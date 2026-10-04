@@ -1,0 +1,34 @@
+<!-- BEGIN @hunpeolabs/ai-agent-kit managed -->
+.codegraph/
+.cocoindex_code/
+.ai/local/
+.ai-agent-kit/backups/
+.ai-agent-kit/architecture/
+.ai-agent-kit/conflicts/
+.ai-agent-kit/context/
+.ai-agent-kit/demo/
+.ai-agent-kit/failure-lab/
+.ai-agent-kit/local/
+.ai-agent-kit/passport/
+.ai-agent-kit/proof/
+.ai-agent-kit/transactions/
+.ai-agent-kit/runtime/
+<!-- END @hunpeolabs/ai-agent-kit managed -->
+# CocoIndex Code (ccc)
+/.cocoindex_code/
+
+node_modules/
+dist/
+functions/lib/
+.env
+.env.*
+!.env.example
+.firebase/
+*-debug.log
+coverage/
+playwright-report/
+test-results/
+
+.DS_Store
+scripts/beta/site/
+.ai-agent-kit/output/

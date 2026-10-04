@@ -1,0 +1,870 @@
+import { beforeAll, afterAll, it, expect } from "vitest";
+import { randomUUID } from "node:crypto";
+import { getFirestore } from "firebase-admin/firestore";
+import type { CallableRequest } from "firebase-functions/v2/https";
+let command: typeof import("../../functions/src/index").command;
+let workspace: typeof import("../../functions/src/workspace").workspaceCommand;
+let db: ReturnType<typeof getFirestore>;
+const prefix = `integration-${randomUUID()}`;
+const customer = `${prefix}-a`,
+  other = `${prefix}-b`,
+  owner = `${prefix}-owner`;
+function req(uid: string, data: unknown) {
+  return {
+    auth: {
+      uid,
+      token: {
+        uid,
+        auth_time: Math.floor(Date.now() / 1000),
+        firebase: { sign_in_provider: "google.com" },
+      },
+    },
+    data,
+  } as CallableRequest;
+}
+async function invoke(
+  uid: string,
+  action: string,
+  payload: unknown,
+  id?: string,
+  version?: number,
+  operationId = randomUUID(),
+) {
+  return command.run(
+    req(uid, {
+      action,
+      payload,
+      operationId,
+      ...(id ? { orderId: id, expectedVersion: version } : {}),
+    }),
+  );
+}
+beforeAll(async () => {
+  process.env.FUNCTIONS_EMULATOR = "true";
+  process.env.GCLOUD_PROJECT = "demo-satsunicgo";
+  process.env.FIRESTORE_EMULATOR_HOST = "127.0.0.1:8181";
+  ({ command } = await import("../../functions/src/index"));
+  ({ workspaceCommand: workspace } =
+    await import("../../functions/src/workspace"));
+  db = getFirestore();
+  await db
+    .doc(`staffAccess/${owner}`)
+    .set({ active: true, locked: false, roles: ["OWNER"] });
+  await db.doc("settings/pricing").set({
+    approved: true,
+    termsVersion: "emulator-v1",
+    rates: {
+      USD: { numerator: 250, denominator: 1 },
+      JPY: { numerator: 1, denominator: 1 },
+      KRW: { numerator: 1, denominator: 1 },
+    },
+    effectiveFrom: 1,
+    expiresAt: Date.now() + 3600000,
+  });
+});
+afterAll(async () => {
+  await db?.terminate();
+});
+const payload = {
+  market: "US",
+  items: [
+    { name: "Emulator item", url: "", quantity: 1, variant: "Confirmed size" },
+  ],
+  notes: "fixture only",
+};
+const q = () => ({
+  goods: 1700000,
+  service: 100000,
+  sourceCosts: 0,
+  internationalShipping: 150000,
+  destinationShipping: 50000,
+  discount: 0,
+  sourceCurrency: "USD",
+  sourceMinor: 6800,
+  fxNumerator: 250,
+  fxDenominator: 1,
+  termsVersion: "emulator-v1",
+  expiresAt: Date.now() + 3600000,
+  verifiedProduct: "Verified test product and variant",
+});
+it("cannot overwrite an existing order through submitRequest", async () => {
+  const a = await invoke(customer, "submitRequest", payload);
+  await expect(
+    invoke(other, "submitRequest", payload, a.id, a.version),
+  ).rejects.toMatchObject({ code: "already-exists" });
+  expect((await db.doc(`orders/${a.id}`).get()).data()?.ownerId).toBe(customer);
+});
+it("idempotency returns same outcome and rejects conflicting reuse", async () => {
+  const op = randomUUID(),
+    a = await invoke(
+      customer,
+      "submitRequest",
+      payload,
+      undefined,
+      undefined,
+      op,
+    ),
+    b = await invoke(
+      customer,
+      "submitRequest",
+      payload,
+      undefined,
+      undefined,
+      op,
+    );
+  expect(a).toEqual(b);
+  await expect(
+    invoke(
+      customer,
+      "submitRequest",
+      { ...payload, notes: "changed" },
+      undefined,
+      undefined,
+      op,
+    ),
+  ).rejects.toMatchObject({ code: "already-exists" });
+});
+it("customer cannot quote or accept another customers quote", async () => {
+  let a = await invoke(customer, "submitRequest", payload);
+  await expect(
+    invoke(customer, "issueQuote", q(), a.id, a.version),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  a = await invoke(owner, "issueQuote", q(), a.id, a.version);
+  await expect(
+    invoke(other, "acceptQuote", { quoteVersion: 1 }, a.id, a.version),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+});
+it("full server lifecycle uses approved final total and confirmed funds", async () => {
+  let a = await invoke(customer, "submitRequest", payload);
+  a = await invoke(owner, "issueQuote", q(), a.id, a.version);
+  a = await invoke(
+    customer,
+    "acceptQuote",
+    { quoteVersion: 1 },
+    a.id,
+    a.version,
+  );
+  await expect(
+    invoke(owner, "claimPurchase", {}, a.id, a.version),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  a = await invoke(
+    owner,
+    "verifyTransfer",
+    {
+      amount: 1000000,
+      bankTransactionId: randomUUID(),
+      evidence: "emulator bank entry",
+      reason: "Emulator deposit",
+    },
+    a.id,
+    a.version,
+  );
+  a = await invoke(owner, "claimPurchase", {}, a.id, a.version);
+  a = await invoke(
+    owner,
+    "recordPurchase",
+    {
+      quantity: 1,
+      supplierOrder: "test-merchant",
+      actualSourceMinor: 6800,
+      evidence: "test purchase receipt",
+    },
+    a.id,
+    a.version,
+  );
+  a = await invoke(
+    owner,
+    "receive",
+    { quantity: 1, condition: "good", evidence: "test check photos" },
+    a.id,
+    a.version,
+  );
+  a = await invoke(
+    owner,
+    "pack",
+    {
+      weightGrams: 1000,
+      dimensionsCm: [10, 20, 30],
+      evidence: "test packing photo",
+      checklist: true,
+    },
+    a.id,
+    a.version,
+  );
+  a = await invoke(
+    owner,
+    "finalize",
+    { total: 2160000, reason: "Emulator actual shipping charge" },
+    a.id,
+    a.version,
+  );
+  await expect(
+    invoke(owner, "dispatch", {}, a.id, a.version),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  a = await invoke(customer, "approveFinal", {}, a.id, a.version);
+  a = await invoke(
+    owner,
+    "verifyTransfer",
+    {
+      amount: 1160000,
+      bankTransactionId: randomUUID(),
+      evidence: "test bank balance",
+      reason: "Emulator balance",
+    },
+    a.id,
+    a.version,
+  );
+  expect((await db.doc(`orders/${a.id}`).get()).data()?.stage).toBe(
+    "READY_TO_SHIP",
+  );
+  a = await invoke(owner, "dispatch", {}, a.id, a.version);
+  a = await invoke(
+    owner,
+    "track",
+    { tracking: "test-parcel", delivered: true },
+    a.id,
+    a.version,
+  );
+  expect((await db.doc(`orders/${a.id}`).get()).data()?.stage).toBe(
+    "DELIVERED",
+  );
+});
+it("concurrent commands cannot double allocate bank funds", async () => {
+  let a = await invoke(customer, "submitRequest", payload);
+  a = await invoke(owner, "issueQuote", q(), a.id, a.version);
+  a = await invoke(
+    customer,
+    "acceptQuote",
+    { quoteVersion: 1 },
+    a.id,
+    a.version,
+  );
+  const p = {
+    amount: 1000000,
+    bankTransactionId: randomUUID(),
+    evidence: "test entry",
+    reason: "Test concurrent payment",
+  };
+  const results = await Promise.allSettled([
+    invoke(owner, "verifyTransfer", p, a.id, a.version),
+    invoke(owner, "verifyTransfer", p, a.id, a.version),
+  ]);
+  expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+  expect((await db.doc(`orders/${a.id}`).get()).data()?.collected).toBe(
+    1000000,
+  );
+}, 60000);
+it("revoked finance and locked customer denied", async () => {
+  const f = `${prefix}-finance`;
+  const a = await invoke(customer, "submitRequest", payload);
+  await db.doc(`staffAccess/${f}`).set({ active: false, roles: ["FINANCE"] });
+  await expect(
+    invoke(
+      f,
+      "verifyTransfer",
+      {
+        amount: 1,
+        bankTransactionId: randomUUID(),
+        evidence: "test-entry",
+        reason: "test",
+      },
+      a.id,
+      a.version,
+    ),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  await db.doc(`users/${other}`).set({ ownerId: other, locked: true });
+  await expect(invoke(other, "submitRequest", payload)).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+});
+it("support creation cannot overwrite someone elses ticket", async () => {
+  const t = await workspace.run(
+    req(customer, {
+      action: "openTicket",
+      operationId: randomUUID(),
+      payload: {
+        subject: "Test support",
+        message: "Test persisted customer message",
+      },
+    }),
+  );
+  await expect(
+    workspace.run(
+      req(owner, {
+        action: "openTicket",
+        id: t.id,
+        expectedVersion: t.version,
+        operationId: randomUUID(),
+        payload: { subject: "Overwrite", message: "Not allowed" },
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "already-exists" });
+});
+it("preserves immutable quote and acceptance snapshots", async () => {
+  let order = await invoke(customer, "submitRequest", payload);
+  order = await invoke(owner, "issueQuote", q(), order.id, order.version);
+  const issued = (await db.doc(`orders/${order.id}/quotes/1`).get()).data();
+  expect(issued?.quote.goods).toBe(q().goods);
+  order = await invoke(
+    customer,
+    "acceptQuote",
+    { quoteVersion: 1 },
+    order.id,
+    order.version,
+  );
+  expect(
+    (await db.doc(`orders/${order.id}/acceptances/1`).get()).data()?.acceptedBy,
+  ).toBe(customer);
+  expect((await db.doc(`orders/${order.id}/quotes/1`).get()).data()).toEqual(
+    issued,
+  );
+});
+it("allocates verified provider events once and quarantines mismatched context", async () => {
+  const { applyVerifiedPayment } =
+    await import("../../functions/src/payments/payos");
+  const id = `${prefix}-provider`,
+    intentId = `${prefix}-intent`;
+  await db.doc(`orders/${id}`).set({
+    id,
+    ownerId: customer,
+    version: 1,
+    stage: "ACCEPTED",
+    acceptedQuoteVersion: 1,
+    collected: 0,
+    refunded: 0,
+  });
+  const orderCode = Math.floor(Date.now() / 10);
+  await db.doc(`paymentRequests/${intentId}`).set({
+    orderId: id,
+    orderCode,
+    paymentLinkId: "fixture-link",
+    amount: 1000000,
+    acceptedQuoteVersion: 1,
+    state: "pending",
+  });
+  const event = {
+    orderCode,
+    paymentLinkId: "fixture-link",
+    amount: 1000000,
+    currency: "VND",
+    reference: `${prefix}-provider-reference`,
+    accountNumber: "fixture-account",
+    code: "00",
+  };
+  await applyVerifiedPayment(event, "fixture-account");
+  await applyVerifiedPayment(event, "fixture-account");
+  expect((await db.doc(`orders/${id}`).get()).data()?.collected).toBe(1000000);
+  await applyVerifiedPayment(
+    { ...event, reference: `${prefix}-mismatch`, amount: 999999 },
+    "fixture-account",
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()?.collected).toBe(1000000);
+  expect(
+    (
+      await db
+        .collection("paymentExceptions")
+        .where("orderCode", "==", orderCode)
+        .get()
+    ).size,
+  ).toBe(1);
+});
+
+it("parcel allocation serializes duplicate packing and partial delivery", async () => {
+  const { shippingCommand } = await import("../../functions/src/shipping");
+  const id = `${prefix}-split-order`;
+  await db.doc(`orders/${id}`).set({
+    id,
+    ownerId: customer,
+    items: [{ name: "Fixture", quantity: 2, variant: "" }],
+    market: "US",
+    notes: "",
+    stage: "READY_TO_SHIP",
+    version: 1,
+    createdAt: Date.now(),
+    collected: 100,
+    refunded: 0,
+    finalTotal: 100,
+    finalApproved: true,
+    packingComplete: true,
+    packedQuantity: 2,
+  });
+  const pack = async (quantity: number) =>
+    shippingCommand.run(
+      req(owner, {
+        action: "packParcel",
+        operationId: randomUUID(),
+        orderVersions: { [id]: 1 },
+        payload: {
+          allocations: [{ orderId: id, line: 0, quantity }],
+          weightGrams: 200,
+          dimensionsCm: [10, 10, 10],
+          warehouse: "fixture-origin",
+          route: "US-VN",
+          checklist: true,
+          evidence: "fixture evidence",
+        },
+      }),
+    );
+  const first = await pack(1),
+    second = await pack(1);
+  await expect(pack(1)).rejects.toMatchObject({ code: "failed-precondition" });
+  let orderVersion = 1;
+  for (const parcel of [first, second]) {
+    await shippingCommand.run(
+      req(owner, {
+        action: "dispatchParcel",
+        operationId: randomUUID(),
+        parcelId: parcel.id,
+        expectedVersion: 1,
+        orderVersions: { [id]: orderVersion },
+        payload: {
+          carrier: "manual fixture",
+          tracking: `fixture-${parcel.id}`,
+          handoffEvidence: "fixture only",
+        },
+      }),
+    );
+    orderVersion++;
+  }
+  await expect(
+    invoke(
+      owner,
+      "track",
+      { tracking: "bypass", delivered: true },
+      id,
+      orderVersion,
+    ),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  await shippingCommand.run(
+    req(owner, {
+      action: "trackParcel",
+      operationId: randomUUID(),
+      parcelId: first.id,
+      expectedVersion: 2,
+      orderVersions: { [id]: orderVersion },
+      payload: { state: "delivered", event: "fixture delivery" },
+    }),
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()?.stage).toBe("IN_TRANSIT");
+  await shippingCommand.run(
+    req(owner, {
+      action: "trackParcel",
+      operationId: randomUUID(),
+      parcelId: second.id,
+      expectedVersion: 2,
+      orderVersions: { [id]: orderVersion },
+      payload: { state: "delivered", event: "fixture delivery" },
+    }),
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()?.stage).toBe("DELIVERED");
+});
+it("customer-approved cancellation preserves collected money and hides internal proof", async () => {
+  const { changeCommand } = await import("../../functions/src/changes");
+  let current = await invoke(customer, "submitRequest", payload);
+  current = await invoke(owner, "issueQuote", q(), current.id, current.version);
+  current = await invoke(
+    customer,
+    "acceptQuote",
+    { quoteVersion: 1 },
+    current.id,
+    current.version,
+  );
+  current = await invoke(
+    owner,
+    "verifyTransfer",
+    {
+      amount: 1000000,
+      bankTransactionId: `${prefix}-change-payment`,
+      evidence: "fixture verified",
+      reason: "fixture deposit",
+    },
+    current.id,
+    current.version,
+  );
+  const proposal = {
+    kind: "cancellation",
+    reason: "Fixture cancellation terms",
+    termsVersion: q().termsVersion,
+    lines: [{ line: 0, cancelQuantity: 1 }],
+    actualCosts: 100000,
+    finalPayable: 100000,
+    evidence: "private fixture proof",
+  };
+  const proposed = await changeCommand.run(
+    req(owner, {
+      action: "propose",
+      operationId: randomUUID(),
+      orderId: current.id,
+      expectedVersion: current.version,
+      payload: proposal,
+    }),
+  );
+  expect(
+    (await db.doc(`orderChanges/${proposed.id}`).get()).data()?.proposal
+      .evidence,
+  ).toBeUndefined();
+  await expect(
+    changeCommand.run(
+      req(other, {
+        action: "accept",
+        operationId: randomUUID(),
+        orderId: current.id,
+        proposalId: proposed.id,
+        expectedVersion: proposed.version,
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  await expect(
+    changeCommand.run(
+      req(owner, {
+        action: "apply",
+        operationId: randomUUID(),
+        orderId: current.id,
+        proposalId: proposed.id,
+        expectedVersion: proposed.version,
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  const accepted = await changeCommand.run(
+    req(customer, {
+      action: "accept",
+      operationId: randomUUID(),
+      orderId: current.id,
+      proposalId: proposed.id,
+      expectedVersion: proposed.version,
+    }),
+  );
+  await changeCommand.run(
+    req(owner, {
+      action: "apply",
+      operationId: randomUUID(),
+      orderId: current.id,
+      proposalId: proposed.id,
+      expectedVersion: accepted.version,
+    }),
+  );
+  const order = (await db.doc(`orders/${current.id}`).get()).data();
+  expect(order?.stage).toBe("CANCELLED");
+  expect(order?.collected).toBe(1000000);
+  expect(order?.refunded).toBe(0);
+  expect(order?.finalTotal).toBe(100000);
+});
+it("privileged workspace replay is denied after staff revocation", async () => {
+  const editor = `${prefix}-editor`,
+    operationId = randomUUID();
+  await db
+    .doc(`staffAccess/${editor}`)
+    .set({ active: true, roles: ["CONTENT_EDITOR"], locked: false });
+  const data = {
+    action: "saveContent",
+    operationId,
+    payload: {
+      kind: "posts",
+      content: {
+        title: "Replay security",
+        slug: `replay-${randomUUID()}`,
+        body: "Only approved editors may publish content.",
+        status: "draft",
+      },
+    },
+  };
+  await workspace.run(req(editor, data));
+  await db.doc(`staffAccess/${editor}`).update({ active: false });
+  await expect(workspace.run(req(editor, data))).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+});
+it("internal CRM notes are restricted to current staff, including replay", async () => {
+  const { readCustomer, saveCustomerNotes } =
+    await import("../../functions/src/crm");
+  const d = {
+    id: customer,
+    operationId: randomUUID(),
+    tags: ["follow-up"],
+    notes: "Private operational note",
+    assigneeId: "",
+    followUpAt: 0,
+  };
+  await expect(saveCustomerNotes.run(req(customer, d))).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+  await saveCustomerNotes.run(req(owner, d));
+  await expect(
+    readCustomer.run(req(customer, { id: customer })),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  expect(
+    (await readCustomer.run(req(owner, { id: customer }))).crm?.notes,
+  ).toBe(d.notes);
+});
+it("consolidation seals complete allocations and blocks held or unpaid members", async () => {
+  const { consolidationCommand } =
+    await import("../../functions/src/consolidation");
+  const ids = [`${prefix}-batch-a`, `${prefix}-batch-b`],
+    parcelId = `${prefix}-batch-p`,
+    batchId = `${prefix}-batch`;
+  for (const id of ids) {
+    await db.doc(`orders/${id}`).set({
+      id,
+      ownerId: customer,
+      market: "US",
+      items: [{ name: "Item", variant: "", quantity: 1 }],
+      notes: "",
+      stage: "READY_TO_SHIP",
+      version: 1,
+      createdAt: 1,
+      collected: 100,
+      refunded: 0,
+      finalTotal: 100,
+      finalApproved: true,
+      packingComplete: true,
+      packedQuantity: 1,
+    });
+    await db.doc(`packageAllocations/${id}`).set({
+      parcelIds: [parcelId],
+      allocations: [{ orderId: id, line: 0, quantity: 1 }],
+    });
+  }
+  await db.doc(`packages/${parcelId}`).set({
+    id: parcelId,
+    version: 1,
+    state: "packed",
+    allocations: ids.map((orderId) => ({ orderId, line: 0, quantity: 1 })),
+    weightGrams: 300,
+    warehouse: "origin",
+    route: "US-VN",
+  });
+  const seal = {
+    action: "seal",
+    operationId: randomUUID(),
+    batchId,
+    orderVersions: Object.fromEntries(ids.map((id) => [id, 1])),
+    parcelVersions: { [parcelId]: 1 },
+    payload: {
+      parcelIds: [parcelId],
+      orderWeights: { [ids[0]]: 100, [ids[1]]: 200 },
+      freight: 101,
+      hub: "VN",
+      service: "Air",
+      cutoff: Date.now() + 600000,
+    },
+  };
+  await consolidationCommand.run(req(owner, seal));
+  const b = (await db.doc(`consolidationBatches/${batchId}`).get()).data()!;
+  expect(
+    Object.values(b.shares).reduce((s: number, v) => s + Number(v), 0),
+  ).toBe(101);
+  for (const id of ids)
+    await db.doc(`orders/${id}`).update({
+      finalFreightVersion: 1,
+      finalApproved: true,
+      stage: "READY_TO_SHIP",
+    });
+  const dispatch = () =>
+    consolidationCommand.run(
+      req(owner, {
+        action: "dispatch",
+        operationId: randomUUID(),
+        batchId,
+        expectedVersion: 1,
+        orderVersions: Object.fromEntries(ids.map((id) => [id, 2])),
+        parcelVersions: { [parcelId]: 2 },
+        payload: {
+          carrier: "Manual carrier",
+          tracking: "fixture-tracking",
+          handoffEvidence: "fixture only proof",
+        },
+      }),
+    );
+  await db.doc(`orders/${ids[1]}`).update({ collected: 99 });
+  await expect(dispatch()).rejects.toThrow();
+  expect((await db.doc(`packages/${parcelId}`).get()).data()?.state).toBe(
+    "packed",
+  );
+  await db
+    .doc(`orders/${ids[1]}`)
+    .update({ collected: 100, hold: "inspection" });
+  await expect(dispatch()).rejects.toThrow();
+  await db.doc(`orders/${ids[1]}`).update({ hold: null });
+  await dispatch();
+  expect((await db.doc(`packages/${parcelId}`).get()).data()?.state).toBe(
+    "in_transit",
+  );
+});
+it("scheduled publication, expiry and in-app outbox processing are replay safe", async () => {
+  const { maintenance } = await import("../../functions/src/jobs");
+  const post = db.doc(`posts/${prefix}-scheduled`),
+    member = db.doc(`membershipSubscriptions/${prefix}-expired`),
+    job = db.doc(`outboxJobs/${prefix}-notice`);
+  await db.doc("settings/email").set({ enabled: false });
+  await post.set({
+    title: "Scheduled fixture",
+    slug: `scheduled-${randomUUID()}`,
+    body: "Fixture content only",
+    status: "scheduled",
+    publishAt: Date.now() - 1000,
+    version: 1,
+  });
+  await member.set({ state: "active", endsAt: Date.now() - 1000 });
+  await job.set({
+    state: "queued",
+    ownerId: customer,
+    orderId: `${prefix}-order`,
+    action: "quoteOrder",
+  });
+  await maintenance.run({ scheduleTime: new Date().toISOString() });
+  await maintenance.run({ scheduleTime: new Date().toISOString() });
+  expect((await post.get()).data()?.version).toBe(2);
+  expect((await post.collection("versions").get()).size).toBe(1);
+  expect((await member.get()).data()?.state).toBe("expired");
+  expect((await member.collection("history").get()).size).toBe(1);
+  expect((await job.get()).data()?.emailState).toBe("blocked_external");
+  expect(
+    (await db.doc(`notifications/${prefix}-notice`).get()).data()?.ownerId,
+  ).toBe(customer);
+});
+it("finance verifies a pending transfer atomically and cannot reuse its bank reference", async () => {
+  let o = await invoke(customer, "submitRequest", payload);
+  o = await invoke(owner, "issueQuote", q(), o.id, o.version);
+  o = await invoke(
+    customer,
+    "acceptQuote",
+    { quoteVersion: 1 },
+    o.id,
+    o.version,
+  );
+  const noticeId = randomUUID();
+  o = await invoke(
+    customer,
+    "transferReview",
+    { reference: "fixture transfer notice", amount: 1000000 },
+    o.id,
+    o.version,
+    noticeId,
+  );
+  const reviewId = `${customer}-${noticeId}`,
+    bankId = `fixture-${randomUUID()}`;
+  await expect(
+    invoke(
+      owner,
+      "verifyTransfer",
+      {
+        amount: 999999,
+        bankTransactionId: bankId,
+        evidence: "fixture proof only",
+        reason: "fixture check",
+        reviewId,
+      },
+      o.id,
+      o.version,
+    ),
+  ).rejects.toThrow();
+  expect(
+    (await db.doc(`transferReviews/${reviewId}`).get()).data()?.status,
+  ).toBe("pending");
+  o = await invoke(
+    owner,
+    "verifyTransfer",
+    {
+      amount: 1000000,
+      bankTransactionId: bankId,
+      evidence: "fixture proof only",
+      reason: "fixture check",
+      reviewId,
+    },
+    o.id,
+    o.version,
+  );
+  expect(
+    (await db.doc(`transferReviews/${reviewId}`).get()).data()?.status,
+  ).toBe("verified");
+  await expect(
+    invoke(
+      owner,
+      "verifyTransfer",
+      {
+        amount: 1000000,
+        bankTransactionId: ` ${bankId} `,
+        evidence: "fixture proof only",
+        reason: "duplicate check",
+      },
+      o.id,
+      o.version,
+    ),
+  ).rejects.toMatchObject({ code: "already-exists" });
+  expect((await db.doc(`orders/${o.id}`).get()).data()?.collected).toBe(
+    1000000,
+  );
+});
+it("operational dashboard is staff-only and returns bounded counts without customer records", async () => {
+  const { operationalDashboard } = await import("../../functions/src/crm");
+  const period = { from: Date.now() - 86400000, until: Date.now() };
+  await expect(
+    operationalDashboard.run(req(customer, period)),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  const result = await operationalDashboard.run(req(owner, period));
+  expect(result.limitPerKind).toBe(100);
+  expect(result.timezone).toBe("UTC");
+  expect(
+    Object.values(result.counts).every(
+      (v) => Number.isSafeInteger(v) && v >= 0,
+    ),
+  ).toBe(true);
+  expect(JSON.stringify(result)).not.toContain(customer);
+  expect(JSON.stringify(result)).not.toContain("Private operational note");
+  await expect(
+    operationalDashboard.run(req(owner, { from: 1, until: Date.now() })),
+  ).rejects.toMatchObject({ code: "invalid-argument" });
+});
+it("AI context ownership and global quota deny before model invocation", async () => {
+  const { ask } = await import("../../functions/src/ai/ask");
+  const id = `${prefix}-ai-private`;
+  await db.doc(`orders/${id}`).set({ ownerId: customer, stage: "REQUESTED" });
+  await db.doc("settings/ai").set({
+    enabled: true,
+    approved: true,
+    model: "gemini-fixture-never-invoked",
+  });
+  const data = {
+    question: "Order status",
+    sessionId: randomUUID(),
+    language: "en",
+    orderId: id,
+  };
+  await expect(ask.run(req(other, data))).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+  const day = Math.floor(Date.now() / 86400000);
+  await db.doc(`aiQuota/global-${day}`).set({ count: 500 });
+  await expect(ask.run(req(customer, data))).rejects.toMatchObject({
+    code: "resource-exhausted",
+  });
+  await db.doc("settings/ai").set({ enabled: false, approved: false });
+  await expect(ask.run(req(customer, data))).rejects.toMatchObject({
+    code: "unavailable",
+  });
+});
+it("technical quota retention requires approval and preserves current counters and financial records", async () => {
+  const { maintenance } = await import("../../functions/src/jobs");
+  const stale = db.doc(`aiQuota/${prefix}-stale`),
+    current = db.doc(`aiQuota/${prefix}-current`);
+  await stale.set({ count: 1, expiresAt: Date.now() - 1000 });
+  await current.set({ count: 1, expiresAt: Date.now() + 3600000 });
+  await db.doc("settings/retention").set({ approved: false });
+  const financialCount = (await db.collection("financialEntries").get()).size;
+  await maintenance.run({ scheduleTime: new Date().toISOString() });
+  expect((await stale.get()).exists).toBe(true);
+  await db
+    .doc("settings/retention")
+    .set({
+      approved: true,
+      technicalQuotaRetentionDays: 2,
+      policyVersion: "fixture-only",
+    });
+  await maintenance.run({ scheduleTime: new Date().toISOString() });
+  expect((await stale.get()).exists).toBe(false);
+  expect((await current.get()).exists).toBe(true);
+  expect((await db.collection("financialEntries").get()).size).toBe(
+    financialCount,
+  );
+  await db.doc("settings/retention").delete();
+});

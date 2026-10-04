@@ -1,0 +1,9 @@
+# Repository intelligence brief — SATSUNICGO-001
+
+Gate checked 2026-10-04: DEGRADED. CodeGraph and CocoIndex installed but indexes missing and health checks failing. Current main is unborn, no indexed commit/signature exists. Source scope verified with rg --files: no application/package/Firebase config; prompt/policy/documentation only. No existing runtime call path or data migration. Reference HunpeoLabs Ask component/CSS/route paths verified; reference image viewed. MASTER_PROMPT.md is acceptance source. Native evidence is sufficient to prepare architecture plan; cannot claim complete implementation impact or visual parity. Relevant future surfaces, data, contracts, tests, risks and unknowns are enumerated in SATSUNICGO-001-v1.md. No index-derived claims used. No external service state inferred.
+
+## Current source review refresh, 2026-10-04
+
+The initial empty-workspace description above is historical. The current candidate contains the React/Vite client, Functions, shared domain, Rules, provider adapters and tests. A fresh gate command is recorded in `/tmp/satsunicgo-intelligence-current.json`; optional index health/staleness still prevents READY. Bounded source reads, source/test hashes, Node 22 compiler/tests and isolated emulator evidence are used in DEGRADED mode under the repository instruction. The approval validator currently refuses DEGRADED and requires READY; that tool limitation is recorded, not bypassed with a false status. Human local implementation approval remains explicit; production mutations remain excluded except the separately approved single Web app registration.
+
+2026-10-04 final refresh: index-repository.py completed successfully; both indexes Current/health Passed, READY. CodeGraph recentMfa/requireRole identified affected handlers and tests; CocoIndex authorization query returned bounded security/docs evidence. No policy controls changed.

@@ -1,0 +1,19 @@
+# First production beta — 0.1.0-beta.1
+
+Human authorization: current user explicitly requested the first production beta, sanity check, review, commit and push. Approved scope is recorded in ../plans/SATSUNICGO-BETA-003.md.
+
+Scope: Firebase Hosting static UI only, https://satsunicgo.web.app. The beta build sets VITE_BETA_RELEASE=true, disabling Firebase initialization, Google login, callable operations, persistence and financial transactions. Banner explains unavailable actions. No production database, functions, rules, secrets, IAM or billing changes were deployed. Search indexing is disabled. Separate beta hosting configuration contains only SPA rewrites; full firebase.json is preserved for a future integrated release.
+
+Validation: root TypeScript/frontend + Functions compiler and lint passed; 39 unit tests passed. Beta build passed. Initial deploy succeeded (Hosting version cbb4e22b27c0cf24); 26 deployed files matched local SHA256, security/noindex headers present. The subsequent corrected deploy is recorded in BETA-003-HTTP.json. Production browser rendered homepage/nav/footer, disabled Google login, request form with disabled submit, Ask collapse and product navigation. Review found misleading catalog network-error copy; fixed beta-specific catalog text and rechecked after redeploy. No real auth, provider, checkout, upload, order or end-to-end acceptance was performed. No frame-rate/animation smoothness certification or mobile acceptance yet.
+
+Review cycles: parent cycle4 remains BLOCKED; beta cycle1 found invalid outside-project public path and catalog copy mismatch, corrected before final candidate. Beta cycle2 reviews isolation, build-failure exit, owned artifact replacement, project-specific deploy, immutable asset caching, HTML revalidation, CSP and disabled services. Current master review cycle5 remains BLOCKED: 6 high backend dependency advisories, missing live backend tests, unfinished requirements, and unavailable governed runtime ledger. Current limited browser evidence does not establish full product readiness.
+
+Infrastructure preflight: billing disabled; Auth/Firestore/Functions admin APIs returned403; Storage bucket list empty. HTTP403 cause not established. Functions CLI list failed. Enabling billing, provisioning services, access changes and secret setup need separate verified authority; no attempt made. Existing payOS/SMTP integration secrets were neither accessed nor created.
+
+Rollback: first Hosting release has no previous known-good production version. A corrected beta may restore an explicitly verified prior beta version through Hosting release management. Disabling Hosting would remove availability and requires a separately verified action; no destructive rollback tested. Keep production services disabled until integrated acceptance passes.
+
+Git: initial snapshot includes product source, canonical repository policies, tests and review evidence; excludes ignored env files, generated beta artifact, dependency/output/cache folders and local agent setup. Commit and remote readback are reported after push.
+
+Product content: new banner and beta catalog notices reviewed in production context. Purpose: review UI; Agency: disabled submissions and editable local form; Responsibility: no transaction success claims; Familiarity: short Vietnamese notices; Flexibility: navigable web routes; Simplicity: one banner and explicit empty state; Craft: existing Satsunic typography/color; Delight: retained modest transitions with no performance certification. Mobile/assistive-technology coverage NOT_TESTED. Target: React responsive web, no Apple-only expression.
+
+Status: LIMITED_BETA_DEPLOYED; master IN_PROGRESS / production readiness NOT_READY. Weighted completion unavailable; no runtime ledger receipt. Token usage and billed cost Unavailable. Memory candidates: None.

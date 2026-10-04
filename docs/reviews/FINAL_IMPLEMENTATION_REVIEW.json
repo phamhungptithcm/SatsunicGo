@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-001",
+  "status": "BLOCKED",
+  "cycle": 5,
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "security": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "code_quality": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json",
+        "docs/reviews/UI-002-QUALITY_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "error_handling": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json"
+      ]
+    },
+    "product_content": {
+      "status": "BLOCKED",
+      "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+      "evidence_refs": [
+        "docs/reviews/TASK_REPORT.md",
+        "docs/REQUIREMENTS_MATRIX.md",
+        "docs/reviews/CANDIDATE_HASHES.json",
+        "docs/reviews/UI-002-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "R3-DEPENDENCIES",
+      "severity": "high",
+      "status": "OPEN",
+      "location": "functions/package.json / transitive Genkit OpenTelemetry",
+      "evidence": "Runtime audit: 6 high / 51 moderate",
+      "impact": "Production AI dependency risk; no compatible vendor fix established",
+      "correction": "Resolve compatible dependency chain and rerun audit before enabling/release; do not force incompatible major overrides"
+    },
+    {
+      "id": "R3-MASTER",
+      "severity": "high",
+      "status": "OPEN",
+      "location": "docs/REQUIREMENTS_MATRIX.md",
+      "evidence": "All detailed buckets partial; twelve complete acceptance scenarios not passed",
+      "impact": "Full master delivery incomplete",
+      "correction": "Implement source gaps and execute complete role/domain/browser/provider acceptance"
+    },
+    {
+      "id": "R3-RENDERED",
+      "severity": "high",
+      "status": "BLOCKED_EXTERNAL",
+      "location": "src/features/ask / app and staff surfaces",
+      "evidence": "Browser URL policy rejection; current rendered evidence unavailable",
+      "impact": "100% parity and product-language/accessibility gate cannot pass",
+      "correction": "Obtain allowed browser access and verify current candidate at required viewports without bypassing restrictions"
+    }
+  ],
+  "residual_risks": [
+    "Incomplete detailed master requirements and full acceptance scenarios",
+    "Browser parity/rendered content blocked",
+    "Live OAuth/MFA/App Check/providers NOT_RUN",
+    "949.34KB entry chunk and ineffective dynamic imports",
+    "Staging/production monitoring/backup/deploy/rollback NOT_RUN"
+  ],
+  "limitations": [
+    "ai-agent-kit executable absent; no runtime ledger receipt",
+    "Git unborn; source hashes identify candidate",
+    "Handler auth and provider fixtures are not live integrations"
+  ],
+  "previous_cycles": [
+    {
+      "cycle": 1,
+      "status": "BLOCKED",
+      "evidence_ref": "docs/reviews/TASK_REPORT.md#review-cycles-and-fixes"
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "historical_review": {
+        "schema_version": 1,
+        "task_id": "SATSUNICGO-001",
+        "status": "BLOCKED",
+        "cycle": 2,
+        "dimensions": {
+          "requirement_match": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "security": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "code_quality": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "failure_paths": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "error_handling": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "production_readiness": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "trade_offs": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "product_content": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          }
+        },
+        "findings": [],
+        "residual_risks": [
+          "Incomplete master requirements",
+          "Browser parity and rendered content blocked",
+          "Provider/MFA/HTTP auth untested",
+          "950KB JS chunk",
+          "Node 22 target untested"
+        ],
+        "limitations": [
+          "ai-agent-kit executable absent; no runtime ledger receipt",
+          "Git unborn; source hashes are candidate identity",
+          "Direct callable auth fixtures are not real auth"
+        ]
+      }
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "historical_review": {
+        "schema_version": 1,
+        "task_id": "SATSUNICGO-001",
+        "status": "BLOCKED",
+        "cycle": 3,
+        "dimensions": {
+          "requirement_match": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "security": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "code_quality": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json",
+              "docs/reviews/UI-002-QUALITY_REVIEW.md"
+            ]
+          },
+          "failure_paths": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "error_handling": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "production_readiness": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "trade_offs": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json"
+            ]
+          },
+          "product_content": {
+            "status": "BLOCKED",
+            "summary": "Current bounded source/compiler/emulator evidence reviewed; required complete acceptance and/or rendered/provider/release evidence missing. See current TASK_REPORT.md and TEST_EVIDENCE.md.",
+            "evidence_refs": [
+              "docs/reviews/TASK_REPORT.md",
+              "docs/REQUIREMENTS_MATRIX.md",
+              "docs/reviews/CANDIDATE_HASHES.json",
+              "docs/reviews/UI-002-CONTENT_REVIEW.md"
+            ]
+          }
+        },
+        "findings": [
+          {
+            "id": "R3-DEPENDENCIES",
+            "severity": "high",
+            "status": "OPEN",
+            "location": "functions/package.json / transitive Genkit OpenTelemetry",
+            "evidence": "Runtime audit: 6 high / 51 moderate",
+            "impact": "Production AI dependency risk; no compatible vendor fix established",
+            "correction": "Resolve compatible dependency chain and rerun audit before enabling/release; do not force incompatible major overrides"
+          },
+          {
+            "id": "R3-MASTER",
+            "severity": "high",
+            "status": "OPEN",
+            "location": "docs/REQUIREMENTS_MATRIX.md",
+            "evidence": "All detailed buckets partial; twelve complete acceptance scenarios not passed",
+            "impact": "Full master delivery incomplete",
+            "correction": "Implement source gaps and execute complete role/domain/browser/provider acceptance"
+          },
+          {
+            "id": "R3-RENDERED",
+            "severity": "high",
+            "status": "BLOCKED_EXTERNAL",
+            "location": "src/features/ask / app and staff surfaces",
+            "evidence": "Browser URL policy rejection; current rendered evidence unavailable",
+            "impact": "100% parity and product-language/accessibility gate cannot pass",
+            "correction": "Obtain allowed browser access and verify current candidate at required viewports without bypassing restrictions"
+          }
+        ],
+        "residual_risks": [
+          "Incomplete detailed master requirements and full acceptance scenarios",
+          "Browser parity/rendered content blocked",
+          "Live OAuth/MFA/App Check/providers NOT_RUN",
+          "981.50KB entry chunk and ineffective dynamic imports",
+          "Staging/production monitoring/backup/deploy/rollback NOT_RUN"
+        ],
+        "limitations": [
+          "ai-agent-kit executable absent; no runtime ledger receipt",
+          "Git unborn; source hashes identify candidate",
+          "Handler auth and provider fixtures are not live integrations"
+        ],
+        "reviewed_at": "2026-10-04",
+        "candidate_ref": "docs/reviews/CANDIDATE_HASHES.json",
+        "repository_intelligence": {
+          "current": "READY",
+          "historical": "DEGRADED fallback during implementation",
+          "queries": [
+            "CodeGraph recentMfa command requireRole",
+            "CocoIndex current role authorization financial verification recent MFA"
+          ]
+        }
+      }
+    }
+  ],
+  "reviewed_at": "2026-10-04",
+  "candidate_ref": "docs/reviews/CANDIDATE_HASHES.json",
+  "repository_intelligence": {
+    "start": "DEGRADED (sandbox CocoIndex daemon access)",
+    "queries": [
+      "CodeGraph createLiveCache createCountdown ToastHost SiteHeader Catalog",
+      "CocoIndex refreshed public cache loading stale published content pause toast countdown"
+    ],
+    "critical_source_verified": true
+  },
+  "current_slice": "SATSUNICGO-UI-002",
+  "slice_review_ref": "docs/reviews/UI-002-TASK_REPORT.md",
+  "slice_fixes": [
+    "public-cache permission discard and late generation callback guards",
+    "initial empty SDK cache remains loading across repeated metadata events",
+    "notice ID, overlapping countdown holds and observer/timer cleanup",
+    "responsive navbar focus padding and explicit offline/stale labels"
+  ],
+  "beta_release": {
+    "hosting_version": "0f9a7f29f7f23f75",
+    "scope": "static-ui-only",
+    "evidence": "docs/releases/BETA-003.md",
+    "browser": "Production homepage/request/catalog rendered; disabled auth/submission observed; catalog beta notice rechecked.",
+    "findings_fixed": [
+      "Hosting public path outside config project root",
+      "Beta catalog misleading network-error message"
+    ],
+    "remaining": [
+      "Full master acceptance incomplete",
+      "Live backend/auth/storage not validated",
+      "Six high backend dependency advisories",
+      "Governed runtime ledger unavailable",
+      "Mobile and animation frame-time acceptance not tested"
+    ]
+  }
+}

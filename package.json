@@ -1,0 +1,52 @@
+{
+  "name": "satsunicgo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "functions"
+  ],
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build && node scripts/public-assets.mjs",
+    "typecheck": "tsc --noEmit && npm run build --workspace functions",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview --host 127.0.0.1",
+    "test:rules": "node scripts/emulator-test.mjs rules",
+    "lint": "eslint src packages/domain functions/src tests",
+    "format": "prettier --write src packages/domain functions/src tests vite.config.ts vitest.rules.config.ts eslint.config.js",
+    "test:http": "node scripts/emulator-test.mjs http",
+    "test:restore": "node scripts/emulator-test.mjs restore"
+  },
+  "dependencies": {
+    "firebase": "12.19.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.4",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@firebase/rules-unit-testing": "5.0.2",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.6.4",
+    "@types/nodemailer": "8.0.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "firebase-tools": "15.32.1",
+    "prettier": "3.9.9",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0",
+    "vite": "8.3.2",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.14.5"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "source": "/Users/hunpeo97/Desktop/Workspace/Coder/HunpeoLabs",
+  "capturedOn": "2026-10-04",
+  "files": {
+    "components/ask-hunpeolabs.tsx": "e8e9dfca5fff1641441fbe3bf83db9065cd752cfa5e84f467dedc8b940eff80e",
+    "components/ask-hunpeolabs.module.css": "9cf59755f6a38d2f0a81560fde21f53e1af87e410e953fff60ced18b98ecc147",
+    "components/ask-site.tsx": "96cf939f1461e17295a5e9ff9c8812345a9e7d9cfc6a4d3ac8e79c4463d0b8a5"
+  },
+  "browserParity": "NOT_RUN"
+}
