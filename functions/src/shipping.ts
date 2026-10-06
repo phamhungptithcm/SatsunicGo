@@ -1,3 +1,4 @@
+import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { randomUUID, createHash } from "node:crypto";
@@ -5,6 +6,8 @@ import { z } from "zod";
 import { type Order } from "../../packages/domain";
 import {
   allocationSchema,
+  deliveryWindowSchema,
+  readManualDeliveryEstimate,
   verifyAllocations,
   verifyParcelDispatch,
   fullyDelivered,
@@ -17,11 +20,17 @@ const options = {
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
 };
 export const shippingCommand = onCall(options, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const parsed = z
     .object({
-      action: z.enum(["packParcel", "dispatchParcel", "trackParcel"]),
+      action: z.enum([
+        "packParcel",
+        "dispatchParcel",
+        "trackParcel",
+        "setDeliveryEstimate",
+      ]),
       operationId: z.string().uuid(),
       parcelId: z
         .string()
@@ -52,11 +61,12 @@ export const shippingCommand = onCall(options, async (req) => {
       ]);
       const a = access.data();
       if (
-        !a?.active ||
+        a?.active !== true ||
+        !isStringRoleArray(a.roles) ||
         a.locked ||
         user.data()?.locked ||
         !(
-          d.action === "trackParcel"
+          ["trackParcel", "setDeliveryEstimate"].includes(d.action)
             ? ["OWNER", "OPERATIONS_MANAGER"]
             : ["OWNER", "WAREHOUSE"]
         ).some((r) => a.roles?.includes(r))
@@ -169,6 +179,35 @@ export const shippingCommand = onCall(options, async (req) => {
           orders[i].version++;
           tx.set(snapshots[i].ref, orders[i]);
         }
+      } else if (d.action === "setDeliveryEstimate") {
+        if (!["in_transit", "failed"].includes(parcel.state))
+          throw Error("INVALID_STATE");
+        const p = z
+          .object({
+            estimate: deliveryWindowSchema.nullable(),
+            evidence: z.string().trim().min(5).max(1000),
+          })
+          .strict()
+          .parse(d.payload);
+        const now = Date.now();
+        if (p.estimate && p.estimate.endAt < now)
+          throw Error("ESTIMATE_ELAPSED");
+        parcel = { ...parcel, version: parcel.version + 1 };
+        if (p.estimate)
+          parcel.deliveryEstimate = {
+            ...p.estimate,
+            source: "staff",
+            recordedAt: now,
+          };
+        else delete parcel.deliveryEstimate;
+        tx.create(ref.collection("events").doc(), {
+          action: d.action,
+          estimate: parcel.deliveryEstimate ?? null,
+          evidence: p.evidence,
+          source: "manual",
+          createdAt: now,
+          actor: uid,
+        });
       } else {
         const p = z
           .object({
@@ -208,6 +247,10 @@ export const shippingCommand = onCall(options, async (req) => {
         });
       }
       tx.set(ref, parcel);
+      const publicEstimate = readManualDeliveryEstimate(
+        parcel.deliveryEstimate,
+        Date.now(),
+      );
       // Each projection contains only this customer's allocations, never a manifest.
       for (const ownerId of new Set(orders.map((o) => o.ownerId)))
         tx.set(db.doc(`customerShipments/${ownerId}-${id}`), {
@@ -216,6 +259,7 @@ export const shippingCommand = onCall(options, async (req) => {
           state: parcel.state,
           route: parcel.route,
           warehouse: parcel.warehouse,
+          ...(publicEstimate ? { deliveryEstimate: publicEstimate } : {}),
           ...(parcel.carrier ? { carrier: parcel.carrier } : {}),
           ...(parcel.tracking ? { tracking: parcel.tracking } : {}),
           ownerId,
@@ -230,6 +274,17 @@ export const shippingCommand = onCall(options, async (req) => {
         createdAt: Date.now(),
       });
       const result = { id, version: parcel.version };
+      // Metadata-only ETA does not initiate customer/provider delivery jobs.
+      if (d.action !== "setDeliveryEstimate")
+        for (const order of orders)
+          tx.create(db.collection("outboxJobs").doc(), {
+            ownerId: order.ownerId,
+            orderId: order.id,
+            resourceId: id,
+            action: d.action,
+            state: "queued",
+            createdAt: Date.now(),
+          });
       tx.create(op, { hash, result, createdAt: Date.now() });
       return result;
     });

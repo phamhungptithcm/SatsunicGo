@@ -1,9 +1,11 @@
+import { validateStudioImage } from "./blog-studio";
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { randomUUID, createHash } from "node:crypto";
 import { z } from "zod";
 import { verifyImage } from "../../packages/domain/media";
+import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 export const uploadContentImage = onCall(
   {
     region: "asia-southeast1",
@@ -13,6 +15,7 @@ export const uploadContentImage = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (!req.auth?.uid)
       throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
     const data = z
@@ -40,7 +43,8 @@ export const uploadContentImage = onCall(
         db.doc(`users/${uid}`).get(),
       ]);
       return (
-        a.data()?.active &&
+        a.data()?.active === true &&
+        isStringRoleArray(a.data()?.roles) &&
         !a.data()?.locked &&
         !u.data()?.locked &&
         a
@@ -101,14 +105,57 @@ export const publicImage = onRequest(
     try {
       const db = getFirestore(),
         media = (await db.doc(`contentMedia/${id}`).get()).data();
-      if (!media || !["products", "posts"].includes(media.contentKind)) {
+      if (
+        !media ||
+        !["products", "posts", "authors"].includes(media.contentKind)
+      ) {
         res.status(404).end();
         return;
       }
-      const content = (
-        await db.doc(`${media.contentKind}/${media.contentId}`).get()
-      ).data();
-      if (content?.status !== "published" || content.mediaId !== id) {
+      if (media.contentKind === "authors") {
+        if (media.studioMedia !== true || media.rightsConfirmed !== true) {
+          res.status(404).end();
+          return;
+        }
+        const referenced = async () =>
+          !(
+            await db
+              .collection("blogPublished")
+              .where("status", "==", "published")
+              .where("authorAvatarId", "==", id)
+              .limit(1)
+              .get()
+          ).empty;
+        if (!(await referenced())) {
+          res.status(404).end();
+          return;
+        }
+        const [bytes] = await getStorage()
+          .bucket()
+          .file(media.objectPath)
+          .download();
+        await validateStudioImage(bytes, media.mime);
+        if (!(await referenced())) {
+          res.status(404).end();
+          return;
+        }
+        res.type(media.mime).send(bytes);
+        return;
+      }
+      const publishedRef = db.doc(`blogPublished/${media.contentId}`);
+      const studio =
+        media.contentKind === "posts"
+          ? (await publishedRef.get()).data()
+          : undefined;
+      const content =
+        studio ??
+        (await db.doc(`${media.contentKind}/${media.contentId}`).get()).data();
+      if (
+        content?.status !== "published" ||
+        (studio
+          ? !Array.isArray(studio.mediaIds) || !studio.mediaIds.includes(id)
+          : content.mediaId !== id)
+      ) {
         res.status(404).end();
         return;
       }
@@ -116,7 +163,18 @@ export const publicImage = onRequest(
         .bucket()
         .file(media.objectPath)
         .download();
-      verifyImage(bytes, media.mime);
+      if (studio) {
+        await validateStudioImage(bytes, media.mime);
+        const current = (await publishedRef.get()).data();
+        if (
+          current?.status !== "published" ||
+          !Array.isArray(current.mediaIds) ||
+          !current.mediaIds.includes(id)
+        ) {
+          res.status(404).end();
+          return;
+        }
+      } else verifyImage(bytes, media.mime);
       res.type(media.mime).send(bytes);
     } catch {
       res.status(404).end();

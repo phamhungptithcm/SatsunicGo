@@ -84,3 +84,41 @@ test("substitution cannot silently change quantities or already purchased goods"
     }),
   ).toThrow("UNEXPECTED_SUBSTITUTION");
 });
+
+test("multi-line substitution cannot rewrite a purchased variant", () => {
+  const multi: Order = {
+    ...order,
+    items: [
+      ...order.items,
+      { name: "Second item", quantity: 1, variant: "old" },
+    ],
+    purchasedLines: [1, 0],
+  };
+  const substitution = {
+    ...p,
+    kind: "substitution" as const,
+    lines: [
+      { line: 0, cancelQuantity: 0, replacementVariant: "new size" },
+      { line: 1, cancelQuantity: 0, replacementName: "Replacement item" },
+    ],
+  };
+  expect(() => checkProposal(multi, substitution)).toThrow("ALREADY_PURCHASED");
+  expect(() =>
+    checkProposal(multi, {
+      ...substitution,
+      lines: [
+        { line: 0, cancelQuantity: 0, replacementVariant: "" },
+        substitution.lines[1],
+      ],
+    }),
+  ).toThrow("ALREADY_PURCHASED");
+  expect(() =>
+    checkProposal({ ...multi, purchasedLines: [0, 0] }, substitution),
+  ).not.toThrow();
+  expect(() =>
+    checkProposal(multi, {
+      ...substitution,
+      lines: [{ line: 0, cancelQuantity: 0 }, substitution.lines[1]],
+    }),
+  ).not.toThrow();
+});

@@ -1,11 +1,11 @@
 export const publicCopy: Record<string, [string, string]> = {
   "how-it-works": [
     "Mua hộ từng bước",
-    "Gửi yêu cầu → xác minh sản phẩm → duyệt báo giá → xác nhận cọc 50% → mua hàng → nhận và đóng gói → duyệt tổng cuối → thanh toán số dư → xuất gửi và theo dõi.",
+    "Sản phẩm niêm yết: chọn sản phẩm → thanh toán toàn bộ → nhân viên mua hộ → nhận, đóng gói và giao hàng.\n\nSản phẩm chưa có trong danh mục: gửi yêu cầu → xem xét và báo giá → chấp nhận báo giá → thanh toán đợt một → mua hộ → chốt tổng cuối → thanh toán đợt hai → giao hàng.",
   ],
   fees: [
     "Chi phí được tách rõ",
-    "Giá hàng, phí mua hộ, phí/thuế nội địa nguồn, cước quốc tế và giao nội địa được thể hiện trong báo giá. Bảng phí và tỷ giá thương mại đang chờ duyệt; chưa có giá công khai.",
+    "Sản phẩm niêm yết dùng giá trọn gói cho toàn bộ phí mua hộ và giao hàng, thanh toán một lần. Sản phẩm ngoài danh mục được xem xét và báo giá riêng; chi phí và hai đợt thanh toán được thể hiện trong báo giá.",
   ],
   membership: [
     "Quyền lợi cho người mua thường xuyên",
@@ -21,7 +21,7 @@ export const publicCopy: Record<string, [string, string]> = {
   ],
   terms: [
     "Điều khoản mua hộ",
-    "Điều khoản cọc, đổi trả, hủy và hoàn tiền cần được đơn vị vận hành duyệt trước khi nhận giao dịch thật.",
+    "Sản phẩm niêm yết thanh toán toàn bộ; yêu cầu mua hộ ngoài danh mục thanh toán hai đợt theo báo giá. Điều khoản mua hàng, đổi trả, hủy và hoàn tiền cần được đơn vị vận hành duyệt trước khi nhận giao dịch thật.",
   ],
   restricted: [
     "Hàng hạn chế",

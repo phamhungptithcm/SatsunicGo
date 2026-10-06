@@ -1,7 +1,12 @@
-import { recentMfa } from "./auth/guards";
+import {
+  isStringRoleArray,
+  recentMfa,
+  requireVerifiedGoogle,
+} from "./auth/guards";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { normalizeCustomerName } from "../../packages/domain/crm";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import {
@@ -15,6 +20,7 @@ import {
   type Action,
   type Order,
   type Role,
+  grants,
 } from "../../packages/domain";
 initializeApp();
 const db = getFirestore();
@@ -37,6 +43,7 @@ const config = {
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
 };
 export const command = onCall(config, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const parsed = schema.safeParse(req.data);
@@ -65,14 +72,16 @@ export const command = onCall(config, async (req) => {
       if (previous.data()?.hash !== hash)
         throw new HttpsError("already-exists", "Mã thao tác đã được sử dụng.");
     }
-    const rs: Role[] = access.data()?.active
-      ? (access.data()?.roles ?? [])
-      : [];
+    const rs: Role[] =
+      access.data()?.active === true && isStringRoleArray(access.data()?.roles)
+        ? (access.data()?.roles ?? [])
+        : [];
     let o = snapshot.data() as Order;
     let finance: Record<string, unknown> | undefined;
     let bankRef;
     let bankData;
     let transferRef;
+    let refundRef;
     if (d.action !== "submitRequest") {
       if (!snapshot.exists)
         throw new HttpsError(
@@ -83,6 +92,7 @@ export const command = onCall(config, async (req) => {
         [
           "acceptQuote",
           "approveFinal",
+          "confirmReceipt",
           "cancelRequest",
           "transferReview",
         ].includes(d.action)
@@ -103,8 +113,11 @@ export const command = onCall(config, async (req) => {
         }
         if (
           rs.includes("BUYER") &&
-          !rs.includes("OWNER") &&
-          !(access.data()?.orderIds ?? []).includes(id)
+          !(grants[d.action] ?? []).some(
+            (role) => role !== "BUYER" && rs.includes(role),
+          ) &&
+          (!Array.isArray(access.data()?.orderIds) ||
+            !access.data()!.orderIds.includes(id))
         )
           throw new HttpsError("permission-denied", "Đơn chưa được phân công.");
       }
@@ -134,6 +147,7 @@ export const command = onCall(config, async (req) => {
           ...p,
           id,
           ownerId: uid,
+          purchaseKind: "custom",
           stage: "REQUESTED",
           version: 1,
           createdAt: now,
@@ -141,6 +155,11 @@ export const command = onCall(config, async (req) => {
           refunded: 0,
         };
       } else if (d.action === "verifyTransfer" || d.action === "refund") {
+        if (d.action === "verifyTransfer" && o.stage === "CANCELLED")
+          throw new HttpsError(
+            "failed-precondition",
+            "Đơn đã hủy. Không thể phân bổ thêm tiền.",
+          );
         if (
           process.env.FUNCTIONS_EMULATOR !== "true" &&
           !recentMfa(req.auth!.token, now)
@@ -159,6 +178,7 @@ export const command = onCall(config, async (req) => {
               .string()
               .regex(/^[a-zA-Z0-9-]{1,160}$/)
               .optional(),
+            refundRequestId: z.string().uuid().optional(),
           })
           .strict()
           .parse(d.payload);
@@ -181,8 +201,24 @@ export const command = onCall(config, async (req) => {
         if ((await tx.get(bankRef)).exists)
           throw new HttpsError("already-exists", "Giao dịch đã được phân bổ.");
         if (!o.acceptedAt) throw Error("NO_ACCEPTANCE");
+        if (p.refundRequestId && d.action !== "refund")
+          throw Error("INVALID_REFUND_ACTION");
         if (d.action === "refund") {
-          if (p.amount > o.collected - o.refunded) throw Error("OVER_REFUND");
+          if (p.refundRequestId) {
+            refundRef = db.doc(`refunds/${p.refundRequestId}`);
+            const refund = await tx.get(refundRef);
+            if (
+              refund.data()?.state !== "pending" ||
+              refund.data()?.orderId !== id ||
+              refund.data()?.amount !== p.amount
+            )
+              throw Error("REFUND_CONTEXT_MISMATCH");
+            if ((o.refundReserved ?? 0) < p.amount)
+              throw Error("REFUND_RESERVATION_MISMATCH");
+            o.refundReserved = (o.refundReserved ?? 0) - p.amount;
+          }
+          if (p.amount > o.collected - o.refunded - (o.refundReserved ?? 0))
+            throw Error("OVER_REFUND");
           o.refunded += p.amount;
         } else o.collected = money.parse(o.collected + p.amount);
         finance = {
@@ -199,7 +235,7 @@ export const command = onCall(config, async (req) => {
           o.stage === "PACKED" &&
           o.finalApproved &&
           o.finalTotal !== undefined &&
-          o.collected - o.refunded >= o.finalTotal &&
+          o.collected - o.refunded - (o.refundReserved ?? 0) >= o.finalTotal &&
           !o.hold
         )
           o.stage = "READY_TO_SHIP";
@@ -340,7 +376,29 @@ export const command = onCall(config, async (req) => {
       );
     }
     const result = { id, version: o.version };
+    if (d.action === "submitRequest" && !profile.exists) {
+      const displayName =
+        typeof req.auth!.token.name === "string"
+          ? req.auth!.token.name.slice(0, 120)
+          : "";
+      tx.create(db.doc(`users/${uid}`), {
+        ownerId: uid,
+        displayName,
+        searchName: normalizeCustomerName(displayName),
+        businessName: "",
+        marketingConsent: false,
+        version: 1,
+        createdAt: now,
+        changedAt: now,
+      });
+    }
     if (bankRef && bankData) tx.create(bankRef, bankData);
+    if (refundRef)
+      tx.update(refundRef, {
+        state: "confirmed",
+        confirmedAt: now,
+        confirmedBy: uid,
+      });
     tx.set(ref, o);
     tx.create(op, { hash, result, createdAt: now });
     tx.create(db.collection("auditEvents").doc(), {
@@ -375,6 +433,7 @@ export const command = onCall(config, async (req) => {
   });
 });
 export { ask } from "./ai/ask";
+export { askWorkflow, currentAskConversation } from "./ai/ask-workflow";
 export {
   listWork,
   workspaceCommand,
@@ -390,13 +449,63 @@ export {
   reconcilePayments,
 } from "./payments/payos";
 export { deliverEmail } from "./email";
+export {
+  readOrderConversation,
+  orderConversationCommand,
+} from "./order-conversation";
 
 export { shippingCommand } from "./shipping";
 export { orderHistory } from "./order-history";
 export { changeCommand } from "./changes";
+export { returnCommand } from "./returns";
+export { refundCommand } from "./refunds";
 
 export { uploadContentImage, publicImage } from "./media";
 export { consolidationCommand } from "./consolidation";
 export { readStaffAccess } from "./workspace";
-export { readCustomer, saveCustomerNotes } from "./crm";
+export {
+  readCustomer,
+  saveCustomerNotes,
+  listCustomers,
+  listFollowUps,
+  listCrmStaff,
+} from "./crm";
 export { operationalDashboard } from "./crm";
+
+export {
+  uploadOrderImage,
+  listOrderImages,
+  readOrderImage,
+} from "./order-media";
+
+export { financeReview } from "./finance-review";
+
+export { membershipReminderPolicy } from "./membership-reminder-policy";
+
+export { readOrderOperations } from "./workspace";
+
+export { catalogCheckout } from "./catalog-checkout";
+
+export { invoiceCommand, invoiceList, invoiceDetail } from "./invoices";
+export { invoiceShare } from "./invoice-share";
+export { outboxCommand } from "./outbox-command";
+
+export { customerOrderTracking } from "./customer-order-tracking";
+export { shippingRatesPublic, shippingRatesAdmin } from "./shipping-rates";
+export {
+  studioRead,
+  studioCommand,
+  studioMediaUpload,
+  studioMediaRead,
+} from "./blog-studio";
+
+export {
+  blogCommentSubmit,
+  blogCommentList,
+  blogCommentCommand,
+  blogCommentReport,
+} from "./blog-comments";
+export {
+  studioAdvancedRead,
+  studioAdvancedCommand,
+} from "./blog-studio-advanced";

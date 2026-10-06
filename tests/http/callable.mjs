@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { randomUUID } from "node:crypto";
+import { URLSearchParams } from "node:url";
 if (
   process.env.GCLOUD_PROJECT &&
   process.env.GCLOUD_PROJECT !== "demo-satsunicgo"
@@ -16,17 +17,33 @@ if (authHost !== "127.0.0.1:9198" || firestoreHost !== "127.0.0.1:8181")
   throw Error("Dedicated emulators required");
 const endpoint =
   "http://127.0.0.1:5101/demo-satsunicgo/asia-southeast1/command";
-async function signup() {
+async function signup(google = true) {
+  const email = `fixture-${randomUUID()}@example.invalid`;
   const response = await fetch(
-    `http://${authHost}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=demo-only`,
+    `http://${authHost}/identitytoolkit.googleapis.com/v1/accounts:${google ? "signInWithIdp" : "signUp"}?key=demo-only`,
     {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        email: `fixture-${randomUUID()}@example.invalid`,
-        password: "Emulator-fixture-only-123!",
-        returnSecureToken: true,
-      }),
+      body: JSON.stringify(
+        google
+          ? {
+              requestUri: "http://localhost",
+              postBody: new URLSearchParams({
+                providerId: "google.com",
+                id_token: JSON.stringify({
+                  sub: randomUUID(),
+                  email,
+                  email_verified: true,
+                }),
+              }).toString(),
+              returnSecureToken: true,
+            }
+          : {
+              email,
+              password: "Emulator-fixture-only-123!",
+              returnSecureToken: true,
+            },
+      ),
     },
   );
   assert.equal(response.status, 200);
@@ -55,6 +72,9 @@ const anonymous = await command(null, input);
 assert.equal(anonymous.body.error?.status, "UNAUTHENTICATED");
 const forged = await command("invalid-token", input);
 assert.equal(forged.body.error?.status, "UNAUTHENTICATED");
+const passwordUser = await signup(false);
+const wrongProvider = await command(passwordUser.idToken, input);
+assert.equal(wrongProvider.body.error?.status, "PERMISSION_DENIED");
 const created = await command(a.idToken, input);
 assert.equal(created.status, 200);
 assert.ok(created.body.result.id);
@@ -71,24 +91,20 @@ assert.equal(forbidden.body.error?.status, "PERMISSION_DENIED");
 initializeApp({ projectId: "demo-satsunicgo" });
 const db = getFirestore(),
   slug = `http-${randomUUID()}`;
-await db
-  .doc(`posts/${slug}`)
-  .set({
-    status: "published",
-    slug,
-    title: "HTTP public fixture",
-    body: "Readable fixture <script>unsafe()</script>",
-    seoTitle: "Fixture search title",
-    seoDescription: "Fixture search description",
-  });
-await db
-  .doc(`posts/draft-${slug}`)
-  .set({
-    status: "draft",
-    slug: `draft-${slug}`,
-    title: "Private draft",
-    body: "PRIVATE_DRAFT_FIXTURE",
-  });
+await db.doc(`posts/${slug}`).set({
+  status: "published",
+  slug,
+  title: "HTTP public fixture",
+  body: "Readable fixture <script>unsafe()</script>",
+  seoTitle: "Fixture search title",
+  seoDescription: "Fixture search description",
+});
+await db.doc(`posts/draft-${slug}`).set({
+  status: "draft",
+  slug: `draft-${slug}`,
+  title: "Private draft",
+  body: "PRIVATE_DRAFT_FIXTURE",
+});
 const publicEndpoint =
   "http://127.0.0.1:5101/demo-satsunicgo/asia-southeast1/publicPage";
 const published = await fetch(`${publicEndpoint}/posts/${slug}`),

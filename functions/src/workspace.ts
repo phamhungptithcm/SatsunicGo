@@ -1,9 +1,18 @@
-import { recentMfa } from "./auth/guards";
+import {
+  catalogOptionsSchema,
+  catalogProductSchema,
+} from "../../packages/domain/catalog-checkout";
+import {
+  isStringRoleArray,
+  recentMfa,
+  requireVerifiedGoogle,
+} from "./auth/guards";
 import { getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { z } from "zod";
 import { randomUUID, createHash } from "node:crypto";
 import { roles, money, type Role } from "../../packages/domain";
+import { normalizeCustomerName } from "../../packages/domain/crm";
 const opts = {
   region: "asia-southeast1",
   maxInstances: 4,
@@ -11,73 +20,245 @@ const opts = {
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
 };
 export const listWork = onCall(opts, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const db = getFirestore();
-  const access = (await db.doc(`staffAccess/${req.auth.uid}`).get()).data();
-  const customer = (await db.doc(`users/${req.auth.uid}`).get()).data();
-  if (!access?.active || access.locked || customer?.locked)
-    throw new HttpsError("permission-denied", "Cần quyền nhân viên.");
-  const rs: Role[] = access.roles ?? [];
-  const parsed = z
-    .object({
-      kind: z.enum([
-        "orders",
-        "supportTickets",
-        "products",
-        "posts",
-        "campaigns",
-        "membershipPlans",
-        "packages",
-        "consolidationBatches",
-        "orderChanges",
-        "membershipInvoices",
-        "transferReviews",
-        "paymentExceptions",
-      ]),
-      after: z.string().max(80).optional(),
-    })
-    .strict()
-    .safeParse(req.data);
-  if (!parsed.success)
-    throw new HttpsError("invalid-argument", "Không hợp lệ.");
-  const { kind, after } = parsed.data;
-  const allowed = [
-    "membershipInvoices",
-    "transferReviews",
-    "paymentExceptions",
-  ].includes(kind)
-    ? ["OWNER", "FINANCE"]
-    : kind === "orderChanges"
-      ? ["OWNER", "OPERATIONS_MANAGER"]
-      : ["packages", "consolidationBatches"].includes(kind)
-        ? ["OWNER", "WAREHOUSE", "OPERATIONS_MANAGER"]
-        : kind === "orders"
-          ? [
+  return db.runTransaction(async (tx) => {
+    const [accessSnapshot, customerSnapshot] = await Promise.all([
+      tx.get(db.doc(`staffAccess/${req.auth!.uid}`)),
+      tx.get(db.doc(`users/${req.auth!.uid}`)),
+    ]);
+    const access = accessSnapshot.data(),
+      customer = customerSnapshot.data();
+    if (
+      access?.active !== true ||
+      !isStringRoleArray(access.roles) ||
+      access.locked ||
+      customer?.locked
+    )
+      throw new HttpsError("permission-denied", "Cần quyền nhân viên.");
+    const rs: readonly string[] = access.roles;
+    const parsed = z
+      .object({
+        kind: z.enum([
+          "orders",
+          "supportTickets",
+          "products",
+          "posts",
+          "campaigns",
+          "membershipPlans",
+          "packages",
+          "consolidationBatches",
+          "orderChanges",
+          "orderReturns",
+          "refunds",
+          "membershipInvoices",
+          "transferReviews",
+          "paymentExceptions",
+          "auditEvents",
+          "outboxJobs",
+        ]),
+        after: z.string().max(256).optional(),
+        id: z
+          .string()
+          .regex(/^[a-zA-Z0-9-]{1,80}$/)
+          .optional(),
+        changeState: z.literal("accepted").optional(),
+        queue: z
+          .enum([
+            "requests",
+            "quotes",
+            "purchasing",
+            "warehouse",
+            "balance",
+            "ready",
+            "holds",
+          ])
+          .optional(),
+      })
+      .strict()
+      .refine(
+        (input) =>
+          !input.after ||
+          (input.kind === "outboxJobs"
+            ? /^[a-zA-Z0-9_-]{1,256}$/.test(input.after)
+            : input.after.length <= 80),
+      )
+      .safeParse(req.data);
+    if (!parsed.success)
+      throw new HttpsError("invalid-argument", "Không hợp lệ.");
+    const { kind, after, id, queue, changeState } = parsed.data;
+    if (
+      (changeState && kind !== "orderChanges") ||
+      (queue && kind !== "orders") ||
+      (id &&
+        !["orders", "supportTickets", "packages", "consolidationBatches"].includes(
+          kind,
+        )) ||
+      (id && after && ["packages", "consolidationBatches"].includes(kind))
+    )
+      throw new HttpsError("invalid-argument", "Bộ lọc không hợp lệ.");
+    const allowed = [
+      "membershipInvoices",
+      "refunds",
+      "transferReviews",
+      "paymentExceptions",
+    ].includes(kind)
+      ? ["OWNER", "FINANCE"]
+      : ["auditEvents", "outboxJobs", "orderChanges"].includes(kind)
+        ? ["OWNER", "OPERATIONS_MANAGER"]
+        : ["packages", "consolidationBatches", "orderReturns"].includes(kind)
+          ? ["OWNER", "WAREHOUSE", "OPERATIONS_MANAGER"]
+          : kind === "orders"
+            ? [
+                "OWNER",
+                "OPERATIONS_MANAGER",
+                "BUYER",
+                "WAREHOUSE",
+                "FINANCE",
+                "SUPPORT",
+              ]
+            : kind === "supportTickets"
+              ? ["OWNER", "SUPPORT", "OPERATIONS_MANAGER"]
+              : ["OWNER", "CONTENT_EDITOR"];
+    if (!allowed.some((r) => rs.includes(r as Role)))
+      throw new HttpsError("permission-denied", "Không có quyền xem hàng đợi.");
+    const acceptedChanges =
+      kind === "orderChanges" && changeState === "accepted";
+    let q = acceptedChanges
+      ? db
+          .collection(kind)
+          .where("state", "==", "accepted")
+          .orderBy("reviewedAt", "desc")
+          .orderBy("__name__", "asc")
+          .limit(31)
+      : (queue === "holds"
+          ? db.collection(kind).orderBy("hold")
+          : ["auditEvents", "outboxJobs"].includes(kind)
+            ? db.collection(kind).orderBy("createdAt", "desc")
+            : db.collection(kind)
+        )
+          .orderBy("__name__")
+          .limit(30);
+    const buyerOnly =
+      rs.includes("BUYER") &&
+      !rs.some((r) =>
+        [
+          "OWNER",
+          "OPERATIONS_MANAGER",
+          "WAREHOUSE",
+          "FINANCE",
+          "SUPPORT",
+        ].includes(r),
+      );
+    let assignmentNext: string | null = null;
+    const assignedIds: string[] = Array.isArray(access.orderIds)
+      ? access.orderIds
+      : [];
+    if (kind === "orders" && buyerOnly && !id) {
+      const candidates = [...new Set<string>(assignedIds)]
+        .sort()
+        .filter((value) => !after || value > after);
+      const ids = candidates.slice(0, 30);
+      assignmentNext = candidates.length > 30 ? (ids.at(-1) ?? null) : null;
+      if (!ids.length) return { rows: [], next: null };
+      q = q.where("__name__", "in", ids);
+    }
+    if (id) {
+      if (buyerOnly && !assignedIds.includes(id))
+        throw new HttpsError("permission-denied", "Đơn chưa được phân công.");
+      q = q.where("__name__", "==", id);
+    }
+    if (queue) {
+      if (queue === "holds") q = q.where("hold", ">", "");
+      else {
+        const stages = {
+          requests: ["REQUESTED"],
+          quotes: ["QUOTED"],
+          purchasing: ["QUOTE_ACCEPTED", "PURCHASING"],
+          warehouse: ["PURCHASED", "ORIGIN_RECEIVED", "PACKED"],
+          balance: ["PACKED"],
+          ready: ["READY_TO_SHIP"],
+        };
+        q = q.where("stage", "in", stages[queue]);
+      }
+    }
+    if (after && !(kind === "orders" && buyerOnly)) {
+      const last = await tx.get(db.doc(`${kind}/${after}`));
+      if (
+        !last.exists ||
+        (acceptedChanges &&
+          (last.data()?.state !== "accepted" ||
+            !Number.isSafeInteger(last.data()?.reviewedAt) ||
+            last.data()!.reviewedAt <= 0))
+      )
+        throw new HttpsError(
+          "invalid-argument",
+          "Trang đã thay đổi. Tải lại danh sách.",
+        );
+      q = q.startAfter(last);
+    }
+    const s = await tx.get(q);
+    const rows = acceptedChanges ? s.docs.slice(0, 30) : s.docs;
+    return {
+      rows: rows.map((d) => {
+        const data = d.data();
+        if (kind === "auditEvents")
+          return {
+            id: d.id,
+            action: data.action,
+            resourceId: data.resourceId,
+            createdAt: data.createdAt,
+          };
+        if (kind === "outboxJobs")
+          return {
+            id: d.id,
+            action: data.action,
+            state: data.state,
+            emailState: data.emailState ?? "not_queued",
+            createdAt: data.createdAt,
+            attempts: data.emailAttempts ?? 0,
+            version: data.version ?? 0,
+          };
+        if (
+          kind === "orders" &&
+          !rs.some((r) =>
+            [
               "OWNER",
               "OPERATIONS_MANAGER",
-              "BUYER",
-              "WAREHOUSE",
               "FINANCE",
               "SUPPORT",
-            ]
-          : kind === "supportTickets"
-            ? ["OWNER", "SUPPORT", "OPERATIONS_MANAGER"]
-            : ["OWNER", "CONTENT_EDITOR"];
-  if (!allowed.some((r) => rs.includes(r as Role)))
-    throw new HttpsError("permission-denied", "Không có quyền xem hàng đợi.");
-  let q = db.collection(kind).orderBy("__name__").limit(30);
-  if (after) q = q.startAfter(after);
-  if (kind === "orders" && rs.includes("BUYER") && !rs.includes("OWNER")) {
-    const ids = (access.orderIds ?? []).slice(0, 30);
-    if (!ids.length) return { rows: [], next: null };
-    q = q.where("__name__", "in", ids);
-  }
-  const s = await q.get();
-  return {
-    rows: s.docs.map((d) => ({ ...d.data(), id: d.id })),
-    next: s.size === 30 ? s.docs.at(-1)?.id : null,
-  };
+              "BUYER",
+            ].includes(r),
+          )
+        ) {
+          return {
+            id: d.id,
+            ownerId: data.ownerId,
+            items: data.items,
+            market: data.market,
+            stage: data.stage,
+            version: data.version,
+            packingComplete: data.packingComplete ?? false,
+            packedQuantity: data.packedQuantity ?? 0,
+            hold: data.hold ?? "",
+            createdAt: data.createdAt,
+          };
+        }
+        return { ...data, id: d.id };
+      }),
+      next: acceptedChanges
+        ? s.size > 30
+          ? (rows.at(-1)?.id ?? null)
+          : null
+        : kind === "orders" && buyerOnly
+          ? assignmentNext
+          : s.size === 30
+            ? s.docs.at(-1)?.id
+            : null,
+    };
+  });
 });
 const contentSchema = z
   .object({
@@ -95,9 +276,18 @@ const contentSchema = z
       .refine((value) => /^https?:\/\//i.test(value))
       .optional(),
     variants: z.string().max(500).optional(),
+    featured: z.boolean().optional(),
+    featuredOrder: z.number().int().min(0).max(9999).default(9999),
+    origin: z.string().max(4000).optional(),
+    functions: z.string().max(4000).optional(),
+    usage: z.string().max(4000).optional(),
     seoTitle: z.string().min(2).max(160).optional(),
     seoDescription: z.string().min(2).max(300).optional(),
     referencePrice: money.optional(),
+    listedPrice: money.positive().optional(),
+    orderable: z.boolean().optional(),
+    termsVersion: z.string().trim().min(1).max(80).optional(),
+    catalogOptions: catalogOptionsSchema.optional(),
     priceCheckedAt: z.number().int().positive().optional(),
     mediaId: z
       .string()
@@ -106,6 +296,7 @@ const contentSchema = z
   })
   .strict();
 export const workspaceCommand = onCall(opts, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const db = getFirestore(),
@@ -127,12 +318,18 @@ export const workspaceCommand = onCall(opts, async (req) => {
       operationId: z.string().uuid(),
       id: z
         .string()
-        .regex(/^[a-zA-Z0-9-]{1,80}$/)
+        .regex(/^[a-zA-Z0-9-]{1,128}$/)
         .optional(),
       expectedVersion: z.number().int().nonnegative().optional(),
       payload: z.unknown(),
     })
     .strict()
+    .refine(
+      (input) =>
+        !input.id ||
+        input.action === "saveStaffAccess" ||
+        input.id.length <= 80,
+    )
     .safeParse(req.data);
   if (!parsed.success)
     throw new HttpsError("invalid-argument", "Thông tin không hợp lệ.");
@@ -151,9 +348,10 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "permission-denied",
         "Không thể thực hiện thao tác.",
       );
-    const rs: Role[] = access.data()?.active
-      ? (access.data()?.roles ?? [])
-      : [];
+    const rs: Role[] =
+      access.data()?.active === true && isStringRoleArray(access.data()?.roles)
+        ? (access.data()?.roles ?? [])
+        : [];
     const require = (allowed: Role[]) => {
       if (!allowed.some((r) => rs.includes(r)))
         throw new HttpsError(
@@ -257,6 +455,13 @@ export const workspaceCommand = onCall(opts, async (req) => {
             .parse(d.payload);
           collection = p.kind;
           data = p.content;
+          if (p.kind === "products" && p.content.orderable) {
+            catalogProductSchema.parse({
+              ...p.content,
+              status: "published",
+              version: 1,
+            });
+          }
           if (
             data.status === "scheduled" &&
             (!data.publishAt || Number(data.publishAt) <= now)
@@ -403,6 +608,14 @@ export const workspaceCommand = onCall(opts, async (req) => {
       throw new HttpsError("already-exists", "Hội thoại đã tồn tại.");
     if (old.exists && old.data()?.version !== d.expectedVersion)
       throw new HttpsError("aborted", "Dữ liệu đã thay đổi. Tải lại.");
+    const storedVersion = old.data()?.version;
+    if (
+      storedVersion !== undefined &&
+      (!Number.isSafeInteger(storedVersion) ||
+        storedVersion < 0 ||
+        storedVersion >= Number.MAX_SAFE_INTEGER)
+    )
+      throw new HttpsError("aborted", "Dữ liệu đã thay đổi. Tải lại.");
     if (
       ["saveProfile", "saveAddress"].includes(d.action) &&
       old.exists &&
@@ -458,9 +671,18 @@ export const workspaceCommand = onCall(opts, async (req) => {
         authorId: uid,
         createdAt: now,
       });
+      if (old.data()?.ownerId !== uid)
+        tx.create(db.collection("outboxJobs").doc(), {
+          ownerId: old.data()!.ownerId,
+          resourceId: entityId,
+          action: "replyTicket",
+          state: "queued",
+          createdAt: now,
+        });
       data = { status: data.status };
     }
     if (d.action === "saveProfile") {
+      data.searchName = normalizeCustomerName(String(data.displayName));
       const changed = old.data()?.marketingConsent !== data.marketingConsent;
       data.marketingConsentVersion = "profile-opt-in-v1";
       data.marketingConsentAt = changed
@@ -506,6 +728,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
   });
 });
 export const readOwnerConfiguration = onCall(opts, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const db = getFirestore(),
@@ -515,9 +738,10 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
       db.doc("settings/pricing").get(),
     ]);
   if (
-    !access.data()?.active ||
+    access.data()?.active !== true ||
     access.data()?.locked ||
     user.data()?.locked ||
+    !isStringRoleArray(access.data()?.roles) ||
     !access.data()?.roles?.includes("OWNER")
   )
     throw new HttpsError("permission-denied", "Cần quyền chủ doanh nghiệp.");
@@ -536,6 +760,7 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
   };
 });
 export const ticketMessages = onCall(opts, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const id = z
@@ -556,7 +781,8 @@ export const ticketMessages = onCall(opts, async (req) => {
     !ticket.exists ||
     !(
       ticket.data()?.ownerId === req.auth.uid ||
-      (access.data()?.active &&
+      (access.data()?.active === true &&
+        isStringRoleArray(access.data()?.roles) &&
         access
           .data()
           ?.roles?.some((r: string) =>
@@ -582,6 +808,7 @@ export const ticketMessages = onCall(opts, async (req) => {
   };
 });
 export const readStaffAccess = onCall(opts, async (req) => {
+  requireVerifiedGoogle(req.auth);
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const id = z
@@ -598,9 +825,10 @@ export const readStaffAccess = onCall(opts, async (req) => {
       tx.get(db.doc(`staffAccess/${id.data}`)),
     ]);
     if (
-      !access.data()?.active ||
+      access.data()?.active !== true ||
       access.data()?.locked ||
       user.data()?.locked ||
+      !isStringRoleArray(access.data()?.roles) ||
       !access.data()?.roles?.includes("OWNER")
     )
       throw new HttpsError("permission-denied", "Cần quyền chủ doanh nghiệp.");
@@ -608,13 +836,79 @@ export const readStaffAccess = onCall(opts, async (req) => {
     return {
       access: t
         ? {
-            version: t.version,
+            ...(t.version !== undefined ? { version: t.version } : {}),
             roles: t.roles,
-            active: t.active,
-            locked: t.locked,
+            ...(t.active !== undefined ? { active: t.active } : {}),
+            ...(t.locked !== undefined ? { locked: t.locked } : {}),
             orderIds: t.orderIds ?? [],
           }
         : null,
+    };
+  });
+});
+export const readOrderOperations = onCall(opts, async (req) => {
+  const uid = requireVerifiedGoogle(req.auth);
+  const parsed = z
+    .object({ orderId: z.string().regex(/^[a-zA-Z0-9-]{1,80}$/) })
+    .strict()
+    .safeParse(req.data);
+  if (!parsed.success)
+    throw new HttpsError("invalid-argument", "Mã đơn chưa hợp lệ.");
+  const id = parsed.data.orderId,
+    db = getFirestore();
+  return db.runTransaction(async (tx) => {
+    const [staff, user, order, operations] = await Promise.all([
+      tx.get(db.doc(`staffAccess/${uid}`)),
+      tx.get(db.doc(`users/${uid}`)),
+      tx.get(db.doc(`orders/${id}`)),
+      tx.get(db.doc(`orderOperations/${id}`)),
+    ]);
+    const rs: Role[] = isStringRoleArray(staff.data()?.roles)
+        ? staff.data()!.roles
+        : [],
+      manager = rs.some((r) => ["OWNER", "OPERATIONS_MANAGER"].includes(r)),
+      buyer =
+        rs.includes("BUYER") &&
+        Array.isArray(staff.data()?.orderIds) &&
+        staff.data()!.orderIds.includes(id);
+    if (
+      staff.data()?.active !== true ||
+      staff.data()?.locked ||
+      user.data()?.locked ||
+      !order.exists ||
+      !(manager || buyer || rs.includes("WAREHOUSE"))
+    )
+      throw new HttpsError(
+        "permission-denied",
+        "Không có quyền xem dữ liệu nhận kho của đơn.",
+      );
+    const data = operations.data();
+    return {
+      recipient:
+        manager || rs.includes("WAREHOUSE") ? (data?.recipient ?? null) : null,
+      receiving: data?.receive
+        ? {
+            quantity: data.receive.quantity,
+            condition: data.receive.condition,
+            shelf: data.receive.shelf ?? "",
+            changedAt: data.changedAt,
+          }
+        : null,
+      packing: data?.pack
+        ? {
+            weightGrams: data.pack.weightGrams,
+            dimensionsCm: data.pack.dimensionsCm,
+            checklist: data.pack.checklist,
+          }
+        : null,
+      purchase:
+        (manager || buyer) && data?.recordPurchase
+          ? {
+              supplierOrder: data.recordPurchase.supplierOrder,
+              quantity: data.recordPurchase.quantity,
+              actualSourceMinor: data.recordPurchase.actualSourceMinor,
+            }
+          : null,
     };
   });
 });

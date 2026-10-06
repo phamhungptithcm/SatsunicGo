@@ -622,3 +622,605 @@
     animation: none;
   }
 }
+
+.commerce {
+  padding: 16px 0;
+  border-top: 1px solid #e4e7ed;
+  overflow-wrap: anywhere;
+}
+.commerce h2 {
+  font-size: 1rem;
+}
+.commerce h3 {
+  font-size: 0.95rem;
+}
+.commerce p {
+  margin: 8px 0;
+}
+.commerce button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #d9dee8;
+  border-radius: 10px;
+  background: #fff;
+  color: #163cff;
+  cursor: pointer;
+}
+.commerce button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.commerce button:focus-visible,
+.inlineForm input:focus-visible,
+.inlineForm select:focus-visible,
+.inlineForm textarea:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 2px;
+}
+.inlineForm {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+.inlineForm label {
+  display: grid;
+  gap: 5px;
+  font-size: 0.875rem;
+}
+.inlineForm input,
+.inlineForm textarea,
+.inlineForm select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px;
+  font: inherit;
+  border: 1px solid #d9dee8;
+  border-radius: 8px;
+  background: #fff;
+  color: #111c35;
+  box-sizing: border-box;
+}
+.inlineForm fieldset {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  border: 1px solid #d9dee8;
+  border-radius: 10px;
+}
+
+/* Contents only: retain the existing Ask shell, composer and dialog geometry. */
+.invoiceCard {
+  border: 1px solid #e8ebf0;
+  border-radius: 20px;
+  padding: 22px;
+  margin: 8px 0;
+  background: #fff;
+  box-shadow: 0 3px 16px rgb(17 28 53 / 3%);
+}
+.invoiceHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.invoiceHeading h2 {
+  margin: 0;
+}
+.orderBadge {
+  font-size: 12px;
+  color: #163cff;
+  background: #f1f4ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.orderItems {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e9ecf2;
+  margin-bottom: 12px;
+}
+.orderItems strong {
+  display: block;
+  font-size: 14px;
+}
+.orderItems span {
+  display: block;
+  color: #6c788b;
+  font-size: 12px;
+  margin-top: 3px;
+}
+.invoiceRows {
+  margin: 10px 0;
+  font-size: 13px;
+}
+.invoiceRows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px 0;
+}
+.invoiceRows dt {
+  color: #69758a;
+}
+.invoiceRows dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.invoiceRows .invoiceTotal {
+  border-top: 1px solid #e6eaf1;
+  margin-top: 8px;
+  padding-top: 12px;
+  font-weight: 650;
+}
+.invoiceTotal dt {
+  color: #111c35;
+}
+.quoteDetails summary {
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.zeroFees {
+  font-size: 12px;
+  color: #69758a;
+}
+.commerce .smallPrint {
+  color: #738096;
+  font-size: 12px;
+  margin: 7px 0;
+}
+.commerce .amountDue {
+  background: #f2f5ff;
+  color: #163cff;
+  padding: 13px;
+  border-radius: 9px;
+  font-weight: 650;
+}
+.paymentCard {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px solid #e5e9f1;
+  border-radius: 10px;
+}
+.paymentCard img {
+  width: 152px;
+  height: 152px;
+  max-width: 100%;
+  object-fit: contain;
+}
+.imageIntake {
+  border-bottom: 1px solid #e6eaf1;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.imageLabel {
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
+}
+.photos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.photos img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+.photos button {
+  min-height: 30px;
+  font-size: 12px;
+}
+.inlineSupport {
+  margin-top: 14px;
+  border-top: 1px solid #e9ecf2;
+  padding-top: 12px;
+}
+.invoiceCard summary:focus-visible,
+.imageLabel input:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .invoiceCard {
+    padding: 14px;
+  }
+  .paymentCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .invoiceHeading {
+    flex-wrap: wrap;
+  }
+}
+
+/* Order content hierarchy; no shell or composer selectors. */
+.invoiceHeading h2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #596579;
+  letter-spacing: 0.01em;
+}
+.commerce .orderBadge {
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 5px 9px;
+  margin: 0;
+}
+.orderItems {
+  padding: 20px 0 0;
+  border: 0;
+  margin: 0;
+}
+.orderItems strong {
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+}
+.orderItems span {
+  margin-top: 7px;
+  font-size: 12px;
+  color: #596579;
+}
+.totalHero {
+  display: grid;
+  gap: 7px;
+  margin: 23px 0 19px;
+}
+.totalHero > span {
+  color: #596579;
+  font-size: 12px;
+}
+.totalHero > strong {
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.depositLine {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  padding: 13px 0;
+  border-top: 1px solid #edf0f4;
+}
+.quoteDetails,
+.deliveryDetails {
+  border-top: 1px solid #edf0f4;
+  padding: 14px 0;
+}
+.quoteDetails summary,
+.deliveryDetails summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #344158;
+  cursor: pointer;
+}
+.quoteDetails summary::-webkit-details-marker,
+.deliveryDetails summary::-webkit-details-marker {
+  display: none;
+}
+.quoteDetails summary::after,
+.deliveryDetails summary::after {
+  content: "＋";
+  font-size: 16px;
+  color: #758094;
+}
+.quoteDetails[open] summary::after,
+.deliveryDetails[open] summary::after {
+  content: "−";
+}
+.commerce .deliveryDetails p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #596579;
+}
+.commerce .primaryAction {
+  width: 100%;
+  background: #163cff;
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 3px;
+}
+.commerce .secondaryAction {
+  display: block;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  margin: 8px auto;
+}
+.commerce .amountDue {
+  background: #f5f7fb;
+  color: #111c35;
+  font-size: 14px;
+  padding: 14px;
+}
+.commerce .trackingLine {
+  font-size: 12px;
+  color: #596579;
+  overflow-wrap: anywhere;
+}
+.inlineSupport {
+  padding-top: 10px;
+  margin-top: 3px;
+}
+.inlineSupport > button {
+  border: 0;
+  padding: 5px 0;
+  font-size: 12px;
+  min-height: 36px;
+  background: transparent;
+}
+.imageIntake {
+  border: 1px dashed #dce2eb;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 8px 0 16px;
+  background: #fafbfc;
+}
+.imageLabel {
+  position: relative;
+  width: fit-content;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid #dfe4ed;
+  border-radius: 9px;
+  background: #fff;
+  color: #163cff;
+  cursor: pointer;
+}
+.imageLabel input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.imageLabel:focus-within {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.deliveryDetails summary:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .invoiceCard {
+    padding: 18px;
+  }
+  .orderItems strong {
+    font-size: 18px;
+  }
+  .totalHero > strong {
+    font-size: 28px;
+  }
+}
+/* Approved010: attachments live in the existing composer. */
+.composer.withAttachments {
+  flex-wrap: wrap;
+  border-radius: 24px;
+}
+.composer .hiddenFile {
+  display: none;
+}
+.composer .attachImage {
+  color: #69758a;
+  background: transparent;
+}
+.composer .attachImage:hover {
+  background: #f3f5f9;
+}
+.composerPhotos {
+  flex-basis: 100%;
+  display: flex;
+  gap: 8px;
+  padding: 4px 3px 8px;
+}
+.composerPhotos > div {
+  position: relative;
+  width: 58px;
+  height: 58px;
+}
+.composerPhotos img {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e7ef;
+  border-radius: 11px;
+  object-fit: cover;
+}
+.composer .composerPhotos button {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  font-size: 15px;
+  color: #344158;
+}
+.dropActive {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.attachmentNotice {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #596579;
+  margin: 7px 12px;
+}
+.manualFallback {
+  margin: 8px 0;
+  font-size: 12px;
+  color: #69758a;
+}
+.manualFallback summary {
+  cursor: pointer;
+}
+.chatWelcome {
+  padding: 30px 2px 24px;
+}
+.chatWelcome h2 {
+  margin: 0 0 10px;
+  font-size: 21px;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+.commerce .chatWelcome p {
+  font-size: 14px;
+  color: #69758a;
+  line-height: 1.65;
+  max-width: 350px;
+}
+
+.catalogFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.catalogFields > label:only-child {
+  grid-column: 1 / -1;
+}
+@media (max-width: 480px) {
+  .catalogFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.catalogForm input,
+.catalogForm select,
+.commerce .catalogRetry,
+.inlineSupport button {
+  min-height: 44px;
+}
+
+.catalogResults {
+  margin-top: 12px;
+  min-width: 0;
+}
+.catalogResultList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.catalogResultList li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e2e6ef;
+  border-radius: 12px;
+  min-width: 0;
+}
+.catalogResultList img,
+.catalogPlaceholder {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #f5f6fa;
+}
+.catalogPlaceholder {
+  display: grid;
+  place-items: center;
+  color: #58657c;
+}
+.catalogResultList li > div {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.catalogResultList p {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+.catalogResultList button {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .catalogResultList li {
+    gap: 8px;
+    padding: 8px;
+    flex-wrap: wrap;
+  }
+  .catalogResultList img,
+  .catalogPlaceholder {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Narrow viewports: keep the question readable above full-size actions. */
+@media (max-width: 340px) {
+  .composer {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-inline: 8px;
+    border-radius: 24px;
+  }
+  .composer input:not([type="file"]) {
+    order: -1;
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+  .composer > button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .composerPhotos {
+    order: -2;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-inline: 0;
+  }
+  .composerPhotos > div {
+    margin-block: 4px;
+    margin-inline-end: 4px;
+  }
+  .composer .composerPhotos button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Keep tracking labels readable within narrow conversation panels. */
+@media (max-width: 340px) {
+  .conversation {
+    padding-inline: 8px;
+  }
+}

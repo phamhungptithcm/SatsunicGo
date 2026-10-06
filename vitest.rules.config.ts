@@ -2,6 +2,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     include: ["tests/rules/**/*.test.ts"],
+    setupFiles: ["tests/helpers/demo-setup.ts"],
+    fileParallelism: false,
     testTimeout: 15000,
     hookTimeout: 20000,
   },

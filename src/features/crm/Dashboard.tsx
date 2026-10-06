@@ -1,13 +1,26 @@
+import { CrmHeading, CrmIcon, CrmState } from "./CrmPresentation";
 import { useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
+import { Link } from "react-router-dom";
+const destinations: Record<string, string> = {
+  requests: "/crm/orders?queue=requests",
+  quotes: "/crm/orders?queue=quotes",
+  purchasing: "/crm/purchasing",
+  holds: "/crm/orders?queue=holds",
+  balance: "/crm/orders?queue=balance",
+  ready: "/crm/orders?queue=ready",
+  tickets: "/crm/support",
+  transfers: "/crm/finance",
+  exceptions: "/crm/finance",
+};
 const labels: Record<string, string> = {
   requests: "Yêu cầu mới",
   quotes: "Báo giá chờ khách duyệt",
-  purchasing: "Đã đủ cọc, cần mua",
-  holds: "Đơn đang hold",
-  balance: "Tổng cuối đã duyệt, còn thu",
+  purchasing: "Đủ tiền theo loại đơn, cần mua",
+  holds: "Đơn đang tạm giữ",
+  balance: "Đơn còn tiền cần thanh toán",
   ready: "Sẵn sàng xuất gửi",
-  tickets: "Ticket đang mở",
+  tickets: "Hội thoại đang mở",
   transfers: "Chuyển khoản chờ xác minh",
   exceptions: "Ngoại lệ tài chính",
 };
@@ -46,14 +59,23 @@ export function Dashboard() {
     }
   }
   return (
-    <section className="panel">
-      <h2>Tổng quan vận hành</h2>
-      <p>
-        Đếm trạng thái hiện tại của bản ghi tạo trong khoảng đã chọn (UTC), tối
-        đa 100 bản ghi mỗi loại. Không phải tổng toàn hệ thống. Chưa có ETA được
-        xác nhận để tính đơn giao trễ.
-      </p>
-      <form className="form" onSubmit={(e) => void load(e)}>
+    <section className="crmDashboard">
+      <CrmHeading
+        title="Tổng quan vận hành"
+        actions={
+          <>
+            <Link to="/crm/follow-ups">
+              <CrmIcon name="clock" />
+              Lịch chăm sóc →
+            </Link>
+            <Link to="/crm/customers">
+              <CrmIcon name="person" />
+              Khách hàng →
+            </Link>
+          </>
+        }
+      />
+      <form className="crmDashboardToolbar" onSubmit={(e) => void load(e)}>
         <label>
           Từ ngày (UTC)
           <input
@@ -74,13 +96,25 @@ export function Dashboard() {
             required
           />
         </label>
-        <button disabled={busy}>{busy ? "Đang tải…" : "Xem số liệu"}</button>
+        <button className="primary" disabled={busy}>
+          {busy ? "Đang tải…" : "Xem số liệu"}
+        </button>
       </form>
+      <p className="crmDashboardScope">
+        Trạng thái hiện tại của bản ghi tạo trong khoảng đã chọn (UTC), tối đa
+        100 bản ghi mỗi loại. Không phải tổng toàn hệ thống. Chưa có thời gian
+        giao dự kiến được xác nhận để tính đơn giao trễ.
+      </p>
+      {!snapshot && !busy && !error && (
+        <CrmState kind="empty" title="Chọn khoảng ngày để xem công việc">
+          Chọn tối đa 31 ngày, rồi bấm Xem số liệu.
+        </CrmState>
+      )}
       {snapshot && (
         <>
-          <p>
-            Đọc lúc {new Date(snapshot.observedAt).toISOString()} · snapshot,
-            chưa cập nhật trực tiếp
+          <p className="crmDashboardFreshness">
+            Đọc lúc {new Date(snapshot.observedAt).toLocaleString("vi-VN")} ·
+            giờ thiết bị · chưa cập nhật trực tiếp
           </p>
           {snapshot.truncated.length > 0 && (
             <p role="status">
@@ -88,17 +122,20 @@ export function Dashboard() {
               đầy đủ.
             </p>
           )}
-          <dl>
+          <dl className="crmMetrics">
             {Object.entries(snapshot.counts).map(([key, value]) => (
               <div key={key}>
-                <dt>{labels[key]}</dt>
+                <dt>
+                  <Link to={destinations[key]}>{labels[key]}</Link>
+                </dt>
                 <dd>{value}</dd>
               </div>
             ))}
           </dl>
         </>
       )}
-      {error && <p role="alert">{error}</p>}
+      {busy && <CrmState kind="loading" title="Đang tải…" />}
+      {error && <CrmState kind="error" title={error} />}
     </section>
   );
 }

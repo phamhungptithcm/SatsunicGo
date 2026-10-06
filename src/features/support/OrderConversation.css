@@ -1,0 +1,101 @@
+.orderConversation {
+  margin-block: 1rem;
+  border: 1px solid var(--border, #dce2ec);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.orderConversation > summary {
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  font-weight: 650;
+}
+.conversationBody {
+  padding: 0 1rem 1rem;
+}
+.conversationHeading,
+.conversationAssignment form,
+.conversationDrafts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.conversationHeading {
+  justify-content: space-between;
+}
+.conversationAssignment form {
+  align-items: end;
+}
+.conversationAssignment form > div {
+  display: grid;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+.conversationAssignment label {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.conversationChannels {
+  font-size: 0.85rem;
+  color: #536176;
+}
+.conversationMessages {
+  display: grid;
+  gap: 0.6rem;
+  max-height: 28rem;
+  overflow-y: auto;
+  margin-block: 1rem;
+}
+.conversationMessage {
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  background: #f3f5f8;
+  overflow-wrap: anywhere;
+}
+.conversationMessage.fromStaff {
+  background: #eef2ff;
+}
+.conversationMessage p {
+  white-space: pre-wrap;
+  margin-block: 0.35rem;
+}
+.conversationMessage time {
+  font-size: 0.78rem;
+  color: #536176;
+}
+.conversationDrafts button {
+  font-size: 0.85rem;
+}
+.conversationNotes {
+  margin-top: 1rem;
+  border-top: 1px solid #dce2ec;
+  padding-top: 0.75rem;
+}
+.conversationBody textarea,
+.conversationBody select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.conversationBody textarea {
+  min-height: 6rem;
+}
+.orderConversation :focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .conversationAssignment form {
+    display: grid;
+    width: 100%;
+  }
+  .conversationHeading button {
+    padding-inline: 0.7rem;
+  }
+}
+@media print {
+  .orderConversation {
+    display: none;
+  }
+}

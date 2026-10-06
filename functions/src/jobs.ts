@@ -1,11 +1,35 @@
+import { maintenanceDemoEnvironmentAllowed, releaseCapabilityAllowed } from "./provider-release-gate";
+import { publishDueStudioPosts } from "./blog-studio";
 import { onSchedule } from "firebase-functions/v2/scheduler";
-import { getFirestore } from "firebase-admin/firestore";
+import { FieldPath, getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { requireVerifiedGoogle } from "./auth/guards";
 export const maintenance = onSchedule(
   { schedule: "every 30 minutes", region: "asia-southeast1", maxInstances: 1 },
   async () => {
-    const db = getFirestore(),
-      now = Date.now();
+    if (!maintenanceDemoEnvironmentAllowed(process.env)) return;
+    let db: ReturnType<typeof getFirestore>;
+    try {
+      db = getFirestore();
+      if (!releaseCapabilityAllowed("scheduledMaintenance", process.env, Reflect.get(db, "projectId"))) return;
+    } catch {
+      return;
+    }
+    const now = Date.now();
+    await publishDueStudioPosts(db, now);
+    // Expired capabilities and minute quotas contain no financial records.
+    for (const kind of ["salesDocumentShares", "invoiceShareQuotas"]) {
+      const expired = await db
+        .collection(kind)
+        .where("expiresAt", "<=", now)
+        .limit(30)
+        .get();
+      if (!expired.empty) {
+        const batch = db.batch();
+        expired.docs.forEach((d) => batch.delete(d.ref));
+        await batch.commit();
+      }
+    }
     for (const kind of ["products", "posts"]) {
       const rows = await db
         .collection(kind)
@@ -62,9 +86,98 @@ export const maintenance = onSchedule(
             actor: "scheduled-job",
             previousEndsAt: s.data()?.endsAt,
           });
+          tx.create(db.collection("membershipHistory").doc(), {
+            ownerId: d.id,
+            action: "expired",
+            createdAt: now,
+            actor: "scheduled-job",
+            endsAt: s.data()?.endsAt,
+          });
+          tx.create(
+            db.doc(`outboxJobs/membership-expired-${d.id}-${s.data()?.endsAt}`),
+            {
+              ownerId: d.id,
+              action: "membershipExpired",
+              state: "queued",
+              createdAt: now,
+            },
+          );
+          tx.create(db.collection("auditEvents").doc(), {
+            actor: "scheduled-job",
+            action: "expireMembership",
+            resourceId: d.id,
+            createdAt: now,
+          });
         }),
       ),
     );
+    // Lead time is operator policy, never an invented commercial default.
+    const reminders = (
+      await db.doc("settings/membershipReminders").get()
+    ).data();
+    if (
+      reminders?.approved === true &&
+      Number.isSafeInteger(reminders.daysBeforeExpiry) &&
+      reminders.daysBeforeExpiry >= 1 &&
+      reminders.daysBeforeExpiry <= 30
+    ) {
+      const deadline = now + reminders.daysBeforeExpiry * 86400000;
+      const cursorRef = db.doc("maintenanceCursors/membershipReminders");
+      const cursor = (await cursorRef.get()).data();
+      let reminderQuery = db
+        .collection("membershipSubscriptions")
+        .where("state", "==", "active")
+        .where("endsAt", ">", now)
+        .where("endsAt", "<=", deadline)
+        .orderBy("endsAt")
+        .orderBy(FieldPath.documentId());
+      if (
+        cursor &&
+        cursor?.daysBeforeExpiry === reminders.daysBeforeExpiry &&
+        cursor?.policyVersion === (reminders.version ?? 0) &&
+        Number.isSafeInteger(cursor.endsAt) &&
+        typeof cursor.id === "string"
+      )
+        reminderQuery = reminderQuery.startAfter(cursor.endsAt, cursor.id);
+      const upcoming = await reminderQuery.limit(30).get();
+      await Promise.all(
+        upcoming.docs.map((row) =>
+          db.runTransaction(async (tx) => {
+            const subscription = await tx.get(row.ref);
+            const value = subscription.data();
+            if (
+              value?.state !== "active" ||
+              !Number.isSafeInteger(value.endsAt) ||
+              value.endsAt <= now ||
+              value.endsAt > deadline
+            )
+              return;
+            const ref = db.doc(
+              `outboxJobs/membership-reminder-${row.id}-${value.endsAt}`,
+            );
+            const existing = await tx.get(ref);
+            if (existing.exists) return;
+            tx.create(ref, {
+              ownerId: row.id,
+              action: "membershipExpiring",
+              state: "queued",
+              createdAt: now,
+              endsAt: value.endsAt,
+            });
+          }),
+        ),
+      );
+      // Advance past already-notified active subscriptions instead of starving
+      // later pages. Reset at the end so newly eligible earlier rows are revisited.
+      const last = upcoming.docs.at(-1);
+      await cursorRef.set({
+        daysBeforeExpiry: reminders.daysBeforeExpiry,
+        policyVersion: reminders.version ?? 0,
+        endsAt: upcoming.size === 30 ? last!.data().endsAt : null,
+        id: upcoming.size === 30 ? last!.id : null,
+        changedAt: now,
+      });
+    }
     // No financial, customer or legal records are removed by technical cleanup.
     const retention = (await db.doc("settings/retention").get()).data();
     if (
@@ -90,6 +203,27 @@ export const maintenance = onSchedule(
       typeof email.user === "string" &&
       typeof email.from === "string" &&
       typeof email.messageIdDomain === "string";
+    if (emailReady) {
+      const blocked = await db
+        .collection("outboxJobs")
+        .where("emailState", "==", "blocked_external")
+        .limit(30)
+        .get();
+      await Promise.all(
+        blocked.docs.map((row) =>
+          db.runTransaction(async (tx) => {
+            const current = await tx.get(row.ref);
+            // Only configuration-blocked, never-claimed deliveries are safe to resume.
+            if (
+              current.data()?.emailState === "blocked_external" &&
+              (current.data()?.emailAttempts ?? 0) === 0 &&
+              !current.data()?.claimedAt
+            )
+              tx.update(row.ref, { emailState: "queued" });
+          }),
+        ),
+      );
+    }
     const jobs = await db
       .collection("outboxJobs")
       .where("state", "==", "queued")
@@ -102,8 +236,10 @@ export const maintenance = onSchedule(
           if (job.data()?.state !== "queued") return;
           tx.create(db.doc(`notifications/${d.id}`), {
             ownerId: job.data()?.ownerId,
-            orderId: job.data()?.orderId,
+            orderId: job.data()?.orderId ?? null,
             action: job.data()?.action,
+            resourceId: job.data()?.resourceId ?? null,
+            endsAt: job.data()?.endsAt ?? null,
             createdAt: now,
             read: false,
           });
@@ -124,10 +260,11 @@ export const readNotification = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (
       !req.auth?.uid ||
       typeof req.data?.id !== "string" ||
-      !/^[a-zA-Z0-9-]{1,80}$/.test(req.data.id)
+      !/^[a-zA-Z0-9_-]{1,256}$/.test(req.data.id)
     )
       throw new HttpsError("invalid-argument", "Thông tin không hợp lệ.");
     const db = getFirestore();

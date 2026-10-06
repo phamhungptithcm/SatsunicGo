@@ -1,0 +1,40 @@
+.account {
+  width: min(100%, 64rem);
+  margin: 0 auto;
+  padding: clamp(3rem, 6vw, 6rem) var(--page-gutter);
+  min-height: 55vh;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+}
+.account.embedded { width: 100%; padding: 0; min-height: 0; }
+.account .heading h1 { margin: 0; font: 600 clamp(1.75rem, 3vw, 2.5rem)/1.15 var(--font-sans); letter-spacing: -0.04em; }
+.account p { margin: 0.65rem 0 0; color: var(--color-muted); font: 400 0.9rem/1.6 var(--font-sans); }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr) 11rem; align-items: start; gap: 2rem; margin-top: 2.5rem; padding: 2rem 0; border-block: 1px solid var(--color-line); }
+.profile { display: flex; align-items: center; gap: 1.25rem; min-width: 0; padding-top: 0.25rem; }
+.profile > div { min-width: 0; }
+.account .profile h2 { margin: 0; font: 500 1.15rem/1.4 var(--font-sans); overflow-wrap: anywhere; }
+.avatar { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; flex: 0 0 3.5rem; border-radius: 50%; object-fit: cover; background: #eef1ff; color: var(--color-accent); font-size: 1.25rem; }
+.actions { display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+.links { display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+.primary, .link, .logout { display: inline-flex; align-items: center; justify-content: center; gap: 1.5rem; min-height: 2.75rem; font: 500 0.9rem/1.5 var(--font-sans); }
+.account .primary { padding: 0.8rem 1.25rem; background: var(--color-accent); color: #fff; }
+.account .primary:hover { background: var(--color-accent-dark); }
+.account .link { border: 1px solid var(--color-line); padding: 0.65rem 1.25rem; color: var(--color-text); }
+.link:hover, .logout:hover { text-decoration: underline; text-underline-offset: 4px; }
+.logout { padding: 0; border: 0; background: transparent; color: var(--color-muted); cursor: pointer; }
+.logout:disabled { opacity: 0.6; cursor: wait; }
+.account a:focus-visible, .logout:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+.account .notice { color: #a52626; }
+
+@media (max-width: 40rem) {
+  .panel { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .actions { width: 100%; }
+}
+
+.account.compact { width: 100%; padding: 0; min-height: 0; }
+.compact .heading { padding-right: 2rem; }
+.account.compact .heading h1 { font-size: 1.5rem; }
+.compact .panel { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; margin-top: 1.25rem; padding: 1.25rem 0 0; border-bottom: 0; }
+.compact .profile { gap: 0.875rem; }
+.compact .actions { gap: 0.5rem; }
+.compact .primary, .compact .link { border-radius: 10px; }

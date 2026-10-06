@@ -8,7 +8,11 @@ import {
   verifyBatchDispatch,
   type Batch,
 } from "../../packages/domain/consolidation";
-import { type Parcel } from "../../packages/domain/shipping";
+import {
+  readManualDeliveryEstimate,
+  type Parcel,
+} from "../../packages/domain/shipping";
+import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 export const consolidationCommand = onCall(
   {
     region: "asia-southeast1",
@@ -17,6 +21,7 @@ export const consolidationCommand = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (!req.auth?.uid)
       throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
     const d = z
@@ -57,9 +62,10 @@ export const consolidationCommand = onCall(
         ]);
         const a = access.data();
         if (
-          !a?.active ||
+          a?.active !== true ||
           a.locked ||
           user.data()?.locked ||
+          !isStringRoleArray(a.roles) ||
           !a.roles?.some((r: string) =>
             ["OWNER", "WAREHOUSE", "OPERATIONS_MANAGER"].includes(r),
           )
@@ -199,9 +205,13 @@ export const consolidationCommand = onCall(
               version: 1,
               amount: shares[o.id],
             };
-            o.finalApproved = false;
-            delete o.finalFreightVersion;
-            if (o.stage === "READY_TO_SHIP") o.stage = "PACKED";
+            if (o.purchaseKind === "catalog") {
+              o.finalFreightVersion = 1;
+            } else {
+              o.finalApproved = false;
+              delete o.finalFreightVersion;
+              if (o.stage === "READY_TO_SHIP") o.stage = "PACKED";
+            }
             o.version++;
             tx.set(orderSnapshots[i].ref, o);
           }
@@ -237,6 +247,14 @@ export const consolidationCommand = onCall(
                 id: parcel.id,
                 version: parcel.version,
                 state: parcel.state,
+                ...(readManualDeliveryEstimate(parcel.deliveryEstimate, now)
+                  ? {
+                      deliveryEstimate: readManualDeliveryEstimate(
+                        parcel.deliveryEstimate,
+                        now,
+                      ),
+                    }
+                  : {}),
                 route: parcel.route,
                 carrier: parcel.carrier,
                 tracking: parcel.tracking,
@@ -264,6 +282,15 @@ export const consolidationCommand = onCall(
           createdAt: now,
         });
         const result = { id, version: batch.version };
+        for (const order of orders)
+          tx.create(db.collection("outboxJobs").doc(), {
+            ownerId: order.ownerId,
+            orderId: order.id,
+            resourceId: id,
+            action: `batch-${input.action}`,
+            state: "queued",
+            createdAt: now,
+          });
         tx.create(op, { hash, result, createdAt: now });
         return result;
       });

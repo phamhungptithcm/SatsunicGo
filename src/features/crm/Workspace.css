@@ -1,0 +1,1001 @@
+/* CRM-only screen presentation. Printed statements retain their own contract. */
+@media screen {
+  @media (max-width: 1000px) {
+    .workspaceShell .workspaceContent .tableWrap.crmRecordTable {
+      width: 100%;
+      min-width: 0;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable table,
+    .workspaceShell .workspaceContent .crmRecordTable tbody {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable tbody tr {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 1px solid #e3e7ef;
+      border-radius: 10px;
+      background: #fff;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable td {
+      display: block;
+      min-width: 0;
+      padding: 4px 0;
+      border: 0;
+      overflow-wrap: anywhere;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable td::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 4px;
+      color: #647087;
+      font-size: 11px;
+      font-weight: 550;
+    }
+    .workspaceShell .workspaceContent .crmCustomersTable td:first-child,
+    .workspaceShell .workspaceContent .crmReturnsTable td:first-child,
+    .workspaceShell .workspaceContent .crmActivityTable td:last-child {
+      grid-column: 1 / -1;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable td > *,
+    .workspaceShell
+      .workspaceContent
+      .crmRecordTable
+      :is(select, input, textarea, button, details, form) {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .workspaceShell .workspaceContent .crmRecordTable button {
+      white-space: normal;
+    }
+  }
+  .workspaceShell .crmRateFields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    border: 1px solid #e3e7ef;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .workspaceShell .crmRateFields legend {
+    padding: 0 5px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .workspaceShell .crmTicket > summary::before {
+    content: "›";
+    flex: 0 0 10px;
+    color: #647087;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .workspaceShell .crmTicket[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  .workspaceShell .crmTicket > summary .crmItemTitle {
+    flex: 1;
+  }
+  .workspaceShell .workspaceContent .crmTicket > summary .crmItemTitle {
+    display: block;
+    min-width: 0;
+  }
+  .workspaceShell .crmTicket > summary .crmItemTitle .crmIcon {
+    margin-right: 8px;
+  }
+  .workspaceShell .contentEditorList:focus-visible,
+  .workspaceShell .crmEditorList:focus-visible {
+    outline: 2px solid #163cff;
+    outline-offset: 3px;
+  }
+  .workspaceShell .crmRoleOptions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 18px;
+    padding: 12px 14px;
+    border: 1px solid #e3e7ef;
+    border-radius: 8px;
+  }
+  .workspaceShell .crmRoleOptions legend {
+    padding: 0 5px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .workspaceShell .workspaceContent .crmRoleOptions label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+  }
+  .workspaceShell .workspaceContent .crmMessage {
+    padding: 12px 14px;
+    margin: 8px 0;
+  }
+  .workspaceShell .crmMessage p {
+    margin: 6px 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmMessage time {
+    font-size: 11px;
+    color: #647087;
+  }
+  .workspaceShell .crmTicket > summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .workspaceShell .crmTicket > summary .crmItemTitle {
+    margin: 0;
+  }
+  .workspaceShell .crmIcon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+  }
+  .workspaceShell .crmActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .workspaceShell .crmActions button,
+  .workspaceShell .crmActions a {
+    gap: 7px;
+  }
+  .workspaceShell .crmHeading {
+    align-items: center;
+  }
+  .workspaceShell .crmHeading > div:first-child {
+    min-width: 0;
+  }
+  .workspaceShell .crmSectionHeading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .workspaceShell .crmSectionHeading h2 {
+    margin: 0;
+  }
+  .workspaceShell .workspaceContent h2.crmSectionHeading,
+  .workspaceShell .workspaceContent h3.crmSectionHeading {
+    justify-content: flex-start;
+  }
+  .workspaceShell .workspaceContent > section > div.documentList.crmList {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .workspaceShell .contentEditorSidebar {
+    min-width: 0;
+  }
+  .workspaceShell .contentEditorList,
+  .workspaceShell .crmEditorList {
+    max-height: 36rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 3px;
+    border: 1px solid #e3e7ef;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .workspaceShell .workspaceContent .contentEditorList .contentRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    gap: 12px;
+    border: 0;
+    border-bottom: 1px solid #e3e7ef;
+    border-radius: 0;
+    padding: 12px;
+  }
+  .workspaceShell .workspaceContent .contentRow .crmItemTitle {
+    display: block;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+  .workspaceShell .contentRow .crmBadge {
+    flex: 0 0 auto;
+  }
+  .workspaceShell .crmItemReason {
+    color: #46536b;
+    font-size: 12px;
+  }
+  @media (max-width: 1000px) {
+    .workspaceShell .contentEditorList,
+    .workspaceShell .crmEditorList {
+      max-height: min(38dvh, 22rem);
+    }
+  }
+  .workspaceShell .crmList {
+    display: grid;
+    gap: 8px;
+  }
+  .workspaceShell .workspaceContent .crmItem {
+    display: block;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 16px;
+    margin: 0;
+    border: 1px solid #e3e7ef;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .workspaceShell
+    .workspaceContent
+    .crmItem:has(> .crmItemMain:first-child):has(
+      > .crmActions:nth-child(2):last-child
+    ) {
+    display: flex;
+  }
+  .workspaceShell .crmItemMain {
+    flex: 1;
+    min-width: 0;
+  }
+  .workspaceShell .workspaceContent .crmItemTitle {
+    color: #111c35;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmItemMain > p {
+    margin: 4px 0;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmItemMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    color: #647087;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmReference {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .workspaceShell .crmReference code {
+    color: #46536b;
+    font-family: inherit;
+    overflow-wrap: anywhere;
+    min-width: 0;
+    user-select: text;
+  }
+  .workspaceShell .crmFacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin: 8px 0;
+  }
+  .workspaceShell .crmFacts > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmFacts dt {
+    color: #647087;
+    font-size: 11px;
+  }
+  .workspaceShell .crmFacts dd {
+    margin: 2px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .workspaceShell .crmItemMeta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .workspaceShell .crmBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border: 1px solid #dce3f4;
+    border-radius: 5px;
+    color: #344a76;
+    background: #f4f6fc;
+    font-size: 11px;
+    font-weight: 550;
+  }
+  .workspaceShell .crmItemDetails {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .workspaceShell .crmItemDetails > summary {
+    min-height: 28px;
+    display: list-item;
+    width: fit-content;
+    color: #163cff;
+    cursor: pointer;
+  }
+  .workspaceShell .crmState {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #e3e7ef;
+    background: #fff;
+    padding: 16px;
+    border-radius: 10px;
+    margin: 12px 0;
+  }
+  .workspaceShell .crmStateIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #f1f4fc;
+    color: #465d91;
+  }
+  .workspaceShell .crmStateContent {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmStateContent strong {
+    font-size: 13px;
+  }
+  .workspaceShell .crmStateDescription {
+    font-size: 12px;
+    color: #647087;
+    margin-top: 3px;
+  }
+  .workspaceShell .crmStateDescription p {
+    margin: 0;
+  }
+  .workspaceShell .crmState--error {
+    border-color: #ecd6d6;
+  }
+  .workspaceShell .crmState--error .crmStateIcon {
+    color: #a93838;
+    background: #fcf1f1;
+  }
+  @media (max-width: 640px) {
+    .workspaceShell .crmItemDetails > summary {
+      min-height: 44px;
+    }
+    .workspaceShell .crmRateFields {
+      grid-template-columns: 1fr;
+    }
+    .workspaceShell .crmRoleOptions {
+      grid-template-columns: 1fr;
+    }
+    .workspaceShell .workspaceContent .crmItem {
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px;
+    }
+    .workspaceShell .crmItem > .crmActions {
+      width: 100%;
+    }
+    .workspaceShell .crmState {
+      flex-wrap: wrap;
+      padding: 12px;
+    }
+    .workspaceShell .crmState > .crmActions {
+      margin-left: 48px;
+    }
+    .workspaceShell .crmSectionHeading {
+      align-items: flex-start;
+    }
+    .workspaceShell .crmActions button,
+    .workspaceShell .crmActions a {
+      min-height: 44px;
+    }
+  }
+}
+@media screen {
+  body:has(main.crmRoot) {
+    padding-top: 0;
+  }
+  .crmRoot .workspaceShell {
+    --crm-border: #e3e7ef;
+    --crm-muted: #647087;
+    grid-template-columns: 240px minmax(0, 1fr);
+    background: #f6f7fb;
+    color: #111c35;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .workspaceShell .workspaceSidebar {
+    padding: 24px 14px 16px;
+    gap: 24px;
+    border-color: var(--crm-border);
+  }
+  .workspaceShell .workspaceBrand {
+    font-size: 23px;
+    padding: 0 12px;
+  }
+  .workspaceShell .workspaceBrand small {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .workspaceShell .workspaceNavGroup {
+    margin-bottom: 20px;
+  }
+  .workspaceShell .workspaceNavGroup > p {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+    color: var(--crm-muted);
+  }
+  .workspaceShell .workspaceNavGroup a {
+    min-height: 36px;
+    padding: 8px 10px;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 7px;
+  }
+  .workspaceShell .workspaceNavGroup a.active {
+    background: #edf1ff;
+    color: #163cff;
+    font-weight: 650;
+  }
+  .workspaceNavMark {
+    display: inline-flex;
+    flex: 0 0 18px;
+    opacity: 0.75;
+  }
+  .workspaceShell .workspaceNavGroup a.active .workspaceNavMark {
+    opacity: 1;
+  }
+  .workspaceShell .workspaceSidebarBottom {
+    padding: 16px 10px 0;
+    gap: 10px;
+    border-color: var(--crm-border);
+  }
+  .workspaceShell .workspaceTop {
+    min-height: 72px;
+    padding: 16px 28px;
+    gap: 16px;
+    border-color: var(--crm-border);
+  }
+  .workspaceShell .workspaceContext {
+    display: grid;
+    gap: 2px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .workspaceShell .workspaceContext .workspaceContextGroup {
+    padding: 0;
+    font-size: 10px;
+    color: var(--crm-muted);
+  }
+  .workspaceShell .workspaceContext strong {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .workspaceShell .crmIdentity {
+    margin-left: auto;
+    min-width: 0;
+    gap: 14px;
+  }
+  .workspaceShell .crmIdentity > span {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .workspaceShell .crmIdentity button {
+    padding: 7px 12px;
+    min-height: 34px;
+    font-size: 12px;
+  }
+  .workspaceShell .workspaceContent {
+    padding: 28px 28px 56px;
+    max-width: 1480px;
+  }
+  .workspaceShell .workspaceContent h1 {
+    font-size: clamp(24px, 2.2vw, 28px);
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    margin-bottom: 8px;
+  }
+  .workspaceShell .workspaceContent h2 {
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: -0.2px;
+    margin: 0 0 14px;
+  }
+  .workspaceShell .workspaceEyebrow {
+    font-size: 11px;
+    color: var(--crm-muted);
+    margin: 0 0 5px;
+  }
+  .workspaceShell .workspaceContent .pageHeading {
+    margin-bottom: 22px;
+    gap: 18px;
+  }
+  .workspaceShell .workspaceContent .pageHeading p {
+    margin: 0;
+  }
+  .workspaceShell .workspaceContent .muted {
+    color: var(--crm-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .workspaceShell .workspaceContent .panel {
+    background: #fff;
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px #111c3503;
+  }
+  .workspaceShell .workspaceContent button,
+  .workspaceShell .workspaceDialog button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 14px;
+    border: 1px solid var(--crm-border);
+    border-radius: 8px;
+    background: #fff;
+    color: #111c35;
+    font-size: 12px;
+    font-weight: 550;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .workspaceShell .workspaceContent button:hover:not(:disabled),
+  .workspaceShell .workspaceDialog button:hover:not(:disabled) {
+    background: #f3f5fa;
+    border-color: #cbd3e3;
+  }
+  .workspaceShell .workspaceContent button.primary {
+    color: #fff;
+    background: #163cff;
+    border-color: #163cff;
+  }
+  .workspaceShell .workspaceContent button.primary:hover:not(:disabled) {
+    background: #1231d1;
+  }
+  .workspaceShell .workspaceContent button:disabled {
+    opacity: 0.55;
+  }
+  .workspaceShell .workspaceContent .textbutton {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    justify-content: start;
+    color: #163cff;
+    text-align: left;
+  }
+  .workspaceShell .workspaceContent section > button {
+    margin: 0 8px 10px 0;
+  }
+  .workspaceShell .workspaceContent input,
+  .workspaceShell .workspaceContent select,
+  .workspaceShell .workspaceContent textarea {
+    background: #fff;
+    border: 1px solid #d8deea;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #111c35;
+    min-height: 40px;
+  }
+  .workspaceShell .workspaceContent input[type="checkbox"],
+  .workspaceShell .workspaceContent input[type="radio"] {
+    min-height: 0;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    padding: 0;
+    accent-color: #163cff;
+  }
+  .workspaceShell .workspaceContent .form {
+    display: grid;
+    gap: 16px;
+  }
+  .workspaceShell .workspaceContent .form label {
+    display: grid;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 550;
+  }
+  .workspaceShell .workspaceContent .form label:has(input[type="checkbox"]) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 9px;
+  }
+  .workspaceShell .workspaceContent .form > h2 {
+    margin-bottom: 0;
+  }
+  .workspaceShell .workspaceContent .form > p {
+    margin: 0;
+  }
+  .workspaceShell .workspaceContent .form > button {
+    justify-self: start;
+  }
+  .workspaceShell .workspaceContent > section > .form {
+    padding: 20px;
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    background: #fff;
+    margin: 18px 0;
+  }
+  .workspaceShell .workspaceContent > section > div.noPrint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0;
+  }
+  .workspaceShell .workspaceContent > section > details.noPrint {
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    background: #fff;
+    margin: 18px 0;
+  }
+  .workspaceShell .workspaceContent > section > details.noPrint > summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 550;
+  }
+  .workspaceShell
+    .workspaceContent
+    > section
+    > details.noPrint[open]
+    > summary {
+    margin-bottom: 20px;
+  }
+  .workspaceShell .workspaceContent .tableWrap {
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    background: #fff;
+    overflow: auto;
+  }
+  .workspaceShell .workspaceContent table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .workspaceShell .workspaceContent th {
+    padding: 13px 16px;
+    background: #f9fafc;
+    color: var(--crm-muted);
+    font-weight: 550;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .workspaceShell .workspaceContent td {
+    padding: 15px 16px;
+    border-bottom: 1px solid #edf0f5;
+    vertical-align: middle;
+  }
+  .workspaceShell .workspaceContent tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .workspaceShell .workspaceContent tbody tr:hover {
+    background: #fafbfe;
+  }
+  .workspaceShell .crmCustomerLink {
+    font-weight: 600;
+    color: #111c35;
+  }
+  .workspaceShell .crmTable small {
+    margin-top: 3px;
+    color: var(--crm-muted);
+  }
+  .workspaceShell .crmTag {
+    border: 1px solid #e2e7f0;
+    background: #f5f7fb;
+    color: #4e5b73;
+    padding: 3px 7px;
+    font-size: 10px;
+    border-radius: 5px;
+  }
+  .workspaceShell .crmFilters {
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    gap: 14px;
+    margin: 20px 0;
+    align-items: end;
+  }
+  .workspaceShell .crmFilters label {
+    font-size: 12px;
+    gap: 7px;
+  }
+  .workspaceShell .crmFilters .crmCheck {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+  }
+  .workspaceShell .crmPagination {
+    padding: 14px 2px;
+    color: var(--crm-muted);
+    font-size: 11px;
+  }
+  .workspaceShell .crmProfileSummary {
+    gap: 24px;
+  }
+  .workspaceShell .crmProfileSummary > div {
+    display: grid;
+    gap: 5px;
+  }
+  .workspaceShell .crmProfileSummary span {
+    font-size: 11px;
+    color: var(--crm-muted);
+  }
+  .workspaceShell .crmProfileSummary strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .workspaceShell .crmDetailGrid {
+    gap: 20px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .workspaceShell .crmRelated {
+    padding: 12px 0;
+  }
+  .workspaceShell .crmRelated p {
+    margin: 5px 0;
+  }
+  .workspaceShell .workspaceContent .notice,
+  .workspaceShell .workspaceContent .error {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+  .workspaceShell .workspaceContent .empty {
+    background: #fff;
+    border: 1px dashed #d8deea;
+    border-radius: 12px;
+    padding: 36px 24px;
+  }
+  .workspaceShell .workspaceContent .empty p {
+    color: var(--crm-muted);
+    font-size: 13px;
+  }
+  .workspaceShell .workspaceContent details.panel > summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .workspaceShell .workspaceContent details.panel[open] > summary {
+    margin-bottom: 16px;
+  }
+  .workspaceShell .workspaceContent .workColumns {
+    gap: 20px;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+  }
+  .workspaceShell .workspaceDialog {
+    border-color: var(--crm-border);
+    padding: 20px;
+    width: min(360px, calc(100vw - 24px));
+  }
+  .workspaceShell .workspaceDialog .pageHeading {
+    margin-bottom: 22px;
+  }
+  .workspaceShell .workspaceContent :focus-visible,
+  .workspaceShell .workspaceTop :focus-visible,
+  .workspaceShell .workspaceSidebar :focus-visible,
+  .workspaceShell .workspaceDialog :focus-visible {
+    outline: 2px solid #163cff;
+    outline-offset: 3px;
+  }
+  .workspaceShell .crmDashboard {
+    background: transparent;
+  }
+  .workspaceShell .crmDashboard .crmQuickLinks {
+    margin: 0;
+    gap: 16px;
+    font-size: 12px;
+  }
+  .workspaceShell .crmDashboardToolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: end;
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    margin: 22px 0 12px;
+  }
+  .workspaceShell .crmDashboardToolbar label {
+    display: grid;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 550;
+  }
+  .workspaceShell .crmDashboardToolbar input {
+    width: 176px;
+  }
+  .workspaceShell .crmDashboardScope {
+    font-size: 11px;
+    color: var(--crm-muted);
+    margin: 10px 2px 24px;
+    max-width: 850px;
+    line-height: 1.65;
+  }
+  .workspaceShell .crmDashboardFreshness {
+    font-size: 11px;
+    color: var(--crm-muted);
+    margin: 24px 0 12px;
+  }
+  .workspaceShell .crmMetrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+  }
+  .workspaceShell .crmMetrics > div {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--crm-border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .workspaceShell .crmMetrics dt {
+    font-size: 12px;
+    color: var(--crm-muted);
+    line-height: 1.5;
+  }
+  .workspaceShell .crmMetrics dt a {
+    display: block;
+    padding-right: 20px;
+  }
+  .workspaceShell .crmMetrics dt a::after {
+    content: "↗";
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    color: #a0abc0;
+  }
+  .workspaceShell .crmMetrics dd {
+    font-size: 32px;
+    font-weight: 650;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin: 14px 0 0;
+  }
+  .workspaceShell .crmDashboardEmpty {
+    margin-top: 24px;
+  }
+  @media (max-width: 1100px) {
+    .workspaceShell .workspaceContent .workColumns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 1000px) {
+    .crmRoot .workspaceShell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .workspaceShell .workspaceSidebar {
+      display: none;
+    }
+    .workspaceShell .workspaceTop {
+      padding: 14px 20px;
+    }
+    .workspaceShell .workspaceContent {
+      padding: 24px 20px 40px;
+    }
+    .workspaceShell .crmMetrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .workspaceShell .workspaceTop {
+      padding: 12px 14px;
+      gap: 10px;
+    }
+    .workspaceShell .workspaceContextGroup {
+      display: none;
+    }
+    .workspaceShell .workspaceContext strong {
+      max-width: 160px;
+      font-size: 12px;
+    }
+    .workspaceShell .crmIdentity {
+      gap: 8px;
+    }
+    .workspaceShell .crmIdentity > span {
+      display: none;
+    }
+    .workspaceShell .crmIdentity button {
+      padding: 7px 9px;
+      min-height: 36px;
+    }
+    .workspaceShell .workspaceContent {
+      padding: 22px 14px 36px;
+    }
+    .workspaceShell .workspaceContent .panel {
+      padding: 18px;
+    }
+    .workspaceShell .workspaceContent .pageHeading {
+      flex-direction: row;
+      align-items: start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .workspaceShell .crmDetailGrid,
+    .workspaceShell .crmProfileSummary {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .workspaceShell .crmDashboardToolbar {
+      gap: 12px;
+      padding: 16px;
+    }
+    .workspaceShell .crmDashboardToolbar label {
+      flex: 1 1 130px;
+      min-width: 0;
+    }
+    .workspaceShell .crmDashboardToolbar input {
+      width: 100%;
+    }
+    .workspaceShell .crmDashboardToolbar > button {
+      width: 100%;
+    }
+    .workspaceShell .crmMetrics {
+      gap: 10px;
+    }
+    .workspaceShell .crmMetrics > div {
+      padding: 16px;
+    }
+    .workspaceShell .crmMetrics dd {
+      font-size: 28px;
+    }
+    .workspaceShell .crmMetrics dt a {
+      padding-right: 0;
+    }
+    .workspaceShell .crmMetrics dt a::after {
+      display: none;
+    }
+    .workspaceShell .crmFilters {
+      padding: 16px;
+    }
+    .workspaceShell .crmFilters label {
+      flex-basis: 100%;
+    }
+    .workspaceShell .crmFilters > button {
+      width: 100%;
+    }
+  }
+}

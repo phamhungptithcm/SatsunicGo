@@ -1,0 +1,502 @@
+.accountWorkspace {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 32px 144px;
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  gap: 64px;
+  align-items: start;
+}
+.customerRail {
+  position: sticky;
+  top: 132px;
+  padding-top: 7px;
+}
+.customerRailLabel {
+  display: block;
+  margin: 0 0 18px 12px;
+  color: #65718a;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  font-weight: 650;
+}
+.customerRail nav {
+  display: grid;
+  gap: 4px;
+}
+.customerRail nav a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #647087;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+.customerRail nav a[aria-current="page"] {
+  color: #163cff;
+  background: #eef2ff;
+  font-weight: 650;
+}
+.customerRail nav a:hover {
+  background: #f4f6fa;
+  color: #111c35;
+}
+.customerRailDivider {
+  height: 1px;
+  margin: 16px 12px;
+  background: #edf0f5;
+}
+.customerHelp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 34px 12px 0;
+  color: #65718a;
+  font-size: 12px;
+}
+.customerHelp svg {
+  width: 15px;
+}
+.accountPage {
+  min-width: 0;
+  animation: accountReveal 180ms ease-out;
+}
+.accountPage > .pageHeading {
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 38px;
+}
+.accountPage > .pageHeading h1 {
+  font-size: 32px;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+  font-weight: 650;
+  margin: 0 0 10px;
+}
+.accountPage > .pageHeading p {
+  color: #65718a;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+}
+.accountPage > .pageHeading .primary {
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 11px;
+  font-size: 13px;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.accountBack {
+  display: inline-block;
+  color: #788295;
+  font-size: 12px;
+  margin-bottom: 22px;
+}
+.customerOrderList {
+  border-top: 1px solid #e9edf4;
+}
+.customerOrderRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 4px;
+  border-bottom: 1px solid #edf0f5;
+  transition: background-color 140ms ease;
+}
+.customerOrderRow:hover {
+  background: #fafbfe;
+}
+.orderMarket {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  color: #64728c;
+  background: #f3f5fa;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  font-weight: 650;
+}
+.orderRowTitle {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+}
+.orderRowTitle strong {
+  color: #1d2840;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.orderRowTitle small {
+  font-size: 12px;
+  color: #65718a;
+}
+.customerOrderRow > svg {
+  width: 16px;
+  color: #9ba5b8;
+  flex-shrink: 0;
+}
+.accountPage .statusTag {
+  white-space: normal;
+  font-size: 11px;
+  padding: 6px 10px;
+  font-weight: 550;
+  border-radius: 7px;
+  background: #f0f3fc;
+  color: #4b62a2;
+}
+.listScope {
+  margin: 20px 0;
+  color: #65718a;
+  font-size: 11px;
+}
+.orderDetail {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.orderDetail > .pageHeading {
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.orderDetail > .pageHeading h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+.orderDetail > p {
+  color: #65718a;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.6;
+}
+.accountPage .orderDetail > .orderHold {
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  color: #825c17;
+  background: #fff9ed;
+  border: 1px solid #f0dfb4;
+  font-size: 13px;
+}
+.orderSections {
+  display: flex;
+  gap: 26px;
+  border-bottom: 1px solid #e9edf4;
+  margin-top: 28px;
+}
+.orderSections button {
+  position: relative;
+  min-height: 46px;
+  padding: 12px 0;
+  font-size: 13px;
+  color: #65718a;
+  background: transparent;
+  border: 0;
+  transition: color 140ms ease;
+  white-space: nowrap;
+}
+.orderSections button[aria-pressed="true"] {
+  color: #1c2a45;
+  font-weight: 650;
+}
+.orderSections button[aria-pressed="true"]::after {
+  content: "";
+  height: 2px;
+  background: #163cff;
+  position: absolute;
+  inset: auto 0 -1px;
+  border-radius: 2px;
+}
+.detailSection {
+  padding-top: 28px;
+}
+.detailSection.isVisible {
+  animation: accountReveal 160ms ease-out;
+}
+.orderNextStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 22px;
+  border-radius: 14px;
+  background: #f5f7fc;
+  margin-bottom: 30px;
+}
+.orderStatusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #163cff;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.accountPage .orderNextStep h2 {
+  margin: 0 0 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.orderNextStep p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0;
+  color: #6e7a91;
+  max-width: 480px;
+}
+.accountPage .orderItems > h2 {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #65718a;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #edf0f5;
+  font-size: 13px;
+}
+.orderItem strong {
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.orderItem p {
+  color: #65718a;
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+.orderItem > span {
+  color: #64738c;
+  white-space: nowrap;
+}
+.accountPage .orderTools {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+.orderUtilityActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.accountPage .orderUtilityActions a,
+.accountPage .orderUtilityActions button {
+  background: none;
+  border: 0;
+  color: #64738c;
+  padding: 5px 0;
+  min-height: 36px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.accountPage .orderUtilityActions a:hover,
+.accountPage .orderUtilityActions button:hover {
+  color: #163cff;
+}
+.accountPage details {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.accountPage summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 550;
+  padding: 15px 0;
+}
+.accountPage details[open] > summary {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #edf0f5;
+}
+.accountPage details p,
+.accountPage .detailSection > p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #6e7a91;
+  margin: 12px 0;
+}
+.accountPage .detailSection h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.accountPage
+  .detailSection
+  button:not(.primary):not(.orderUtilityActions button) {
+  font-size: 13px;
+  min-height: 40px;
+  padding: 9px 14px;
+  background: #f3f5fa;
+  border: 1px solid #e8ecf3;
+  border-radius: 9px;
+  color: #263858;
+}
+.accountPage .form {
+  max-width: 560px;
+  margin-top: 24px;
+}
+.accountPage > section > h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.accountPage > section > p {
+  font-size: 14px;
+  color: #65718a;
+  padding: 32px 0;
+  border-top: 1px solid #edf0f5;
+}
+.accountPage .empty {
+  padding: 48px 24px;
+  border-radius: 16px;
+}
+.accountLoading {
+  padding: 48px 0;
+  color: #788295;
+  font-size: 14px;
+}
+@keyframes accountReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 900px) {
+  .accountWorkspace {
+    grid-template-columns: 156px minmax(0, 1fr);
+    gap: 30px;
+    padding: 38px 24px 132px;
+  }
+}
+@media (max-width: 640px) {
+  .accountWorkspace {
+    display: block;
+    padding: 20px 20px 120px;
+  }
+  .customerRail {
+    position: static;
+    padding: 0;
+    margin-bottom: 30px;
+  }
+  .customerRailLabel,
+  .customerRailDivider,
+  .customerHelp {
+    display: none;
+  }
+  .customerRail nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .customerRail nav a {
+    flex-shrink: 0;
+    padding: 9px 12px;
+    min-height: 44px;
+    font-size: 12px;
+    justify-content: center;
+  }
+  .customerRail nav a.customerSecondary {
+    display: none;
+  }
+  .customerRail nav svg {
+    display: none;
+  }
+  .accountPage > .pageHeading {
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .accountPage > .pageHeading h1 {
+    font-size: 26px;
+  }
+  .accountPage > .pageHeading p {
+    font-size: 12px;
+    max-width: 190px;
+  }
+  .accountPage > .pageHeading .primary {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+  .customerOrderRow {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px 0;
+  }
+  .customerOrderRow .statusTag {
+    margin-left: 58px;
+  }
+  .customerOrderRow > svg {
+    margin-left: auto;
+  }
+  .orderDetail > .pageHeading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .orderDetail > .pageHeading h1 {
+    font-size: 24px;
+  }
+  .orderSections {
+    gap: 20px;
+    margin-top: 22px;
+  }
+  .orderSections button {
+    font-size: 12px;
+  }
+  .orderNextStep {
+    padding: 18px;
+  }
+  .orderUtilityActions {
+    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .accountPage .orderUtilityActions a,
+  .accountPage .orderUtilityActions button {
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .accountPage,
+  .detailSection {
+    animation: none;
+  }
+  .customerRail nav a,
+  .customerOrderRow,
+  .orderSections button {
+    transition: none;
+  }
+}

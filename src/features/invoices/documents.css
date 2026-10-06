@@ -1,0 +1,95 @@
+.salesStatement {
+  background: white;
+  border: 1px solid #e3e6eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  overflow-wrap: anywhere;
+}
+.statementTotals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+}
+.salesStatement th:nth-child(2) {
+  white-space: nowrap;
+}
+.statementTotals dd {
+  text-align: right;
+  margin: 0;
+  font-weight: 600;
+}
+.statementActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.statementActions details,
+.statementActions form {
+  width: 100%;
+}
+.statementActions input {
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  .salesStatement {
+    padding: 16px;
+  }
+  .statementTotals {
+    font-size: 14px;
+  }
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .salesStatement,
+  .salesStatement * {
+    visibility: visible;
+  }
+  .salesStatement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 12mm;
+  }
+  .salesStatement .noPrint,
+  .noPrint {
+    display: none !important;
+  }
+  .salesStatement tr {
+    break-inside: avoid;
+  }
+}
+
+@media screen {
+  .documentList {
+    margin-block: 16px;
+  }
+  .documentList .crmItem {
+    min-width: 0;
+  }
+  .documentList .crmItemMain > strong {
+    white-space: nowrap;
+  }
+  .statementActions {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .statementActions > details,
+  .statementActions > form {
+    padding: 12px;
+    border: 1px solid #e3e6eb;
+    border-radius: 8px;
+  }
+  .statementActions label {
+    display: grid;
+    gap: 6px;
+  }
+  .statementActions form p {
+    margin-block: 8px;
+  }
+}

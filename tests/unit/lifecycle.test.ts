@@ -127,3 +127,46 @@ it("a refund after readiness prevents dispatch", () => {
   } as Order;
   expect(() => evolve(o, "dispatch", {}, 100)).toThrow();
 });
+it("money reserved for refunds cannot fund procurement or dispatch", () => {
+  const accepted = {
+    ...initial(),
+    stage: "QUOTE_ACCEPTED" as const,
+    deposit: 100,
+    collected: 100,
+    refundReserved: 1,
+  };
+  expect(() => evolve(accepted, "claimPurchase", {}, 1)).toThrow();
+  const ready = {
+    ...accepted,
+    stage: "READY_TO_SHIP" as const,
+    finalTotal: 100,
+    finalApproved: true,
+    packingComplete: true,
+  };
+  expect(() => evolve(ready, "dispatch", {}, 1)).toThrow();
+  const packed = { ...ready, stage: "PACKED" as const };
+  expect(evolve(packed, "hold", { reason: "" }, 1).stage).toBe("PACKED");
+});
+it("partial receipt never replaces the current customer-approval hold", () => {
+  const order = {
+    ...initial(),
+    stage: "PURCHASED" as const,
+    items: [{ name: "Fixture", quantity: 2, variant: "confirmed" }],
+    purchasedQuantity: 2,
+    purchasedLines: [2],
+    hold: "Chờ duyệt thay đổi fixture",
+  };
+  expect(
+    evolve(
+      order,
+      "receive",
+      {
+        quantity: 1,
+        condition: "damaged",
+        evidence: "Fixture damaged item",
+        shelf: "A-1",
+      },
+      1,
+    ).hold,
+  ).toBe(order.hold);
+});

@@ -67,6 +67,7 @@ const { Client } = require("../../node_modules/firebase-tools/lib/apiv2");
       try {
         const r = await new Client({ urlPrefix: origin, apiVersion: "" }).get(
           path,
+          { headers: { "x-goog-user-project": "satsunicgo" } },
         );
         return { check: key, result: filter(r.body) };
       } catch (e) {

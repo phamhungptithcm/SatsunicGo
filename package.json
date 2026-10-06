@@ -17,10 +17,25 @@
     "lint": "eslint src packages/domain functions/src tests",
     "format": "prettier --write src packages/domain functions/src tests vite.config.ts vitest.rules.config.ts eslint.config.js",
     "test:http": "node scripts/emulator-test.mjs http",
-    "test:restore": "node scripts/emulator-test.mjs restore"
+    "test:restore": "node scripts/emulator-test.mjs restore",
+    "dev:demo": "node scripts/emulator-test.mjs demo",
+    "demo:seed": "node scripts/seed-demo.mjs",
+    "demo:check": "node scripts/seed-demo.mjs check",
+    "demo:reset": "node scripts/seed-demo.mjs reset",
+    "test:release-config": "node --test tests/unit/public-config069.test.mjs",
+    "release:preflight": "node scripts/release/check-public-config.mjs && node scripts/release/preflight.mjs --project satsunicgo",
+    "release:build": "node scripts/release/check-public-config.mjs && npm run build && npm run build --workspace functions && node scripts/release/preflight.mjs --project satsunicgo"
   },
   "dependencies": {
+    "@tiptap/extension-code-block": "3.31.4",
+    "@tiptap/extension-image": "3.31.4",
+    "@tiptap/extension-table": "3.31.4",
+    "@tiptap/pm": "3.31.4",
+    "@tiptap/react": "3.31.4",
+    "@tiptap/starter-kit": "3.31.4",
     "firebase": "12.19.0",
+    "mermaid": "12.0.0",
+    "qrcode": "1.5.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-router-dom": "7.18.4",
@@ -29,16 +44,22 @@
   "devDependencies": {
     "@eslint/js": "9.39.5",
     "@firebase/rules-unit-testing": "5.0.2",
+    "@opentelemetry/core": "2.11.0",
+    "@opentelemetry/resources": "2.11.0",
+    "@opentelemetry/sdk-metrics": "2.11.0",
+    "@opentelemetry/sdk-trace-base": "2.11.0",
     "@playwright/test": "1.63.0",
     "@tailwindcss/vite": "4.3.3",
     "@types/node": "26.6.4",
     "@types/nodemailer": "8.0.2",
+    "@types/qrcode": "1.5.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.1",
     "eslint": "9.39.5",
     "eslint-plugin-react-hooks": "7.1.1",
     "firebase-tools": "15.32.1",
+    "lightningcss": "1.33.0",
     "prettier": "3.9.9",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
@@ -47,6 +68,21 @@
     "vitest": "4.1.11"
   },
   "overrides": {
-    "@grpc/grpc-js": "1.14.5"
+    "@grpc/grpc-js": "1.14.5",
+    "@opentelemetry/sdk-node": "0.222.0",
+    "@opentelemetry/auto-instrumentations-node": {
+      ".": "0.80.0",
+      "@opentelemetry/core": "2.11.0"
+    },
+    "@opentelemetry/propagator-jaeger": "2.11.0",
+    "@google-cloud/opentelemetry-cloud-monitoring-exporter": "0.22.0",
+    "@google-cloud/opentelemetry-cloud-trace-exporter": "3.1.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
+    "acorn": "8.18.0",
+    "nanoid": "3.3.19",
+    "postcss": "8.5.28",
+    "@emnapi/runtime": "1.11.3",
+    "uuid@<11.1.1": "11.1.1",
+    "lodash-es": "4.18.1"
   }
 }

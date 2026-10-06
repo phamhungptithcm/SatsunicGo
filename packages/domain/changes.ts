@@ -33,9 +33,16 @@ export type ChangeProposal = z.infer<typeof proposalSchema>;
 export function checkProposal(order: Order, p: ChangeProposal) {
   proposalSchema.parse(p);
   if (
+    order.purchaseKind === "catalog" &&
+    (!order.catalogSnapshot || p.finalPayable > order.catalogSnapshot.total)
+  )
+    throw Error("CATALOG_REPRICING_FORBIDDEN");
+  if (
     !order.acceptedAt ||
-    !order.quote ||
-    p.termsVersion !== order.quote.termsVersion ||
+    p.termsVersion !==
+      (order.purchaseKind === "catalog"
+        ? order.catalogSnapshot?.termsVersion
+        : order.quote?.termsVersion) ||
     order.stage === "CANCELLED"
   )
     throw Error("INVALID_STATE");
@@ -73,7 +80,11 @@ export function checkProposal(order: Order, p: ChangeProposal) {
       l.cancelQuantity > item.quantity - processed
     )
       throw Error("ALREADY_PURCHASED");
-    if (l.replacementName && processed > 0) throw Error("ALREADY_PURCHASED");
+    if (
+      (l.replacementName !== undefined || l.replacementVariant !== undefined) &&
+      processed > 0
+    )
+      throw Error("ALREADY_PURCHASED");
   }
   if (
     p.kind === "cancellation" &&

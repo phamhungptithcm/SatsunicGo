@@ -1,9 +1,51 @@
-import { recentMfa } from "./auth/guards";
+import {
+  isStringRoleArray,
+  recentMfa,
+  requireVerifiedGoogle,
+} from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { money, type Role } from "../../packages/domain";
+// A renewal extends only the same live plan; changing benefits mid-term needs
+// a separately approved commercial migration policy.
+export function membershipTerm(
+  plan: Record<string, unknown>,
+  planId: string,
+  current: Record<string, unknown> | undefined,
+  now: number,
+) {
+  const days = z.number().int().min(1).max(366).safeParse(plan.periodDays);
+  if (!days.success)
+    throw new HttpsError("failed-precondition", "Gói chưa có kỳ hạn hợp lệ.");
+  const active = current?.state === "active" && Number(current.endsAt) > now;
+  if (
+    active &&
+    (current?.planId
+      ? current.planId !== planId
+      : (current?.planSnapshot as Record<string, unknown> | undefined)?.name !==
+        plan.name)
+  )
+    throw new HttpsError(
+      "failed-precondition",
+      "Gói hiện tại còn hiệu lực. Liên hệ hỗ trợ để đổi gói.",
+    );
+  const end = active ? Number(current?.endsAt) : now;
+  const startsAt = active ? Number(current?.startsAt) : now;
+  const endsAt = end + days.data * 86400000;
+  if (
+    !Number.isSafeInteger(end) ||
+    !Number.isSafeInteger(startsAt) ||
+    startsAt > end ||
+    !Number.isSafeInteger(endsAt)
+  )
+    throw new HttpsError(
+      "failed-precondition",
+      "Kỳ hạn membership cần được kiểm tra.",
+    );
+  return { startsAt, endsAt };
+}
 export const membershipCommand = onCall(
   {
     region: "asia-southeast1",
@@ -12,11 +54,19 @@ export const membershipCommand = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (!req.auth?.uid)
       throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
     const d = z
       .object({
-        action: z.enum(["purchase", "confirm", "grant", "cancelRenewal"]),
+        action: z.enum([
+          "purchase",
+          "confirm",
+          "grant",
+          "cancelRenewal",
+          "requestRenewal",
+          "cancelInvoice",
+        ]),
         operationId: z.string().uuid(),
         planId: z
           .string()
@@ -56,9 +106,11 @@ export const membershipCommand = onCall(
           "permission-denied",
           "Tài khoản không thể thao tác.",
         );
-      const rs: Role[] = access.data()?.active
-        ? (access.data()?.roles ?? [])
-        : [];
+      const rs: Role[] =
+        access.data()?.active === true &&
+        isStringRoleArray(access.data()?.roles)
+          ? access.data()?.roles
+          : [];
       if (p.action === "grant" && !rs.includes("OWNER"))
         throw new HttpsError(
           "permission-denied",
@@ -86,7 +138,11 @@ export const membershipCommand = onCall(
       const invoiceRef = db.doc(
           `membershipInvoices/${p.invoiceId ?? randomUUID()}`,
         ),
-        invoice = p.action === "confirm" ? await tx.get(invoiceRef) : null;
+        invoice = ["confirm", "cancelInvoice"].includes(p.action)
+          ? await tx.get(invoiceRef)
+          : null;
+      if (["confirm", "cancelInvoice"].includes(p.action) && !p.invoiceId)
+        throw new HttpsError("invalid-argument", "Chọn hóa đơn membership.");
       const target =
         p.action === "confirm"
           ? invoice?.data()?.ownerId
@@ -98,18 +154,51 @@ export const membershipCommand = onCall(
       const subscriptionRef = db.doc(`membershipSubscriptions/${target}`),
         subscription = await tx.get(subscriptionRef);
       const targetUser = await tx.get(db.doc(`users/${target}`));
-      if (targetUser.data()?.locked)
+      if (!targetUser.exists || targetUser.data()?.locked)
         throw new HttpsError(
           "permission-denied",
-          "Không thể xử lý tài khoản bị khóa.",
+          "Không thể xử lý tài khoản này.",
         );
-      let result: { id: string };
-      if (p.action === "cancelRenewal") {
+      let result: { id: string; state?: "active" | "pending" };
+      if (p.action === "cancelInvoice") {
+        if (!invoice?.exists || invoice.data()?.ownerId !== uid)
+          throw new HttpsError(
+            "permission-denied",
+            "Không thể xử lý hóa đơn này.",
+          );
+        if (invoice.data()?.state !== "pending")
+          throw new HttpsError(
+            "failed-precondition",
+            "Chỉ hủy được yêu cầu chưa xác nhận thanh toán.",
+          );
+        tx.update(invoiceRef, {
+          state: "cancelled",
+          cancelledAt: now,
+          cancelledBy: uid,
+        });
+        result = { id: invoiceRef.id };
+      } else if (["cancelRenewal", "requestRenewal"].includes(p.action)) {
+        if (!subscription.exists)
+          throw new HttpsError(
+            "failed-precondition",
+            "Bạn chưa có membership.",
+          );
         tx.set(
           subscriptionRef,
-          { ownerId: uid, renewalIntent: false, changedAt: now },
+          {
+            ownerId: uid,
+            renewalIntent: p.action === "requestRenewal",
+            changedAt: now,
+          },
           { merge: true },
         );
+        tx.create(db.collection("membershipHistory").doc(), {
+          ownerId: uid,
+          action: p.action,
+          actor: uid,
+          createdAt: now,
+          endsAt: subscription.data()?.endsAt,
+        });
         result = { id: target };
       } else if (p.action === "purchase") {
         if (!p.planId)
@@ -117,17 +206,69 @@ export const membershipCommand = onCall(
         const plan = await tx.get(db.doc(`membershipPlans/${p.planId}`));
         if (plan.data()?.status !== "published")
           throw new HttpsError("failed-precondition", "Gói chưa mở bán.");
+        const term = membershipTerm(
+          plan.data()!,
+          p.planId,
+          subscription.data(),
+          now,
+        );
         const amount = money.parse(plan.data()?.price);
-        tx.create(invoiceRef, {
-          ownerId: uid,
-          planId: p.planId,
-          planSnapshot: plan.data(),
-          amount,
-          currency: "VND",
-          state: "pending",
-          createdAt: now,
-        });
-        result = { id: invoiceRef.id };
+        if (amount === 0) {
+          if (plan.data()?.name !== "FREE")
+            throw new HttpsError(
+              "failed-precondition",
+              "Gói này cần được chủ doanh nghiệp kiểm tra giá trước khi mở bán.",
+            );
+          const current = subscription.data();
+          const active = current?.state === "active" && current.endsAt > now;
+          if (
+            active &&
+            (current.planSnapshot?.name !== "FREE" ||
+              current.planSnapshot?.price !== 0)
+          )
+            throw new HttpsError(
+              "failed-precondition",
+              "Gói hiện tại còn hiệu lực. Liên hệ hỗ trợ để đổi gói.",
+            );
+          // Re-selecting an active free plan does not stack unlimited future terms
+          // or silently replace the current benefit snapshot.
+          if (!active) {
+            const value = {
+              ownerId: uid,
+              planId: p.planId,
+              planSnapshot: plan.data(),
+              ...term,
+              renewalIntent: false,
+              state: "active",
+              changedAt: now,
+            };
+            tx.set(subscriptionRef, value);
+            tx.create(db.collection("membershipHistory").doc(), {
+              ...value,
+              action: "activateFree",
+              actor: uid,
+              createdAt: now,
+            });
+            tx.create(db.doc(`outboxJobs/membership-${uid}-${p.operationId}`), {
+              ownerId: uid,
+              action: "membershipActivated",
+              state: "queued",
+              createdAt: now,
+            });
+          }
+          result = { id: uid, state: "active" };
+        } else {
+          tx.create(invoiceRef, {
+            ownerId: uid,
+            planId: p.planId,
+            planSnapshot: plan.data(),
+            amount,
+            currency: "VND",
+            state: "pending",
+            createdAt: now,
+          });
+          result = { id: invoiceRef.id, state: "pending" };
+        }
       } else {
         let plan: Record<string, unknown>;
         let bankRef;
@@ -136,6 +277,11 @@ export const membershipCommand = onCall(
             throw new HttpsError(
               "failed-precondition",
               "Hóa đơn không còn chờ xác nhận.",
+            );
+          if (invoice.data()?.amount === 0)
+            throw new HttpsError(
+              "failed-precondition",
+              "Yêu cầu miễn phí không cần xác nhận chuyển khoản. Liên hệ hỗ trợ để xử lý yêu cầu cũ.",
             );
           if (p.amount !== invoice.data()?.amount)
             throw new HttpsError(
@@ -167,26 +313,30 @@ export const membershipCommand = onCall(
             throw new HttpsError("failed-precondition", "Gói chưa được duyệt.");
           plan = s.data()!;
         }
-        const start = Math.max(now, subscription.data()?.endsAt ?? 0),
-          endsAt = start + Number(plan.periodDays) * 86400000;
-        if (!Number.isFinite(endsAt))
+        const planId =
+          p.action === "confirm" ? invoice?.data()?.planId : p.planId;
+        if (typeof planId !== "string" || !plan)
           throw new HttpsError(
             "failed-precondition",
-            "Gói chưa có kỳ hạn hợp lệ.",
+            "Hóa đơn chưa có gói hợp lệ.",
           );
+        const term = membershipTerm(plan, planId, subscription.data(), now);
         const value = {
           ownerId: target,
+          planId,
           planSnapshot: plan,
-          startsAt:
-            subscription.data()?.endsAt > now
-              ? (subscription.data()?.startsAt ?? now)
-              : now,
-          endsAt,
+          ...term,
           renewalIntent: false,
           state: "active",
           changedAt: now,
         };
         tx.set(subscriptionRef, value);
+        tx.create(db.doc(`outboxJobs/membership-${uid}-${p.operationId}`), {
+          ownerId: target,
+          action: "membershipActivated",
+          state: "queued",
+          createdAt: now,
+        });
         tx.create(db.collection("membershipHistory").doc(), {
           ...value,
           action: p.action,

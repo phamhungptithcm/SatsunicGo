@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
  match /databases/{database}/documents {
-  function signed() { return request.auth != null; }
+  function signed() { return request.auth != null && request.auth.token.get('email_verified', false) == true && request.auth.token.get('firebase', {}).get('sign_in_provider', '') == 'google.com'; }
   function unlocked() { return signed() && (!exists(/databases/$(database)/documents/users/$(request.auth.uid)) || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('locked', false) == false); }
   function owner() { return unlocked() && resource.data.ownerId == request.auth.uid; }
   match /orders/{id} { allow read: if owner(); allow write: if false;
@@ -13,13 +13,16 @@ service cloud.firestore {
   match /orderChanges/{id} { allow read: if owner(); allow write: if false; }
   match /notifications/{id} { allow read: if owner(); allow write: if false; }
   match /membershipSubscriptions/{uid} { allow get: if unlocked() && uid == request.auth.uid; allow write: if false; }
+  match /salesDocuments/{id} { allow read: if owner() && resource.data.state in ["issued", "void"]; allow write: if false; }
   match /membershipInvoices/{id} { allow read: if owner(); allow write: if false; }
   match /membershipHistory/{id} { allow read: if owner(); allow write: if false; }
+  match /askConversations/{id} { allow read: if owner(); allow write: if false; }
+  match /orderRecipients/{id} { allow read: if owner(); allow write: if false; }
   match /addresses/{id} { allow read: if owner(); allow write: if false; }
   match /supportTickets/{id} { allow read: if owner(); allow write: if false; match /messages/{event} { allow read: if unlocked() && get(/databases/$(database)/documents/supportTickets/$(id)).data.ownerId == request.auth.uid; } }
   match /staffAccess/{uid} { allow get: if unlocked() && request.auth.uid == uid; allow write: if false; }
   match /users/{uid} { allow get: if signed() && request.auth.uid == uid; allow write: if false; }
-  match /{collection}/{id} { allow read: if collection in ['products','posts','membershipPlans'] && resource.data.status == 'published'; allow write: if false; }
+  match /{collection}/{id} { allow read: if collection in ['products','posts','blogPublished','membershipPlans'] && resource.data.status == 'published'; allow write: if false; }
   match /{document=**} { allow read, write: if false; }
  }
 }

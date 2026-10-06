@@ -28,3 +28,19 @@ test("public images escape alternative text and never accept arbitrary paths", (
     }),
   ).not.toContain("<img src=");
 });
+test("listed product structured data uses the explicit VND price and never claims stock", () => {
+  const html = contentHtml(
+    "Fixture product",
+    "Full payment before staff purchasing",
+    "/products/fixture",
+    undefined,
+    undefined,
+    120000,
+  );
+  expect(html).toContain('"price":120000');
+  expect(html).toContain('"priceCurrency":"VND"');
+  expect(html).not.toContain('"availability"');
+  expect(
+    contentHtml("Fixture", "Not orderable", "/products/fixture"),
+  ).not.toContain('"offers"');
+});

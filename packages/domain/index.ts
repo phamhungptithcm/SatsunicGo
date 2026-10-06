@@ -163,6 +163,8 @@ export const stageLabels: Record<Stage, string> = {
   CANCELLED: "Đã hủy",
 };
 export type Order = {
+  purchaseKind?: "catalog" | "custom";
+  catalogSnapshot?: import("./catalog-checkout").CatalogSnapshot;
   id: string;
   ownerId: string;
   market: z.infer<typeof market>;
@@ -181,6 +183,7 @@ export type Order = {
   deposit?: number;
   collected: number;
   refunded: number;
+  refundReserved?: number;
   finalTotal?: number;
   finalApproved?: boolean;
   hold?: string;
@@ -219,6 +222,7 @@ export function requireRole(action: string, currentRoles: Role[]) {
 }
 export function canDispatch(o: Order) {
   return (
+    (o.purchaseKind !== "catalog" || catalogPayable(o) === o.finalTotal) &&
     o.stage === "READY_TO_SHIP" &&
     o.finalApproved === true &&
     o.packingComplete === true &&
@@ -226,8 +230,50 @@ export function canDispatch(o: Order) {
       o.finalFreightVersion === o.consolidatedFreight.version) &&
     !o.hold &&
     o.finalTotal !== undefined &&
-    o.collected - o.refunded >= o.finalTotal
+    o.collected - o.refunded - (o.refundReserved ?? 0) >= o.finalTotal
   );
+}
+export function orderStageLabel(o: Order) {
+  if (o.purchaseKind === "catalog" && o.stage === "QUOTE_ACCEPTED")
+    return o.collected - o.refunded - (o.refundReserved ?? 0) >=
+      purchaseAmount(o)
+      ? "Đã thanh toán · chờ mua hàng"
+      : "Chờ thanh toán toàn bộ";
+  if (o.purchaseKind === "catalog" && o.stage === "PACKED")
+    return "Đã đóng gói";
+  return stageLabels[o.stage];
+}
+export function catalogPayable(o: Order) {
+  if (
+    !o.catalogSnapshot ||
+    o.finalTotal === undefined ||
+    o.finalTotal > o.catalogSnapshot.total
+  )
+    throw Error("INVALID_CATALOG_TOTAL");
+  return safeMoney(o.finalTotal);
+}
+export function purchaseAmount(o: Order) {
+  return o.purchaseKind === "catalog"
+    ? catalogPayable(o)
+    : (o.deposit ?? Infinity);
+}
+export function paymentPurpose(o: Order): "full" | "deposit" | "balance" {
+  return o.purchaseKind === "catalog"
+    ? "full"
+    : o.finalApproved && o.finalTotal !== undefined
+      ? "balance"
+      : "deposit";
+}
+export function paymentDue(o: Order, purpose = paymentPurpose(o)) {
+  if (purpose !== paymentPurpose(o)) throw Error("INVALID_PAYMENT_PURPOSE");
+  const target =
+    purpose === "full"
+      ? catalogPayable(o)
+      : purpose === "deposit"
+        ? o.deposit
+        : o.finalTotal;
+  if (target === undefined) throw Error("NO_PAYMENT_TARGET");
+  return safeMoney(Math.max(0, target - o.collected + o.refunded));
 }
 export function membershipDiscount(
   service: number,
@@ -258,6 +304,7 @@ export type Action =
   | "pack"
   | "finalize"
   | "approveFinal"
+  | "confirmReceipt"
   | "dispatch"
   | "track"
   | "hold"
@@ -312,7 +359,10 @@ export function evolve(
   const count = o.items.reduce((s, i) => s + i.quantity, 0);
   switch (action) {
     case "issueQuote": {
-      guard(["REQUESTED", "QUOTED"].includes(o.stage));
+      guard(
+        o.purchaseKind !== "catalog" &&
+          ["REQUESTED", "QUOTED"].includes(o.stage),
+      );
       const q = quoteSchema.parse(payload);
       guard(q.expiresAt > now);
       quoteTotal(q);
@@ -327,7 +377,8 @@ export function evolve(
         .strict()
         .parse(payload);
       guard(
-        o.stage === "QUOTED" &&
+        o.purchaseKind !== "catalog" &&
+          o.stage === "QUOTED" &&
           o.quote &&
           o.quote.expiresAt > now &&
           p.quoteVersion === o.quoteVersion,
@@ -341,7 +392,8 @@ export function evolve(
     case "claimPurchase":
       guard(
         o.stage === "QUOTE_ACCEPTED" &&
-          o.collected - o.refunded >= (o.deposit ?? Infinity) &&
+          o.collected - o.refunded - (o.refundReserved ?? 0) >=
+            purchaseAmount(o) &&
           !o.hold,
       );
       o.stage = "PURCHASING";
@@ -374,6 +426,7 @@ export function evolve(
         .object({
           quantity: z.number().int().positive(),
           condition: z.enum(["good", "damaged"]),
+          shelf: z.string().trim().max(80).optional(),
           lines: lineCountsSchema.optional(),
           evidence: z.string().min(5).max(1000),
         })
@@ -394,7 +447,7 @@ export function evolve(
       o.receivedQuantity = o.receivedLines.reduce((sum, n) => sum + n, 0);
       if (o.receivedQuantity === count) o.stage = "ORIGIN_RECEIVED";
       if (o.receivedQuantity !== count || p.condition === "damaged")
-        o.hold = "Hàng thiếu hoặc hỏng";
+        o.hold ||= "Hàng thiếu hoặc hỏng";
       break;
     }
     case "pack":
@@ -424,7 +477,11 @@ export function evolve(
         })
         .strict()
         .parse(payload);
-      guard(o.stage === "PACKED" && o.packingComplete);
+      guard(
+        o.stage === "PACKED" &&
+          o.packingComplete &&
+          o.purchaseKind !== "catalog",
+      );
       if (
         o.consolidatedFreight &&
         (p.freightShare !== o.consolidatedFreight.amount ||
@@ -442,7 +499,11 @@ export function evolve(
       break;
     }
     case "approveFinal":
-      guard(o.stage === "PACKED" && o.finalTotal !== undefined);
+      guard(
+        o.stage === "PACKED" &&
+          o.finalTotal !== undefined &&
+          o.purchaseKind !== "catalog",
+      );
       o.finalApproved = true;
       break;
     case "dispatch":
@@ -462,6 +523,17 @@ export function evolve(
       if (p.delivered) o.stage = "DELIVERED";
       break;
     }
+    case "confirmReceipt":
+      z.object({ received: z.literal(true) })
+        .strict()
+        .parse(payload);
+      guard(
+        o.stage === "DELIVERED" &&
+          !!o.tracking &&
+          canDispatch({ ...o, stage: "READY_TO_SHIP" }),
+      );
+      o.stage = "COMPLETED";
+      break;
     case "hold":
       o.hold = z
         .object({ reason: z.string().max(500) })
@@ -469,7 +541,13 @@ export function evolve(
         .parse(payload).reason;
       break;
     case "cancelRequest":
-      guard(o.stage === "REQUESTED");
+      guard(
+        o.stage === "REQUESTED" ||
+          (o.purchaseKind === "catalog" &&
+            o.stage === "QUOTE_ACCEPTED" &&
+            o.collected === 0 &&
+            o.refunded === 0),
+      );
       o.stage = "CANCELLED";
       break;
     default:
@@ -479,7 +557,7 @@ export function evolve(
     o.stage === "PACKED" &&
     o.finalApproved &&
     o.finalTotal !== undefined &&
-    o.collected - o.refunded >= o.finalTotal &&
+    o.collected - o.refunded - (o.refundReserved ?? 0) >= o.finalTotal &&
     !o.hold
   )
     o.stage = "READY_TO_SHIP";

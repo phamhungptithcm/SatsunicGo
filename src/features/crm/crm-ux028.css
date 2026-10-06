@@ -1,0 +1,89 @@
+/* CRM028: only Workbench selection and detail presentation. */
+@media screen {
+  .workspaceShell .crmWorkbench028 .crmItemMain {
+    padding: 14px 16px;
+  }
+  .workspaceShell .crmWorkbench028 .crmItemMain > p {
+    margin: 8px 0;
+  }
+  .workspaceShell .crmWorkbench028 .crmList .crmReference {
+    font-size: 11px;
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchPrompt028 {
+    display: grid;
+    justify-items: start;
+    align-content: center;
+    gap: 12px;
+    min-height: 200px;
+    padding: 28px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchPrompt028 h2,
+  .workspaceShell .crmWorkbench028 .crmWorkbenchPrompt028 p {
+    margin: 0;
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchPrompt028 p {
+    color: var(--muted);
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchBack028 {
+    display: none;
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchDetail028 {
+    min-width: 0;
+    scroll-margin-top: 16px;
+  }
+  .workspaceShell .crmWorkbench028 .crmWorkbenchDetail028 > h2:focus {
+    outline: 2px solid var(--blue);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .workspaceShell .crmWorkbench028 .crmWorkbenchDetail028 {
+      animation: crm028-detail-enter 160ms ease-out;
+    }
+  }
+  @keyframes crm028-detail-enter {
+    from {
+      opacity: 0.6;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 1100px) {
+    .workspaceShell
+      .crmWorkbench028
+      .workColumns[data-detail-open="true"]
+      > .crmList {
+      display: none;
+    }
+    .workspaceShell
+      .crmWorkbench028
+      .workColumns[data-detail-open="false"]
+      > .crmWorkbenchDetail028 {
+      display: none;
+    }
+    .workspaceShell .crmWorkbench028 .crmWorkbenchPrompt028 {
+      display: none;
+    }
+    .workspaceShell .crmWorkbench028 .crmWorkbenchBack028 {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .workspaceShell .crmWorkbench028 .crmWorkbenchBack028 .crmIcon {
+      transform: rotate(180deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .workspaceShell .crmWorkbench028 .crmWorkbenchDetail028 {
+      animation: none;
+      transition: none;
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../../shared/firebase";
+import { DeliveryEstimate } from "./DeliveryEstimate";
 import type { Parcel } from "../../../packages/domain/shipping";
 const labels = {
   packed: "Đã đóng kiện",
@@ -17,25 +18,42 @@ const labels = {
 };
 export function CustomerShipments({ uid }: { uid: string }) {
   const [rows, setRows] = useState<Parcel[]>([]),
-    [error, setError] = useState(false);
+    [error, setError] = useState(false),
+    [loading, setLoading] = useState(true);
+  const [observedAt, setObservedAt] = useState(0);
   useEffect(() => {
     setRows([]);
     setError(false);
-    if (!db) return;
+    setLoading(true);
+    if (!db) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
     return onSnapshot(
       query(
         collection(db, "customerShipments"),
         where("ownerId", "==", uid),
         limit(30),
       ),
-      (s) => setRows(s.docs.map((d) => d.data() as Parcel)),
-      () => setError(true),
+      (s) => {
+        setObservedAt(Date.now());
+        setRows(s.docs.map((d) => d.data() as Parcel));
+        setLoading(false);
+      },
+      () => {
+        setError(true);
+        setLoading(false);
+      },
     );
   }, [uid]);
   return (
     <section>
       <h2>Kiện vận chuyển của bạn</h2>
-      {rows.length === 0 && <p>Chưa có kiện được phân bổ.</p>}
+      {loading && <p role="status">Đang tải kiện hàng…</p>}
+      {!loading && !error && rows.length === 0 && (
+        <p>Chưa có kiện được phân bổ.</p>
+      )}
       {rows.map((p) => (
         <article className="panel order" key={p.id}>
           <h3>Kiện {p.id}</h3>
@@ -51,6 +69,11 @@ export function CustomerShipments({ uid }: { uid: string }) {
               {p.carrier} · vận đơn {p.tracking}
             </p>
           )}
+          <DeliveryEstimate
+            value={p.deliveryEstimate}
+            state={p.state}
+            observedAt={observedAt}
+          />
           <p className="quietNote">
             Trạng thái được nhân viên cập nhật thủ công. Một kiện đã giao chưa
             có nghĩa toàn bộ đơn đã giao đủ.

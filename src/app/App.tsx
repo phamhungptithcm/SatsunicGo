@@ -1,8 +1,33 @@
+import { staffRoles } from "../shared/staff-access";
+const Documents = lazy(() =>
+  import("../features/invoices/Documents").then((m) => ({
+    default: m.Documents,
+  })),
+);
+const SharedDocument = lazy(() =>
+  import("../features/invoices/Documents").then((m) => ({
+    default: m.SharedDocument,
+  })),
+);
+import {
+  isCrmPath,
+  legacyStaffTarget,
+} from "../../packages/domain/staff-route";
+const ProductCheckout = lazy(() =>
+  import("../features/products/Checkout").then((m) => ({
+    default: m.ProductCheckout,
+  })),
+);
+const Workspace = lazy(() =>
+  import("../features/crm/Workspace").then((m) => ({ default: m.Workspace })),
+);
+import "../styles/account.css";
+import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
 import { notify, withProgress } from "../shared/feedback";
 import { publicCopy } from "../../packages/domain/public-content";
-import { useEffect, useState, lazy, Suspense } from "react";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import {
   collection,
@@ -16,12 +41,16 @@ import {
   auth,
   db,
   configured,
-  betaRelease,
   login,
   logout,
   sendCommand,
 } from "../shared/firebase";
-import { stageLabels, quoteTotal, type Order } from "../../packages/domain";
+import {
+  canDispatch,
+  orderStageLabel,
+  quoteTotal,
+  type Order,
+} from "../../packages/domain";
 const RequestForm = lazy(() =>
   import("../features/requests/RequestForm").then((m) => ({
     default: m.RequestForm,
@@ -32,48 +61,20 @@ const TransferNotice = lazy(() =>
     default: m.TransferNotice,
   })),
 );
+const ShippingRates = lazy(() =>
+  import("../features/shipping/ShippingRates").then((m) => ({
+    default: m.ShippingRates,
+  })),
+);
 const CustomerShipments = lazy(() =>
   import("../features/shipping/CustomerShipments").then((m) => ({
     default: m.CustomerShipments,
   })),
 );
-const Shipping = lazy(() =>
-  import("../features/shipping/Shipping").then((m) => ({
-    default: m.Shipping,
-  })),
-);
-const StaffSupport = lazy(() =>
-  import("../features/support/Thread").then((m) => ({
-    default: m.StaffSupport,
-  })),
-);
-const Finance = lazy(() =>
-  import("../features/payments/Finance").then((m) => ({ default: m.Finance })),
-);
-const PlanEditor = lazy(() =>
-  import("../features/membership/PlanEditor").then((m) => ({
-    default: m.PlanEditor,
-  })),
-);
-const StaffAccess = lazy(() =>
-  import("../features/settings/StaffAccess").then((m) => ({
-    default: m.StaffAccess,
-  })),
-);
-const Dashboard = lazy(() =>
-  import("../features/crm/Dashboard").then((m) => ({ default: m.Dashboard })),
-);
-const Customer = lazy(() =>
-  import("../features/crm/Customer").then((m) => ({ default: m.Customer })),
-);
-const Campaigns = lazy(() =>
-  import("../features/content/Campaigns").then((m) => ({
-    default: m.Campaigns,
-  })),
-);
-const Settings = lazy(() =>
-  import("../features/settings/Settings").then((m) => ({
-    default: m.Settings,
+
+const OrderConversation = lazy(() =>
+  import("../features/support/OrderConversation").then((m) => ({
+    default: m.OrderConversation,
   })),
 );
 const OrderTools = lazy(() =>
@@ -90,11 +91,7 @@ const CustomerChanges = lazy(() =>
     default: m.CustomerChanges,
   })),
 );
-const ChangeQueue = lazy(() =>
-  import("../features/orders/Changes").then((m) => ({
-    default: m.ChangeQueue,
-  })),
-);
+
 const Notifications = lazy(() =>
   import("../features/notifications/Notifications").then((m) => ({
     default: m.Notifications,
@@ -103,17 +100,16 @@ const Notifications = lazy(() =>
 const Profile = lazy(() =>
   import("../features/profile/Profile").then((m) => ({ default: m.Profile })),
 );
-const Workbench = lazy(() =>
-  import("../features/operations/Workbench").then((m) => ({
-    default: m.Workbench,
+
+const Catalog = lazy(() =>
+  import("../features/content/Content").then((m) => ({ default: m.Catalog })),
+);
+const ContentDetail = lazy(() =>
+  import("../features/content/Content").then((m) => ({
+    default: m.ContentDetail,
   })),
 );
-import { Catalog, ContentDetail } from "../features/content/Content";
-const ContentEditor = lazy(() =>
-  import("../features/content/ContentEditor").then((m) => ({
-    default: m.ContentEditor,
-  })),
-);
+
 const Membership = lazy(() =>
   import("../features/membership/Membership").then((m) => ({
     default: m.Membership,
@@ -129,24 +125,55 @@ const money = (n: number) =>
     currency: "VND",
     maximumFractionDigits: 0,
   }).format(n);
-function useOrders(user: User | null) {
+function useOrders(user: User | null, selectedId?: string) {
   const [orders, setOrders] = useState<Order[]>([]),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [loading, setLoading] = useState(!!user && !!db);
   useEffect(() => {
     setOrders([]);
     setError("");
+    setLoading(!!user && !!db);
     if (!db || !user) return;
-    return onSnapshot(
-      query(
-        collection(db, "orders"),
-        where("ownerId", "==", user.uid),
-        limit(50),
-      ),
-      (s) => setOrders(s.docs.map((d) => d.data() as Order)),
-      () => setError("Chưa tải được đơn hàng. Thử lại sau."),
-    );
-  }, [user]);
-  return { orders, error };
+    let active = true;
+    const success = (rows: Order[]) => {
+      if (!active) return;
+      setOrders(rows);
+      setLoading(false);
+    };
+    const failure = () => {
+      if (!active) return;
+      setOrders([]);
+      setError("Chưa tải được đơn hàng. Thử lại sau.");
+      setLoading(false);
+    };
+    const unsubscribe = selectedId
+      ? onSnapshot(
+          doc(db, "orders", selectedId),
+          (snapshot) => {
+            const order = snapshot.data() as Order | undefined;
+            success(
+              order?.ownerId === user.uid
+                ? [{ ...order, id: snapshot.id }]
+                : [],
+            );
+          },
+          failure,
+        )
+      : onSnapshot(
+          query(
+            collection(db, "orders"),
+            where("ownerId", "==", user.uid),
+            limit(50),
+          ),
+          (s) => success(s.docs.map((d) => d.data() as Order)),
+          failure,
+        );
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [user?.uid, selectedId]);
+  return { orders, error, loading };
 }
 function Icon({ kind = "arrow" }: { kind?: string }) {
   return (
@@ -177,10 +204,19 @@ function Icon({ kind = "arrow" }: { kind?: string }) {
 export function App() {
   const [user, setUser] = useState<User | null>(null),
     [authError, setAuthError] = useState(""),
-    [authBusy, setAuthBusy] = useState(false);
+    [authBusy, setAuthBusy] = useState(false),
+    [authReady, setAuthReady] = useState(!auth);
   const location = useLocation();
   useEffect(() => {
-    if (auth) return onAuthStateChanged(auth, setUser);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.getElementById("main")?.focus({ preventScroll: true });
+  }, [location.pathname]);
+  useEffect(() => {
+    if (auth)
+      return onAuthStateChanged(auth, (current) => {
+        setUser(current);
+        setAuthReady(true);
+      });
   }, []);
   async function signIn() {
     if (authBusy) return;
@@ -215,27 +251,21 @@ export function App() {
       <a className="skip" href="#main">
         Đến nội dung chính
       </a>
-      <SiteHeader
-        user={user}
-        signIn={signIn}
-        signOut={signOut}
-        busy={authBusy}
-      />
-      {betaRelease && (
-        <div className="betaNotice" role="status">
-          <strong>Beta 0.1</strong>
-          <span>
-            Đang kiểm tra giao diện. Đăng nhập, gửi yêu cầu và thanh toán chưa
-            mở.
-          </span>
-        </div>
+      {!isCrmPath(location.pathname) && (
+        <SiteHeader user={user} signOut={signOut} busy={authBusy} />
       )}
       {authError && (
         <p className="banner" role="alert">
-          {authError} <Link to="/account/security">Bảo mật tài khoản</Link>
+          {authError} <Link to="/account">Mở tài khoản</Link>
+          {" · "}
+          <Link to="/account/security">Bảo mật tài khoản</Link>
         </p>
       )}
-      <main id="main" tabIndex={-1}>
+      <main
+        id="main"
+        tabIndex={-1}
+        className={isCrmPath(location.pathname) ? "crmRoot" : undefined}
+      >
         <Suspense
           fallback={
             <section className="page routeLoading" role="status">
@@ -243,76 +273,302 @@ export function App() {
             </section>
           }
         >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/request"
-              element={
-                <RequestForm
-                  key={user?.uid ?? "anonymous"}
-                  user={user}
-                  signIn={signIn}
-                />
-              }
-            />
-            <Route
-              path="/account/security"
-              element={<Security user={user} />}
-            />
-            <Route path="/account/profile" element={<Profile user={user} />} />
-            <Route
-              path="/account"
-              element={<Account user={user} signIn={signIn} />}
-            />
-            <Route
-              path="/account/orders/:id"
-              element={<Account user={user} signIn={signIn} />}
-            />
-            <Route path="/products" element={<Catalog kind="products" />} />
-            <Route path="/posts" element={<Catalog kind="posts" />} />
-            <Route
-              path="/posts/:slug"
-              element={<ContentDetail kind="posts" />}
-            />
-            <Route
-              path="/products/:slug"
-              element={<ContentDetail kind="products" />}
-            />
-            <Route path="/membership" element={<Membership user={user} />} />
-            <Route path="/support" element={<Support user={user} />} />
-            <Route
-              path="/staff/*"
-              element={
-                <Suspense
-                  fallback={<p role="status">Đang mở không gian vận hành…</p>}
-                >
-                  <Staff user={user} />
-                </Suspense>
-              }
-            />
-            <Route path="/:page" element={<PublicPage />} />
-            <Route
-              path="*"
-              element={
-                <section className="page">
-                  <h1>Không tìm thấy trang</h1>
-                  <Link to="/">Về trang chủ</Link>
-                </section>
-              }
-            />
-          </Routes>
+          {!authReady &&
+          /^(?:\/account|\/staff|\/crm)(?:\/|$)/.test(location.pathname) ? (
+            <section className="page" role="status">
+              Đang khôi phục tài khoản…
+            </section>
+          ) : (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/request"
+                element={
+                  <RequestForm
+                    key={user?.uid ?? "anonymous"}
+                    user={user}
+                    signIn={signIn}
+                  />
+                }
+              />
+              <Route
+                path="/account/security"
+                element={
+                  <Security key={user?.uid ?? "anonymous"} user={user} />
+                }
+              />
+              <Route
+                path="/account/profile"
+                element={<Profile key={user?.uid ?? "anonymous"} user={user} />}
+              />
+              <Route
+                path="/account"
+                element={
+                  <Account
+                    key={user?.uid ?? "anonymous"}
+                    user={user}
+                    signIn={signIn}
+                  />
+                }
+              />
+              <Route
+                path="/account/orders/:id"
+                element={
+                  <Account
+                    key={user?.uid ?? "anonymous"}
+                    user={user}
+                    signIn={signIn}
+                  />
+                }
+              />
+              <Route
+                path="/account/documents"
+                element={<Documents key={user?.uid ?? "anonymous"} />}
+              />
+              <Route path="/documents/shared" element={<SharedDocument />} />
+              <Route path="/products" element={<Catalog kind="products" />} />
+              <Route
+                path="/products/:slug/checkout"
+                element={<ProductCheckout user={user} signIn={signIn} />}
+              />
+              <Route path="/posts" element={<Catalog kind="posts" />} />
+              <Route
+                path="/posts/:slug"
+                element={<ContentDetail kind="posts" />}
+              />
+              <Route
+                path="/products/:slug"
+                element={<ContentDetail kind="products" />}
+              />
+              <Route
+                path="/membership"
+                element={
+                  <Membership
+                    key={user?.uid ?? "anonymous"}
+                    user={user}
+                    signIn={signIn}
+                  />
+                }
+              />
+              <Route
+                path="/support"
+                element={<Support key={user?.uid ?? "anonymous"} user={user} />}
+              />
+              <Route
+                path="/crm/*"
+                element={
+                  <Suspense
+                    fallback={<p role="status">Đang mở không gian vận hành…</p>}
+                  >
+                    <Staff
+                      key={user?.uid ?? "anonymous"}
+                      user={user}
+                      signIn={signIn}
+                      signOut={signOut}
+                      busy={authBusy}
+                    />
+                  </Suspense>
+                }
+              />
+              <Route path="/staff/*" element={<LegacyStaffRedirect />} />
+              <Route path="/:page" element={<PublicPage />} />
+              <Route
+                path="*"
+                element={
+                  <section className="page">
+                    <h1>Không tìm thấy trang</h1>
+                    <Link to="/">Về trang chủ</Link>
+                  </section>
+                }
+              />
+            </Routes>
+          )}
         </Suspense>
       </main>
-      <SiteFooter />
-      {!location.pathname.startsWith("/staff") && (
+      {!isCrmPath(location.pathname) && <SiteFooter />}
+      {authReady && !isCrmPath(location.pathname) && (
         <Ask
-          key={location.pathname}
-          startCollapsed={location.pathname.startsWith("/posts")}
+          key={`${location.pathname}:${user?.uid ?? "anonymous"}`}
+          startCollapsed={
+            location.pathname.startsWith("/posts") ||
+            location.pathname.startsWith("/account") ||
+            location.pathname === "/request"
+          }
         />
       )}
     </>
   );
 }
+function JourneyTimeline() {
+  const root = useRef<HTMLDivElement>(null);
+  const parcel = useRef<HTMLSpanElement>(null);
+  const motion = useRef<Animation | null>(null);
+  useEffect(() => {
+    const card = root.current;
+    const box = parcel.current;
+    if (!card || !box) return;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let visible = false;
+    const sync = () => {
+      if (
+        !visible ||
+        document.hidden ||
+        preference.matches ||
+        card.matches(":hover") ||
+        card.contains(document.activeElement)
+      )
+        motion.current?.pause();
+      else motion.current?.play();
+    };
+    const measure = () => {
+      const track = card.querySelector<HTMLElement>(".journeyTrack");
+      const markers = [...card.querySelectorAll<HTMLElement>("li > span")];
+      if (!track || markers.length !== 4 || !box.animate) return;
+      const previousTime = motion.current?.currentTime ?? 0;
+      motion.current?.cancel();
+      const origin = track.getBoundingClientRect().top;
+      const positions = markers.map(
+        (marker) => marker.getBoundingClientRect().top - origin,
+      );
+      const frames: Keyframe[] = [];
+      positions.forEach((y, index) => {
+        const start = index * 0.25;
+        frames.push({
+          transform: `translateY(${y}px)`,
+          opacity: 1,
+          offset: start,
+        });
+        frames.push({
+          transform: `translateY(${y}px)`,
+          opacity: 1,
+          offset: start + 0.17,
+        });
+        if (index < 3)
+          frames.push({
+            transform: `translate(9px, ${(y + positions[index + 1]) / 2 - 12}px) rotate(${index % 2 ? -8 : 8}deg)`,
+            opacity: 1,
+            offset: start + 0.21,
+          });
+      });
+      frames.push({
+        transform: `translateY(${positions[3]}px)`,
+        opacity: 0,
+        offset: 0.96,
+      });
+      frames.push({
+        transform: `translateY(${positions[0]}px)`,
+        opacity: 0,
+        offset: 0.98,
+      });
+      frames.push({
+        transform: `translateY(${positions[0]}px)`,
+        opacity: 1,
+        offset: 1,
+      });
+      motion.current = box.animate(frames, {
+        duration: 12000,
+        iterations: Infinity,
+        easing: "ease-in-out",
+      });
+      motion.current.currentTime = previousTime;
+      sync();
+    };
+    const resize = new ResizeObserver(measure);
+    resize.observe(card);
+    const intersection = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    intersection.observe(card);
+    card.addEventListener("pointerenter", sync);
+    card.addEventListener("pointerleave", sync);
+    card.addEventListener("focusin", sync);
+    // focusout fires before the browser updates activeElement.
+    const focusOut = () => queueMicrotask(sync);
+    card.addEventListener("focusout", focusOut);
+    document.addEventListener("visibilitychange", sync);
+    preference.addEventListener("change", sync);
+    measure();
+    return () => {
+      resize.disconnect();
+      intersection.disconnect();
+      card.removeEventListener("pointerenter", sync);
+      card.removeEventListener("pointerleave", sync);
+      card.removeEventListener("focusin", sync);
+      card.removeEventListener("focusout", focusOut);
+      document.removeEventListener("visibilitychange", sync);
+      preference.removeEventListener("change", sync);
+      motion.current?.cancel();
+      motion.current = null;
+    };
+  }, []);
+  return (
+    <div
+      className="journey journeyTimeline"
+      aria-label="Quy trình mua hộ"
+      aria-description="Minh họa tự động. Đặt con trỏ hoặc focus vào khung để tạm ngưng chuyển động."
+      tabIndex={0}
+      ref={root}
+    >
+      <div className="journeyTop">
+        <span>
+          Từ món hàng bạn muốn
+          <br />
+          <strong>đến tận tay bạn.</strong>
+        </span>
+      </div>
+      <div className="journeyTrack">
+        <span className="journeyParcel" aria-hidden="true" ref={parcel}>
+          <Icon kind="box" />
+        </span>
+        <ol>
+          {[
+            [
+              "01",
+              "Bạn gửi yêu cầu",
+              "Tên sản phẩm hoặc link, số lượng, biến thể.",
+            ],
+            [
+              "02",
+              "Xem và duyệt báo giá",
+              "Chi phí dự kiến và điều khoản trước khi cọc.",
+            ],
+            [
+              "03",
+              "Mua và kiểm hàng",
+              "Nhân viên mua hộ, nhận kho và đóng gói.",
+            ],
+            [
+              "04",
+              "Thanh toán số dư, nhận hàng",
+              "Tổng cuối đã duyệt, trả đủ trước xuất gửi.",
+            ],
+          ].map(([n, t, d]) => (
+            <li key={n}>
+              <span>{n}</span>
+              <div>
+                <h3>{t}</h3>
+                <p>{d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="journeyFoot">
+        <span>
+          Cọc <strong>50%</strong>
+        </span>
+        <p>
+          Theo báo giá bạn đã chấp nhận.
+          <br />
+          Số dư tính theo chi phí cuối đã duyệt.
+        </p>
+      </div>
+      <p className="journeyIllustration">Minh họa quy trình mua hộ</p>
+    </div>
+  );
+}
+
 function Home() {
   return (
     <>
@@ -350,58 +606,7 @@ function Home() {
             </span>
           </div>
         </div>
-        <div className="journey" aria-label="Quy trình mua hộ">
-          <div className="journeyTop">
-            <Icon kind="box" />
-            <span>
-              Từ món hàng bạn muốn
-              <br />
-              <strong>đến tận tay bạn.</strong>
-            </span>
-          </div>
-          <ol>
-            {[
-              [
-                "01",
-                "Bạn gửi yêu cầu",
-                "Tên sản phẩm hoặc link, số lượng, biến thể.",
-              ],
-              [
-                "02",
-                "Xem và duyệt báo giá",
-                "Chi phí dự kiến và điều khoản trước khi cọc.",
-              ],
-              [
-                "03",
-                "Mua và kiểm hàng",
-                "Nhân viên mua hộ, nhận kho và đóng gói.",
-              ],
-              [
-                "04",
-                "Thanh toán số dư, nhận hàng",
-                "Tổng cuối đã duyệt, trả đủ trước xuất gửi.",
-              ],
-            ].map(([n, t, d]) => (
-              <li key={n}>
-                <span>{n}</span>
-                <div>
-                  <h3>{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="journeyFoot">
-            <span>
-              Cọc <strong>50%</strong>
-            </span>
-            <p>
-              Theo báo giá bạn đã chấp nhận.
-              <br />
-              Số dư tính theo chi phí cuối đã duyệt.
-            </p>
-          </div>
-        </div>
+        <JourneyTimeline />
       </section>
       <section className="marketSection" aria-labelledby="market-title">
         <div className="sectionHeading">
@@ -477,65 +682,191 @@ function Account({
   user: User | null;
   signIn: () => Promise<void>;
 }) {
-  const { orders, error } = useOrders(user);
   const location = useLocation();
   const selectedId = location.pathname.match(
     /^\/account\/orders\/([a-zA-Z0-9-]+)$/,
   )?.[1];
+  const { orders, error, loading } = useOrders(user, selectedId);
   const visibleOrders = selectedId
     ? orders.filter((o) => o.id === selectedId)
     : orders;
+  const view = new URLSearchParams(location.search).get("view");
+  const space =
+    view === "shipments" || view === "notifications" ? view : "orders";
+  const title =
+    space === "shipments"
+      ? "Vận chuyển"
+      : space === "notifications"
+        ? "Thông báo"
+        : selectedId
+          ? "Chi tiết đơn"
+          : "Đơn của tôi";
   return (
-    <section className="page">
-      <div className="pageHeading">
-        <div>
-          <h1>Đơn của tôi</h1>
-          <Link to="/account/profile">Hồ sơ và địa chỉ</Link>
-          <Link to="/account/security">Bảo mật tài khoản</Link>
-          <p>Báo giá, thanh toán và hành trình hàng về.</p>
-        </div>
-        <Link className="primary" to="/request">
-          Yêu cầu mới <Icon kind="plus" />
-        </Link>
-      </div>
-      {!user ? (
-        <div className="empty">
-          <Icon kind="box" />
-          <h2>Đăng nhập để xem đơn của bạn</h2>
-          <button
-            className="primary"
-            disabled={!configured}
-            onClick={() => void signIn()}
+    <section className="accountWorkspace">
+      <aside className="customerRail">
+        <span className="customerRailLabel">TÀI KHOẢN</span>
+        <nav aria-label="Không gian khách hàng">
+          <Link
+            to="/account"
+            aria-current={space === "orders" ? "page" : undefined}
           >
-            Đăng nhập với Google
-          </button>
-        </div>
-      ) : visibleOrders.length ? (
-        <>
-          {visibleOrders.map((o) => (
-            <OrderCard key={o.id} order={o} />
-          ))}
-          {user && (
+            <Icon kind="box" /> Đơn của tôi
+          </Link>
+          <Link
+            to="/account?view=shipments"
+            aria-current={space === "shipments" ? "page" : undefined}
+          >
+            Vận chuyển
+          </Link>
+          <Link
+            to="/account?view=notifications"
+            aria-current={space === "notifications" ? "page" : undefined}
+          >
+            Thông báo
+          </Link>
+          <div className="customerRailDivider" />
+          <Link className="customerSecondary" to="/account/documents">
+            Chứng từ của tôi
+          </Link>
+          <Link className="customerSecondary" to="/account/profile">
+            Hồ sơ và địa chỉ
+          </Link>
+          <Link className="customerSecondary" to="/account/security">
+            Bảo mật tài khoản
+          </Link>
+        </nav>
+        <Link className="customerHelp" to="/support">
+          Cần hỗ trợ? <Icon />
+        </Link>
+      </aside>
+      <div className="accountPage" key={`${space}:${selectedId ?? "list"}`}>
+        {selectedId && space === "orders" && (
+          <Link className="accountBack" to="/account">
+            ← Tất cả đơn của tôi
+          </Link>
+        )}
+        {(!selectedId || space !== "orders") && (
+          <header className="pageHeading">
+            <div>
+              <h1>{title}</h1>
+              <p>
+                {space === "orders"
+                  ? selectedId
+                    ? "Mọi thông tin của đơn, trong một nơi."
+                    : "Theo dõi món hàng bạn đang chờ."
+                  : space === "shipments"
+                    ? "Các kiện hàng và vận đơn của bạn."
+                    : "Cập nhật mới từ SatsunicGo."}
+              </p>
+            </div>
+            {space === "orders" && !selectedId && (
+              <Link className="primary" to="/request">
+                Yêu cầu mới <Icon kind="plus" />
+              </Link>
+            )}
+          </header>
+        )}
+        <Suspense
+          fallback={
+            <p className="accountLoading" role="status">
+              Đang mở mục này…
+            </p>
+          }
+        >
+          {import.meta.env.DEV && !user && <EmulatorLogin />}
+          {!user ? (
+            <div className="empty">
+              <Icon kind="box" />
+              <h2>Đăng nhập để xem đơn của bạn</h2>
+              <button
+                className="primary"
+                disabled={!configured}
+                onClick={() => void signIn()}
+              >
+                Đăng nhập với Google
+              </button>
+            </div>
+          ) : space === "shipments" ? (
+            <CustomerShipments uid={user.uid} />
+          ) : space === "notifications" ? (
+            <Notifications uid={user.uid} expanded />
+          ) : loading ? (
+            <div className="accountLoading" role="status">
+              Đang tải đơn của bạn…
+            </div>
+          ) : visibleOrders.length ? (
             <>
-              <CustomerShipments uid={user.uid} />
-              <Notifications uid={user.uid} />
+              {selectedId ? (
+                visibleOrders.map((o) => <OrderCard key={o.id} order={o} />)
+              ) : (
+                <div className="customerOrderList">
+                  {[...visibleOrders]
+                    .sort(
+                      (a, b) =>
+                        b.createdAt - a.createdAt || a.id.localeCompare(b.id),
+                    )
+                    .map((o) => (
+                      <Link
+                        className="customerOrderRow"
+                        key={o.id}
+                        to={`/account/orders/${o.id}`}
+                      >
+                        <span className="orderMarket">{o.market}</span>
+                        <span className="orderRowTitle">
+                          <strong>
+                            {o.items[0]?.name || "Yêu cầu mua hộ"}
+                          </strong>
+                          <small>
+                            {new Intl.DateTimeFormat("vi-VN").format(
+                              o.createdAt,
+                            )}{" "}
+                            · {o.items.reduce((s, i) => s + i.quantity, 0)} sản
+                            phẩm
+                          </small>
+                        </span>
+                        <span className="statusTag">{orderStageLabel(o)}</span>
+                        <Icon />
+                      </Link>
+                    ))}
+                  <p className="listScope">
+                    Hiển thị tối đa 50 đơn trong tài khoản.
+                  </p>
+                </div>
+              )}
             </>
+          ) : (
+            <div className="empty">
+              <Icon kind="box" />
+              <h2>
+                {error
+                  ? "Chưa tải được đơn hàng"
+                  : selectedId
+                    ? "Chưa mở được đơn này"
+                    : "Chưa có yêu cầu nào"}
+              </h2>
+              <p>
+                {error ||
+                  (selectedId
+                    ? "Kiểm tra liên kết hoặc quay lại danh sách đơn của bạn."
+                    : "Bắt đầu bằng món hàng bạn muốn mua.")}
+              </p>
+              <Link to={selectedId ? "/account" : "/request"}>
+                {selectedId ? "Về danh sách đơn" : "Gửi yêu cầu mua hộ"}
+              </Link>
+            </div>
           )}
-        </>
-      ) : (
-        <div className="empty">
-          <Icon kind="box" />
-          <h2>{error ? "Chưa tải được đơn hàng" : "Chưa có yêu cầu nào"}</h2>
-          <p>{error || "Bắt đầu bằng món hàng bạn muốn mua."}</p>
-          <Link to="/request">Gửi yêu cầu mua hộ</Link>
-        </div>
-      )}
+        </Suspense>
+      </div>
     </section>
   );
 }
 function OrderCard({ order: o }: { order: Order }) {
   const [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [section, setSection] = useState<"overview" | "files" | "history">(
+      "overview",
+    ),
+    [visited, setVisited] = useState<string[]>(["overview"]);
   async function act(action: string, payload: unknown) {
     setBusy(true);
     setError("");
@@ -547,84 +878,216 @@ function OrderCard({ order: o }: { order: Order }) {
       setBusy(false);
     }
   }
-  const total = o.quote ? quoteTotal(o.quote) : undefined;
+  const total =
+    o.purchaseKind === "catalog"
+      ? o.finalTotal
+      : o.quote
+        ? quoteTotal(o.quote)
+        : undefined;
   return (
-    <article className="panel order">
+    <article className="order orderDetail">
       <div className="pageHeading">
-        <h2>{o.items[0]?.name}</h2>
-        <span className="statusTag">{stageLabels[o.stage]}</span>
+        <h1>{o.items[0]?.name}</h1>
+        <span className="statusTag">{orderStageLabel(o)}</span>
       </div>
       <p>
         {o.market} · {new Intl.DateTimeFormat("vi-VN").format(o.createdAt)} ·{" "}
         {o.items.reduce((s, i) => s + i.quantity, 0)} sản phẩm
       </p>
-      {o.quote && (
+      {o.hold && (
+        <p role="status" className="orderHold">
+          Tạm giữ: {o.hold}
+        </p>
+      )}
+      <nav className="orderSections" aria-label="Thông tin đơn hàng">
+        {(
+          [
+            ["overview", "Tổng quan"],
+            ["files", "Ảnh & chứng từ"],
+            ["history", "Lịch sử & tiền"],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            aria-pressed={section === value}
+            onClick={() => {
+              setSection(value);
+              setVisited((current) =>
+                current.includes(value) ? current : [...current, value],
+              );
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+      <div
+        className={`detailSection ${section === "overview" ? "isVisible" : ""}`}
+        hidden={section !== "overview"}
+      >
         <>
-          <h3>Sản phẩm trong báo giá đã chấp nhận</h3>
-          <p>{o.quote.verifiedProduct}</p>
-          <dl className="prices">
-            {[
-              ["Giá hàng", o.quote.goods],
-              ["Phí mua hộ", o.quote.service],
-              ["Phí/thuế nội địa nguồn", o.quote.sourceCosts],
-              ["Cước quốc tế dự kiến", o.quote.internationalShipping],
-              ["Giao nội địa dự kiến", o.quote.destinationShipping],
-              ["Giảm phí", -o.quote.discount],
-              ["Tổng dự kiến", total!],
-            ].map(([label, n]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{money(Number(n))}</dd>
+          {o.stage === "REQUESTED" && !o.hold && (
+            <div className="orderNextStep">
+              <span className="orderStatusDot" />
+              <div>
+                <h2>Đã nhận yêu cầu của bạn</h2>
+                <p>
+                  Nhân viên sẽ làm rõ sản phẩm và gửi báo giá. Bạn chưa cần
+                  thanh toán ở bước này.
+                </p>
+              </div>
+            </div>
+          )}
+          <section className="orderItems">
+            <h2>Sản phẩm</h2>
+            {o.items.map((item, index) => (
+              <div className="orderItem" key={index}>
+                <div>
+                  <strong>{item.name}</strong>
+                  {item.variant && <p>{item.variant}</p>}
+                </div>
+                <span>× {item.quantity}</span>
               </div>
             ))}
-          </dl>
-          <p>
-            Điều khoản: {o.quote.termsVersion} · Báo giá v{o.quoteVersion} · Hết
-            hạn {new Date(o.quote.expiresAt).toLocaleString("vi-VN")}
-          </p>
+          </section>
+          {o.purchaseKind === "catalog" && (
+            <section aria-label="Thanh toán sản phẩm niêm yết">
+              <h2>Đặt mua theo giá niêm yết</h2>
+              <p>
+                Tổng trọn gói: <strong>{money(total!)}</strong>. Thanh toán toàn
+                bộ để SatsunicGo tiến hành mua hộ.
+              </p>
+              <p>
+                Điều khoản: {o.catalogSnapshot?.termsVersion}. Không cần báo giá
+                và không thu thêm đợt hai.
+              </p>
+              {o.stage === "QUOTE_ACCEPTED" &&
+                o.collected - o.refunded >= total! && (
+                  <p role="status">
+                    Đã xác nhận thanh toán. Nhân viên sẽ tiến hành mua hộ.
+                  </p>
+                )}
+              {o.stage === "QUOTE_ACCEPTED" && o.collected === 0 && (
+                <button
+                  disabled={busy}
+                  onClick={() => void act("cancelRequest", {})}
+                >
+                  Hủy đơn chưa thanh toán
+                </button>
+              )}
+            </section>
+          )}
+          {o.quote && (
+            <>
+              <h2>
+                {o.acceptedAt ? "Báo giá đã chấp nhận" : "Báo giá để bạn duyệt"}
+              </h2>
+              <p>{o.quote.verifiedProduct}</p>
+              <dl className="prices">
+                {[
+                  ["Giá hàng", o.quote.goods],
+                  ["Phí mua hộ", o.quote.service],
+                  ["Phí/thuế nội địa nguồn", o.quote.sourceCosts],
+                  ["Cước quốc tế dự kiến", o.quote.internationalShipping],
+                  ["Giao nội địa dự kiến", o.quote.destinationShipping],
+                  ["Giảm phí", -o.quote.discount],
+                  ["Tổng dự kiến", total!],
+                ].map(([label, n]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{money(Number(n))}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p>
+                Điều khoản: {o.quote.termsVersion} · Báo giá v{o.quoteVersion} ·
+                Hết hạn {new Date(o.quote.expiresAt).toLocaleString("vi-VN")}
+              </p>
+            </>
+          )}
+          {o.stage === "QUOTED" && (
+            <button
+              className="primary"
+              disabled={busy}
+              onClick={() =>
+                void act("acceptQuote", { quoteVersion: o.quoteVersion })
+              }
+            >
+              Chấp nhận báo giá và điều khoản
+            </button>
+          )}
+          {o.deposit !== undefined && (
+            <p>
+              Cọc cần xác nhận: <strong>{money(o.deposit)}</strong> · Đã thu
+              ròng: <strong>{money(o.collected - o.refunded)}</strong>
+            </p>
+          )}
+          {o.consolidatedFreight && o.purchaseKind !== "catalog" && (
+            <p>
+              Cước quốc tế phân bổ từ lô gom:{" "}
+              {money(o.consolidatedFreight.amount)}. Tổng cuối cần được duyệt
+              trước khi xuất gửi.
+            </p>
+          )}
+          {o.finalTotal !== undefined && (
+            <p>
+              {o.purchaseKind === "catalog" ? "Tổng trọn gói" : "Tổng cuối"}:{" "}
+              {money(o.finalTotal)} · Còn thu:{" "}
+              <strong>
+                {money(Math.max(0, o.finalTotal - o.collected + o.refunded))}
+              </strong>
+            </p>
+          )}
+          {o.stage === "PACKED" && o.finalApproved === false && (
+            <button
+              disabled={busy}
+              onClick={() => void act("approveFinal", {})}
+            >
+              Duyệt tổng phí cuối
+            </button>
+          )}
+          <Suspense fallback={<p role="status">Đang mở thao tác của đơn…</p>}>
+            <CustomerChanges order={o} />
+            <TransferNotice order={o} />
+            <OrderTools order={o} section="actions" />
+            <OrderConversation key={o.id} orderId={o.id} />
+          </Suspense>
+          {o.tracking && <p>Vận đơn: {o.tracking} · Cập nhật bởi nhân viên</p>}
+          {o.stage === "DELIVERED" &&
+            o.tracking &&
+            canDispatch({ ...o, stage: "READY_TO_SHIP" }) && (
+              <section aria-label="Xác nhận nhận hàng">
+                <p>
+                  Chỉ xác nhận sau khi bạn đã nhận và kiểm tra đủ sản phẩm trong
+                  đơn.
+                </p>
+                <button
+                  className="primary"
+                  disabled={busy}
+                  onClick={() => void act("confirmReceipt", { received: true })}
+                >
+                  Xác nhận đã nhận đủ hàng
+                </button>
+              </section>
+            )}
         </>
+      </div>
+      {(["files", "history"] as const).map(
+        (value) =>
+          visited.includes(value) && (
+            <div
+              key={value}
+              className={`detailSection ${section === value ? "isVisible" : ""}`}
+              hidden={section !== value}
+            >
+              <Suspense
+                fallback={<p role="status">Đang mở thông tin của đơn…</p>}
+              >
+                <OrderTools order={o} section={value} />
+              </Suspense>
+            </div>
+          ),
       )}
-      {o.stage === "QUOTED" && (
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() =>
-            void act("acceptQuote", { quoteVersion: o.quoteVersion })
-          }
-        >
-          Chấp nhận báo giá và điều khoản
-        </button>
-      )}
-      {o.deposit !== undefined && (
-        <p>
-          Cọc cần xác nhận: <strong>{money(o.deposit)}</strong> · Đã thu ròng:{" "}
-          <strong>{money(o.collected - o.refunded)}</strong>
-        </p>
-      )}
-      {o.consolidatedFreight && (
-        <p>
-          Cước quốc tế phân bổ từ lô gom: {money(o.consolidatedFreight.amount)}.
-          Tổng cuối cần được duyệt trước khi xuất gửi.
-        </p>
-      )}
-      {o.finalTotal !== undefined && (
-        <p>
-          Tổng cuối: {money(o.finalTotal)} · Còn thu:{" "}
-          <strong>
-            {money(Math.max(0, o.finalTotal - o.collected + o.refunded))}
-          </strong>
-        </p>
-      )}
-      {o.stage === "PACKED" && o.finalApproved === false && (
-        <button disabled={busy} onClick={() => void act("approveFinal", {})}>
-          Duyệt tổng phí cuối
-        </button>
-      )}
-      <CustomerChanges order={o} />
-      <TransferNotice order={o} />
-      <OrderTools order={o} />
-      {o.hold && <p className="error">Tạm giữ: {o.hold}</p>}
-      {o.tracking && <p>Vận đơn: {o.tracking} · Cập nhật bởi nhân viên</p>}
       {error && (
         <p role="alert" className="error">
           {error}
@@ -633,93 +1096,87 @@ function OrderCard({ order: o }: { order: Order }) {
     </article>
   );
 }
-function Staff({ user }: { user: User | null }) {
+function LegacyStaffRedirect() {
+  const { pathname, search, hash } = useLocation();
+  return <Navigate replace to={legacyStaffTarget(pathname, search, hash)} />;
+}
+function Staff({
+  user,
+  signIn,
+  signOut,
+  busy,
+}: {
+  user: User | null;
+  signIn: () => void;
+  signOut: () => void;
+  busy: boolean;
+}) {
   const [access, setAccess] = useState<{
       roles?: string[];
       active?: boolean;
       locked?: boolean;
     } | null>(null),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [loading, setLoading] = useState(!!user && !!db);
   useEffect(() => {
-    if (!user || !db) {
-      setAccess(null);
-      return;
-    }
+    if (!user || !db) return;
     return onSnapshot(
       doc(db, "staffAccess", user.uid),
-      (s) => setAccess(s.data() ?? null),
-      () => setError("Không thể kiểm tra quyền nhân viên."),
+      (s) => {
+        setAccess(s.data() ?? null);
+        setLoading(false);
+        setError("");
+      },
+      () => {
+        setAccess(null);
+        setLoading(false);
+        setError(
+          "Không thể kiểm tra quyền nhân viên. Tải lại trang để thử lại.",
+        );
+      },
     );
   }, [user]);
-  return (
-    <section className="page">
-      <h1>Không gian vận hành</h1>
-      {error ? (
-        <p role="alert">{error}</p>
-      ) : !access?.active || access?.locked ? (
+  if (loading)
+    return (
+      <section className="page" role="status">
+        Đang kiểm tra quyền vận hành…
+      </section>
+    );
+  const roles = staffRoles(access);
+  if (error || !user || roles === null)
+    return (
+      <section className="page">
+        <h1>SatsunicGo CRM</h1>
         <div className="empty">
           <h2>Cần tài khoản nhân viên được cấp quyền</h2>
           <p>
-            Quyền vận hành do chủ doanh nghiệp cấp. Đăng nhập khách hàng không
-            cấp quyền nhân viên.
+            {error ||
+              "Quyền vận hành do chủ doanh nghiệp cấp. Tài khoản khách hàng không có quyền nhân viên."}
           </p>
+          {!user && (
+            <button className="primary" onClick={signIn} disabled={busy}>
+              Đăng nhập CRM
+            </button>
+          )}
+          <Link to="/account">Mở tài khoản</Link>
         </div>
-      ) : (
-        <>
-          {access.roles?.some((r) =>
-            ["OWNER", "OPERATIONS_MANAGER"].includes(r),
-          ) && <Dashboard />}
-          {access.roles?.some((r) =>
-            ["OWNER", "WAREHOUSE", "OPERATIONS_MANAGER"].includes(r),
-          ) && <Shipping roles={access.roles ?? []} />}
-          {access.roles?.includes("OWNER") && (
-            <>
-              <Settings />
-              <StaffAccess />
-              <PlanEditor />
-            </>
-          )}
-          {access.roles?.some((r) => ["OWNER", "FINANCE"].includes(r)) && (
-            <Finance />
-          )}
-          {access.roles?.some((r) =>
-            ["OWNER", "SUPPORT", "OPERATIONS_MANAGER"].includes(r),
-          ) && (
-            <>
-              <Customer />
-              <StaffSupport />
-            </>
-          )}
-          {access.roles?.some((r) =>
-            ["OWNER", "OPERATIONS_MANAGER"].includes(r),
-          ) && <ChangeQueue />}
-          <p>Quyền hiện hành: {access.roles?.join(", ")}</p>
-          {access.roles?.some((r) =>
-            [
-              "OWNER",
-              "OPERATIONS_MANAGER",
-              "BUYER",
-              "WAREHOUSE",
-              "FINANCE",
-              "SUPPORT",
-            ].includes(r),
-          ) && <Workbench roles={access.roles ?? []} />}
-          {access.roles?.some((r) =>
-            ["OWNER", "CONTENT_EDITOR"].includes(r),
-          ) && (
-            <>
-              <ContentEditor />
-              <Campaigns />
-            </>
-          )}
-        </>
-      )}
-    </section>
+      </section>
+    );
+  return (
+    <Workspace
+      key={`${user.uid}:${roles.join(",")}`}
+      roles={roles}
+      uid={user.uid}
+      name={user.displayName || "Nhân viên"}
+      signOut={signOut}
+      busy={busy}
+    />
   );
 }
 
 function PublicPage() {
   const path = useLocation().pathname.slice(1);
+  if (path === "fees") return <ShippingRates />;
   const content = publicCopy[path];
   if (!content)
     return (

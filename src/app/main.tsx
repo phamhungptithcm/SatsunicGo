@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { App } from "./App";
 import "../styles/global.css";
+import "../styles/public-ux.css";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>

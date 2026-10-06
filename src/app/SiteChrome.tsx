@@ -1,55 +1,313 @@
-import { Link, NavLink } from "react-router-dom";
+import { staffRoles } from "../shared/staff-access";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import type { User } from "firebase/auth";
-import { configured } from "../shared/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../shared/firebase";
+const navigation = [
+  ["Sản phẩm", "/products"],
+  ["Mua hộ", "/request"],
+  ["Biểu phí", "/fees"],
+  ["Membership", "/membership"],
+  ["Bài viết", "/posts"],
+  ["Hỗ trợ", "/support"],
+] as const;
+const accountNavigation = [
+  ["Hồ sơ và địa chỉ", "/account/profile"],
+  ["Đơn của tôi", "/account"],
+  ["Gửi yêu cầu mua hộ", "/request"],
+  ["Membership", "/membership"],
+  ["Hỗ trợ", "/support"],
+  ["Bảo mật tài khoản", "/account/security"],
+] as const;
+function AccountProfile({
+  user,
+  signOut,
+  busy,
+  onOpen,
+  navigationOpen,
+}: {
+  user: User;
+  signOut: () => Promise<void>;
+  busy: boolean;
+  onOpen: () => void;
+  navigationOpen: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [failedPhoto, setFailedPhoto] = useState<string | null>(null);
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
+  const google = user.providerData.find(
+    (provider) => provider.providerId === "google.com",
+  );
+  const name =
+    google?.displayName?.trim() ||
+    user.displayName?.trim() ||
+    "Tài khoản của bạn";
+  const photo = google?.photoURL || user.photoURL;
+  const email = google?.email?.trim() || user.email?.trim();
+  const safePhoto = photo?.startsWith("https://") ? photo : null;
+  const initials =
+    name === "Tài khoản của bạn"
+      ? "SG"
+      : name
+          .split(/\s+/)
+          .slice(0, 2)
+          .map((word) => Array.from(word)[0])
+          .join("")
+          .toLocaleUpperCase("vi-VN");
+  useEffect(() => {
+    setOpen(false);
+  }, [location.key, user.uid]);
+  useEffect(() => {
+    if (navigationOpen) setOpen(false);
+  }, [navigationOpen]);
+  useEffect(() => {
+    if (!open) return;
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !root.current?.contains(event.target))
+        setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        trigger.current?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [open]);
+  return (
+    <div
+      className="accountProfile"
+      ref={root}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+    >
+      <button
+        type="button"
+        className="accountProfileTrigger"
+        ref={trigger}
+        aria-expanded={open}
+        aria-controls="customer-account-navigation"
+        aria-label={
+          name === "Tài khoản của bạn" ? name : `Tài khoản của ${name}`
+        }
+        onClick={() => {
+          if (!open) onOpen();
+          setOpen((value) => !value);
+        }}
+      >
+        <span className="accountAvatar" aria-hidden="true">
+          {safePhoto && failedPhoto !== safePhoto ? (
+            <img
+              src={safePhoto}
+              alt=""
+              width="36"
+              height="36"
+              referrerPolicy="no-referrer"
+              onError={() => setFailedPhoto(safePhoto)}
+            />
+          ) : (
+            initials
+          )}
+        </span>
+        <span className="accountProfileName">{name}</span>
+        <svg
+          className="accountChevron"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="m4 6 4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+      {open && (
+        <div className="accountDropdown">
+          <div className="accountIdentity">
+            <strong>{name}</strong>
+            {email && <span>{email}</span>}
+            {google && <span>Google</span>}
+          </div>
+          <nav
+            id="customer-account-navigation"
+            aria-label="Chức năng tài khoản"
+          >
+            {accountNavigation.map(([label, path]) => (
+              <Link key={path} to={path} onClick={() => setOpen(false)}>
+                {label}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            ))}
+          </nav>
+          <div className="accountSignOut">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                setOpen(false);
+                void signOut();
+              }}
+            >
+              {busy ? "Đang đăng xuất…" : "Đăng xuất"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 export function SiteHeader({
   user,
-  signIn,
   signOut,
   busy,
 }: {
   user: User | null;
-  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
   busy: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    let small = false;
+    const scroll = () => {
+      if (window.scrollY > 32) small = true;
+      else if (window.scrollY < 8) small = false;
+      setCompact(small);
+    };
+    scroll();
+    window.addEventListener("scroll", scroll, { passive: true });
+    return () => window.removeEventListener("scroll", scroll);
+  }, []);
+  const [staffId, setStaffId] = useState("");
+  useEffect(() => {
+    if (!user || !db) return;
+    return onSnapshot(
+      doc(db, "staffAccess", user.uid),
+      (s) => setStaffId(staffRoles(s.data()) !== null ? user.uid : ""),
+      () => setStaffId(""),
+    );
+  }, [user]);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+    };
+    const media = window.matchMedia("(min-width: 1201px)");
+    const resize = () => {
+      if (media.matches) setOpen(false);
+    };
+    const outside = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !header.current?.contains(event.target)
+      )
+        setOpen(false);
+    };
+    document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", outside);
+    media.addEventListener("change", resize);
+    return () => {
+      document.removeEventListener("keydown", close);
+      document.removeEventListener("pointerdown", outside);
+      media.removeEventListener("change", resize);
+    };
+  }, [open]);
   return (
-    <header className="topbar">
+    <header
+      ref={header}
+      className="topbar"
+      data-menu-open={open}
+      data-compact={compact}
+    >
       <div className="navShell">
-        <Link className="brand" to="/" aria-label="SatsunicGo — Trang chủ">
-          Satsunic<span>Go</span>
-          <i>by HunpeoLabs</i>
+        <Link
+          className="brand"
+          to="/"
+          aria-label="SatsunicGo — Trang chủ"
+          onClick={() => setOpen(false)}
+        >
+          <svg
+            className="brandMark"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m16 3 12 7-12 7-12-7 12-7Z" />
+            <path d="M4 10v13l12 7 12-7V10M16 17v13M10 6l12 7" />
+          </svg>
+          <span className="brandWord">
+            Satsunic<span>Go</span>
+          </span>
         </Link>
-        <nav aria-label="Điều hướng chính">
-          <NavLink to="/products">Sản phẩm</NavLink>
-          <NavLink to="/how-it-works">Cách mua hộ</NavLink>
-          <NavLink to="/fees">Biểu phí</NavLink>
-          <NavLink to="/membership">Membership</NavLink>
-          <NavLink to="/posts">Bài viết</NavLink>
-          <NavLink to="/support">Hỗ trợ</NavLink>
-        </nav>
-        <div className="account">
-          {user ? (
-            <>
-              <Link className="login" to="/account">
-                Đơn của tôi
-              </Link>
-              <button
-                className="textbutton"
-                disabled={busy}
-                onClick={() => void signOut()}
-              >
-                Đăng xuất
-              </button>
-            </>
-          ) : (
-            <button
-              className="login"
-              onClick={() => void signIn()}
-              disabled={!configured || busy}
-            >
-              {busy ? "Đang đăng nhập…" : "Đăng nhập Google"}
-            </button>
+        <nav
+          id="primary-navigation"
+          aria-label="Điều hướng chính"
+          data-open={open}
+        >
+          {navigation.map(([label, path]) => (
+            <NavLink key={path} to={path} onClick={() => setOpen(false)}>
+              {label}
+            </NavLink>
+          ))}
+          {user && staffId === user.uid && (
+            <NavLink to="/crm" onClick={() => setOpen(false)}>
+              CRM
+            </NavLink>
           )}
+        </nav>
+        <div className="headerActions">
+          <Link className="headerRequest" to="/request">
+            Mua hộ <span aria-hidden="true">↗</span>
+          </Link>
+          {user && (
+            <AccountProfile
+              key={user.uid}
+              user={user}
+              signOut={signOut}
+              busy={busy}
+              onOpen={() => setOpen(false)}
+              navigationOpen={open}
+            />
+          )}
+          <button
+            type="button"
+            className="menuToggle"
+            ref={toggle}
+            aria-controls="primary-navigation"
+            aria-expanded={open}
+            aria-label={open ? "Đóng menu" : "Mở menu"}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </button>
         </div>
       </div>
     </header>
@@ -57,46 +315,21 @@ export function SiteHeader({
 }
 export function SiteFooter() {
   return (
-    <footer className="siteFooter">
-      <div className="footerGrid">
-        <div className="footerIntro">
+    <footer className="siteFooter compactFooter">
+      <div className="compactFooterInner">
+        <div>
           <Link className="brand" to="/">
             Satsunic<span>Go</span>
           </Link>
-          <p>
-            Món bạn chọn ở Mỹ, Nhật, Hàn.
-            <br />
-            Một nơi để theo dõi hành trình về.
-          </p>
-          <Link className="footerCta" to="/request">
-            Gửi yêu cầu mua hộ <span aria-hidden="true">↗</span>
-          </Link>
+          <span className="footerAttribution">by HunpeoLabs</span>
+          <p>© {new Date().getFullYear()} HunpeoLabs.</p>
         </div>
-        <nav aria-label="Khám phá">
-          <h2>Khám phá</h2>
-          <Link to="/products">Sản phẩm tham khảo</Link>
-          <Link to="/posts">Bài viết</Link>
-          <Link to="/membership">Membership</Link>
-        </nav>
-        <nav aria-label="Mua hộ">
-          <h2>Mua hộ</h2>
-          <Link to="/how-it-works">Cách hoạt động</Link>
-          <Link to="/fees">Biểu phí</Link>
-          <Link to="/account">Đơn của tôi</Link>
+        <nav aria-label="Thông tin và hỗ trợ">
           <Link to="/support">Hỗ trợ</Link>
-        </nav>
-        <nav aria-label="Thông tin chính sách">
-          <h2>Thông tin</h2>
           <Link to="/privacy">Quyền riêng tư</Link>
           <Link to="/terms">Điều khoản & hoàn tiền</Link>
           <Link to="/restricted">Hàng hạn chế</Link>
         </nav>
-      </div>
-      <div className="footerBottom">
-        <span>SatsunicGo · by HunpeoLabs</span>
-        <small>
-          Phí và chính sách thương mại đang chờ đơn vị vận hành xác nhận.
-        </small>
       </div>
     </footer>
   );

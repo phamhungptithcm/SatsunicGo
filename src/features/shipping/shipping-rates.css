@@ -1,0 +1,85 @@
+.shippingRates {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.shippingRates p {
+  margin: 0;
+}
+.shippingRates label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.shippingRates input,
+.shippingRates select,
+.shippingRates textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.shippingRates textarea {
+  min-height: 120px;
+}
+.rateFilters,
+.rateFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.rateTableWrap {
+  overflow-x: auto;
+}
+.shippingRates table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.shippingRates th,
+.shippingRates td {
+  padding: 10px;
+  border-bottom: 1px solid #e3e7ef;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.shippingRates caption {
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+.rateEditor {
+  display: grid;
+  gap: 12px;
+}
+.rateEditor fieldset {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  padding: 14px;
+}
+.rateActions,
+.rateConfirm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rateConfirm {
+  padding: 12px;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+}
+.rateConfirm p {
+  flex-basis: 100%;
+}
+@media (max-width: 600px) {
+  .rateFilters,
+  .rateFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shippingRates th,
+  .shippingRates td {
+    padding: 8px 4px;
+  }
+}

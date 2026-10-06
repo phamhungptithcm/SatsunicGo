@@ -1,3 +1,5 @@
+import { releaseCapabilityAllowed } from "../provider-release-gate";
+import { validatePaymentQr } from "../../../packages/domain/payment-qr";
 import { PayOS } from "@payos/node";
 import { defineSecret } from "firebase-functions/params";
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
@@ -5,7 +7,8 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import { getFirestore } from "firebase-admin/firestore";
 import { createHash } from "node:crypto";
 import { z } from "zod";
-import { money, type Order } from "../../../packages/domain";
+import { money, paymentDue, type Order } from "../../../packages/domain";
+import { requireVerifiedGoogle } from "../auth/guards";
 const clientId = defineSecret("PAYOS_CLIENT_ID"),
   apiKey = defineSecret("PAYOS_API_KEY"),
   checksumKey = defineSecret("PAYOS_CHECKSUM_KEY");
@@ -20,6 +23,8 @@ function sdk() {
   });
 }
 async function settings() {
+  if (!releaseCapabilityAllowed("payments", process.env))
+    throw new HttpsError("unavailable", "Thanh toán payOS chưa được kích hoạt.");
   const s = (await getFirestore().doc("settings/payments").get()).data();
   if (
     s?.payosEnabled !== true ||
@@ -78,7 +83,7 @@ export async function applyVerifiedPayment(
       !Number.isSafeInteger(data.amount) ||
       data.amount <= 0 ||
       data.amount !== i.amount ||
-      o.acceptedQuoteVersion !== i.acceptedQuoteVersion ||
+      (o.acceptedQuoteVersion ?? null) !== (i.acceptedQuoteVersion ?? null) ||
       o.stage === "CANCELLED";
     tx.create(receipt, {
       referenceHash: key,
@@ -94,6 +99,13 @@ export async function applyVerifiedPayment(
         currency: data.currency,
         state: "open",
         reason: "Unmatched payment context",
+        bankReferenceHash: bankRef.id,
+        inboundVerified:
+          data.accountNumber === accountNumber &&
+          data.code === "00" &&
+          data.currency === "VND" &&
+          Number.isSafeInteger(data.amount) &&
+          data.amount > 0,
         createdAt: Date.now(),
       });
       return;
@@ -111,7 +123,7 @@ export async function applyVerifiedPayment(
       o!.stage === "PACKED" &&
       o!.finalApproved &&
       o!.finalTotal !== undefined &&
-      o!.collected - o!.refunded >= o!.finalTotal &&
+      o!.collected - o!.refunded - (o!.refundReserved ?? 0) >= o!.finalTotal &&
       !o!.hold
     )
       o!.stage = "READY_TO_SHIP";
@@ -130,6 +142,13 @@ export async function applyVerifiedPayment(
       createdAt: Date.now(),
     });
     tx.update(intent.ref, { state: "paid", paidAt: Date.now() });
+    tx.create(db.collection("outboxJobs").doc(), {
+      ownerId: o!.ownerId,
+      orderId: o!.id,
+      action: "verifyTransfer",
+      state: "queued",
+      createdAt: Date.now(),
+    });
     tx.create(db.collection("auditEvents").doc(), {
       actor: "payos-webhook",
       action: "allocatePayment",
@@ -147,12 +166,13 @@ export const createPaymentLink = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (!req.auth?.uid)
       throw new HttpsError("unauthenticated", "Đăng nhập để thanh toán.");
     const p = z
       .object({
         orderId: z.string().regex(/^[a-zA-Z0-9-]{1,80}$/),
-        purpose: z.enum(["deposit", "balance"]),
+        purpose: z.enum(["full", "deposit", "balance"]),
         operationId: z.string().uuid(),
       })
       .strict()
@@ -181,20 +201,21 @@ export const createPaymentLink = onCall(
           "failed-precondition",
           "Tổng phí cuối chưa được duyệt.",
         );
-      const amount = money.parse(
-        Math.max(
-          0,
-          (d.purpose === "deposit" ? o.deposit! : o.finalTotal!) -
-            o.collected +
-            o.refunded,
-        ),
-      );
+      let amount: number;
+      try {
+        amount = paymentDue(o, d.purpose);
+      } catch {
+        throw new HttpsError(
+          "failed-precondition",
+          "Khoản thanh toán không khớp với đơn hiện tại.",
+        );
+      }
       if (!amount)
         throw new HttpsError(
           "failed-precondition",
           "Không còn khoản cần thanh toán.",
         );
-      const id = `${o.id}-${d.purpose}-${o.acceptedQuoteVersion}-${amount}`,
+      const id = `${o.id}-${d.purpose}-${o.acceptedQuoteVersion ?? `catalog-${o.catalogSnapshot?.productVersion}`}-${amount}`,
         ref = db.doc(`paymentRequests/${id}`),
         old = await tx.get(ref);
       if (old.exists)
@@ -204,6 +225,11 @@ export const createPaymentLink = onCall(
           orderCode: number;
           amount: number;
           checkoutUrl?: string;
+          expiresAt?: number;
+          qrCode?: string;
+          description?: string;
+          bin?: string;
+          accountNumber?: string;
           shouldCreate: boolean;
         };
       const orderCode = (c.data()?.value ?? 100000) + 1;
@@ -211,7 +237,7 @@ export const createPaymentLink = onCall(
         orderId: o.id,
         ownerId: o.ownerId,
         purpose: d.purpose,
-        acceptedQuoteVersion: o.acceptedQuoteVersion,
+        acceptedQuoteVersion: o.acceptedQuoteVersion ?? null,
         amount,
         currency: "VND",
         orderCode,
@@ -225,10 +251,40 @@ export const createPaymentLink = onCall(
         id,
         ...value,
         shouldCreate: true,
+        expiresAt: undefined as number | undefined,
         checkoutUrl: undefined as string | undefined,
+        qrCode: undefined as string | undefined,
+        description: undefined as string | undefined,
+        bin: undefined as string | undefined,
       };
     });
-    if (intent.checkoutUrl) return { checkoutUrl: intent.checkoutUrl };
+    if (intent.checkoutUrl) {
+      if (intent.expiresAt && intent.expiresAt <= Date.now())
+        throw new HttpsError(
+          "failed-precondition",
+          "Yêu cầu thanh toán đã hết hạn. Liên hệ nhân viên để đối chiếu trước khi thanh toán lại.",
+        );
+      if (intent.qrCode)
+        validatePaymentQr(intent.qrCode, {
+          accountNumber: config.accountNumber,
+          amount: intent.amount!,
+          description: intent.description!,
+          bin: intent.bin,
+        });
+      return {
+        checkoutUrl: intent.checkoutUrl,
+        ...(intent.qrCode
+          ? {
+              expiresAt: intent.expiresAt,
+              qrCode: intent.qrCode,
+              amount: intent.amount,
+              accountNumber: config.accountNumber,
+              description: intent.description,
+              bin: intent.bin,
+            }
+          : {}),
+      };
+    }
     const client = sdk();
     if (
       !intent.shouldCreate ||
@@ -246,7 +302,9 @@ export const createPaymentLink = onCall(
       );
     }
     try {
+      const expiresAt = Date.now() + 30 * 60 * 1000;
       const link = await client.paymentRequests.create({
+        expiredAt: Math.floor(expiresAt / 1000),
         orderCode: intent.orderCode,
         amount: intent.amount,
         description: `SG ${intent.orderCode}`,
@@ -259,12 +317,31 @@ export const createPaymentLink = onCall(
         link.accountNumber !== config.accountNumber
       )
         throw Error("MERCHANT_MISMATCH");
+      const qrCode = validatePaymentQr(link.qrCode, {
+        accountNumber: config.accountNumber,
+        amount: intent.amount!,
+        description: `SG ${intent.orderCode}`,
+        bin: link.bin,
+      });
       await db.doc(`paymentRequests/${intent.id}`).update({
+        qrCode,
+        expiresAt,
+        description: `SG ${intent.orderCode}`,
+        bin: link.bin,
+        accountNumber: config.accountNumber,
         state: "pending",
         checkoutUrl: link.checkoutUrl,
         paymentLinkId: link.paymentLinkId,
       });
-      return { checkoutUrl: link.checkoutUrl };
+      return {
+        checkoutUrl: link.checkoutUrl,
+        qrCode,
+        expiresAt,
+        amount: intent.amount,
+        accountNumber: config.accountNumber,
+        description: `SG ${intent.orderCode}`,
+        bin: link.bin,
+      };
     } catch {
       await db.doc(`paymentRequests/${intent.id}`).update({ state: "unknown" });
       throw new HttpsError(
@@ -277,6 +354,10 @@ export const createPaymentLink = onCall(
 export const payosWebhook = onRequest(
   { region: "asia-southeast1", maxInstances: 3, secrets },
   async (req, res) => {
+    if (!releaseCapabilityAllowed("payments", process.env)) {
+      res.status(503).send("Payment processing unavailable");
+      return;
+    }
     if (req.method !== "POST") {
       res.status(405).send("Method not allowed");
       return;
@@ -299,6 +380,7 @@ export const reconcilePayments = onSchedule(
     secrets,
   },
   async () => {
+    if (!releaseCapabilityAllowed("payments", process.env)) return;
     let config;
     try {
       config = await settings();

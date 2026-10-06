@@ -1,0 +1,127 @@
+/* Original Studio host dependencies, scoped away from the CRM and website.
+   Low-specificity fallbacks preserve explicit source component declarations. */
+.blog-surface {
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-muted: #5e6067;
+  --color-line: #d9dbe1;
+  --color-accent: #173df5;
+  --color-accent-dark: #0c2cce;
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --page-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  text-rendering: optimizeLegibility;
+  font-synthesis: weight style small-caps;
+}
+
+.blog-surface .panel {
+  padding: 0;
+}
+
+.blog-surface .container {
+  width: auto;
+}
+
+:where(.blog-surface) .eyebrow {
+  display: block;
+  margin: 0;
+  color: inherit;
+}
+
+:where(.blog-surface) .muted {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+:where(.blog-surface) h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+:where(.blog-surface) h4 {
+  font-weight: bold;
+  margin-block: 1.33em;
+}
+
+:where(.blog-surface) ul,
+:where(.blog-surface) ol {
+  margin-block: 1em;
+  padding-inline-start: 40px;
+}
+
+:where(.blog-surface) ul {
+  list-style-type: disc;
+}
+
+:where(.blog-surface) ol {
+  list-style-type: decimal;
+}
+
+:where(.blog-surface) :where(h3, h4, ul, ol) {
+  border-style: none;
+}
+
+:where(.blog-surface) hr {
+  color: revert;
+  margin-block: 0.5em;
+  border-style: inset;
+  border-width: 1px;
+}
+
+:where(.blog-surface) .primary {
+  box-shadow: none;
+}
+
+:where(.blog-surface) .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: max-content;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  position: static;
+  white-space: normal;
+}
+
+:where(.blog-surface) .brand span {
+  color: inherit;
+}
+
+:where(.blog-surface) .brand__mark {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 0.65rem);
+  gap: 0.25rem;
+  width: 1.55rem;
+  height: 1.85rem;
+}
+
+:where(.blog-surface) .brand__mark span {
+  background: var(--color-accent);
+}
+
+:where(.blog-surface) .brand__mark span:first-child::after,
+:where(.blog-surface) .brand__mark span:last-child::after {
+  position: absolute;
+  top: 50%;
+  width: 0.45rem;
+  height: 0.3rem;
+  background: #fff;
+  content: "";
+  transform: translateY(-50%);
+}
+
+:where(.blog-surface) .brand__mark span:first-child::after {
+  left: 0.35rem;
+}
+
+:where(.blog-surface) .brand__mark span:last-child::after {
+  right: 0.35rem;
+}
+
+@media (max-width: 52rem) {
+  :where(.blog-surface) .brand__mark {
+    transform: scale(0.85);
+    transform-origin: left center;
+  }
+}

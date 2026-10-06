@@ -1,8 +1,9 @@
+import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { randomUUID, createHash } from "node:crypto";
 import { z } from "zod";
-import { requiredDeposit, type Order } from "../../packages/domain";
+import { type Order } from "../../packages/domain";
 import {
   proposalSchema,
   checkProposal,
@@ -15,6 +16,7 @@ export const changeCommand = onCall(
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
   async (req) => {
+    requireVerifiedGoogle(req.auth);
     if (!req.auth?.uid)
       throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
     const parsed = z
@@ -66,7 +68,8 @@ export const changeCommand = onCall(
               "Chỉ chủ đơn duyệt thay đổi.",
             );
         } else if (
-          !a.data()?.active ||
+          a.data()?.active !== true ||
+          !isStringRoleArray(a.data()?.roles) ||
           !a
             .data()
             ?.roles?.some((r: string) =>
@@ -136,6 +139,26 @@ export const changeCommand = onCall(
             checkProposal(order, p);
             if (allocation.exists && p.kind !== "return")
               throw Error("PARCEL_ALREADY_ALLOCATED");
+            if (p.kind === "return") {
+              tx.create(db.doc(`orderReturns/${id}`), {
+                orderId: order.id,
+                ownerId: order.ownerId,
+                proposalId: id,
+                lines: p.lines
+                  .filter((line) => line.cancelQuantity > 0)
+                  .map((line) => ({
+                    line: line.line,
+                    name: order.items[line.line].name,
+                    authorized: line.cancelQuantity,
+                    received: 0,
+                    accepted: 0,
+                    damaged: 0,
+                  })),
+                state: "authorized",
+                version: 1,
+                createdAt: now,
+              });
+            }
             if (p.kind !== "return") {
               const canceled = p.lines.reduce(
                   (sum, l) => sum + l.cancelQuantity,
@@ -177,10 +200,8 @@ export const changeCommand = onCall(
                 delete order.packedQuantity;
               }
             }
-            order.deposit = Math.min(
-              order.deposit ?? requiredDeposit(p.finalPayable),
-              requiredDeposit(p.finalPayable),
-            );
+            // Accepted deposit is an immutable obligation snapshot, including
+            // after a lower final payable. Refunds/credits are separate events.
             order.finalTotal = p.finalPayable;
             order.finalApproved = true;
             order.hold =
@@ -218,6 +239,13 @@ export const changeCommand = onCall(
           createdAt: now,
         });
         const result = { id, version: order.version };
+        tx.create(db.collection("outboxJobs").doc(), {
+          ownerId: order.ownerId,
+          orderId: order.id,
+          action: `change-${d.action}`,
+          state: "queued",
+          createdAt: now,
+        });
         tx.create(op, { hash, result, createdAt: now });
         return result;
       });

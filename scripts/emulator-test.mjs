@@ -5,8 +5,8 @@ import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 const mode = process.argv[2];
-if (!["rules", "http", "restore"].includes(mode))
-  throw Error("Choose rules, http or restore demo tests only");
+if (!["rules", "http", "restore", "demo"].includes(mode))
+  throw Error("Choose rules/http/restore/demo on isolated emulators only");
 const homes = [
   process.env.JAVA_HOME,
   "/opt/homebrew/opt/openjdk@24",
@@ -40,6 +40,9 @@ if (!selected) {
 }
 const env = {
   ...process.env,
+  GCLOUD_PROJECT: "demo-satsunicgo",
+  FUNCTIONS_EMULATOR: "true",
+  FIRESTORE_EMULATOR_HOST: "127.0.0.1:8181",
   ...(selected
     ? {
         JAVA_HOME: selected,
@@ -76,10 +79,16 @@ const args = [
   "--project",
   "demo-satsunicgo",
   "--only",
-  mode === "http" ? "auth,firestore,functions" : "firestore",
-  mode === "http"
-    ? "node tests/http/callable.mjs"
-    : "vitest run --config vitest.rules.config.ts",
+  mode === "demo"
+    ? "auth,firestore,functions,storage"
+    : mode === "http"
+      ? "auth,firestore,functions"
+      : "firestore,storage",
+  mode === "demo"
+    ? "node scripts/start-demo.mjs"
+    : mode === "http"
+      ? "node tests/http/callable.mjs"
+      : "vitest run --config vitest.rules.config.ts",
 ];
 const child = spawnSync(process.execPath, args, { env, stdio: "inherit" });
 process.exit(child.status ?? 1);

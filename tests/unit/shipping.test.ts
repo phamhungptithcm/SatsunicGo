@@ -54,3 +54,36 @@ test("one delivered parcel never completes a partially delivered order", () => {
     fullyDelivered(order, [delivered, { ...delivered, id: "second" }]),
   ).toBe(true);
 });
+
+test("split parcel dispatch preserves catalog ceiling and all dispatch guards", () => {
+  const catalog: Order = {
+    ...order,
+    purchaseKind: "catalog",
+    stage: "IN_TRANSIT",
+    catalogSnapshot: {
+      productId: "product",
+      productVersion: 1,
+      slug: "product",
+      title: "Item",
+      variant: "",
+      unitPrice: 50,
+      quantity: 2,
+      total: 100,
+      termsVersion: "v1",
+    },
+  };
+  expect(() => verifyParcelDispatch(parcel, [catalog])).not.toThrow();
+  for (const unsafe of [
+    { ...catalog, finalTotal: 101, collected: 101 },
+    { ...catalog, refundReserved: 1 },
+    { ...catalog, hold: "inspection" },
+    { ...catalog, packingComplete: false },
+    {
+      ...catalog,
+      consolidatedFreight: { batchId: "b", version: 2, amount: 0 },
+      finalFreightVersion: 1,
+    },
+    { ...catalog, stage: "DELIVERED" as const },
+  ])
+    expect(() => verifyParcelDispatch(parcel, [unsafe])).toThrow();
+});

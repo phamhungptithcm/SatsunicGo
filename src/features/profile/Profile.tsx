@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useReducer, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
 import {
   collection,
@@ -10,62 +10,101 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db, callService } from "../../shared/firebase";
-type ProfileValues = {
-  displayName: string;
-  businessName: string;
-  marketingConsent: boolean;
-};
+import { initialProfileRead, profileReadReducer } from "./profile-state";
 export function Profile({ user }: { user: User | null }) {
-  const [profile, setProfile] = useState<ProfileValues>({
-    displayName: "",
-    businessName: "",
-    marketingConsent: false,
-  });
-  const [version, setVersion] = useState<number | undefined>(),
-    [error, setError] = useState(""),
+  const [read, dispatch] = useReducer(profileReadReducer, undefined, () =>
+    initialProfileRead(user?.uid),
+  );
+  const { profile, version, addresses } = read;
+  const setProfile = (value: typeof profile) =>
+    dispatch({ type: "edit", uid: user?.uid ?? "", profile: value });
+  const [error, setError] = useState(""),
     [saved, setSaved] = useState(""),
     [busy, setBusy] = useState(false),
-    [addresses, setAddresses] = useState<
-      { id: string; recipient: string; address: string }[]
-    >([]);
+    [retry, setRetry] = useState(0);
+  const epoch = useRef(0),
+    writing = useRef(false);
   useEffect(() => {
-    setAddresses([]);
-    setVersion(undefined);
+    epoch.current++;
+    dispatch({ type: "reset", uid: user?.uid ?? "" });
+    setError("");
+    setSaved("");
+    setBusy(false);
     if (!db || !user) return;
+    let active = true;
+    let locked = false;
+    const uid = user.uid;
     const a = onSnapshot(
-        doc(db, "users", user.uid),
-        (s) => {
-          const value = s.data();
-          setVersion(value?.version);
-          setProfile({
+      doc(db, "users", uid),
+      (s) => {
+        if (!active || locked) return;
+        const value = s.data();
+        if (value?.locked === true) {
+          locked = true;
+          epoch.current++;
+          dispatch({ type: "locked", uid });
+          setError("");
+          setSaved("");
+          setBusy(false);
+          return;
+        }
+        dispatch({
+          type: "profile",
+          uid,
+          version: value?.version,
+          profile: {
             displayName: value?.displayName ?? user.displayName ?? "",
             businessName: value?.businessName ?? "",
             marketingConsent: value?.marketingConsent === true,
-          });
-        },
-        () => setError("Chưa tải được hồ sơ."),
+          },
+        });
+      },
+      () => {
+        if (active && !locked) dispatch({ type: "profile-error", uid });
+      },
+    );
+    const b = onSnapshot(
+      query(
+        collection(db, "addresses"),
+        where("ownerId", "==", uid),
+        limit(20),
       ),
-      b = onSnapshot(
-        query(
-          collection(db, "addresses"),
-          where("ownerId", "==", user.uid),
-          limit(20),
-        ),
-        (s) =>
-          setAddresses(
-            s.docs.map(
-              (d) => ({ ...d.data(), id: d.id }) as (typeof addresses)[number],
-            ),
-          ),
-        () => setError("Chưa tải được địa chỉ."),
-      );
+      (s) => {
+        if (active && !locked)
+          dispatch({
+            type: "addresses",
+            uid,
+            addresses: s.docs.map((d) => ({
+              id: d.id,
+              recipient: String(d.data().recipient ?? ""),
+              address: String(d.data().address ?? ""),
+            })),
+          });
+      },
+      () => {
+        if (active && !locked) dispatch({ type: "addresses-error", uid });
+      },
+    );
     return () => {
+      active = false;
+      epoch.current++;
       a();
       b();
     };
-  }, [user]);
+  }, [user?.uid, retry]);
   async function save(e: FormEvent<HTMLFormElement>, action: string) {
     e.preventDefault();
+    if (
+      !user ||
+      read.locked ||
+      writing.current ||
+      read.uid !== user.uid ||
+      !read.profileReady ||
+      (action === "saveAddress" && !read.addressesReady)
+    )
+      return;
+    writing.current = true;
+    const context = epoch.current;
     const f = new FormData(e.currentTarget);
     setError("");
     setSaved("");
@@ -91,11 +130,12 @@ export function Profile({ user }: { user: User | null }) {
           : {}),
         payload,
       });
-      setSaved("Đã lưu thông tin.");
+      if (context === epoch.current) setSaved("Đã lưu thông tin.");
     } catch (e) {
-      setError((e as Error).message);
+      if (context === epoch.current) setError((e as Error).message);
     } finally {
-      setBusy(false);
+      writing.current = false;
+      if (context === epoch.current) setBusy(false);
     }
   }
   return (
@@ -119,95 +159,125 @@ export function Profile({ user }: { user: User | null }) {
             onSubmit={(e) => void save(e, "saveProfile")}
           >
             <h2>Hồ sơ</h2>
-            <label>
-              Tên hiển thị
-              <input
-                name="displayName"
-                value={profile.displayName}
-                onChange={(e) =>
-                  setProfile({ ...profile, displayName: e.target.value })
-                }
-                required
-                maxLength={120}
-              />
-            </label>
-            <label>
-              Tên hộ kinh doanh · không bắt buộc
-              <input
-                name="businessName"
-                maxLength={160}
-                value={profile.businessName}
-                onChange={(e) =>
-                  setProfile({ ...profile, businessName: e.target.value })
-                }
-              />
-            </label>
-            <label>
-              <span>
+            <fieldset
+              disabled={busy || !read.profileReady || read.uid !== user?.uid}
+            >
+              <label>
+                Tên hiển thị
                 <input
-                  type="checkbox"
-                  name="marketingConsent"
-                  checked={profile.marketingConsent}
+                  name="displayName"
+                  value={profile.displayName}
                   onChange={(e) =>
-                    setProfile({
-                      ...profile,
-                      marketingConsent: e.target.checked,
-                    })
+                    setProfile({ ...profile, displayName: e.target.value })
                   }
-                />{" "}
-                Nhận nội dung quảng bá qua kênh đã cấu hình
-              </span>
-            </label>
-            <button className="primary" disabled={busy}>
-              Lưu hồ sơ
-            </button>
+                  required
+                  maxLength={120}
+                />
+              </label>
+              <label>
+                Tên hộ kinh doanh · không bắt buộc
+                <input
+                  name="businessName"
+                  maxLength={160}
+                  value={profile.businessName}
+                  onChange={(e) =>
+                    setProfile({ ...profile, businessName: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                <span>
+                  <input
+                    type="checkbox"
+                    name="marketingConsent"
+                    checked={profile.marketingConsent}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        marketingConsent: e.target.checked,
+                      })
+                    }
+                  />{" "}
+                  Nhận nội dung quảng bá qua kênh đã cấu hình
+                </span>
+              </label>
+              <button className="primary" disabled={busy}>
+                Lưu hồ sơ
+              </button>
+            </fieldset>
           </form>
           <div>
             <form
+              key={`${user?.uid}:${read.locked}`}
               className="form panel"
               onSubmit={(e) => void save(e, "saveAddress")}
             >
               <h2>Địa chỉ nhận hàng mới</h2>
-              <label>
-                Người nhận
-                <input
-                  name="recipient"
-                  minLength={2}
-                  maxLength={120}
-                  required
-                />
-              </label>
-              <label>
-                Số điện thoại
-                <input
-                  name="phone"
-                  type="tel"
-                  minLength={8}
-                  maxLength={20}
-                  required
-                />
-              </label>
-              <label>
-                Địa chỉ
-                <textarea
-                  name="address"
-                  minLength={10}
-                  maxLength={500}
-                  required
-                />
-              </label>
-              <button className="primary" disabled={busy}>
-                Lưu địa chỉ
-              </button>
+              <fieldset
+                disabled={
+                  busy ||
+                  !read.profileReady ||
+                  !read.addressesReady ||
+                  read.uid !== user?.uid
+                }
+              >
+                <label>
+                  Người nhận
+                  <input
+                    name="recipient"
+                    minLength={2}
+                    maxLength={120}
+                    required
+                  />
+                </label>
+                <label>
+                  Số điện thoại
+                  <input
+                    name="phone"
+                    type="tel"
+                    minLength={8}
+                    maxLength={20}
+                    required
+                  />
+                </label>
+                <label>
+                  Địa chỉ
+                  <textarea
+                    name="address"
+                    minLength={10}
+                    maxLength={500}
+                    required
+                  />
+                </label>
+                <button className="primary" disabled={busy}>
+                  Lưu địa chỉ
+                </button>
+              </fieldset>
             </form>
-            {addresses.map((a) => (
-              <article className="panel order" key={a.id}>
-                <strong>{a.recipient}</strong>
-                <p>{a.address}</p>
-              </article>
-            ))}
+            {read.profileReady &&
+              addresses.map((a) => (
+                <article className="panel order" key={a.id}>
+                  <strong>{a.recipient}</strong>
+                  <p>{a.address}</p>
+                </article>
+              ))}
           </div>
         </div>
+      )}
+      {(read.profileError || read.addressesError) && (
+        <div role="alert">
+          <p>{read.profileError || read.addressesError}</p>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => setRetry((n) => n + 1)}
+          >
+            Tải lại thông tin
+          </button>
+        </div>
+      )}
+      {!read.profileReady && !read.profileError && user && (
+        <p role="status">Đang tải hồ sơ…</p>
       )}
       {error && (
         <p role="alert" className="error">

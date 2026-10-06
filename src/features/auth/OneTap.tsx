@@ -6,18 +6,14 @@ import {
 } from "firebase/auth";
 import { auth } from "../../shared/firebase";
 import { captureMfa } from "./mfa";
-type Identity = {
-  initialize: (options: {
-    client_id: string;
-    auto_select: boolean;
-    callback: (r: { credential: string }) => void;
-  }) => void;
-  prompt: () => void;
-  cancel: () => void;
-};
+import {
+  createOneTapController,
+  type OneTapIdentity,
+} from "./one-tap-controller";
 function identity() {
-  return (window as unknown as { google?: { accounts?: { id?: Identity } } })
-    .google?.accounts?.id;
+  return (
+    window as unknown as { google?: { accounts?: { id?: OneTapIdentity } } }
+  ).google?.accounts?.id;
 }
 let loader: Promise<void> | null = null;
 function load() {
@@ -34,7 +30,12 @@ function load() {
       }, 10000);
       script.onload = () => {
         clearTimeout(timer);
-        resolve();
+        if (identity()) resolve();
+        else {
+          script.remove();
+          loader = null;
+          reject(Error("ONE_TAP_UNAVAILABLE"));
+        }
       };
       script.onerror = () => {
         clearTimeout(timer);
@@ -63,40 +64,37 @@ export function OneTap({
     )
       return;
     let active = true;
+    let dispose: (() => void) | undefined;
     void load()
       .then(() => {
         if (!active) return;
         const id = identity();
         if (!id) return;
-        id.initialize({
-          client_id: clientId,
-          auto_select: false,
-          callback: (r) => {
-            if (!active || !auth || !r.credential) return;
-            void signInWithCredential(
-              auth,
-              GoogleAuthProvider.credential(r.credential),
-            ).catch((e) => {
-              if (!active) return;
-              if (captureMfa(e, auth))
-                onError(
-                  "Cần xác thực hai lớp. Mở Bảo mật tài khoản để tiếp tục.",
-                );
-              else
-                onError(
-                  "One Tap chưa đăng nhập được. Dùng nút Đăng nhập với Google để thử lại.",
-                );
-            });
+        dispose = createOneTapController(
+          id,
+          clientId,
+          (credential) =>
+            signInWithCredential(
+              auth!,
+              GoogleAuthProvider.credential(credential),
+            ),
+          (error) => {
+            if (!active) return;
+            if (auth && captureMfa(error, auth))
+              onError(
+                "Cần xác thực hai lớp. Mở Bảo mật tài khoản để tiếp tục.",
+              );
+            else onError("Chưa đăng nhập được. Mở tài khoản để thử lại.");
           },
-        });
-        id.prompt();
+        );
       })
       .catch(() => {
-        /* The persistent Google popup/redirect button remains available. */
+        if (active)
+          onError("Chưa kết nối được Google. Mở tài khoản để thử lại.");
       });
     return () => {
       active = false;
-      identity()?.cancel();
+      dispose?.();
     };
   }, [user, onError]);
   return null;

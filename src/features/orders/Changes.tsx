@@ -1,4 +1,11 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
+import {
+  CrmHeading,
+  CrmIcon,
+  CrmState,
+  CrmReference,
+} from "../crm/CrmPresentation";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   collection,
   query,
@@ -8,7 +15,11 @@ import {
 } from "firebase/firestore";
 import { db, callService } from "../../shared/firebase";
 import type { Order } from "../../../packages/domain";
-import type { ChangeProposal } from "../../../packages/domain/changes";
+import {
+  proposalSchema,
+  type ChangeProposal,
+} from "../../../packages/domain/changes";
+import { createRequestSequence } from "../content/editor-state";
 type Change = {
   id: string;
   orderId: string;
@@ -21,97 +32,372 @@ const labels = {
   cancellation: "Hủy đơn và đối soát chi phí",
   return: "Trả hàng và đối soát",
 };
-export function CustomerChanges({ order }: { order: Order }) {
-  const [changes, setChanges] = useState<Change[]>([]),
-    [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+export function changeRejection(cause: unknown) {
+  const code = (cause as { code?: string })?.code?.replace(/^functions\//, "");
+  return [
+    "invalid-argument",
+    "permission-denied",
+    "unauthenticated",
+    "failed-precondition",
+    "not-found",
+    "already-exists",
+    "aborted",
+  ].includes(code ?? "");
+}
+export function changeProposalInput(form: FormData, order: Order) {
+  const kind = String(form.get("kind"));
+  const lines = order.items
+    .map((item, line) => {
+      const name = String(form.get(`name-${line}`) ?? "").trim();
+      const variant = String(form.get(`variant-${line}`) ?? item.variant);
+      const changedVariant = variant !== item.variant;
+      return kind === "substitution"
+        ? {
+            line,
+            cancelQuantity: 0,
+            ...(name ? { replacementName: name } : {}),
+            ...(name || changedVariant ? { replacementVariant: variant } : {}),
+          }
+        : { line, cancelQuantity: Number(form.get(`cancel-${line}`) ?? 0) };
+    })
+    .filter(
+      (line) =>
+        line.cancelQuantity > 0 ||
+        "replacementName" in line ||
+        "replacementVariant" in line,
+    );
+  if (
+    kind === "substitution" &&
+    !lines.some((line) => "replacementName" in line)
+  )
+    throw new Error("NO_SUBSTITUTION");
+  return proposalSchema.parse({
+    kind,
+    resolveHold: form.get("resolveHold") === "on",
+    reason: String(form.get("reason") ?? ""),
+    termsVersion:
+      order.catalogSnapshot?.termsVersion ?? order.quote?.termsVersion,
+    lines,
+    finalPayable: Number(form.get("total")),
+    actualCosts: Number(form.get("costs")),
+    evidence: String(form.get("evidence") ?? ""),
+  });
+}
+function useChangeMutation(identity: string, vi = true) {
+  const sequence = useRef(createRequestSequence());
+  const sending = useRef(false);
+  const pending = useRef<Record<string, unknown> | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [uncertain, setUncertain] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   useEffect(() => {
+    sequence.current.invalidate();
+    sending.current = false;
+    pending.current = null;
+    setBusy(false);
+    setUncertain(false);
+    setError("");
+    setNotice("");
+    return () => {
+      sequence.current.invalidate();
+    };
+  }, [identity]);
+  async function run(
+    build?: () => Record<string, unknown> | Promise<Record<string, unknown>>,
+    confirmed?: () => void | Promise<void>,
+  ) {
+    if (sending.current || (!pending.current && !build)) return;
+    sending.current = true;
+    const revision = sequence.current.next();
+    setBusy(true);
+    setError("");
+    setNotice("");
+    let acknowledged = false;
+    try {
+      if (!pending.current && build) {
+        const command = await build();
+        if (!sequence.current.current(revision)) return;
+        pending.current = { ...command, operationId: crypto.randomUUID() };
+      }
+      await callService("changeCommand", pending.current!);
+      if (!sequence.current.current(revision)) return;
+      pending.current = null;
+      acknowledged = true;
+      setUncertain(false);
+      setNotice(
+        vi
+          ? "Đã ghi nhận thao tác thay đổi."
+          : "Your change action has been recorded.",
+      );
+      if (confirmed) await confirmed();
+    } catch (cause) {
+      if (!sequence.current.current(revision)) return;
+      if (acknowledged) {
+        setError(
+          vi
+            ? "Thao tác đã được ghi nhận, nhưng chưa tải được dữ liệu mới. Hãy tải lại."
+            : "The action was recorded, but updated data could not be loaded. Reload to check.",
+        );
+      } else {
+        const unknown = !!pending.current && !changeRejection(cause);
+        if (!unknown) pending.current = null;
+        setUncertain(unknown);
+        setError(
+          unknown
+            ? vi
+              ? "Chưa xác nhận được kết quả. Thử lại đúng thao tác đang chờ."
+              : "The result is unconfirmed. Retry the same pending action."
+            : vi
+              ? "Chưa thực hiện được. Tải lại đơn và kiểm tra điều khoản, phần hàng, chi phí trước khi thử lại."
+              : "The action could not be completed. Reload the order and check its terms, items and costs before retrying.",
+        );
+      }
+    } finally {
+      if (sequence.current.current(revision)) {
+        sending.current = false;
+        setBusy(false);
+      }
+    }
+  }
+  return { busy, uncertain, error, notice, run, pending };
+}
+function ChangeFeedback({
+  mutation,
+  retry,
+  vi = true,
+}: {
+  mutation: ReturnType<typeof useChangeMutation>;
+  retry: () => void;
+  vi?: boolean;
+}) {
+  return (
+    <>
+      {mutation.notice && <p role="status">{mutation.notice}</p>}
+      {mutation.error && (
+        <p className="error" role="alert">
+          {mutation.error}
+        </p>
+      )}
+      {mutation.uncertain && (
+        <button disabled={mutation.busy} onClick={retry}>
+          {vi ? "Thử lại thao tác đang chờ" : "Retry pending action"}
+        </button>
+      )}
+    </>
+  );
+}
+export function CustomerChanges({
+  order,
+  language = "vi",
+}: {
+  order: Order;
+  language?: "vi" | "en";
+}) {
+  const vi = language === "vi";
+  const mutation = useChangeMutation(order.id, vi);
+  const [changes, setChanges] = useState<Change[]>([]),
+    [readAttempt, setReadAttempt] = useState(0),
+    [readState, setReadState] = useState<
+      "loading" | "ready" | "offline" | "error"
+    >("loading");
+  useEffect(() => {
+    let active = true;
+    let requiresRetry = !navigator.onLine;
     setChanges([]);
-    if (!db) return;
-    return onSnapshot(
+    setReadState(navigator.onLine ? "loading" : "offline");
+    if (!db) {
+      setReadState("error");
+      return;
+    }
+    const offline = () => {
+      requiresRetry = true;
+      if (active) setReadState("offline");
+    };
+    const online = () => {
+      if (active) setReadState(requiresRetry ? "error" : "loading");
+    };
+    window.addEventListener("offline", offline);
+    window.addEventListener("online", online);
+    const unsubscribe = onSnapshot(
       query(
         collection(db, "orderChanges"),
         where("ownerId", "==", order.ownerId),
         where("orderId", "==", order.id),
         limit(20),
       ),
-      (s) =>
-        setChanges(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Change)),
-      () => setError("Chưa tải được đề xuất thay đổi."),
+      { includeMetadataChanges: true },
+      (snapshot) => {
+        if (!active) return;
+        setChanges(
+          snapshot.docs.map((d) => ({ ...d.data(), id: d.id }) as Change),
+        );
+        setReadState(
+          requiresRetry
+            ? navigator.onLine
+              ? "error"
+              : "offline"
+            : !navigator.onLine
+              ? "offline"
+              : snapshot.metadata.fromCache
+                ? "loading"
+                : "ready",
+        );
+      },
+      () => {
+        if (active) {
+          setReadState("error");
+          setChanges([]);
+        }
+      },
     );
-  }, [order.id, order.ownerId]);
+    return () => {
+      active = false;
+      unsubscribe();
+      window.removeEventListener("offline", offline);
+      window.removeEventListener("online", online);
+    };
+  }, [order.id, order.ownerId, readAttempt]);
+  const amount = (value: number) =>
+    value.toLocaleString(vi ? "vi-VN" : "en-US") + " ₫";
+  const englishLabels = {
+    substitution: "Replace product or variant",
+    partialCancellation: "Cancel unpurchased items",
+    cancellation: "Cancel order and reconcile costs",
+    return: "Return items and reconcile costs",
+  };
   async function review(change: Change, action: "accept" | "reject") {
-    setBusy(true);
-    setError("");
-    try {
-      await callService("changeCommand", {
-        action,
-        orderId: order.id,
-        expectedVersion: order.version,
-        proposalId: change.id,
-        operationId: crypto.randomUUID(),
-      });
-    } catch {
-      setError(
-        "Chưa lưu được quyết định. Tải lại đơn để kiểm tra phiên bản rồi thử lại.",
-      );
-    } finally {
-      setBusy(false);
-    }
+    if (mutation.busy || mutation.uncertain || readState !== "ready") return;
+    await mutation.run(() => ({
+      action,
+      orderId: order.id,
+      expectedVersion: order.version,
+      proposalId: change.id,
+    }));
   }
   return (
     <>
+      {readState === "loading" && (
+        <p role="status">
+          {vi ? "Đang tải đề xuất thay đổi…" : "Loading change proposals…"}
+        </p>
+      )}
+      {(readState === "offline" || readState === "error") && (
+        <>
+          <p role="alert" className="error">
+            {vi
+              ? "Chưa tải được đề xuất thay đổi."
+              : "Could not load change proposals."}
+            {readState === "offline" &&
+              (vi
+                ? " Anh/chị đang mất kết nối. Kết nối lại rồi tải lại đề xuất."
+                : " You are offline. Reconnect, then retry proposals.")}
+          </p>
+          <button
+            disabled={mutation.busy || mutation.uncertain}
+            onClick={() => setReadAttempt((attempt) => attempt + 1)}
+          >
+            {vi ? "Tải lại đề xuất" : "Retry proposals"}
+          </button>
+        </>
+      )}
+      {readState === "ready" && changes.length === 0 && (
+        <p>
+          {vi
+            ? "Chưa có đề xuất thay đổi cho đơn này."
+            : "No change proposals for this order."}
+        </p>
+      )}
       {changes.map((c) => (
         <article className="panel order" key={c.id}>
-          <h3>{labels[c.proposal.kind]}</h3>
+          <h3>
+            {vi ? labels[c.proposal.kind] : englishLabels[c.proposal.kind]}
+          </h3>
           <p>{c.proposal.reason}</p>
           <p>
-            Tổng phải trả sau thay đổi:{" "}
-            {c.proposal.finalPayable.toLocaleString("vi-VN")} ₫ · chi phí thật
-            được ghi nhận: {c.proposal.actualCosts.toLocaleString("vi-VN")} ₫
+            {vi ? "Tổng phải trả sau thay đổi:" : "Total payable after change:"}{" "}
+            {amount(c.proposal.finalPayable)} ·{" "}
+            {vi ? "chi phí thật được ghi nhận:" : "recorded actual costs:"}{" "}
+            {amount(c.proposal.actualCosts)}
           </p>
           <p>
-            Cọc tối thiểu sau thay đổi:{" "}
-            {Math.ceil(c.proposal.finalPayable / 2).toLocaleString("vi-VN")} ₫.
-            Tiền đã thu vẫn được giữ trong lịch sử.
+            {order.purchaseKind === "catalog"
+              ? vi
+                ? "Đơn này cần thanh toán toàn bộ theo giá niêm yết."
+                : "This order requires full payment at the listed price."
+              : vi
+                ? `Cọc đã chấp nhận: ${amount(order.deposit ?? 0)}. Thay đổi tổng tiền không sửa nghĩa vụ cọc đã chấp nhận.`
+                : `Accepted deposit: ${amount(order.deposit ?? 0)}. Changing the total does not change the accepted deposit obligation.`}{" "}
+            {vi
+              ? "Tiền đã thu được giữ trong lịch sử; hoàn tiền được đối soát riêng."
+              : "Collected payments remain in the history; refunds are reconciled separately."}
           </p>
-          <p>Điều khoản đã chấp nhận: {c.proposal.termsVersion}</p>
+          <p>
+            {vi ? "Điều khoản đã chấp nhận:" : "Accepted terms:"}{" "}
+            {c.proposal.termsVersion}
+          </p>
           {c.proposal.lines.map((l) => (
             <p key={l.line}>
-              Dòng {l.line + 1}: {c.proposal.kind === "return" ? "trả" : "hủy"}{" "}
-              {l.cancelQuantity}
-              {l.replacementName
-                ? ` · đổi thành ${l.replacementName}, ${l.replacementVariant ?? ""}`
-                : ""}
+              {vi ? "Dòng" : "Line"} {l.line + 1}:{" "}
+              {c.proposal.kind === "substitution"
+                ? l.replacementName || l.replacementVariant !== undefined
+                  ? `${vi ? "Đổi thành" : "Replace with"} ${l.replacementName ?? order.items[l.line]?.name ?? (vi ? "sản phẩm hiện tại" : "current product")}${l.replacementVariant !== undefined ? ` · ${vi ? "Biến thể" : "Variant"}: ${l.replacementVariant || (vi ? "chưa ghi" : "not specified")}` : ""}`
+                  : vi
+                    ? "Giữ nguyên sản phẩm/biến thể"
+                    : "Keep the current product and variant"
+                : `${c.proposal.kind === "return" ? (vi ? "trả" : "return") : vi ? "hủy" : "cancel"} ${l.cancelQuantity}`}
             </p>
           ))}
           <p>
             {c.state === "pending"
-              ? "Chờ bạn duyệt"
+              ? vi
+                ? "Chờ anh/chị duyệt"
+                : "Waiting for your approval"
               : c.state === "accepted"
-                ? "Bạn đã duyệt · chờ nhân viên áp dụng"
+                ? vi
+                  ? "Anh/chị đã duyệt · chờ nhân viên áp dụng"
+                  : "Approved by you · waiting for staff to apply"
                 : c.state === "rejected"
-                  ? "Bạn đã từ chối"
-                  : "Đã áp dụng và ghi lịch sử"}
-            . Quyết định này không tự chuyển hoặc hoàn tiền.
+                  ? vi
+                    ? "Anh/chị đã từ chối"
+                    : "Rejected by you"
+                  : c.state === "applied"
+                    ? vi
+                      ? "Đã áp dụng và ghi lịch sử"
+                      : "Applied and recorded in the history"
+                    : vi
+                      ? "Cần kiểm tra trạng thái thay đổi"
+                      : "Change status needs verification"}
+            .{" "}
+            {vi
+              ? "Quyết định này không tự chuyển hoặc hoàn tiền."
+              : "This decision does not transfer or refund money automatically."}
           </p>
-          {c.state === "pending" && (
+          {c.state === "pending" && readState === "ready" && (
             <>
-              <button disabled={busy} onClick={() => void review(c, "accept")}>
-                Đồng ý thay đổi và tổng phải trả
+              <button
+                disabled={mutation.busy || mutation.uncertain}
+                onClick={() => void review(c, "accept")}
+              >
+                {vi
+                  ? "Đồng ý thay đổi và tổng phải trả"
+                  : "Accept change and final amount"}
               </button>
-              <button disabled={busy} onClick={() => void review(c, "reject")}>
-                Từ chối thay đổi
+              <button
+                disabled={mutation.busy || mutation.uncertain}
+                onClick={() => void review(c, "reject")}
+              >
+                {vi ? "Từ chối thay đổi" : "Reject change"}
               </button>
             </>
           )}
         </article>
       ))}
-      {error && (
-        <p role="alert" className="error">
-          {error}
-        </p>
-      )}
+      <ChangeFeedback
+        mutation={mutation}
+        vi={vi}
+        retry={() => void mutation.run()}
+      />
     </>
   );
 }
@@ -122,204 +408,305 @@ export function ProposeChange({
   order: Order;
   onChanged: () => void;
 }) {
-  const [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+  const mutation = useChangeMutation(order.id);
+  const [kind, setKind] = useState("substitution");
   async function propose(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setBusy(true);
-    setError("");
-    const f = new FormData(e.currentTarget),
-      lines = order.items
-        .map((_, line) => ({
-          line,
-          cancelQuantity: Number(f.get(`cancel-${line}`)),
-          replacementName: String(f.get(`name-${line}`) ?? ""),
-          replacementVariant: String(f.get(`variant-${line}`) ?? ""),
-        }))
-        .filter((l) => l.cancelQuantity > 0 || l.replacementName)
-        .map((l) => ({
-          line: l.line,
-          cancelQuantity: l.cancelQuantity,
-          ...(l.replacementName
-            ? {
-                replacementName: l.replacementName,
-                replacementVariant: l.replacementVariant,
-              }
-            : {}),
-        }));
-    try {
-      await callService("changeCommand", {
+    if (mutation.uncertain) return;
+    const form = new FormData(e.currentTarget);
+    await mutation.run(
+      () => ({
         action: "propose",
-        operationId: crypto.randomUUID(),
         orderId: order.id,
         expectedVersion: order.version,
-        payload: {
-          kind: String(f.get("kind")),
-          resolveHold: f.get("resolveHold") === "on",
-          reason: String(f.get("reason")),
-          termsVersion: order.quote?.termsVersion,
-          lines,
-          finalPayable: Number(f.get("total")),
-          actualCosts: Number(f.get("costs")),
-          evidence: String(f.get("evidence")),
-        },
-      });
-      onChanged();
-    } catch {
-      setError(
-        "Chưa gửi được. Kiểm tra phần chưa mua, kiện đã phân bổ, điều khoản, chi phí và hold hiện tại.",
-      );
-    } finally {
-      setBusy(false);
-    }
+        payload: changeProposalInput(form, order),
+      }),
+      onChanged,
+    );
   }
   return (
     <details>
       <summary>Đề xuất thay đổi để khách duyệt</summary>
       <form className="form" onSubmit={(e) => void propose(e)}>
-        <label>
-          Loại thay đổi
-          <select name="kind">
-            {Object.entries(labels).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        {order.items.map((item, line) => (
-          <fieldset key={line}>
-            <legend>
-              {item.name} · {item.variant} · {item.quantity}
-            </legend>
-            <label>
-              Số lượng hủy
-              <input
-                name={`cancel-${line}`}
-                type="number"
-                min={0}
-                max={item.quantity}
-                defaultValue={0}
-              />
-            </label>
-            <label>
-              Tên thay thế · không bắt buộc
-              <input name={`name-${line}`} maxLength={200} />
-            </label>
-            <label>
-              Biến thể thay thế
-              <input name={`variant-${line}`} maxLength={200} />
-            </label>
-          </fieldset>
-        ))}
-        <label>
-          Lý do hiển thị cho khách
-          <textarea name="reason" minLength={5} maxLength={1000} required />
-        </label>
-        <label>
-          Tổng phải trả sau thay đổi (₫)
-          <input
-            name="total"
-            type="number"
-            min={0}
-            max={1000000000000}
-            required
-          />
-        </label>
-        <label>
-          Chi phí thực tế đã phát sinh (₫)
-          <input
-            name="costs"
-            type="number"
-            min={0}
-            max={1000000000000}
-            required
-          />
-        </label>
-        <label>
-          <input type="checkbox" name="resolveHold" /> Đề xuất đã xử lý nguyên
-          nhân hold trước đó
-        </label>
-        <label>
-          Bằng chứng nội bộ · khách không đọc trường này
-          <textarea name="evidence" minLength={5} maxLength={1000} required />
-        </label>
-        <p>
-          Không mặc định tịch thu cọc hoặc hứa hoàn tiền. Cần chi phí thật, điều
-          khoản đã chấp nhận và quyết định của khách.
-        </p>
-        <button disabled={busy}>Gửi đề xuất và tạm giữ xử lý</button>
+        <fieldset
+          className="form"
+          disabled={mutation.busy || mutation.uncertain}
+        >
+          <label>
+            Loại thay đổi
+            <select
+              name="kind"
+              value={kind}
+              onChange={(e) => setKind(e.target.value)}
+            >
+              {Object.entries(labels).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          {order.items.map((item, line) => (
+            <fieldset key={`${kind}:${line}`}>
+              <legend>
+                {item.name} · {item.variant} · {item.quantity}
+              </legend>
+              {kind === "substitution" ? (
+                <>
+                  <label>
+                    Tên thay thế · không bắt buộc
+                    <input name={`name-${line}`} maxLength={200} />
+                  </label>
+                  <label>
+                    Biến thể thay thế
+                    <input
+                      name={`variant-${line}`}
+                      maxLength={200}
+                      defaultValue={item.variant}
+                    />
+                  </label>
+                </>
+              ) : (
+                <>
+                  <label>
+                    {kind === "return" ? "Số lượng trả" : "Số lượng hủy"}
+                    <input
+                      name={`cancel-${line}`}
+                      type="number"
+                      min={0}
+                      max={item.quantity}
+                      defaultValue={kind === "cancellation" ? item.quantity : 0}
+                    />
+                  </label>
+                </>
+              )}
+            </fieldset>
+          ))}
+          <label>
+            Lý do hiển thị cho khách
+            <textarea name="reason" minLength={5} maxLength={1000} required />
+          </label>
+          <label>
+            Tổng phải trả sau thay đổi (₫)
+            <input
+              name="total"
+              type="number"
+              min={0}
+              max={1000000000000}
+              required
+            />
+          </label>
+          <label>
+            Chi phí thực tế đã phát sinh (₫)
+            <input
+              name="costs"
+              type="number"
+              min={0}
+              max={1000000000000}
+              required
+            />
+          </label>
+          <label>
+            <input type="checkbox" name="resolveHold" /> Đề xuất đã xử lý nguyên
+            nhân hold trước đó
+          </label>
+          <label>
+            Bằng chứng nội bộ · khách không đọc trường này
+            <textarea name="evidence" minLength={5} maxLength={1000} required />
+          </label>
+          <p>
+            Không mặc định tịch thu cọc hoặc hứa hoàn tiền. Cần chi phí thật,
+            điều khoản đã chấp nhận và quyết định của khách.
+          </p>
+          <button disabled={mutation.busy || mutation.uncertain}>
+            Gửi đề xuất và tạm giữ xử lý
+          </button>
+        </fieldset>
       </form>
-      {error && (
-        <p className="error" role="alert">
-          {error}
-        </p>
-      )}
+      <ChangeFeedback
+        mutation={mutation}
+        retry={() => void mutation.run(undefined, onChanged)}
+      />
     </details>
   );
 }
 export function ChangeQueue() {
+  const mutation = useChangeMutation("crm-change-queue");
   const [changes, setChanges] = useState<Change[]>([]),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
-  async function load() {
+    [reading, setReading] = useState(false),
+    [ready, setReady] = useState(false),
+    [next, setNext] = useState<string | null>(null);
+  const epoch = useRef(0),
+    mounted = useRef(false),
+    readLocked = useRef(false);
+  async function load(after?: string) {
+    if (!mounted.current || readLocked.current || mutation.pending.current)
+      return;
+    readLocked.current = true;
+    const request = ++epoch.current;
+    setReading(true);
+    if (!after) setReady(false);
+    setError("");
+    if (!after) {
+      setChanges([]);
+      setNext(null);
+    }
     try {
-      const r = await callService<{ rows: Change[] }>("listWork", {
-        kind: "orderChanges",
+      const result = await callService<{ rows: Change[]; next: string | null }>(
+        "listWork",
+        {
+          kind: "orderChanges",
+          changeState: "accepted",
+          ...(after ? { after } : {}),
+        },
+      );
+      if (!mounted.current || epoch.current !== request) return;
+      setChanges((previous) => {
+        const rows = after ? [...previous, ...result.rows] : result.rows;
+        return [...new Map(rows.map((row) => [row.id, row])).values()];
       });
-      setChanges(r.rows);
+      setNext(result.next ?? null);
+      setReady(true);
     } catch {
-      setError("Chưa tải được đề xuất thay đổi.");
+      if (mounted.current && epoch.current === request) {
+        setChanges([]);
+        setNext(null);
+        setReady(false);
+        setError("Chưa tải được đề xuất thay đổi.");
+      }
+    } finally {
+      if (mounted.current && epoch.current === request) {
+        readLocked.current = false;
+        setReading(false);
+      }
     }
   }
   useEffect(() => {
+    mounted.current = true;
+    readLocked.current = false;
     void load();
+    return () => {
+      mounted.current = false;
+      ++epoch.current;
+      readLocked.current = false;
+    };
   }, []);
   async function apply(c: Change) {
-    setBusy(true);
-    setError("");
-    try {
-      const current = await callService<{ order: Order }>("orderHistory", {
-        orderId: c.orderId,
-      });
-      await callService("changeCommand", {
-        action: "apply",
-        orderId: c.orderId,
-        expectedVersion: current.order.version,
-        proposalId: c.id,
-        operationId: crypto.randomUUID(),
-      });
-      await load();
-    } catch {
-      setError(
-        "Chưa áp dụng được. Đề xuất cần khách duyệt và phần hàng/kiện vẫn phải khớp.",
-      );
-    } finally {
-      setBusy(false);
-    }
+    if (
+      !mounted.current ||
+      mutation.busy ||
+      mutation.uncertain ||
+      readLocked.current ||
+      !ready
+    )
+      return;
+    await mutation.run(
+      async () => {
+        const current = await callService<{ order: Order }>("orderHistory", {
+          orderId: c.orderId,
+        });
+        return {
+          action: "apply",
+          orderId: c.orderId,
+          expectedVersion: current.order.version,
+          proposalId: c.id,
+        };
+      },
+      () => load(),
+    );
   }
   return (
     <section>
-      <h2>Thay đổi đã được khách duyệt</h2>
-      <button onClick={() => void load()}>Tải lại đề xuất</button>
-      {changes
-        .filter((c) => c.state === "accepted")
-        .map((c) => (
-          <article className="panel" key={c.id}>
-            <h3>
-              {labels[c.proposal.kind]} · {c.orderId}
-            </h3>
-            <p>{c.proposal.reason}</p>
-            <button disabled={busy} onClick={() => void apply(c)}>
-              Áp dụng quyết định đã duyệt
-            </button>
-          </article>
-        ))}
-      {error && (
-        <p role="alert" className="error">
-          {error}
-        </p>
+      <CrmHeading
+        title="Thay đổi chờ áp dụng"
+        actions={
+          <button
+            disabled={reading || mutation.busy || mutation.uncertain}
+            onClick={() => void load()}
+          >
+            <CrmIcon name="refresh" />
+            Tải lại đề xuất
+          </button>
+        }
+      />
+      <ChangeFeedback
+        mutation={mutation}
+        retry={() => void mutation.run(undefined, () => load())}
+      />
+      {reading && <CrmState kind="loading" title="Đang tải đề xuất…" />}
+      {ready && changes.length === 0 && (
+        <CrmState kind="empty" title="Chưa có thay đổi đã duyệt cần xử lý." />
       )}
+      <div className="crmList">
+        {ready &&
+          changes.map((c) => (
+            <article className="crmItem" key={c.id}>
+              <div className="crmItemMain">
+                <div className="crmItemMeta">
+                  <h2 className="crmItemTitle">{labels[c.proposal.kind]}</h2>
+                  <span className="crmBadge">
+                    <CrmIcon name="check" />
+                    Khách đã duyệt
+                  </span>
+                </div>
+                <p>{c.proposal.reason}</p>
+                <dl className="crmFacts">
+                  <div>
+                    <dt>Tổng phải trả sau thay đổi</dt>
+                    <dd>{c.proposal.finalPayable.toLocaleString("vi-VN")} ₫</dd>
+                  </div>
+                  <div>
+                    <dt>Chi phí thực tế</dt>
+                    <dd>{c.proposal.actualCosts.toLocaleString("vi-VN")} ₫</dd>
+                  </div>
+                </dl>
+                <div className="crmItemMeta">
+                  <Link to={"/crm/orders?order=" + c.orderId}>
+                    <CrmIcon name="box" />
+                    Mở đơn mua hộ
+                  </Link>
+                  <CrmReference label="Mã đơn" value={c.orderId} />
+                </div>
+                <details className="crmItemDetails">
+                  <summary>Chi tiết thay đổi</summary>
+                  <CrmReference label="Mã đề xuất" value={c.id} />
+                  <p>Điều khoản đã chấp nhận: {c.proposal.termsVersion}</p>
+                  {c.proposal.lines.map((line) => (
+                    <p key={line.line}>
+                      Dòng {line.line + 1}:{" "}
+                      {c.proposal.kind === "substitution"
+                        ? `${line.replacementName ?? "Giữ nguyên sản phẩm"}${line.replacementVariant !== undefined ? ` · Biến thể: ${line.replacementVariant || "chưa ghi"}` : ""}`
+                        : `${c.proposal.kind === "return" ? "trả" : "hủy"} ${line.cancelQuantity}`}
+                    </p>
+                  ))}
+                </details>
+              </div>
+              <div className="crmActions">
+                <button
+                  className="primary"
+                  disabled={mutation.busy || mutation.uncertain || reading}
+                  onClick={() => void apply(c)}
+                >
+                  <CrmIcon name="check" />
+                  Áp dụng quyết định đã duyệt
+                </button>
+              </div>
+            </article>
+          ))}
+      </div>
+      {ready && next && (
+        <div className="crmActions">
+          <button
+            disabled={reading || mutation.busy || mutation.uncertain}
+            onClick={() => void load(next)}
+          >
+            <CrmIcon name="arrow" />
+            Xem thêm đề xuất
+          </button>
+        </div>
+      )}
+      {error && <CrmState kind="error" title={error} />}
     </section>
   );
 }

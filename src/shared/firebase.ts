@@ -1,4 +1,5 @@
 import { withProgress } from "./feedback";
+import { serviceError } from "./service-error";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -30,6 +31,8 @@ export const configured =
     env.VITE_FIREBASE_APP_ID
   );
 const local = env.DEV && env.VITE_USE_EMULATORS === "true";
+export const emulatorMode =
+  local && env.VITE_FIREBASE_PROJECT_ID === "demo-satsunicgo";
 if (env.VITE_USE_EMULATORS === "true" && !env.DEV)
   throw Error("Emulators cannot be enabled in a production build");
 if (local && !env.VITE_FIREBASE_PROJECT_ID?.startsWith("demo-"))
@@ -56,9 +59,21 @@ if (app && env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY)
     isTokenAutoRefreshEnabled: true,
   });
 if (local && auth && db && functions) {
-  connectAuthEmulator(auth, "http://127.0.0.1:9198", { disableWarnings: true });
-  connectFirestoreEmulator(db, "127.0.0.1", 8181);
-  connectFunctionsEmulator(functions, "127.0.0.1", 5101);
+  connectAuthEmulator(
+    auth,
+    `http://127.0.0.1:${Number(env.VITE_AUTH_EMULATOR_PORT ?? 9198)}`,
+    { disableWarnings: true },
+  );
+  connectFirestoreEmulator(
+    db,
+    "127.0.0.1",
+    Number(env.VITE_FIRESTORE_EMULATOR_PORT ?? 8181),
+  );
+  connectFunctionsEmulator(
+    functions,
+    "127.0.0.1",
+    Number(env.VITE_FUNCTIONS_EMULATOR_PORT ?? 5101),
+  );
 }
 export async function login() {
   if (!auth) throw Error("Đăng nhập chưa được kích hoạt.");
@@ -90,7 +105,7 @@ export async function sendCommand(
   payload: unknown,
   orderId?: string,
   expectedVersion?: number,
-  operationId = crypto.randomUUID(),
+  operationId: string = crypto.randomUUID(),
 ) {
   if (!functions || !navigator.onLine)
     throw Error("Không thể gửi lúc này. Kiểm tra kết nối và thử lại.");
@@ -108,23 +123,68 @@ export async function sendCommand(
       version: number;
     };
   } catch (e) {
-    throw Object.assign(
-      new Error(
-        (e as { message?: string }).message ?? "Chưa lưu được. Thử lại sau.",
-      ),
-      { code: (e as { code?: string }).code },
-    );
+    throw serviceError(e, "Chưa lưu được. Thử lại sau.");
   }
 }
+const readServices = new Set([
+  "currentAskConversation",
+  "listWork",
+  "readOwnerConfiguration",
+  "ticketMessages",
+  "publicPage",
+  "readNotification",
+  "readOrderConversation",
+  "orderHistory",
+  "readStaffAccess",
+  "readCustomer",
+  "listCustomers",
+  "listFollowUps",
+  "listCrmStaff",
+  "operationalDashboard",
+  "listOrderImages",
+  "readOrderImage",
+  "financeReview",
+  "readOrderOperations",
+  "invoiceList",
+  "invoiceDetail",
+  "customerOrderTracking",
+  "shippingRatesPublic",
+  "studioRead",
+  "studioAdvancedRead",
+  "studioMediaRead",
+  "blogCommentList",
+]);
 export async function callService<T>(name: string, data: unknown): Promise<T> {
   if (!functions || !navigator.onLine)
     throw Error("Không thể kết nối lúc này. Kiểm tra kết nối và thử lại.");
+  const readOnly =
+    readServices.has(name) ||
+    (name === "shippingRatesAdmin" &&
+      (data as { action?: string })?.action === "read");
+  const timeout = readOnly ? 15_000 : 60_000;
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    return (await withProgress(() => httpsCallable(functions!, name)(data)))
-      .data as T;
+    return await withProgress(async () => {
+      const request = httpsCallable(functions!, name, { timeout })(data);
+      const deadline = new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () =>
+            reject(
+              Object.assign(
+                new Error(
+                  "Chưa nhận được kết quả. Kiểm tra kết nối và thử lại.",
+                ),
+                { code: "functions/deadline-exceeded" },
+              ),
+            ),
+          timeout,
+        );
+      });
+      return (await Promise.race([request, deadline])).data as T;
+    });
   } catch (e) {
-    throw Error(
-      (e as { message?: string }).message ?? "Chưa xử lý được. Thử lại sau.",
-    );
+    throw serviceError(e, "Chưa xử lý được. Thử lại sau.");
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }

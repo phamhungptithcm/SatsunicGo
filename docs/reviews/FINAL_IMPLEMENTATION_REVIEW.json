@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "SATSUNICGO-001",
   "status": "BLOCKED",
-  "cycle": 5,
+  "cycle": 10,
   "dimensions": {
     "requirement_match": {
       "status": "BLOCKED",
@@ -395,5 +395,32 @@
       "Governed runtime ledger unavailable",
       "Mobile and animation frame-time acceptance not tested"
     ]
+  },
+  "current_task": {
+    "id": "UX-AUTH-004",
+    "approval": "docs/approvals/SATSUNICGO-UX-AUTH-004.md",
+    "review_cycles": 2,
+    "report": "docs/reviews/UX-AUTH-004-TASK_REPORT.md",
+    "content_review": "docs/reviews/UX-AUTH-004-CONTENT_REVIEW.md",
+    "tests": "42 unit tests passed; lint/compiler/build passed",
+    "blockers": [
+      "OAuth client ID missing",
+      "Auth provider reads403",
+      "Current rendered/mobile/motion acceptance missing",
+      "Full master/backend/data acceptance incomplete"
+    ]
+  },
+  "auth_setup": {
+    "task_id": "AUTH-SETUP-005",
+    "report": "docs/reviews/AUTH-SETUP-005.md",
+    "service_usage_readback": "identitytoolkit.googleapis.com ENABLED",
+    "auth_config_readback": "Exists; production domains plus localhost and127.0.0.1 verified",
+    "provider": "ENABLED_VERIFIED",
+    "blockers": [
+      "Current production bundle still uses static preview client lock",
+      "Interactive local/production One Tap acceptance not run",
+      "Full application and concurrent source acceptance incomplete"
+    ],
+    "configuration_evidence": "docs/reviews/AUTH-SETUP-005-CONFIG.json"
   }
 }

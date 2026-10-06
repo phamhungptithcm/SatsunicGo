@@ -1,5 +1,38 @@
 import { z } from "zod";
 import { canDispatch, type Order } from "./index";
+const instant = z.number().int().safe().positive().max(8640000000000000);
+export const deliveryWindowSchema = z
+  .object({ startAt: instant, endAt: instant })
+  .strict()
+  .refine((window) => window.startAt <= window.endAt);
+export const manualDeliveryEstimateSchema = z
+  .object({
+    source: z.literal("staff"),
+    startAt: instant,
+    endAt: instant,
+    recordedAt: instant,
+  })
+  .strict()
+  .refine((window) => window.startAt <= window.endAt);
+export type ManualDeliveryEstimate = z.infer<
+  typeof manualDeliveryEstimateSchema
+>;
+/** Malformed legacy metadata is unknown, never a fabricated forecast. */
+export function readManualDeliveryEstimate(
+  value: unknown,
+  observedAt: number,
+): ManualDeliveryEstimate | null {
+  if (
+    !Number.isSafeInteger(observedAt) ||
+    observedAt <= 0 ||
+    observedAt > 8640000000000000
+  )
+    return null;
+  const parsed = manualDeliveryEstimateSchema.safeParse(value);
+  return parsed.success && parsed.data.recordedAt <= observedAt
+    ? parsed.data
+    : null;
+}
 export const allocationSchema = z
   .object({
     orderId: z.string().regex(/^[a-zA-Z0-9-]{1,80}$/),
@@ -19,6 +52,7 @@ export type Parcel = {
   carrier?: string;
   tracking?: string;
   batchId?: string;
+  deliveryEstimate?: ManualDeliveryEstimate;
 };
 export function verifyAllocations(
   orders: Order[],
@@ -63,7 +97,8 @@ export function verifyParcelDispatch(parcel: Parcel, orders: Order[]) {
           order.packingComplete &&
           !order.hold &&
           order.finalTotal !== undefined &&
-          order.collected - order.refunded >= order.finalTotal)
+          order.collected - order.refunded - (order.refundReserved ?? 0) >=
+            order.finalTotal)
       )
     )
       throw Error("MEMBER_NOT_READY");

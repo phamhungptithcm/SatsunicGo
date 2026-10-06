@@ -25,7 +25,7 @@ writeFileSync(
 // The SPA entry contains a real, readable public overview before JavaScript.
 const html = readFileSync("dist/index.html", "utf8");
 const overview =
-  '<header><a href="/">SatsunicGo</a></header><main><h1>Bạn chọn món. SatsunicGo lo phần còn lại.</h1><p>Gửi tên hoặc link món hàng bạn muốn mua tại Mỹ, Nhật, Hàn. Nhận báo giá rõ ràng trước khi quyết định.</p><p>Duyệt báo giá, xác nhận cọc 50%, mua và kiểm hàng, duyệt tổng cuối rồi thanh toán số dư trước khi xuất gửi.</p><a href="/request">Gửi yêu cầu mua hộ</a><a href="/how-it-works">Cách hoạt động</a><p>Phí và chính sách thương mại đang chờ đơn vị vận hành xác nhận.</p></main>';
+  '<header><a href="/">SatsunicGo</a></header><main><h1>Bạn chọn món. SatsunicGo lo phần còn lại.</h1><p>Chọn sản phẩm đã niêm yết và thanh toán toàn bộ để nhân viên mua hộ.</p><p>Món chưa được niêm yết: gửi tên hoặc link để được xem xét, nhận báo giá rồi thanh toán thành hai đợt.</p><a href="/products">Chọn sản phẩm</a><a href="/request">Gửi yêu cầu mua hộ</a><a href="/fees">Xem biểu phí</a><a href="/how-it-works">Cách hoạt động</a><p>Tra cứu tiến độ đơn hàng và cước gửi Mỹ ↔ Việt Nam trong Hỏi SatsunicGo. Tổng phí vận chuyển cần được xác nhận trước khi gửi.</p></main>';
 if (!html.includes('<div id="root"></div>'))
   throw Error("Unexpected SPA root; no prerender written");
 writeFileSync(

@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, it, expect } from "vitest";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
 let command: typeof import("../../functions/src/index").command;
@@ -15,6 +15,7 @@ function req(uid: string, data: unknown) {
       uid,
       token: {
         uid,
+        email_verified: true,
         auth_time: Math.floor(Date.now() / 1000),
         firebase: { sign_in_provider: "google.com" },
       },
@@ -41,7 +42,10 @@ async function invoke(
 }
 beforeAll(async () => {
   process.env.FUNCTIONS_EMULATOR = "true";
-  process.env.GCLOUD_PROJECT = "demo-satsunicgo";
+  process.env.GCLOUD_PROJECT = `demo-satsunicgo-server-${randomUUID().slice(0, 8)}`;
+  process.env.FIREBASE_CONFIG = JSON.stringify({
+    projectId: process.env.GCLOUD_PROJECT,
+  });
   process.env.FIRESTORE_EMULATOR_HOST = "127.0.0.1:8181";
   ({ command } = await import("../../functions/src/index"));
   ({ workspaceCommand: workspace } =
@@ -548,6 +552,7 @@ it("customer-approved cancellation preserves collected money and hides internal 
   expect(order?.collected).toBe(1000000);
   expect(order?.refunded).toBe(0);
   expect(order?.finalTotal).toBe(100000);
+  expect(order?.deposit).toBe(1000000);
 });
 it("privileged workspace replay is denied after staff revocation", async () => {
   const editor = `${prefix}-editor`,
@@ -853,13 +858,11 @@ it("technical quota retention requires approval and preserves current counters a
   const financialCount = (await db.collection("financialEntries").get()).size;
   await maintenance.run({ scheduleTime: new Date().toISOString() });
   expect((await stale.get()).exists).toBe(true);
-  await db
-    .doc("settings/retention")
-    .set({
-      approved: true,
-      technicalQuotaRetentionDays: 2,
-      policyVersion: "fixture-only",
-    });
+  await db.doc("settings/retention").set({
+    approved: true,
+    technicalQuotaRetentionDays: 2,
+    policyVersion: "fixture-only",
+  });
   await maintenance.run({ scheduleTime: new Date().toISOString() });
   expect((await stale.get()).exists).toBe(false);
   expect((await current.get()).exists).toBe(true);
@@ -867,4 +870,593 @@ it("technical quota retention requires approval and preserves current counters a
     financialCount,
   );
   await db.doc("settings/retention").delete();
+});
+
+it("CRM lists paginate normalized names and schedules; current authority and versions remain enforced", async () => {
+  const {
+    listCustomers,
+    listFollowUps,
+    listCrmStaff,
+    readCustomer,
+    saveCustomerNotes,
+  } = await import("../../functions/src/crm");
+  const crmPrefix = `${prefix}-crm`,
+    support = `${prefix}-support`,
+    locked = `${prefix}-locked-crm`;
+  await db.doc(`users/${support}`).set({ displayName: "Support fixture" });
+  await db
+    .doc(`staffAccess/${support}`)
+    .set({ active: true, roles: ["SUPPORT"] });
+  await db
+    .doc(`users/${locked}`)
+    .set({ displayName: "Locked support", locked: true });
+  await db
+    .doc(`staffAccess/${locked}`)
+    .set({ active: true, roles: ["SUPPORT"] });
+  const batch = db.batch();
+  for (let i = 0; i < 35; i++) {
+    const id = `${crmPrefix}-${String(i).padStart(2, "0")}`;
+    batch.set(db.doc(`users/${id}`), {
+      ownerId: id,
+      displayName: `Đặng fixture ${i}`,
+      searchName: `dang ${crmPrefix} ${i}`,
+      businessName: "",
+    });
+    batch.set(db.doc(`crmCustomers/${id}`), {
+      assigneeId: support,
+      followUpAt: 1000,
+      version: 1,
+      tags: ["fixture"],
+      notes: "Private fixture",
+    });
+    batch.set(db.doc(`orders/${id}`), {
+      id,
+      ownerId: `${crmPrefix}-00`,
+      createdAt: 1000,
+      stage: "REQUESTED",
+      collected: 0,
+      refunded: 0,
+      items: [{ name: "Fixture order" }],
+    });
+  }
+  await batch.commit();
+  const first = await listCustomers.run(
+    req(owner, { search: `dang ${crmPrefix}` }),
+  );
+  const second = await listCustomers.run(
+    req(owner, { search: `dang ${crmPrefix}`, after: first.next }),
+  );
+  expect(first.rows).toHaveLength(30);
+  expect(second.rows).toHaveLength(5);
+  expect(new Set([...first.rows, ...second.rows].map((r) => r.id)).size).toBe(
+    35,
+  );
+  const appointments = await listFollowUps.run(
+    req(owner, { assigneeId: support, asOf: 2000, mode: "overdue" }),
+  );
+  expect(appointments.rows).toHaveLength(30);
+  const next = await listFollowUps.run(
+    req(owner, {
+      assigneeId: support,
+      asOf: 2000,
+      mode: "overdue",
+      after: appointments.next,
+    }),
+  );
+  expect(next.rows).toHaveLength(5);
+  expect(
+    (
+      await listFollowUps.run(
+        req(owner, { assigneeId: support, asOf: 2000, mode: "upcoming" }),
+      )
+    ).rows,
+  ).toHaveLength(0);
+  const profile = await readCustomer.run(req(owner, { id: `${crmPrefix}-00` }));
+  expect(profile.orders).toHaveLength(30);
+  expect(profile.ordersNext).toBeTruthy();
+  expect(
+    (
+      await readCustomer.run(
+        req(owner, { id: `${crmPrefix}-00`, ordersAfter: profile.ordersNext! }),
+      )
+    ).orders,
+  ).toHaveLength(5);
+  const value = {
+    id: `${crmPrefix}-00`,
+    operationId: randomUUID(),
+    expectedVersion: 1,
+    tags: [],
+    notes: "Revised note",
+    assigneeId: support,
+    followUpAt: 1000,
+  };
+  await saveCustomerNotes.run(req(owner, value));
+  expect(
+    (await readCustomer.run(req(owner, { id: value.id }))).crm?.followUpAt,
+  ).toBe(1000);
+  expect(await saveCustomerNotes.run(req(owner, value))).toEqual({
+    version: 2,
+  });
+  await expect(
+    saveCustomerNotes.run(req(owner, { ...value, operationId: randomUUID() })),
+  ).rejects.toMatchObject({ code: "aborted" });
+  await expect(
+    saveCustomerNotes.run(
+      req(owner, {
+        ...value,
+        expectedVersion: 2,
+        assigneeId: locked,
+        operationId: randomUUID(),
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  const staff = await listCrmStaff.run(req(owner, {}));
+  expect(staff.rows.some((r) => r.id === locked)).toBe(false);
+  for (const service of [listCustomers, listFollowUps, listCrmStaff]) {
+    await expect(service.run(req(customer, {}))).rejects.toMatchObject({
+      code: "permission-denied",
+    });
+    await expect(
+      service.run({ data: {} } as CallableRequest),
+    ).rejects.toMatchObject({ code: "unauthenticated" });
+  }
+  await db.doc(`staffAccess/${support}`).update({ active: false });
+  await expect(listCustomers.run(req(support, {}))).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+});
+
+it("warehouse list projection excludes money, and buyer pages cover every assigned ID", async () => {
+  const { listWork } = await import("../../functions/src/workspace");
+  const warehouse = `${prefix}-warehouse-list`,
+    buyer = `${prefix}-buyer-list`;
+  await db
+    .doc(`staffAccess/${warehouse}`)
+    .set({ active: true, roles: ["WAREHOUSE"] });
+  const ids = Array.from(
+    { length: 35 },
+    (_, i) => `${prefix}-assigned-${String(i).padStart(2, "0")}`,
+  );
+  const batch = db.batch();
+  for (const id of ids)
+    batch.set(db.doc(`orders/${id}`), {
+      id,
+      ownerId: customer,
+      stage: "REQUESTED",
+      items: [],
+      collected: 123,
+      refunded: 0,
+      quote: { goods: 200 },
+      version: 1,
+    });
+  await batch.commit();
+  await db
+    .doc(`staffAccess/${buyer}`)
+    .set({ active: true, roles: ["BUYER"], orderIds: ids });
+  const restricted = await listWork.run(
+    req(warehouse, { kind: "orders", id: ids[0] }),
+  );
+  expect(restricted.rows[0]).not.toHaveProperty("collected");
+  expect(restricted.rows[0]).not.toHaveProperty("quote");
+  const first = await listWork.run(req(buyer, { kind: "orders" }));
+  const second = await listWork.run(
+    req(buyer, { kind: "orders", after: first.next }),
+  );
+  expect(first.rows).toHaveLength(30);
+  expect(second.rows).toHaveLength(5);
+  expect(
+    (await listWork.run(req(buyer, { kind: "orders", id: ids[34] }))).rows,
+  ).toHaveLength(1);
+  await expect(
+    listWork.run(req(buyer, { kind: "orders", id: "not-assigned" })),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+});
+it("physical returns conserve authorized quantities and never refund or release financial hold", async () => {
+  const { returnCommand } = await import("../../functions/src/returns");
+  const id = `${prefix}-return`,
+    warehouse = `${prefix}-return-warehouse`;
+  await db
+    .doc(`staffAccess/${warehouse}`)
+    .set({ active: true, roles: ["WAREHOUSE"] });
+  await db.doc(`orders/${id}`).set({
+    ownerId: customer,
+    version: 8,
+    collected: 1000,
+    refunded: 0,
+    hold: "Chờ đối soát",
+  });
+  await db.doc(`orderReturns/${id}`).set({
+    orderId: id,
+    ownerId: customer,
+    version: 1,
+    state: "authorized",
+    lines: [
+      {
+        line: 0,
+        name: "Fixture",
+        authorized: 2,
+        received: 0,
+        accepted: 0,
+        damaged: 0,
+      },
+    ],
+  });
+  const run = (
+    uid: string,
+    action: string,
+    expectedVersion: number,
+    extra = {},
+    operationId = randomUUID(),
+  ) =>
+    returnCommand.run(
+      req(uid, {
+        id,
+        action,
+        expectedVersion,
+        evidence: "private fixture inspection",
+        operationId,
+        ...extra,
+      }),
+    );
+  await expect(
+    run(customer, "receive", 1, { line: 0, quantity: 1 }),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+  await expect(
+    run(warehouse, "inspect", 1, {
+      line: 0,
+      quantity: 1,
+      condition: "accepted",
+    }),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  const operationId = randomUUID();
+  const first = await run(
+    warehouse,
+    "receive",
+    1,
+    { line: 0, quantity: 2 },
+    operationId,
+  );
+  expect(
+    await run(warehouse, "receive", 1, { line: 0, quantity: 2 }, operationId),
+  ).toEqual(first);
+  await expect(
+    run(warehouse, "receive", 2, { line: 0, quantity: 1 }),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  await expect(run(owner, "close", 2)).rejects.toMatchObject({
+    code: "failed-precondition",
+  });
+  await run(warehouse, "inspect", 2, {
+    line: 0,
+    quantity: 1,
+    condition: "accepted",
+  });
+  await expect(
+    run(warehouse, "inspect", 2, {
+      line: 0,
+      quantity: 1,
+      condition: "damaged",
+    }),
+  ).rejects.toMatchObject({ code: "aborted" });
+  await run(warehouse, "inspect", 3, {
+    line: 0,
+    quantity: 1,
+    condition: "damaged",
+  });
+  await expect(run(warehouse, "close", 4)).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+  await run(owner, "close", 4);
+  expect((await db.doc(`orderReturns/${id}`).get()).data()?.state).toBe(
+    "closed",
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()).toMatchObject({
+    refunded: 0,
+    collected: 1000,
+    hold: "Chờ đối soát",
+    version: 8,
+  });
+  await db.doc(`staffAccess/${warehouse}`).update({ active: false });
+  await expect(
+    run(warehouse, "receive", 1, { line: 0, quantity: 2 }, operationId),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+});
+it("refund reservations serialize concurrent requests and only confirmed bank proof changes net money", async () => {
+  const { refundCommand } = await import("../../functions/src/refunds");
+  const id = `${prefix}-refund-reserve`;
+  await db.doc(`orders/${id}`).set({
+    id,
+    ownerId: customer,
+    version: 1,
+    acceptedAt: Date.now(),
+    collected: 1000,
+    refunded: 0,
+    stage: "CANCELLED",
+    items: [],
+  });
+  const request = (amount: number, version: number, op = randomUUID()) =>
+    refundCommand.run(
+      req(owner, {
+        action: "request",
+        orderId: id,
+        amount,
+        expectedVersion: version,
+        operationId: op,
+        reason: "Fixture refund requested",
+      }),
+    );
+  const results = await Promise.allSettled([request(700, 1), request(700, 1)]);
+  expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
+  const result = results.find(
+    (r) => r.status === "fulfilled",
+  ) as PromiseFulfilledResult<{ id: string; version: number }>;
+  const reservation = result.value;
+  expect((await db.doc(`orders/${id}`).get()).data()).toMatchObject({
+    refundReserved: 700,
+    refunded: 0,
+  });
+  await expect(request(400, 2)).rejects.toMatchObject({
+    code: "failed-precondition",
+  });
+  await expect(
+    invoke(
+      owner,
+      "refund",
+      {
+        amount: 400,
+        bankTransactionId: `${prefix}-unreserved`,
+        evidence: "Fixture proof",
+        reason: "Fixture reason",
+      },
+      id,
+      2,
+    ),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  const op = randomUUID(),
+    body = {
+      amount: 700,
+      bankTransactionId: `${prefix}-reserved`,
+      evidence: "Fixture confirmed bank proof",
+      reason: "Fixture reason",
+      refundRequestId: reservation.id,
+    };
+  await invoke(owner, "refund", body, id, 2, op);
+  await invoke(owner, "refund", body, id, 2, op);
+  expect((await db.doc(`orders/${id}`).get()).data()).toMatchObject({
+    refundReserved: 0,
+    refunded: 700,
+  });
+  expect((await db.doc(`refunds/${reservation.id}`).get()).data()?.state).toBe(
+    "confirmed",
+  );
+  const second = await request(300, 3);
+  await refundCommand.run(
+    req(owner, {
+      action: "cancel",
+      id: second.id,
+      orderId: id,
+      expectedVersion: 4,
+      operationId: randomUUID(),
+      reason: "Fixture cancellation of reservation",
+    }),
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()).toMatchObject({
+    refundReserved: 0,
+    refunded: 700,
+  });
+  await expect(
+    refundCommand.run(
+      req(customer, {
+        action: "request",
+        orderId: id,
+        amount: 1,
+        expectedVersion: 5,
+        operationId: randomUUID(),
+        reason: "Fixture unauthorized",
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+});
+it("manual reversals append history and payment exceptions cannot allocate a duplicate or wrong-beneficiary receipt", async () => {
+  const { financeReview } = await import("../../functions/src/finance-review");
+  const id = `${prefix}-finance-review`,
+    entryId = `${prefix}-credit`,
+    exceptionId = `${prefix}-exception`;
+  await db.doc(`orders/${id}`).set({
+    id,
+    ownerId: customer,
+    version: 1,
+    acceptedAt: Date.now(),
+    collected: 1000,
+    refunded: 0,
+    refundReserved: 200,
+    hold: "",
+    stage: "READY_TO_SHIP",
+  });
+  await db.doc(`financialEntries/${entryId}`).set({
+    kind: "payment",
+    orderId: id,
+    amount: 1000,
+    currency: "VND",
+    createdAt: Date.now(),
+  });
+  const reverse = {
+    action: "reverse",
+    orderId: id,
+    entryId,
+    amount: 600,
+    expectedVersion: 1,
+    bankTransactionId: `${prefix}-bank-reversal`,
+    evidence: "Fixture actual bank reversal proof",
+    reason: "Fixture reversal reason",
+    operationId: randomUUID(),
+  };
+  await expect(financeReview.run(req(customer, reverse))).rejects.toMatchObject(
+    { code: "permission-denied" },
+  );
+  await financeReview.run(req(owner, reverse));
+  await financeReview.run(req(owner, reverse));
+  expect((await db.doc(`orders/${id}`).get()).data()).toMatchObject({
+    collected: 400,
+    refunded: 0,
+    refundReserved: 200,
+    stage: "PACKED",
+    hold: "Chờ đối soát tiền bị đảo",
+  });
+  expect(
+    (await db.doc(`financialEntries/${entryId}`).get()).data()?.amount,
+  ).toBe(1000);
+  await expect(
+    financeReview.run(
+      req(owner, {
+        ...reverse,
+        amount: 500,
+        expectedVersion: 2,
+        bankTransactionId: `${prefix}-another-reversal`,
+        operationId: randomUUID(),
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "failed-precondition" });
+  await db.doc(`paymentExceptions/${exceptionId}`).set({
+    state: "open",
+    amount: 100,
+    inboundVerified: false,
+    bankReferenceHash: createHash("sha256")
+      .update(`${prefix}-exception-bank`)
+      .digest("hex"),
+  });
+  const allocate = {
+    action: "allocateException",
+    id: exceptionId,
+    orderId: id,
+    expectedVersion: 2,
+    evidence: "Fixture operator verification",
+    reason: "Fixture context allocation",
+    operationId: randomUUID(),
+  };
+  await expect(financeReview.run(req(owner, allocate))).rejects.toMatchObject({
+    code: "failed-precondition",
+  });
+  await db
+    .doc(`paymentExceptions/${exceptionId}`)
+    .update({ inboundVerified: true });
+  await financeReview.run(req(owner, allocate));
+  expect((await db.doc(`orders/${id}`).get()).data()?.collected).toBe(500);
+  expect(
+    (await db.doc(`paymentExceptions/${exceptionId}`).get()).data()?.state,
+  ).toBe("allocated");
+  const duplicate = `${prefix}-duplicate-exception`;
+  await db.doc(`paymentExceptions/${duplicate}`).set({
+    state: "open",
+    amount: 100,
+    inboundVerified: true,
+    bankReferenceHash: createHash("sha256")
+      .update(`${prefix}-exception-bank`)
+      .digest("hex"),
+  });
+  await expect(
+    financeReview.run(
+      req(owner, {
+        ...allocate,
+        id: duplicate,
+        expectedVersion: 3,
+        operationId: randomUUID(),
+      }),
+    ),
+  ).rejects.toMatchObject({ code: "already-exists" });
+  await financeReview.run(
+    req(owner, {
+      action: "closeException",
+      id: duplicate,
+      evidence: "Fixture duplicate readback",
+      reason: "Duplicate already allocated",
+      operationId: randomUUID(),
+    }),
+  );
+  expect((await db.doc(`orders/${id}`).get()).data()?.collected).toBe(500);
+});
+it("verified Google is required for private CRM commands even when a password account has staff access", async () => {
+  const { listCustomers } = await import("../../functions/src/crm");
+  const password = req(owner, {});
+  password.auth!.token.firebase = {
+    ...password.auth!.token.firebase,
+    sign_in_provider: "password",
+  };
+  await expect(listCustomers.run(password)).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+  const unverified = req(owner, {});
+  unverified.auth!.token.email_verified = false;
+  await expect(listCustomers.run(unverified)).rejects.toMatchObject({
+    code: "permission-denied",
+  });
+});
+it("warehouse operations projection exposes packing metadata without purchase money or internal finance notes", async () => {
+  const { readOrderOperations } = await import("../../functions/src/workspace");
+  const id = `${prefix}-warehouse-projection`,
+    uid = `${prefix}-warehouse-meta`;
+  await db
+    .doc(`staffAccess/${uid}`)
+    .set({ active: true, roles: ["WAREHOUSE"] });
+  await db.doc(`orders/${id}`).set({ ownerId: customer, version: 1 });
+  await db.doc(`orderOperations/${id}`).set({
+    receive: {
+      quantity: 2,
+      condition: "good",
+      shelf: "A-1",
+      evidence: "Private inspection proof",
+    },
+    pack: {
+      weightGrams: 500,
+      dimensionsCm: [10, 20, 30],
+      checklist: true,
+      evidence: "Private packing proof",
+    },
+    recordPurchase: {
+      quantity: 2,
+      supplierOrder: "Fixture shop",
+      actualSourceMinor: 9999,
+    },
+    finalize: { total: 999999 },
+    changedAt: Date.now(),
+  });
+  const result = await readOrderOperations.run(req(uid, { orderId: id }));
+  expect(result.receiving).toMatchObject({ quantity: 2, shelf: "A-1" });
+  expect(result.packing).toMatchObject({ weightGrams: 500 });
+  expect(result.purchase).toBeNull();
+  expect(JSON.stringify(result)).not.toContain("9999");
+  expect(JSON.stringify(result)).not.toContain("evidence");
+  await expect(
+    readOrderOperations.run(req(customer, { orderId: id })),
+  ).rejects.toMatchObject({ code: "permission-denied" });
+});
+
+it("substitution rejects purchased variants before creating proposal or financial changes", async () => {
+  const { changeCommand } = await import("../../functions/src/changes");
+  const id = `${prefix}-purchased-variant`;
+  const original = {
+    id, ownerId: customer, market: "US", notes: "", stage: "PURCHASING",
+    version: 1, createdAt: 1, acceptedAt: 1, quote: q(),
+    collected: 1000000, refunded: 0, purchasedQuantity: 1, purchasedLines: [1, 0],
+    items: [
+      { name: "Bought item", quantity: 1, variant: "original size" },
+      { name: "Unbought item", quantity: 1, variant: "" },
+    ],
+  };
+  await db.doc(`orders/${id}`).set(original);
+  const operationId = randomUUID(), proposalId = randomUUID();
+  await expect(changeCommand.run(req(owner, {
+    action: "propose", operationId, proposalId, orderId: id, expectedVersion: 1,
+    payload: {
+      kind: "substitution", reason: "Fixture replacement", termsVersion: q().termsVersion,
+      finalPayable: 2000000, actualCosts: 1000000, evidence: "Private fixture evidence",
+      lines: [
+        { line: 0, cancelQuantity: 0, replacementVariant: "changed size" },
+        { line: 1, cancelQuantity: 0, replacementName: "Replacement item" },
+      ],
+    },
+  }))).rejects.toMatchObject({ code: "failed-precondition" });
+  expect((await db.doc(`orders/${id}`).get()).data()).toEqual(original);
+  expect((await db.doc(`orderChanges/${proposalId}`).get()).exists).toBe(false);
+  expect((await db.doc(`orderChangeEvidence/${proposalId}`).get()).exists).toBe(false);
+  expect((await db.doc(`idempotencyKeys/${owner}-${operationId}`).get()).exists).toBe(false);
 });

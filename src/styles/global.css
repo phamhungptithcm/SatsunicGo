@@ -1224,7 +1224,7 @@ body {
     transform: translateY(0);
   }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   :root {
     --header-height: 114px;
   }
@@ -1444,3 +1444,1105 @@ body {
   color: #fff;
   border-radius: 5px;
 }
+
+/* Compact shared chrome; menu movement never changes page layout. */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.menuToggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: white;
+  padding: 13px 11px;
+}
+.menuToggle span {
+  display: block;
+  height: 2px;
+  background: var(--navy, #111c35);
+  margin: 5px 0;
+  transition: transform 220ms ease;
+}
+.menuToggle[aria-expanded="true"] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.menuToggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+.compactFooter {
+  padding: 36px max(24px, calc((100vw - 1200px) / 2)) 120px;
+}
+.compactFooterInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+}
+.compactFooterInner p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+.compactFooter .compactFooterInner nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  font-size: 12px;
+}
+.compactFooter .footerBottom {
+  margin-top: 24px;
+  padding-top: 16px;
+}
+@media (max-width: 1200px) {
+  :root {
+    --header-height: 76px;
+  }
+  .topbar {
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+  }
+  .navShell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .menuToggle {
+    display: block;
+  }
+  .topbar nav {
+    position: absolute;
+    top: 100%;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: calc(100dvh - 100px);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 24px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 20px 45px #111c3514;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 220ms ease,
+      transform 220ms ease,
+      visibility 220ms;
+  }
+  .topbar nav[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .topbar nav a {
+    padding: 14px 0;
+    font-size: 15px;
+  }
+  .compactFooterInner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menuToggle span,
+  .topbar nav {
+    transition: none;
+  }
+}
+
+/* Operational workspace follows the shared compact brand on every route. */
+.workspaceShell {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  min-height: calc(100dvh - var(--header-height));
+  background: #f7f8fb;
+  color: var(--navy);
+}
+.workspaceSidebar {
+  background: white;
+  border-right: 1px solid var(--border);
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: var(--header-height);
+  align-self: start;
+  height: calc(100dvh - var(--header-height));
+  overflow: auto;
+}
+.workspaceBrand {
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.7px;
+  padding: 0 12px;
+}
+.workspaceBrand span {
+  color: var(--blue);
+}
+.workspaceBrand small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.workspaceNavGroup {
+  margin-bottom: 17px;
+}
+.workspaceNavGroup > p {
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--muted);
+  margin: 0 12px 7px;
+}
+.workspaceNavGroup a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.45;
+}
+.workspaceNavGroup a:hover {
+  background: #f5f6fa;
+}
+.workspaceNavGroup a.active {
+  color: #163cff;
+  background: #edf1ff;
+  font-weight: 650;
+}
+.navIndicator {
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.65;
+}
+.workspaceNavGroup a.active .navIndicator {
+  background: currentColor;
+  opacity: 1;
+}
+.workspaceSidebarBottom {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding: 16px 12px 0;
+  display: grid;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.workspaceMain {
+  min-width: 0;
+}
+.workspaceTop {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+.workspaceTop p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 0;
+}
+.workspaceTop p span {
+  padding: 0 8px;
+}
+.workspaceTop strong {
+  color: var(--navy);
+  font-weight: 550;
+}
+.workspaceTop > a {
+  margin-left: auto;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.workspaceContent {
+  padding: 30px 32px 56px;
+  max-width: 1600px;
+  margin: auto;
+}
+.workspaceContent h1 {
+  font-size: clamp(24px, 2.5vw, 32px);
+  margin: 0 0 10px;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.workspaceContent h2 {
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+.workspaceContent > section > .panel,
+.workspaceContent .panel {
+  background: white;
+}
+.workspaceContent .pageHeading {
+  margin-bottom: 20px;
+  align-items: center;
+  gap: 14px;
+}
+.workspaceContent .form {
+  max-width: none;
+}
+.workspaceContent input,
+.workspaceContent select,
+.workspaceContent textarea {
+  max-width: 100%;
+  min-width: 0;
+}
+.workspaceContent .panel {
+  margin-bottom: 20px;
+  padding: 24px;
+  border-radius: 12px;
+}
+.workspaceMenuButton {
+  display: none;
+}
+.workspaceDialog {
+  width: min(360px, calc(100vw - 24px));
+  height: calc(100dvh - 32px);
+  max-height: calc(100dvh - 32px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  color: var(--navy);
+}
+.workspaceDialog::backdrop {
+  background: #111c3577;
+}
+.workspaceDialog .pageHeading {
+  margin-bottom: 24px;
+}
+.workspaceEyebrow {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.crmFilters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.crmFilters label,
+.crmQueueFilter {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.crmFilters label {
+  flex: 1 1 170px;
+}
+.crmFilters input,
+.crmFilters select,
+.crmQueueFilter select {
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: white;
+  color: var(--navy);
+  font-size: 13px;
+}
+.crmFilters .crmCheck {
+  display: flex;
+  align-items: center;
+  align-self: center;
+}
+.crmCheck input {
+  width: auto;
+}
+.crmQueueFilter {
+  max-width: 300px;
+  margin: 18px 0;
+}
+.crmTable {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.crmTable table {
+  width: 100%;
+  min-width: 600px;
+  font-size: 12px;
+}
+.crmTable small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+  max-width: 200px;
+  overflow-wrap: anywhere;
+}
+.crmCustomerLink {
+  font-size: 13px;
+  font-weight: 600;
+}
+.crmTag {
+  display: inline-block;
+  background: #f0f2f7;
+  color: #49536b;
+  border-radius: 5px;
+  padding: 3px 7px;
+  margin: 2px 4px 2px 0;
+  font-size: 10px;
+}
+.crmPagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.crmDetailGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 24px;
+  align-items: start;
+}
+.crmProfileSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.crmProfileSummary div {
+  display: grid;
+  gap: 8px;
+}
+.crmProfileSummary span,
+.crmProfileSummary small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.crmProfileSummary strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+.crmRelated {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.crmRelated:last-of-type {
+  border-bottom: 0;
+}
+.crmRelated > a {
+  font-size: 13px;
+  font-weight: 600;
+}
+.crmRelated p {
+  font-size: 12px;
+  margin: 8px 0;
+}
+.crmRelated small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.crmQuickLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+.supportToolbar,
+.workbenchLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.crmMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.crmMetrics > div {
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 10px;
+  background: #fafbfe;
+}
+.crmMetrics dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.crmMetrics dd {
+  font-size: 28px;
+  margin: 12px 0 0;
+  font-weight: 600;
+}
+.workspaceContent .tableWrap {
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
+}
+.workspaceContent .workColumns {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+}
+.workspaceContent button,
+.workspaceDialog button {
+  min-height: 40px;
+}
+@media (max-width: 1000px) {
+  .workspaceShell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspaceSidebar {
+    display: none;
+  }
+  .workspaceMenuButton {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  .workspaceContent {
+    padding: 24px 20px 40px;
+  }
+  .workspaceTop {
+    padding: 12px 20px;
+  }
+}
+@media (max-width: 640px) {
+  .workspaceContent {
+    padding: 20px 14px 36px;
+  }
+  .workspaceContent .panel {
+    padding: 18px;
+  }
+  .workspaceTop {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .workspaceTop > a {
+    display: none;
+  }
+  .crmDetailGrid,
+  .workspaceContent .workColumns,
+  .crmProfileSummary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .crmMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .workspaceContent .pageHeading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .crmFilters {
+    padding: 14px;
+  }
+  .crmFilters label {
+    flex-basis: 100%;
+  }
+  .crmFilters button {
+    width: 100%;
+  }
+  .crmQueueFilter {
+    max-width: none;
+  }
+  .headerActions {
+    gap: 8px;
+    margin-left: auto;
+  }
+}
+@media (max-width: 420px) {
+  .topbar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .topbar .brand {
+    font-size: 21px;
+  }
+  .topbar .brand i {
+    display: none;
+  }
+  .topbar .account {
+    gap: 0;
+  }
+  .topbar .account .login {
+    font-size: 11px;
+    padding: 8px;
+  }
+  .crmMetrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media print {
+  .workspaceSidebar,
+  .workspaceTop,
+  .workspaceDialog {
+    display: none;
+  }
+  .workspaceShell {
+    display: block;
+  }
+}
+
+/* PAGES-007: public editorial and support surfaces. */
+.postsPage,
+.supportPage {
+  max-width: 1164px;
+  padding-top: 64px;
+  padding-bottom: 72px;
+}
+.editorialEyebrow {
+  display: block;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.postsHeading {
+  position: relative;
+  margin-bottom: 36px;
+  padding-left: 24px;
+  border-left: 3px solid var(--blue);
+}
+.postsHeading h1,
+.supportIntro h1 {
+  font-size: clamp(36px, 4vw, 54px);
+  line-height: 1.14;
+  font-weight: 650;
+  letter-spacing: -2px;
+  margin: 16px 0;
+}
+.postsHeading h1 span,
+.supportIntro h1 span {
+  color: var(--blue);
+}
+.postsHeading p,
+.supportIntro > p {
+  max-width: 450px;
+  color: #647087;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.postsEmpty {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  align-items: center;
+  gap: 44px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 44px 56px;
+  background: linear-gradient(115deg, #f4f6ff, #fafbff 40%, #fff 75%);
+}
+.postsIllustration {
+  color: var(--blue);
+  padding: 20px;
+  border-radius: 50%;
+  background: #e9eeff;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+.postsIllustration svg {
+  width: 100%;
+  max-width: 200px;
+}
+.postsEmptyCopy h2 {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  line-height: 1.35;
+  margin: 12px 0;
+}
+.postsEmptyCopy p {
+  max-width: 470px;
+  color: #647087;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 24px;
+}
+.postsPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  border-radius: 10px;
+  font-size: 13px;
+  min-height: 46px;
+  padding: 12px 20px;
+}
+.postsShortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 28px;
+}
+.postsShortcuts > a {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.shortcutNumber {
+  color: #647087;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.postsShortcuts strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.postsShortcuts strong + span {
+  color: #647087;
+  font-size: 12px;
+}
+.postsShortcuts > a > span:last-child {
+  margin-left: auto;
+  color: var(--blue);
+}
+.postsShortcuts a:hover strong {
+  color: var(--blue);
+}
+.postsPage .catalogGrid {
+  gap: 24px;
+}
+.postsPage .productCard {
+  box-shadow: none;
+}
+.supportPage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 72px;
+}
+.supportIntro {
+  padding-top: 12px;
+  min-width: 0;
+}
+.supportGuide {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  margin-top: 36px;
+}
+.supportGuideIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  background: #eef2ff;
+  color: var(--blue);
+  border-radius: 10px;
+  font-size: 20px;
+}
+.supportGuide h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.supportGuide p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #647087;
+  margin: 0;
+}
+.supportIntro > .supportHours {
+  font-size: 12px;
+  margin-top: 24px;
+}
+.supportTicketsHeading {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 32px;
+}
+.supportIntro .order {
+  overflow-wrap: anywhere;
+}
+.supportForm {
+  gap: 20px;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px #111c3506;
+  min-width: 0;
+}
+.supportFormHeading {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.supportFormHeading h2 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  margin: 0 0 8px;
+}
+.supportFormHeading p {
+  font-size: 13px;
+  color: #647087;
+  line-height: 1.7;
+  margin: 0;
+}
+.supportForm select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  min-height: 46px;
+  font: inherit;
+  color: #111c35;
+  background: #f8f9fc;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline-offset: 3px;
+}
+.supportForm select:focus-visible {
+  outline: 2px solid var(--blue);
+}
+.supportForm input,
+.supportForm textarea {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.supportForm input::placeholder,
+.supportForm textarea::placeholder {
+  color: #6b778e;
+  opacity: 1;
+}
+.supportForm textarea {
+  min-height: 130px;
+}
+.supportDataNote {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #536179;
+  border-left: 2px solid var(--blue);
+  background: #f5f7ff;
+  padding: 12px 14px;
+  margin: 0;
+}
+.supportSignIn {
+  font-size: 12px;
+  background: #f6f7fa;
+  padding: 12px 14px;
+}
+.supportForm > .primary {
+  min-height: 48px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+@media (max-width: 850px) {
+  .supportPage {
+    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+  .postsEmpty {
+    grid-template-columns: 180px 1fr;
+    padding: 32px;
+    gap: 28px;
+  }
+}
+@media (max-width: 650px) {
+  .postsPage .catalogGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .postsPage,
+  .supportPage {
+    padding: 36px 20px 48px;
+  }
+  .postsHeading {
+    padding-left: 18px;
+    margin-bottom: 28px;
+  }
+  .postsHeading h1,
+  .supportIntro h1 {
+    font-size: 36px;
+    letter-spacing: -1.3px;
+  }
+  .postsEmpty {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 28px 24px;
+  }
+  .postsIllustration {
+    width: 140px;
+    padding: 12px;
+  }
+  .postsEmptyCopy h2 {
+    font-size: 23px;
+  }
+  .postsShortcuts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin-top: 12px;
+  }
+  .supportPage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .supportIntro {
+    padding: 0;
+  }
+  .supportGuide {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+  .supportForm {
+    padding: 24px 20px;
+  }
+  .supportForm input,
+  .supportForm select,
+  .supportForm textarea {
+    font-size: 16px;
+  }
+}
+
+/* ACCOUNT-MENU-009: signed-in customer profile disclosure. */
+.accountProfile {
+  position: relative;
+  flex-shrink: 0;
+}
+.accountProfileTrigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px 5px 5px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: #111c35;
+  min-height: 44px;
+}
+.accountProfileTrigger:hover,
+.accountProfileTrigger[aria-expanded="true"] {
+  background: #f6f7fc;
+  border-color: var(--border);
+}
+.accountAvatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #edf1ff;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 650;
+}
+.accountAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.accountProfileName {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+}
+.accountChevron {
+  flex-shrink: 0;
+}
+.accountProfileTrigger[aria-expanded="true"] .accountChevron {
+  transform: rotate(180deg);
+}
+.accountDropdown {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 12px);
+  right: 0;
+  width: min(280px, calc(100vw - 24px));
+  max-height: calc(100dvh - 110px);
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 12px 40px #111c3514;
+}
+.accountIdentity {
+  padding: 12px 12px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.accountIdentity strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.accountIdentity > span {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 2px;
+  color: #647087;
+  font-size: 12px;
+}
+.topbar .accountDropdown nav {
+  position: static;
+  width: auto;
+  max-height: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: none;
+}
+.topbar .accountDropdown nav a::after {
+  display: none;
+}
+.topbar .accountDropdown nav a,
+.accountSignOut button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #111c35;
+  background: white;
+  border: 0;
+}
+.topbar .accountDropdown nav a:hover,
+.accountSignOut button:hover:not(:disabled) {
+  color: var(--blue);
+  background: #f3f5ff;
+}
+.accountDropdown nav a > span {
+  color: #7d89a0;
+}
+.accountSignOut {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+.accountSignOut button {
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .accountProfileTrigger {
+    gap: 7px;
+    padding-right: 5px;
+  }
+  .accountProfileName {
+    max-width: 90px;
+    font-size: 12px;
+  }
+  .accountAvatar {
+    width: 32px;
+    height: 32px;
+  }
+  .accountDropdown {
+    position: fixed;
+    top: calc(var(--header-height) + 8px);
+    right: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .accountProfileTrigger {
+    gap: 4px;
+    padding: 2px;
+  }
+  .accountProfileName {
+    max-width: 40px;
+  }
+  .accountAvatar {
+    width: 28px;
+    height: 28px;
+  }
+  .accountChevron {
+    width: 10px;
+  }
+}
+
+.footerAttribution {
+  display: inline-block;
+  margin-left: 10px;
+  color: #647087;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .topbar .headerActions:has(.accountProfile) .headerRequest {
+    display: none;
+  }
+}
+
+/* CRM owns its viewport; public header/footer are absent on this shell. */
+.crmRoot { padding: 0; max-width: none; width: 100%; }
+.crmRoot .workspaceShell { min-height: 100dvh; }
+.crmRoot .workspaceSidebar { top: 0; height: 100dvh; }
+.crmIdentity { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.crmIdentity button { padding: 6px 10px; white-space: nowrap; }
+@media(max-width: 600px) { .crmIdentity span { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+
+.orderTracking { border: 1px solid #e2e6ef; border-radius: 14px; padding: 16px; margin-top: 12px; min-width: 0; }
+.orderTracking h2 { font-size: 18px; margin: 0 0 8px; }
+.orderTrackingReference { overflow-wrap: anywhere; font-size: 13px; }
+.orderTrackingSteps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 8px; list-style: none; padding: 0; }
+.orderTrackingSteps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 8px; padding: 10px; border: 1px solid transparent; border-radius: 8px; background: #f5f6fa; color: #111c35; font-size: 13px; line-height: 1.4; }
+.orderTrackingStepIcon { display: grid; place-items: center; width: 20px; height: 20px; line-height: 1; }
+.orderTrackingStepContent { display: grid; min-width: 0; gap: 4px; }
+.orderTrackingStepLabel { font-weight: 600; overflow-wrap: anywhere; }
+.orderTrackingStepStatus { display: block; color: #526078; font-size: 12px; font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; }
+.orderTrackingSteps li[aria-current="step"] { color: #163cff; background: #edf0ff; border-color: #163cff; }
+.orderTrackingSteps li[aria-current="step"] .orderTrackingStepStatus { color: #163cff; }
+.orderTrackingParcels { display: grid; gap: 8px; }
+.orderTrackingParcels article { padding: 12px; border: 1px solid #e2e6ef; border-radius: 8px; overflow-wrap: anywhere; }
