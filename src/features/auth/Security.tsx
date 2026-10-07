@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import QRCode from "qrcode";
 import {
@@ -22,7 +23,7 @@ export function Security({ user }: { user: User | null }) {
   const [busy, setBusy] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+
   const [statusFailed, setStatusFailed] = useState(false);
   const [factors, setFactors] = useState<number | null>(null);
   const [, setRevision] = useState(0);
@@ -37,7 +38,7 @@ export function Security({ user }: { user: User | null }) {
     setBusy(false);
     setVerifying(false);
     setError("");
-    setMessage("");
+
     setFactors(null);
     setStatusFailed(false);
     if (user)
@@ -76,7 +77,6 @@ export function Security({ user }: { user: User | null }) {
     clearSetup();
     setBusy(false);
     setError("");
-    setMessage("");
   }
   async function copyKey() {
     if (!secret || copyState === "pending") return;
@@ -95,7 +95,7 @@ export function Security({ user }: { user: User | null }) {
     clearSetup();
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       await reauthenticateWithPopup(user, new GoogleAuthProvider());
       if (epoch.current !== attempt) return;
@@ -103,7 +103,10 @@ export function Security({ user }: { user: User | null }) {
       if (epoch.current !== attempt) return;
       setFactors(multiFactor(user).enrolledFactors.length);
       setStatusFailed(false);
-      setMessage("Đã xác thực lại với Google. Bạn có thể tiếp tục thiết lập.");
+      notify(
+        "Đã xác thực lại với Google. Bạn có thể tiếp tục thiết lập.",
+        "success",
+      );
     } catch (e) {
       if (epoch.current !== attempt) return;
       if (captureMfa(e, auth)) setRevision((v) => v + 1);
@@ -121,7 +124,7 @@ export function Security({ user }: { user: User | null }) {
     clearSetup();
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       const session = await multiFactor(user).getSession();
       if (epoch.current !== attempt) return;
@@ -162,7 +165,7 @@ export function Security({ user }: { user: User | null }) {
     setBusy(true);
     setVerifying(true);
     setError("");
-    setMessage("");
+
     let enrolled = false;
     try {
       if (challenge) await verifyMfa(factor, code);
@@ -189,8 +192,9 @@ export function Security({ user }: { user: User | null }) {
           return;
         }
       }
-      setMessage(
+      notify(
         enrolled ? "Đã bật xác thực hai bước." : "Đã xác nhận mã xác thực.",
+        "success",
       );
       setRevision((v) => v + 1);
     } catch {
@@ -422,11 +426,6 @@ export function Security({ user }: { user: User | null }) {
       {error && (
         <p id="security-error" role="alert" className="securityNotice isError">
           {error}
-        </p>
-      )}
-      {message && !(message === "Đã bật xác thực hai bước." && factors) && (
-        <p role="status" className="securityNotice">
-          {message}
         </p>
       )}
     </section>

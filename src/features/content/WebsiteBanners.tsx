@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -151,7 +152,7 @@ export function WebsiteBanners() {
       draftSession.current++;
       setEditing(false);
       setRow(null);
-      setMessage("Đã lưu thay đổi banner.");
+      notify("Đã lưu thay đổi banner.", "success");
       await load();
     } catch (error) {
       if (

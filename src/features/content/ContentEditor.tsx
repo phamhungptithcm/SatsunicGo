@@ -297,11 +297,6 @@ export function ContentEditor() {
     <section className="ceWorkspace">
       <CrmHeading
         title={kind === "products" ? "Sản phẩm" : "Bài viết"}
-        description={
-          editing
-            ? undefined
-            : "Quản lý thông tin, hình ảnh và trạng thái xuất bản."
-        }
         actions={
           !editing && (
             <>
@@ -328,7 +323,7 @@ export function ContentEditor() {
               </select>
               <button disabled={loading || busy} onClick={() => void load()}>
                 <CrmIcon name="refresh" />
-                Tải lại danh sách
+                Làm mới
               </button>
               <button disabled={busy} onClick={() => edit(null)}>
                 <CrmIcon name="document" />
@@ -340,54 +335,63 @@ export function ContentEditor() {
       />
       {!editing && (
         <>
-          <div className="ceToolbar">
-            <label className="ceSearch">
-              Tìm sản phẩm
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Tên, thương hiệu hoặc danh mục…"
+          <div className="ceListTools">
+            <div className="ceToolbar">
+              <label className="ceSearch">
+                <span>Tìm trong danh sách đã tải</span>
+                <input
+                  aria-label={
+                    kind === "products" ? "Tìm sản phẩm" : "Tìm bài viết"
+                  }
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Tên, thương hiệu hoặc danh mục…"
+                />
+              </label>
+              <label>
+                <span>Trạng thái</span>
+                <select
+                  aria-label="Trạng thái"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="draft">Bản nháp</option>
+                  <option value="published">Đã xuất bản</option>
+                  <option value="scheduled">Đã lên lịch</option>
+                  <option value="archived">Lưu trữ</option>
+                </select>
+              </label>
+              <label>
+                <span>Danh mục</span>
+                <select
+                  aria-label="Danh mục"
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                >
+                  <option value="">Tất cả danh mục đã tải</option>
+                  {[...new Set(rows.map((row) => row.category).filter(Boolean))]
+                    .sort()
+                    .map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                </select>
+              </label>
+              {(search || statusFilter || categoryFilter) && <button type="button" onClick={() => { setSearch(""); setStatusFilter(""); setCategoryFilter(""); }}>Xóa bộ lọc</button>}
+            </div>
+            <p className="crmFilterScope" role="status">{visibleRows.length} / {rows.length} mục đã tải · Lọc ngay khi thay đổi</p>
+            {kind === "products" && (
+              <ProductSpreadsheet
+                rows={rows}
+                filtered={visibleRows}
+                selected={selected}
+                onSaved={() => load()}
               />
-            </label>
-            <label>
-              Trạng thái
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="">Tất cả trạng thái</option>
-                <option value="draft">Bản nháp</option>
-                <option value="published">Đã xuất bản</option>
-                <option value="scheduled">Đã lên lịch</option>
-                <option value="archived">Lưu trữ</option>
-              </select>
-            </label>
-            <label>
-              Danh mục
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-              >
-                <option value="">Tất cả danh mục đã tải</option>
-                {[...new Set(rows.map((row) => row.category).filter(Boolean))]
-                  .sort()
-                  .map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-              </select>
-            </label>
+            )}
           </div>
-          {kind === "products" && (
-            <ProductSpreadsheet
-              rows={rows}
-              filtered={visibleRows}
-              selected={selected}
-              onSaved={() => load()}
-            />
-          )}
           {loading && <CrmState kind="loading" title="Đang tải nội dung…" />}
           {error && (
             <p role="alert" className="error">
@@ -404,91 +408,93 @@ export function ContentEditor() {
               }
             />
           )}
-          <div className="ceTableScroll">
-            <table className="ceTable">
-              <thead>
-                <tr>
-                  <th>Chọn</th>
-                  <th>{kind === "products" ? "Sản phẩm" : "Bài viết"}</th>
-                  <th>Danh mục</th>
-                  {kind === "products" && (
-                    <>
-                      <th>Giá tham khảo</th>
-                      <th>Giá trọn gói</th>
-                    </>
-                  )}
-                  <th>Trạng thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleRows.map((row) => (
-                  <tr key={row.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        aria-label={`Chọn ${row.title || row.id}`}
-                        checked={selected.has(row.id)}
-                        onChange={(e) =>
-                          setSelected((previous) => {
-                            const next = new Set(previous);
-                            if (e.target.checked) next.add(row.id);
-                            else next.delete(row.id);
-                            return next;
-                          })
-                        }
-                      />
-                    </td>
-                    <td>
-                      <button className="ceProduct" onClick={() => edit(row)}>
-                        {row.mediaId && (
-                          <img
-                            src={`/media/${row.mediaId}`}
-                            alt=""
-                            width="40"
-                            height="40"
-                            loading="lazy"
-                          />
-                        )}
-                        <span>
-                          <strong>{row.title || "Thiếu tên sản phẩm"}</strong>
-                          <small>
-                            {row.brand || row.slug || "Cần bổ sung thông tin"}
-                          </small>
-                        </span>
-                      </button>
-                    </td>
-                    <td data-label="Danh mục">{row.category || "—"}</td>
+          {visibleRows.length > 0 && (
+            <div className="ceTableScroll">
+              <table className="ceTable">
+                <thead>
+                  <tr>
+                    <th>Chọn</th>
+                    <th>{kind === "products" ? "Sản phẩm" : "Bài viết"}</th>
+                    <th>Danh mục</th>
                     {kind === "products" && (
                       <>
-                        <td data-label="Giá tham khảo">
-                          {row.referencePrice === undefined
-                            ? "Chưa có giá"
-                            : `${row.referencePrice.toLocaleString("vi-VN")} ₫`}
-                        </td>
-                        <td data-label="Giá trọn gói">
-                          {row.listedPrice === undefined
-                            ? "Chưa niêm yết"
-                            : `${row.listedPrice.toLocaleString("vi-VN")} ₫`}
-                        </td>
+                        <th>Giá tham khảo</th>
+                        <th>Giá trọn gói</th>
                       </>
                     )}
-                    <td data-label="Trạng thái">
-                      <span className="crmBadge">
-                        {(
-                          {
-                            published: "Đã xuất bản",
-                            scheduled: "Đã lên lịch",
-                            archived: "Lưu trữ",
-                            draft: "Bản nháp",
-                          } as Record<string, string>
-                        )[row.status] || row.status}
-                      </span>
-                    </td>
+                    <th>Trạng thái</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {visibleRows.map((row) => (
+                    <tr key={row.id}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          aria-label={`Chọn ${row.title || row.id}`}
+                          checked={selected.has(row.id)}
+                          onChange={(e) =>
+                            setSelected((previous) => {
+                              const next = new Set(previous);
+                              if (e.target.checked) next.add(row.id);
+                              else next.delete(row.id);
+                              return next;
+                            })
+                          }
+                        />
+                      </td>
+                      <td>
+                        <button className="ceProduct" onClick={() => edit(row)}>
+                          {row.mediaId && (
+                            <img
+                              src={`/media/${row.mediaId}`}
+                              alt=""
+                              width="40"
+                              height="40"
+                              loading="lazy"
+                            />
+                          )}
+                          <span>
+                            <strong>{row.title || "Thiếu tên sản phẩm"}</strong>
+                            <small>
+                              {row.brand || row.slug || "Cần bổ sung thông tin"}
+                            </small>
+                          </span>
+                        </button>
+                      </td>
+                      <td data-label="Danh mục">{row.category || "—"}</td>
+                      {kind === "products" && (
+                        <>
+                          <td data-label="Giá tham khảo">
+                            {row.referencePrice === undefined
+                              ? "Chưa có giá"
+                              : `${row.referencePrice.toLocaleString("vi-VN")} ₫`}
+                          </td>
+                          <td data-label="Giá trọn gói">
+                            {row.listedPrice === undefined
+                              ? "Chưa niêm yết"
+                              : `${row.listedPrice.toLocaleString("vi-VN")} ₫`}
+                          </td>
+                        </>
+                      )}
+                      <td data-label="Trạng thái">
+                        <span className="crmBadge">
+                          {(
+                            {
+                              published: "Đã xuất bản",
+                              scheduled: "Đã lên lịch",
+                              archived: "Lưu trữ",
+                              draft: "Bản nháp",
+                            } as Record<string, string>
+                          )[row.status] || row.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
           <div className="ceListFooter">
             <span>
               {visibleRows.length} kết quả trong {rows.length} nội dung đã tải
@@ -681,7 +687,6 @@ export function ContentEditor() {
               </h3>
               <div className="ceFieldGrid">
                 <label>
-                  Danh mục
                   <input
                     name="category"
                     maxLength={80}
@@ -922,7 +927,6 @@ export function ContentEditor() {
             </div>
             <div data-step-stage="3" hidden={step !== 3}>
               <label>
-                Trạng thái
                 <select name="status" defaultValue={current?.status ?? "draft"}>
                   <option value="draft">Bản nháp</option>
                   <option value="published">Xuất bản trên website</option>

@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState } from "react";
 import type { User } from "firebase/auth";
@@ -53,7 +54,7 @@ export function Membership({
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [history, setHistory] = useState<History[]>([]);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+
   const [busy, setBusy] = useState(false);
   const generation = useRef(0);
   const inFlight = useRef(false);
@@ -88,7 +89,7 @@ export function Membership({
     setInvoices([]);
     setHistory([]);
     setError("");
-    setMessage("");
+
     setBusy(false);
     if (!db || !user) return;
     const current = generation.current;
@@ -161,7 +162,7 @@ export function Membership({
     inFlight.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       const result = await callService<{ state?: "active" | "pending" }>(
         "membershipCommand",
@@ -173,7 +174,7 @@ export function Membership({
       );
       if (current !== generation.current) return;
       attempt.current = null;
-      setMessage(
+      notify(
         action === "purchase"
           ? result.state === "active"
             ? "Gói miễn phí của bạn đang có hiệu lực. Không cần chuyển khoản."
@@ -183,6 +184,7 @@ export function Membership({
             : action === "requestRenewal"
               ? "Đã ghi nhận ý định gia hạn. Không tự động thu tiền."
               : "Đã hủy ý định gia hạn. Quyền lợi hiện tại giữ đến hết kỳ.",
+        "success",
       );
     } catch (e) {
       if (current !== generation.current) return;
@@ -246,11 +248,7 @@ export function Membership({
           {error}
         </p>
       )}
-      {message && (
-        <p role="status" className="notice">
-          {message}
-        </p>
-      )}
+
       {loading && <LoadingState>Đang tải các gói…</LoadingState>}
       <div className="membershipPlans">
         {plans.map((p) => (

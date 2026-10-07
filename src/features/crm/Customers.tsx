@@ -106,7 +106,7 @@ export function Customers({
             ? "Xem lịch đến hạn và mở hồ sơ để tiếp tục chăm sóc khách hàng."
             : "Tìm khách hàng và mở hồ sơ để xem thông tin, đơn hàng và lịch chăm sóc."
         }
-        actions={
+        reload={
           <button disabled={busy} onClick={() => void load()}>
             <CrmIcon name="refresh" />
             Tải lại
@@ -181,6 +181,11 @@ export function Customers({
                 ? "Xem danh sách"
                 : "Tìm khách hàng"}
           </button>
+          {(filter.search || filter.mode !== "name" || filter.mine || filter.due !== "overdue") && (
+            <button type="button" disabled={busy} onClick={() => change({ search: "", mode: "name", due: "overdue", mine: false })}>
+              Xóa bộ lọc
+            </button>
+          )}
         </form>
         <p className="customerWorkspace095-hint" id="customer-search-hint095">
           {followUps

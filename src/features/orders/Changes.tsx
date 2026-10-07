@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { OperationsEmpty } from "../operations/OperationsPresentation";
 import "../operations/operations-workbench.css";
@@ -94,7 +95,7 @@ function useChangeMutation(identity: string, vi = true) {
   const [busy, setBusy] = useState(false);
   const [uncertain, setUncertain] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+
   useEffect(() => {
     sequence.current.invalidate();
     sending.current = false;
@@ -102,7 +103,7 @@ function useChangeMutation(identity: string, vi = true) {
     setBusy(false);
     setUncertain(false);
     setError("");
-    setNotice("");
+
     return () => {
       sequence.current.invalidate();
     };
@@ -116,7 +117,7 @@ function useChangeMutation(identity: string, vi = true) {
     const revision = sequence.current.next();
     setBusy(true);
     setError("");
-    setNotice("");
+
     let acknowledged = false;
     try {
       if (!pending.current && build) {
@@ -129,10 +130,11 @@ function useChangeMutation(identity: string, vi = true) {
       pending.current = null;
       acknowledged = true;
       setUncertain(false);
-      setNotice(
+      notify(
         vi
           ? "Đã ghi nhận thao tác thay đổi."
           : "Your change action has been recorded.",
+        "success",
       );
       if (confirmed) await confirmed();
     } catch (cause) {
@@ -164,7 +166,7 @@ function useChangeMutation(identity: string, vi = true) {
       }
     }
   }
-  return { busy, uncertain, error, notice, run, pending };
+  return { busy, uncertain, error, run, pending };
 }
 function ChangeFeedback({
   mutation,
@@ -177,7 +179,6 @@ function ChangeFeedback({
 }) {
   return (
     <>
-      {mutation.notice && <p role="status">{mutation.notice}</p>}
       {mutation.error && (
         <p className="error" role="alert">
           {mutation.error}
@@ -664,15 +665,14 @@ export function ChangeQueue() {
       <CrmHeading
         title="Thay đổi chờ áp dụng"
         description="Kiểm tra đề xuất khách đã duyệt trước khi áp dụng vào đơn."
-        actions={
-          <button
+        reload={<button
             disabled={reading || mutation.busy || mutation.uncertain}
             onClick={() => void load()}
           >
             <CrmIcon name="refresh" />
             Tải lại đề xuất
-          </button>
-        }
+          </button>}
+
       />
       <ChangeFeedback
         mutation={mutation}

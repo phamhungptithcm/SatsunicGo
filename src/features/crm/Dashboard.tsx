@@ -6,6 +6,7 @@ import {
   type FormEvent,
 } from "react";
 import { Link } from "react-router-dom";
+import { notify } from "../../shared/feedback";
 import { callService } from "../../shared/firebase";
 import { CrmHeading, CrmIcon, type CrmIconName } from "./CrmPresentation";
 import {
@@ -65,6 +66,17 @@ export function Dashboard() {
         return;
       }
       setSnapshot(next);
+      if (
+        next.truncated.length === 0 &&
+        (Object.keys(dashboardMetrics) as MetricKey[]).every(
+          (key) => next.counts[key] === 0,
+        )
+      ) {
+        notify(
+          "Không có việc cần xử lý trong mẫu đã đọc. Chọn khoảng khác để xem thêm.",
+          "info",
+        );
+      }
     } catch (error) {
       if (version !== requestVersion.current) return;
       const code = (error as { code?: string } | null)?.code;
@@ -114,8 +126,6 @@ export function Dashboard() {
   const missing = snapshot
     ? currentKeys.filter((key) => snapshot.counts[key] === null)
     : [];
-  const allZero =
-    !!snapshot && currentKeys.every((key) => snapshot.counts[key] === 0);
   const chartMax = Math.max(
     1,
     ...primary.map(({ key }) => snapshot?.counts[key] ?? 0),
@@ -129,23 +139,22 @@ export function Dashboard() {
       className="crmDashboard dashboard094"
       aria-label="Tổng quan vận hành"
     >
-      <CrmHeading
-        title="Tổng quan vận hành"
-        description="Nắm tình hình đơn hàng. Chọn việc cần xử lý tiếp theo."
-        actions={
-          <>
-            <Link to="/crm/follow-ups">
-              <CrmIcon name="clock" />
-              Lịch chăm sóc
-            </Link>
-            <Link to="/crm/customers">
-              <CrmIcon name="person" />
-              Khách hàng
-            </Link>
-          </>
-        }
-      />
       <div className="d94Toolbar">
+        <CrmHeading
+          title="Tổng quan"
+          reload={
+            <button
+              className="d94Refresh"
+              type="button"
+              disabled={busy}
+              onClick={() => void load(period)}
+            >
+              <CrmIcon name="refresh" />
+              {busy ? "Đang tải số liệu…" : "Làm mới"}
+            </button>
+          }
+        />
+
         <div className="d94Presets" role="group" aria-label="Khoảng thời gian">
           {[
             [1, "Hôm nay"],
@@ -175,65 +184,60 @@ export function Dashboard() {
             Tùy chọn
           </button>
         </div>
-        <button
-          className="d94Refresh"
-          type="button"
-          disabled={busy}
-          onClick={() => void load(period)}
-        >
-          <CrmIcon name="refresh" />
-          {busy ? "Đang tải số liệu…" : "Làm mới"}
-        </button>
-      </div>
-      {custom && (
-        <form id="d94CustomPeriod" className="d94Custom" onSubmit={applyCustom}>
-          <label>
-            <span className="formLabelText">
-              Từ ngày (UTC){" "}
-              <span className="requiredMark" aria-hidden="true">
-                *
+        {custom && (
+          <form
+            id="d94CustomPeriod"
+            className="d94Custom"
+            onSubmit={applyCustom}
+          >
+            <label>
+              <span className="formLabelText">
+                Từ ngày (UTC){" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
               </span>
-            </span>
-            <input
-              type="date"
-              required
-              value={draft.from}
-              aria-describedby="d94DateHelp"
-              onChange={(event) =>
-                setDraft({ ...draft, from: event.target.value })
-              }
-            />
-          </label>
-          <label>
-            <span className="formLabelText">
-              Đến ngày (UTC){" "}
-              <span className="requiredMark" aria-hidden="true">
-                *
+              <input
+                type="date"
+                required
+                value={draft.from}
+                aria-describedby="d94DateHelp"
+                onChange={(event) =>
+                  setDraft({ ...draft, from: event.target.value })
+                }
+              />
+            </label>
+            <label>
+              <span className="formLabelText">
+                Đến ngày (UTC){" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
               </span>
-            </span>
-            <input
-              type="date"
-              required
-              value={draft.until}
-              aria-describedby="d94DateHelp"
-              onChange={(event) =>
-                setDraft({ ...draft, until: event.target.value })
-              }
-            />
-          </label>
-          <button type="submit" className="primary">
-            Áp dụng
-          </button>
-          <p id="d94DateHelp">
-            Chọn tối đa 31 ngày, không vượt hôm nay theo UTC.
-          </p>
-          {validation && (
-            <p className="d94Validation" role="alert">
-              {validation}
+              <input
+                type="date"
+                required
+                value={draft.until}
+                aria-describedby="d94DateHelp"
+                onChange={(event) =>
+                  setDraft({ ...draft, until: event.target.value })
+                }
+              />
+            </label>
+            <button type="submit" className="primary">
+              Áp dụng
+            </button>
+            <p id="d94DateHelp">
+              Chọn tối đa 31 ngày, không vượt hôm nay theo UTC.
             </p>
-          )}
-        </form>
-      )}
+            {validation && (
+              <p className="d94Validation" role="alert">
+                {validation}
+              </p>
+            )}
+          </form>
+        )}
+      </div>
       <div className="d94Context">
         <span>
           {periodLabel(snapshot ? snapshot.period : period)}{" "}
@@ -343,20 +347,6 @@ export function Dashboard() {
             </Link>
           ))}
         </div>
-        {allZero && !stale && !partial && (
-          <div className="d94Zero" role="status">
-            <CrmIcon name="check" />
-            <div>
-              <strong>
-                Không có công việc thuộc các hàng đợi trong mẫu đã đọc
-              </strong>
-              <p>
-                Chọn khoảng khác để xem thêm. Đây không phải tổng công việc toàn
-                hệ thống.
-              </p>
-            </div>
-          </div>
-        )}
         <div className="d94Panels">
           <section
             className="d94Panel d94Chart"

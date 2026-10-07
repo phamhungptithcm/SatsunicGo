@@ -1,3 +1,4 @@
+import "./toast.css";
 import { LoadingOverlay } from "./Loading";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
@@ -32,6 +33,7 @@ export function ToastHost() {
     [remaining, setRemaining] = useState(5000);
   const [host, setHost] = useState<Element>(document.body);
   const timer = useRef<ReturnType<typeof createCountdown> | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
   const element = useRef<HTMLDivElement>(null),
     hovered = useRef(false);
   useEffect(() => {
@@ -57,6 +59,9 @@ export function ToastHost() {
   }, []);
   useEffect(() => {
     if (!notice) return;
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && !element.current?.contains(active))
+      returnFocus.current = active;
     const countdown = createCountdown(5000, setRemaining, () =>
       dismissNotice(notice.id),
     );
@@ -135,7 +140,14 @@ export function ToastHost() {
               type="button"
               title="Ẩn thông báo"
               aria-label="Ẩn thông báo"
-              onClick={() => dismissNotice(notice.id)}
+              onClick={() => {
+                const focused = element.current?.contains(
+                  document.activeElement,
+                );
+                dismissNotice(notice.id);
+                if (focused && returnFocus.current?.isConnected)
+                  returnFocus.current.focus();
+              }}
             >
               ×
             </button>

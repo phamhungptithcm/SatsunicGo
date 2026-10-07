@@ -1,3 +1,6 @@
+import { CrmHeaderTarget } from "./CrmPresentation";
+import type { User } from "firebase/auth";
+import { AccountProfile } from "../../app/SiteChrome";
 import { LoadingState } from "../../shared/Loading";
 import { Documents } from "../invoices/Documents";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
@@ -251,12 +254,14 @@ export const workspacePages = [
 export function Workspace({
   roles,
   uid,
+  user,
   name,
   signOut,
   busy,
 }: {
   roles: string[];
   uid: string;
+  user: User;
   name: string;
   signOut: () => void;
   busy: boolean;
@@ -271,6 +276,7 @@ export function Workspace({
       pathname === `/crm/${p.path}` || pathname.startsWith(`/crm/${p.path}/`),
   );
   const [menu, setMenu] = useState(false);
+  const [headerTarget, setHeaderTarget] = useState<HTMLDivElement | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (menu) dialog.current?.showModal();
@@ -382,64 +388,68 @@ export function Workspace({
           >
             ☰
           </button>
-          <p className="workspaceContext">
-            <span className="workspaceContextGroup">
-              {current?.group ?? "CRM"}
-            </span>
-            <strong>{current?.label ?? "Khách hàng"}</strong>
-          </p>
-          <div className="crmIdentity">
-            <span>{name}</span>
-            <button type="button" onClick={signOut} disabled={busy}>
-              Đăng xuất
-            </button>
+          <div className="workspaceContext" ref={setHeaderTarget}>
+            <h1 className="crmHeaderFallback">
+              {current?.label ?? "Khách hàng"}
+            </h1>
           </div>
+          <AccountProfile
+            user={user}
+            signOut={async () => {
+              await signOut();
+            }}
+            busy={busy}
+            onOpen={() => setMenu(false)}
+            navigationOpen={menu}
+          />
         </header>
-        <div className="workspaceContent">
-          <Suspense
-            fallback={
-              <LoadingState variant="panel">Đang mở công việc…</LoadingState>
-            }
-          >
-            <Routes>
-              <Route
-                index
-                element={
-                  defaultPage ? (
-                    <Navigate replace to={defaultPage.path} />
-                  ) : (
-                    <p>Chưa có công việc trong phạm vi được cấp.</p>
-                  )
-                }
-              />
-              {pages.map((p) => (
+        <CrmHeaderTarget.Provider value={headerTarget}>
+          <div className="workspaceContent">
+            <Suspense
+              fallback={
+                <LoadingState variant="panel">Đang mở công việc…</LoadingState>
+              }
+            >
+              <Routes>
                 <Route
-                  key={p.path}
-                  path={`${p.path}/*`}
-                  element={screen(p.path)}
+                  index
+                  element={
+                    defaultPage ? (
+                      <Navigate replace to={defaultPage.path} />
+                    ) : (
+                      <p>Chưa có công việc trong phạm vi được cấp.</p>
+                    )
+                  }
                 />
-              ))}
-              {pages.some((p) => p.path === "customers") && (
+                {pages.map((p) => (
+                  <Route
+                    key={p.path}
+                    path={`${p.path}/*`}
+                    element={screen(p.path)}
+                  />
+                ))}
+                {pages.some((p) => p.path === "customers") && (
+                  <Route
+                    path="customers/:id"
+                    element={<Customer key={pathname} />}
+                  />
+                )}
                 <Route
-                  path="customers/:id"
-                  element={<Customer key={pathname} />}
+                  path="*"
+                  element={
+                    <div className="empty">
+                      <h1>Không thể mở công việc này</h1>
+                      <p>
+                        Kiểm tra quyền hiện hành hoặc chọn công việc trong menu.
+                      </p>
+                      <Link to="/crm">Về không gian vận hành</Link>
+                    </div>
+                  }
                 />
-              )}
-              <Route
-                path="*"
-                element={
-                  <div className="empty">
-                    <h1>Không thể mở công việc này</h1>
-                    <p>
-                      Kiểm tra quyền hiện hành hoặc chọn công việc trong menu.
-                    </p>
-                    <Link to="/crm">Về không gian vận hành</Link>
-                  </div>
-                }
-              />
-            </Routes>
-          </Suspense>
-        </div>
+              </Routes>
+            </Suspense>
+          </div>
+        </CrmHeaderTarget.Provider>
       </div>
       <dialog
         className="workspaceDialog"

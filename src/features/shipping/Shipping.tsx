@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { PageTabs } from "../../shared/PageTabs";
 import { ShippingStepForm } from "./ShippingStepForm";
 import "./shipping-workbench.css";
@@ -93,7 +94,6 @@ export function Shipping({ roles }: { roles: string[] }) {
     [busy, setBusy] = useState(false),
     [loading, setLoading] = useState(true),
     [loadError, setLoadError] = useState(""),
-    [message, setMessage] = useState(""),
     [uncertain, setUncertain] = useState(false);
   const mounted = useRef(true);
   const generation = useRef(0),
@@ -298,7 +298,7 @@ export function Shipping({ roles }: { roles: string[] }) {
     const context = generation.current;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       let payload: unknown;
       if (action === "packParcel") {
@@ -407,12 +407,13 @@ export function Shipping({ roles }: { roles: string[] }) {
       formIntent.clear(submittedForm.current);
       submittedForm.current?.reset();
       setUncertain(false);
-      setMessage(
+      notify(
         acknowledgedAction === "setDeliveryEstimate"
           ? estimateRemoved
             ? "Đã gỡ thời gian giao dự kiến."
             : "Đã lưu thời gian giao dự kiến."
           : "Đã lưu kiện và lịch sử vận chuyển.",
+        "success",
       );
       setResultId(acknowledged.id);
       if (result?.id !== acknowledged.id) setResult(null);
@@ -476,55 +477,10 @@ export function Shipping({ roles }: { roles: string[] }) {
     );
   return (
     <section ref={root} className="workbench shippingWorkbench">
-      <CrmHeading
-        title="Kiện & vận chuyển"
-        description="Đóng kiện, gom lô và theo dõi bàn giao."
-      />
-      <PageTabs
-        id="shipping"
-        label="Kiện và lô gom"
-        value={workspace}
-        onChange={setWorkspace}
-        disabled={locked || loading || busy || uncertain}
-        items={[
-          {
-            value: "parcels",
-            label: (
-              <>
-                <CrmIcon name="box" />
-                Kiện hàng
-              </>
-            ),
-          },
-          ...(mayPack || mayTrack
-            ? [
-                {
-                  value: "batches" as const,
-                  label: (
-                    <>
-                      <CrmIcon name="document" />
-                      Lô gom & cước
-                    </>
-                  ),
-                },
-              ]
-            : []),
-        ]}
-      />
-      <div
-        id="shipping-panel-parcels"
-        role="tabpanel"
-        aria-labelledby="shipping-tab-parcels"
-        hidden={workspace !== "parcels"}
-        tabIndex={0}
-        className="shippingWorkspacePanel"
-      >
-        <div className="shippingToolbar">
-          <div>
-            <h2>Kiện hàng</h2>
-            <p>Quản lý kiện từ đóng gói đến bàn giao và giao hàng.</p>
-          </div>
-          <div className="crmActions">
+      <div className="shippingTopbar">
+        <CrmHeading
+          title="Vận chuyển"
+          reload={
             <button
               disabled={
                 locked || loading || orderQueue.loading || parcelQueue.loading
@@ -533,25 +489,71 @@ export function Shipping({ roles }: { roles: string[] }) {
             >
               <CrmIcon name="refresh" /> Tải lại kiện
             </button>
-            {mayPack && (
-              <button
-                className="primary"
-                data-shipping-create
-                disabled={locked || loading || busy || uncertain}
-                onClick={() => {
-                  if (packForm.current) {
-                    packForm.current.open = true;
-                    packForm.current
-                      .querySelector<HTMLElement>("summary")
-                      ?.focus();
-                  }
-                }}
-              >
-                <CrmIcon name="box" /> Tạo kiện
-              </button>
-            )}
-          </div>
+          }
+        />
+
+        <PageTabs
+          id="shipping"
+          label="Kiện và lô gom"
+          value={workspace}
+          onChange={setWorkspace}
+          disabled={locked || loading || busy || uncertain}
+          items={[
+            {
+              value: "parcels",
+              label: (
+                <>
+                  <CrmIcon name="box" />
+                  Kiện hàng
+                </>
+              ),
+            },
+            ...(mayPack || mayTrack
+              ? [
+                  {
+                    value: "batches" as const,
+                    label: (
+                      <>
+                        <CrmIcon name="document" />
+                        Lô gom & cước
+                      </>
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+        />
+        <div
+          className="crmActions shippingToolbar"
+          hidden={workspace !== "parcels"}
+        >
+          {mayPack && (
+            <button
+              className="primary"
+              data-shipping-create
+              disabled={locked || loading || busy || uncertain}
+              onClick={() => {
+                if (packForm.current) {
+                  packForm.current.open = true;
+                  packForm.current
+                    .querySelector<HTMLElement>("summary")
+                    ?.focus();
+                }
+              }}
+            >
+              <CrmIcon name="box" /> Tạo kiện
+            </button>
+          )}
         </div>
+      </div>
+      <div
+        id="shipping-panel-parcels"
+        role="tabpanel"
+        aria-labelledby="shipping-tab-parcels"
+        hidden={workspace !== "parcels"}
+        tabIndex={0}
+        className="shippingWorkspacePanel"
+      >
         {loading && <CrmState kind="loading" title="Đang tải đơn và kiện…" />}
         {loadError && (
           <CrmState
@@ -963,7 +965,7 @@ export function Shipping({ roles }: { roles: string[] }) {
             aria-label="Kiện vừa lưu"
           >
             <CrmReference label="Kiện vừa lưu" value={resultId} />
-            {message && <p role="status">{message}</p>}
+
             {resultError && (
               <>
                 <p role="alert">Đã lưu kiện. Chưa tải được chi tiết.</p>

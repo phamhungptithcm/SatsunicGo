@@ -1,3 +1,4 @@
+import { notify } from "../../../shared/feedback";
 import { LoadingState } from "../../../shared/Loading";
 import { TaxonomyFields } from "./taxonomy-fields";
 import { auth } from "../../../shared/firebase";
@@ -82,7 +83,6 @@ export function StudioEditor({
   const [dirty, setDirty] = useState(false),
     [busy, setBusy] = useState(false),
     [conflicted, setConflicted] = useState(false),
-    [notice, setNotice] = useState(""),
     [error, setError] = useState("");
   const [modal, setModal] = useState<
       "preview" | "publish" | "history" | "seo" | "unpublish" | "archive" | null
@@ -184,89 +184,91 @@ export function StudioEditor({
     },
     [],
   );
-  const save = useCallback(async (): Promise<StudioPost | null> => {
-    if (
-      conflicted ||
-      categoryPending.current ||
-      !alive.current ||
-      auth?.currentUser?.uid !== uid
-    )
-      return null;
-    if (working.current) return pending.current;
-    const epoch = fence.current.epoch(),
-      generation = fence.current.generation(),
-      submitted = current.current;
-    working.current = true;
-    setBusy(true);
-    setError("");
-    setNotice("Đang lưu bản nháp…");
-    const task = (async () => {
-      try {
-        const result = await commands.current.send(
-          "save",
-          submitted.id,
-          submitted.revision,
-          draftOf(submitted),
-        );
-        if (
-          !alive.current ||
-          auth?.currentUser?.uid !== uid ||
-          !fence.current.current(epoch)
-        )
+  const save = useCallback(
+    async (announce = false): Promise<StudioPost | null> => {
+      if (
+        conflicted ||
+        categoryPending.current ||
+        !alive.current ||
+        auth?.currentUser?.uid !== uid
+      )
+        return null;
+      if (working.current) return pending.current;
+      const epoch = fence.current.epoch(),
+        generation = fence.current.generation(),
+        submitted = current.current;
+      working.current = true;
+      setBusy(true);
+      setError("");
+      const task = (async () => {
+        try {
+          const result = await commands.current.send(
+            "save",
+            submitted.id,
+            submitted.revision,
+            draftOf(submitted),
+          );
+          if (
+            !alive.current ||
+            auth?.currentUser?.uid !== uid ||
+            !fence.current.current(epoch)
+          )
+            return null;
+          // Preserve edits made while save was in flight; only server-owned metadata advances.
+          current.current = {
+            ...current.current,
+            revision: result.draft.revision,
+            state: result.draft.state,
+            updatedAt: result.draft.updatedAt,
+          };
+          delete current.current.scheduledAt;
+          setScheduleState(null);
+          setPost(current.current);
+          if (fence.current.unchanged(epoch, generation)) {
+            setDirty(false);
+            lastDirty.current = false;
+            try {
+              sessionStorage.removeItem(recoveryKey(uid, submitted.id));
+            } catch {
+              /* optional */
+            }
+          }
+          onSaved(result.draft);
+          if (announce)
+            notify("Đã lưu bản nháp. Bài công khai chưa thay đổi.", "success");
+          return result.draft;
+        } catch (e) {
+          if (
+            alive.current &&
+            auth?.currentUser?.uid === uid &&
+            fence.current.current(epoch)
+          ) {
+            setError((e as Error).message);
+            if (
+              /đã thay đổi|phiên bản|revision|conflict/i.test(
+                (e as Error).message,
+              )
+            )
+              setConflicted(true);
+          }
           return null;
-        // Preserve edits made while save was in flight; only server-owned metadata advances.
-        current.current = {
-          ...current.current,
-          revision: result.draft.revision,
-          state: result.draft.state,
-          updatedAt: result.draft.updatedAt,
-        };
-        delete current.current.scheduledAt;
-        setScheduleState(null);
-        setPost(current.current);
-        if (fence.current.unchanged(epoch, generation)) {
-          setDirty(false);
-          lastDirty.current = false;
-          try {
-            sessionStorage.removeItem(recoveryKey(uid, submitted.id));
-          } catch {
-            /* optional */
+        } finally {
+          if (
+            alive.current &&
+            auth?.currentUser?.uid === uid &&
+            fence.current.current(epoch)
+          ) {
+            working.current = false;
+            pending.current = null;
+            setBusy(false);
           }
         }
-        onSaved(result.draft);
-        setNotice("Đã lưu bản nháp. Bài công khai chưa thay đổi.");
-        return result.draft;
-      } catch (e) {
-        if (
-          alive.current &&
-          auth?.currentUser?.uid === uid &&
-          fence.current.current(epoch)
-        ) {
-          setError((e as Error).message);
-          setNotice("");
-          if (
-            /đã thay đổi|phiên bản|revision|conflict/i.test(
-              (e as Error).message,
-            )
-          )
-            setConflicted(true);
-        }
-        return null;
-      } finally {
-        if (
-          alive.current &&
-          auth?.currentUser?.uid === uid &&
-          fence.current.current(epoch)
-        ) {
-          working.current = false;
-          pending.current = null;
-          setBusy(false);
-        }
-      }
-    })();
-    pending.current = task;
-    return task;
-  }, [conflicted, uid, onSaved]);
+      })();
+      pending.current = task;
+      return task;
+    },
+    [conflicted, uid, onSaved],
+  );
   useEffect(() => {
     if (!dirty || conflicted || modal || recovery) return;
     const timer = setTimeout(() => void save(), 1800);
@@ -406,7 +408,7 @@ export function StudioEditor({
         name === "schedule" ? { dueAt: r.draft.scheduledAt } : null,
       );
       setEditorKey((k) => k + 1);
-      setNotice(
+      notify(
         name === "publish"
           ? "Đã xuất bản bài viết."
           : name === "schedule"
@@ -418,6 +420,7 @@ export function StudioEditor({
                 : name === "unpublish"
                   ? "Đã gỡ bài công khai. Bản nháp được giữ lại."
                   : "Đã lưu trữ bản nháp.",
+        "success",
       );
     } catch (e) {
       if (
@@ -467,7 +470,7 @@ export function StudioEditor({
       lastUploadedAlt.current = imageAlt.trim();
       imageRequest.resolve(r.url);
       setImageRequest(null);
-      setNotice("Đã tải ảnh vào bản nháp.");
+      notify("Đã tải ảnh vào bản nháp.", "success");
     } catch (e) {
       if (
         alive.current &&
@@ -541,7 +544,7 @@ export function StudioEditor({
           </span>
         </div>
         <div>
-          <button disabled={busy || conflicted} onClick={() => void save()}>
+          <button disabled={busy || conflicted} onClick={() => void save(true)}>
             Lưu bản nháp
           </button>
           <button disabled={busy} onClick={() => void revisions()}>
@@ -567,7 +570,6 @@ export function StudioEditor({
           {error}
         </p>
       )}
-      {notice && <p role="status">{notice}</p>}
       {scheduleState?.status === "blocked" && (
         <p role="alert" className="error">
           Bài chưa được xuất bản theo lịch. Kiểm tra nội dung, tác giả, ảnh và
@@ -631,7 +633,13 @@ export function StudioEditor({
             )}{" "}
             phút đọc · Phiên bản {post.revision}
           </p>
-          <Suspense fallback={<LoadingState overlay={false}>Đang mở trình soạn thảo…</LoadingState>}>
+          <Suspense
+            fallback={
+              <LoadingState overlay={false}>
+                Đang mở trình soạn thảo…
+              </LoadingState>
+            }
+          >
             <RichEditor
               key={editorKey}
               body={post.body}
@@ -717,7 +725,7 @@ export function StudioEditor({
             tags={post.tags}
             onCategory={(v) => update("category", v)}
             onTags={(v) => update("tags", v)}
-            notify={(text) => setNotice(text)}
+            notify={(text) => notify(text, "info")}
             onPending={(v) => {
               categoryPending.current = v;
             }}

@@ -3655,3 +3655,11 @@
 .blog-toast .blog-toast-actions button { padding:0; border:0; background:transparent; color:var(--toast-accent); font:inherit; font-weight:600; cursor:pointer; }
 .blog-toast .blog-toast-actions button:hover { text-decoration:underline; }
 .blog-toast .blog-toast-actions button:focus-visible { outline:2px solid #163cff; outline-offset:3px; border-radius:2px; }
+
+/* CRM-CONSISTENCY102: keep Studio independent, expose filter purpose. */
+.blog-surface .list-controls { align-items: end; flex-wrap: wrap; gap: 12px; }
+.blog-surface .list-controls .search { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 6px; }
+.blog-surface .studioFilterLabel { display: block; font-size: 12px; font-weight: 600; line-height: 1.5; }
+.blog-surface .list-controls .search .studioFilterLabel { grid-column: 1 / -1; }
+.blog-surface .studioCategoryFilter { display: grid; gap: 6px; min-width: 0; }
+.blog-surface .studioCategoryFilter input { min-height: 42px; }

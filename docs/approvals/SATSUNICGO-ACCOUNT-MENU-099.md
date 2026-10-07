@@ -1,0 +1,1 @@
+Direct human approval: “apporved” on 2026-10-07 following combined TOAST098/ACCOUNT-MENU099 plan. Reuse verified AccountProfile; actual profile route /account/profile supersedes speculative plan route. No authentication or deployment changes.

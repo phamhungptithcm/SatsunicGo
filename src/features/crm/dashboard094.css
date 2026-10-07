@@ -49,8 +49,8 @@
 }
 .workspaceShell .dashboard094 .d94Toolbar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: end;
   gap: 12px;
   padding: 12px;
   background: #fff;
@@ -85,6 +85,7 @@
   background: #f0f3fa;
 }
 .workspaceShell .dashboard094 .d94Refresh {
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -99,15 +100,7 @@
   font-weight: 600;
 }
 .workspaceShell .dashboard094 .d94Custom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: 12px;
-  padding: 16px;
-  margin-top: 12px;
-  background: #fff;
-  border: 1px solid var(--d94-line);
-  border-radius: 10px;
+  display: contents;
 }
 .workspaceShell .dashboard094 .d94Custom label {
   display: grid;
@@ -131,6 +124,7 @@
 }
 .workspaceShell .dashboard094 .d94Custom p {
   flex-basis: 100%;
+  order: 10;
   font-size: 12px;
   color: var(--d94-muted);
   margin: 0;
@@ -409,8 +403,7 @@
   width: 14px;
   color: var(--d94-muted);
 }
-.workspaceShell .dashboard094 .d94Notice,
-.workspaceShell .dashboard094 .d94Zero {
+.workspaceShell .dashboard094 .d94Notice {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -423,16 +416,14 @@
   font-size: 12px;
   line-height: 1.6;
 }
-.workspaceShell .dashboard094 .d94Notice p,
-.workspaceShell .dashboard094 .d94Zero p {
+.workspaceShell .dashboard094 .d94Notice p {
   margin: 3px 0 0;
   font-size: 12px;
 }
 .workspaceShell .dashboard094 .d94Notice > div {
   flex: 1;
 }
-.workspaceShell .dashboard094 .d94Notice > .crmIcon,
-.workspaceShell .dashboard094 .d94Zero > .crmIcon {
+.workspaceShell .dashboard094 .d94Notice > .crmIcon {
   margin-top: 2px;
 }
 .workspaceShell .dashboard094 .d94Notice--error {
@@ -448,12 +439,6 @@
   min-height: 44px;
   padding: 8px 12px;
   font-size: 12px;
-}
-.workspaceShell .dashboard094 .d94Zero {
-  background: #eef6f1;
-  color: #266747;
-  border-color: #d6e8dc;
-  margin: 16px 0 0;
 }
 .workspaceShell .dashboard094 .d94Data--unavailable .d94Track {
   background: #e9edf4;

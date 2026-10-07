@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useId, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -15,7 +16,6 @@ export function ProductReviewModeration() {
   const [page, setPage] = useState<Page | null>(null),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
     [reasons, setReasons] = useState<Record<string, string>>({}),
     [pending, setPending] = useState<Record<string, unknown> | null>(null);
   const epoch = useRef(0),
@@ -54,7 +54,7 @@ export function ProductReviewModeration() {
       if (valid(e, uid) && s === seq.current) {
         setPage(null);
         setReasons({});
-        setNotice("");
+
         setError("Chưa tải được đánh giá. Kiểm tra quyền và tải lại.");
       }
     } finally {
@@ -75,7 +75,7 @@ export function ProductReviewModeration() {
           setPage(null);
           setReasons({});
           setPending(null);
-          setNotice("");
+
           setError("");
           setBusy(false);
         })
@@ -108,7 +108,7 @@ export function ProductReviewModeration() {
       if (!valid(e, uid)) return;
       retry.current.clear();
       setPending(null);
-      setNotice("Đã lưu quyết định.");
+      notify("Đã lưu quyết định.", "success");
       await load();
     } catch (error) {
       if (!valid(e, uid)) return;
@@ -120,7 +120,6 @@ export function ProductReviewModeration() {
       ) {
         setPage(null);
         setReasons({});
-        setNotice("");
       }
       if (
         [
@@ -163,7 +162,7 @@ export function ProductReviewModeration() {
       </button>
       {error && <p role="alert">{error}</p>}
       {busy && <LoadingState overlay={false}>Đang xử lý…</LoadingState>}
-      {notice && <p role="status">{notice}</p>}
+
       {pending && (
         <button disabled={busy} onClick={() => void act(pending)}>
           Thử lại thao tác

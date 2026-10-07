@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { ShippingStepForm } from "./ShippingStepForm";
 import { LoadingState } from "../../shared/Loading";
 import { CrmIcon, CrmReference, CrmState } from "../crm/CrmPresentation";
@@ -52,7 +53,7 @@ export function Consolidation({
   const [result, setResult] = useState<Batch | null>(null);
   const [resultId, setResultId] = useState("");
   const [resultError, setResultError] = useState(false);
-  const [ackNotice, setAckNotice] = useState("");
+
   const [reconcile, setReconcile] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [authorityDenied, setAuthorityDenied] = useState(false);
@@ -417,12 +418,13 @@ export function Consolidation({
       formIntent.clear(submittedForm.current);
       submittedForm.current?.reset();
       setUncertain(false);
-      setAckNotice(
+      notify(
         command.action === "dispatch"
           ? "Đã ghi nhận bàn giao toàn bộ lô."
           : needsFinalReview.current
             ? "Đã chốt phân bổ cước. Tổng cuối của đơn mua hộ cần được khách duyệt trước khi xuất gửi."
             : "Đã chốt phân bổ cước cho lô.",
+        "success",
       );
       setResultId(acknowledged.id);
       if (result?.id !== acknowledged.id) setResult(null);
@@ -887,7 +889,7 @@ export function Consolidation({
           aria-label="Lô vừa lưu"
         >
           <CrmReference label="Lô vừa lưu" value={resultId} />
-          {ackNotice && <p role="status">{ackNotice}</p>}
+
           {resultError && (
             <>
               <p role="alert">Đã lưu lô. Chưa tải được chi tiết.</p>

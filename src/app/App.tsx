@@ -1,3 +1,4 @@
+import { AuthFeedbackToast } from "../features/auth/AuthFeedbackToast";
 import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
 import {
   authFeedbackSnapshot,
@@ -269,7 +270,6 @@ export function App() {
       if (auth?.currentUser) notify("Đã đăng nhập.", "success");
     } catch (e) {
       setAuthError((e as Error).message);
-      if (!isCrmPath(location.pathname)) notify((e as Error).message, "error");
     } finally {
       authFlight.current = false;
       setAuthBusy(false);
@@ -285,7 +285,6 @@ export function App() {
       notify("Đã đăng xuất.", "success");
     } catch {
       setAuthError("Chưa đăng xuất được. Thử lại.");
-      notify("Chưa đăng xuất được. Thử lại.", "error");
     } finally {
       setAuthBusy(false);
     }
@@ -293,6 +292,10 @@ export function App() {
   return (
     <>
       <OneTap user={user} onError={setAuthError} />
+      <AuthFeedbackToast
+        message={authError || redirectError}
+        staff={isCrmPath(location.pathname)}
+      />
       <LoginChallenge
         onOpen={() => {
           setAuthError("");
@@ -304,13 +307,6 @@ export function App() {
       </a>
       {!isCrmPath(location.pathname) && (
         <SiteHeader user={user} signOut={signOut} busy={authBusy} />
-      )}
-      {(authError || redirectError) && !isCrmPath(location.pathname) && (
-        <p className="banner" role="alert">
-          {authError || redirectError} <Link to="/account">Mở tài khoản</Link>
-          {" · "}
-          <Link to="/account/security">Bảo mật tài khoản</Link>
-        </p>
       )}
       <main
         id="main"
@@ -716,11 +712,14 @@ function Home() {
             <Link className="marketCard" key={code} to="/request">
               <div className="marketArt" data-market={code} aria-hidden="true">
                 <span className="marketCode">{code}</span>
-                <span className="parcelGraphic">
-                  <span />
-                  <span />
-                  <span />
-                </span>
+                <img
+                  src={`/images/markets/${code.toLowerCase()}-v2.webp`}
+                  alt=""
+                  width="960"
+                  height="640"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="marketCopy">
                 <div>
@@ -736,27 +735,27 @@ function Home() {
         </div>
       </section>
       <section className="explain">
-        <h2>Rõ ràng trước mỗi quyết định.</h2>
+        <h2>Mua hộ, dễ hơn bạn nghĩ</h2>
         <div className="featureRow">
           <article>
-            <h3>Chưa có link? Vẫn gửi được.</h3>
+            <h3>Chưa có link cũng được</h3>
             <p>
-              Mô tả món hàng, mẫu mã và ngân sách. Nhân viên sẽ làm rõ trước khi
+              Kể món bạn muốn mua và ngân sách. Mình sẽ trao đổi thêm trước khi
               báo giá.
             </p>
           </article>
           <article>
-            <h3>Biết tiền đi đâu.</h3>
+            <h3>Chi phí rõ ràng</h3>
             <p>
-              Giá hàng, phí mua hộ và vận chuyển được tách riêng. Khoản chưa xác
-              định được ghi là ước tính.
+              Giá hàng, phí mua hộ và vận chuyển ghi riêng. Khoản chưa chốt sẽ
+              ghi là ước tính.
             </p>
           </article>
           <article>
-            <h3>Theo dõi một nơi.</h3>
+            <h3>Xem đơn ở một nơi</h3>
             <p>
-              Báo giá, thanh toán, tình trạng kiểm hàng và vận đơn nằm trong đơn
-              của bạn.
+              Xem báo giá, thanh toán và tình trạng giao hàng ngay trong đơn của
+              bạn.
             </p>
           </article>
         </div>
@@ -1292,6 +1291,7 @@ function Staff({
       key={`${user.uid}:${roles.join(",")}`}
       roles={roles}
       uid={user.uid}
+      user={user}
       name={user.displayName || "Nhân viên"}
       signOut={signOut}
       busy={busy}

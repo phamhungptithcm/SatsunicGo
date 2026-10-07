@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import {
   useCallback,
@@ -35,8 +36,7 @@ export function OrderConversation({
     [data, setData] = useState<OrderConversationData | null>(null);
   const [loading, setLoading] = useState(false),
     [busy, setBusy] = useState(false);
-  const [error, setError] = useState(""),
-    [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
   const [readError, setReadError] = useState("");
   const [text, setText] = useState(""),
     [note, setNote] = useState(""),
@@ -123,7 +123,7 @@ export function OrderConversation({
     writing.current = true;
     setBusy(true);
     setError("");
-    setNotice("");
+
     try {
       await callService("orderConversationCommand", payload);
       if (!mounted.current) return;
@@ -131,12 +131,13 @@ export function OrderConversation({
       setUncertain(false);
       if (payload.action === "message") setText("");
       if (payload.action === "note") setNote("");
-      setNotice(
+      notify(
         payload.action === "message"
           ? "Đã lưu tin nhắn trong cuộc trao đổi trên SatsunicGo."
           : payload.action === "note"
             ? "Đã lưu ghi chú nội bộ."
             : "Đã cập nhật người phụ trách.",
+        "success",
       );
     } catch (e) {
       if (!mounted.current) return;
@@ -366,7 +367,7 @@ export function OrderConversation({
               </form>
             </details>
           )}
-          {notice && <p role="status">{notice}</p>}
+
           {error && (
             <p role="alert" className="error">
               {error}

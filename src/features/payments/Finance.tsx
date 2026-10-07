@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { PageTabs } from "../../shared/PageTabs";
 import "../crm/finance-content095.css";
 import {
@@ -64,7 +65,6 @@ export function Finance() {
     >([]),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
-    [message, setMessage] = useState(""),
     [scope, setScope] = useState<Scope>("transferReviews"),
     [held, setHeld] = useState(false),
     [authority, setAuthority] = useState(false),
@@ -121,7 +121,7 @@ export function Finance() {
     setPages({});
     cursors.current = {};
     setError("");
-    setMessage("");
+
     setAuthority(true);
   }
   const transport: FinanceTransport = {
@@ -319,7 +319,7 @@ export function Finance() {
       committed = false;
     sending.current = true;
     setError("");
-    setMessage("");
+
     try {
       await callService("membershipCommand", command);
       committed = true;
@@ -327,7 +327,7 @@ export function Finance() {
       confirmationToken.current = null;
       if (!mounted.current) return;
       setUncertain(false);
-      setMessage("Đã xác nhận tiền vào và kích hoạt gói thành viên.");
+      notify("Đã xác nhận tiền vào và kích hoạt gói thành viên.", "success");
       await readQueues(token);
     } catch (cause) {
       if (!mounted.current) return;
@@ -359,7 +359,7 @@ export function Finance() {
   if (authority)
     return (
       <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
-        <CrmHeading title="Đối soát thanh toán" />
+        <CrmHeading title="Thanh toán & đối soát" />
         <CrmState kind="error" title="Cần kiểm tra lại quyền truy cập." />
         {busy && (
           <CrmState kind="loading" title="Đang kiểm tra quyền truy cập…" />
@@ -373,13 +373,12 @@ export function Finance() {
   return (
     <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
       <CrmHeading
-        title="Đối soát thanh toán"
+        title="Thanh toán & đối soát"
         description="Kiểm tra tiền vào, kích hoạt gói và xử lý giao dịch chưa khớp."
-        actions={
-          <button disabled={busy || blocked} onClick={() => void load()}>
+        reload={<button disabled={busy || blocked} onClick={() => void load()}>
             <CrmIcon name="refresh" /> Tải lại
-          </button>
-        }
+          </button>}
+
       />
       <p className="fc095Notice">
         Tiền membership được phân bổ cho hóa đơn gói riêng, không thanh toán số
@@ -600,11 +599,7 @@ export function Finance() {
           </button>
         </div>
       )}
-      {message && (
-        <p className="notice" role="status">
-          {message}
-        </p>
-      )}
+
       {error && <CrmState kind="error" title={error} />}
     </section>
   );

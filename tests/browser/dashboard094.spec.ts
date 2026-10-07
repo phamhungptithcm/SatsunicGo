@@ -87,12 +87,13 @@ async function mount(page: Page, mode: Mode = "success") {
         return response;
       };
       const { Dashboard } = await import('/src/features/crm/Dashboard.tsx');
+      const { ToastHost } = await import('/src/shared/Toast.tsx');
       const root = createRoot(document.getElementById('root'));
       window.dashboard094Unmount = () => root.unmount();
       root.render(React.createElement(MemoryRouter, null,
         React.createElement('div', { className: 'workspaceShell', style: { gridTemplateColumns: '1fr', minHeight: '100vh' } },
           React.createElement('main', { className: 'workspaceMain' },
-            React.createElement('div', { className: 'workspaceContent' }, React.createElement(Dashboard))))));
+            React.createElement('div', { className: 'workspaceContent' }, React.createElement(Dashboard)))), React.createElement(ToastHost)));
     `,
     }),
   );
@@ -104,7 +105,7 @@ async function mount(page: Page, mode: Mode = "success") {
   );
   await page.goto(`${baseURL}/dashboard094-fixture`);
   await expect(
-    page.getByRole("heading", { name: "Tổng quan vận hành", exact: true }),
+    page.getByRole("region", { name: "Tổng quan vận hành", exact: true }),
   ).toBeVisible();
   return errors;
 }
@@ -141,12 +142,34 @@ for (const width of [1440, 390, 320]) {
     ).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".d94Status")).toContainText("Đọc lúc");
     await page.getByRole("button", { name: "Tùy chọn", exact: true }).click();
-    await page.getByLabel("Từ ngày (UTC)", { exact: true }).fill("2026-01-01");
-    await page.getByLabel("Đến ngày (UTC)", { exact: true }).fill("2026-02-02");
+    await expect(page.locator(".d94Toolbar #d94CustomPeriod")).toHaveCount(1);
+    if (width === 1440) {
+      const bottoms = await page
+        .locator(".d94Custom input, .d94Custom button")
+        .evaluateAll((elements) =>
+          elements.map((el) => el.getBoundingClientRect().bottom),
+        );
+      expect(Math.max(...bottoms) - Math.min(...bottoms)).toBeLessThan(3);
+    }
+    await mkdir(evidence, { recursive: true });
+    await page.screenshot({
+      path: `${evidence}/filter-${width}.png`,
+      fullPage: true,
+    });
+    await page
+      .getByRole("textbox", { name: "Từ ngày (UTC)", exact: true })
+      .fill("2026-01-01");
+    await page
+      .getByRole("textbox", { name: "Đến ngày (UTC)", exact: true })
+      .fill("2026-02-02");
     await page.getByRole("button", { name: "Áp dụng", exact: true }).click();
     await expect(page.getByRole("alert")).toContainText("tối đa 31 ngày");
-    await page.getByLabel("Từ ngày (UTC)", { exact: true }).fill("2026-01-01");
-    await page.getByLabel("Đến ngày (UTC)", { exact: true }).fill("2026-01-07");
+    await page
+      .getByRole("textbox", { name: "Từ ngày (UTC)", exact: true })
+      .fill("2026-01-01");
+    await page
+      .getByRole("textbox", { name: "Đến ngày (UTC)", exact: true })
+      .fill("2026-01-07");
     await page.getByRole("button", { name: "Áp dụng", exact: true }).click();
     await expect(page.locator(".d94Context")).toContainText(
       "01/01/2026 – 07/01/2026",
@@ -157,11 +180,9 @@ for (const width of [1440, 390, 320]) {
         () => document.documentElement.scrollWidth <= innerWidth + 1,
       ),
     ).toBe(true);
-    await page.getByRole("button", { name: "Làm mới", exact: true }).focus();
+    await page.getByRole("button", { name: "Áp dụng", exact: true }).focus();
     await page.keyboard.press("Tab");
-    await expect(
-      page.getByLabel("Từ ngày (UTC)", { exact: true }),
-    ).toBeFocused();
+    await expect(page.locator(".d94Kpi").first()).toBeFocused();
     await page.getByRole("button", { name: "7 ngày", exact: true }).click();
     await expect(page.locator(".d94Status")).toContainText("Đọc lúc");
     await expect(page.locator(".d94Kpi").first()).toHaveAttribute(
@@ -198,7 +219,12 @@ test("D094 unavailable, genuine zero and partial coverage remain distinct", asyn
       pending.response.counts[key] = 0;
     pending.resolve(pending.response);
   });
-  await expect(page.locator(".d94Zero")).toBeVisible();
+  await expect(page.locator(".siteToast[data-kind=info]")).toContainText(
+    "Không có việc cần xử lý trong mẫu đã đọc",
+  );
+  await expect(page.locator(".siteToast")).toHaveCSS("position", "fixed");
+  await expect(page.locator(".d94Zero")).toHaveCount(0);
+  await page.getByRole("button", { name: "Ẩn thông báo" }).click();
   await page.screenshot({ path: `${evidence}/zero.png`, fullPage: true });
   await expect(page.locator(".d94KpiValue").first()).toHaveText("0đơn");
   await setMode(page, "partial");
@@ -208,6 +234,7 @@ test("D094 unavailable, genuine zero and partial coverage remain distinct", asyn
   ).toBeVisible();
   await expect(page.locator(".d94KpiValue").nth(1)).toHaveText("—đơn");
   await expect(page.locator(".d94Zero")).toHaveCount(0);
+  await expect(page.locator(".siteToast")).toHaveCount(0);
   await page.screenshot({ path: `${evidence}/partial.png`, fullPage: true });
   await page.getByText("Phạm vi và cách đọc số liệu", { exact: true }).click();
   await expect(page.getByText(/Không cộng các số đếm/)).toBeVisible();

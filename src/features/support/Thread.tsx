@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import "../crm/customer-workspace095.css";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -64,7 +65,7 @@ export function Thread({
   const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState("");
   const [readError, setReadError] = useState("");
-  const [notice, setNotice] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [uncertain, setUncertain] = useState(false);
@@ -133,7 +134,7 @@ export function Thread({
     setMessages([]);
     setError("");
     setReadError("");
-    setNotice("");
+
     callback.current?.(false);
     return () => {
       request.current++;
@@ -161,7 +162,7 @@ export function Thread({
       );
     setBusy(true);
     setError("");
-    setNotice("");
+
     callback.current?.(true);
     let unresolved = false;
     try {
@@ -170,7 +171,7 @@ export function Thread({
       pending.current = null;
       setUncertain(false);
       formRef.current?.reset();
-      setNotice("Đã gửi phản hồi.");
+      notify("Đã gửi phản hồi.", "success");
       await load();
       if (mutations.current.current(revision)) {
         callback.current?.(false);
@@ -220,7 +221,7 @@ export function Thread({
           <time>{new Date(m.createdAt).toLocaleString("vi-VN")}</time>
         </div>
       ))}
-      {notice && <p role="status">{notice}</p>}
+
       <form ref={formRef} key={ticket.id} className="form" onSubmit={reply}>
         <fieldset className="form" disabled={busy || uncertain || mustReload}>
           <label>
@@ -385,13 +386,14 @@ export function StaffSupport() {
       <CrmHeading
         title="Hội thoại hỗ trợ"
         description="Mở hội thoại để xem nội dung, phản hồi và cập nhật trạng thái giải quyết."
+        reload={<button disabled={loading || locked} onClick={() => void load()}>
+              <CrmIcon name="refresh" />
+              Tải lại hội thoại
+            </button>}
         actions={
           <>
             {target && <Link to="/crm/support">← Tất cả hội thoại</Link>}
-            <button disabled={loading || locked} onClick={() => void load()}>
-              <CrmIcon name="refresh" />
-              Tải lại hội thoại
-            </button>
+
           </>
         }
       />

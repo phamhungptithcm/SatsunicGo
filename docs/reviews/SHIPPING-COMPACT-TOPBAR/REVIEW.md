@@ -1,0 +1,7 @@
+# Shipping compact topbar
+
+User-approved scope 2026-10-07: remove pictured Kiện & vận chuyển / Kiện hàng heading descriptions; place existing reload/create actions beside tabs. Only Shipping.tsx and scoped CSS changed; unrelated shared WIP preserved. Intelligence DEGRADED: stale CodeGraph/CocoIndex; bounded source verified.
+
+Content inventory: removed two titles and two descriptions; button/tab names retained. Purpose PASSED (tabs identify work), Agency PASSED (same actions/handlers), Responsibility PASSED (mayPack/disabled permissions untouched), Familiarity PASSED (same tab names), Flexibility PASSED at source level (wrapping native controls), Simplicity PASSED (duplicates removed), Craft PASSED (tabpanel aria linkage/hidden maintained), Delight PASSED (reduced redundant space). Web platform. Product content local source gate PASSED; rendered post-change production NOT_TESTED, not visual/device certification.
+
+Review cycle 1 PASSED for bounded presentation change: requirement/code/security/failure/error/trade-off review, create-summary focus and refresh handlers preserved. Actions still hidden on batches; existing permission/locking/loading semantics unchanged. TypeScript noEmit/scoped ESLint/diff check PASSED; shipping-contextual and shipping-queue028 16/16 unit tests PASSED. No deployment or business data mutation. Production NOT_READY pending release and rendered acceptance. Manual report fallback; token/cost Unavailable; memory candidates None.

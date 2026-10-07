@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { PageTabs } from "../../shared/PageTabs";
 import "../settings/admin-workbench096.css";
@@ -40,7 +41,6 @@ export function PlanEditor() {
     [selected, setSelected] = useState<Plan | null>(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
-    [message, setMessage] = useState(""),
     [editing, setEditing] = useState(false),
     [loading, setLoading] = useState(false),
     [ready, setReady] = useState(false),
@@ -112,7 +112,7 @@ export function PlanEditor() {
     const f = new FormData(e.currentTarget);
     setBusy(true);
     setError("");
-    setMessage("");
+
     pending.current = {
       service: "workspaceCommand",
       success: "Đã lưu gói. Quyền lợi đã chốt trong báo giá cũ giữ nguyên.",
@@ -163,13 +163,13 @@ export function PlanEditor() {
     sending.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       await callService(attempt.service, attempt.command);
       if (!mounted.current) return;
       pending.current = null;
       setUncertain(false);
-      setMessage(attempt.success);
+      notify(attempt.success, "success");
       if (attempt.command.action === "saveMembershipPlan") {
         setSelected(null);
         setEditing(false);
@@ -208,15 +208,16 @@ export function PlanEditor() {
       <CrmHeading
         title="Gói thành viên"
         description="Quản lý giá, kỳ hạn, quyền lợi và cấp tặng."
-        actions={
-          <>
-            <button
+        reload={<button
               disabled={busy || uncertain || loading}
               onClick={() => void load()}
             >
               <CrmIcon name="refresh" />
               Tải lại
-            </button>
+            </button>}
+        actions={
+          <>
+
             <button
               className="primary"
               disabled={busy || uncertain}
@@ -586,7 +587,6 @@ export function PlanEditor() {
           </button>
         </p>
       )}
-      {message && <p role="status">{message}</p>}
     </section>
   );
 }

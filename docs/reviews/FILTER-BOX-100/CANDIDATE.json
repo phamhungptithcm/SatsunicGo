@@ -1,0 +1,8 @@
+{
+  "commit": "64902dafbe538141b2a928463ac25694c39d2a4a",
+  "files": {
+    "src/features/crm/Dashboard.tsx": "7fd221df888b9080166fb7f2632a30dc25a63791696bd041f115354769a4120c",
+    "src/features/crm/dashboard094.css": "d35d409ca8a896b7f7c9de5d3f67cdfd61da690152a03c57c806c6fbd869d0b8",
+    "tests/browser/dashboard094.spec.ts": "642cb0eeae632b795dcbe6ee5b39b000c61e00df4be6c3872b67ce59ce13e1ad"
+  }
+}

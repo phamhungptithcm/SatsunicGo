@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import {
   useCallback,
@@ -38,7 +39,6 @@ export function ProductReviews({ productId }: { productId: string }) {
     [page, setPage] = useState<ReviewPage | null>(null),
     [loading, setLoading] = useState(false),
     [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
     [open, setOpen] = useState(false),
     [busy, setBusy] = useState(false),
     [eligibility, setEligibility] = useState<EligibilityPage | null>(null),
@@ -81,7 +81,7 @@ export function ProductReviews({ productId }: { productId: string }) {
             setOpen(false);
             setBusy(false);
             setWithdraw(false);
-            setNotice("");
+
             setError("");
           })
         : undefined,
@@ -123,7 +123,7 @@ export function ProductReviews({ productId }: { productId: string }) {
           setText("");
           setRating(0);
           setWithdraw(false);
-          setNotice("");
+
           setError("Chưa tải được đánh giá. Anh/chị thử tải lại nhé.");
         }
       } finally {
@@ -219,10 +219,11 @@ export function ProductReviews({ productId }: { productId: string }) {
       retry.current.clear();
       setPending(null);
       setPage((old) => (old ? { ...old, mine: result.mine } : old));
-      setNotice(
+      notify(
         payload.action === "withdraw"
           ? "Đã gỡ đánh giá."
           : "Đã gửi đánh giá, đang chờ duyệt.",
+        "success",
       );
       setOpen(false);
       setWithdraw(false);
@@ -245,7 +246,6 @@ export function ProductReviews({ productId }: { productId: string }) {
         setText("");
         setRating(0);
         setWithdraw(false);
-        setNotice("");
       }
       if (
         [
@@ -349,11 +349,7 @@ export function ProductReviews({ productId }: { productId: string }) {
           {error}
         </p>
       )}
-      {notice && (
-        <p className="sgReviewNotice" role="status">
-          {notice}
-        </p>
-      )}
+
       {error && !pending && (
         <button disabled={loading || busy} onClick={() => void load()}>
           Tải lại

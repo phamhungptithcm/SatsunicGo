@@ -19,10 +19,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { betaRelease, db } from "../../shared/firebase";
-import {
-  usePublicContent,
-  type ContentRow,
-} from "../../shared/public-content";
+import { usePublicContent, type ContentRow } from "../../shared/public-content";
 function authorImage(row: ContentRow) {
   if (
     typeof row.authorAvatarId === "string" &&
@@ -42,19 +39,6 @@ function authorImage(row: ContentRow) {
     /* An unavailable profile picture leaves the author name readable. */
   }
   return undefined;
-}
-function PostsHeading() {
-  return (
-    <header className="postsHeading">
-      <span className="editorialEyebrow">Bài viết · SatsunicGo</span>
-      <h1>
-        Hiểu rõ hơn
-        <br />
-        <span>trước khi mua.</span>
-      </h1>
-      <p>Thông tin mua hộ và những điều cần biết trước khi chọn hàng.</p>
-    </header>
-  );
 }
 function PostsEmpty({
   failed = false,
@@ -165,8 +149,7 @@ function ExistingCatalog({ kind }: { kind: "products" | "posts" }) {
   const { rows, error, loading, stale, retry } = usePublicContent(kind);
   if (betaRelease && kind === "posts")
     return (
-      <section className="page postsPage">
-        <PostsHeading />
+      <section className="page postsPage" aria-label="Bài viết">
         <PostsEmpty beta />
         <PostsShortcuts />
       </section>
@@ -187,10 +170,11 @@ function ExistingCatalog({ kind }: { kind: "products" | "posts" }) {
       </section>
     );
   return (
-    <section className={kind === "posts" ? "page postsPage" : "page"}>
-      {kind === "posts" ? (
-        <PostsHeading />
-      ) : (
+    <section
+      className={kind === "posts" ? "page postsPage" : "page"}
+      aria-label={kind === "posts" ? "Bài viết" : undefined}
+    >
+      {kind !== "posts" && (
         <>
           <h1>Sản phẩm tham khảo</h1>
           <p>
@@ -445,7 +429,11 @@ export function ContentDetail({ kind }: { kind: "products" | "posts" }) {
               </section>
             )}
           {row.richBody && (
-            <Suspense fallback={<LoadingState overlay={false}>Đang mở bình luận…</LoadingState>}>
+            <Suspense
+              fallback={
+                <LoadingState overlay={false}>Đang mở bình luận…</LoadingState>
+              }
+            >
               <BlogComments key={row.id} postId={row.id} />
             </Suspense>
           )}

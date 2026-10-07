@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { CrmHeading, CrmIcon, CrmReference, CrmState } from "./CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -56,7 +57,6 @@ export function Customer() {
   const [data, setData] = useState<CustomerData | null>(null),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [message, setMessage] = useState(""),
     [staff, setStaff] = useState<{ id: string; displayName: string }[]>([]),
     [staffNext, setStaffNext] = useState<string | null>(null),
     [assignee, setAssignee] = useState(""),
@@ -140,7 +140,7 @@ export function Customer() {
     setDraft(null);
     setStaff([]);
     setStaffNext(null);
-    setMessage("");
+
     setUncertain(false);
     pending.current = null;
     void load();
@@ -222,7 +222,7 @@ export function Customer() {
     saving.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       await callService("saveCustomerNotes", payload);
       if (!valid()) return;
@@ -231,7 +231,7 @@ export function Customer() {
       careDraft.current = null;
       setDraft(null);
       setDraftReset((value) => value + 1);
-      setMessage("Đã lưu hồ sơ nội bộ.");
+      notify("Đã lưu hồ sơ nội bộ.", "success");
       try {
         await read();
       } catch {
@@ -276,7 +276,7 @@ export function Customer() {
         description={
           data?.profile?.businessName || "Hồ sơ và công việc liên quan"
         }
-        actions={
+        reload={
           <button disabled={busy || uncertain} onClick={() => void load()}>
             <CrmIcon name="refresh" />
             Tải lại hồ sơ
@@ -284,11 +284,7 @@ export function Customer() {
         }
       />
       {busy && <CrmState kind="loading" title="Đang xử lý hồ sơ…" />}
-      {message && (
-        <p className="notice" role="status">
-          {message}
-        </p>
-      )}
+
       {error && <CrmState kind="error" title={error} />}
       {uncertain && (
         <button

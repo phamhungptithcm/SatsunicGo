@@ -1,5 +1,16 @@
 import { LoadingState } from "../../shared/Loading";
-import type { ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  cloneElement,
+  isValidElement,
+  type ReactNode,
+  type ReactElement,
+  type ButtonHTMLAttributes,
+} from "react";
+import { createPortal } from "react-dom";
+
+export const CrmHeaderTarget = createContext<HTMLElement | null>(null);
 
 export type CrmIconName =
   | "refresh"
@@ -80,18 +91,51 @@ export function CrmHeading({
   title,
   description,
   actions,
+  reload,
 }: {
   title: string;
   description?: ReactNode;
   actions?: ReactNode;
+  reload?: ReactNode;
 }) {
+  const target = useContext(CrmHeaderTarget);
+  if (target) {
+    const refresh = isValidElement(reload)
+      ? cloneElement(
+          reload as ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>,
+          {
+            className: "crmHeaderRefresh",
+            "aria-label": `Tải lại ${title.toLocaleLowerCase("vi-VN")}`,
+            title: "Tải lại",
+            children: <CrmIcon name="refresh" />,
+          },
+        )
+      : reload;
+    return (
+      <>
+        {createPortal(
+          <div className="crmHeaderTitle">
+            <h1>{title}</h1>
+            {refresh}
+          </div>,
+          target,
+        )}
+        {actions && <div className="crmActions crmPageActions">{actions}</div>}
+      </>
+    );
+  }
   return (
     <div className="pageHeading crmHeading">
       <div>
         <h1>{title}</h1>
         {description && <p className="muted">{description}</p>}
       </div>
-      {actions && <div className="crmActions">{actions}</div>}
+      {(reload || actions) && (
+        <div className="crmActions">
+          {reload}
+          {actions}
+        </div>
+      )}
     </div>
   );
 }

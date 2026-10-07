@@ -120,14 +120,15 @@ export function Refunds() {
       <CrmHeading
         title="Hoàn tiền"
         description="Tạo yêu cầu và đối chiếu giao dịch hoàn tiền theo đơn."
-        actions={
-          <>
-            <button
+        reload={<button
               disabled={busy || requestUncertain}
               onClick={() => void load()}
             >
               <CrmIcon name="refresh" /> Tải lại
-            </button>
+            </button>}
+        actions={
+          <>
+
             <button
               className="primary"
               disabled={busy || requestUncertain}

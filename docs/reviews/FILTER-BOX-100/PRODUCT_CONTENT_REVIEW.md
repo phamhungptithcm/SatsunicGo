@@ -1,0 +1,8 @@
+# Product content review — FILTER-BOX-100
+Reviewed 2026-10-07. Vietnamese React web dashboard filters. Copy/UTC semantics unchanged: Hôm nay, 7 ngày, 30 ngày, Tùy chọn, Từ ngày (UTC), Đến ngày (UTC), Áp dụng, Làm mới, Đang tải số liệu…, 31-day UTC help and existing validation. Their source handlers remain intact. No new string or data definition; only grouping and keyboard order changed.
+
+State coverage PASSED: default/presets, custom dates, invalid span error, apply, pending refresh disabled and failure retry. Zero/partial/unavailable remain distinct in 7 browser regressions. Destructive actions NOT_APPLICABLE. Source period validation and 11 unit tests unchanged. Synthetic transport used; no private data or backend writes.
+
+Eight principles PASSED: Purpose — filters grouped by task; Agency — existing selection/apply/refresh maintained; Responsibility — UTC and max span help retained; Familiarity — native dates and buttons; Flexibility — 1440/390/320, keyboard and text scaling tested; Simplicity — one container; Craft — desktop bottom alignment asserted, mobile no overflow; Delight — less visual fragmentation without invented promises. All evidence: current filter PNGs and browser suite. Desktop/320 screenshots visually inspected.
+
+Platform fit PASSED: web controls, existing brand; Apple-only expressions not applicable. Accessibility within keyboard, native semantics, persistent labels/error/status and responsive evidence PASSED; actual screen-reader device NOT_TESTED. Meaning, audience, concise tone, terminology, privacy, localization/reflow and in-context gate PASSED for unchanged Vietnamese strings. Product Language Gate PASSED.

@@ -75,17 +75,15 @@ export function Returns({ roles }: { roles: string[] }) {
   return (
     <section className="operations095 operationsReturns">
       <CrmHeading
-        title="Nhận & kiểm tra hàng trả"
-        actions={
+        title="Hàng trả"
+        reload={
           <button disabled={busy} onClick={() => void load()}>
             <CrmIcon name="refresh" /> Tải lại
           </button>
         }
       />
-      <p className="muted">
-        Chỉ nhận hàng theo đề xuất khách đã duyệt. Hoàn tất kiểm tra không tự
-        hoàn tiền hoặc gỡ giữ đơn; tài chính cần đối soát riêng.
-      </p>
+
+      <div className="crmActions"></div>
       {busy && <CrmState kind="loading" title="Đang tải hàng trả…" />}
       {error && (
         <CrmState

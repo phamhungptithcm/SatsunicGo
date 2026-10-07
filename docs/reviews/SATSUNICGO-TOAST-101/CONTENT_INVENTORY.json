@@ -1,0 +1,254 @@
+[
+  {
+    "file": "src/app/App.tsx",
+    "line": 270,
+    "content": "\"Đã đăng nhập.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/app/App.tsx",
+    "line": 285,
+    "content": "\"Đã đăng xuất.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/auth/AuthFeedbackToast.tsx",
+    "line": 16,
+    "content": "message",
+    "kind": "\"error\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 106,
+    "content": "\"Đã xác thực lại với Google. Bạn có thể tiếp tục thiết lập.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 195,
+    "content": "enrolled ? \"Đã bật xác thực hai bước.\" : \"Đã xác nhận mã xác thực.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/ask/InlineSupport.tsx",
+    "line": 183,
+    "content": "vi\n                ? \"Yêu cầu đã được ghi nhận.\"\n                : \"Your request has been recorded.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/ask/InlineSupport.tsx",
+    "line": 282,
+    "content": "vi ? \"Yêu cầu đã được ghi nhận.\" : \"Your request has been recorded.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/profile/Profile.tsx",
+    "line": 152,
+    "content": "action === \"saveProfile\" ? \"Đã lưu hồ sơ.\" : \"Đã lưu địa chỉ.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/crm/Activity.tsx",
+    "line": 168,
+    "content": "action === \"resolveUnknown\"\n          ? \"Đã lưu đối soát, chưa gửi lại email.\"\n          : \"Đã xếp lịch thử lại email.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/crm/Customer.tsx",
+    "line": 234,
+    "content": "\"Đã lưu hồ sơ nội bộ.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/support/Thread.tsx",
+    "line": 174,
+    "content": "\"Đã gửi phản hồi.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/support/OrderConversation.tsx",
+    "line": 134,
+    "content": "payload.action === \"message\"\n          ? \"Đã lưu tin nhắn trong cuộc trao đổi trên SatsunicGo.\"\n          : payload.action === \"note\"\n            ? \"Đã lưu ghi chú nội bộ.\"\n            : \"Đã cập nhật người phụ trách.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/orders/Changes.tsx",
+    "line": 133,
+    "content": "vi\n          ? \"Đã ghi nhận thao tác thay đổi.\"\n          : \"Your change action has been recorded.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 222,
+    "content": "payload.action === \"withdraw\"\n          ? \"Đã gỡ đánh giá.\"\n          : \"Đã gửi đánh giá, đang chờ duyệt.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/ProductReviewModeration.tsx",
+    "line": 111,
+    "content": "\"Đã lưu quyết định.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/WebsiteBanners.tsx",
+    "line": 155,
+    "content": "\"Đã lưu thay đổi banner.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/Campaigns.tsx",
+    "line": 172,
+    "content": "\"Đã lưu chiến dịch. Chưa đăng lên mạng xã hội.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/Campaigns.tsx",
+    "line": 208,
+    "content": "\"Đã sao chép caption và link UTM. Bạn tự kiểm tra rồi đăng trên kênh đã chọn.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/Campaigns.tsx",
+    "line": 214,
+    "content": "\"Chưa sao chép được. Cho phép clipboard hoặc sao chép thủ công.\"",
+    "kind": "\"error\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 238,
+    "content": "\"Đã lưu bản nháp. Bài công khai chưa thay đổi.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 411,
+    "content": "name === \"publish\"\n          ? \"Đã xuất bản bài viết.\"\n          : name === \"schedule\"\n            ? \"Đã lên lịch xuất bản.\"\n            : name === \"review\"\n              ? \"Đã gửi duyệt.\"\n              : name === \"restore\"\n                ? \"Đã khôi phục thành bản nháp mới.\"\n                : name === \"unpublish\"\n                  ? \"Đã gỡ bài công khai. Bản nháp được giữ lại.\"\n                  : \"Đã lưu trữ bản nháp.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 473,
+    "content": "\"Đã tải ảnh vào bản nháp.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 728,
+    "content": "text",
+    "kind": "\"info\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/shipping/Shipping.tsx",
+    "line": 410,
+    "content": "acknowledgedAction === \"setDeliveryEstimate\"\n          ? estimateRemoved\n            ? \"Đã gỡ thời gian giao dự kiến.\"\n            : \"Đã lưu thời gian giao dự kiến.\"\n          : \"Đã lưu kiện và lịch sử vận chuyển.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 217,
+    "content": "action === \"save\"\n          ? \"Đã lưu bản nháp. Bảng giá công khai chưa thay đổi.\"\n          : action === \"publish\"\n            ? \"Đã công bố bảng giá đã lưu.\"\n            : \"Đã xóa bản nháp và gỡ bảng giá công khai.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 421,
+    "content": "command.action === \"dispatch\"\n          ? \"Đã ghi nhận bàn giao toàn bộ lô.\"\n          : needsFinalReview.current\n            ? \"Đã chốt phân bổ cước. Tổng cuối của đơn mua hộ cần được khách duyệt trước khi xuất gửi.\"\n            : \"Đã chốt phân bổ cước cho lô.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 224,
+    "content": "\"Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 230,
+    "content": "\"Chưa sao chép được. Chọn và sao chép link.\"",
+    "kind": "\"error\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 273,
+    "content": "current.payload.action === \"queueEmail\"\n            ? \"Đã xếp lịch gửi email (kiểm tra mỗi 30 phút); chưa xác nhận khách đã nhận.\"\n            : \"Đã lưu thao tác hóa đơn.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 135,
+    "content": "\"Đã lưu quyền. Kiểm tra lại nhân viên trước khi sửa tiếp.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/settings/Settings.tsx",
+    "line": 106,
+    "content": "\"Đã lưu chính sách. Báo giá đã chấp nhận giữ nguyên snapshot.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/membership/Membership.tsx",
+    "line": 177,
+    "content": "action === \"purchase\"\n          ? result.state === \"active\"\n            ? \"Gói miễn phí của bạn đang có hiệu lực. Không cần chuyển khoản.\"\n            : \"Đã tạo yêu cầu mua gói. Membership chỉ kích hoạt sau khi xác nhận thanh toán.\"\n          : action === \"cancelInvoice\"\n            ? \"Đã hủy yêu cầu mua gói chưa thanh toán.\"\n            : action === \"requestRenewal\"\n              ? \"Đã ghi nhận ý định gia hạn. Không tự động thu tiền.\"\n              : \"Đã hủy ý định gia hạn. Quyền lợi hiện tại giữ đến hết kỳ.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 172,
+    "content": "attempt.success",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/membership/ReminderSettings.tsx",
+    "line": 98,
+    "content": "result.approved\n          ? \"Đã bật nhắc hết hạn theo số ngày bạn chọn. Email chỉ gửi khi dịch vụ gửi thư đã được cấu hình.\"\n          : \"Đã tắt tạo nhắc hết hạn mới. Thông báo đã tạo vẫn được giữ.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/payments/Finance.tsx",
+    "line": 330,
+    "content": "\"Đã xác nhận tiền vào và kích hoạt gói thành viên.\"",
+    "kind": "\"success\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  },
+  {
+    "file": "src/features/crm/Dashboard.tsx",
+    "line": 75,
+    "content": "\"Không có việc cần xử lý trong mẫu đã đọc. Chọn khoảng khác để xem thêm.\"",
+    "kind": "\"info\"",
+    "evidence": "Current event handler / async ownership guard in source; shared in-context browser fixture verifies presentation."
+  }
+]

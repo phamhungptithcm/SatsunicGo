@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-TOAST-101",
+  "approval_ref": "docs/approvals/SATSUNICGO-TOAST-101.md",
+  "source_ref": "CANDIDATE.json",
+  "cycle": 2,
+  "status": "BLOCKED",
+  "summary": "Verification review found directive lint issue, browser fixture assertions and CSS cascade risk; fixes stayed in approved scope.",
+  "findings": [
+    {
+      "id": "T101-06",
+      "severity": "low",
+      "location": "src/features/content/studio/toast.tsx",
+      "summary": "New CSS import initially preceded use-client directive, detected by ESLint.",
+      "status": "FIXED",
+      "verification": "Directive restored first; full ESLint passes."
+    },
+    {
+      "id": "T101-07",
+      "severity": "low",
+      "location": "tests/browser/toast101.spec.ts; dashboard094.spec.ts",
+      "summary": "Fixture replacement click overlapped toast on narrow screens; subpixel measurement and concurrent header DOM changed old assertions.",
+      "status": "FIXED",
+      "verification": "Keyboard replacement; rounded rendered pixel measurement; preserve 3px form baseline and verify new Tab-to-KPI order. 18 browser cases pass."
+    },
+    {
+      "id": "T101-08",
+      "severity": "low",
+      "location": "src/shared/toast.css",
+      "summary": "Equal specificity could let later global/Studio stylesheet restore 32px close size.",
+      "status": "FIXED",
+      "verification": "Scoped higher specificity; fresh build and 11 toast browser cases pass."
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Within frontend feedback-only plan"
+    },
+    "verification": {
+      "status": "BLOCKED",
+      "summary": "Fresh checks required after fixes"
+    }
+  },
+  "next_action": "Fix scoped findings, verify and perform fresh whole-scope review."
+}

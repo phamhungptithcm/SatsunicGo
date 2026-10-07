@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import {
   CrmIcon,
@@ -215,6 +216,20 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       viewRevision.current++;
     };
   }, [storageKey, staff, orderFilter]);
+  async function copyShare() {
+    const revision = viewRevision.current;
+    try {
+      await navigator.clipboard.writeText(share);
+      if (revision !== viewRevision.current) return;
+      notify(
+        "Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin.",
+        "success",
+      );
+    } catch {
+      if (revision !== viewRevision.current) return;
+      notify("Chưa sao chép được. Chọn và sao chép link.", "error");
+    }
+  }
   async function execute(payload: Record<string, unknown>, retry = false) {
     if (executing.current) return;
     const revision = viewRevision.current;
@@ -255,10 +270,11 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           );
       } else {
         setShare("");
-        setMessage(
+        notify(
           current.payload.action === "queueEmail"
             ? "Đã xếp lịch gửi email (kiểm tra mỗi 30 phút); chưa xác nhận khách đã nhận."
             : "Đã lưu thao tác hóa đơn.",
+          "success",
         );
       }
       if (current.payload.action === "createDraft") setCreating(false);
@@ -375,14 +391,16 @@ export function Documents({ staff = false }: { staff?: boolean }) {
             ? "Lập và quản lý hóa đơn nội bộ theo đơn hàng."
             : "Xem hóa đơn đã xuất từ đơn hàng của bạn."
         }
+        reload={
+          <button
+            disabled={busy || pending || listLoading}
+            onClick={() => void load()}
+          >
+            <CrmIcon name="refresh" /> Tải lại
+          </button>
+        }
         actions={
           <>
-            <button
-              disabled={busy || pending || listLoading}
-              onClick={() => void load()}
-            >
-              <CrmIcon name="refresh" /> Tải lại
-            </button>
             {staff && list?.canIssue && (
               <button
                 className="primary"
@@ -512,6 +530,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       >
         <aside className="invoiceSidebar" aria-label="Danh sách hóa đơn">
           <h2 className="invoicePanelTitle">Danh sách hóa đơn</h2>
+          {orderFilter && <p className="crmFilterScope">Đơn <CrmReference label="Mã đơn" value={orderFilter} />{!creating && !busy && !pending && <Link to={staff ? "/crm/documents" : "/account/documents"}>Xóa bộ lọc</Link>}</p>}
           <div className="noPrint documentList crmList" aria-busy={listLoading}>
             {list?.rows.map((d) => (
               <article
@@ -678,22 +697,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
                                 readOnly
                                 value={share}
                               />
-                              <button
-                                onClick={() =>
-                                  void navigator.clipboard
-                                    .writeText(share)
-                                    .then(
-                                      () =>
-                                        setMessage(
-                                          "Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin.",
-                                        ),
-                                      () =>
-                                        setError(
-                                          "Chưa sao chép được. Chọn và sao chép link.",
-                                        ),
-                                    )
-                                }
-                              >
+                              <button onClick={() => void copyShare()}>
                                 Sao chép link
                               </button>
                             </>

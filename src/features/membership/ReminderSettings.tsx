@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
@@ -21,8 +22,7 @@ export function ReminderSettings() {
     [days, setDays] = useState(""),
     [approved, setApproved] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [message, setMessage] = useState("");
+    [error, setError] = useState("");
   const attempt = useRef<Attempt | null>(null),
     running = useRef(false),
     mounted = useRef(false);
@@ -34,7 +34,7 @@ export function ReminderSettings() {
     setApproved(false);
     setDays("");
     setError("");
-    setMessage("");
+
     try {
       const result = await callService<Policy>("membershipReminderPolicy", {
         action: "read",
@@ -82,7 +82,7 @@ export function ReminderSettings() {
     running.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       const result = await callService<Policy>("membershipReminderPolicy", {
         ...attempt.current.payload,
@@ -95,10 +95,11 @@ export function ReminderSettings() {
       setDays(
         result.daysBeforeExpiry === null ? "" : String(result.daysBeforeExpiry),
       );
-      setMessage(
+      notify(
         result.approved
           ? "Đã bật nhắc hết hạn theo số ngày bạn chọn. Email chỉ gửi khi dịch vụ gửi thư đã được cấu hình."
           : "Đã tắt tạo nhắc hết hạn mới. Thông báo đã tạo vẫn được giữ.",
+        "success",
       );
     } catch (e) {
       if (!mounted.current) return;
@@ -183,7 +184,6 @@ export function ReminderSettings() {
           {error}
         </p>
       )}
-      {message && <p role="status">{message}</p>}
     </section>
   );
 }

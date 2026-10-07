@@ -999,3 +999,52 @@
     }
   }
 }
+
+/* Reuse the public account disclosure within the CRM header. */
+.workspaceTop .workspaceContext {
+  min-width: 0;
+  flex: 1;
+}
+@media screen and (max-width: 640px) {
+  .workspaceTop .accountProfileName {
+    max-width: 72px;
+  }
+  .workspaceTop .accountDropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+  }
+}
+
+.workspaceTop .workspaceContext:has(.crmHeaderTitle) > .crmHeaderFallback { display: none; }
+.workspaceTop .crmHeaderTitle { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.workspaceTop .workspaceContext h1 { margin: 0; font-size: 16px; font-weight: 650; line-height: 1.4; overflow-wrap: anywhere; }
+.workspaceTop .crmHeaderRefresh { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; padding: 8px; border: 0; border-radius: 8px; background: transparent; color: #647087; }
+.workspaceTop .crmHeaderRefresh:hover:not(:disabled) { color: #163cff; background: #edf1ff; }
+.workspaceTop .crmHeaderRefresh:disabled { opacity: .45; cursor: default; }
+.crmPageActions { margin-bottom: 16px; }
+.crmPageActions:empty { display: none; }
+@media screen and (max-width: 640px) { .workspaceTop .workspaceContext h1 { font-size: 14px; } }
+
+/* CRM-CONSISTENCY102: labelled list tools; task tabs remain distinct. */
+.workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) {
+  display: flex; flex-wrap: wrap; align-items: end; gap: 12px;
+  padding: 16px; border: 1px solid #e2e6ef; border-radius: 12px; background: #fff;
+}
+.workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) > label {
+  display: flex; flex-direction: column; gap: 6px; min-width: 160px; flex: 1;
+  color: #526078; font-size: 12px; font-weight: 600;
+}
+.workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) :is(input:not([type="checkbox"]), select) {
+  min-height: 42px; width: 100%; margin: 0; font-size: 14px; font-weight: 400;
+}
+.workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) > button { min-height: 42px; margin: 0; }
+.workspaceContent .crmFilters > .crmCheck { flex-direction: row; align-items: center; min-height: 42px; }
+.workspaceContent .crmFilterScope { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: #647087; font-size: 12px; line-height: 1.6; }
+.workspaceContent .pageTabs { margin-block: 16px; gap: 6px; }
+.workspaceContent .pageTab { min-height: 42px; font-size: 13px; }
+.workspaceContent :is(.adminLayout, .rateFilters) label { line-height: 1.5; }
+@media screen and (max-width: 640px) {
+  .workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) { padding: 12px; gap: 10px; }
+  .workspaceContent :is(.crmFilters, .operationsToolbar, .ceToolbar, .rateFilters) > label { min-width: min(100%, 200px); }
+}

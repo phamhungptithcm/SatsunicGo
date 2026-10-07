@@ -21,7 +21,7 @@ const accountNavigation = [
   ["Hỗ trợ", "/support"],
   ["Bảo mật tài khoản", "/account/security"],
 ] as const;
-function AccountProfile({
+export function AccountProfile({
   user,
   signOut,
   busy,

@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { PageTabs } from "../../shared/PageTabs";
 import { WorkbenchComposer095 } from "../crm/FinanceContent095";
@@ -112,11 +113,13 @@ export function Campaigns() {
       if (requests.current.current(revision)) setLoading(false);
     }
   }
+  const clipboardEpoch = useRef(0);
   useEffect(() => {
     void load();
     return () => {
       requests.current.invalidate();
       saves.current.invalidate();
+      clipboardEpoch.current++;
     };
   }, []);
   async function save(e: FormEvent<HTMLFormElement>) {
@@ -166,12 +169,8 @@ export function Campaigns() {
       setCurrent(null);
       setEditing(false);
       form?.reset();
+      notify("Đã lưu chiến dịch. Chưa đăng lên mạng xã hội.", "success");
       await load();
-      if (!saves.current.current(saveRevision)) return;
-      setMessage(
-        (previous) =>
-          previous || "Đã lưu chiến dịch. Chưa đăng lên mạng xã hội.",
-      );
     } catch (cause) {
       if (!saves.current.current(saveRevision)) return;
       const code = String((cause as { code?: string })?.code ?? "").replace(
@@ -200,16 +199,21 @@ export function Campaigns() {
     }
   }
   async function copy(r: Campaign) {
+    const epoch = clipboardEpoch.current;
     try {
       await navigator.clipboard.writeText(
         campaignClipboardText(r, window.location.origin),
       );
-      setMessage(
+      if (epoch !== clipboardEpoch.current) return;
+      notify(
         "Đã sao chép caption và link UTM. Bạn tự kiểm tra rồi đăng trên kênh đã chọn.",
+        "success",
       );
     } catch {
-      setMessage(
+      if (epoch !== clipboardEpoch.current) return;
+      notify(
         "Chưa sao chép được. Cho phép clipboard hoặc sao chép thủ công.",
+        "error",
       );
     }
   }
@@ -218,14 +222,16 @@ export function Campaigns() {
       <CrmHeading
         title="Chiến dịch"
         description="Soạn nội dung cho các kênh và quản lý banner website."
+        reload={
+          <button
+            disabled={busy || loading || uncertain}
+            onClick={() => void load()}
+          >
+            <CrmIcon name="refresh" /> Tải lại danh sách
+          </button>
+        }
         actions={
           <>
-            <button
-              disabled={busy || loading || uncertain}
-              onClick={() => void load()}
-            >
-              <CrmIcon name="refresh" /> Tải lại danh sách
-            </button>
             {section === "campaigns" && (
               <button
                 className="primary"

@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -29,7 +30,6 @@ export function InlineSupport({
   const [open, setOpen] = useState(false),
     [text, setText] = useState(""),
     [error, setError] = useState(""),
-    [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(false),
     [ready, setReady] = useState(false),
     [readAttempt, setReadAttempt] = useState(0),
@@ -51,6 +51,13 @@ export function InlineSupport({
       : null;
   const scope = useRef("");
   scope.current = `${uid}:${subject}`;
+  const feedbackEpoch = useRef(0);
+  useEffect(
+    () => () => {
+      feedbackEpoch.current++;
+    },
+    [uid, subject],
+  );
   const sending = useRef(false);
   const language = useRef(vi);
   language.current = vi;
@@ -64,7 +71,7 @@ export function InlineSupport({
     setMessages([]);
     setReady(false);
     setError("");
-    setNotice("");
+
     setBusy(false);
     sending.current = false;
     pending.current = null;
@@ -145,10 +152,11 @@ export function InlineSupport({
     if (!uid || !ready || disabled || sending.current || text.trim().length < 3)
       return;
     sending.current = true;
+    const feedbackAttempt = feedbackEpoch.current;
     const owner = scope.current;
     setBusy(true);
     setError("");
-    setNotice("");
+
     try {
       if (beforeSend && !(await beforeSend()))
         throw Error("Context unavailable");
@@ -171,11 +179,13 @@ export function InlineSupport({
         if (storageKey) sessionStorage.removeItem(storageKey);
         if (message === ticket.message) {
           setText("");
-          setNotice(
-            vi
-              ? "Yêu cầu đã được ghi nhận."
-              : "Your request has been recorded.",
-          );
+          if (feedbackAttempt === feedbackEpoch.current)
+            notify(
+              vi
+                ? "Yêu cầu đã được ghi nhận."
+                : "Your request has been recorded.",
+              "success",
+            );
           return;
         }
       }
@@ -268,6 +278,11 @@ export function InlineSupport({
       pending.current = null;
       if (storageKey) sessionStorage.removeItem(storageKey);
       setText("");
+      if (feedbackAttempt === feedbackEpoch.current)
+        notify(
+          vi ? "Yêu cầu đã được ghi nhận." : "Your request has been recorded.",
+          "success",
+        );
     } catch (e) {
       if (scope.current !== owner) return;
       const code = (e as { code?: string })?.code;
@@ -394,7 +409,6 @@ export function InlineSupport({
             </button>
           </form>
           {error && <p role="alert">{error}</p>}
-          {notice && <p role="status">{notice}</p>}
         </>
       )}
     </div>

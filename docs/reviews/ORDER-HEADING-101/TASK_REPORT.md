@@ -1,0 +1,8 @@
+# ORDER-HEADING-101
+2026-10-07. Exact screenshot title/description removed from orders Workbench only; refresh retained in operationsToolbar, queue controls and business handlers unchanged. User explicit removal is concrete scoped approval; docs/approvals/SATSUNICGO-ORDER-HEADING-101.md.
+
+Final review cycle1 PASSED for bounded local presentation: requirement/source diff, unchanged security/data/async handling, compiler noEmit, scoped ESLint and diff check passed. No new tests for reversible low-impact markup-only correction. Purchasing/warehouse heading untouched. Fresh authenticated browser NOT_TESTED; no deployment/production certification. Shared unrelated WIP preserved. Intelligence DEGRADED stale indexes, bounded source verified.
+
+Product language: removed only duplicated Yêu cầu & báo giá heading and its instruction, no new strings; Tải lại moved unchanged. Inventory includes those removed strings and retained button/disabled state. Screenshot supplied by user establishes in-context removal target, source matches it. Purpose/Simplicity: duplicate header removed; Agency/Familiarity: same reload/filter controls; Responsibility: no new promises; Flexibility/Craft: native controls and shared responsive toolbar retained; Delight: less repetition. Principles and platform-fit PASSED for removal-only scope based on supplied rendered context and source; new browser/device verification NOT_TESTED. Product Language Gate PASSED within this removal scope.
+
+No known findings in executed checks. Production readiness NOT_READY as release acceptance; local implementation complete. Token/cost Unavailable; memory candidates None. Manual report fallback.

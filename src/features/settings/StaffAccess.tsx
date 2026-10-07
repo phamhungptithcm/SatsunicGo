@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import "./admin-workbench096.css";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -131,7 +132,10 @@ export function StaffAccess() {
       pending.current = null;
       setUncertain(false);
       setReady(false);
-      setMessage("Đã lưu quyền. Kiểm tra lại nhân viên trước khi sửa tiếp.");
+      notify(
+        "Đã lưu quyền. Kiểm tra lại nhân viên trước khi sửa tiếp.",
+        "success",
+      );
     } catch (cause) {
       if (token !== request.current) return;
       const code = String((cause as { code?: string })?.code ?? "").replace(

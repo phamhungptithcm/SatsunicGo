@@ -1,0 +1,2 @@
+# RELEASE104 authorization
+Direct human instruction in this task: "Commit & push sau đó release toadn bộ lên production". Authorizes commit, existing GitHub main push and production testing deployment of current approved changes. Earlier human scope: production is testing, not customer launch; skip AI and payment. Protected authentication, financial controls and production data remain unchanged. This record is authorization, not a passing test or business-launch certification.

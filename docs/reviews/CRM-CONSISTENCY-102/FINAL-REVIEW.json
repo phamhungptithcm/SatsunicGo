@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "CRM-CONSISTENCY102",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Shared consistency implemented; complete all-route visual acceptance remains pending.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Current bounded source and focused checks reviewed.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current bounded source and focused checks reviewed.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current bounded source and focused checks reviewed.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current bounded source and focused checks reviewed.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_APPLICABLE",
+      "summary": "Local approved UI scope; no deployment.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Current bounded source and focused checks reviewed.",
+      "evidence_refs": [
+        "TASK-REPORT.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [],
+  "limitations": [
+    "Intelligence DEGRADED",
+    "All-page browser/product visual acceptance not complete",
+    "Runtime ledger unavailable"
+  ]
+}

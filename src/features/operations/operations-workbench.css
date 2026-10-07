@@ -184,3 +184,52 @@
     padding: 32px 16px;
   }
 }
+
+/* Queue filter: one compact row; native select preserves keyboard interaction. */
+.workspaceShell .operations095 .operationsToolbar:has(.crmQueueFilter) {
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  background: #fff;
+}
+.workspaceShell .operations095 .operationsToolbar .crmQueueFilter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #647087;
+}
+.workspaceShell .operations095 .crmQueueFilter select {
+  flex: 1;
+  width: 240px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 32px 10px 12px;
+  border: 1px solid #dce2ee;
+  border-radius: 8px;
+  background-color: #f8faff;
+  color: #111c35;
+  font-weight: 500;
+}
+.workspaceShell
+  .operations095
+  .operationsToolbar:has(.crmQueueFilter)
+  > button {
+  margin-left: auto;
+  min-height: 44px;
+}
+@media (max-width: 600px) {
+  .workspaceShell .operations095 .operationsToolbar .crmQueueFilter {
+    flex: 1 1 100%;
+  }
+  .workspaceShell .operations095 .crmQueueFilter select {
+    width: auto;
+  }
+}

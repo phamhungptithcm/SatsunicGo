@@ -452,3 +452,56 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* Compact approved list controls; editor/import dialog keep their own layout. */
+.ceWorkspace .ceListTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  margin: 16px 0;
+  border: 1px solid #e1e5ed;
+  border-radius: 12px;
+  background: #fff;
+}
+.ceWorkspace .ceListTools .ceToolbar,
+.ceWorkspace .ceListTools .ceSpreadsheet {
+  display: contents;
+}
+.ceWorkspace .ceListTools .ceToolbar input,
+.ceWorkspace .ceListTools .ceToolbar select {
+  margin-top: 0;
+  width: 100%;
+}
+.ceWorkspace .ceListTools .ceSearch {
+  flex: 1 1 220px;
+  max-width: none;
+  min-width: 0;
+}
+.ceWorkspace .ceListTools .ceToolbar label:not(.ceSearch) {
+  flex: 0 1 180px;
+  min-width: 0;
+}
+.ceWorkspace .ceListTools .ceExport {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ceWorkspace .ceListTools .ceExport select {
+  max-width: 220px;
+}
+.ceWorkspace .ceListTools > [role="status"],
+.ceWorkspace .ceListTools > [role="alert"] {
+  flex-basis: 100%;
+}
+@media (max-width: 760px) {
+  .ceWorkspace .ceListTools .ceSearch {
+    flex-basis: 100%;
+  }
+  .ceWorkspace .ceListTools .ceToolbar label:not(.ceSearch) {
+    flex: 1 1 140px;
+  }
+  .ceWorkspace .ceListTools .ceExport {
+    width: 100%;
+  }
+}

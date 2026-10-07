@@ -118,20 +118,13 @@ export function Workbench({
     <div className="workbench crmWorkbench028 operations095">
       <CrmHeading
         title={
-          queue === "purchasing"
-            ? "Mua hàng"
-            : queue === "warehouse"
-              ? "Nhận kho & đóng gói"
+          queue === "warehouse"
+            ? "Nhận kho & đóng gói"
+            : queue === "purchasing"
+              ? "Mua hàng"
               : "Yêu cầu & báo giá"
         }
-        description={
-          queue === "purchasing"
-            ? "Kiểm tra điều kiện thanh toán, nhận việc và ghi nhận hàng đã mua."
-            : queue === "warehouse"
-              ? "Kiểm tra số lượng nhận, tình trạng hàng và thông tin đóng gói."
-              : "Xem yêu cầu của khách, kiểm tra hàng hóa và xử lý báo giá."
-        }
-        actions={
+        reload={
           <button onClick={() => void load()} disabled={busy}>
             <CrmIcon name="refresh" /> Tải lại
           </button>
@@ -144,7 +137,7 @@ export function Workbench({
             <select
               value={selectedQueue}
               onChange={(e) =>
-                setParams(e.target.value ? { queue: e.target.value } : {})
+                setParams((previous) => { const next = new URLSearchParams(previous); if (e.target.value) next.set("queue", e.target.value); else next.delete("queue"); return next; })
               }
             >
               <option value="">Tất cả đơn</option>
@@ -158,6 +151,10 @@ export function Workbench({
             </select>
           </label>
         )}
+        {!queue && !target && selectedQueue && (
+          <button type="button" disabled={busy} onClick={() => setParams((previous) => { const next = new URLSearchParams(previous); next.delete("queue"); return next; })}>Xóa bộ lọc</button>
+        )}
+        {queue && <span className="crmFilterScope">{queue === "warehouse" ? "Nhận kho & đóng gói" : "Mua hàng"}</span>}
         {!busy && !error && orders.length > 0 && (
           <span className="operationsCount">
             {orders.length} đơn trong trang

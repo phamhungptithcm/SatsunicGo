@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { policyDateLabel, policyVersionLabel } from "./policy-display099";
 import "./admin-workbench096.css";
@@ -25,7 +26,6 @@ export function Settings() {
     [reading, setReading] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [message, setMessage] = useState(""),
     [uncertain, setUncertain] = useState(false);
   const request = useRef(0);
   const sending = useRef(false),
@@ -67,7 +67,7 @@ export function Settings() {
     if (!ready || busy || reading || uncertain || sending.current) return;
     setBusy(true);
     setError("");
-    setMessage("");
+
     const f = new FormData(e.currentTarget);
     pending.current = {
       action: "savePricingPolicy",
@@ -97,14 +97,15 @@ export function Settings() {
     sending.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       await callService("workspaceCommand", command);
       if (!mounted.current) return;
       pending.current = null;
       setUncertain(false);
-      setMessage(
+      notify(
         "Đã lưu chính sách. Báo giá đã chấp nhận giữ nguyên snapshot.",
+        "success",
       );
       await load();
     } catch (cause) {
@@ -281,7 +282,6 @@ export function Settings() {
               </button>
             </CrmState>
           )}
-          {message && <p role="status">{message}</p>}
         </details>
         <aside
           className="panel adminGuide"

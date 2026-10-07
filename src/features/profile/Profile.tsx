@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import "./profile.css";
 import { Link } from "react-router-dom";
@@ -25,7 +26,6 @@ export function Profile({ user }: { user: User | null }) {
   const setProfile = (value: typeof profile) =>
     dispatch({ type: "edit", uid: user?.uid ?? "", profile: value });
   const [error, setError] = useState(""),
-    [saved, setSaved] = useState(""),
     [busy, setBusy] = useState(false),
     [retry, setRetry] = useState(0);
   const [step, setStep] = useState<1 | 2>(1);
@@ -35,7 +35,7 @@ export function Profile({ user }: { user: User | null }) {
     epoch.current++;
     dispatch({ type: "reset", uid: user?.uid ?? "" });
     setError("");
-    setSaved("");
+
     setBusy(false);
     if (!user) return;
     if (!db) {
@@ -56,7 +56,7 @@ export function Profile({ user }: { user: User | null }) {
           epoch.current++;
           dispatch({ type: "locked", uid });
           setError("");
-          setSaved("");
+
           setBusy(false);
           return;
         }
@@ -121,7 +121,7 @@ export function Profile({ user }: { user: User | null }) {
     const owner = user.uid;
     const f = new FormData(e.currentTarget);
     setError("");
-    setSaved("");
+
     setBusy(true);
     const payload =
       action === "saveProfile"
@@ -149,8 +149,9 @@ export function Profile({ user }: { user: User | null }) {
         currentUid.current === owner &&
         auth?.currentUser?.uid === owner
       )
-        setSaved(
+        notify(
           action === "saveProfile" ? "Đã lưu hồ sơ." : "Đã lưu địa chỉ.",
+          "success",
         );
     } catch {
       if (
@@ -432,7 +433,6 @@ export function Profile({ user }: { user: User | null }) {
               {error}
             </p>
           )}
-          {saved && <p role="status">{saved}</p>}
         </div>
       )}
       <footer className="profilePrivacy">

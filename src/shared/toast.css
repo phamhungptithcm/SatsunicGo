@@ -1,0 +1,15 @@
+/* Shared feedback targets: preserve the established portal placement and theme. */
+.siteToast p {
+  min-width: 0;
+}
+.siteToast button[aria-label],
+.blog-toast button.blog-toast-close {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+.siteToast button[aria-label]:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 2px;
+}

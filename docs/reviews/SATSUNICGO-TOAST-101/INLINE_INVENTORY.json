@@ -1,0 +1,1339 @@
+[
+  {
+    "file": "src/app/App.tsx",
+    "line": 989,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\" className=\"orderHold\"> Tạm giữ: {o.hold} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/app/App.tsx",
+    "line": 1066,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> Đã xác nhận thanh toán. Nhân viên sẽ tiến hành mua hộ. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/app/App.tsx",
+    "line": 1202,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 220,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{draftError}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 268,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {turn.mixed.language === \"vi\" ? \"Em đang tra cứu các thông tin còn lại…\" : \"Checking the remaining information…\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 305,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" key={kind}> {turn.mixed!.language === \"vi\" ? { tracking: \"Em chưa tra cứu được đơn. Anh/chị có thể thử lại.\", catalog: \"Chưa thể tìm sản phẩm. Kết quả này chưa xác nhận sản phẩm có được niêm yết hay không.\", fees: \"Chưa tải được biểu phí. Chưa thể xác nhận cước.\", }[kind] : { tracking: \"Order tracking is unavailable. Check the ID and ordering account.\", catalog: \"Product search is ",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 324,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {turn.mixed.language === \"vi\" ? \"Đã dừng tra cứu thông tin còn lại.\" : \"Stopped the remaining lookups.\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 331,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> {turn.mixed.language === \"vi\" ? \"Em chưa hoàn tất tra cứu. Thông tin đã tải vẫn được giữ lại.\" : \"The lookups could not finish. Loaded information remains available.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 350,
+    "role": "\"status\"",
+    "excerpt": "<p className={styles.status} role=\"status\"> <span className={styles.logo} aria-hidden=\"true\"> SG </span> {phase === \"committing\" ? vi ? \"Đang xác nhận thao tác…\" : \"Confirming this action…\" : phase === \"selecting\" ? vi ? \"Em đang tìm thông tin phù hợp…\" : \"Finding the right information…\" : vi ? \"Em đang kiểm tra thông tin SatsunicGo…\" : \"Checking SatsunicGo information…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 394,
+    "role": "{turn.status === \"error\" ? \"alert\" : \"status\"}",
+    "excerpt": "<div className={styles.error} role={turn.status === \"error\" ? \"alert\" : \"status\"} > <p> {turn.status === \"stopped\" ? vi ? \"Đã dừng câu trả lời.\" : \"Response stopped.\" : turn.rateLimited ? vi ? \"Chưa thể trả lời lúc này. Hãy thử lại sau.\" : \"We can’t answer right now. Please try again later.\" : vi ? \"Em chưa thể trả lời lúc này. Câu hỏi của anh/chị vẫn được giữ lại.\" : \"We couldn’t answer just now.",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 1650,
+    "role": "\"alert\"",
+    "excerpt": "<p className={styles.attachmentNotice} role=\"alert\"> {images.error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 1655,
+    "role": "\"status\"",
+    "excerpt": "<p className={styles.attachmentNotice} role=\"status\"> {vi ? \"Đang xử lý ảnh…\" : \"Processing images…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 1660,
+    "role": "",
+    "excerpt": "<p className={styles.attachmentNotice}> {vi ? \"Tối đa 3 ảnh sản phẩm · 2 MB/ảnh. Ảnh được gửi cho AI và lưu cùng đơn khi có đơn. Không gửi giấy tờ hoặc biên lai.\" : \"Up to 3 product photos · 2 MB each. Photos go to AI and are stored with your order once created. Avoid documents or receipts.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Ask.tsx",
+    "line": 1667,
+    "role": "",
+    "excerpt": "<p className={styles.notice}> {vi ? \"Khi dùng AI, câu hỏi có thể được Google xử lý. Không chia sẻ thông tin nhạy cảm.\" : \"When AI is used, questions may be processed by Google. Avoid sharing sensitive information.\"}{\" \"} <Link href=\"/privacy\">{vi ? \"Quyền riêng tư\" : \"Privacy\"}</Link> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/ask/CatalogPurchase.tsx",
+    "line": 79,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/CatalogSearch.tsx",
+    "line": 96,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? \"Nội dung lần tải trước. Giá sẽ được kiểm tra lại khi tạo đơn.\" : \"Previously loaded content. Prices are checked again when creating an order.\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/CatalogSearch.tsx",
+    "line": 105,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{data.hasMore ? vi ? \"Chưa thấy sản phẩm trong phần đã kiểm tra. Có thể tìm tiếp.\" : \"No match in the products checked so far. You can search further.\" : vi ? \"Chưa có sản phẩm phù hợp. Anh/chị có thể gửi yêu cầu mua hộ ngay trong chat.\" : \"No matching products yet. You can request an item within this chat.\"}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/CatalogSearch.tsx",
+    "line": 165,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/Commerce.tsx",
+    "line": 1037,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\" className={styles.orderBadge}> {vi ? orderStageLabel(order) : { REQUESTED: \"Request sent\", QUOTED: \"Review quote\", QUOTE_ACCEPTED: order.purchaseKind === \"catalog\" ? paymentDue(order) ? \"Awaiting full payment\" : \"Paid · awaiting purchase\" : \"Awaiting deposit\", PURCHASING: \"Purchasing\", PURCHASED: \"Purchased\", ORIGIN_RECEIVED: \"Received at source warehouse\", PACKED: order.purchaseK",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/Commerce.tsx",
+    "line": 1328,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {t( \"QR đã hết hạn. Gửi yêu cầu hỗ trợ để nhân viên đối chiếu trước khi thanh toán lại.\", \"QR expired. Ask staff to reconcile before paying again.\", )} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/Commerce.tsx",
+    "line": 1403,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> {vi ? c.error : \"This step could not finish. Check your connection and retry.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/InlineSupport.tsx",
+    "line": 357,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? ticket.status === \"resolved\" ? \"Đã xử lý\" : \"Đang chờ hỗ trợ\" : ticket.status === \"resolved\" ? \"Resolved\" : \"Awaiting support\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/ask/InlineSupport.tsx",
+    "line": 411,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/ask/OrderTracking.tsx",
+    "line": 127,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? \"Thông tin kiện chưa đầy đủ. Liên hệ hỗ trợ để kiểm tra.\" : \"Parcel information is incomplete. Contact support to check.\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/ask/ShippingQuote.tsx",
+    "line": 62,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? \"Biểu phí chưa được mở. Gửi thông tin hàng trong chat để được xem xét báo giá.\" : \"Shipping rates are unavailable. Provide shipment details in this chat for quote review.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/CrmAccessScreen.tsx",
+    "line": 66,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"entry-status\" role=\"status\"> <LoadingBar /> {state === \"restoring\" ? \"Đang khôi phục phiên đăng nhập…\" : \"Đang kiểm tra quyền CRM…\"} </div>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/auth/CrmAccessScreen.tsx",
+    "line": 103,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"entry-status\" role=\"status\"> Nhập mã xác thực để hoàn tất đăng nhập. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/auth/CrmAccessScreen.tsx",
+    "line": 135,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"entry-error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/EmulatorLogin.tsx",
+    "line": 65,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/LoginChallenge.tsx",
+    "line": 146,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Phương thức xác thực này chưa được hỗ trợ. Hủy để chọn cách đăng nhập khác. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/LoginChallenge.tsx",
+    "line": 152,
+    "role": "\"alert\"",
+    "excerpt": "<p id=\"login-challenge-error\" role=\"alert\" className=\"loginChallengeError\" > {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 224,
+    "role": "{factors ? \"status\" : undefined}",
+    "excerpt": "<span role={factors ? \"status\" : undefined} className={`securityBadge ${factors ? \"isEnabled\" : \"\"}`} > {factors === null ? statusFailed ? \"Chưa xác định\" : \"Đang kiểm tra\" : factors ? \"Đã bật\" : \"Chưa bật\"} </span>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 291,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {qrFailed ? \"Không tạo được mã QR. Bạn có thể nhập khóa bên dưới.\" : \"Đang tạo mã QR…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 327,
+    "role": "{copyState === \"failed\" ? \"alert\" : \"status\"}",
+    "excerpt": "<p className=\"securityCopyFeedback\" role={copyState === \"failed\" ? \"alert\" : \"status\"} > {copyState === \"done\" ? \"Đã sao chép\" : copyState === \"failed\" ? \"Không sao chép được. Chọn khóa để sao chép thủ công.\" : \"Đang sao chép…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 351,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Tài khoản cần phương thức xác thực khác. Quay lại trang đăng nhập để tiếp tục. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 427,
+    "role": "\"alert\"",
+    "excerpt": "<p id=\"security-error\" role=\"alert\" className=\"securityNotice isError\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/BlogComments.tsx",
+    "line": 301,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"notice\" role=\"status\"> Chưa xác nhận được kết quả của thao tác trước. <button type=\"button\" className=\"button\" onClick={() => void write( pending, pending.service === \"blogCommentSubmit\" ? \"Đã gửi bình luận, đang chờ duyệt trước khi hiển thị công khai.\" : pending.service === \"blogCommentReport\" ? \"Đã gửi báo cáo.\" : pending.payload.action === \"delete\" ? \"Đã xóa bình luận.\" : \"Đã gử",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/BlogComments.tsx",
+    "line": 401,
+    "role": "",
+    "excerpt": "<div className=\"notice\">Bài viết này đã đóng bình luận.</div>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/BlogComments.tsx",
+    "line": 415,
+    "role": "",
+    "excerpt": "<div className=\"notice\" key={comment.id}> <span className=\"status-badge\"> {commentStatus(comment.status)} </span> <p style={{ whiteSpace: \"pre-wrap\", fontSize: 13, marginTop: 10 }} > {comment.text || \"Nội dung đã xóa\"} </p> <div className=\"comment-actions\"> {![\"hidden\", \"rejected\", \"deleted\"].includes( comment.status, ) && ( <button type=\"button\" disabled={blocked} onClick={() => open(\"edit\", comm",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/BlogComments.tsx",
+    "line": 760,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"private-note\"> Chưa tải được trả lời. <button type=\"button\" disabled={loading} onClick={() => void loadReplies()} > Thử lại </button> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/Campaigns.tsx",
+    "line": 265,
+    "role": "",
+    "excerpt": "<p className=\"fc095Notice\"> Lịch là kế hoạch nội dung. Duyệt caption không đăng lên mạng xã hội; bạn tự đăng sau khi kiểm tra. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/Campaigns.tsx",
+    "line": 472,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{message}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/Content.tsx",
+    "line": 187,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error}{\" \"} <button type=\"button\" className=\"textbutton\" onClick={retry}> Tải lại </button> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/Content.tsx",
+    "line": 195,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"smallNote\" role=\"status\"> Đang hiển thị nội dung lần tải trước; chờ cập nhật. </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/Content.tsx",
+    "line": 460,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 385,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"crmFilterScope\" role=\"status\">{visibleRows.length} / {rows.length} mục đã tải · Lọc ngay khi thay đổi</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 397,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 559,
+    "role": "\"status\"",
+    "excerpt": "<span className={`ceSaveIndicator${dirty ? \" isDirty\" : \"\"}`} role=\"status\" aria-label={dirty ? \"Chưa lưu\" : \"Không có thay đổi chưa lưu\"} title={dirty ? \"Chưa lưu\" : \"Không có thay đổi chưa lưu\"} > <svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" aria-hidden=\"true\" > {dirty ? ( <circle cx=\"8\" cy=\"8\" r=\"4\" fill=\"currentColor\" /> ) : ( <path d=\"M3 8l3 3 7-7\" fill=\"none\" stroke=\"currentColor\" strokeW",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 945,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Xuất bản hiển thị công khai. Không đưa chứng từ, thông tin khách hoặc nội dung chưa được duyệt vào đây. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 951,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 956,
+    "role": "\"alert\"",
+    "excerpt": "<div role=\"alert\" className=\"error\"> <strong>Kiểm tra các trường sau:</strong> <ul> {validation.map((message, index) => ( <li key={index}>{message}</li> ))} </ul> </div>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/MediaUpload.tsx",
+    "line": 101,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductInformationFields.tsx",
+    "line": 102,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Trang sản phẩm tiếp tục dùng cách dùng đã lưu bên dưới khi chưa có hướng dẫn dạng danh sách. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/ProductReviewModeration.tsx",
+    "line": 157,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Giữ nguyên lời nhận xét và số sao. Không từ chối chỉ vì đánh giá thấp. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviewModeration.tsx",
+    "line": 163,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviewModeration.tsx",
+    "line": 178,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> { ( { pending: \"Chờ duyệt\", approved: \"Đã đăng\", rejected: \"Chưa được duyệt\", withdrawn: \"Đã gỡ\", hidden: \"Đã ẩn\", } as Record<string, string> )[r.status] }{\" \"} ·{\" \"} {r.productSlug && ( <a href={`/products/${r.productSlug}`}>Xem sản phẩm</a> )} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 312,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\">Chưa có đánh giá.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 316,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\">Chưa tải được điểm tổng hợp.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 338,
+    "role": "",
+    "excerpt": "<LoadingState className=\"sgReviewNotice\" overlay={false}> Đang tải đánh giá… </LoadingState>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 343,
+    "role": "",
+    "excerpt": "<LoadingState className=\"sgReviewNotice\" overlay={false}> Đang xử lý… </LoadingState>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 348,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"sgReviewNotice\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 364,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\"> { ( { pending: \"Đánh giá của anh/chị đang chờ duyệt.\", approved: \"Đánh giá của anh/chị đã đăng.\", rejected: \"Đánh giá chưa được duyệt.\", withdrawn: \"Đánh giá của anh/chị đã gỡ.\", hidden: \"Đánh giá của anh/chị đã ẩn.\", } as Record<string, string> )[mine.status] } {mine.reason && ` ${mine.reason}`} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 413,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\"> Chỉ đánh giá sản phẩm đã nhận tại SatsunicGo. Quyền được kiểm tra khi gửi. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 418,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\"> Chưa tìm thấy đơn có thể đối chiếu với sản phẩm này. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 484,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\"> Nội dung được duyệt trước khi đăng. Không đưa thông tin riêng tư vào nhận xét. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 508,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\"> Gỡ đánh giá khỏi trang sản phẩm?{\" \"} <button disabled={busy} onClick={() => void write({ action: \"withdraw\", productId, expectedVersion: mine.version, }) } > Gỡ đánh giá </button> <button disabled={busy} onClick={() => setWithdraw(false)}> Giữ lại </button> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/ProductReviews.tsx",
+    "line": 544,
+    "role": "",
+    "excerpt": "<p className=\"sgReviewNotice\">Mẫu: {r.variant}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 199,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\">{phase}</span>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 201,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 338,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {preview.length} dòng · {preview.filter((r) => r.error).length}{\" \"} lỗi · {preview.filter((r) => r.result === \"saved\").length} đã lưu </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 441,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{phase}</p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 443,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/ProductsCatalog.tsx",
+    "line": 38,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"products074State\" role=\"alert\"> <div className=\"products074StateIcon\"><CatalogIcon kind=\"bag\" /></div> <h2>Chưa tải được sản phẩm</h2> <p>Anh/chị kiểm tra kết nối rồi thử lại nhé.</p> <button type=\"button\" className=\"products074Button\" onClick={retry}><CatalogIcon kind=\"retry\" />Tải lại</button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/ProductsCatalog.tsx",
+    "line": 44,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"products074Notice\" role=\"alert\"><span>Chưa tải được thêm sản phẩm.</span><button type=\"button\" onClick={retry}>Thử lại</button></div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/ProductsCatalog.tsx",
+    "line": 45,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"products074Note\" role=\"status\">Đang hiển thị sản phẩm từ lần tải trước.</p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/WebsiteBanners.tsx",
+    "line": 265,
+    "role": "",
+    "excerpt": "<p className=\"fc095Notice\"> Hiển thị chương trình trên website. Không có banner đang chạy, trang sẽ giữ bố cục bình thường. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/WebsiteBanners.tsx",
+    "line": 269,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{message}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/studio/MermaidDiagram.tsx",
+    "line": 65,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {result?.source === source && result.error ? \"Chưa vẽ được sơ đồ. Kiểm tra lại cú pháp Mermaid.\" : \"Đang vẽ sơ đồ…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/studio/RichPreview.tsx",
+    "line": 47,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{\"Chưa mở được ảnh bản nháp.\"}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/RichPreview.tsx",
+    "line": 176,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Chưa mở được nội dung bản nháp.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/SourceStudio.tsx",
+    "line": 495,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Đăng nhập tài khoản biên tập để mở Studio.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/SourceStudio.tsx",
+    "line": 503,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"notice\" role=\"alert\"> {error} <button className=\"button\" onClick={() => setRefresh((n) => n + 1)}> Tải lại </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/studio/SourceStudio.tsx",
+    "line": 529,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Cần quyền quản trị Studio.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/SourceStudio.tsx",
+    "line": 664,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{uploadError}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/Studio.tsx",
+    "line": 18,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Đăng nhập tài khoản biên tập để mở Studio.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 538,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\"> {busy ? \"Đang xử lý…\" : dirty ? \"Chưa lưu thay đổi\" : \"Đã lưu bản nháp\"} </span>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 569,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 574,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> Bài chưa được xuất bản theo lịch. Kiểm tra nội dung, tác giả, ảnh và quyền biên tập rồi lên lịch lại. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 580,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Lịch xuất bản: {scheduleLabel(post.scheduledAt)}. Lưu thay đổi sẽ hủy lịch hiện tại; cần lên lịch lại bản mới. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 586,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Bản thảo đã thay đổi. Sao chép nội dung cần giữ trước khi tải lại. Không tự ghi đè phiên bản khác. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 592,
+    "role": "",
+    "excerpt": "<div className=\"notice\"> <p>Có bản tạm trong phiên trình duyệt này.</p> <button onClick={restoreLocal}>Khôi phục bản tạm</button> <button onClick={() => { try { sessionStorage.removeItem(recoveryKey(uid, post.id)); } catch { /* optional */ } setRecovery(null); }} > Bỏ bản tạm </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 854,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Bản đã lưu · phiên bản {preview.revision}. Xem trước riêng tư, chưa phải bài công khai. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/studio/StudioEditor.tsx",
+    "line": 1036,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/rich-editor.tsx",
+    "line": 853,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\">{\"Gõ / ở dòng mới để chèn nhanh\"}</span>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/studio/rich-editor.tsx",
+    "line": 1042,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{linkError}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/source-editor.tsx",
+    "line": 618,
+    "role": "",
+    "excerpt": "<div className=\"notice\"> Đăng lúc {new Date(scheduledAt).toLocaleString(\"vi\")}{\" \"} <button type=\"button\" disabled={busy} onClick={async () => { setBusy(true); try { await request( `/api/admin/blog/posts/${post.id}/schedule`, \"DELETE\", { revision: post.revision }, ); setScheduledAt(null); setNotice(\"Đã hủy lịch đăng.\", \"success\"); } catch (e) { setNotice(message(e), \"error\"); } finally { setBusy(f",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/studio/source-editor.tsx",
+    "line": 645,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"notice\" role=\"status\"> Có nội dung chưa lưu trên thiết bị này. {recovery.revision !== initial.revision ? \" Bản trên máy chủ đã thay đổi; kiểm tra kỹ trước khi lưu.\" : \"\"} <button type=\"button\" disabled={dirty || busy} onClick={restoreRecovery} > Phục hồi </button> <button type=\"button\" onClick={() => { try { localStorage.removeItem(recoveryKey(viewerUid, initial.id)); } catch { /* ",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/content/studio/source-mermaid.tsx",
+    "line": 78,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {result?.source === source && result.error ? \"Chưa vẽ được sơ đồ. Kiểm tra lại cú pháp Mermaid.\" : \"Đang vẽ sơ đồ…\"} </p>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/studio/source-moderation.tsx",
+    "line": 110,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">Chưa tải được số báo cáo.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/source-moderation.tsx",
+    "line": 254,
+    "role": "\"note\"",
+    "excerpt": "<div className=\"notice\" role=\"note\"> <strong>Lý do kiểm tra tự động</strong> <ul> {c.moderationReasons.map((reason) => ( <li key={reason}>{reason}</li> ))} </ul> </div>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/content/studio/source-settings.tsx",
+    "line": 530,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"notice\" role=\"alert\"> {dialogError} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/content/studio/taxonomy-fields.tsx",
+    "line": 216,
+    "role": "\"status\"",
+    "excerpt": "<small role=\"status\">Đang tạo chuyên mục…</small>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/content/studio/toast.tsx",
+    "line": 134,
+    "role": "{kind === \"error\" ? \"alert\" : \"status\"}",
+    "excerpt": "<p role={kind === \"error\" ? \"alert\" : \"status\"} aria-atomic=\"true\"> {text} </p>",
+    "decision": "KEEP_EXISTING_TOAST: portal/live announcement is already transient."
+  },
+  {
+    "file": "src/features/crm/CrmPresentation.tsx",
+    "line": 163,
+    "role": "{kind === \"error\" ? \"alert\" : undefined}",
+    "excerpt": "<div className={`crmState crmState--${kind}`} role={kind === \"error\" ? \"alert\" : undefined} > <span className=\"crmStateIcon\"> <CrmIcon name={kind === \"error\" ? \"warning\" : \"check\"} /> </span> <div className=\"crmStateContent\"> <strong>{title}</strong> {children && <div className=\"crmStateDescription\">{children}</div>} </div> {action && <div className=\"crmActions\">{action}</div>} </div>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/crm/Customer.tsx",
+    "line": 350,
+    "role": "",
+    "excerpt": "<div className=\"notice\"> <p role=\"status\"> Hồ sơ đã thay đổi. Bản nháp của bạn chưa được lưu. </p> <details className=\"crmItemDetails\"> <summary>Nội dung mới nhất</summary> <p> Phân loại:{\" \"} {data.crm?.tags.join(\", \") || \"Chưa phân loại\"} </p> <p>Ghi chú: {data.crm?.notes || \"Chưa có ghi chú\"}</p> <p> Người phụ trách:{\" \"} {data.crm?.assigneeId || \"Chưa phân công\"} </p> <p> Lịch hẹn:{\" \"} {data.",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/crm/Customers.tsx",
+    "line": 204,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"muted\" role=\"status\"> Bộ lọc đã đổi. Bấm{\" \"} {followUps ? \"Xem danh sách\" : \"Tìm khách hàng\"} để xem kết quả. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/crm/Dashboard.tsx",
+    "line": 234,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"d94Validation\" role=\"alert\"> {validation} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/crm/Dashboard.tsx",
+    "line": 246,
+    "role": "\"status\"",
+    "excerpt": "<span className={`d94Status${stale ? \" d94Status--stale\" : \"\"}`} role=\"status\" > {busy ? ( snapshot ? ( `Đang tải ${periodLabel(period)} · đang hiển thị lần đọc trước` ) : ( \"Đang tải số liệu\" ) ) : failure ? ( snapshot ? ( `Chưa tải được ${periodLabel(period)} · số liệu lần đọc trước` ) : ( \"Chưa có số liệu\" ) ) : snapshot ? ( <> Đọc lúc{\" \"} <time dateTime={new Date(snapshot.observedAt).toISOStr",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/crm/Dashboard.tsx",
+    "line": 280,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"d94Notice d94Notice--error\" role=\"alert\"> <CrmIcon name=\"warning\" /> <div> <strong> {failure === \"permission\" ? \"Chưa có quyền xem tổng quan vận hành\" : failure === \"response\" ? \"Số liệu trả về chưa hợp lệ\" : \"Chưa tải được số liệu\"} </strong> <p> {failure === \"permission\" ? \"Cần tài khoản chủ sở hữu hoặc quản lý vận hành. Kiểm tra tài khoản đang đăng nhập.\" : \"Kiểm tra kết nối và ",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/crm/Dashboard.tsx",
+    "line": 306,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"d94Notice\" role=\"status\"> <CrmIcon name=\"warning\" /> <div> <strong>Số liệu chưa đầy đủ</strong> <p> {snapshot.truncated.length > 0 ? \"Có nguồn đạt giới hạn 100 bản ghi. Thu hẹp khoảng ngày để kiểm tra thêm.\" : \"Một số chỉ số chưa có dữ liệu hợp lệ. Chúng được hiển thị bằng dấu —.\"} </p> {snapshot.truncated.length > 0 && missing.length > 0 && ( <p> Một số chỉ số chưa có dữ liệu hợp ",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 70,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\" className=\"error\"> Đã hủy · {d.voidReason} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 424,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{message}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 426,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> Có thao tác chưa rõ kết quả.{\" \"} <button disabled={busy} onClick={() => void execute({}, true)}> Kiểm tra lại cùng thao tác </button> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/invoices/Documents.tsx",
+    "line": 809,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/membership/Membership.tsx",
+    "line": 220,
+    "role": "",
+    "excerpt": "<div className=\"notice\"> <strong>{subscription.planSnapshot.name}</strong> ·{\" \"} {subscription.endsAt > Date.now() ? \"Có hiệu lực đến\" : \"Đã hết hạn ngày\"}{\" \"} {new Date(subscription.endsAt).toLocaleDateString(\"vi-VN\")} <p> {subscription.renewalIntent ? \"Bạn muốn tiếp tục gia hạn.\" : \"Chưa đăng ký ý định gia hạn.\"} </p> <button disabled={busy} className=\"textbutton\" onClick={() => void command( ",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/membership/Membership.tsx",
+    "line": 247,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 457,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Kiểm tra đúng tài khoản và gói đã duyệt trước khi cấp tặng. Thao tác được ghi vào lịch sử gói thành viên. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 490,
+    "role": "",
+    "excerpt": "<p id=\"membership-gift-uid-hint\" className=\"notice\"> Mã gồm 1–128 ký tự A–Z, a–z, 0–9 hoặc dấu gạch ngang (-). </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 493,
+    "role": "{giftUidError ? \"alert\" : undefined}",
+    "excerpt": "<p id=\"membership-gift-uid-error\" className=\"error\" role={giftUidError ? \"alert\" : undefined} > {giftUidError} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 526,
+    "role": "",
+    "excerpt": "<p id=\"membership-plan-page-hint\" className=\"notice\"> Chọn gói đã duyệt trên trang đang xem. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/membership/PlanEditor.tsx",
+    "line": 579,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} <button type=\"button\" disabled={busy || uncertain || loading} onClick={() => void load()} > Tải lại danh sách gói </button> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/membership/ReminderSettings.tsx",
+    "line": 183,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/notifications/Notifications.tsx",
+    "line": 170,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"notificationState isError\" role=\"alert\"> <span className=\"notificationStateIcon\" aria-hidden=\"true\"> ! </span> <h3> {rows.length ? \"Chưa cập nhật được\" : \"Chưa tải được thông báo\"} </h3> <p>{rows.length ? error : \"Thử lại để xem cập nhật mới.\"}</p> <button className=\"notificationRetry\" onClick={() => setRetry((v) => v + 1)} > Thử lại </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/operations/OperationsPresentation.tsx",
+    "line": 12,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"operationsEmpty\" role=\"status\"> <span className=\"operationsEmptyIcon\"> <CrmIcon name=\"box\" /> </span> <h2>{title}</h2> <p>{children}</p> </div>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/operations/Returns.tsx",
+    "line": 441,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Hoàn tất kiểm tra không tự hoàn tiền hoặc gỡ tạm giữ đơn. Tài chính cần đối soát riêng. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/operations/Returns.tsx",
+    "line": 471,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/operations/Workbench.tsx",
+    "line": 207,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> <CrmIcon name=\"warning\" /> Tạm giữ: {o.hold} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/operations/Workbench.tsx",
+    "line": 260,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> <CrmIcon name=\"warning\" /> Tạm giữ: {selected.hold} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/operations/Workbench.tsx",
+    "line": 827,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> Chỉ xác nhận sau khi kiểm tra giao dịch ngân hàng thực tế. Ảnh khách gửi chưa chứng minh tiền đã về. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/orders/AccountTracking.tsx",
+    "line": 50,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"accountTrackingNotice\" role=\"status\"> Phiên đăng nhập đã thay đổi. Mở lại đơn hàng trong tài khoản của bạn. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/orders/AccountTracking.tsx",
+    "line": 57,
+    "role": "",
+    "excerpt": "<section className=\"accountTrackingNotice\" aria-label=\"Theo dõi đơn hàng\"> <p role=\"status\"> Chưa tải được tiến trình đơn hàng. Kiểm tra kết nối và thử lại. </p> <button onClick={() => setRetry((value) => value + 1)}> Tải lại tiến trình </button> </section>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/orders/AccountTracking.tsx",
+    "line": 67,
+    "role": "",
+    "excerpt": "<LoadingState className=\"accountTrackingNotice\" overlay={false}> Đang tải tiến trình đơn hàng… </LoadingState>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/orders/Changes.tsx",
+    "line": 183,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {mutation.error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/orders/Changes.tsx",
+    "line": 292,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {vi ? \"Chưa tải được đề xuất thay đổi.\" : \"Could not load change proposals.\"} {readState === \"offline\" && (vi ? \" Anh/chị đang mất kết nối. Kết nối lại rồi tải lại đề xuất.\" : \" You are offline. Reconnect, then retry proposals.\")} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/orders/OrderImages.tsx",
+    "line": 236,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">{error}</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/orders/OrderTools.tsx",
+    "line": 196,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/payments/Finance.tsx",
+    "line": 383,
+    "role": "",
+    "excerpt": "<p className=\"fc095Notice\"> Tiền membership được phân bổ cho hóa đơn gói riêng, không thanh toán số dư đơn mua hộ. Chỉ xác nhận khi đã đối chiếu tiền vào tài khoản doanh nghiệp. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/payments/Finance.tsx",
+    "line": 588,
+    "role": "",
+    "excerpt": "<div className=\"notice\"> <CrmReference label=\"Hóa đơn đang chờ\" value={String(confirmation.current?.invoiceId ?? \"\")} /> <button className=\"primary\" disabled={busy} onClick={() => void executeConfirmation()} > Thử lại thao tác đang chờ </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/payments/Finance.tsx",
+    "line": 746,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"notice\" role=\"status\"> Đã xác nhận tiền vào và đóng thông báo. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/payments/FinancialReview.tsx",
+    "line": 173,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"notice\" role=\"status\"> Đã lưu kết quả đối soát. Tải lại hàng đợi và đơn để xem dữ liệu mới. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/payments/Refunds.tsx",
+    "line": 142,
+    "role": "",
+    "excerpt": "<p className=\"fc095Notice\"> Yêu cầu chỉ dành trước số tiền có thể hoàn. Chỉ xác nhận sau khi đã đối chiếu giao dịch tiền ra thực tế; không tự chuyển tiền. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/products/Checkout.tsx",
+    "line": 243,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">Chọn mẫu và số lượng hợp lệ để tiếp tục.</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/products/Checkout.tsx",
+    "line": 264,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> Sản phẩm này chưa mở đặt mua. Bạn có thể chọn sản phẩm khác trong danh mục. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/products/Checkout.tsx",
+    "line": 271,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/profile/Profile.tsx",
+    "line": 179,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"profileNotice\" role=\"alert\"> <p>{message}</p> <button type=\"button\" disabled={busy} onClick={() => setRetry((n) => n + 1)} > Thử tải lại </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/profile/Profile.tsx",
+    "line": 209,
+    "role": "",
+    "excerpt": "<p className=\"profileNotice\">Đăng nhập để quản lý thông tin của bạn.</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/profile/Profile.tsx",
+    "line": 432,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"profileNotice\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 189,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\">Đang đọc ảnh…</span>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 208,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 776,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">Chức năng gửi chưa được kích hoạt.</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 779,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"requestRecovery\" role=\"status\"> Yêu cầu đã lưu. {attempt.images.filter((x) => x.uploaded).length}/ {attempt.images.length} ảnh đã tải.{\" \"} <Link to={`/account/orders/${attempt.orderId}`}> Xem đơn để bổ sung ảnh sau </Link> </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 788,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> Chưa đọc được lần gửi trước.{\" \"} <Link to=\"/account\">Kiểm tra đơn của bạn</Link> trước khi tiếp tục. </p>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 795,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/requests/TransferNotice.tsx",
+    "line": 37,
+    "role": "",
+    "excerpt": "<details className=\"transferNotice\"> <summary>Báo đã chuyển khoản</summary> <p> Chỉ chuyển tới tài khoản đã được nhân viên xác nhận. Thông báo này chưa xác nhận tiền đã vào tài khoản; nhân viên đối soát trước khi ghi nhận. </p> {sent ? ( <p role=\"status\"> Đã gửi thông báo. Đang chờ đối soát; số tiền đã thu chưa thay đổi. </p> ) : ( <form className=\"form\" onSubmit={(e) => void submit(e)}> <label> <",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/features/settings/Settings.tsx",
+    "line": 145,
+    "role": "",
+    "excerpt": "<p className=\"notice\"> {policy ? `${policyVersionLabel(policy.version)} · ${policy.approved ? \"Đã phê duyệt\" : \"Chưa phê duyệt\"} · ${policyDateLabel(policy.effectiveFrom)} → ${policyDateLabel(policy.expiresAt)}` : \"Chưa có chính sách.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 272,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{message}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 485,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 738,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" style={{ overflowWrap: \"anywhere\" }}> Kiện {failedChoice} chưa được thêm. Các kiện đã chọn được giữ lại. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 783,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Có kiện không còn đủ điều kiện gom. Bỏ kiện đó trước khi chốt lô. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 789,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Chưa tải đủ đơn của kiện đã chọn. Tải lại và kiểm tra trước khi chốt lô. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 871,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Dữ liệu cần được đối chiếu trước thao tác mới. Nội dung đang được giữ nguyên. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 895,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Đã lưu lô. Chưa tải được chi tiết.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Consolidation.tsx",
+    "line": 1029,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">{message}</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/CustomerShipments.tsx",
+    "line": 84,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Chưa tải được kiện vận chuyển.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/DeliveryEstimate.tsx",
+    "line": 140,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? \"Đã qua khoảng dự kiến. Cần cập nhật lại.\" : \"The estimated window has passed. An update is needed.\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/DeliveryEstimate.tsx",
+    "line": 147,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {vi ? \"Giao chưa thành công. Khoảng dự kiến cần được cập nhật.\" : \"Delivery was unsuccessful. The estimate needs an update.\"} </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/DeliveryEstimate.tsx",
+    "line": 351,
+    "role": "{error ? \"alert\" : undefined}",
+    "excerpt": "<p id={`${id}-error`} hidden={!error} role={error ? \"alert\" : undefined} className=\"error\" > {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Shipping.tsx",
+    "line": 467,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Shipping.tsx",
+    "line": 947,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\"> Dữ liệu cần được đối chiếu trước thao tác mới. Nội dung đang được giữ nguyên. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Shipping.tsx",
+    "line": 971,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\">Đã lưu kiện. Chưa tải được chi tiết.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/Shipping.tsx",
+    "line": 1204,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 374,
+    "role": "\"alert\"",
+    "excerpt": "<div className=\"rateNotice\" role=\"alert\"> <span>{error}</span> <button disabled={busy} onClick={() => void load()}> Tải lại </button> </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 382,
+    "role": "\"status\"",
+    "excerpt": "<p className=\"rateNotice\" role=\"status\"> Chưa có bảng giá. Nhờ xác nhận cước theo kiện hàng. </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 497,
+    "role": "\"status\"",
+    "excerpt": "<div role=\"status\" aria-live=\"polite\" aria-atomic=\"true\"> <div className=\"rateFeedback\" key={amountLabel}> <p className={`rateAmount${estimate ? \"\" : \" rateAmount--message\"}`} > {amountLabel} </p> {explanation && ( <p className=\"rateExplanation\">{explanation}</p> )} </div> </div>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 622,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\"> {detailRows.length} / {rows.length} dòng giá </span>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 707,
+    "role": "\"status\"",
+    "excerpt": "<span role=\"status\"> {conditions.length} / {config.conditions.length} điều kiện </span>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 789,
+    "role": "\"alert\"",
+    "excerpt": "<div role=\"alert\" className=\"error\"> {error} {uncertain && ( <button disabled={busy} onClick={() => void mutate(attempt.current!.payload.action)} > Thử lại thao tác </button> )} </div>",
+    "decision": "KEEP_CONTEXTUAL: recovery/action or consequential next step must remain discoverable."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 897,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\"> {quote?.status === \"estimate\" ? `Cước vận chuyển theo biểu phí VietCargo: ${money(quote.freightMinor, quote.currency)}. Chưa cộng thông quan, thuế, phụ thu hoặc bảo hiểm.` : \"Cần xác nhận báo giá cho lựa chọn này; không nội suy hoặc làm tròn lên mốc giá khác.\"} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 1455,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">Đã gửi yêu cầu.</p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 1474,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"rateSupportError\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/shipping/ShippingRates.tsx",
+    "line": 1479,
+    "role": "\"status\"",
+    "excerpt": "<p role=\"status\">Chưa thể gửi yêu cầu lúc này.</p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/support/OrderConversation.tsx",
+    "line": 372,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/support/OrderConversation.tsx",
+    "line": 377,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {readError} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/support/Support.tsx",
+    "line": 190,
+    "role": "",
+    "excerpt": "<p className=\"notice supportSignIn\"> Đăng nhập để gửi và xem phản hồi riêng của bạn. </p>",
+    "decision": "KEEP_DURABLE: displayed data, qualifications, empty result, confirmation state or persistent receipt replacing a submitted form."
+  },
+  {
+    "file": "src/features/support/Support.tsx",
+    "line": 195,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/support/Thread.tsx",
+    "line": 245,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/features/support/Thread.tsx",
+    "line": 250,
+    "role": "\"alert\"",
+    "excerpt": "<p className=\"error\" role=\"alert\"> {readError} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/shared/Loading.tsx",
+    "line": 30,
+    "role": "\"status\"",
+    "excerpt": "<div className=\"loadingOverlayCard\" role=\"status\" aria-live=\"polite\" aria-atomic=\"true\" aria-busy=\"true\" > <LoadingBar /> <div>{children}</div> </div>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/shared/Loading.tsx",
+    "line": 44,
+    "role": "\"status\"",
+    "excerpt": "<div className={`loadingState loadingState--${variant} ${className}`} role=\"status\" aria-busy=\"true\" > <LoadingBar /> <div>{children}</div> </div>",
+    "decision": "KEEP_STATE: progress or data status belongs to its operation/content."
+  },
+  {
+    "file": "src/shared/StepForm.tsx",
+    "line": 342,
+    "role": "\"alert\"",
+    "excerpt": "<p role=\"alert\" className=\"error crmStepError\"> {error} </p>",
+    "decision": "KEEP_CONTEXTUAL: validation, authorization, failed read or partial/reconciliation condition."
+  },
+  {
+    "file": "src/shared/Toast.tsx",
+    "line": 128,
+    "role": "{notice?.kind === \"error\" ? \"alert\" : \"status\"}",
+    "excerpt": "<p role={notice?.kind === \"error\" ? \"alert\" : \"status\"} aria-atomic=\"true\" > {text} </p>",
+    "decision": "KEEP_EXISTING_TOAST: portal/live announcement is already transient."
+  }
+]

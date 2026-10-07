@@ -1,4 +1,5 @@
 "use client";
+import "../../../shared/toast.css";
 import {
   useCallback,
   useEffect,
@@ -48,6 +49,7 @@ export function BlogToast({
   const hasHost = host !== null;
   const timer = useRef<ToastCountdown | null>(null);
   const element = useRef<HTMLDivElement | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
   const hovered = useRef(false);
   const [clock, setClock] = useState({ remaining: duration, paused: false });
   useEffect(() => {
@@ -68,6 +70,9 @@ export function BlogToast({
   }, [text]);
   useEffect(() => {
     if (!hasHost || !text) return;
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && !element.current?.contains(active))
+      returnFocus.current = active;
     const countdown = createToastCountdown(
       duration,
       (remaining, paused) => setClock({ remaining, paused }),
@@ -88,7 +93,10 @@ export function BlogToast({
       timer.current = null;
       document.removeEventListener("visibilitychange", visibility);
     };
-  }, [hasHost, text, kind, pending]);
+  }, [hasHost, text, kind]);
+  useEffect(() => {
+    timer.current?.hold("pending", pending);
+  }, [pending]);
   useEffect(() => {
     hovered.current = false;
     timer.current?.hold("hover", false);
@@ -150,7 +158,12 @@ export function BlogToast({
           <button
             className="blog-toast-close"
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              const focused = element.current?.contains(document.activeElement);
+              onClose();
+              if (focused && returnFocus.current?.isConnected)
+                returnFocus.current.focus();
+            }}
             aria-label={
               language === "en" ? "Dismiss notification" : "Ẩn thông báo"
             }

@@ -172,6 +172,7 @@ export function Dashboard({
           }}
         >
           <label className="search">
+            <span className="studioFilterLabel">Tiêu đề bài viết</span>
             <BlogIcon name="search" size={15} />
             <input
               name="q"
@@ -181,18 +182,20 @@ export function Dashboard({
             />
           </label>
           <input type="hidden" name="state" value={query.state ?? ""} />
-          <div className="flex">
+          <label className="studioCategoryFilter">
+            <span className="studioFilterLabel">Chuyên mục</span>
             <input
               className="filter-input"
               name="category"
               aria-label="Chuyên mục"
               defaultValue={query.category}
-              placeholder="Chuyên mục"
+              placeholder="Nhập chuyên mục"
             />
-          </div>
+          </label>
           <button className="button small" type="submit">
-            Tìm / lọc
+            Áp dụng
           </button>
+          {(query.q || query.state || query.category) && <button className="button small" type="button" onClick={() => router.push("/crm/studio")}>Xóa bộ lọc</button>}
         </form>
         <table className="post-table">
           <thead>

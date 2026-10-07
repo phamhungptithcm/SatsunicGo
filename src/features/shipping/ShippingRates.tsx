@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import "../settings/admin-workbench096.css";
 import {
@@ -70,8 +71,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
   const [weight, setWeight] = useState(staff ? "1" : "2"),
     [product, setProduct] = useState("");
   const [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [message, setMessage] = useState("");
+    [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState<"publish" | "delete" | null>(
     null,
   );
@@ -86,7 +86,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
     running.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     setSnapshot(null);
     setDraft(null);
     setPublicSnapshot(null);
@@ -150,7 +150,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
             setDraft(null);
             setConfirmation(null);
             setError("");
-            setMessage("");
+
             void load();
           })
         : undefined;
@@ -198,7 +198,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
     running.current = true;
     setBusy(true);
     setError("");
-    setMessage("");
+
     try {
       const result = await callService<ShippingRatesSnapshot>(
         "shippingRatesAdmin",
@@ -214,12 +214,13 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
       setSnapshot(result);
       setDraft(result.config);
       setConfirmation(null);
-      setMessage(
+      notify(
         action === "save"
           ? "Đã lưu bản nháp. Bảng giá công khai chưa thay đổi."
           : action === "publish"
             ? "Đã công bố bảng giá đã lưu."
             : "Đã xóa bản nháp và gỡ bảng giá công khai.",
+        "success",
       );
     } catch (e) {
       if (
@@ -773,11 +774,10 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
     <section className={`shippingRates${staff ? " admin096" : ""}`}>
       <CrmHeading
         title={staff ? "Cấu hình cước vận chuyển" : "Cước vận chuyển"}
-        actions={
-          <button disabled={busy || uncertain} onClick={() => void load()}>
+        reload={<button disabled={busy || uncertain} onClick={() => void load()}>
             Tải lại bảng giá
-          </button>
-        }
+          </button>}
+
       />
       <p>
         Cước vận chuyển theo biểu phí VietCargo, chiều vận chuyển và khối lượng.
@@ -798,7 +798,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
           )}
         </div>
       )}
-      {message && <p role="status">{message}</p>}
+
       {!busy && !error && !config && (
         <CrmState kind="empty" title="Chưa có bảng giá công khai">
           Liên hệ để được báo giá theo kiện hàng.

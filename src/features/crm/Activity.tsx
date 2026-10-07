@@ -1,3 +1,4 @@
+import { notify } from "../../shared/feedback";
 import { PageTabs } from "../../shared/PageTabs";
 import "../settings/admin-workbench096.css";
 import { CrmHeading, CrmIcon, CrmState, CrmReference } from "./CrmPresentation";
@@ -106,7 +107,7 @@ export function Activity() {
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const [uncertain, setUncertain] = useState(false);
-  const [notice, setNotice] = useState("");
+
   async function load(after: string | undefined = cursors.current[kind]) {
     if (pending.current) return;
     cursors.current[kind] = after;
@@ -157,17 +158,18 @@ export function Activity() {
     const current = context.current;
     setBusy(true);
     setError("");
-    setNotice("");
+
     try {
       const action = pending.current!.action;
       await callService("outboxCommand", pending.current!);
       if (current !== context.current) return;
       pending.current = null;
       setUncertain(false);
-      setNotice(
+      notify(
         action === "resolveUnknown"
           ? "Đã lưu đối soát, chưa gửi lại email."
           : "Đã xếp lịch thử lại email.",
+        "success",
       );
       await load();
     } catch (cause) {
@@ -191,7 +193,7 @@ export function Activity() {
     <section className="admin096">
       <CrmHeading
         title="Nhật ký & thông báo"
-        actions={
+        reload={
           <button disabled={busy || uncertain} onClick={() => void load()}>
             <CrmIcon name="refresh" />
             Tải lại
@@ -213,7 +215,7 @@ export function Activity() {
           request.current++;
           setRows([]);
           setNext(null);
-          setNotice("");
+
           setError("");
           setKind(value);
         }}
@@ -236,7 +238,7 @@ export function Activity() {
             }
           />
         )}
-        {notice && <p role="status">{notice}</p>}
+
         {error && <CrmState kind="error" title={error} />}
         {uncertain && (
           <button disabled={busy} onClick={() => void retry()}>
