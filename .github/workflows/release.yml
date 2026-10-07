@@ -71,8 +71,6 @@ jobs:
         name: Build versioned production artifact once
         env:
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
-          VITE_RELEASE_TAG: ${{ steps.version.outputs.tag }}
-          VITE_RELEASE_SHA: ${{ github.sha }}
           VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_PROJECT_ID: satsunicgo
           VITE_FIREBASE_APP_ID: '1:278913913091:web:e40355cd8ad5abe00f9936'
