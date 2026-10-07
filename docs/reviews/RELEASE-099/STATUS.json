@@ -1,8 +1,8 @@
 {
   "status": "BLOCKED_RELEASE",
   "production": "NOT_DEPLOYED",
-  "commit": "PENDING",
-  "push": "PENDING",
+  "commit": "93ed382daa48b2f02e1c9a7c45726b7b2c1c5771",
+  "push": "VERIFIED origin main 93ed382daa48b2f02e1c9a7c45726b7b2c1c5771",
   "unit": "894/894 passed104files Node22",
   "lint": "PASSED",
   "releaseBuild": "PASSED after metadata correction",
@@ -15,5 +15,7 @@
   "intelligence": "DEGRADED",
   "tokenUsage": "Unavailable",
   "cost": "Unavailable",
-  "memoryCandidates": "None"
+  "memoryCandidates": "None",
+  "remote": "https://github.com/phamhungptithcm/SatsunicGo.git",
+  "remoteAuthorization": "Human approved remote receiving source and review documentation on 2026-10-07"
 }
