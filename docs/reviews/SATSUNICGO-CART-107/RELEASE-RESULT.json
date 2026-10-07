@@ -1,0 +1,78 @@
+{
+  "applicationCommit": "17310790224e85a6a856dacde718c535bd9925b1",
+  "provider": {
+    "cartCommand": {
+      "buildConfig": {
+        "runtime": "nodejs22"
+      },
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/cartCommand",
+      "serviceConfig": {
+        "uri": "https://cartcommand-b37peexksa-as.a.run.app"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T18:33:23.902384373Z"
+    },
+    "publicPage": {
+      "buildConfig": {
+        "runtime": "nodejs22"
+      },
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicPage",
+      "serviceConfig": {
+        "uri": "https://publicpage-b37peexksa-as.a.run.app"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T18:43:46.278444912Z"
+    },
+    "hosting": {
+      "url": "https://satsunicgo.web.app",
+      "release": "projects/satsunicgo/sites/satsunicgo/channels/live/releases/1791398504542000",
+      "version": "projects/satsunicgo/sites/satsunicgo/versions/1c46cafb410609d1"
+    }
+  },
+  "smoke": {
+    "status": "PASSED_SCOPED_DEPLOYMENT_SMOKE",
+    "guestAddReloadMobile": "NOT_TESTED_NO_ORDERABLE_PRODUCT",
+    "anonymousCallableRejected": true,
+    "artifacts": [
+      {
+        "path": "/assets/index-DeLiBguv.js",
+        "sha256": "85bbb24713c67545530cd203d09481e900d2349777e2582265f6bcd19ab6e7ac"
+      },
+      {
+        "path": "/assets/index-Coh7Yf4s.css",
+        "sha256": "0a5f225b7d02abc674aa8d38616d5e1b36926fd0fc402e86966427dcc7a4b2de"
+      },
+      {
+        "path": "/assets/Cart-ClQ1VcL9.js",
+        "sha256": "8ae07cc7b941afbba4900d59a25386eb24149c792582cac343c7ec6832740904"
+      }
+    ],
+    "authenticatedCheckout": "NOT_TESTED",
+    "paymentCollection": "NOT_TESTED"
+  },
+  "package": {
+    "sourceCommit": "17310790224e85a6a856dacde718c535bd9925b1",
+    "dependencyAudit": {
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "npmCi": "PASSED",
+    "runtimeImport": "PASSED",
+    "hashes": {
+      "package.json": "659e0ce469e592d08338f2c7fafe6e32ad8494911002b8acac999b3cf94dce40",
+      "package-lock.json": "e0ef4694316f77fabaaa4421d9f0c96518551eec581caafe1612f53924838dd9",
+      "lib/functions/src/cart-release.js": "9088210ea8c01334f3bbdfd65467342a0502b24d0ae3d7cb2e76c0ceb0aa2f70",
+      "lib/functions/src/cart.js": "85976ca088aaadd375ee075340640f92582d25ebafb62061840080505bbec4eb",
+      "lib/functions/src/public.js": "0d76703b16660e152d4d24209c73ed39571e9b6ea1358b92a92f3dfc00c09dd3",
+      "lib/functions/src/auth/guards.js": "a69752fd4f53796b6b0911ae5bc6b23e19a0f8df3ea9e17f31d3a6a30df6f450",
+      "lib/packages/domain/cart.js": "765bcbe562525ee2221b1a8f314cf0beec7937f61c2e1bb77d1f7d6bf56ebf21",
+      "generated/public-assets.json": "8b851e8e0f85b59b9155ccbee2943bad9787da6010f9279fd38b6ea19ab9e058"
+    }
+  },
+  "httpInvoker": {
+    "cartCommand": "MATCHES_EXISTING_CATALOG_CHECKOUT",
+    "businessAuthorization": "VERIFIED_GOOGLE_OWNER_AND_APP_CHECK_RETAINED"
+  },
+  "broaderProductionReadiness": "NOT_READY"
+}
