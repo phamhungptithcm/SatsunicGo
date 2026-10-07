@@ -56,7 +56,7 @@ import "../styles/security.css";
 import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
 import { CartProvider } from "../features/cart/cart-store";
-const CartPage = lazy(() => import("../features/cart/Cart").then(m => ({ default: m.CartPage }))); 
+const CartPage = lazy(() => import("../features/cart/Cart").then(m => ({ default: m.CartPage })));
 import { notify, withProgress } from "../shared/feedback";
 import { publicCopy } from "../../packages/domain/public-content";
 import {

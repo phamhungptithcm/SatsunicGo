@@ -31,3 +31,7 @@ Approved paths:
 ## Clean copy delta approval, 2026-10-07
 Direct user instruction: "Bỏ mấy label giải thích rươdm rà máy móc không cần thiêdt đi clean nhấtt" with cart screenshot.
 Approved plan: docs/plans/SATSUNICGO-CART-107-CLEAN.md. Presentation-only removal of redundant explanations and labels, shorter headings; essential errors and per-product checkout meaning retained. Same approved paths and business constraints apply.
+
+Production release authorized by current user instruction: Release lên production commit and push to main. Release plan docs/plans/SATSUNICGO-CART-107-RELEASE.md. Necessary test mock compatibility path tests/unit/product-reviews080.test.ts and regenerated functions/generated/public-assets.json included.
+
+Necessary scoped deployment entry functions/src/cart-release.ts is part of authorized cart production packaging; no provider secret changes.
