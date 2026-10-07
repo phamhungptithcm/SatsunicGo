@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import { useCatalogPages } from "../../shared/public-content";
 import "./products-catalog.css";
+import { AddToCart } from "../cart/AddToCart";
 
 const markets = [["", "Tất cả"], ["US", "Mỹ"], ["JP", "Nhật Bản"], ["KR", "Hàn Quốc"]] as const;
 const normalize = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase();
@@ -54,6 +55,7 @@ export function ProductsCatalog() {
                 <span className="productCategory">{[row.category, markets.find(([code]) => code && code === row.market)?.[1]].filter(Boolean).join(" · ")}</span>
                 <h2><Link to={`/products/${row.slug}`}>{row.title}</Link></h2>
                 <p className="products074Price">{available ? <>{row.listedPrice!.toLocaleString("vi-VN")} ₫ <span>trọn gói</span></> : "Chưa mở đặt mua"}</p>
+                {available && <AddToCart key={row.id} product={row} />}
                 <div className="productAction"><Link to={`/products/${row.slug}`}>Chi tiết</Link>{available && <Link to={`/products/${row.slug}/checkout`}>Chọn mua <span aria-hidden="true">↗</span></Link>}</div>
               </div>
             </article>;

@@ -2,7 +2,12 @@ import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import {
   catalogProductSchema,
   catalogSelectionSchema,
@@ -10,12 +15,15 @@ import {
 } from "../../../packages/domain/catalog-checkout";
 import { callService, db } from "../../shared/firebase";
 import type { ContentRow } from "../../shared/public-content";
+import { useCart } from "../cart/cart-store";
+import { notify } from "../../shared/feedback";
 
 type Attempt = {
   key: string;
   operationId: string;
   product: ContentRow;
   selection: CatalogSelection;
+  cartLine?: string;
 };
 export function ProductCheckout({
   user,
@@ -26,6 +34,15 @@ export function ProductCheckout({
 }) {
   const { slug } = useParams(),
     navigate = useNavigate();
+  const [params] = useSearchParams();
+  const { consume } = useCart();
+  const cartLine = /^[0-9a-f-]{36}$/i.test(params.get("cartLine") ?? "")
+    ? params.get("cartLine")!
+    : undefined;
+  const initialQuantity = Number(params.get("quantity") ?? 1);
+  const initialVariant = params.get("variant") ?? "";
+  const initialVersion = Number(params.get("productVersion") ?? 0);
+  const [needsPriceReview, setNeedsPriceReview] = useState(false);
   const [product, setProduct] = useState<ContentRow | null>(null),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
@@ -50,7 +67,9 @@ export function ProductCheckout({
         catalogSelectionSchema.safeParse(saved.selection).success &&
         saved.product.id === saved.selection.productId &&
         saved.product.slug === slug &&
-        /^[0-9a-f-]{36}$/.test(saved.operationId)
+        /^[0-9a-f-]{36}$/.test(saved.operationId) &&
+        (saved.cartLine === undefined ||
+          /^[0-9a-f-]{36}$/i.test(saved.cartLine))
       ) {
         attempt.current = saved;
         setPending(saved);
@@ -85,7 +104,21 @@ export function ProductCheckout({
           ? null
           : ({ ...s.docs[0].data(), id: s.docs[0].id } as ContentRow);
         setProduct(row);
-        setVariant(attempt.current?.selection.variant ?? "");
+        setVariant(attempt.current?.selection.variant ?? initialVariant);
+        setQuantity(
+          attempt.current?.selection.quantity ??
+            (Number.isInteger(initialQuantity) &&
+            initialQuantity >= 1 &&
+            initialQuantity <= 100
+              ? initialQuantity
+              : 1),
+        );
+        setNeedsPriceReview(
+          !!cartLine &&
+            initialVersion > 0 &&
+            row?.version !== initialVersion &&
+            !attempt.current,
+        );
       })
       .catch(() => {
         if (live)
@@ -97,7 +130,7 @@ export function ProductCheckout({
     return () => {
       live = false;
     };
-  }, [slug, retry]);
+  }, [slug, retry, initialQuantity, initialVariant, initialVersion, cartLine]);
   const displayedProduct = pending?.product ?? product;
   const parsed = catalogProductSchema.safeParse(displayedProduct);
   const total = parsed.success ? parsed.data.listedPrice * quantity : 0;
@@ -112,7 +145,13 @@ export function ProductCheckout({
       : variant === "");
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy || !user || !displayedProduct || (!selectionValid && !pending))
+    if (
+      busy ||
+      !user ||
+      !displayedProduct ||
+      needsPriceReview ||
+      (!selectionValid && !pending)
+    )
       return;
     const selection = pending?.selection ?? {
       productId: displayedProduct.id,
@@ -127,6 +166,7 @@ export function ProductCheckout({
         operationId: crypto.randomUUID(),
         product: displayedProduct,
         selection,
+        ...(cartLine ? { cartLine } : {}),
       };
     const current = attempt.current!;
     try {
@@ -149,6 +189,14 @@ export function ProductCheckout({
       setPending(null);
       attempt.current = null;
       navigate(`/account/orders/${encodeURIComponent(result.id)}`);
+      if (current.cartLine)
+        void consume(result.id, current.cartLine).then((removed) => {
+          if (!removed)
+            notify(
+              "Đơn đã tạo. Giỏ chưa cập nhật; mở giỏ để kiểm tra lại.",
+              "info",
+            );
+        });
     } catch (e) {
       const code = (e as { code?: string }).code ?? "";
       if (
@@ -177,6 +225,7 @@ export function ProductCheckout({
     <section className="page">
       <Link to="/products">← Sản phẩm</Link>
       <h1>Đặt mua sản phẩm</h1>
+      {cartLine && <Link to="/cart">← Quay lại giỏ hàng</Link>}
       {loading ? (
         <LoadingState>Đang tải sản phẩm…</LoadingState>
       ) : parsed.success && displayedProduct ? (
@@ -239,13 +288,26 @@ export function ProductCheckout({
             Thanh toán toàn bộ một lần. Nhân viên mua hộ sau khi tiền được xác
             nhận. Điều khoản: {parsed.data.termsVersion}.
           </p>
+          {needsPriceReview && (
+            <div className="cartNotice107" role="status">
+              <span>
+                Sản phẩm đã cập nhật từ lúc bạn xem giỏ. Xem lại giá và mẫu
+                trước khi đặt mua.
+              </span>
+              <button type="button" onClick={() => setNeedsPriceReview(false)}>
+                Đã xem thông tin mới
+              </button>
+            </div>
+          )}
           {!selectionValid && !pending && (
             <p role="status">Chọn mẫu và số lượng hợp lệ để tiếp tục.</p>
           )}
           {user ? (
             <button
               className="primary"
-              disabled={busy || (!selectionValid && !pending)}
+              disabled={
+                busy || needsPriceReview || (!selectionValid && !pending)
+              }
             >
               {busy
                 ? "Đang tạo đơn…"

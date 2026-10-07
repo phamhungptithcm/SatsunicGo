@@ -22,6 +22,7 @@ service cloud.firestore {
   match /supportTickets/{id} { allow read: if owner(); allow write: if false; match /messages/{event} { allow read: if unlocked() && get(/databases/$(database)/documents/supportTickets/$(id)).data.ownerId == request.auth.uid; } }
   match /staffAccess/{uid} { allow get: if unlocked() && request.auth.uid == uid; allow write: if false; }
   match /users/{uid} { allow get: if signed() && request.auth.uid == uid; allow write: if false; }
+  match /carts/{uid} { allow get: if unlocked() && request.auth.uid == uid && (!exists(/databases/$(database)/documents/staffAccess/$(request.auth.uid)) || get(/databases/$(database)/documents/staffAccess/$(request.auth.uid)).data.get('locked', false) == false); allow list, write: if false; }
   match /{collection}/{id} { allow read: if collection in ['products','posts','blogPublished','membershipPlans'] && resource.data.status == 'published'; allow write: if false; }
   match /{document=**} { allow read, write: if false; }
  }

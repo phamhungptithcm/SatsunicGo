@@ -8,6 +8,7 @@ import {
 } from "../../../packages/domain/product-information";
 import { ProductReviews } from "./ProductReviews";
 import "./product-detail080.css";
+import { AddToCart } from "../cart/AddToCart";
 export function ProductDetails({ row }: { row: ContentRow }) {
   const [failed, setFailed] = useState(false);
   useEffect(() => setFailed(false), [row.mediaId]);
@@ -95,6 +96,7 @@ export function ProductDetails({ row }: { row: ContentRow }) {
                 <Link className="primary" to={`/products/${row.slug}/checkout`}>
                   Chọn mua và thanh toán
                 </Link>
+                <AddToCart key={row.id} product={row} />
                 <p className="sgProductHint">
                   Giá trọn gói, thanh toán toàn bộ.
                 </p>

@@ -48,6 +48,8 @@ import "../styles/account.css";
 import "../styles/security.css";
 import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
+import { CartProvider } from "../features/cart/cart-store";
+const CartPage = lazy(() => import("../features/cart/Cart").then(m => ({ default: m.CartPage })));
 import { notify, withProgress } from "../shared/feedback";
 import { publicCopy } from "../../packages/domain/public-content";
 import {
@@ -290,7 +292,7 @@ export function App() {
     }
   }
   return (
-    <>
+    <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
       <OneTap user={user} onError={setAuthError} />
       <AuthFeedbackToast
         message={authError || redirectError}
@@ -406,9 +408,10 @@ export function App() {
               />
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
+              <Route path="/cart" element={<CartPage signIn={signIn} />} />
               <Route
                 path="/products/:slug/checkout"
-                element={<ProductCheckout user={user} signIn={signIn} />}
+                element={<ProductCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />}
               />
               <Route path="/posts" element={<Catalog kind="posts" />} />
               <Route
@@ -476,11 +479,12 @@ export function App() {
           startCollapsed={
             location.pathname.startsWith("/posts") ||
             location.pathname.startsWith("/account") ||
-            location.pathname === "/request"
+            location.pathname === "/request" ||
+            location.pathname === "/cart"
           }
         />
       )}
-    </>
+    </CartProvider>
   );
 }
 function JourneyTimeline() {
