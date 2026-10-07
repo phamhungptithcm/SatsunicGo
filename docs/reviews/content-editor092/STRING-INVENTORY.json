@@ -1,0 +1,1454 @@
+[
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 40,
+    "source": "if (dirty && !window.confirm(\"Rời form và bỏ thay đổi chưa lưu?\")) return;",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 47,
+    "source": "(dirty && !window.confirm(\"Bỏ thay đổi chưa lưu để mở nội dung khác?\"))",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 138,
+    "source": "if (!window.confirm(\"Rời form và bỏ thay đổi chưa lưu?\")) {",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 194,
+    "source": "!window.confirm(\"Xuất bản nội dung này công khai trên website?\")",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 278,
+    "source": "notify(\"Đã lưu nội dung.\", \"success\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 294,
+    "source": "title={kind === \"products\" ? \"Sản phẩm\" : \"Bài viết\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 295,
+    "source": "description=\"Quản lý thông tin, hình ảnh và trạng thái xuất bản.\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 299,
+    "source": "aria-label=\"Loại nội dung\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 305,
+    "source": "!window.confirm(\"Đổi loại nội dung và bỏ thay đổi chưa lưu?\")",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 314,
+    "source": "<option value=\"products\">Sản phẩm</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 315,
+    "source": "<option value=\"posts\">Bài viết</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 319,
+    "source": "Tải lại danh sách",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 323,
+    "source": "{kind === \"products\" ? \"Thêm sản phẩm\" : \"Thêm bài viết\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 332,
+    "source": "Tìm sản phẩm",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 337,
+    "source": "placeholder=\"Tên, thương hiệu hoặc danh mục…\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 341,
+    "source": "Trạng thái",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 346,
+    "source": "<option value=\"\">Tất cả trạng thái</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 347,
+    "source": "<option value=\"draft\">Bản nháp</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 348,
+    "source": "<option value=\"published\">Đã xuất bản</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 349,
+    "source": "<option value=\"scheduled\">Đã lên lịch</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 350,
+    "source": "<option value=\"archived\">Lưu trữ</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 354,
+    "source": "Danh mục",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 359,
+    "source": "<option value=\"\">Tất cả danh mục đã tải</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 378,
+    "source": "{loading && <CrmState kind=\"loading\" title=\"Đang tải nội dung…\" />}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 389,
+    "source": "? \"Không có nội dung khớp bộ lọc.\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 390,
+    "source": ": \"Chưa có nội dung. Thêm mới hoặc nhập Excel để bắt đầu.\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 398,
+    "source": "<th>Chọn</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 399,
+    "source": "<th>{kind === \"products\" ? \"Sản phẩm\" : \"Bài viết\"}</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 400,
+    "source": "<th>Danh mục</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 403,
+    "source": "<th>Giá tham khảo</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 404,
+    "source": "<th>Giá trọn gói</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 407,
+    "source": "<th>Trạng thái</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 416,
+    "source": "aria-label={`Chọn ${row.title || row.id}`}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 440,
+    "source": "<strong>{row.title || \"Thiếu tên sản phẩm\"}</strong>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 442,
+    "source": "{row.brand || row.slug || \"Cần bổ sung thông tin\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 447,
+    "source": "<td data-label=\"Danh mục\">{row.category || \"—\"}</td>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 450,
+    "source": "<td data-label=\"Giá tham khảo\">",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 452,
+    "source": "? \"Chưa có giá\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 455,
+    "source": "<td data-label=\"Giá trọn gói\">",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 457,
+    "source": "? \"Chưa niêm yết\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 462,
+    "source": "<td data-label=\"Trạng thái\">",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 466,
+    "source": "published: \"Đã xuất bản\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 467,
+    "source": "scheduled: \"Đã lên lịch\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 468,
+    "source": "archived: \"Lưu trữ\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 469,
+    "source": "draft: \"Bản nháp\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 481,
+    "source": "{visibleRows.length} kết quả trong {rows.length} nội dung đã tải",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 482,
+    "source": "{next ? \" · Còn nội dung chưa tải\" : \"\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 489,
+    "source": "Tải thêm",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 525,
+    "source": "{current ? \"Chỉnh sửa nội dung\" : \"Nội dung mới\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 529,
+    "source": "<summary>Thông tin bản đã lưu</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 530,
+    "source": "<CrmReference label=\"Mã nội dung\" value={current.id} />",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 535,
+    "source": "← Danh sách",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 537,
+    "source": "<span>{dirty ? \"Có thay đổi chưa lưu\" : \"Chưa có thay đổi\"}</span>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 539,
+    "source": "<div className=\"ceTabs\" role=\"group\" aria-label=\"Nhóm thông tin\">",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 540,
+    "source": "{[\"Thông tin\", \"Ảnh & chi tiết\", \"Giá & xuất bản\"].map(",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 555,
+    "source": "<h3 className=\"crmSectionHeading\">Nội dung chính</h3>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 557,
+    "source": "Tiêu đề",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 568,
+    "source": ".replace(/[đĐ]/g, \"d\")",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 581,
+    "source": "Đường dẫn sản phẩm",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 593,
+    "source": "Nội dung",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 603,
+    "source": "<summary>Phân loại và thông tin tìm kiếm</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 605,
+    "source": "Phân loại",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 613,
+    "source": "Link tham khảo · không bắt buộc",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 622,
+    "source": "Biến thể tham khảo",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 630,
+    "source": "Tiêu đề tìm kiếm · để trống dùng tiêu đề nội dung",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 638,
+    "source": "Mô tả tìm kiếm · để trống dùng đầu nội dung",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 655,
+    "source": "<summary>Giới thiệu sản phẩm</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 662,
+    "source": "Hiển thị trong sản phẩm được chọn",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 665,
+    "source": "Thứ tự giới thiệu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 674,
+    "source": "<small>Số nhỏ hơn được ưu tiên giới thiệu.</small>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 677,
+    "source": "Thông tin nguồn gốc đã lưu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 685,
+    "source": "Chức năng và công dụng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 693,
+    "source": "Cách dùng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 703,
+    "source": "<h3 className=\"crmSectionHeading\">Đặt mua và giá trọn gói</h3>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 705,
+    "source": "Quốc gia mua hàng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 710,
+    "source": "<option value=\"US\">Mỹ</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 711,
+    "source": "<option value=\"JP\">Nhật Bản</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 712,
+    "source": "<option value=\"KR\">Hàn Quốc</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 721,
+    "source": "Cho phép đặt mua và thanh toán toàn bộ",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 724,
+    "source": "Giá niêm yết trọn gói (₫ / sản phẩm)",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 734,
+    "source": "Bao gồm toàn bộ phí mua hộ và giao hàng. Không thu thêm",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 735,
+    "source": "đợt hai.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 739,
+    "source": "Phiên bản điều khoản mua hàng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 747,
+    "source": "Lựa chọn đặt mua · mỗi dòng một mẫu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 753,
+    "source": "Các mẫu dùng chung giá niêm yết. Mẫu khác giá cần sản phẩm",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 754,
+    "source": "riêng.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 758,
+    "source": "<summary>Giá tham khảo nội bộ</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 760,
+    "source": "Giá tham khảo nội bộ (₫) · không dùng để thu tiền",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 771,
+    "source": "Thời điểm kiểm tra giá (giờ địa phương)",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 796,
+    "source": "<summary>Xem trước nội dung bản đã lưu</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 800,
+    "source": "Bản nháp không hiển thị trên trang public. Các thay đổi chưa",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 801,
+    "source": "lưu không có trong bản xem trước này.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 806,
+    "source": "<h3 className=\"crmSectionHeading\">Ảnh sản phẩm</h3>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 810,
+    "source": "<CrmReference label=\"Ảnh đã lưu\" value={mediaId} />. Lưu nội",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 811,
+    "source": "dung để gắn ảnh.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 817,
+    "source": "Trạng thái",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 819,
+    "source": "<option value=\"draft\">Bản nháp</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 820,
+    "source": "<option value=\"published\">Xuất bản trên website</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 821,
+    "source": "<option value=\"scheduled\">Lên lịch xuất bản</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 822,
+    "source": "<option value=\"archived\">Lưu trữ</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 826,
+    "source": "Giờ xuất bản theo lịch",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 834,
+    "source": "Xuất bản hiển thị công khai. Không đưa chứng từ, thông tin khách",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 835,
+    "source": "hoặc nội dung chưa được duyệt vào đây.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 845,
+    "source": "<strong>Kiểm tra các trường sau:</strong>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 856,
+    "source": "aria-label=\"Xem trước nội dung chưa lưu\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 858,
+    "source": "<p>Bản xem trước nội dung · chưa lưu hoặc xuất bản</p>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 870,
+    "source": "title: String(data.get(\"title\") || \"Chưa có tiêu đề\"),",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 871,
+    "source": "body: String(data.get(\"body\") || \"Chưa có nội dung\"),",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 875,
+    "source": "Xem trước nội dung",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 887,
+    "source": "Lưu bản nháp",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 891,
+    "source": "Hủy",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 895,
+    "source": "{busy ? \"Đang lưu…\" : \"Lưu nội dung\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ContentEditor.tsx",
+    "line": 903,
+    "source": "<summary>Đánh giá sản phẩm</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 53,
+    "source": "if (cancel.current) throw Error(\"Đã dừng tải dữ liệu.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 61,
+    "source": "throw Error(\"Phân trang không tiến triển.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 66,
+    "source": "\"Danh sách vượt giới hạn 10.000 sản phẩm; chia nhỏ phạm vi.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 99,
+    "source": "throw Error(\"Sửa các dòng lỗi trước khi nhập.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 108,
+    "source": "\"Tệp có thay đổi xuất bản, lên lịch hoặc lưu trữ. Bạn đã kiểm tra từng dòng và muốn tiếp tục?\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 126,
+    "source": "setPhase(`Đang xử lý dòng ${row.line}…`);",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 138,
+    "source": "aria-label=\"Phạm vi xuất\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 143,
+    "source": "<option value=\"selected\">Dòng đã chọn ({selected.size})</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 145,
+    "source": "Kết quả lọc đã tải ({filtered.length})",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 147,
+    "source": "<option value=\"all\">Toàn bộ sản phẩm</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 150,
+    "source": "aria-label=\"Định dạng xuất\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 162,
+    "source": "setPhase(\"Đang chuẩn bị tệp…\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 170,
+    "source": "throw Error(\"Chưa có sản phẩm trong phạm vi đã chọn.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 184,
+    "source": "Xuất dữ liệu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 187,
+    "source": "Nhập Excel",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 195,
+    "source": "Dừng sau dòng hiện tại",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 214,
+    "source": "<h2 id=\"ceImportTitle\">Nhập sản phẩm</h2>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 217,
+    "source": "aria-label=\"Đóng nhập sản phẩm\"",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 220,
+    "source": "×",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 224,
+    "source": "<p>Chọn tệp → Ghép cột → Kiểm tra → Lưu. Không xuất bản tự động.</p>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 232,
+    "source": "title: \"Tên sản phẩm\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 234,
+    "source": "body: \"Mô tả sản phẩm đã xác minh.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 245,
+    "source": "Tải mẫu Excel",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 248,
+    "source": "Tệp Excel hoặc CSV · tối đa 5 MB, 500 dòng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 259,
+    "source": "if (!data.length) throw Error(\"Tệp không có sheet.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 283,
+    "source": "<summary>Ghép cột</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 287,
+    "source": "{sheets[sheet].rows[0][i] || `Cột ${i + 1}`}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 300,
+    "source": "<option value=\"\">Bỏ qua</option>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 312,
+    "source": "Ô trống giữ giá trị cũ khi cập nhật; không dùng để xóa trường.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 313,
+    "source": "Giá là số nguyên VND không có dấu phân cách. status trống giữ",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 314,
+    "source": "trạng thái cũ; sản phẩm mới là bản nháp. Ảnh dùng mediaId đã",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 315,
+    "source": "upload và được cấp quyền, không tải ảnh từ URL.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 321,
+    "source": "setPhase(\"Đang đối chiếu danh sách hiện tại…\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 332,
+    "source": "Kiểm tra dữ liệu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 339,
+    "source": "{preview.length} dòng · {preview.filter((r) => r.error).length}{\" \"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 340,
+    "source": "lỗi · {preview.filter((r) => r.result === \"saved\").length} đã",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 341,
+    "source": "lưu",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 347,
+    "source": "<th>Dòng</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 348,
+    "source": "<th>Sản phẩm</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 349,
+    "source": "<th>Thao tác</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 350,
+    "source": "<th>Trạng thái</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 351,
+    "source": "<th>Kết quả</th>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 359,
+    "source": "<td>{r.existing ? \"Cập nhật\" : \"Tạo mới\"}</td>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 362,
+    "source": "{r.error || r.message || \"Hợp lệ\"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 364,
+    "source": "<summary>Xem thông tin sẽ lưu</summary>",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 391,
+    "source": "Lưu từng dòng qua phân quyền hiện có. Khi lỗi một phần, dòng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 392,
+    "source": "thành công không lưu lại; thử lại giữ nguyên mã thao tác. Dừng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 393,
+    "source": "chỉ chặn dòng chưa gửi.",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 404,
+    "source": "Xác nhận lưu{\" \"}",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 405,
+    "source": "{preview.filter((r) => r.result !== \"saved\").length} dòng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 437,
+    "source": "Tải kết quả từng dòng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 450,
+    "source": "Đóng",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/ProductSpreadsheet.tsx",
+    "line": 458,
+    "source": "Dừng sau dòng hiện tại",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 48,
+    "source": "\"Mã sản phẩm\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 49,
+    "source": "\"Phiên bản\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 50,
+    "source": "\"Tên sản phẩm\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 51,
+    "source": "\"Đường dẫn\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 52,
+    "source": "\"Mô tả\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 53,
+    "source": "\"Thương hiệu\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 54,
+    "source": "\"Danh mục\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 55,
+    "source": "\"Tóm tắt\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 56,
+    "source": "\"Xuất xứ sản xuất\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 57,
+    "source": "\"Nhà bán hàng\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 58,
+    "source": "\"Nguồn thông tin\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 59,
+    "source": "\"Link tham khảo\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 60,
+    "source": "\"Quy cách\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 61,
+    "source": "\"Giá tham khảo (VND)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 62,
+    "source": "\"Giá trọn gói (VND)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 63,
+    "source": "\"Cho đặt mua (true/false)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 64,
+    "source": "\"Thị trường (US/JP/KR)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 65,
+    "source": "\"Phiên bản điều khoản\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 66,
+    "source": "\"Lựa chọn đặt mua\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 67,
+    "source": "\"Các bước sử dụng\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 68,
+    "source": "\"Thông tin xuất xứ\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 69,
+    "source": "\"Công dụng\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 70,
+    "source": "\"Cách dùng\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 71,
+    "source": "\"Tiêu đề tìm kiếm\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 72,
+    "source": "\"Mô tả tìm kiếm\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 73,
+    "source": "\"Nổi bật (true/false)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 74,
+    "source": "\"Thứ tự nổi bật\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 75,
+    "source": "\"Mã ảnh đã upload\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 76,
+    "source": "\"Ngày kiểm tra giá (timestamp ms)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 77,
+    "source": "\"Trạng thái xuất bản\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 78,
+    "source": "\"Giờ xuất bản (timestamp ms)\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 123,
+    "source": "message: \"Đặt mua cần giá trọn gói, quốc gia và phiên bản điều khoản.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 134,
+    "source": "message: \"Lựa chọn đặt mua chưa hợp lệ theo hợp đồng catalog.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 138,
+    "source": "c.addIssue({ code: \"custom\", message: \"Giờ xuất bản phải ở tương lai.\" });",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 168,
+    "source": "else throw Error(\"Dấu ngoặc kép CSV không hợp lệ.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 171,
+    "source": "if (row.length > 100) throw Error(\"Tối đa 100 cột.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 176,
+    "source": "if (rows.length > 501) throw Error(\"Tối đa 500 dòng sản phẩm.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 180,
+    "source": "if (closed && c !== \"\\r\") throw Error(\"CSV có ký tự sau ô đã đóng.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 184,
+    "source": "if (quoted) throw Error(\"CSV thiếu dấu ngoặc kép đóng.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 186,
+    "source": "if (row.length > 100) throw Error(\"Tối đa 100 cột.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 188,
+    "source": "if (rows.length > 501) throw Error(\"Tối đa 500 dòng sản phẩm.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 194,
+    "source": "Error(\"Tệp Excel hỏng hoặc định dạng ZIP không được hỗ trợ.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 240,
+    "source": "\"Không nhận macro, liên kết ngoài hoặc đường dẫn không hợp lệ.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 261,
+    "source": "\"Trình duyệt chưa hỗ trợ đọc Excel an toàn. Dùng CSV hoặc cập nhật trình duyệt.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 290,
+    "source": "if (file.size > 5 * 1024 * 1024) throw Error(\"Tệp tối đa 5 MB.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 298,
+    "source": "if (!/\\.xlsx$/i.test(file.name)) throw Error(\"Chỉ nhận .xlsx hoặc .csv.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 306,
+    "source": "throw Error(\"Tối đa 500 dòng và 100 cột mỗi sheet.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 318,
+    "source": "\"Không nhận công thức, liên kết hoặc ô định dạng phức tạp.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 344,
+    "source": "if (rows.length > 501) throw Error(\"Tối đa 500 dòng.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 347,
+    "source": "throw Error(\"Một trường đang ghép với nhiều cột.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 349,
+    "source": "throw Error(\"Cần ghép cột title và slug.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 364,
+    "source": "if (id && !existing) throw Error(\"Mã sản phẩm không tồn tại.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 370,
+    "source": "throw Error(\"Phiên bản đã thay đổi; xuất lại dữ liệu trước khi nhập.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 375,
+    "source": "throw Error(\"Đường dẫn đã thuộc sản phẩm khác.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 377,
+    "source": "if (!key || seen.has(key)) throw Error(\"Sản phẩm bị trùng trong tệp.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 384,
+    "source": "throw Error(\"Cột không được hỗ trợ.\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 389,
+    "source": "`${columnLabels[field as Column]} có công thức hoặc tiền tố không an toàn.`,",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 402,
+    "source": "`${columnLabels[field as Column]} cần số nguyên, không dùng dấu phân cách.`,",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 408,
+    "source": "`${columnLabels[field as Column]} cần true hoặc false.`,",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 425,
+    "source": "`${columnLabels[i.path[0] as Column] || \"Thông tin sản phẩm\"}: ${i.code === \"custom\" && /[à-ỹ]/i.test(i.message) ? i.message : i.code === \"too_small\" ? \"Giá trị nhỏ hoặc ngắn hơn giới hạn cho phép.\" : i.code === \"too_big\" ? \"Giá trị vượt giới hạn cho phép.\" : \"Kiểu dữ liệu, giá trị hoặc định dạng chưa hợp lệ.\"}`,",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 462,
+    "source": "\"Chưa xác minh được kết quả lưu; giữ mã thao tác để thử lại.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 465,
+    "source": "row.message = \"Đã gửi thành công, đang chờ kiểm tra dữ liệu.\";",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 496,
+    "source": "readError || \"Kết quả đọc lại chưa khớp; giữ mã thao tác để thử lại.\";",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 499,
+    "source": "row.message = `Đã xác minh phiên bản ${result.version}`;",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 528,
+    "source": "const guide = book.addWorksheet(\"Hướng dẫn\");",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 529,
+    "source": "guide.addRow([\"Trường\", \"Ý nghĩa\"]);",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 532,
+    "source": "\"Ô trống\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 533,
+    "source": "\"Giữ giá trị cũ khi cập nhật; không xóa trường.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 536,
+    "source": "\"Giá\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 537,
+    "source": "\"Số nguyên VND, không dấu phân cách. Giá tham khảo không dùng thanh toán.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 540,
+    "source": "\"Thời gian\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 541,
+    "source": "\"Timestamp Unix mili giây. Trạng thái: draft, published, scheduled, archived.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 544,
+    "source": "\"Ảnh\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 545,
+    "source": "\"mediaId đã upload qua form với quyền sử dụng ảnh; không nhận URL ảnh.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 548,
+    "source": "\"Ví dụ\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  },
+  {
+    "file": "src/features/content/product-spreadsheet.ts",
+    "line": 549,
+    "source": "\"Thay dòng mẫu ở sheet Products bằng dữ liệu đã xác minh trước khi nhập.\",",
+    "state": "In-context final validation pending shared runtime recovery"
+  }
+]

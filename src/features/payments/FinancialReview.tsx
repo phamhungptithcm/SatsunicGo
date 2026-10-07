@@ -1,3 +1,4 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
 import { CrmIcon, CrmState } from "../crm/CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
@@ -185,74 +186,124 @@ export function FinancialReview({
           ? "Đóng ngoại lệ chỉ ghi kết quả kiểm tra. Phân bổ chỉ áp dụng tiền đã xác minh vào đúng tài khoản doanh nghiệp; không tự cho đơn đi tiếp."
           : "Chỉ đảo phần tiền vào đã ghi nhận, có giao dịch ngân hàng thật. Giữ lịch sử gốc và tạm giữ đơn để đối soát."}
       </p>
-      <form className="form" onSubmit={(event) => void submit(event)}>
+      <StepForm
+        steps={["Giao dịch", "Lý do & bằng chứng", "Kiểm tra"]}
+        disabled={busy || uncertain || disabled}
+        resetKey={action}
+        className="form"
+        onSubmit={(event) => void submit(event)}
+      >
         <fieldset className="form" disabled={busy || uncertain || disabled}>
-          {exception && (
-            <label>
-              Quyết định
-              <select
-                name="action"
-                value={action}
-                onChange={(e) => setAction(e.target.value)}
-              >
-                <option value="closeException">
-                  Đóng sau khi kiểm tra, không ghi thêm tiền
-                </option>
-                {exception.inboundVerified && (
-                  <option value="allocateException">
-                    Phân bổ tiền đã đối soát vào đơn
+          <StepStage index={0}>
+            {exception && (
+              <label>
+                Quyết định
+                <select
+                  name="action"
+                  value={action}
+                  onChange={(e) => setAction(e.target.value)}
+                >
+                  <option value="closeException">
+                    Đóng sau khi kiểm tra, không ghi thêm tiền
                   </option>
-                )}
-              </select>
-            </label>
-          )}
-          {action !== "closeException" && (
+                  {exception.inboundVerified && (
+                    <option value="allocateException">
+                      Phân bổ tiền đã đối soát vào đơn
+                    </option>
+                  )}
+                </select>
+              </label>
+            )}
+            {action !== "closeException" && (
+              <label>
+                <span className="formLabelText">
+                  Mã đơn{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="orderId" maxLength={80} required />
+              </label>
+            )}
+            {!exception && (
+              <>
+                <label>
+                  <span className="formLabelText">
+                    Mã khoản tiền vào gốc trong lịch sử đơn{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="entryId" maxLength={160} required />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Số tiền bị đảo (₫){" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="amount"
+                    type="number"
+                    min={1}
+                    max={1000000000000}
+                    required
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Mã giao dịch đảo tiền ngân hàng{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="bank" minLength={4} maxLength={120} required />
+                </label>
+              </>
+            )}
+          </StepStage>
+          <StepStage index={1}>
             <label>
-              Mã đơn
-              <input name="orderId" maxLength={80} required />
+              <span className="formLabelText">
+                Lý do{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <textarea name="reason" minLength={5} maxLength={500} required />
             </label>
-          )}
-          {!exception && (
-            <>
-              <label>
-                Mã khoản tiền vào gốc trong lịch sử đơn
-                <input name="entryId" maxLength={160} required />
-              </label>
-              <label>
-                Số tiền bị đảo (₫)
-                <input
-                  name="amount"
-                  type="number"
-                  min={1}
-                  max={1000000000000}
-                  required
-                />
-              </label>
-              <label>
-                Mã giao dịch đảo tiền ngân hàng
-                <input name="bank" minLength={4} maxLength={120} required />
-              </label>
-            </>
-          )}
-          <label>
-            Lý do
-            <textarea name="reason" minLength={5} maxLength={500} required />
-          </label>
-          <label>
-            Bằng chứng đã đối soát
-            <textarea name="evidence" minLength={5} maxLength={1000} required />
-          </label>
-          <button className="primary" disabled={busy || uncertain || disabled}>
-            {busy
-              ? "Đang lưu…"
-              : action === "closeException"
-                ? "Đóng ngoại lệ đã kiểm tra"
-                : action === "allocateException"
-                  ? "Phân bổ tiền đã xác minh"
-                  : "Ghi nhận ngân hàng đảo tiền"}
-          </button>
+            <label>
+              <span className="formLabelText">
+                Bằng chứng đã đối soát{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <textarea
+                name="evidence"
+                minLength={5}
+                maxLength={1000}
+                required
+              />
+            </label>
+          </StepStage>
+          <StepStage index={2}>
+            <button
+              className="primary"
+              disabled={busy || uncertain || disabled}
+            >
+              {busy
+                ? "Đang lưu…"
+                : action === "closeException"
+                  ? "Đóng ngoại lệ đã kiểm tra"
+                  : action === "allocateException"
+                    ? "Phân bổ tiền đã xác minh"
+                    : "Ghi nhận ngân hàng đảo tiền"}
+            </button>
+          </StepStage>
         </fieldset>
-      </form>
+      </StepForm>
       {error && <CrmState kind="error" title={error} />}
       {uncertain && (
         <button

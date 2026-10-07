@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "SATSUNICGO-CATALOG-029",
   "status": "BLOCKED",
-  "cycle": 3,
+  "cycle": 4,
   "dimensions": {
     "requirement_match": {
       "status": "NOT_RUN",
@@ -54,5 +54,14 @@
     "Production writes/upload/archive0.",
     "Current local tsc pass and scoped lint not whole-release certification.",
     "Product-content rendered eight-principle evidence pending."
-  ]
+  ],
+  "currentEvidence": {
+    "uniqueProducts": 26,
+    "imagesVerifiedByHash": 26,
+    "referencePriceCandidates": 20,
+    "productionWrites": 0,
+    "intelligence": "DEGRADED",
+    "production": "Exactly60 HTTP invocation bindings applied and independently verified; public products HTTP200; normal OWNER Google login still fails",
+    "httpInvokerReadback": 60
+  }
 }

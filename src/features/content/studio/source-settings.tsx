@@ -275,7 +275,12 @@ export function Settings({
             </div>
             <div className="field">
               <label>
-                Tên hiển thị
+                <span className="formLabelText">
+                  Tên hiển thị{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <input
                   value={name}
                   maxLength={80}
@@ -529,7 +534,12 @@ export function Settings({
             {dialog === "taxonomy" ? (
               <div className="field">
                 <label>
-                  Tên chuyên mục
+                  <span className="formLabelText">
+                    Tên chuyên mục{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <input
                     name="name"
                     defaultValue={editing?.name}
@@ -544,7 +554,12 @@ export function Settings({
                 {!editing && (
                   <div className="field">
                     <label>
-                      Email tài khoản
+                      <span className="formLabelText">
+                        Email tài khoản{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
                       <input type="email" name="email" required />
                     </label>
                     <small>Nhập email Google của người bạn muốn thêm.</small>

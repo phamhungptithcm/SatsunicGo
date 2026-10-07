@@ -1,11 +1,13 @@
 {
   "uniqueProducts": 26,
-  "referencePriceCandidates": 19,
+  "referencePriceCandidates": 20,
   "downloadedImages": 26,
   "rejectedImages": 0,
   "missingImages": [],
   "localValidationErrors": [],
   "productionWrites": 0,
-  "productionReview": "BLOCKED_COMMON_FREEZE_AND_PLATFORM_VERIFICATION",
-  "jsonSha256": "a545c5a82ddc7f9723d1da01487ad7f2e348d7a9ce1daceb6d998fbcb937e524"
+  "productionReview": "BLOCKED_NORMAL_OWNER_GOOGLE_LOGIN",
+  "jsonSha256": "cc8bea86188c027391fe72251179ce29b009ab477fbddc2491835044e985c010",
+  "httpInvokerApplied": 60,
+  "publicProductsHttpStatus": 200
 }

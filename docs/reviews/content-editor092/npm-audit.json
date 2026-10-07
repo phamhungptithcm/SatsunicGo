@@ -1,0 +1,512 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@genkit-ai/ai": {
+      "name": "@genkit-ai/ai",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@genkit-ai/core"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@genkit-ai/ai"
+      ],
+      "fixAvailable": true
+    },
+    "@genkit-ai/core": {
+      "name": "@genkit-ai/core",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@genkit-ai/firebase",
+        "@opentelemetry/core",
+        "@opentelemetry/sdk-logs",
+        "@opentelemetry/sdk-metrics",
+        "@opentelemetry/sdk-trace-base"
+      ],
+      "effects": [
+        "@genkit-ai/ai",
+        "genkit"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@genkit-ai/core"
+      ],
+      "fixAvailable": false
+    },
+    "@genkit-ai/firebase": {
+      "name": "@genkit-ai/firebase",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@genkit-ai/google-cloud",
+        "genkit"
+      ],
+      "effects": [
+        "@genkit-ai/core"
+      ],
+      "range": ">=0.5.4",
+      "nodes": [
+        "node_modules/@genkit-ai/core/node_modules/@genkit-ai/firebase"
+      ],
+      "fixAvailable": false
+    },
+    "@genkit-ai/google-cloud": {
+      "name": "@genkit-ai/google-cloud",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@google-cloud/opentelemetry-resource-util",
+        "@opentelemetry/core",
+        "@opentelemetry/instrumentation-pino",
+        "@opentelemetry/resources",
+        "@opentelemetry/sdk-metrics",
+        "@opentelemetry/sdk-trace-base",
+        "genkit"
+      ],
+      "effects": [
+        "@genkit-ai/firebase"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@genkit-ai/google-cloud"
+      ],
+      "fixAvailable": false
+    },
+    "@genkit-ai/google-genai": {
+      "name": "@genkit-ai/google-genai",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "genkit"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@genkit-ai/google-genai"
+      ],
+      "fixAvailable": false
+    },
+    "@google-cloud/opentelemetry-resource-util": {
+      "name": "@google-cloud/opentelemetry-resource-util",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/resources"
+      ],
+      "effects": [],
+      "range": "<=2.4.0",
+      "nodes": [
+        "node_modules/@genkit-ai/google-cloud/node_modules/@google-cloud/opentelemetry-resource-util"
+      ],
+      "fixAvailable": true
+    },
+    "@google-cloud/pubsub": {
+      "name": "@google-cloud/pubsub",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core"
+      ],
+      "effects": [
+        "firebase-tools"
+      ],
+      "range": "5.1.0 - 6.0.0",
+      "nodes": [
+        "node_modules/@google-cloud/pubsub"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@opentelemetry/core": {
+      "name": "@opentelemetry/core",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1153174,
+          "name": "@opentelemetry/core",
+          "dependency": "@opentelemetry/core",
+          "title": "OpenTelemetry Core: Unbounded memory allocation in W3C Baggage propagation",
+          "url": "https://github.com/advisories/GHSA-8988-4f7v-96qf",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": "<2.8.0"
+        }
+      ],
+      "effects": [
+        "@genkit-ai/core",
+        "@genkit-ai/google-cloud",
+        "@google-cloud/pubsub",
+        "@opentelemetry/instrumentation-pino",
+        "@opentelemetry/resources",
+        "@opentelemetry/sdk-logs",
+        "@opentelemetry/sdk-metrics",
+        "@opentelemetry/sdk-trace-base"
+      ],
+      "range": "<2.8.0",
+      "nodes": [
+        "node_modules/@genkit-ai/core/node_modules/@opentelemetry/core",
+        "node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/core",
+        "node_modules/@google-cloud/pubsub/node_modules/@opentelemetry/core",
+        "node_modules/@opentelemetry/instrumentation-pino/node_modules/@opentelemetry/core",
+        "node_modules/@opentelemetry/sdk-logs/node_modules/@opentelemetry/core"
+      ],
+      "fixAvailable": false
+    },
+    "@opentelemetry/instrumentation-pino": {
+      "name": "@opentelemetry/instrumentation-pino",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core"
+      ],
+      "effects": [
+        "@genkit-ai/google-cloud"
+      ],
+      "range": "0.41.0 - 0.46.1",
+      "nodes": [
+        "node_modules/@opentelemetry/instrumentation-pino"
+      ],
+      "fixAvailable": false
+    },
+    "@opentelemetry/resources": {
+      "name": "@opentelemetry/resources",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core"
+      ],
+      "effects": [
+        "@google-cloud/opentelemetry-resource-util"
+      ],
+      "range": "0.8.0 - 2.7.1",
+      "nodes": [
+        "node_modules/@genkit-ai/core/node_modules/@opentelemetry/resources",
+        "node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/resources",
+        "node_modules/@opentelemetry/sdk-logs/node_modules/@opentelemetry/resources"
+      ],
+      "fixAvailable": true
+    },
+    "@opentelemetry/sdk-logs": {
+      "name": "@opentelemetry/sdk-logs",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core",
+        "@opentelemetry/resources"
+      ],
+      "effects": [
+        "@genkit-ai/core"
+      ],
+      "range": "<=0.218.0",
+      "nodes": [
+        "node_modules/@opentelemetry/sdk-logs"
+      ],
+      "fixAvailable": false
+    },
+    "@opentelemetry/sdk-metrics": {
+      "name": "@opentelemetry/sdk-metrics",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core",
+        "@opentelemetry/resources"
+      ],
+      "effects": [],
+      "range": "<=2.7.1",
+      "nodes": [
+        "node_modules/@genkit-ai/core/node_modules/@opentelemetry/sdk-metrics",
+        "node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/sdk-metrics"
+      ],
+      "fixAvailable": true
+    },
+    "@opentelemetry/sdk-trace-base": {
+      "name": "@opentelemetry/sdk-trace-base",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@opentelemetry/core",
+        "@opentelemetry/resources"
+      ],
+      "effects": [],
+      "range": "<=2.7.1",
+      "nodes": [
+        "node_modules/@genkit-ai/core/node_modules/@opentelemetry/sdk-trace-base",
+        "node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/sdk-trace-base"
+      ],
+      "fixAvailable": true
+    },
+    "basic-ftp": {
+      "name": "basic-ftp",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1240853,
+          "name": "basic-ftp",
+          "dependency": "basic-ftp",
+          "title": "basic-ftp: Quadratic-time CPU denial of service in Client.list() Unix directory-listing parser (RE_LINE backtracking)",
+          "url": "https://github.com/advisories/GHSA-c475-qrg2-pj4r",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.2.0"
+        }
+      ],
+      "effects": [
+        "get-uri"
+      ],
+      "range": "<=6.2.0",
+      "nodes": [
+        "node_modules/basic-ftp"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "braces": {
+      "name": "braces",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1240992,
+          "name": "braces",
+          "dependency": "braces",
+          "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+          "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+          "severity": "high",
+          "cwe": [
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<=3.0.3"
+        }
+      ],
+      "effects": [
+        "chokidar"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/braces"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "chokidar": {
+      "name": "chokidar",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "braces"
+      ],
+      "effects": [
+        "firebase-tools"
+      ],
+      "range": "2.0.0 - 3.6.0",
+      "nodes": [
+        "node_modules/chokidar"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "firebase-tools": {
+      "name": "firebase-tools",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@google-cloud/pubsub",
+        "chokidar",
+        "proxy-agent"
+      ],
+      "effects": [],
+      "range": ">=6.9.0",
+      "nodes": [
+        "node_modules/firebase-tools"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "genkit": {
+      "name": "genkit",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@genkit-ai/ai",
+        "@genkit-ai/core"
+      ],
+      "effects": [
+        "@genkit-ai/firebase",
+        "@genkit-ai/google-cloud",
+        "@genkit-ai/google-genai"
+      ],
+      "range": "0.6.0-dev.2 - 1.0.0-rc.19 || >=1.0.4",
+      "nodes": [
+        "node_modules/genkit"
+      ],
+      "fixAvailable": false
+    },
+    "get-uri": {
+      "name": "get-uri",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "basic-ftp"
+      ],
+      "effects": [
+        "pac-proxy-agent"
+      ],
+      "range": ">=5.0.0",
+      "nodes": [
+        "node_modules/get-uri"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "katex": {
+      "name": "katex",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1241206,
+          "name": "katex",
+          "dependency": "katex",
+          "title": "KaTeX: Existing prototype pollution can bypass trust restrictions",
+          "url": "https://github.com/advisories/GHSA-238p-pmpm-9mq7",
+          "severity": "low",
+          "cwe": [
+            "CWE-807"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=0.11.0 <0.18.2"
+        }
+      ],
+      "effects": [
+        "mermaid"
+      ],
+      "range": "0.11.0 - 0.18.1",
+      "nodes": [
+        "node_modules/katex"
+      ],
+      "fixAvailable": {
+        "name": "mermaid",
+        "version": "10.8.0",
+        "isSemVerMajor": true
+      }
+    },
+    "mermaid": {
+      "name": "mermaid",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "katex"
+      ],
+      "effects": [],
+      "range": ">=10.9.0-rc.1",
+      "nodes": [
+        "node_modules/mermaid"
+      ],
+      "fixAvailable": {
+        "name": "mermaid",
+        "version": "10.8.0",
+        "isSemVerMajor": true
+      }
+    },
+    "pac-proxy-agent": {
+      "name": "pac-proxy-agent",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "get-uri"
+      ],
+      "effects": [
+        "proxy-agent"
+      ],
+      "range": ">=6.0.0",
+      "nodes": [
+        "node_modules/pac-proxy-agent"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    },
+    "proxy-agent": {
+      "name": "proxy-agent",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "pac-proxy-agent"
+      ],
+      "effects": [
+        "firebase-tools"
+      ],
+      "range": ">=6.0.0",
+      "nodes": [
+        "node_modules/proxy-agent"
+      ],
+      "fixAvailable": {
+        "name": "firebase-tools",
+        "version": "14.23.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 2,
+      "moderate": 14,
+      "high": 7,
+      "critical": 0,
+      "total": 23
+    },
+    "dependencies": {
+      "prod": 747,
+      "dev": 586,
+      "optional": 339,
+      "peer": 8,
+      "peerOptional": 0,
+      "total": 1600
+    }
+  }
+}

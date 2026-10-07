@@ -385,7 +385,12 @@ export function ProductReviews({ productId }: { productId: string }) {
           {!mine && (
             <>
               <label>
-                Đơn đã nhận sản phẩm
+                <span className="formLabelText">
+                  Đơn đã nhận sản phẩm{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <select
                   value={orderId}
                   required
@@ -433,7 +438,12 @@ export function ProductReviews({ productId }: { productId: string }) {
                     checked={rating === n}
                     onChange={() => setRating(n)}
                   />
-                  {n}
+                  <span className="formLabelText">
+                    {n}{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <span aria-hidden="true">★</span>
                   <span className="sr-only"> sao</span>
                 </label>
@@ -441,7 +451,12 @@ export function ProductReviews({ productId }: { productId: string }) {
             </div>
           </fieldset>
           <label>
-            Tên hiển thị
+            <span className="formLabelText">
+              Tên hiển thị{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               required
               minLength={2}
@@ -452,7 +467,14 @@ export function ProductReviews({ productId }: { productId: string }) {
             />
           </label>
           <div className="sgReviewTextField">
-            <label htmlFor={`${inputId}-text`}>Nhận xét</label>
+            <label htmlFor={`${inputId}-text`}>
+              <span className="formLabelText">
+                Nhận xét{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+            </label>
             <textarea
               id={`${inputId}-text`}
               required

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "task_id": "FINANCE-CONTENT-UX-095",
+  "status": "BLOCKED",
+  "candidate_manifest": "SOURCE_MANIFEST.json",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Approved scoped compositions present; product092 preserved. Full acceptance UI proof incomplete.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No auth/role/backend/schema/financial/publication changes. Existing identities and expectedVersion guards retained.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Latest shared primitive source inspected;095 regressions51/51 current; own prior TypeScript precedes last onBlur change, admin reports fresh compiler/lint. Full095 current validation incomplete.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Existing contract units passed; focused form retention observed; final browser error/denied/uncertain matrix unavailable.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "False empty and inaccessible mobile list repaired; service error/uncertainty guards preserved.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Full fresh in-context coverage blocked; see product review.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "NOT_READY; no deploy, incomplete UI certification and no provider evidence.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped components/CSS, no new dependencies;092 ownership preserved; SPA draft and incomplete UI evidence explicitly disclosed.",
+      "evidence_refs": [
+        "TASK_REPORT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "BLOCKED",
+      "findings": [
+        "false empty during invoice load",
+        "duplicate finance empty",
+        "mobile detail failure could hide list",
+        "campaign edit switch could discard draft"
+      ],
+      "fixes": [
+        "listLoading and suppressed empty",
+        "queue-only state",
+        "reset mobile detail on failure",
+        "retained composer/dirty guard"
+      ],
+      "verification": "Scoped lint/regression51/51; pre-final browser retention/focus evidence"
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "findings": [
+        "Incomplete final browser and product-language state coverage"
+      ],
+      "fixes": [],
+      "verification": "Latest source/diff inspection and51/51 tests after shared-tab migration; shared5207 unavailable"
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "findings": [
+        "Fresh095 UI/authenticated CRM matrix still incomplete"
+      ],
+      "verification": "Latest shared onBlur source inspected; refreshed hashes;095 regressions51/51 passed. Admin validation reported separately."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "Medium",
+      "state": "BLOCKED_EVIDENCE",
+      "summary": "Fresh responsive and UI-state verification incomplete; no final success certification."
+    }
+  ],
+  "residual_risks": [
+    "Campaign SPA navigation is not intercepted; full-page beforeunload and editor-switch confirmation only.",
+    "Catalog092 validation belongs to its owner."
+  ],
+  "limitations": [
+    "DEGRADED repository indexes",
+    "No production/provider tests",
+    "No runtime ledger executable",
+    "Browser URL policy rejected offline file protocol; shared5207 stopped"
+  ]
+}

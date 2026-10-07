@@ -1,3 +1,6 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { PageTabs } from "../../shared/PageTabs";
+import { WorkbenchComposer095 } from "../crm/FinanceContent095";
 import { WebsiteBanners } from "./WebsiteBanners";
 import {
   CrmHeading,
@@ -53,20 +56,30 @@ export function Campaigns() {
     pending = useRef<Record<string, unknown> | null>(null),
     sending = useRef(false),
     saves = useRef(createRequestSequence());
-  const editor = useRef<HTMLDetailsElement>(null);
+  const [section, setSection] = useState<"campaigns" | "banners">("campaigns");
+  const dirty = useRef(false);
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {
+      if (!dirty.current) return;
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, []);
+  function editCampaign(next: Campaign | null) {
+    if (
+      next?.id !== current?.id &&
+      dirty.current &&
+      !window.confirm("Bỏ thay đổi chưa lưu để mở chiến dịch khác?")
+    )
+      return;
+    if (next?.id !== current?.id) dirty.current = false;
+    setCurrent(next);
+    openEditor();
+  }
   function openEditor() {
     setEditing(true);
-    requestAnimationFrame(() => {
-      const summary = editor.current?.querySelector("summary");
-      if (!summary) return;
-      summary.focus({ preventScroll: true });
-      summary.scrollIntoView({
-        block: "center",
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "instant"
-          : "smooth",
-      });
-    });
+    setSection("campaigns");
   }
   async function load(after?: string) {
     const revision = requests.current.next();
@@ -149,6 +162,7 @@ export function Campaigns() {
       if (!saves.current.current(saveRevision)) return;
       pending.current = null;
       setUncertain(false);
+      dirty.current = false;
       setCurrent(null);
       setEditing(false);
       form?.reset();
@@ -200,194 +214,267 @@ export function Campaigns() {
     }
   }
   return (
-    <section>
+    <section className="fc095 fc095Campaigns">
       <CrmHeading
-        title="Chiến dịch và lịch nội dung"
+        title="Chiến dịch"
+        description="Soạn nội dung cho các kênh và quản lý banner website."
         actions={
-          <button
-            disabled={busy || loading || uncertain}
-            onClick={() => void load()}
-          >
-            <CrmIcon name="refresh" />
-            Tải lại danh sách
-          </button>
+          <>
+            <button
+              disabled={busy || loading || uncertain}
+              onClick={() => void load()}
+            >
+              <CrmIcon name="refresh" /> Tải lại danh sách
+            </button>
+            {section === "campaigns" && (
+              <button
+                className="primary"
+                disabled={busy || uncertain}
+                onClick={() => editCampaign(null)}
+              >
+                <CrmIcon name="document" /> Tạo bản nháp
+              </button>
+            )}
+          </>
         }
       />
-      <p>
-        Lưu caption để người biên tập duyệt. Lịch là kế hoạch nội dung; đăng tự
-        động lên mạng xã hội đang tắt.
-      </p>
-      <button
-        disabled={busy || uncertain}
-        onClick={() => {
-          setCurrent(null);
-          openEditor();
-        }}
+      <PageTabs
+        id="campaigns"
+        label="Nhóm nội dung chiến dịch"
+        value={section}
+        onChange={setSection}
+        items={[
+          { value: "campaigns", label: "Nội dung các kênh" },
+          { value: "banners", label: "Banner website" },
+        ]}
+      />
+      <section
+        id="campaigns-panel-campaigns"
+        role="tabpanel"
+        aria-labelledby="campaigns-tab-campaigns"
+        tabIndex={0}
+        hidden={section !== "campaigns"}
+        aria-label="Nội dung các kênh"
       >
-        <CrmIcon name="document" />
-        Tạo bản nháp mới
-      </button>
-      {loading && <CrmState kind="loading" title="Đang tải chiến dịch…" />}
-      {!loading && !rows.length && !message && (
-        <CrmState kind="empty" title="Chưa có chiến dịch." />
-      )}
-      {next && (
-        <button
-          disabled={busy || loading || uncertain}
-          onClick={() => void load(next)}
+        <p className="fc095Notice">
+          Lịch là kế hoạch nội dung. Duyệt caption không đăng lên mạng xã hội;
+          bạn tự đăng sau khi kiểm tra.
+        </p>
+        {loading && <CrmState kind="loading" title="Đang tải chiến dịch…" />}
+        {!loading && !rows.length && !message && (
+          <CrmState kind="empty" title="Chưa có chiến dịch." />
+        )}
+        {next && (
+          <button
+            disabled={busy || loading || uncertain}
+            onClick={() => void load(next)}
+          >
+            Xem thêm chiến dịch
+          </button>
+        )}
+        <div className="crmList">
+          {rows.map((r) => (
+            <article key={r.id} className="crmItem">
+              <div className="crmItemMain">
+                <h3 className="crmItemTitle">{r.title}</h3>
+                <span className="crmBadge">
+                  {r.status === "approved"
+                    ? "Đã duyệt caption"
+                    : r.status === "archived"
+                      ? "Đã lưu trữ"
+                      : r.status === "draft"
+                        ? "Bản nháp"
+                        : "Trạng thái chưa xác định"}
+                </span>
+                <p>{r.caption}</p>
+                {r.scheduledAt && (
+                  <p>
+                    Lịch dự kiến:{" "}
+                    {new Date(r.scheduledAt).toLocaleString("vi-VN")}
+                  </p>
+                )}
+                <details className="crmItemDetails">
+                  <summary>Đường dẫn và thông tin theo dõi</summary>
+                  <p>{r.path}</p>
+                  <p>
+                    UTM source: {r.source} · medium: {r.medium} · campaign:{" "}
+                    {r.campaign}
+                  </p>
+                  <CrmReference label="Mã chiến dịch" value={r.id} />
+                </details>
+              </div>
+              <div className="crmActions">
+                <button
+                  disabled={busy || uncertain}
+                  onClick={() => {
+                    editCampaign(r);
+                  }}
+                >
+                  <CrmIcon name="document" />
+                  Chỉnh sửa
+                </button>
+                <button onClick={() => void copy(r)}>
+                  <CrmIcon name="arrow" />
+                  Sao chép caption và link
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+        <WorkbenchComposer095
+          open={editing}
+          title={current ? "Chỉnh sửa chiến dịch" : "Bản nháp chiến dịch mới"}
+          locked={busy || uncertain}
+          onClose={() => setEditing(false)}
         >
-          Xem thêm chiến dịch
-        </button>
-      )}
-      <div className="crmList">
-        {rows.map((r) => (
-          <article key={r.id} className="crmItem">
-            <div className="crmItemMain">
-              <h3 className="crmItemTitle">{r.title}</h3>
-              <span className="crmBadge">
-                {r.status === "approved"
-                  ? "Đã duyệt caption"
-                  : r.status === "archived"
-                    ? "Đã lưu trữ"
-                    : r.status === "draft"
-                      ? "Bản nháp"
-                      : "Trạng thái chưa xác định"}
-              </span>
-              <p>{r.caption}</p>
-              {r.scheduledAt && (
-                <p>
-                  Lịch dự kiến:{" "}
-                  {new Date(r.scheduledAt).toLocaleString("vi-VN")}
-                </p>
-              )}
+          <StepForm
+            steps={["Nội dung", "Theo dõi", "Lịch & trạng thái", "Kiểm tra"]}
+            disabled={busy || uncertain}
+            key={current?.id ?? "new"}
+            className="form"
+            onSubmit={(e) => void save(e)}
+            onInput={() => {
+              dirty.current = true;
+            }}
+            onChange={() => {
+              dirty.current = true;
+            }}
+          >
+            {current && (
               <details className="crmItemDetails">
-                <summary>Đường dẫn và thông tin theo dõi</summary>
-                <p>{r.path}</p>
-                <p>
-                  UTM source: {r.source} · medium: {r.medium} · campaign:{" "}
-                  {r.campaign}
-                </p>
-                <CrmReference label="Mã chiến dịch" value={r.id} />
+                <summary>Thông tin bản đã lưu</summary>
+                <CrmReference label="Mã chiến dịch" value={current.id} />
               </details>
-            </div>
-            <div className="crmActions">
-              <button
-                disabled={busy || uncertain}
-                onClick={() => {
-                  setCurrent(r);
-                  openEditor();
-                }}
-              >
-                <CrmIcon name="document" />
-                Chỉnh sửa
-              </button>
-              <button onClick={() => void copy(r)}>
-                <CrmIcon name="arrow" />
-                Sao chép caption và link
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-      <details
-        className="panel crmItemDetails"
-        ref={editor}
-        open={editing}
-        onToggle={(e) => setEditing(e.currentTarget.open)}
+            )}
+            <fieldset className="form" disabled={busy || uncertain}>
+              <StepStage index={0}>
+                <label>
+                  <span className="formLabelText">
+                    Tên chiến dịch{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="title"
+                    required
+                    minLength={2}
+                    maxLength={160}
+                    defaultValue={current?.title}
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Caption{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <textarea
+                    name="caption"
+                    required
+                    minLength={3}
+                    maxLength={4000}
+                    defaultValue={current?.caption}
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Đường dẫn bài viết hoặc sản phẩm{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="path"
+                    required
+                    placeholder="/posts/ten-bai-viet"
+                    defaultValue={current?.path}
+                  />
+                </label>
+              </StepStage>
+              <StepStage index={1}>
+                <p className="muted">
+                  Các mã UTM giúp phân biệt nguồn và chiến dịch trong link được
+                  sao chép.
+                </p>
+                <div className="fc095FieldGrid">
+                  {["source", "medium", "campaign"].map((k) => (
+                    <label key={k}>
+                      <span className="formLabelText">
+                        UTM {k}{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input
+                        name={k}
+                        required
+                        pattern="[a-zA-Z0-9_-]{1,80}"
+                        defaultValue={
+                          current?.[k as "source" | "medium" | "campaign"]
+                        }
+                      />
+                    </label>
+                  ))}
+                </div>
+              </StepStage>
+              <StepStage index={2}>
+                <h3 className="crmSectionHeading">
+                  Lịch và trạng thái biên tập
+                </h3>
+                <div className="fc095FieldGrid">
+                  <label>
+                    Lịch dự kiến theo giờ địa phương
+                    <input
+                      name="schedule"
+                      type="datetime-local"
+                      defaultValue={scheduledInput(current?.scheduledAt)}
+                    />
+                  </label>
+                  <label>
+                    Trạng thái biên tập
+                    <select
+                      name="status"
+                      defaultValue={current?.status ?? "draft"}
+                    >
+                      <option value="draft">Bản nháp</option>
+                      <option value="approved">Đã duyệt caption</option>
+                      <option value="archived">Lưu trữ</option>
+                    </select>
+                  </label>
+                </div>
+              </StepStage>
+              <StepStage index={3}>
+                <button className="primary" disabled={busy || uncertain}>
+                  <CrmIcon name="check" />
+                  {busy ? "Đang lưu…" : "Lưu chiến dịch"}
+                </button>
+              </StepStage>
+            </fieldset>
+          </StepForm>
+        </WorkbenchComposer095>
+        {uncertain && (
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() => void executeSave()}
+          >
+            Thử lại thao tác đang chờ
+          </button>
+        )}
+        {message && <p role="status">{message}</p>}
+      </section>
+      <section
+        id="campaigns-panel-banners"
+        role="tabpanel"
+        aria-labelledby="campaigns-tab-banners"
+        tabIndex={0}
+        hidden={section !== "banners"}
+        aria-label="Quản lý banner website"
       >
-        <summary>{current ? "Chỉnh sửa chiến dịch" : "Tạo chiến dịch"}</summary>
-        <form
-          key={current?.id ?? "new"}
-          className="form"
-          onSubmit={(e) => void save(e)}
-        >
-          <h2 className="crmSectionHeading">
-            {current ? "Chỉnh sửa chiến dịch" : "Chiến dịch mới"}
-          </h2>
-          {current && (
-            <details className="crmItemDetails">
-              <summary>Thông tin bản đã lưu</summary>
-              <CrmReference label="Mã chiến dịch" value={current.id} />
-            </details>
-          )}
-          <fieldset className="form" disabled={busy || uncertain}>
-            <label>
-              Tên chiến dịch
-              <input
-                name="title"
-                required
-                minLength={2}
-                maxLength={160}
-                defaultValue={current?.title}
-              />
-            </label>
-            <label>
-              Caption
-              <textarea
-                name="caption"
-                required
-                minLength={3}
-                maxLength={4000}
-                defaultValue={current?.caption}
-              />
-            </label>
-            <label>
-              Đường dẫn bài viết hoặc sản phẩm
-              <input
-                name="path"
-                required
-                placeholder="/posts/ten-bai-viet"
-                defaultValue={current?.path}
-              />
-            </label>
-            <h3 className="crmSectionHeading">Theo dõi lượt truy cập</h3>
-            {["source", "medium", "campaign"].map((k) => (
-              <label key={k}>
-                UTM {k}
-                <input
-                  name={k}
-                  required
-                  pattern="[a-zA-Z0-9_-]{1,80}"
-                  defaultValue={
-                    current?.[k as "source" | "medium" | "campaign"]
-                  }
-                />
-              </label>
-            ))}
-            <label>
-              Lịch dự kiến theo giờ địa phương
-              <input
-                name="schedule"
-                type="datetime-local"
-                defaultValue={scheduledInput(current?.scheduledAt)}
-              />
-            </label>
-            <label>
-              Trạng thái biên tập
-              <select name="status" defaultValue={current?.status ?? "draft"}>
-                <option value="draft">Bản nháp</option>
-                <option value="approved">Đã duyệt caption</option>
-                <option value="archived">Lưu trữ</option>
-              </select>
-            </label>
-            <button className="primary" disabled={busy || uncertain}>
-              <CrmIcon name="check" />
-              {busy ? "Đang lưu…" : "Lưu chiến dịch"}
-            </button>
-          </fieldset>
-        </form>
-      </details>
-      {uncertain && (
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() => void executeSave()}
-        >
-          Thử lại thao tác đang chờ
-        </button>
-      )}
-      {message && <p role="status">{message}</p>}
-      <WebsiteBanners />
+        <WebsiteBanners />
+      </section>
     </section>
   );
 }

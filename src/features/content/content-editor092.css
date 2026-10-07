@@ -1,0 +1,454 @@
+.ceWorkspace {
+  max-width: 1500px;
+  margin: auto;
+}
+.ceToolbar,
+.ceExport,
+.ceListFooter,
+.ceEditorNav,
+.ceSaveBar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.ceToolbar {
+  margin: 20px 0;
+}
+.ceWorkspace .ceToolbar label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-size: 12px;
+  color: #65728a;
+}
+.ceToolbar input,
+.ceToolbar select {
+  margin-top: 6px;
+  min-height: 42px;
+}
+.ceSearch {
+  flex: 1;
+  max-width: 440px;
+}
+.ceSpreadsheet {
+  margin-bottom: 20px;
+}
+.ceExport select {
+  width: auto;
+  max-width: 260px;
+  min-height: 42px;
+}
+.ceExport button {
+  min-height: 42px;
+}
+.ceTableScroll {
+  overflow: auto;
+  border: 1px solid #e1e5ed;
+  border-radius: 12px;
+  background: #fff;
+}
+.ceTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.ceWorkspace th {
+  font-size: 12px;
+  color: #64738b;
+  background: #fafbfc;
+  font-weight: 500;
+}
+.ceWorkspace td,
+.ceWorkspace th {
+  padding: 14px 16px;
+  border-bottom: 1px solid #edf0f5;
+  white-space: nowrap;
+}
+.ceTable td:nth-child(2) {
+  white-space: normal;
+  min-width: 240px;
+}
+.ceWorkspace .ceTable .ceProduct {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: #111c35;
+}
+.ceProduct img {
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f7f8fa;
+}
+.ceProduct small {
+  display: block;
+  color: #748096;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.ceListFooter {
+  justify-content: space-between;
+  color: #65728a;
+  font-size: 12px;
+  padding: 16px 0;
+}
+.ceEditor {
+  max-width: 980px;
+  margin: 20px auto;
+}
+.ceEditorForm {
+  gap: 16px;
+}
+.workspaceShell
+  .workspaceContent
+  form.ceEditorForm.crmStepForm[data-crm-steps]
+  .ceEditorNav {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  color: #67748a;
+  font-size: 12px;
+}
+.workspaceShell
+  .workspaceContent
+  form.ceEditorForm.crmStepForm[data-crm-steps]
+  .ceEditorNav
+  h2 {
+  order: 0;
+  flex-basis: auto;
+  margin: 0;
+  font-size: 18px;
+  flex: 0 1 auto;
+  min-width: 0;
+  color: #111c35;
+  line-height: 1.25;
+}
+.ceEditorNav .ceSaveIndicator {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #64738b;
+}
+.workspaceShell .workspaceContent .ceEditorForm .ceEditorNav .ceListIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #64738b;
+}
+.workspaceShell .workspaceContent .ceEditorForm .ceEditorNav .ceListIcon:hover {
+  background: #f1f4fa;
+  color: #163cff;
+}
+.ceEditorNav .ceSaveIndicator.isDirty {
+  color: #a96a00;
+}
+.ceEditorNav > span,
+.ceEditorNav > button {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* Step layout and connecting rails come from the shared StepForm. */
+.workspaceShell
+  .workspaceContent
+  form.ceEditorForm.crmStepForm[data-crm-steps] {
+  padding: 20px;
+}
+.workspaceShell
+  .workspaceContent
+  form.ceEditorForm.crmStepForm[data-crm-steps]
+  .crmStepper
+  small {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (max-width: 640px) {
+  .workspaceShell
+    .workspaceContent
+    form.ceEditorForm.crmStepForm[data-crm-steps] {
+    padding: 16px;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.ceEditorForm.crmStepForm[data-crm-steps]
+    .ceEditorNav {
+    gap: 8px;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.ceEditorForm.crmStepForm[data-crm-steps]
+    .ceEditorNav
+    h2 {
+    font-size: 16px;
+  }
+}
+.ceTabs {
+  display: flex;
+  border-bottom: 1px solid #e1e5ed;
+  gap: 6px;
+  margin: 18px 0;
+}
+.ceTabs button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  min-height: 44px;
+  color: #68758b;
+}
+.ceTabs [aria-pressed="true"] {
+  color: #163cff;
+  border-bottom: 2px solid #163cff;
+}
+.ceEditorForm [data-editor-step] > label {
+  display: block;
+  margin: 18px 0;
+}
+.ceEditorForm textarea {
+  min-height: 100px;
+}
+.ceEditorForm .ceFieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.ceEditorForm .ceFieldGrid > label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.ceEditorForm .ceFieldGrid input,
+.ceEditorForm .ceFieldGrid textarea {
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .ceEditorForm .ceFieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ceEditorForm [hidden] {
+  display: none !important;
+}
+.ceSaveBar {
+  position: sticky;
+  bottom: 0;
+  justify-content: flex-end;
+  background: #fff;
+  padding: 16px 0;
+  border-top: 1px solid #e1e5ed;
+  z-index: 1;
+}
+.ceImport {
+  margin: auto;
+  width: 920px;
+  max-width: calc(100vw - 24px);
+  max-height: 90vh;
+  padding: 0;
+  border: 1px solid #dfe4ee;
+  border-radius: 16px;
+  color: #111c35;
+}
+.ceImport::backdrop {
+  background: #111c3545;
+}
+.ceImport header,
+.ceImport footer {
+  padding: 18px 24px;
+  border-bottom: 1px solid #e1e5ed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: white;
+}
+.ceImport h2 {
+  margin: 0;
+  font-size: 22px;
+}
+.ceImportBody {
+  padding: 24px;
+  overflow: auto;
+}
+.ceImportBody > label {
+  display: block;
+  margin: 18px 0;
+}
+.ceImportBody > label input,
+.ceImportBody > label select {
+  margin-top: 8px;
+}
+.ceMapping {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.ceMapping label {
+  font-size: 12px;
+}
+.ceMapping select {
+  width: 100%;
+  margin-top: 6px;
+}
+.ceImport p {
+  color: #64738b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.ceImport table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.ceImport td {
+  white-space: normal;
+  min-width: 70px;
+}
+.ceImport footer {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid #e1e5ed;
+}
+.ceWorkspace :focus-visible {
+  outline: 3px solid #a7b7ff;
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  .ceExport {
+    align-items: stretch;
+  }
+  .ceExport select {
+    max-width: none;
+    flex: 1;
+    min-width: 140px;
+  }
+  .ceToolbar {
+    align-items: stretch;
+  }
+  .ceSearch {
+    max-width: none;
+    width: 100%;
+  }
+  .ceEditor {
+    margin: 0;
+  }
+  .ceEditorForm {
+    padding: 16px;
+  }
+  .ceTabs {
+    gap: 0;
+  }
+  .ceTabs button {
+    flex: 1;
+    font-size: 12px;
+    padding: 10px 6px;
+  }
+  .ceImportBody {
+    padding: 16px;
+  }
+  .ceMapping {
+    grid-template-columns: 1fr;
+  }
+  .ceSaveBar > button {
+    flex: 1;
+  }
+  .ceTableScroll {
+    border-radius: 8px;
+  }
+  .ceTable td,
+  .ceTable th {
+    padding: 12px;
+  }
+  .ceImport {
+    max-height: 94vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ceWorkspace * {
+    scroll-behavior: auto !important;
+  }
+}
+
+.ceWorkspace button,
+.ceWorkspace input,
+.ceWorkspace select {
+  min-height: 44px;
+}
+.ceWorkspace input[type="checkbox"] {
+  min-height: auto;
+  width: 18px;
+  height: 18px;
+}
+.ceWorkspace .ceTable .ceProduct {
+  text-align: left;
+  justify-content: flex-start;
+  font-weight: 500;
+  box-shadow: none;
+}
+.ceWorkspace .ceToolbar input {
+  width: 100%;
+}
+.ceWorkspace .ceSearch {
+  min-width: min(320px, 100%);
+}
+
+@media (max-width: 640px) {
+  .ceWorkspace .ceTable thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .ceWorkspace .ceTable tbody {
+    display: block;
+  }
+  .ceWorkspace .ceTable tbody tr {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    padding: 12px;
+    border-bottom: 1px solid #edf0f5;
+  }
+  .ceWorkspace .ceTable tbody td {
+    border: 0;
+    padding: 5px;
+    min-width: 0;
+    white-space: normal;
+    grid-column: 2;
+  }
+  .ceWorkspace .ceTable tbody td:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .ceWorkspace .ceTable tbody td:nth-child(2) {
+    grid-row: 1;
+  }
+  .ceWorkspace .ceTable tbody td[data-label] {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+  }
+  .ceWorkspace .ceTable td[data-label]::before {
+    content: attr(data-label);
+    color: #64738b;
+  }
+  .ceWorkspace .ceProduct small {
+    overflow-wrap: anywhere;
+  }
+}

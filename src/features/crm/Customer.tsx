@@ -1,3 +1,4 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
 import { CrmHeading, CrmIcon, CrmReference, CrmState } from "./CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -392,7 +393,13 @@ export function Customer() {
                     </div>
                   </div>
                 )}
-                <form
+                <StepForm
+                  steps={[
+                    "Phân loại & ghi chú",
+                    "Phân công & lịch",
+                    "Kiểm tra",
+                  ]}
+                  disabled={busy || uncertain || needsReview}
                   key={`${id}:${draft ? (draft.baseVersion ?? "new") : (data.crm?.version ?? "new")}:${draftReset}`}
                   className="form"
                   onChange={(e) => captureDraft(e.currentTarget)}
@@ -402,72 +409,81 @@ export function Customer() {
                     className="form"
                     disabled={busy || uncertain || needsReview}
                   >
-                    <p className="muted">
-                      Ghi chú này chỉ dành cho nhân viên, không gửi cho khách.
-                    </p>
-                    <label>
-                      Phân loại
-                      <input
-                        name="tags"
-                        placeholder="Các nhóm, cách nhau bằng dấu phẩy"
-                        defaultValue={draft?.tags ?? data.crm?.tags.join(", ")}
-                        maxLength={customerTagInputLimit}
-                      />
-                    </label>
-                    <label>
-                      Ghi chú nội bộ
-                      <textarea
-                        name="notes"
-                        maxLength={4000}
-                        defaultValue={draft?.notes ?? data.crm?.notes}
-                        rows={5}
-                      />
-                    </label>
-                    <label>
-                      Người phụ trách
-                      <select
-                        name="assignee"
-                        value={assignee}
-                        onChange={(e) => setAssignee(e.target.value)}
+                    <StepStage index={0}>
+                      <p className="muted">
+                        Ghi chú này chỉ dành cho nhân viên, không gửi cho khách.
+                      </p>
+                      <label>
+                        Phân loại
+                        <input
+                          name="tags"
+                          placeholder="Các nhóm, cách nhau bằng dấu phẩy"
+                          defaultValue={
+                            draft?.tags ?? data.crm?.tags.join(", ")
+                          }
+                          maxLength={customerTagInputLimit}
+                        />
+                      </label>
+                      <label>
+                        Ghi chú nội bộ
+                        <textarea
+                          name="notes"
+                          maxLength={4000}
+                          defaultValue={draft?.notes ?? data.crm?.notes}
+                          rows={5}
+                        />
+                      </label>
+                    </StepStage>
+                    <StepStage index={1}>
+                      <label>
+                        Người phụ trách
+                        <select
+                          name="assignee"
+                          value={assignee}
+                          onChange={(e) => setAssignee(e.target.value)}
+                        >
+                          <option value="">Chưa phân công</option>
+                          {assignee &&
+                            !staff.some((s) => s.id === assignee) && (
+                              <option value={assignee}>
+                                {assignee} · cần kiểm tra quyền
+                              </option>
+                            )}
+                          {staff.map((s) => (
+                            <option value={s.id} key={s.id}>
+                              {s.displayName}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => void loadStaff(staffNext ?? undefined)}
                       >
-                        <option value="">Chưa phân công</option>
-                        {assignee && !staff.some((s) => s.id === assignee) && (
-                          <option value={assignee}>
-                            {assignee} · cần kiểm tra quyền
-                          </option>
-                        )}
-                        {staff.map((s) => (
-                          <option value={s.id} key={s.id}>
-                            {s.displayName}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => void loadStaff(staffNext ?? undefined)}
-                    >
-                      {staffNext ? "Xem thêm nhân viên" : "Tải lại nhân viên"}
-                    </button>
-                    <label>
-                      Lịch hẹn theo giờ thiết bị
-                      <input
-                        type="datetime-local"
-                        name="followup"
-                        defaultValue={
-                          draft?.followup ??
-                          localDateTime(data.crm?.followUpAt ?? 0)
-                        }
-                      />
-                    </label>
-                    <p className="muted">
-                      Xóa lịch hẹn để đánh dấu không còn việc cần theo dõi.
-                    </p>
-                    <button className="primary" disabled={busy || uncertain}>
-                      {busy ? "Đang lưu…" : "Lưu hồ sơ nội bộ"}
-                    </button>
+                        {staffNext ? "Xem thêm nhân viên" : "Tải lại nhân viên"}
+                      </button>
+                      <label>
+                        Lịch hẹn theo giờ thiết bị
+                        <input
+                          type="datetime-local"
+                          name="followup"
+                          defaultValue={
+                            draft?.followup ??
+                            localDateTime(data.crm?.followUpAt ?? 0)
+                          }
+                        />
+                      </label>
+                      <p className="muted">
+                        Xóa lịch hẹn để đánh dấu không còn việc cần theo dõi.
+                      </p>
+                    </StepStage>
+                    <StepStage index={2}>
+                      <button className="primary" disabled={busy || uncertain}>
+                        {busy ? "Đang lưu…" : "Lưu hồ sơ nội bộ"}
+                      </button>
+                    </StepStage>
                   </fieldset>
-                </form>
+                </StepForm>
               </details>
             </section>
             <div>

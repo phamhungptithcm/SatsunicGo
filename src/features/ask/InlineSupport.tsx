@@ -328,7 +328,9 @@ export function InlineSupport({
                   : "Send a private question to staff. This does not create a buying order."}
           </p>
           {!ready && !error && (
-            <LoadingState overlay={false}>{vi ? "Đang tải hỗ trợ…" : "Loading support…"}</LoadingState>
+            <LoadingState overlay={false}>
+              {vi ? "Đang tải hỗ trợ…" : "Loading support…"}
+            </LoadingState>
           )}
           {!ready && error && (
             <button type="button" onClick={() => setReadAttempt((n) => n + 1)}>
@@ -372,7 +374,12 @@ export function InlineSupport({
             }}
           >
             <label>
-              {vi ? "Nội dung cần hỗ trợ" : "How can staff help?"}
+              <span className="formLabelText">
+                {vi ? "Nội dung cần hỗ trợ" : "How can staff help?"}{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
               <textarea
                 value={text}
                 disabled={busy || (!!orderId && !!pending.current)}

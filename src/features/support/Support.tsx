@@ -149,7 +149,12 @@ export function Support({ user }: { user: User | null }) {
           </p>
         )}
         <label>
-          Chủ đề
+          <span className="formLabelText">
+            Chủ đề{" "}
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
+          </span>
           <input
             name="subject"
             placeholder={
@@ -163,7 +168,12 @@ export function Support({ user }: { user: User | null }) {
           />
         </label>
         <label>
-          Nội dung
+          <span className="formLabelText">
+            Nội dung{" "}
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
+          </span>
           <textarea
             name="message"
             placeholder={

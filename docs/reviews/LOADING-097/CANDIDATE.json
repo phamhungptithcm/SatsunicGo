@@ -1,0 +1,11 @@
+{
+  "task_id": "SATSUNICGO-LOADING-097",
+  "base_commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "files": {
+    "src/shared/Loading.tsx": "38d72c166f7687d49c9f8aae4281a2f40b2f9ef8376fc6ff7f79f543038e3ab2",
+    "src/shared/loading.css": "d3784312b24b737dacecf8ac806a7ead159f9bbc9269c0380e5daa21e2f5ec01",
+    "src/features/crm/CrmPresentation.tsx": "def7474187c1ea7c2f894ae29e426ca620eae17ef735e165cf66f46646144fd3",
+    "src/features/crm/Workspace.tsx": "4cb08738d7c20b1eef188d5aca9f4398ddd2acddfaba1317e5fc9c9c12194a85",
+    "src/app/App.tsx": "b5709cc2c23ff84ebb2543ea912de0ab41662a8148c0e5677c614d92e6925780"
+  }
+}

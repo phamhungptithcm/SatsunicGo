@@ -271,7 +271,7 @@ export function Security({ user }: { user: User | null }) {
           <p>Đăng nhập với Google để quản lý bảo mật tài khoản.</p>
         </div>
       )}
-      {(secret || challenge) && (
+      {secret && (
         <div className="securityCard">
           {secret && (
             <div className="securitySetup">
@@ -365,7 +365,14 @@ export function Security({ user }: { user: User | null }) {
                 </select>
               </label>
             )}
-            <label htmlFor="security-code">Mã xác thực 6 chữ số</label>
+            <label htmlFor="security-code">
+              <span className="formLabelText">
+                Mã xác thực 6 chữ số{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+            </label>
             <input
               id="security-code"
               name="code"

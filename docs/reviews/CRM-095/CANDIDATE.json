@@ -1,0 +1,11 @@
+{
+  "base_commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "frozen_at_utc": "2026-10-07T03:47:12.507118+00:00",
+  "files": {
+    "src/features/crm/Customers.tsx": "d054d595794cabc725d0c239a6c41d208a7bcb3cfd66f9e3dc83d6abce8fe249",
+    "src/features/support/Thread.tsx": "4f499ce937cb6789ec375cfb12899dec77bd51594814ea87b085ae7e23a4a1ec",
+    "src/features/crm/customer-workspace095.css": "8c31f641087a876527e78d983e7d13aa30961ad321b983bcfd4f0be10b1bf0f3",
+    "tests/browser/crm095.spec.ts": "bb571d135a90792a66e27f1c09998729338c1519f5f19ee0b9a0cb5824804721"
+  },
+  "scope": "CRM095 frontend and browser tests only; unrelated shared WIP excluded"
+}

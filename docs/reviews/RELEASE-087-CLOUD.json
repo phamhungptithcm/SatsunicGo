@@ -3,7 +3,7 @@
   "designatedIdentityExists": true,
   "verified": true,
   "googleLinked": true,
-  "mfaEnrolled": false,
+  "mfaEnrolled": true,
   "totpEnabled": true,
   "deployedFunctionCount": 0,
   "secretMetadataCount": 0,
@@ -14,5 +14,7 @@
     "pointInTimeRecoveryEnablement": "POINT_IN_TIME_RECOVERY_DISABLED",
     "type": "FIRESTORE_NATIVE"
   },
-  "scope": "metadata-only; no secret payloads/customer records"
+  "scope": "metadata-only; no secret payloads/customer records",
+  "ownerRoleVerified": true,
+  "ownerAuditVerified": true
 }

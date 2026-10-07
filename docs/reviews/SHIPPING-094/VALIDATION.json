@@ -1,0 +1,83 @@
+{
+  "candidate": "CANDIDATE.json",
+  "environment": "SYNTHETIC_BROWSER; existing 5207/demo identity, intercepted reads/commands",
+  "browserPlugin": "ABSENT",
+  "browser": "Chromium",
+  "browserStats": {
+    "startTime": "2026-10-07T03:17:00.650Z",
+    "duration": 25091.311,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "checks": {
+    "scopedTypeScript": "PASSED",
+    "eslint": "PASSED",
+    "prettier": "PASSED",
+    "diffWhitespace": "PASSED",
+    "unit": {
+      "status": "PASSED",
+      "suites": 4,
+      "tests": 22
+    },
+    "fullTypeScript": {
+      "status": "NOT_COMPLETED",
+      "previous": "FAILED: concurrent ProductSpreadsheet.tsx TS7022/TS7006 outside scope",
+      "finalRefresh": "Stopped prolonged full-repository run with interrupt (exit130); scoped TypeScript passed."
+    },
+    "businessFunctionTokenComparison": {
+      "status": "PASSED",
+      "count": 24
+    },
+    "repositoryIntelligence": {
+      "initial": "READY",
+      "final": "DEGRADED",
+      "reason": "CocoIndex daemon log permission failure; stale metadata; current native source/token/tests fallback"
+    }
+  },
+  "coverage": [
+    "empty",
+    "loading/shared-read-lock",
+    "selected order/parcel",
+    "native grouped forms",
+    "retained draft across tabs/collapse/errors",
+    "arrow/Home keyboard",
+    "collapse focus",
+    "separate parcel/batch pagination",
+    "mobile390/320",
+    "zoom200",
+    "80-character ids",
+    "reducedMotion",
+    "read error/reconciliation",
+    "unknown command identical retry",
+    "acknowledged result focus",
+    "permission denied",
+    "no overlay",
+    "no uncaught page errors",
+    "no unexpected console errors"
+  ],
+  "notTested": [
+    "manual screenreader",
+    "other engines/devices",
+    "real backend business persistence",
+    "live providers"
+  ],
+  "screenshots": {
+    "desktop-batch-form.png": "c4aa0d72837a747750aaa55d3e1acb23c3486fc86ec28a0588250db95b4a22c9",
+    "desktop-batch-selected.png": "42e9e07e283b76eda6f55d163d55dae53d9bba20771ec77aeb628bd7355358f9",
+    "desktop-empty.png": "472de78afc8575508e1c34a67d67b5eb93460cdccffc5a5a64a54ea9b6342236",
+    "desktop-form.png": "e3524a72dd6d9905fdc2aeb6f9b65e491ee7289ee0322e271164b5c02de00c55",
+    "desktop-populated.png": "35c930322b6adc6b7fef77b26322d8f377e0302950af3dcbc5803e69e6b7fd06",
+    "error.png": "4392c4f04a6d78a28bd500819efe0c287b2fc92a653a360a8a72a9c8abd230e5",
+    "mobile-320.png": "6a8c21a69c7e1df2c73e4cd52fba7490403e3bf4d36a47dcc2c6f1dc534c3e7d",
+    "mobile-390.png": "d434232bfc05242c3bde0324fa0f29395b515a8bdf8affd70e2686daeb85dc15",
+    "mobile-long-identifiers.png": "10e320ccc0c3b244cba38cb024fddf015e771ccd4e05f67660441777e65d19ac",
+    "success.png": "9929ddcea9ee5bf304820074ea79c343e6d5974a1274e49afc1a5ff6b1f3b9cf",
+    "uncertain.png": "62a4f448f937c8a96d036b802289b54d56e00654deeb5ecbad1dab82e48b40e1",
+    "zoom200.png": "e3b365ead52416d1cb38e9e925d2044242d5bea7eb6fcf39a311776832796935"
+  },
+  "mutationsToBackend": 0,
+  "serverRestart": false,
+  "dependencyChanges": false
+}

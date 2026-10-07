@@ -1,0 +1,100 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "exact_html": true
+  },
+  {
+    "path": "/request",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "exact_html": true
+  },
+  {
+    "path": "/account/security",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "exact_html": true
+  },
+  {
+    "path": "/assets/index-DnQKd_CC.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/rolldown-runtime-Dd_uD5pT.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/react-C0PBjpjw.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/firebase-u8DDmQcB.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/firebase-Qx3PY130.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/Loading-y0kFrugd.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/schemas-OGczLxvf.js",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/Loading-D7tMzVHG.css",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/assets/index-C6RSwWEx.css",
+    "status": 200,
+    "sha_match": true
+  },
+  {
+    "path": "/products",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "bytes": 1523
+  },
+  {
+    "path": "/fees",
+    "status": 200,
+    "type": "text/html; charset=utf-8",
+    "bytes": 23660
+  },
+  {
+    "path": "/robots.txt",
+    "status": 200,
+    "type": "text/plain; charset=utf-8",
+    "bytes": 126
+  },
+  {
+    "path": "/sitemap.xml",
+    "status": 200,
+    "type": "application/xml; charset=utf-8",
+    "bytes": 381
+  },
+  {
+    "path": "/campaign-banners?placement=home",
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "bytes": 54
+  },
+  {
+    "endpoint": "command",
+    "unauth_status": 401,
+    "rejected": true
+  }
+]

@@ -7,12 +7,24 @@ import {
 } from "firebase/auth";
 
 let resolver: MultiFactorResolver | null = null;
+const listeners = new Set<() => void>();
+function update(next: MultiFactorResolver | null) {
+  resolver = next;
+  listeners.forEach((listener) => listener());
+}
+export function subscribeMfa(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
 export function captureMfa(error: unknown, auth: Auth | null) {
   if (
     auth &&
-    (error as { code?: string }).code === "auth/multi-factor-auth-required"
+    (error as { code?: string } | null)?.code ===
+      "auth/multi-factor-auth-required"
   ) {
-    resolver = getMultiFactorResolver(auth, error as MultiFactorError);
+    update(getMultiFactorResolver(auth, error as MultiFactorError));
     return true;
   }
   return false;
@@ -21,12 +33,23 @@ export function pendingMfa() {
   return resolver;
 }
 export async function verifyMfa(enrollmentId: string, code: string) {
-  if (!resolver) throw Error("NO_CHALLENGE");
-  await resolver.resolveSignIn(
+  const current = resolver;
+  if (!current) throw Error("NO_CHALLENGE");
+  if (
+    !/^[0-9]{6}$/.test(code) ||
+    !current.hints.some(
+      (hint) =>
+        hint.uid === enrollmentId &&
+        hint.factorId === TotpMultiFactorGenerator.FACTOR_ID,
+    )
+  ) {
+    throw Error("INVALID_CHALLENGE_INPUT");
+  }
+  await current.resolveSignIn(
     TotpMultiFactorGenerator.assertionForSignIn(enrollmentId, code),
   );
-  resolver = null;
+  if (resolver === current) update(null);
 }
 export function clearMfa() {
-  resolver = null;
+  update(null);
 }

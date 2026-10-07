@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CRM-REDESIGN-095",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved customer/care/support scope implemented; runtime recovery is not performed without approval. Final desktop passes; remaining viewport validation is separately blocked.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-CRM-REDESIGN-095.md",
+        "docs/reviews/CRM-095/CANDIDATE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No authority, backend, schema, dependency or mutation handler changes; React text encoding retained. Projection commands intercepted.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/HANDLER-COMPATIBILITY.json",
+        "docs/reviews/CRM-095/VALIDATION.json"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Scoped TypeScript, ESLint, format and Vite bundle pass. Product Language Gate and final narrow-layout verification remain BLOCKED after shared runtime stopped.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/PRODUCT-CONTENT-REVIEW.md",
+        "docs/reviews/CRM-095/VALIDATION.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Request generations, explicit query modes, asOf cursors, reply version/idempotency and locks unchanged by AST comparison. Previous candidate six browser tests pass; current final state rerun cannot navigate.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/HANDLER-COMPATIBILITY.json",
+        "tests/browser/crm095.spec.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Inline retry uses existing load and retains safe query input. Failed reads do not render zero results; targeted empty is distinct from read failure. New initial loading state avoids false empty flash.",
+      "evidence_refs": [
+        "src/features/crm/Customers.tsx",
+        "src/features/support/Thread.tsx"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Boundary assessed: NOT_READY for production; no deployment authorized/performed. Shared worktree dirty, full-repository typecheck not completed, indexes degraded, final runtime/browser gate blocked.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/VALIDATION.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped CSS avoids concurrent shared component conflicts. Native explicit filters retained rather than inventing backend search/KPI. Text reflow proxy disclosed; no real screen-reader or live-provider claim.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/PRODUCT-CONTENT-REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CRM095-F1",
+      "severity": "LOW",
+      "status": "FIXED",
+      "summary": "Desktop profile action wrapped unnecessarily; column minimum width added and desktop render checked.",
+      "evidence_refs": [
+        "src/features/crm/customer-workspace095.css",
+        "/private/tmp/crm095/customers-1440.png"
+      ],
+      "category": "presentation",
+      "location": "src/features/crm/customer-workspace095.css",
+      "resolution": "Desktop profile action wrapped unnecessarily; column minimum width added and desktop render checked."
+    },
+    {
+      "id": "CRM095-F2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "summary": "Old customer results remained visible during refresh; render gated on !busy. Current handler unchanged; earlier complete state test passes, latest desktop render verified.",
+      "evidence_refs": [
+        "src/features/crm/Customers.tsx",
+        "tests/browser/crm095.spec.ts"
+      ],
+      "category": "presentation",
+      "location": "src/features/crm/Customers.tsx",
+      "resolution": "Old customer results remained visible during refresh; render gated on !busy. Current handler unchanged; earlier complete state test passes, latest desktop render verified."
+    },
+    {
+      "id": "CRM095-F3",
+      "severity": "LOW",
+      "status": "FIXED",
+      "summary": "Primary profile action and resolution label had undersized targets; changed to 44px and final desktop measured by browser assertions. Final mobile measurement remains blocked.",
+      "evidence_refs": [
+        "src/features/crm/customer-workspace095.css",
+        "tests/browser/crm095.spec.ts"
+      ],
+      "category": "presentation",
+      "location": "src/features/crm/customer-workspace095.css",
+      "resolution": "Primary profile action and resolution label had undersized targets; changed to 44px and final desktop measured by browser assertions. Final mobile measurement remains blocked."
+    },
+    {
+      "id": "CRM095-F4",
+      "severity": "LOW",
+      "status": "FIXED",
+      "summary": "Target query with zero rows used read-failure wording; changed to not-found wording and preceding complete six-case run verified it.",
+      "evidence_refs": [
+        "src/features/support/Thread.tsx",
+        "tests/browser/crm095.spec.ts"
+      ],
+      "category": "presentation",
+      "location": "src/features/support/Thread.tsx",
+      "resolution": "Target query with zero rows used read-failure wording; changed to not-found wording and preceding complete six-case run verified it."
+    },
+    {
+      "id": "CRM095-F5",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "summary": "Shared frontend/Auth/Functions/Storage stopped after final desktop passed, so remaining final candidate browser cases cannot navigate. Restart excluded by plan; human authority requested.",
+      "evidence_refs": [
+        "docs/reviews/CRM-095/VALIDATION.json",
+        "docs/reviews/CRM-095/PRODUCT-CONTENT-REVIEW.md"
+      ],
+      "category": "runtime-evidence",
+      "location": "shared localhost 5207"
+    },
+    {
+      "id": "CRM095-F6",
+      "severity": "LOW",
+      "status": "ACCEPTED_RISK",
+      "summary": "Approval validator requires READY while governing repository policy allows DEGRADED fallback. Approval evidence remains truthful; no validator changes or false READY claim.",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-CRM-REDESIGN-095.md",
+        ".ai/guards/repository-intelligence-gate.yaml"
+      ],
+      "category": "tooling",
+      "location": ".ai/scripts/validate_implementation_approval.py"
+    }
+  ],
+  "residual_risks": [
+    "Final candidate mobile/reflow/state validation incomplete",
+    "Shared unrelated WIP prevents whole-repository release certification"
+  ],
+  "limitations": [
+    "CodeGraph and CocoIndex global metadata stale; bounded source/AST/test fallback",
+    "Full-repository typecheck not completed; scoped typecheck passed",
+    "Browser plugin unavailable; regular Playwright used",
+    "Native browser zoom, real screen reader and production/live providers not tested",
+    "Token usage and actual billed cost unavailable"
+  ]
+}

@@ -201,7 +201,12 @@ export function OrderImages({
             </select>
           </label>
           <label>
-            Ảnh
+            <span className="formLabelText">
+              Ảnh{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               name="image"
               type="file"
@@ -210,7 +215,12 @@ export function OrderImages({
             />
           </label>
           <label>
-            Mô tả
+            <span className="formLabelText">
+              Mô tả{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <textarea
               name="description"
               minLength={2}

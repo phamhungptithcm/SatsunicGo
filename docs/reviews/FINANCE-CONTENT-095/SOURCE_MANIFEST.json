@@ -1,0 +1,22 @@
+{
+  "task": "FINANCE-CONTENT-UX-095",
+  "scope": "owned files only; concurrent shared WIP excluded",
+  "commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "files": {
+    "src/features/crm/FinanceContent095.tsx": "52f98838267c4484802e12c910f31aeef482451c8805b6471b2472422d956b42",
+    "src/features/crm/finance-content095.css": "2b771d4e5a05c4de2df8482d457eccdfab03972c50d9bd8548d01a1b2f39f4c8",
+    "src/features/invoices/Documents.tsx": "af91867accd15a7b874fbddf2f93302071bb8e3c03564665f4d70e2939edb505",
+    "src/features/payments/Refunds.tsx": "e7b43b72d36a3980e27400d12a563e18283f50b5de49fbb78300ef6630556031",
+    "src/features/payments/Finance.tsx": "2257488aaca53ba61e4156d46989e744499216aa45465394364f8f0b94157908",
+    "src/features/content/Campaigns.tsx": "03ea190680220b136c7588bcfa45783c8d78b7863fec61b141a988913f86efcb",
+    "src/features/content/WebsiteBanners.tsx": "70fc2c60e186e38117ac2ba684badbf6080107e2793a146e89db20e126776c24",
+    "tests/unit/finance-content095.test.ts": "f5d9cbb5b85b146b04fa0a2e56f5a8a1f15a3a9b42273ba706649aba29e4c913"
+  },
+  "external_shared_dependency": {
+    "approval": "ADMIN096-TABS v1 reported by owning admin chat",
+    "files": {
+      "src/shared/PageTabs.tsx": "bc330c2a4c469dcedb045495bc5583fe84b950fccb677cc45596c9d2f2e50ce5",
+      "src/shared/page-tabs.css": "2dd190186eeabbdd987e93f9ee38776af7ff6dfb05beabfce6c55e4a16a8106e"
+    }
+  }
+}

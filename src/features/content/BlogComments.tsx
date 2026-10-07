@@ -282,7 +282,9 @@ export function BlogComments({ postId }: { postId: string }) {
       {!page && !loadError && (
         <div>
           <div className="skeleton" aria-hidden="true" />
-          <LoadingState className="private-note" overlay={false}>Đang tải bình luận…</LoadingState>
+          <LoadingState className="private-note" overlay={false}>
+            Đang tải bình luận…
+          </LoadingState>
         </div>
       )}
       {loadError && (
@@ -335,7 +337,12 @@ export function BlogComments({ postId }: { postId: string }) {
             )}
             {uid && (
               <label className="public-name" htmlFor={inputId + "-name"}>
-                Tên hiển thị công khai
+                <span className="formLabelText">
+                  Tên hiển thị công khai{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <input
                   id={inputId + "-name"}
                   value={name}
@@ -347,7 +354,12 @@ export function BlogComments({ postId }: { postId: string }) {
               </label>
             )}
             <label className="public-name" htmlFor={inputId}>
-              Bình luận (tối đa 2.000 ký tự)
+              <span className="formLabelText">
+                Bình luận (tối đa 2.000 ký tự){" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
             </label>
             <textarea
               ref={textRef}
@@ -567,9 +579,14 @@ export function BlogComments({ postId }: { postId: string }) {
                   : "Giúp giữ cuộc trò chuyện tôn trọng mọi người."}
               </p>
               <label>
-                {action.kind === "edit"
-                  ? "Nội dung bình luận"
-                  : "Lý do báo cáo"}
+                <span className="formLabelText">
+                  {action.kind === "edit"
+                    ? "Nội dung bình luận"
+                    : "Lý do báo cáo"}{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <textarea
                   required
                   maxLength={action.kind === "edit" ? 2000 : 500}

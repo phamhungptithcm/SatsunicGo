@@ -1,0 +1,72 @@
+{
+  "task_id": "SATSUNICGO-DASHBOARD-094",
+  "candidate_sha256": {
+    "src/features/crm/Dashboard.tsx": "8e1847127f0bd6066722cf4defceeb7c18f17d2de48309494198db1d398e0580",
+    "src/features/crm/dashboard094-model.ts": "49aa8db4989e03e26284c453281e9df3e9fa39a4db82f238ece28de671062296",
+    "src/features/crm/dashboard094.css": "16fbb9d41be3c9abebf19cf432738617328d5e3561078bb02c6fbd76850f7357",
+    "tests/unit/dashboard094.test.ts": "45a1834cc43a300a5a2977d9ed9db6fd3e278a15a97b7d897b13151ed6480af5",
+    "tests/browser/dashboard094.spec.ts": "0d88b8280c644b14d9c849906a988184de180452100984ae3d21d373fbd6aad0"
+  },
+  "checks": {
+    "unit": {
+      "status": "PASSED",
+      "command": "npx vitest run tests/unit/dashboard094.test.ts",
+      "tests": 11
+    },
+    "browser": {
+      "status": "PASSED",
+      "command": "npx playwright test --config /private/tmp/dashboard094.playwright.config.mjs",
+      "tests": 7,
+      "evidence": "Observed final full run: 7 passed (47.4s). Latest focused zero/truncation regression also passed; browser-results.json now holds that focused run."
+    },
+    "focused_regression": {
+      "status": "PASSED",
+      "tests": 1,
+      "summary": "Capped sample of zero visible counts suppresses empty claim"
+    },
+    "compilation": {
+      "status": "PASSED",
+      "command": "npx tsc --noEmit",
+      "summary": "Latest whole-repo run exited 0 after unrelated ProductSpreadsheet owner changes; dashboard-only strict TS check also exited 0"
+    },
+    "static_analysis": {
+      "status": "PASSED",
+      "command": "npx eslint src/features/crm/Dashboard.tsx src/features/crm/dashboard094-model.ts tests/unit/dashboard094.test.ts tests/browser/dashboard094.spec.ts"
+    },
+    "format": {
+      "status": "PASSED",
+      "command": "npx prettier --check scoped application/test files"
+    },
+    "actual_emulator": {
+      "status": "PASSED",
+      "evidence": "/private/tmp/dashboard094-evidence/actual-emulator.json",
+      "summary": "Existing owner demo login; actual callable; no mock; desktop/mobile no overflow; partial coverage correctly shown"
+    },
+    "indexes": {
+      "status": "DEGRADED",
+      "summary": "CodeGraph sync completed; CocoIndex post-change refresh failed/timed out; wrapper raised bytes/string error. Current whole-worktree freshness not asserted."
+    },
+    "approval_validator": {
+      "status": "FAILED",
+      "summary": "Hard-coded READY disagrees with repository-intelligence degraded fallback. Direct human approval recorded truthfully; no validator or gate modified."
+    },
+    "production_provider": {
+      "status": "NOT_RUN",
+      "summary": "Local/emulator evidence only; no deployment authorized or performed"
+    },
+    "full_build": {
+      "status": "NOT_RUN",
+      "summary": "TypeScript and real Vite module compilation verified; full build writes shared generated public-assets outside approved scope"
+    },
+    "other_browsers_screen_reader": {
+      "status": "NOT_RUN",
+      "summary": "Chromium, semantic DOM and keyboard tested; no real assistive technology or other engines claimed"
+    }
+  },
+  "usage": {
+    "tokens": "Unavailable",
+    "actual_billed_cost": "Unavailable",
+    "api_equivalent_estimate": "Unavailable"
+  },
+  "memory_candidates": "None"
+}

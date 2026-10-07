@@ -126,7 +126,7 @@ export function ReminderSettings() {
   }
   return (
     <section className="panel">
-      <h3>Nhắc membership sắp hết hạn</h3>
+      <h3>Nhắc gói sắp hết hạn</h3>
       <p>Chỉ chủ doanh nghiệp được cấu hình. Không tự động thu tiền gia hạn.</p>
       <button
         type="button"
@@ -146,10 +146,17 @@ export function ReminderSettings() {
             disabled={!policy || busy || attempt.current !== null}
             onChange={(e) => setApproved(e.target.checked)}
           />
-          Bật nhắc trước khi membership hết hạn
+          Bật nhắc trước khi gói hết hạn
         </label>
         <label>
-          Số ngày trước khi hết hạn
+          <span className="formLabelText">
+            Số ngày trước khi hết hạn{" "}
+            {approved && (
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            )}
+          </span>
           <input
             type="number"
             min={1}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-094",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved scoped redesign implemented and browser flow exercised.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-SHIPPING-094.md",
+        "tests/browser/shipping094.spec.ts"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Role predicates and commands remain unchanged; browser fixture blocks backend writes.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/CANDIDATE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Final product-language evidence and rendered state inventory have not yet been recorded.",
+      "evidence_refs": [
+        ".ai/templates/product-content-review.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Browser covers read failure, recovery, denied access and retained drafts.",
+      "evidence_refs": [
+        "tests/browser/shipping094.spec.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing lock and pending command behavior preserved; retry uses the identical command.",
+      "evidence_refs": [
+        "tests/browser/shipping094.spec.ts",
+        "docs/reviews/SHIPPING-094/CANDIDATE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Local-only scope evaluated. Full repository compile has unrelated concurrent errors; release is NOT_READY.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-SHIPPING-094.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Mounted hidden panels preserve intent; synthetic browser coverage does not establish live provider behavior.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-SHIPPING-094.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "094-LANGUAGE-EVIDENCE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "product-content",
+      "location": "docs/reviews/SHIPPING-094/PRODUCT_CONTENT_REVIEW.md",
+      "summary": "Required current in-context product language review has not yet been recorded.",
+      "resolution": null,
+      "evidence_refs": [
+        ".ai/templates/product-content-review.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Concurrent repository edits can invalidate whole-worktree receipts; scoped hashes bind the UI candidate."
+  ],
+  "limitations": [
+    "Presentation fixture does not verify real logistics providers or financial persistence."
+  ]
+}

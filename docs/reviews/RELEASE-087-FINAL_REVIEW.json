@@ -36,6 +36,18 @@
         "audited OWNER/protected-action acceptance incomplete",
         "backup/restore/monitoring/full core candidate acceptance incomplete"
       ]
+    },
+    {
+      "cycle": 4,
+      "status": "BLOCKED",
+      "resolved": [
+        "Authoritative MFA enrollment verified",
+        "Approved OWNER075 bootstrap applied and independently read back with audit"
+      ],
+      "remaining": [
+        "Actual client protected-action acceptance",
+        "Backup/restore/monitoring and exact current full core acceptance"
+      ]
     }
   ],
   "dimensions": {

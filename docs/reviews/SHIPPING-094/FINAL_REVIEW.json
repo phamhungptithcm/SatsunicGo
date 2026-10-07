@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-094",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "094 v1 scope met: two queues, retained drafts, creation hierarchy, compact grouped forms and pagination.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-SHIPPING-094.md",
+        "docs/reviews/SHIPPING-094/CANDIDATE.json",
+        "docs/reviews/SHIPPING-094/VALIDATION.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing role guards and denied fail-closed behavior retained; all 24 business functions token-identical; synthetic test issues no backend writes.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/CANDIDATE.json",
+        "docs/reviews/SHIPPING-094/VALIDATION.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped compiler/lint/format checks pass. Current product-language inventory and eight principles verified in rendered context. Source refs/mounted panels are bounded and lifecycle unchanged.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/QUALITY_GATES.md",
+        "docs/reviews/SHIPPING-094/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/SHIPPING-094/VALIDATION.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Empty/loading, selection, draft retention, read failure/recovery, unknown handoff retry and denied access exercised in browser; domain unit regressions pass.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/VALIDATION.json",
+        "tests/browser/shipping094.spec.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Shared locks block tab changes during unknown outcome; retry command and versions are identical; success readback focuses the result; collapsed form returns focus.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/VALIDATION.json",
+        "tests/browser/shipping094.spec.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Readiness assessed: local scope only, no deployment. Whole dirty repository, live providers/persistence, device matrix are not certified. No migrations, infrastructure or dependency changes.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/QUALITY_GATES.md",
+        "docs/reviews/SHIPPING-094/TASK_REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Mounted panels keep drafts and locks; existing cards retained instead of a new table abstraction. Read/command interception provides presentation evidence only. Stale optional indexes replaced by current bounded source and token evidence.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/TASK_REPORT.md",
+        "docs/reviews/SHIPPING-094/VALIDATION.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "094-LANGUAGE-EVIDENCE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "product-content",
+      "location": "docs/reviews/SHIPPING-094/PRODUCT_CONTENT_REVIEW.md",
+      "summary": "Required current in-context product language review has not yet been recorded.",
+      "resolution": "Complete current string/state inventory, all eight principles and platform-fit evidence recorded; final browser scenario passed.",
+      "evidence_refs": [
+        "docs/reviews/SHIPPING-094/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/SHIPPING-094/VALIDATION.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Whole-worktree review freshness can change with other chats; scoped candidate hashes checked before handoff.",
+    "Manual screenreader, other engines and real provider/business persistence remain unverified."
+  ],
+  "limitations": [
+    "Local presentation review only; production release is NOT_READY and outside approved scope.",
+    "Final optional index refresh DEGRADED; current source, unchanged business-function tokens and scoped tests support this bounded review."
+  ]
+}

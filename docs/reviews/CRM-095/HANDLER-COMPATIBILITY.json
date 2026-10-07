@@ -1,0 +1,18 @@
+{
+  "src/features/crm/Customers.tsx": {
+    "module/assigneeDisplay": true,
+    "Customers/load": true,
+    "Customers/search": true,
+    "Customers/change": true
+  },
+  "src/features/support/Thread.tsx": {
+    "module/supportRejection": true,
+    "module/supportReply": true,
+    "module/supportTicketVersion": true,
+    "Thread/load": true,
+    "Thread/send": true,
+    "Thread/reply": true,
+    "StaffSupport/lock": true,
+    "StaffSupport/load": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "scope": "owned source only; shared dirty worktree",
+  "sha256": {
+    "src/features/membership/PlanEditor.tsx": "b42778302a88fdff6ee47f2636b75e6514d774af3a847c08f4f6b26dae8105b7",
+    "src/features/membership/ReminderSettings.tsx": "9131ac0c309de93f73d25b713d22606e8dd32d7f0ec43d1b319974b0834bc4cc",
+    "src/features/settings/StaffAccess.tsx": "2feb8e00a0efbb8965d26e0884f6d54436068e9f506a95526fadc0c184215a75",
+    "src/features/settings/Settings.tsx": "5b10fc4eda2cf3b0daeae458d535d26d56c5cf2efd2fa2f2f49b07168fc99b25",
+    "src/features/settings/admin-workbench096.css": "239e925847163f2fb6052ccf828368b6462901f5bd0c13b8075131f1402d79d3",
+    "src/features/crm/Activity.tsx": "8858b670ae6399e990d4bbd98d99971efd8cef8befff623c097daa7ef8823582",
+    "src/features/shipping/ShippingRates.tsx": "866b7df35f55e75374d274302eee0f80d6b37e32deb73c522eb4148fc87d097e"
+  }
+}

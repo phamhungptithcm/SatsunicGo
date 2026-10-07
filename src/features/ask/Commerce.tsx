@@ -879,7 +879,12 @@ function CommercePanelContext({
               {editing && (
                 <form onSubmit={saveDraft} className={styles.inlineForm}>
                   <label>
-                    {t("Mua từ", "Source market")}
+                    <span className="formLabelText">
+                      {t("Mua từ", "Source market")}{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <select
                       name="market"
                       defaultValue={c.draft.market ?? ""}
@@ -900,7 +905,12 @@ function CommercePanelContext({
                     <fieldset key={i}>
                       <legend>{t(`Sản phẩm ${i + 1}`, `Item ${i + 1}`)}</legend>
                       <label>
-                        {t("Tên sản phẩm", "Product name")}
+                        <span className="formLabelText">
+                          {t("Tên sản phẩm", "Product name")}{" "}
+                          <span className="requiredMark" aria-hidden="true">
+                            *
+                          </span>
+                        </span>
                         <input
                           name={`name-${i}`}
                           defaultValue={item.name}
@@ -910,7 +920,7 @@ function CommercePanelContext({
                         />
                       </label>
                       <label>
-                        {t("Link · nếu có", "Link · optional")}
+                        {t("Link", "Link")}
                         <input
                           name={`url-${i}`}
                           defaultValue={item.url ?? ""}
@@ -927,7 +937,12 @@ function CommercePanelContext({
                         />
                       </label>
                       <label>
-                        {t("Số lượng", "Quantity")}
+                        <span className="formLabelText">
+                          {t("Số lượng", "Quantity")}{" "}
+                          <span className="requiredMark" aria-hidden="true">
+                            *
+                          </span>
+                        </span>
                         <input
                           name={`quantity-${i}`}
                           type="number"
@@ -940,7 +955,7 @@ function CommercePanelContext({
                     </fieldset>
                   ))}
                   <label>
-                    {t("Ghi chú · không bắt buộc", "Notes · optional")}
+                    {t("Ghi chú", "Notes")}
                     <textarea
                       name="notes"
                       defaultValue={c.draft.notes ?? ""}
@@ -1114,7 +1129,12 @@ function CommercePanelContext({
                   </label>
                 )}
                 <label>
-                  {t("Người nhận", "Recipient")}
+                  <span className="formLabelText">
+                    {t("Người nhận", "Recipient")}{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <input
                     value={recipient.recipient}
                     onChange={(e) =>
@@ -1127,7 +1147,12 @@ function CommercePanelContext({
                   />
                 </label>
                 <label>
-                  {t("Số điện thoại", "Phone")}
+                  <span className="formLabelText">
+                    {t("Số điện thoại", "Phone")}{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <input
                     value={recipient.phone}
                     onChange={(e) =>
@@ -1141,7 +1166,12 @@ function CommercePanelContext({
                   />
                 </label>
                 <label>
-                  {t("Địa chỉ nhận", "Delivery address")}
+                  <span className="formLabelText">
+                    {t("Địa chỉ nhận", "Delivery address")}{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <textarea
                     value={recipient.address}
                     onChange={(e) =>

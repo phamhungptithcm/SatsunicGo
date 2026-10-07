@@ -1,0 +1,13 @@
+{
+  "task": "CONTENT-EDITOR092",
+  "files": {
+    "src/features/content/ContentEditor.tsx": "132a292bbcd38a789264091ce970124c48c2cf258ace100d44cfee10630235f0",
+    "src/features/content/ProductSpreadsheet.tsx": "14ab61d1c514e5b11ce5cc0b65f29b8add6612fd8ea8912a4a84823599e213e6",
+    "src/features/content/product-spreadsheet.ts": "83df0eb2e2991d50e6e71ac18158ee4567cbf45b03e9f3ec756d7cc637a8eb16",
+    "src/features/content/content-editor092.css": "4c29846a4b54f6df091e88764f289a38d4fe3c0eb74074e5d5fb04871f79a17c",
+    "tests/unit/product-spreadsheet092.test.ts": "68268d1c20db8c9c4c1eeddae41d74fab93d375517c7ad99b103be9e3e6996e0",
+    "package.json": "5aa00496aaf9d8f41a726bacaf26745939d840f4d669df8ddea9a37593a0880c",
+    "package-lock.json": "0f8b0c79388c72fb69a97b0166f57524ec8cf6fcede637a8f51a966f3768c8a0"
+  },
+  "evidenceBoundary": "Local code only. Shared runtime unavailable; final native acceptance pending."
+}

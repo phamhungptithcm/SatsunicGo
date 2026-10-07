@@ -47,7 +47,12 @@ export function TransferNotice({ order }: { order: Order }) {
       ) : (
         <form className="form" onSubmit={(e) => void submit(e)}>
           <label>
-            Mã giao dịch ngân hàng
+            <span className="formLabelText">
+              Mã giao dịch ngân hàng{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               name="reference"
               minLength={3}
@@ -57,7 +62,12 @@ export function TransferNotice({ order }: { order: Order }) {
             />
           </label>
           <label>
-            Số tiền đã chuyển (₫)
+            <span className="formLabelText">
+              Số tiền đã chuyển (₫){" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               name="amount"
               type="number"

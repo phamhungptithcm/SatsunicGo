@@ -1,0 +1,66 @@
+/* Shared standard: transparent rail, slim underline, native-sized hit areas. */
+.pageTabs.pageTabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 0;
+  border-bottom: 1px solid #dce2ed;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 20px;
+  box-shadow: none;
+}
+.pageTabs.pageTabs > .pageTab.pageTab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #65718a;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  transform: none;
+}
+.pageTabs.pageTabs > .pageTab.pageTab[aria-selected="true"] {
+  color: #163cff;
+  font-weight: 600;
+}
+.pageTabs.pageTabs > .pageTab.pageTab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: currentColor;
+}
+.pageTabs.pageTabs > .pageTab.pageTab:hover:not(:disabled) {
+  color: #163cff;
+}
+.pageTabs.pageTabs > .pageTab.pageTab:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: -4px;
+}
+.pageTabs.pageTabs > .pageTab.pageTab:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+@media (max-width: 700px) {
+  .pageTabs.pageTabs > .pageTab.pageTab {
+    padding-inline: 12px;
+  }
+}

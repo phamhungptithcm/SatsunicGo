@@ -10,6 +10,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { auth, callService } from "../../shared/firebase";
 import type { SalesDocument, Seller } from "../../../packages/domain/invoices";
 import "./documents.css";
+import { WorkbenchComposer095 } from "../crm/FinanceContent095";
 import { LatestDocumentRequest } from "./document-requests";
 type List = {
   rows: SalesDocument[];
@@ -135,11 +136,13 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     [list, setList] = useState<List | null>(null),
     [selected, setSelected] = useState<SalesDocument | null>(null),
     [detailLoading, setDetailLoading] = useState(false),
+    [listLoading, setListLoading] = useState(false),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [share, setShare] = useState("");
   const [mobileDetail, setMobileDetail] = useState(false);
+  const [creating, setCreating] = useState(Boolean(search.get("order")));
   const detailTarget = useRef<HTMLElement | null>(null);
   const returnTarget = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
@@ -160,6 +163,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
   const [pending, setPending] = useState(false);
   async function load(after?: string) {
     const request = ++listRequest.current;
+    setListLoading(true);
     setError("");
     try {
       const r = await callService<List>("invoiceList", {
@@ -170,6 +174,8 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     } catch {
       if (request === listRequest.current)
         setError("Chưa tải được hóa đơn. Đăng nhập và thử lại.");
+    } finally {
+      if (request === listRequest.current) setListLoading(false);
     }
   }
   useEffect(() => {
@@ -181,6 +187,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     operation.current = null;
     setSelected(null);
     setMobileDetail(false);
+    setCreating(Boolean(orderFilter));
     returnTarget.current = null;
     setDetailLoading(false);
     setList(null);
@@ -254,6 +261,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
             : "Đã lưu thao tác hóa đơn.",
         );
       }
+      if (current.payload.action === "createDraft") setCreating(false);
       await load();
       if (revision !== viewRevision.current) return;
       if (r.id && current.payload.action !== "configure") {
@@ -268,6 +276,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           () => {
             setDetailLoading(false);
             setSelected(null);
+            setMobileDetail(false);
             setError(
               "Thao tác đã lưu nhưng chưa tải được hóa đơn. Tải lại rồi mở hóa đơn.",
             );
@@ -319,6 +328,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       },
       () => {
         setDetailLoading(false);
+        setMobileDetail(false);
         setError("Không thể mở hóa đơn này. Thử mở lại.");
       },
     );
@@ -356,7 +366,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     });
   return (
     <section
-      className={`invoiceWorkspace ${staff ? "" : "page"} ${mobileDetail ? "invoiceWorkspace--detail" : ""}`}
+      className={`invoiceWorkspace ${staff ? "fc095" : ""} ${staff ? "" : "page"} ${mobileDetail ? "invoiceWorkspace--detail" : ""}`}
     >
       <CrmHeading
         title="Hóa đơn"
@@ -366,9 +376,26 @@ export function Documents({ staff = false }: { staff?: boolean }) {
             : "Xem hóa đơn đã xuất từ đơn hàng của bạn."
         }
         actions={
-          <button disabled={busy} onClick={() => void load()}>
-            <CrmIcon name="refresh" /> Tải lại
-          </button>
+          <>
+            <button
+              disabled={busy || pending || listLoading}
+              onClick={() => void load()}
+            >
+              <CrmIcon name="refresh" /> Tải lại
+            </button>
+            {staff && list?.canIssue && (
+              <button
+                className="primary"
+                disabled={busy || pending}
+                onClick={() => {
+                  setMobileDetail(false);
+                  setCreating(true);
+                }}
+              >
+                <CrmIcon name="document" /> Tạo bản nháp
+              </button>
+            )}
+          </>
         }
       />
       <p className="invoiceContext">
@@ -385,78 +412,107 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           </button>
         </p>
       )}
-      {!list && !error && <CrmState kind="loading" title="Đang tải hóa đơn…" />}
-      <div className="invoiceLayout">
+      {listLoading && <CrmState kind="loading" title="Đang tải hóa đơn…" />}
+      {staff && list?.canConfigure && (
+        <details className="noPrint fc095Settings">
+          <summary>Thông tin người bán</summary>
+          <form
+            className="form"
+            key={list.seller?.version ?? 0}
+            onSubmit={configure}
+          >
+            <label>
+              <span className="formLabelText">
+                Tên doanh nghiệp/người bán{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                disabled={busy || pending}
+                name="name"
+                minLength={2}
+                maxLength={160}
+                required
+                defaultValue={list.seller?.seller.name}
+              />
+            </label>
+            <label>
+              <span className="formLabelText">
+                Địa chỉ{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                disabled={busy || pending}
+                name="address"
+                minLength={5}
+                maxLength={300}
+                required
+                defaultValue={list.seller?.seller.address}
+              />
+            </label>
+            <label>
+              <span className="formLabelText">
+                Thông tin liên hệ{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                disabled={busy || pending}
+                name="contact"
+                minLength={3}
+                maxLength={160}
+                required
+                defaultValue={list.seller?.seller.contact}
+              />
+            </label>
+            <button disabled={busy || pending}>Lưu thông tin người bán</button>
+          </form>
+        </details>
+      )}
+      {staff && list?.canIssue && (
+        <WorkbenchComposer095
+          open={creating}
+          title="Tạo bản nháp từ đơn hàng"
+          locked={busy || pending}
+          onClose={() => setCreating(false)}
+        >
+          <p className="muted">
+            Dùng mã đơn đã chốt tổng cuối. Bản nháp chưa được xuất cho khách.
+          </p>
+          <form className="form noPrint" onSubmit={create}>
+            <label>
+              <span className="formLabelText">
+                Mã đơn đã chốt tổng cuối{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                key={orderFilter}
+                disabled={busy || pending}
+                name="order"
+                required
+                maxLength={80}
+                pattern={"[a-zA-Z0-9\\-]+"}
+                defaultValue={search.get("order") ?? ""}
+              />
+            </label>
+            <button className="primary" disabled={busy || pending}>
+              Tạo bản nháp từ đơn
+            </button>
+          </form>
+        </WorkbenchComposer095>
+      )}
+      <div
+        className={`invoiceLayout ${staff && !selected && !detailLoading && !mobileDetail ? "fc095InvoiceListOnly" : ""}`}
+      >
         <aside className="invoiceSidebar" aria-label="Danh sách hóa đơn">
           <h2 className="invoicePanelTitle">Danh sách hóa đơn</h2>
-          {staff && list?.canConfigure && (
-            <details className="noPrint">
-              <summary>Thông tin người bán</summary>
-              <form
-                className="form"
-                key={list.seller?.version ?? 0}
-                onSubmit={configure}
-              >
-                <label>
-                  Tên doanh nghiệp/người bán
-                  <input
-                    disabled={busy || pending}
-                    name="name"
-                    minLength={2}
-                    maxLength={160}
-                    required
-                    defaultValue={list.seller?.seller.name}
-                  />
-                </label>
-                <label>
-                  Địa chỉ
-                  <input
-                    disabled={busy || pending}
-                    name="address"
-                    minLength={5}
-                    maxLength={300}
-                    required
-                    defaultValue={list.seller?.seller.address}
-                  />
-                </label>
-                <label>
-                  Thông tin liên hệ
-                  <input
-                    disabled={busy || pending}
-                    name="contact"
-                    minLength={3}
-                    maxLength={160}
-                    required
-                    defaultValue={list.seller?.seller.contact}
-                  />
-                </label>
-                <button disabled={busy || pending}>
-                  Lưu thông tin người bán
-                </button>
-              </form>
-            </details>
-          )}
-          {staff && list?.canIssue && (
-            <form className="form noPrint" onSubmit={create}>
-              <label>
-                Mã đơn đã chốt tổng cuối
-                <input
-                  key={orderFilter}
-                  disabled={busy || pending}
-                  name="order"
-                  required
-                  maxLength={80}
-                  pattern={"[a-zA-Z0-9\\-]+"}
-                  defaultValue={search.get("order") ?? ""}
-                />
-              </label>
-              <button disabled={busy || pending}>Tạo bản nháp từ đơn</button>
-            </form>
-          )}
-          <div
-            className="noPrint documentList crmList"
-            aria-busy={!list && !error}
-          >
+          <div className="noPrint documentList crmList" aria-busy={listLoading}>
             {list?.rows.map((d) => (
               <article
                 className={`crmItem invoiceRow ${selected?.id === d.id ? "invoiceRow--selected" : ""}`}
@@ -490,13 +546,16 @@ export function Documents({ staff = false }: { staff?: boolean }) {
                 </div>
               </article>
             ))}
-            {list && !list.rows.length && (
+            {list && !listLoading && !error && !list.rows.length && (
               <CrmState kind="empty" title="Chưa có hóa đơn trong trang này." />
             )}
           </div>
           {list?.next && (
             <div className="crmActions noPrint">
-              <button disabled={busy} onClick={() => void load(list.next!)}>
+              <button
+                disabled={busy || pending || listLoading}
+                onClick={() => void load(list.next!)}
+              >
                 Trang tiếp
               </button>
             </div>
@@ -525,7 +584,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           {detailLoading && (
             <CrmState kind="loading" title="Đang mở hóa đơn…" />
           )}
-          {!selected && !detailLoading && (
+          {!staff && !selected && !detailLoading && (
             <CrmState kind="empty" title="Chọn hóa đơn để xem chi tiết">
               <p>Nội dung và các thao tác phù hợp sẽ hiển thị tại đây.</p>
             </CrmState>
@@ -657,7 +716,12 @@ export function Documents({ staff = false }: { staff?: boolean }) {
                           }}
                         >
                           <label>
-                            Lý do hủy hóa đơn
+                            <span className="formLabelText">
+                              Lý do hủy hóa đơn{" "}
+                              <span className="requiredMark" aria-hidden="true">
+                                *
+                              </span>
+                            </span>
                             <input
                               disabled={busy || pending}
                               name="reason"

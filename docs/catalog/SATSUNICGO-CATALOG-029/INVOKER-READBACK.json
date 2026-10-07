@@ -1,0 +1,242 @@
+[
+  {
+    "service": "shippingratespublic",
+    "verified": true
+  },
+  {
+    "service": "productreviewadmin",
+    "verified": true
+  },
+  {
+    "service": "blogcommentreport",
+    "verified": true
+  },
+  {
+    "service": "readstaffaccess",
+    "verified": true
+  },
+  {
+    "service": "studiomediaread",
+    "verified": true
+  },
+  {
+    "service": "catalogcheckout",
+    "verified": true
+  },
+  {
+    "service": "studioread",
+    "verified": true
+  },
+  {
+    "service": "studiocommand",
+    "verified": true
+  },
+  {
+    "service": "orderconversationcommand",
+    "verified": true
+  },
+  {
+    "service": "savecustomernotes",
+    "verified": true
+  },
+  {
+    "service": "workspacecommand",
+    "verified": true
+  },
+  {
+    "service": "shippingratesadmin",
+    "verified": true
+  },
+  {
+    "service": "readorderoperations",
+    "verified": true
+  },
+  {
+    "service": "studiomediaupload",
+    "verified": true
+  },
+  {
+    "service": "studioadvancedcommand",
+    "verified": true
+  },
+  {
+    "service": "listfollowups",
+    "verified": true
+  },
+  {
+    "service": "studioadvancedread",
+    "verified": true
+  },
+  {
+    "service": "campaignbannerspublic",
+    "verified": true
+  },
+  {
+    "service": "readnotification",
+    "verified": true
+  },
+  {
+    "service": "publicpage",
+    "verified": true
+  },
+  {
+    "service": "blogcommentsubmit",
+    "verified": true
+  },
+  {
+    "service": "invoicedetail",
+    "verified": true
+  },
+  {
+    "service": "membershipreminderpolicy",
+    "verified": true
+  },
+  {
+    "service": "readorderimage",
+    "verified": true
+  },
+  {
+    "service": "consolidationcommand",
+    "verified": true
+  },
+  {
+    "service": "blogcommentcommand",
+    "verified": true
+  },
+  {
+    "service": "websitebannercommand",
+    "verified": true
+  },
+  {
+    "service": "publicdiscovery",
+    "verified": true
+  },
+  {
+    "service": "orderhistory",
+    "verified": true
+  },
+  {
+    "service": "operationaldashboard",
+    "verified": true
+  },
+  {
+    "service": "changecommand",
+    "verified": true
+  },
+  {
+    "service": "outboxcommand",
+    "verified": true
+  },
+  {
+    "service": "membershipcommand",
+    "verified": true
+  },
+  {
+    "service": "readownerconfiguration",
+    "verified": true
+  },
+  {
+    "service": "listcustomers",
+    "verified": true
+  },
+  {
+    "service": "productreviewread",
+    "verified": true
+  },
+  {
+    "service": "refundcommand",
+    "verified": true
+  },
+  {
+    "service": "customerordertracking",
+    "verified": true
+  },
+  {
+    "service": "command",
+    "verified": true
+  },
+  {
+    "service": "uploadcontentimage",
+    "verified": true
+  },
+  {
+    "service": "websitebanneradmin",
+    "verified": true
+  },
+  {
+    "service": "financereview",
+    "verified": true
+  },
+  {
+    "service": "shippingcommand",
+    "verified": true
+  },
+  {
+    "service": "invoiceshare",
+    "verified": true
+  },
+  {
+    "service": "invoicecommand",
+    "verified": true
+  },
+  {
+    "service": "readorderconversation",
+    "verified": true
+  },
+  {
+    "service": "publicimage",
+    "verified": true
+  },
+  {
+    "service": "invoicelist",
+    "verified": true
+  },
+  {
+    "service": "listwork",
+    "verified": true
+  },
+  {
+    "service": "websitebannerpreview",
+    "verified": true
+  },
+  {
+    "service": "productrevieweligibility",
+    "verified": true
+  },
+  {
+    "service": "productreviewwrite",
+    "verified": true
+  },
+  {
+    "service": "blogcommentlist",
+    "verified": true
+  },
+  {
+    "service": "returncommand",
+    "verified": true
+  },
+  {
+    "service": "listcrmstaff",
+    "verified": true
+  },
+  {
+    "service": "ticketmessages",
+    "verified": true
+  },
+  {
+    "service": "uploadorderimage",
+    "verified": true
+  },
+  {
+    "service": "listorderimages",
+    "verified": true
+  },
+  {
+    "service": "readcustomer",
+    "verified": true
+  },
+  {
+    "service": "productreviewmoderate",
+    "verified": true
+  }
+]

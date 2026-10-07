@@ -1,3 +1,6 @@
+import { PageTabs } from "../../shared/PageTabs";
+import { ShippingStepForm } from "./ShippingStepForm";
+import "./shipping-workbench.css";
 import {
   CrmHeading,
   CrmIcon,
@@ -44,6 +47,8 @@ export function Shipping({ roles }: { roles: string[] }) {
     parcelQueue = useWorkQueue<Parcel>("packages");
   const orders = orderQueue.rows,
     parcels = parcelQueue.rows;
+  const [workspace, setWorkspace] = useState<"parcels" | "batches">("parcels");
+  const packForm = useRef<HTMLDetailsElement | null>(null);
   const [selectedOrders, setSelectedOrders] = useState<Order[]>([]);
   const [lookup, setLookup] = useState("");
   const [result, setResult] = useState<Parcel | null>(null);
@@ -457,7 +462,7 @@ export function Shipping({ roles }: { roles: string[] }) {
   }
   if (authorityDenied)
     return (
-      <section ref={root} className="workbench">
+      <section ref={root} className="workbench shippingWorkbench">
         <p role="alert">
           Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền.
         </p>
@@ -470,62 +475,145 @@ export function Shipping({ roles }: { roles: string[] }) {
       </section>
     );
   return (
-    <section ref={root} className="workbench">
+    <section ref={root} className="workbench shippingWorkbench">
       <CrmHeading
-        title="Kiện hàng và xuất gửi"
-        description="Tạo kiện, bàn giao và ghi nhận hành trình vận chuyển."
-        actions={
-          <button
-            disabled={
-              locked || loading || orderQueue.loading || parcelQueue.loading
-            }
-            onClick={() => void refresh()}
-          >
-            <CrmIcon name="refresh" /> Tải lại kiện
-          </button>
-        }
+        title="Kiện & vận chuyển"
+        description="Đóng kiện, gom lô và theo dõi bàn giao."
       />
-      <p className="muted">
-        Kiện nội bộ không phải shipping label của hãng vận chuyển. Mỗi trang
-        hiển thị tối đa 30 bản ghi.
-      </p>
-      {loading && <CrmState kind="loading" title="Đang tải đơn và kiện…" />}
-      {loadError && (
-        <CrmState
-          kind="error"
-          title="Chưa tải được hàng đợi kiện"
-          action={
+      <PageTabs
+        id="shipping"
+        label="Kiện và lô gom"
+        value={workspace}
+        onChange={setWorkspace}
+        disabled={locked || loading || busy || uncertain}
+        items={[
+          {
+            value: "parcels",
+            label: (
+              <>
+                <CrmIcon name="box" />
+                Kiện hàng
+              </>
+            ),
+          },
+          ...(mayPack || mayTrack
+            ? [
+                {
+                  value: "batches" as const,
+                  label: (
+                    <>
+                      <CrmIcon name="document" />
+                      Lô gom & cước
+                    </>
+                  ),
+                },
+              ]
+            : []),
+        ]}
+      />
+      <div
+        id="shipping-panel-parcels"
+        role="tabpanel"
+        aria-labelledby="shipping-tab-parcels"
+        hidden={workspace !== "parcels"}
+        tabIndex={0}
+        className="shippingWorkspacePanel"
+      >
+        <div className="shippingToolbar">
+          <div>
+            <h2>Kiện hàng</h2>
+            <p>Quản lý kiện từ đóng gói đến bàn giao và giao hàng.</p>
+          </div>
+          <div className="crmActions">
             <button
               disabled={
                 locked || loading || orderQueue.loading || parcelQueue.loading
               }
               onClick={() => void refresh()}
             >
-              Thử lại
+              <CrmIcon name="refresh" /> Tải lại kiện
             </button>
-          }
-        >
-          {parcels.length > 0 &&
-            "Các kiện đang hiển thị là dữ liệu đã tải trước đó."}
-        </CrmState>
-      )}
-      {!loading && !loadError && !parcels.length && (
-        <CrmState kind="empty" title="Chưa có kiện trong phạm vi đang xem" />
-      )}
-      {mayPack && (
-        <details className="crmItemDetails" name="crm-shipping-actions">
-          <summary>
-            <CrmIcon name="box" /> Đóng kiện từ hàng đã kiểm và đóng gói
-          </summary>
-          <form
-            className="form panel"
-            data-intent="pack"
-            onChange={(e) => formIntent.capture(e.currentTarget)}
-            onSubmit={(e) => void submit(e, "packParcel")}
+            {mayPack && (
+              <button
+                className="primary"
+                data-shipping-create
+                disabled={locked || loading || busy || uncertain}
+                onClick={() => {
+                  if (packForm.current) {
+                    packForm.current.open = true;
+                    packForm.current
+                      .querySelector<HTMLElement>("summary")
+                      ?.focus();
+                  }
+                }}
+              >
+                <CrmIcon name="box" /> Tạo kiện
+              </button>
+            )}
+          </div>
+        </div>
+        {loading && <CrmState kind="loading" title="Đang tải đơn và kiện…" />}
+        {loadError && (
+          <CrmState
+            kind="error"
+            title="Chưa tải được hàng đợi kiện"
+            action={
+              <button
+                disabled={
+                  locked || loading || orderQueue.loading || parcelQueue.loading
+                }
+                onClick={() => void refresh()}
+              >
+                Thử lại
+              </button>
+            }
           >
-            <fieldset
-              style={{ minWidth: 0 }}
-              className="form"
+            {parcels.length > 0 &&
+              "Các kiện đang hiển thị là dữ liệu đã tải trước đó."}
+          </CrmState>
+        )}
+        {!loading && !loadError && !parcels.length && (
+          <div className="shippingEmpty">
+            <CrmIcon name="box" />
+            <h3>Chưa có kiện trong trang này</h3>
+            <p>
+              {mayPack
+                ? "Chọn Tạo kiện để đóng kiện từ các đơn đã kiểm và đóng gói."
+                : "Kiện sẽ xuất hiện tại đây khi có dữ liệu trong phạm vi được xem."}
+            </p>
+          </div>
+        )}
+        {mayPack && (
+          <details
+            ref={packForm}
+            onToggle={(event) => {
+              const details = event.currentTarget;
+              if (
+                !details.open &&
+                document.activeElement === details.querySelector("summary")
+              )
+                root.current
+                  ?.querySelector<HTMLButtonElement>(
+                    "button[data-shipping-create]",
+                  )
+                  ?.focus();
+            }}
+            className="crmItemDetails shippingCreate"
+            name="crm-shipping-actions"
+          >
+            <summary>
+              <CrmIcon name="box" /> Tạo kiện từ đơn đã đóng gói
+              <span className="shippingCollapse">Thu gọn</span>
+            </summary>
+            <ShippingStepForm
+              steps={[
+                "Chọn đơn",
+                "Hàng trong kiện",
+                "Thông tin kiện",
+                "Kiểm tra",
+              ]}
+              className="form panel shippingStepForm"
+              data-intent="pack"
               disabled={
                 locked ||
                 loading ||
@@ -533,297 +621,86 @@ export function Shipping({ roles }: { roles: string[] }) {
                 orderQueue.loading ||
                 parcelQueue.loading
               }
-            >
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                Mã đơn
-                <input
-                  value={lookup}
-                  onChange={(e) => setLookup(e.target.value)}
-                  maxLength={80}
-                />
-              </label>
-              <button
-                type="button"
-                disabled={!lookup.trim()}
-                onClick={() => void addOrder()}
-              >
-                Thêm đơn
-              </button>
-              <div className="crmActions" aria-label="Trang đơn đóng kiện">
-                <button
-                  type="button"
-                  disabled={orderQueue.page === 1}
-                  onClick={() => void pageQueue(orderQueue, "back")}
-                >
-                  Trang đơn trước
-                </button>
-                <span>
-                  Trang {orderQueue.page} · {orders.length} đơn
-                </span>
-                <button
-                  type="button"
-                  disabled={!orderQueue.next}
-                  onClick={() => void pageQueue(orderQueue, "forward")}
-                >
-                  Trang đơn sau
-                </button>
-              </div>
-              {orders
-                .filter((o) => o.packingComplete && !o.hold)
-                .map((o) => (
-                  <label key={o.id}>
-                    <input
-                      type="checkbox"
-                      checked={selectedOrders.some(
-                        (selected) => selected.id === o.id,
-                      )}
-                      onChange={(e) =>
-                        e.target.checked
-                          ? void addOrder(o)
-                          : setSelectedOrders((rows) =>
-                              rows.filter((row) => row.id !== o.id),
-                            )
-                      }
-                    />
-                    <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                      {o.id}
-                    </span>
-                  </label>
-                ))}
-              <p className="muted">Đã chọn {selectedOrders.length}/10 đơn</p>
-              {unavailable &&
-                selectedOrders.map((o) => (
-                  <div key={o.id}>
-                    <CrmReference label="Đơn đã chọn" value={o.id} />
-                    <button
-                      type="button"
-                      aria-label={`Bỏ đơn ${o.id}`}
-                      onClick={() =>
-                        setSelectedOrders((rows) =>
-                          rows.filter((row) => row.id !== o.id),
-                        )
-                      }
-                    >
-                      Bỏ đơn
-                    </button>
+              navigationBlocked={reconcile || unavailable}
+              onChange={(e) => formIntent.capture(e.currentTarget)}
+              onSubmit={(e) => void submit(e, "packParcel")}
+              validateStep={(step, form) => {
+                if (
+                  step === 0 &&
+                  (!selectedOrders.length ||
+                    selectedOrders.some(
+                      (order) => !order.packingComplete || order.hold,
+                    ))
+                )
+                  return "Chọn ít nhất một đơn đủ điều kiện đóng kiện.";
+                if (
+                  step === 1 &&
+                  !selectedOrders.some((order) =>
+                    order.items.some(
+                      (_, line) =>
+                        Number(new FormData(form).get(`${order.id}:${line}`)) >
+                        0,
+                    ),
+                  )
+                )
+                  return "Nhập số lượng cho ít nhất một sản phẩm trong kiện.";
+                return null;
+              }}
+              review={(data) => (
+                <dl>
+                  <div>
+                    <dt>Đơn đã chọn</dt>
+                    <dd>{selectedOrders.length} đơn</dd>
                   </div>
-                ))}
-              {(unavailable ? [] : selectedOrders)
-                .filter((o) => o.packingComplete && !o.hold)
-                .map((o) => (
-                  <fieldset key={o.id} style={{ minWidth: 0 }}>
-                    <legend style={{ overflowWrap: "anywhere" }}>{o.id}</legend>
-                    <button
-                      type="button"
-                      aria-label={`Bỏ đơn ${o.id}`}
-                      onClick={() =>
-                        setSelectedOrders((rows) =>
-                          rows.filter((row) => row.id !== o.id),
+                  <div>
+                    <dt>Hàng trong kiện</dt>
+                    <dd>
+                      {selectedOrders
+                        .flatMap((order) =>
+                          order.items.map((item, line) => ({
+                            item,
+                            quantity: Number(data.get(`${order.id}:${line}`)),
+                          })),
                         )
-                      }
-                    >
-                      Bỏ đơn
-                    </button>
-                    {o.items.map((item, line) => (
-                      <label key={line}>
-                        {item.name} · {item.variant} · số lượng theo đơn{" "}
-                        {item.quantity}
-                        <input
-                          name={`${o.id}:${line}`}
-                          type="number"
-                          min={0}
-                          max={Math.min(item.quantity, 100)}
-                          step={1}
-                          defaultValue={0}
-                        />
-                      </label>
-                    ))}
-                  </fieldset>
-                ))}
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                Kho nguồn
-                <input name="warehouse" required minLength={2} />
-              </label>
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                Tuyến và hub đích
-                <input name="route" required minLength={2} />
-              </label>
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                Khối lượng (g)
-                <input
-                  name="weight"
-                  type="number"
-                  min={1}
-                  max={1000000}
-                  required
-                />
-              </label>
-              {[
-                ["length", "Dài"],
-                ["width", "Rộng"],
-                ["height", "Cao"],
-              ].map(([name, label]) => (
-                <label key={name}>
-                  {label} (cm)
-                  <input
-                    name={name}
-                    type="number"
-                    min={0.1}
-                    max={1000}
-                    step="any"
-                    required
-                  />
-                </label>
-              ))}
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                Bằng chứng kiểm/đóng gói
-                <textarea name="evidence" minLength={5} required />
-              </label>
-              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                <input name="checklist" type="checkbox" required /> Đã kiểm sản
-                phẩm, số lượng, điều kiện vận chuyển và đóng gói
-              </label>
-              <button
-                className="primary"
-                disabled={
-                  reconcile ||
-                  unavailable ||
-                  locked ||
-                  loading ||
-                  uncertain ||
-                  orderQueue.loading ||
-                  parcelQueue.loading
-                }
-              >
-                <CrmIcon name="box" /> Tạo kiện nội bộ
-              </button>
-            </fieldset>
-          </form>
-        </details>
-      )}
-      {(mayPack || mayTrack) && (
-        <Consolidation
-          onAuthorityDenied={() => {
-            setAuthorityDenied(true);
-            setUnavailable(true);
-            setReconcile(true);
-            orderQueue.clear();
-            parcelQueue.clear();
-            setResult(null);
-          }}
-          lock={{
-            blocked: locked,
-            acquire: () => acquire("batch"),
-            release: () => release("batch"),
-            beginRead,
-            endRead,
-          }}
-        />
-      )}
-      {reconcile && (
-        <div className="crmActions">
-          <p role="alert">
-            Dữ liệu cần được đối chiếu trước thao tác mới. Nội dung đang được
-            giữ nguyên.
-          </p>
-          <button
-            disabled={locked || loading}
-            onClick={() => void reconcileRecords()}
-          >
-            Đối chiếu dữ liệu kiện
-          </button>
-        </div>
-      )}
-      <div className="crmActions" aria-label="Trang kiện hàng">
-        <button
-          disabled={
-            locked || loading || parcelQueue.loading || parcelQueue.page === 1
-          }
-          onClick={() => void pageQueue(parcelQueue, "back")}
-        >
-          Trang kiện trước
-        </button>
-        <span>
-          Trang {parcelQueue.page} · {parcels.length} kiện
-        </span>
-        <button
-          disabled={
-            locked || loading || parcelQueue.loading || !parcelQueue.next
-          }
-          onClick={() => void pageQueue(parcelQueue, "forward")}
-        >
-          Trang kiện sau
-        </button>
-      </div>
-      {resultId && (
-        <div
-          className="panel"
-          ref={resultTarget}
-          tabIndex={-1}
-          role="region"
-          aria-label="Kiện vừa lưu"
-        >
-          <CrmReference label="Kiện vừa lưu" value={resultId} />
-          {message && <p role="status">{message}</p>}
-          {resultError && (
-            <>
-              <p role="alert">Đã lưu kiện. Chưa tải được chi tiết.</p>
-              <button
-                disabled={locked || loading}
-                onClick={() => void readResult(resultId)}
-              >
-                Tải chi tiết kiện
-              </button>
-            </>
-          )}
-        </div>
-      )}
-      {[
-        ...(result && !parcels.some((p) => p.id === result.id) ? [result] : []),
-        ...parcels.filter((row) => !resultError || row.id !== resultId),
-      ].map((p) => (
-        <article key={p.id} className="panel order crmItem">
-          <h3 className="crmItemTitle">
-            <CrmIcon name="box" /> Kiện hàng
-          </h3>
-          <CrmReference label="Kiện" value={p.id} />
-          <p>
-            {
-              {
-                packed: "Đã đóng kiện",
-                in_transit: "Đang vận chuyển",
-                delivered: "Đã giao kiện",
-                failed: "Giao không thành công",
-                returned: "Đã trả lại",
-              }[p.state]
-            }{" "}
-            · {p.warehouse} → {p.route} · {p.weightGrams} g
-          </p>
-          <details className="crmItemDetails">
-            <summary>
-              <CrmIcon name="document" /> Hàng trong kiện
-            </summary>
-            <p>
-              {p.allocations
-                .map((a) => `${a.orderId}, dòng ${a.line + 1}: ${a.quantity}`)
-                .join("; ")}
-            </p>
-          </details>
-          {parcelDecision(p, mayPack, mayTrack) === "dispatch" ? (
-            <details className="crmItemDetails" name="crm-shipping-actions">
-              <summary>
-                <CrmIcon name="check" /> Bàn giao kiện
-              </summary>
-              <form
-                className="form"
-                data-intent={`dispatch:${p.id}`}
-                onChange={(e) => formIntent.capture(e.currentTarget)}
-                onSubmit={(e) => void submit(e, "dispatchParcel", p)}
-              >
-                <fieldset
-                  style={{ minWidth: 0 }}
-                  className="form"
+                        .filter((entry) => entry.quantity > 0)
+                        .map((entry, index) => (
+                          <p key={index}>
+                            {entry.item.name} · {entry.item.variant} ·{" "}
+                            {entry.quantity}
+                          </p>
+                        ))}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Kho → Tuyến</dt>
+                    <dd>
+                      {String(data.get("warehouse") ?? "")} →{" "}
+                      {String(data.get("route") ?? "")}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Khối lượng</dt>
+                    <dd>
+                      {Number(data.get("weight")).toLocaleString("vi-VN")} g
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Kích thước</dt>
+                    <dd>
+                      {["length", "width", "height"]
+                        .map((name) => String(data.get(name)))
+                        .join(" × ")}{" "}
+                      cm
+                    </dd>
+                  </div>
+                </dl>
+              )}
+              finalAction={
+                <button
+                  className="primary"
                   disabled={
+                    reconcile ||
+                    unavailable ||
                     locked ||
                     loading ||
                     uncertain ||
@@ -831,23 +708,323 @@ export function Shipping({ roles }: { roles: string[] }) {
                     parcelQueue.loading
                   }
                 >
+                  <CrmIcon name="box" /> Tạo kiện nội bộ
+                </button>
+              }
+            >
+              <div className="shippingFormSection">
+                <h3 tabIndex={-1}>
+                  <span>1</span> Chọn đơn
+                </h3>
+                <div className="shippingLookup">
                   <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Hãng vận chuyển
-                    <input name="carrier" required minLength={2} />
-                  </label>
-                  <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Mã vận đơn
-                    <input name="tracking" required minLength={3} />
-                  </label>
-                  <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Bằng chứng bàn giao
-                    <textarea name="evidence" required minLength={5} />
+                    Mã đơn
+                    <input
+                      value={lookup}
+                      onChange={(e) => setLookup(e.target.value)}
+                      maxLength={80}
+                    />
                   </label>
                   <button
-                    className="primary"
+                    type="button"
+                    disabled={!lookup.trim()}
+                    onClick={() => void addOrder()}
+                  >
+                    Thêm đơn
+                  </button>
+                </div>
+                <div
+                  className="crmActions shippingPagination"
+                  aria-label="Trang đơn đóng kiện"
+                >
+                  <button
+                    type="button"
+                    disabled={orderQueue.page === 1}
+                    onClick={() => void pageQueue(orderQueue, "back")}
+                  >
+                    Trang đơn trước
+                  </button>
+                  <span>
+                    Trang {orderQueue.page} · {orders.length} đơn
+                  </span>
+                  <button
+                    type="button"
+                    disabled={!orderQueue.next}
+                    onClick={() => void pageQueue(orderQueue, "forward")}
+                  >
+                    Trang đơn sau
+                  </button>
+                </div>
+                <div
+                  className="shippingSelectionList"
+                  role="group"
+                  aria-label="Đơn đủ điều kiện đóng kiện"
+                >
+                  {orders
+                    .filter((o) => o.packingComplete && !o.hold)
+                    .map((o) => (
+                      <label key={o.id}>
+                        <input
+                          type="checkbox"
+                          checked={selectedOrders.some(
+                            (selected) => selected.id === o.id,
+                          )}
+                          onChange={(e) =>
+                            e.target.checked
+                              ? void addOrder(o)
+                              : setSelectedOrders((rows) =>
+                                  rows.filter((row) => row.id !== o.id),
+                                )
+                          }
+                        />
+                        <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                          {o.id}
+                        </span>
+                      </label>
+                    ))}
+                </div>
+                <p className="muted">Đã chọn {selectedOrders.length}/10 đơn</p>
+                {unavailable &&
+                  selectedOrders.map((o) => (
+                    <div key={o.id}>
+                      <CrmReference label="Đơn đã chọn" value={o.id} />
+                      <button
+                        type="button"
+                        aria-label={`Bỏ đơn ${o.id}`}
+                        onClick={() =>
+                          setSelectedOrders((rows) =>
+                            rows.filter((row) => row.id !== o.id),
+                          )
+                        }
+                      >
+                        Bỏ đơn
+                      </button>
+                    </div>
+                  ))}
+              </div>
+              <div className="shippingFormSection">
+                <h3 tabIndex={-1}>
+                  <span>2</span> Hàng trong kiện
+                </h3>
+                {!selectedOrders.length && (
+                  <p className="muted">
+                    Chọn đơn để nhập số lượng sản phẩm trong kiện.
+                  </p>
+                )}
+                {(unavailable ? [] : selectedOrders)
+                  .filter((o) => o.packingComplete && !o.hold)
+                  .map((o) => (
+                    <fieldset key={o.id} style={{ minWidth: 0 }}>
+                      <legend style={{ overflowWrap: "anywhere" }}>
+                        {o.id}
+                      </legend>
+                      <button
+                        type="button"
+                        aria-label={`Bỏ đơn ${o.id}`}
+                        onClick={() =>
+                          setSelectedOrders((rows) =>
+                            rows.filter((row) => row.id !== o.id),
+                          )
+                        }
+                      >
+                        Bỏ đơn
+                      </button>
+                      {o.items.map((item, line) => (
+                        <label key={line}>
+                          {item.name} · {item.variant} · số lượng theo đơn{" "}
+                          {item.quantity}
+                          <input
+                            name={`${o.id}:${line}`}
+                            type="number"
+                            min={0}
+                            max={Math.min(item.quantity, 100)}
+                            step={1}
+                            defaultValue={0}
+                          />
+                        </label>
+                      ))}
+                    </fieldset>
+                  ))}
+              </div>
+              <div className="shippingFormSection">
+                <h3 tabIndex={-1}>
+                  <span>3</span> Thông tin kiện
+                </h3>
+                <div className="shippingFieldGrid">
+                  <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                    <span className="formLabelText">
+                      Kho nguồn{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
+                    <input name="warehouse" required minLength={2} />
+                  </label>
+                  <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                    <span className="formLabelText">
+                      Tuyến và hub đích{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
+                    <input name="route" required minLength={2} />
+                  </label>
+                  <div className="shippingMeasurements">
+                    <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                      <span className="formLabelText">
+                        Khối lượng (g){" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input
+                        name="weight"
+                        type="number"
+                        min={1}
+                        max={1000000}
+                        required
+                      />
+                    </label>
+                    {[
+                      ["length", "Dài"],
+                      ["width", "Rộng"],
+                      ["height", "Cao"],
+                    ].map(([name, label]) => (
+                      <label key={name}>
+                        <span className="formLabelText">
+                          {label} (cm){" "}
+                          <span className="requiredMark" aria-hidden="true">
+                            *
+                          </span>
+                        </span>
+                        <input
+                          name={name}
+                          type="number"
+                          min={0.1}
+                          max={1000}
+                          step="any"
+                          required
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="shippingFormSection">
+                <h3 tabIndex={-1}>
+                  <span>4</span> Kiểm tra đóng gói
+                </h3>
+                <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                  <span className="formLabelText">
+                    Bằng chứng kiểm/đóng gói{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <textarea name="evidence" minLength={5} required />
+                </label>
+                <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                  <input name="checklist" type="checkbox" required />
+                  <span className="formLabelText">
+                    Đã kiểm sản phẩm, số lượng, điều kiện vận chuyển và đóng gói{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                </label>
+                <p className="shippingHint">
+                  Kiện nội bộ dùng để quản lý hàng, không thay thế nhãn của hãng
+                  vận chuyển.
+                </p>
+              </div>
+            </ShippingStepForm>
+          </details>
+        )}
+        {reconcile && (
+          <div className="crmActions">
+            <p role="alert">
+              Dữ liệu cần được đối chiếu trước thao tác mới. Nội dung đang được
+              giữ nguyên.
+            </p>
+            <button
+              disabled={locked || loading}
+              onClick={() => void reconcileRecords()}
+            >
+              Đối chiếu dữ liệu kiện
+            </button>
+          </div>
+        )}
+        {resultId && (
+          <div
+            className="panel"
+            ref={resultTarget}
+            tabIndex={-1}
+            role="region"
+            aria-label="Kiện vừa lưu"
+          >
+            <CrmReference label="Kiện vừa lưu" value={resultId} />
+            {message && <p role="status">{message}</p>}
+            {resultError && (
+              <>
+                <p role="alert">Đã lưu kiện. Chưa tải được chi tiết.</p>
+                <button
+                  disabled={locked || loading}
+                  onClick={() => void readResult(resultId)}
+                >
+                  Tải chi tiết kiện
+                </button>
+              </>
+            )}
+          </div>
+        )}
+        {[
+          ...(result && !parcels.some((p) => p.id === result.id)
+            ? [result]
+            : []),
+          ...parcels.filter((row) => !resultError || row.id !== resultId),
+        ].map((p) => (
+          <article key={p.id} className="panel order crmItem">
+            <h3 className="crmItemTitle">
+              <CrmIcon name="box" /> Kiện hàng
+            </h3>
+            <CrmReference label="Kiện" value={p.id} />
+            <p>
+              {
+                {
+                  packed: "Đã đóng kiện",
+                  in_transit: "Đang vận chuyển",
+                  delivered: "Đã giao kiện",
+                  failed: "Giao không thành công",
+                  returned: "Đã trả lại",
+                }[p.state]
+              }{" "}
+              · {p.warehouse} → {p.route} · {p.weightGrams} g
+            </p>
+            <details className="crmItemDetails">
+              <summary>
+                <CrmIcon name="document" /> Hàng trong kiện
+              </summary>
+              <p>
+                {p.allocations
+                  .map((a) => `${a.orderId}, dòng ${a.line + 1}: ${a.quantity}`)
+                  .join("; ")}
+              </p>
+            </details>
+            {parcelDecision(p, mayPack, mayTrack) === "dispatch" ? (
+              <details className="crmItemDetails" name="crm-shipping-actions">
+                <summary>
+                  <CrmIcon name="check" /> Bàn giao kiện
+                </summary>
+                <form
+                  className="form"
+                  data-intent={`dispatch:${p.id}`}
+                  onChange={(e) => formIntent.capture(e.currentTarget)}
+                  onSubmit={(e) => void submit(e, "dispatchParcel", p)}
+                >
+                  <fieldset
+                    style={{ minWidth: 0 }}
+                    className="form"
                     disabled={
-                      reconcile ||
-                      unavailable ||
                       locked ||
                       loading ||
                       uncertain ||
@@ -855,48 +1032,38 @@ export function Shipping({ roles }: { roles: string[] }) {
                       parcelQueue.loading
                     }
                   >
-                    <CrmIcon name="check" /> Xác nhận bàn giao xuất gửi
-                  </button>
-                </fieldset>
-              </form>
-            </details>
-          ) : (
-            parcelDecision(p, mayPack, mayTrack) === "track" && (
-              <>
-                <DeliveryEstimate
-                  value={p.deliveryEstimate}
-                  state={p.state}
-                  observedAt={Date.now()}
-                />
-                <DeliveryEstimateForm
-                  parcel={p}
-                  drafts={estimateDrafts.current}
-                  capture={formIntent.capture}
-                  disabled={
-                    locked ||
-                    loading ||
-                    uncertain ||
-                    orderQueue.loading ||
-                    parcelQueue.loading ||
-                    reconcile ||
-                    unavailable
-                  }
-                  onSubmit={(e) => void submit(e, "setDeliveryEstimate", p)}
-                />
-                <details className="crmItemDetails" name="crm-shipping-actions">
-                  <summary>
-                    <CrmIcon name="clock" /> Cập nhật hành trình
-                  </summary>
-                  <form
-                    className="form"
-                    data-intent={`track:${p.id}`}
-                    onChange={(e) => formIntent.capture(e.currentTarget)}
-                    onSubmit={(e) => void submit(e, "trackParcel", p)}
-                  >
-                    <fieldset
-                      style={{ minWidth: 0 }}
-                      className="form"
+                    <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                      <span className="formLabelText">
+                        Hãng vận chuyển{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input name="carrier" required minLength={2} />
+                    </label>
+                    <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                      <span className="formLabelText">
+                        Mã vận đơn{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input name="tracking" required minLength={3} />
+                    </label>
+                    <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                      <span className="formLabelText">
+                        Bằng chứng bàn giao{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <textarea name="evidence" required minLength={5} />
+                    </label>
+                    <button
+                      className="primary"
                       disabled={
+                        reconcile ||
+                        unavailable ||
                         locked ||
                         loading ||
                         uncertain ||
@@ -904,24 +1071,51 @@ export function Shipping({ roles }: { roles: string[] }) {
                         parcelQueue.loading
                       }
                     >
-                      <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                        Kết quả cập nhật thủ công
-                        <select name="state">
-                          <option value="in_transit">Đang vận chuyển</option>
-                          <option value="delivered">Đã giao kiện này</option>
-                          <option value="failed">Giao không thành công</option>
-                          <option value="returned">Đã trả lại</option>
-                        </select>
-                      </label>
-                      <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                        Nội dung sự kiện
-                        <textarea name="event" minLength={3} required />
-                      </label>
-                      <button
-                        className="primary"
+                      <CrmIcon name="check" /> Xác nhận bàn giao xuất gửi
+                    </button>
+                  </fieldset>
+                </form>
+              </details>
+            ) : (
+              parcelDecision(p, mayPack, mayTrack) === "track" && (
+                <>
+                  <DeliveryEstimate
+                    value={p.deliveryEstimate}
+                    state={p.state}
+                    observedAt={Date.now()}
+                  />
+                  <DeliveryEstimateForm
+                    parcel={p}
+                    drafts={estimateDrafts.current}
+                    capture={formIntent.capture}
+                    disabled={
+                      locked ||
+                      loading ||
+                      uncertain ||
+                      orderQueue.loading ||
+                      parcelQueue.loading ||
+                      reconcile ||
+                      unavailable
+                    }
+                    onSubmit={(e) => void submit(e, "setDeliveryEstimate", p)}
+                  />
+                  <details
+                    className="crmItemDetails"
+                    name="crm-shipping-actions"
+                  >
+                    <summary>
+                      <CrmIcon name="clock" /> Cập nhật hành trình
+                    </summary>
+                    <form
+                      className="form"
+                      data-intent={`track:${p.id}`}
+                      onChange={(e) => formIntent.capture(e.currentTarget)}
+                      onSubmit={(e) => void submit(e, "trackParcel", p)}
+                    >
+                      <fieldset
+                        style={{ minWidth: 0 }}
+                        className="form"
                         disabled={
-                          reconcile ||
-                          unavailable ||
                           locked ||
                           loading ||
                           uncertain ||
@@ -929,36 +1123,130 @@ export function Shipping({ roles }: { roles: string[] }) {
                           parcelQueue.loading
                         }
                       >
-                        <CrmIcon name="check" /> Lưu cập nhật vận chuyển
-                      </button>
-                    </fieldset>
-                  </form>
-                </details>
-              </>
-            )
-          )}
-        </article>
-      ))}
-      {error && (
-        <p role="alert" className="error">
-          {error}
-        </p>
-      )}
-      {uncertain && (
-        <div className="crmActions">
-          <CrmReference
-            label="Kiện đang xử lý"
-            value={String(pending.current?.parcelId ?? "Kiện mới")}
-          />
-          <button
-            className="primary"
-            disabled={busy}
-            onClick={() => void execute()}
+                        <label
+                          style={{ minWidth: 0, overflowWrap: "anywhere" }}
+                        >
+                          Kết quả cập nhật thủ công
+                          <select name="state">
+                            <option value="in_transit">Đang vận chuyển</option>
+                            <option value="delivered">Đã giao kiện này</option>
+                            <option value="failed">
+                              Giao không thành công
+                            </option>
+                            <option value="returned">Đã trả lại</option>
+                          </select>
+                        </label>
+                        <label
+                          style={{ minWidth: 0, overflowWrap: "anywhere" }}
+                        >
+                          <span className="formLabelText">
+                            Nội dung sự kiện{" "}
+                            <span className="requiredMark" aria-hidden="true">
+                              *
+                            </span>
+                          </span>
+                          <textarea name="event" minLength={3} required />
+                        </label>
+                        <button
+                          className="primary"
+                          disabled={
+                            reconcile ||
+                            unavailable ||
+                            locked ||
+                            loading ||
+                            uncertain ||
+                            orderQueue.loading ||
+                            parcelQueue.loading
+                          }
+                        >
+                          <CrmIcon name="check" /> Lưu cập nhật vận chuyển
+                        </button>
+                      </fieldset>
+                    </form>
+                  </details>
+                </>
+              )
+            )}
+          </article>
+        ))}
+        {(parcels.length > 0 || parcelQueue.page > 1 || parcelQueue.next) && (
+          <div
+            className="crmActions shippingPagination"
+            aria-label="Trang kiện hàng"
           >
-            {busy ? "Đang kiểm tra…" : "Thử lại thao tác đã gửi"}
-          </button>
-        </div>
-      )}
+            <button
+              disabled={
+                locked ||
+                loading ||
+                parcelQueue.loading ||
+                parcelQueue.page === 1
+              }
+              onClick={() => void pageQueue(parcelQueue, "back")}
+            >
+              Trang kiện trước
+            </button>
+            <span>
+              Trang {parcelQueue.page} · {parcels.length} kiện trong trang
+            </span>
+            <button
+              disabled={
+                locked || loading || parcelQueue.loading || !parcelQueue.next
+              }
+              onClick={() => void pageQueue(parcelQueue, "forward")}
+            >
+              Trang kiện sau
+            </button>
+          </div>
+        )}
+        {error && (
+          <p role="alert" className="error">
+            {error}
+          </p>
+        )}
+        {uncertain && (
+          <div className="crmActions">
+            <CrmReference
+              label="Kiện đang xử lý"
+              value={String(pending.current?.parcelId ?? "Kiện mới")}
+            />
+            <button
+              className="primary"
+              disabled={busy}
+              onClick={() => void execute()}
+            >
+              {busy ? "Đang kiểm tra…" : "Thử lại thao tác đã gửi"}
+            </button>
+          </div>
+        )}
+      </div>
+      <div
+        id="shipping-panel-batches"
+        role="tabpanel"
+        aria-labelledby="shipping-tab-batches"
+        hidden={workspace !== "batches"}
+        tabIndex={0}
+        className="shippingWorkspacePanel"
+      >
+        {(mayPack || mayTrack) && (
+          <Consolidation
+            onAuthorityDenied={() => {
+              setAuthorityDenied(true);
+              setUnavailable(true);
+              setReconcile(true);
+              orderQueue.clear();
+              parcelQueue.clear();
+              setResult(null);
+            }}
+            lock={{
+              blocked: locked,
+              acquire: () => acquire("batch"),
+              release: () => release("batch"),
+              beginRead,
+              endRead,
+            }}
+          />
+        )}
+      </div>
     </section>
   );
 }

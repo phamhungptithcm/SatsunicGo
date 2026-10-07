@@ -493,7 +493,19 @@ export function RequestForm({
           {items.map((item, index) => (
             <div className="requestItem" key={index}>
               {items.length > 1 && <h3>Món {index + 1}</h3>}
-              <p className="requestFieldLabel">Tên hoặc link sản phẩm</p>
+              <p
+                className="requestFieldLabel"
+                data-required={
+                  !images.some((image) => (image.line ?? 0) === index)
+                }
+              >
+                Tên hoặc link sản phẩm{" "}
+                {!images.some((image) => (image.line ?? 0) === index) && (
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                )}
+              </p>
               <ProductComposer
                 value={item.content}
                 onChange={(content) => edit(index, { content })}
@@ -566,8 +578,14 @@ export function RequestForm({
               <div className="itemOptions">
                 <div className="twoCols">
                   <label>
-                    Số lượng
+                    <span className="formLabelText">
+                      Số lượng{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <input
+                      required
                       type="number"
                       min={1}
                       max={100}
@@ -630,7 +648,6 @@ export function RequestForm({
           hidden={step !== 1}
           aria-labelledby="request-stage-title"
         >
-          <p className="requestOptional">Không bắt buộc</p>
           <div className="requestExtras">
             <label className="requestNotes">
               Ghi chú

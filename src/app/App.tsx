@@ -1,3 +1,11 @@
+import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
+import {
+  authFeedbackSnapshot,
+  subscribeAuthFeedback,
+  clearAuthFeedback,
+} from "../features/auth/auth-feedback";
+import { pendingMfa, subscribeMfa } from "../features/auth/mfa";
+import { LoginChallenge } from "../features/auth/LoginChallenge";
 import { routeModules } from "./route-modules";
 import { LoadingState } from "../shared/Loading";
 import { CampaignBanner } from "../features/content/CampaignBanner";
@@ -41,7 +49,14 @@ import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
 import { notify, withProgress } from "../shared/feedback";
 import { publicCopy } from "../../packages/domain/public-content";
-import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useSyncExternalStore,
+  lazy,
+  Suspense,
+} from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import {
@@ -222,6 +237,12 @@ export function App() {
     [authBusy, setAuthBusy] = useState(false),
     [authReady, setAuthReady] = useState(!auth);
   const location = useLocation();
+  const redirectError = useSyncExternalStore(
+    subscribeAuthFeedback,
+    authFeedbackSnapshot,
+    () => "",
+  );
+  const authFlight = useRef(false);
   const accountView =
     location.pathname === "/account"
       ? new URLSearchParams(location.search).get("view")
@@ -238,24 +259,29 @@ export function App() {
       });
   }, []);
   async function signIn() {
-    if (authBusy) return;
+    if (authBusy || authFlight.current) return;
+    authFlight.current = true;
+    clearAuthFeedback();
     setAuthBusy(true);
     setAuthError("");
     try {
-      await withProgress(login);
+      await withProgress(login, { overlay: !isCrmPath(location.pathname) });
       if (auth?.currentUser) notify("Đã đăng nhập.", "success");
     } catch (e) {
       setAuthError((e as Error).message);
-      notify((e as Error).message, "error");
+      if (!isCrmPath(location.pathname)) notify((e as Error).message, "error");
     } finally {
+      authFlight.current = false;
       setAuthBusy(false);
     }
   }
   async function signOut() {
     if (authBusy) return;
+    setAuthError("");
+    clearAuthFeedback();
     setAuthBusy(true);
     try {
-      await withProgress(logout);
+      await withProgress(logout, { overlay: !isCrmPath(location.pathname) });
       notify("Đã đăng xuất.", "success");
     } catch {
       setAuthError("Chưa đăng xuất được. Thử lại.");
@@ -267,15 +293,21 @@ export function App() {
   return (
     <>
       <OneTap user={user} onError={setAuthError} />
+      <LoginChallenge
+        onOpen={() => {
+          setAuthError("");
+          clearAuthFeedback();
+        }}
+      />
       <a className="skip" href="#main">
         Đến nội dung chính
       </a>
       {!isCrmPath(location.pathname) && (
         <SiteHeader user={user} signOut={signOut} busy={authBusy} />
       )}
-      {authError && (
+      {(authError || redirectError) && !isCrmPath(location.pathname) && (
         <p className="banner" role="alert">
-          {authError} <Link to="/account">Mở tài khoản</Link>
+          {authError || redirectError} <Link to="/account">Mở tài khoản</Link>
           {" · "}
           <Link to="/account/security">Bảo mật tài khoản</Link>
         </p>
@@ -287,16 +319,20 @@ export function App() {
       >
         <Suspense
           fallback={
-            <LoadingState className="page routeLoading">
+            <LoadingState variant="panel" className="page routeLoading">
               Đang mở trang…
             </LoadingState>
           }
         >
           {!authReady &&
           /^(?:\/account|\/staff|\/crm)(?:\/|$)/.test(location.pathname) ? (
-            <LoadingState className="page">
-              Đang khôi phục tài khoản…
-            </LoadingState>
+            isCrmPath(location.pathname) ? (
+              <CrmAccessScreen state="restoring" />
+            ) : (
+              <LoadingState variant="panel" className="page">
+                Đang khôi phục tài khoản…
+              </LoadingState>
+            )
           ) : (
             <Routes>
               <Route path="/" element={<Home />} />
@@ -406,7 +442,9 @@ export function App() {
                 element={
                   <Suspense
                     fallback={
-                      <LoadingState>Đang mở không gian vận hành…</LoadingState>
+                      <LoadingState variant="panel">
+                        Đang mở không gian vận hành…
+                      </LoadingState>
                     }
                   >
                     <Staff
@@ -415,6 +453,7 @@ export function App() {
                       signIn={signIn}
                       signOut={signOut}
                       busy={authBusy}
+                      authError={authError || redirectError}
                     />
                   </Suspense>
                 }
@@ -1177,11 +1216,13 @@ function Staff({
   signIn,
   signOut,
   busy,
+  authError,
 }: {
   user: User | null;
   signIn: () => void;
   signOut: () => void;
   busy: boolean;
+  authError: string;
 }) {
   const [access, setAccess] = useState<{
       roles?: string[];
@@ -1190,16 +1231,29 @@ function Staff({
     } | null>(null),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(!!user && !!db);
+  const [revision, setRevision] = useState(0);
+  const challenge = useSyncExternalStore(subscribeMfa, pendingMfa, () => null);
   useEffect(() => {
-    if (!user || !db) return;
-    return onSnapshot(
+    if (!user || !db) {
+      setAccess(null);
+      setError("");
+      setLoading(false);
+      return;
+    }
+    let current = true;
+    setAccess(null);
+    setError("");
+    setLoading(true);
+    const stop = onSnapshot(
       doc(db, "staffAccess", user.uid),
       (s) => {
+        if (!current) return;
         setAccess(s.data() ?? null);
         setLoading(false);
         setError("");
       },
       () => {
+        if (!current) return;
         setAccess(null);
         setLoading(false);
         setError(
@@ -1207,32 +1261,31 @@ function Staff({
         );
       },
     );
-  }, [user]);
-  if (loading)
-    return (
-      <LoadingState className="page">
-        Đang kiểm tra quyền vận hành…
-      </LoadingState>
-    );
+    return () => {
+      current = false;
+      stop();
+    };
+  }, [user, revision]);
+  if (user && loading) return <CrmAccessScreen state="checking" />;
   const roles = staffRoles(access);
-  if (error || !user || roles === null)
+  if (error || !user || roles === null || roles.length === 0)
     return (
-      <section className="page">
-        <h1>SatsunicGo CRM</h1>
-        <div className="empty">
-          <h2>Cần tài khoản nhân viên được cấp quyền</h2>
-          <p>
-            {error ||
-              "Quyền vận hành do chủ doanh nghiệp cấp. Tài khoản khách hàng không có quyền nhân viên."}
-          </p>
-          {!user && (
-            <button className="primary" onClick={signIn} disabled={busy}>
-              Đăng nhập CRM
-            </button>
-          )}
-          <Link to="/account">Mở tài khoản</Link>
-        </div>
-      </section>
+      <CrmAccessScreen
+        state={!user ? "anonymous" : error || !db ? "error" : "denied"}
+        busy={busy}
+        mfa={Boolean(challenge)}
+        error={authError}
+        signIn={signIn}
+        signOut={signOut}
+        retry={
+          !db
+            ? undefined
+            : () => {
+                setLoading(true);
+                setRevision((value) => value + 1);
+              }
+        }
+      />
     );
   return (
     <Workspace

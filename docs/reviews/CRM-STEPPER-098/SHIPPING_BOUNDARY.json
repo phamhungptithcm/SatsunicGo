@@ -1,0 +1,38 @@
+[
+  {
+    "path": "src/features/shipping/Shipping.tsx",
+    "unchangedFunctions": [
+      "parcelDecision",
+      "noteAuthority",
+      "beginRead",
+      "endRead",
+      "acquire",
+      "release",
+      "load",
+      "pageQueue",
+      "refresh",
+      "addOrder",
+      "readResult",
+      "reconcileRecords",
+      "submit",
+      "execute"
+    ],
+    "changedFunctions": []
+  },
+  {
+    "path": "src/features/shipping/Consolidation.tsx",
+    "unchangedFunctions": [
+      "consolidationSelection",
+      "noteAuthority",
+      "load",
+      "pageQueue",
+      "refresh",
+      "selectParcel",
+      "readResult",
+      "reconcileRecords",
+      "submit",
+      "execute"
+    ],
+    "changedFunctions": []
+  }
+]

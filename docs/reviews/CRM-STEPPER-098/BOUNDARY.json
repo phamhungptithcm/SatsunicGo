@@ -1,0 +1,206 @@
+{
+  "status": "PASSED",
+  "baseline": "Task-local pre-edit snapshots of shared working tree, not HEAD; content data attribute rename normalized.",
+  "files": [
+    {
+      "path": "src/features/content/Campaigns.tsx",
+      "unchangedFunctions": [
+        "campaignClipboardText",
+        "editCampaign",
+        "openEditor",
+        "load",
+        "save",
+        "executeSave",
+        "copy"
+      ],
+      "changedPresentationFunctions": [
+        "Campaigns"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/content/ContentEditor.tsx",
+      "unchangedFunctions": [
+        "leave",
+        "edit",
+        "load",
+        "save"
+      ],
+      "changedPresentationFunctions": [
+        "ContentEditor"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/content/WebsiteBanners.tsx",
+      "unchangedFunctions": [
+        "load",
+        "execute",
+        "save",
+        "showPreview",
+        "update"
+      ],
+      "changedPresentationFunctions": [
+        "WebsiteBanners"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/crm/Customer.tsx",
+      "unchangedFunctions": [
+        "customerDraftNeedsReview",
+        "current",
+        "read",
+        "load",
+        "loadStaff",
+        "captureDraft",
+        "reconcileDraft",
+        "save",
+        "executeSave"
+      ],
+      "changedPresentationFunctions": [
+        "Customer"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/membership/PlanEditor.tsx",
+      "unchangedFunctions": [
+        "openEditor",
+        "load",
+        "save",
+        "grant",
+        "executeSave"
+      ],
+      "changedPresentationFunctions": [
+        "PlanEditor"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/operations/Returns.tsx",
+      "unchangedFunctions": [
+        "returnCardTitle",
+        "Returns",
+        "load",
+        "returnPayload",
+        "ReturnQuantitySummary",
+        "execute",
+        "submit"
+      ],
+      "changedPresentationFunctions": [
+        "ReturnActionFields",
+        "ReturnForm"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/operations/Workbench.tsx",
+      "unchangedFunctions": [
+        "Workbench",
+        "selectOrder",
+        "returnToList",
+        "load",
+        "claimPurchaseBlockReason",
+        "onSubmit"
+      ],
+      "changedPresentationFunctions": [
+        "ActionForm"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/orders/Changes.tsx",
+      "unchangedFunctions": [
+        "changeRejection",
+        "changeProposalInput",
+        "useChangeMutation",
+        "run",
+        "ChangeFeedback",
+        "CustomerChanges",
+        "review",
+        "propose",
+        "ChangeQueue",
+        "load",
+        "apply"
+      ],
+      "changedPresentationFunctions": [
+        "ProposeChange"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/payments/FinancialReview.tsx",
+      "unchangedFunctions": [
+        "financeAuthorityDenied",
+        "financeRejection",
+        "financeReviewInput",
+        "submit",
+        "execute"
+      ],
+      "changedPresentationFunctions": [
+        "FinancialReview"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/payments/Refunds.tsx",
+      "unchangedFunctions": [
+        "load",
+        "request",
+        "refundDecision",
+        "definiteRefundRejection",
+        "execute",
+        "submit"
+      ],
+      "changedPresentationFunctions": [
+        "Refunds",
+        "RefundDecisionFields",
+        "RefundForm"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/settings/Settings.tsx",
+      "unchangedFunctions": [
+        "localTime",
+        "load",
+        "save",
+        "executeSave"
+      ],
+      "changedPresentationFunctions": [
+        "Settings"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/settings/StaffAccess.tsx",
+      "unchangedFunctions": [
+        "validAccess",
+        "load",
+        "save",
+        "executeSave"
+      ],
+      "changedPresentationFunctions": [
+        "StaffAccess"
+      ],
+      "businessChanged": []
+    },
+    {
+      "path": "src/features/shipping/ShippingRates.tsx",
+      "unchangedFunctions": [
+        "load",
+        "mutate",
+        "updateRow",
+        "useResultFade",
+        "signIn",
+        "send"
+      ],
+      "changedPresentationFunctions": [
+        "ShippingRates",
+        "ShippingRateSupport"
+      ],
+      "businessChanged": []
+    }
+  ]
+}

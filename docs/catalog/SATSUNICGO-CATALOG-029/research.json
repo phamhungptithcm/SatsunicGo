@@ -391,12 +391,12 @@
       "slug": "olay-regenerist-10-1-7-oz-2-pack",
       "packaging": "Bộ 2 hũ; mỗi hũ 1.7 oz",
       "category": "Chăm sóc da",
-      "referencePriceVnd": null,
-      "priceEvidence": "NOT_VERIFIED",
-      "sourceUrl": "https://www.costco.com/p/-/olay-regenerist-10-17-oz-2-pack/4000417736",
-      "checkedOn": "2026-10-05",
+      "referencePriceVnd": 1000000,
+      "priceEvidence": "supplier_page_exact_2x48g_reference_only",
+      "sourceUrl": "https://www.hstoreus.com/2026/05/set-kem-duong-olay-regenerist-10-cua-my.html",
+      "checkedOn": "2026-10-06",
       "checkedTimezone": "America/Chicago",
-      "notes": "Không thay bằng Micro-Sculpting/Retinol 24; chưa có giá VND đúng bộ",
+      "notes": "Supplier page states 2 jars x48g and 1,000,000 VND; reference only, no SatsunicGo stock or authenticity guarantee. Supplier marketing claims not copied.",
       "proposedContent": {
         "title": "Olay Regenerist 10, 1.7 oz, 2-pack",
         "slug": "olay-regenerist-10-1-7-oz-2-pack",
@@ -407,7 +407,9 @@
         "featured": false,
         "variants": "Bộ 2 hũ; mỗi hũ 1.7 oz",
         "seoTitle": "Olay Regenerist 10, 1.7 oz, 2-pack",
-        "seoDescription": "Olay Regenerist 10, 1.7 oz, 2-pack. Quy cách: Bộ 2 hũ; mỗi hũ 1.7 oz. Xem thông tin sản phẩm và nguồn giá tham khảo."
+        "seoDescription": "Olay Regenerist 10, 1.7 oz, 2-pack. Quy cách: Bộ 2 hũ; mỗi hũ 1.7 oz. Xem thông tin sản phẩm và nguồn giá tham khảo.",
+        "referencePrice": 1000000,
+        "referenceUrl": "https://www.hstoreus.com/2026/05/set-kem-duong-olay-regenerist-10-cua-my.html"
       },
       "imageStatus": "DOWNLOADED_CANDIDATE_NOT_VISUALLY_VERIFIED",
       "imageRights": "USER_CONFIRMED_BRAND_SUPPLIER_USE",

@@ -1,0 +1,385 @@
+/* Request083 progress pattern, shared by CRM forms. */
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  > .crmStepHeader {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.workspaceShell .workspaceContent form.crmStepForm[data-crm-steps] {
+  --step-blue: #163cff;
+  --step-ink: #111c35;
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+.workspaceShell .workspaceContent form.crmStepForm[data-crm-steps] [hidden] {
+  display: none !important;
+}
+.workspaceShell .workspaceContent form.crmStepForm[data-crm-steps] .crmStepper {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #68758d;
+  text-align: center;
+  font-size: 12px;
+  opacity: 1;
+  white-space: normal;
+}
+.workspaceShell
+  .workspaceContent
+  .crmStepForm
+  .crmStepper
+  button
+  > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e9edf4;
+  font-weight: 700;
+}
+.workspaceShell
+  .workspaceContent
+  .crmStepForm
+  .crmStepper
+  button:not(:last-child)::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  width: calc(100% + 12px);
+  height: 2px;
+  background: #e1e6ef;
+  pointer-events: none;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  button
+  > span {
+  position: relative;
+  z-index: 1;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  small {
+  display: block;
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  min-height: 14px;
+  margin-top: 3px;
+  font-size: 10px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  .isCurrent {
+  color: var(--step-blue);
+}
+.workspaceShell
+  .workspaceContent
+  .crmStepForm
+  .crmStepper
+  .isCurrent
+  > span:first-child {
+  background: var(--step-blue);
+  color: white;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  .isComplete {
+  color: #16704c;
+}
+.workspaceShell
+  .workspaceContent
+  .crmStepForm
+  .crmStepper
+  .isComplete
+  > span:first-child,
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepper
+  .isComplete::after {
+  background: #16704c;
+  color: white;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepContent,
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepStage {
+  min-width: 0;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepStage {
+  display: grid;
+  gap: 16px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepTitle {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: var(--step-ink);
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepTitle:focus {
+  outline: none;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 16px;
+  border-top: 1px solid #e3e7ef;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepReview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px;
+  margin: 0 0 16px;
+  border: 1px solid #e3e7ef;
+  border-radius: 8px;
+  background: #f6f8fb;
+  font-size: 13px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepReview
+  > div {
+  min-width: 0;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepReview
+  dt {
+  color: #68758d;
+  margin-bottom: 4px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepReview
+  dd {
+  margin: 0;
+  color: var(--step-ink);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepError {
+  margin-top: 12px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  button:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .workspaceShell .workspaceContent form.crmStepForm[data-crm-steps] {
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepper {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+    display: grid;
+    overflow: visible;
+    position: sticky;
+    top: 12px;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepper
+    button {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 11px;
+  }
+  .workspaceShell
+    .workspaceContent
+    .crmStepForm
+    .crmStepper
+    button:not(:last-child)::after {
+    top: 21px;
+    left: 15px;
+    width: 2px;
+    height: calc(100% + 16px);
+  }
+  .workspaceShell
+    .workspaceContent
+    .crmStepForm
+    .crmStepper
+    button
+    > span:last-child {
+    padding: 3px 0;
+    background: white;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepReview {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepContent
+    label,
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepContent
+    input,
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepContent
+    select,
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepContent
+    textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepContent
+    .adminFields,
+  .workspaceShell
+    .workspaceContent
+    .crmStepForm
+    .crmStepContent
+    .operationsFieldGrid,
+  .workspaceShell
+    .workspaceContent
+    .crmStepForm
+    .crmStepContent
+    .fc095FieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepStage {
+  grid-column: 1 / -1;
+}
+.workspaceShell
+  .workspaceContent
+  .crmStepForm
+  .crmStepContent
+  > [data-step-stage] {
+  display: grid;
+  gap: 16px;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepContent
+  > h2,
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepContent
+  > details,
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepContent
+  > .ceEditorNav {
+  margin-bottom: 16px;
+}
+
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .crmStepReview
+  > dl {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.workspaceShell
+  .workspaceContent
+  form.crmStepForm[data-crm-steps]
+  .shippingFormSection
+  h3
+  > span {
+  display: none;
+}
+@media (max-width: 640px) {
+  .workspaceShell
+    .workspaceContent
+    form.crmStepForm[data-crm-steps]
+    .crmStepReview
+    > dl {
+    grid-template-columns: 1fr;
+  }
+}

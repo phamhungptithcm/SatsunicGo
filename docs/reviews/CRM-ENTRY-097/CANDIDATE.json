@@ -1,0 +1,14 @@
+{
+  "task": "CRM-ENTRY-097",
+  "commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "worktree": "dirty shared WIP; bounded changes reviewed against before snapshots",
+  "files": {
+    "src/app/App.tsx": "6f82fa5800c72e750be09b378fac93458a3452ac51f551fe2f3157bb45ebeb33",
+    "src/shared/firebase.ts": "380a8a30bfdb74d517a93d9550c99d5872b028495ab4a77e88e55216a9799a3b",
+    "src/features/auth/CrmAccessScreen.tsx": "ae279810254900607610ec85f98b257fc6412374eb79a6935eacbbaccea9c2ed",
+    "src/features/auth/crm-access-screen.css": "e994ce15cb855838b51edad0fda73388fee044a6e99b5a68b1d2939f7c6bf5bb",
+    "src/features/auth/auth-feedback.ts": "83fec5dc2ba4b745f379c4f6911c8b8f64757c344df64dc8d5f7653420812987",
+    "tests/unit/crm-entry097.test.ts": "61322465bf54c7b9102173922c1c826e27be7392b8d21f3c5d3b35e42371ad9e",
+    "tests/browser/crm-entry097.spec.ts": "4c1083842e92c4ae8acdbc794a506f4a724bab5a04676d0c89a1c20c542f4df8"
+  }
+}

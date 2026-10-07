@@ -80,10 +80,7 @@ export function OneTap({
             ),
           (error) => {
             if (!active) return;
-            if (auth && captureMfa(error, auth))
-              onError(
-                "Cần xác thực hai lớp. Mở Bảo mật tài khoản để tiếp tục.",
-              );
+            if (auth && captureMfa(error, auth)) onError("");
             else onError("Chưa đăng nhập được. Mở tài khoản để thử lại.");
           },
         );

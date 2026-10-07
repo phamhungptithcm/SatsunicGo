@@ -116,6 +116,7 @@ export function ProductComposer({
     >
       <textarea
         aria-label="Tên, link hoặc ảnh sản phẩm"
+        aria-required={images.length === 0}
         readOnly={readOnly}
         placeholder="Tên, link hoặc ảnh sản phẩm…"
         maxLength={2400}

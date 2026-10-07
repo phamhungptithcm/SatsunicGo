@@ -1,3 +1,6 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { OperationsEmpty } from "../operations/OperationsPresentation";
+import "../operations/operations-workbench.css";
 import { LoadingState } from "../../shared/Loading";
 import { Link } from "react-router-dom";
 import {
@@ -428,102 +431,141 @@ export function ProposeChange({
   return (
     <details>
       <summary>Đề xuất thay đổi để khách duyệt</summary>
-      <form className="form" onSubmit={(e) => void propose(e)}>
+      <StepForm
+        steps={["Hàng thay đổi", "Giá trị & lý do", "Kiểm tra"]}
+        disabled={mutation.busy || mutation.uncertain}
+        resetKey={kind}
+        className="form"
+        onSubmit={(e) => void propose(e)}
+      >
         <fieldset
           className="form"
           disabled={mutation.busy || mutation.uncertain}
         >
-          <label>
-            Loại thay đổi
-            <select
-              name="kind"
-              value={kind}
-              onChange={(e) => setKind(e.target.value)}
-            >
-              {Object.entries(labels).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-          {order.items.map((item, line) => (
-            <fieldset key={`${kind}:${line}`}>
-              <legend>
-                {item.name} · {item.variant} · {item.quantity}
-              </legend>
-              {kind === "substitution" ? (
-                <>
-                  <label>
-                    Tên thay thế · không bắt buộc
-                    <input name={`name-${line}`} maxLength={200} />
-                  </label>
-                  <label>
-                    Biến thể thay thế
-                    <input
-                      name={`variant-${line}`}
-                      maxLength={200}
-                      defaultValue={item.variant}
-                    />
-                  </label>
-                </>
-              ) : (
-                <>
-                  <label>
-                    {kind === "return" ? "Số lượng trả" : "Số lượng hủy"}
-                    <input
-                      name={`cancel-${line}`}
-                      type="number"
-                      min={0}
-                      max={item.quantity}
-                      defaultValue={kind === "cancellation" ? item.quantity : 0}
-                    />
-                  </label>
-                </>
-              )}
-            </fieldset>
-          ))}
-          <label>
-            Lý do hiển thị cho khách
-            <textarea name="reason" minLength={5} maxLength={1000} required />
-          </label>
-          <label>
-            Tổng phải trả sau thay đổi (₫)
-            <input
-              name="total"
-              type="number"
-              min={0}
-              max={1000000000000}
-              required
-            />
-          </label>
-          <label>
-            Chi phí thực tế đã phát sinh (₫)
-            <input
-              name="costs"
-              type="number"
-              min={0}
-              max={1000000000000}
-              required
-            />
-          </label>
-          <label>
-            <input type="checkbox" name="resolveHold" /> Đề xuất đã xử lý nguyên
-            nhân hold trước đó
-          </label>
-          <label>
-            Bằng chứng nội bộ · khách không đọc trường này
-            <textarea name="evidence" minLength={5} maxLength={1000} required />
-          </label>
-          <p>
-            Không mặc định tịch thu cọc hoặc hứa hoàn tiền. Cần chi phí thật,
-            điều khoản đã chấp nhận và quyết định của khách.
-          </p>
-          <button disabled={mutation.busy || mutation.uncertain}>
-            Gửi đề xuất và tạm giữ xử lý
-          </button>
+          <StepStage index={0}>
+            <label>
+              Loại thay đổi
+              <select
+                name="kind"
+                value={kind}
+                onChange={(e) => setKind(e.target.value)}
+              >
+                {Object.entries(labels).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {order.items.map((item, line) => (
+              <fieldset key={`${kind}:${line}`}>
+                <legend>
+                  {item.name} · {item.variant} · {item.quantity}
+                </legend>
+                {kind === "substitution" ? (
+                  <>
+                    <label>
+                      Tên thay thế
+                      <input name={`name-${line}`} maxLength={200} />
+                    </label>
+                    <label>
+                      Biến thể thay thế
+                      <input
+                        name={`variant-${line}`}
+                        maxLength={200}
+                        defaultValue={item.variant}
+                      />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    <label>
+                      {kind === "return" ? "Số lượng trả" : "Số lượng hủy"}
+                      <input
+                        name={`cancel-${line}`}
+                        type="number"
+                        min={0}
+                        max={item.quantity}
+                        defaultValue={
+                          kind === "cancellation" ? item.quantity : 0
+                        }
+                      />
+                    </label>
+                  </>
+                )}
+              </fieldset>
+            ))}
+          </StepStage>
+          <StepStage index={1}>
+            <label>
+              <span className="formLabelText">
+                Lý do hiển thị cho khách{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <textarea name="reason" minLength={5} maxLength={1000} required />
+            </label>
+            <label>
+              <span className="formLabelText">
+                Tổng phải trả sau thay đổi (₫){" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                name="total"
+                type="number"
+                min={0}
+                max={1000000000000}
+                required
+              />
+            </label>
+            <label>
+              <span className="formLabelText">
+                Chi phí thực tế đã phát sinh (₫){" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                name="costs"
+                type="number"
+                min={0}
+                max={1000000000000}
+                required
+              />
+            </label>
+          </StepStage>
+          <StepStage index={2}>
+            <label>
+              <input type="checkbox" name="resolveHold" /> Đề xuất đã xử lý
+              nguyên nhân hold trước đó
+            </label>
+            <label>
+              <span className="formLabelText">
+                Bằng chứng nội bộ · khách không đọc trường này{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <textarea
+                name="evidence"
+                minLength={5}
+                maxLength={1000}
+                required
+              />
+            </label>
+            <p>
+              Không mặc định tịch thu cọc hoặc hứa hoàn tiền. Cần chi phí thật,
+              điều khoản đã chấp nhận và quyết định của khách.
+            </p>
+            <button disabled={mutation.busy || mutation.uncertain}>
+              Gửi đề xuất và tạm giữ xử lý
+            </button>
+          </StepStage>
         </fieldset>
-      </form>
+      </StepForm>
       <ChangeFeedback
         mutation={mutation}
         retry={() => void mutation.run(undefined, onChanged)}
@@ -618,9 +660,10 @@ export function ChangeQueue() {
     );
   }
   return (
-    <section>
+    <section className="operations095 operationsChanges">
       <CrmHeading
         title="Thay đổi chờ áp dụng"
+        description="Kiểm tra đề xuất khách đã duyệt trước khi áp dụng vào đơn."
         actions={
           <button
             disabled={reading || mutation.busy || mutation.uncertain}
@@ -637,7 +680,9 @@ export function ChangeQueue() {
       />
       {reading && <CrmState kind="loading" title="Đang tải đề xuất…" />}
       {ready && changes.length === 0 && (
-        <CrmState kind="empty" title="Chưa có thay đổi đã duyệt cần xử lý." />
+        <OperationsEmpty title="Chưa có thay đổi đã duyệt cần xử lý">
+          Đề xuất xuất hiện tại đây sau khi khách chấp nhận.
+        </OperationsEmpty>
       )}
       <div className="crmList">
         {ready &&

@@ -1,0 +1,327 @@
+/* UX095: finance/content surfaces only; shared shell and public UI stay local. */
+@media screen {
+  .fc095 {
+    min-width: 0;
+    color: #111c35;
+  }
+  .fc095 [hidden] {
+    display: none !important;
+  }
+  .fc095 .crmHeading {
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .fc095 .crmHeading h1 {
+    font-size: clamp(24px, 2.1vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.6px;
+    margin: 0 0 8px;
+  }
+  .fc095 .crmHeading p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .fc095 :is(input, select, textarea, button, summary) {
+    min-height: 44px;
+  }
+  .fc095 :is(input, select, textarea) {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  .fc095 :is(button, summary) {
+    font-size: 13px;
+  }
+  .fc095 button {
+    white-space: normal;
+    gap: 8px;
+  }
+  .fc095 :is(input, select, textarea, button, summary, a):focus-visible {
+    outline: 3px solid #92a5ff;
+    outline-offset: 3px;
+  }
+  .fc095 .crmIcon {
+    width: 18px;
+    height: 18px;
+  }
+  .fc095Notice {
+    padding: 12px 16px;
+    border: 1px solid #dce3f4;
+    border-inline-start: 3px solid var(--blue, #163cff);
+    border-radius: 8px;
+    background: #f4f6fc;
+    color: #46546d;
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0 0 20px;
+  }
+  .fc095 .crmState {
+    padding: 20px;
+    min-height: 100px;
+    margin-block: 12px;
+  }
+  .fc095 .crmStateIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .fc095 .crmState strong {
+    font-size: 14px;
+  }
+  .fc095SectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-block: 20px 12px;
+  }
+  .fc095SectionHead h2,
+  .fc095 .crmSectionHeading {
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .fc095SectionHead .muted {
+    font-size: 12px;
+    margin: 4px 0 0;
+  }
+  .fc095Composer {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #d9e1ef;
+    border-radius: 12px;
+    margin-block: 16px 24px;
+  }
+  .fc095Composer .fc095SectionHead {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf0f6;
+  }
+  .fc095Composer .form {
+    gap: 16px;
+    margin: 0;
+  }
+  .fc095Composer fieldset {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .fc095Composer label,
+  .fc095Placement label {
+    display: grid;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .fc095Composer .form > label,
+  .fc095Composer fieldset > label {
+    max-width: 780px;
+  }
+  .fc095Composer .form > p,
+  .fc095Composer fieldset > p {
+    font-size: 13px;
+    margin: 0;
+  }
+  .fc095Composer textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  .fc095Composer .primary {
+    justify-self: start;
+  }
+  .fc095FieldGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 900px;
+  }
+  .fc095 .crmList {
+    gap: 12px;
+  }
+  .fc095 .crmItem {
+    padding: 16px;
+    border-radius: 10px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .fc095 .crmItemTitle {
+    font-size: 15px;
+  }
+  .fc095 .crmFacts {
+    gap: 12px 24px;
+  }
+  .fc095 .crmItemDetails {
+    margin-block: 8px;
+  }
+  .fc095 .crmItemDetails > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .fc095 .crmItemDetails > summary::before {
+    content: "›";
+    font-size: 20px;
+  }
+  .fc095 .crmItemDetails[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  .fc095Secondary {
+    margin-bottom: 16px;
+  }
+  .fc095Secondary > details {
+    background: #fff;
+    border: 1px solid #e2e6ef;
+    border-radius: 8px;
+    padding: 4px 16px;
+  }
+  .fc095Settings {
+    width: fit-content;
+    max-width: 100%;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .fc095Settings[open] {
+    width: min(600px, 100%);
+    padding: 16px;
+    border: 1px solid #e2e6ef;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .fc095Settings summary {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .fc095Settings summary::before {
+    content: "›";
+    margin-right: 8px;
+  }
+  .fc095Settings[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .fc095Settings label {
+    display: grid;
+    gap: 8px;
+  }
+  .fc095 .fc095InvoiceListOnly {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fc095InvoiceListOnly .invoiceDetail {
+    display: none;
+  }
+  .fc095 .invoiceLayout {
+    gap: 16px;
+  }
+  .fc095 .invoiceSidebar {
+    border: 0;
+    background: transparent;
+  }
+  .fc095 .invoicePanelTitle {
+    padding: 0 0 12px;
+    border-bottom: 0;
+  }
+  .fc095 .invoiceRow {
+    background: #fff;
+    border: 1px solid #e2e6ef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .fc095 .invoiceRow .crmItemMain {
+    padding: 0;
+    flex: 1;
+  }
+  .fc095 .invoiceRow--selected {
+    border-color: var(--blue, #163cff);
+    background: #f7f9ff;
+  }
+  .fc095 .websiteBanners {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .fc095 .websiteBanners > .fc095SectionHead {
+    margin-top: 0;
+  }
+  .fc095Placement {
+    padding: 16px;
+    margin-block: 16px;
+    border: 1px solid #e2e6ef;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .fc095Placement legend {
+    font-size: 14px;
+    font-weight: 600;
+    padding-inline: 6px;
+  }
+  .fc095Placement > p {
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+  .fc095 .websiteBanners > ul {
+    display: grid;
+    gap: 12px;
+    padding: 0;
+    list-style: none;
+  }
+  .fc095 .websiteBanners > ul > li {
+    border: 1px solid #e2e6ef;
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  @media (max-width: 960px) {
+    .fc095 .invoiceLayout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fc095 .invoiceWorkspace--detail .invoiceSidebar {
+      display: none;
+    }
+    .fc095 .crmHeading {
+      flex-wrap: wrap;
+    }
+  }
+  @media (max-width: 600px) {
+    .fc095 .crmHeading {
+      gap: 12px;
+    }
+    .fc095 .crmHeading > .crmActions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .fc095Composer {
+      padding: 16px;
+    }
+    .fc095FieldGrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fc095SectionHead {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .fc095 .invoiceRow {
+      flex-wrap: wrap;
+    }
+    .fc095 .invoiceRow .crmItemMain {
+      flex-basis: 100%;
+    }
+    .fc095 .crmReference code {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc095 *,
+    .fc095 *::before {
+      animation: none;
+      transition: none;
+      scroll-behavior: auto;
+    }
+  }
+}

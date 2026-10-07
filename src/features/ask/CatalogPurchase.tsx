@@ -19,7 +19,9 @@ export function CatalogPurchase({
     [error, setError] = useState(""),
     [readAttempt, setReadAttempt] = useState(0);
   // Equivalent citations across chat turns must not erase reviewed choices.
-  const catalogKey = JSON.stringify([...new Set(c.catalogSlugs)].slice(0, 8).sort());
+  const catalogKey = JSON.stringify(
+    [...new Set(c.catalogSlugs)].slice(0, 8).sort(),
+  );
   useEffect(() => {
     let live = true;
     setRows([]);
@@ -105,7 +107,12 @@ export function CatalogPurchase({
     >
       <h3>{vi ? "Chọn mua sản phẩm niêm yết" : "Buy a listed product"}</h3>
       <label>
-        {vi ? "Sản phẩm" : "Product"}
+        <span className="formLabelText">
+          {vi ? "Sản phẩm" : "Product"}{" "}
+          <span className="requiredMark" aria-hidden="true">
+            *
+          </span>
+        </span>
         <select
           value={selected}
           required
@@ -139,7 +146,12 @@ export function CatalogPurchase({
           <div className={styles.catalogFields}>
             {parsed.data.catalogOptions.length > 0 && (
               <label>
-                {vi ? "Mẫu" : "Variant"}
+                <span className="formLabelText">
+                  {vi ? "Mẫu" : "Variant"}{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <select
                   required
                   value={variant}
@@ -154,7 +166,12 @@ export function CatalogPurchase({
               </label>
             )}
             <label>
-              {vi ? "Số lượng" : "Quantity"}
+              <span className="formLabelText">
+                {vi ? "Số lượng" : "Quantity"}{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
               <input
                 type="number"
                 required

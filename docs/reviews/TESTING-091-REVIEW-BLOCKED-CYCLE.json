@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "task_id": "TESTING091",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Deployment components released; dynamic route usability blocked by missing invocation permission",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No provider keys, no AI/payment/email/schedules; auth/AppCheck intact; prohibited broad IAM action not executed",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "845 tests, lint, Node22 build; standalone clean npm ci and source/package hash checks passed",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Index rejection and lock mismatch corrected; dynamic403 detected; IAM correction held by auto-review",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Partial deployment and CLI cleanup exit distinguished using actual 60 ACTIVE readback",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Hosting/rules/46 READY indexes/60 ACTIVE services; dynamic routes blocked; customer launch not approved",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Testing only; container cleanup unset, full business/auth browser acceptance and operational launch checks deferred",
+      "evidence_refs": [
+        "TESTING-091-CLOUD.json",
+        "TESTING-091-SMOKE.json",
+        "TESTING-091-CANDIDATE.json",
+        "TESTING-091-PACKAGE.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "INDEX_DEFAULT_DUPLICATES",
+      "status": "FIXED",
+      "evidence": "46 indexes READY"
+    },
+    {
+      "id": "STANDALONE_LOCK",
+      "status": "FIXED",
+      "evidence": "npm ci passed, 60 Functions ACTIVE"
+    },
+    {
+      "id": "HTTP_INVOKER",
+      "status": "BLOCKED",
+      "evidence": "public route403, empty publicPage Run policy; correction rejected by auto-review"
+    }
+  ],
+  "residual_risks": [
+    "No container image cleanup policy",
+    "Not ready for customer launch"
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED; governed runtime receipt unavailable; manual evidence review",
+    "No live authenticated browser/business-flow acceptance after deployment"
+  ]
+}

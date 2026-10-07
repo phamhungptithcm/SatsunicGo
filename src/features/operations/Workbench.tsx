@@ -1,3 +1,6 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { OperationsEmpty } from "./OperationsPresentation";
+import "./operations-workbench.css";
 import {
   CrmHeading,
   CrmIcon,
@@ -112,7 +115,7 @@ export function Workbench({
     };
   }, [target, selectedQueue]);
   return (
-    <div className="workbench crmWorkbench028">
+    <div className="workbench crmWorkbench028 operations095">
       <CrmHeading
         title={
           queue === "purchasing"
@@ -121,33 +124,46 @@ export function Workbench({
               ? "Nhận kho & đóng gói"
               : "Yêu cầu & báo giá"
         }
-        description="Chọn đơn để xem thông tin và thực hiện thao tác phù hợp."
+        description={
+          queue === "purchasing"
+            ? "Kiểm tra điều kiện thanh toán, nhận việc và ghi nhận hàng đã mua."
+            : queue === "warehouse"
+              ? "Kiểm tra số lượng nhận, tình trạng hàng và thông tin đóng gói."
+              : "Xem yêu cầu của khách, kiểm tra hàng hóa và xử lý báo giá."
+        }
         actions={
           <button onClick={() => void load()} disabled={busy}>
             <CrmIcon name="refresh" /> Tải lại
           </button>
         }
       />
-      {!queue && !target && (
-        <label className="crmQueueFilter">
-          Hàng đợi
-          <select
-            value={selectedQueue}
-            onChange={(e) =>
-              setParams(e.target.value ? { queue: e.target.value } : {})
-            }
-          >
-            <option value="">Tất cả đơn</option>
-            <option value="requests">Yêu cầu mới</option>
-            <option value="quotes">Chờ duyệt báo giá</option>
-            <option value="purchasing">Chờ thanh toán / cần mua</option>
-            <option value="warehouse">Nhận kho & đóng gói</option>
-            <option value="balance">Đã đóng gói</option>
-            <option value="ready">Sẵn sàng xuất gửi</option>
-            <option value="holds">Đang tạm giữ</option>
-          </select>
-        </label>
-      )}
+      <div className="operationsToolbar">
+        {!queue && !target && (
+          <label className="crmQueueFilter">
+            Hàng đợi
+            <select
+              value={selectedQueue}
+              onChange={(e) =>
+                setParams(e.target.value ? { queue: e.target.value } : {})
+              }
+            >
+              <option value="">Tất cả đơn</option>
+              <option value="requests">Yêu cầu mới</option>
+              <option value="quotes">Chờ duyệt báo giá</option>
+              <option value="purchasing">Chờ thanh toán / cần mua</option>
+              <option value="warehouse">Nhận kho & đóng gói</option>
+              <option value="balance">Đã đóng gói</option>
+              <option value="ready">Sẵn sàng xuất gửi</option>
+              <option value="holds">Đang tạm giữ</option>
+            </select>
+          </label>
+        )}
+        {!busy && !error && orders.length > 0 && (
+          <span className="operationsCount">
+            {orders.length} đơn trong trang
+          </span>
+        )}
+      </div>
       {target && (
         <div className="workbenchLinks">
           <Link to="/crm/orders">← Tất cả đơn</Link>
@@ -174,7 +190,7 @@ export function Workbench({
         className="workColumns"
         data-detail-open={Boolean(selected && detailOpen)}
       >
-        <div className="crmList">
+        <div className="crmList operationsList">
           {orders.map((o) => (
             <article className="crmItem" key={o.id}>
               <div className="crmItemMain">
@@ -206,10 +222,10 @@ export function Workbench({
             </article>
           ))}
           {!orders.length && !busy && !error && (
-            <CrmState
-              kind="empty"
-              title="Chưa có đơn trong phạm vi được phân công"
-            />
+            <OperationsEmpty title="Chưa có đơn trong hàng đợi này">
+              Chỉ hiển thị đơn trong phạm vi bạn được phân công. Bạn có thể tải
+              lại để kiểm tra dữ liệu mới.
+            </OperationsEmpty>
           )}
           {next && (
             <button disabled={busy} onClick={() => void load(next)}>
@@ -542,230 +558,365 @@ export function ActionForm({
   }
   if (!actions.length) return null;
   return (
-    <form className="form" onSubmit={(e) => void onSubmit(e)}>
+    <StepForm
+      enabled={[
+        "issueQuote",
+        "recordPurchase",
+        "receive",
+        "pack",
+        "finalize",
+        "verifyTransfer",
+        "refund",
+      ].includes(action)}
+      steps={["Thao tác", "Thông tin xử lý", "Kiểm tra"]}
+      disabled={busy}
+      resetKey={action}
+      className="form operationsActionForm"
+      onSubmit={(e) => void onSubmit(e)}
+    >
       <h3 className="crmSectionHeading">
         <CrmIcon name="arrow" /> Thao tác với đơn
       </h3>
       <fieldset disabled={busy}>
-        <label>
-          Thao tác
-          <select value={action} onChange={(e) => setAction(e.target.value)}>
-            {actions.map((a) => (
-              <option value={a} key={a}>
-                {actionLabels[a]}
-              </option>
-            ))}
-          </select>
-        </label>
-        {action === "issueQuote" && (
-          <>
-            <label>
-              Sản phẩm, biến thể đã xác minh
-              <input
-                name="verifiedProduct"
-                minLength={2}
-                maxLength={1000}
-                required
-              />
-            </label>
-            {[
-              ["goods", "Giá hàng quy đổi (VND)"],
-              ["service", "Phí mua hộ (VND)"],
-              ["sourceCosts", "Phí/thuế nội địa nguồn (VND)"],
-              ["internationalShipping", "Cước quốc tế dự kiến (VND)"],
-              ["destinationShipping", "Giao nội địa dự kiến (VND)"],
-              ["discount", "Giảm phí (VND)"],
-              ["sourceMinor", "Giá gốc · đơn vị tiền tệ nhỏ nhất"],
-              ["fxNumerator", "Tỷ giá · tử số"],
-              ["fxDenominator", "Tỷ giá · mẫu số"],
-            ].map(([name, label]) => (
-              <label key={name}>
-                {label}
-                <input type="number" min="0" step="1" name={name} required />
+        <legend>Chọn thao tác và kiểm tra thông tin trước khi ghi nhận</legend>
+        <StepStage index={0}>
+          <label>
+            Thao tác
+            <select value={action} onChange={(e) => setAction(e.target.value)}>
+              {actions.map((a) => (
+                <option value={a} key={a}>
+                  {actionLabels[a]}
+                </option>
+              ))}
+            </select>
+          </label>
+        </StepStage>
+        <StepStage index={1}>
+          <div className="operationsFieldGrid">
+            {action === "issueQuote" && (
+              <>
+                <h4 className="operationsGroupTitle">
+                  Sản phẩm và chi phí báo giá
+                </h4>
+                <label>
+                  <span className="formLabelText">
+                    Sản phẩm, biến thể đã xác minh{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="verifiedProduct"
+                    minLength={2}
+                    maxLength={1000}
+                    required
+                  />
+                </label>
+                {[
+                  ["goods", "Giá hàng quy đổi (VND)"],
+                  ["service", "Phí mua hộ (VND)"],
+                  ["sourceCosts", "Phí/thuế nội địa nguồn (VND)"],
+                  ["internationalShipping", "Cước quốc tế dự kiến (VND)"],
+                  ["destinationShipping", "Giao nội địa dự kiến (VND)"],
+                  ["discount", "Giảm phí (VND)"],
+                  ["sourceMinor", "Giá gốc · đơn vị tiền tệ nhỏ nhất"],
+                  ["fxNumerator", "Tỷ giá · tử số"],
+                  ["fxDenominator", "Tỷ giá · mẫu số"],
+                ].map(([name, label]) => (
+                  <label key={name}>
+                    <span className="formLabelText">
+                      {label}{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      name={name}
+                      required
+                    />
+                  </label>
+                ))}
+                <label>
+                  <span className="formLabelText">
+                    Phiên bản điều khoản{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="termsVersion" required />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Hạn báo giá{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input type="datetime-local" name="expiresAt" required />
+                </label>
+              </>
+            )}
+            {["recordPurchase", "receive"].includes(action) && (
+              <h4 className="operationsGroupTitle">Số lượng xử lý lần này</h4>
+            )}
+            {["recordPurchase", "receive"].includes(action) &&
+              order.items.length > 1 &&
+              order.items.map((item, line) => (
+                <label key={line}>
+                  {item.name} · {item.variant} · số lượng xử lý lần này
+                  <input
+                    name={`line-${line}`}
+                    type="number"
+                    min={0}
+                    max={item.quantity}
+                    step={1}
+                    defaultValue={0}
+                  />
+                </label>
+              ))}
+            {["recordPurchase", "receive"].includes(action) &&
+              order.items.length === 1 && (
+                <label>
+                  <span className="formLabelText">
+                    Số lượng{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="quantity"
+                    type="number"
+                    min={1}
+                    max={order.items.reduce((s, i) => s + i.quantity, 0)}
+                    required
+                  />
+                </label>
+              )}
+            {action === "recordPurchase" && (
+              <>
+                <h4 className="operationsGroupTitle">Thông tin mua hàng</h4>
+                <label>
+                  <span className="formLabelText">
+                    Mã đơn cửa hàng{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="supplierOrder" minLength={2} required />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Giá mua thực tế · đơn vị tiền nguồn nhỏ nhất{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="actualSourceMinor"
+                    type="number"
+                    min={0}
+                    step={1}
+                    required
+                  />
+                </label>
+              </>
+            )}
+            {["recordPurchase", "receive", "pack"].includes(action) && (
+              <label>
+                <span className="formLabelText">
+                  Tham chiếu bằng chứng{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="evidence" minLength={5} required />
               </label>
-            ))}
-            <label>
-              Version điều khoản
-              <input name="termsVersion" required />
-            </label>
-            <label>
-              Hạn báo giá
-              <input type="datetime-local" name="expiresAt" required />
-            </label>
-          </>
-        )}
-        {["recordPurchase", "receive"].includes(action) &&
-          order.items.length > 1 &&
-          order.items.map((item, line) => (
-            <label key={line}>
-              {item.name} · {item.variant} · số lượng xử lý lần này
-              <input
-                name={`line-${line}`}
-                type="number"
-                min={0}
-                max={item.quantity}
-                step={1}
-                defaultValue={0}
-              />
-            </label>
-          ))}
-        {["recordPurchase", "receive"].includes(action) &&
-          order.items.length === 1 && (
-            <label>
-              Số lượng
-              <input
-                name="quantity"
-                type="number"
-                min={1}
-                max={order.items.reduce((s, i) => s + i.quantity, 0)}
-                required
-              />
-            </label>
-          )}
-        {action === "recordPurchase" && (
-          <>
-            <label>
-              Mã đơn cửa hàng
-              <input name="supplierOrder" minLength={2} required />
-            </label>
-            <label>
-              Giá mua thực tế · đơn vị tiền nguồn nhỏ nhất
-              <input
-                name="actualSourceMinor"
-                type="number"
-                min={0}
-                step={1}
-                required
-              />
-            </label>
-          </>
-        )}
-        {["recordPurchase", "receive", "pack"].includes(action) && (
-          <label>
-            Tham chiếu bằng chứng
-            <input name="evidence" minLength={5} required />
-          </label>
-        )}
-        {action === "pack" && (
-          <>
-            <label>
-              Cân nặng đã xác nhận (gram)
-              <input
-                name="weightGrams"
-                type="number"
-                min={1}
-                step={1}
-                required
-              />
-            </label>
-            {[
-              ["length", "Dài"],
-              ["width", "Rộng"],
-              ["height", "Cao"],
-            ].map(([name, label]) => (
-              <label key={name}>
-                {label} (cm)
-                <input
-                  name={name}
-                  type="number"
-                  min={0.1}
-                  step={0.1}
-                  required
-                />
+            )}
+            {action === "pack" && (
+              <>
+                <h4 className="operationsGroupTitle">Kiểm tra kiện hàng</h4>
+                <label>
+                  <span className="formLabelText">
+                    Cân nặng đã xác nhận (gram){" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="weightGrams"
+                    type="number"
+                    min={1}
+                    step={1}
+                    required
+                  />
+                </label>
+                {[
+                  ["length", "Dài"],
+                  ["width", "Rộng"],
+                  ["height", "Cao"],
+                ].map(([name, label]) => (
+                  <label key={name}>
+                    <span className="formLabelText">
+                      {label} (cm){" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
+                    <input
+                      name={name}
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      required
+                    />
+                  </label>
+                ))}
+                <label>
+                  <span>
+                    <input type="checkbox" name="checklist" required /> Đã kiểm
+                    tra đủ hàng và đóng gói{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                </label>
+              </>
+            )}
+            {action === "receive" && (
+              <>
+                <h4 className="operationsGroupTitle">
+                  Kiểm tra hàng và lưu kho
+                </h4>
+                <label>
+                  Vị trí kệ
+                  <input name="shelf" maxLength={80} />
+                </label>
+                <label>
+                  Tình trạng
+                  <select name="condition">
+                    <option value="good">Đạt kiểm tra</option>
+                    <option value="damaged">Hỏng · tạm giữ để xử lý</option>
+                  </select>
+                </label>
+              </>
+            )}
+            {action === "finalize" && (
+              <label>
+                <span className="formLabelText">
+                  Lý do tổng phí cuối{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="reason" minLength={5} required />
               </label>
-            ))}
-            <label>
-              <span>
-                <input type="checkbox" name="checklist" required /> Đã kiểm tra
-                đủ hàng và đóng gói
-              </span>
-            </label>
-          </>
-        )}
-        {action === "receive" && (
-          <>
-            <label>
-              Vị trí kệ · không bắt buộc
-              <input name="shelf" maxLength={80} />
-            </label>
-            <label>
-              Tình trạng
-              <select name="condition">
-                <option value="good">Đạt kiểm tra</option>
-                <option value="damaged">Hỏng · tạm giữ để xử lý</option>
-              </select>
-            </label>
-          </>
-        )}
-        {action === "finalize" && (
-          <label>
-            Lý do tổng phí cuối
-            <input name="reason" minLength={5} required />
-          </label>
-        )}
-        {action === "finalize" && (
-          <label>
-            Tổng cuối đã bao gồm phân bổ cước lô gom (VND)
-            <input type="number" min="0" step="1" name="total" required />
-          </label>
-        )}
-        {["verifyTransfer", "refund"].includes(action) && (
-          <>
-            <p className="notice">
-              Chỉ xác nhận sau khi kiểm tra giao dịch ngân hàng thực tế. Ảnh
-              khách gửi chưa chứng minh tiền đã về.
+            )}
+            {action === "finalize" && (
+              <label>
+                <span className="formLabelText">
+                  Tổng cuối đã bao gồm phân bổ cước lô gom (VND){" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input type="number" min="0" step="1" name="total" required />
+              </label>
+            )}
+            {["verifyTransfer", "refund"].includes(action) && (
+              <>
+                <p className="notice">
+                  Chỉ xác nhận sau khi kiểm tra giao dịch ngân hàng thực tế. Ảnh
+                  khách gửi chưa chứng minh tiền đã về.
+                </p>
+                <label>
+                  <span className="formLabelText">
+                    Số tiền (VND){" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="amount"
+                    type="number"
+                    min={1}
+                    step={1}
+                    required
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Mã giao dịch ngân hàng{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="bankTransactionId" minLength={4} required />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Tham chiếu bằng chứng đối soát{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="evidence" minLength={5} required />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Lý do{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="reason" minLength={3} required />
+                </label>
+              </>
+            )}
+            {action === "track" && (
+              <>
+                <label>
+                  <span className="formLabelText">
+                    Mã vận đơn{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input name="tracking" minLength={3} required />
+                </label>
+                <label>
+                  <span>
+                    <input type="checkbox" name="delivered" /> Đã giao đủ hàng
+                  </span>
+                </label>
+              </>
+            )}
+            {action === "hold" && (
+              <label>
+                Lý do tạm giữ · để trống khi bỏ giữ
+                <input name="reason" maxLength={500} />
+              </label>
+            )}
+          </div>
+        </StepStage>
+        <StepStage index={2}>
+          {prerequisite && (
+            <p id={prerequisiteId} className="crmActionPrerequisite028">
+              {prerequisite}
             </p>
-            <label>
-              Số tiền (VND)
-              <input name="amount" type="number" min={1} step={1} required />
-            </label>
-            <label>
-              Mã giao dịch ngân hàng
-              <input name="bankTransactionId" minLength={4} required />
-            </label>
-            <label>
-              Tham chiếu bằng chứng đối soát
-              <input name="evidence" minLength={5} required />
-            </label>
-            <label>
-              Lý do
-              <input name="reason" minLength={3} required />
-            </label>
-          </>
-        )}
-        {action === "track" && (
-          <>
-            <label>
-              Mã vận đơn
-              <input name="tracking" minLength={3} required />
-            </label>
-            <label>
-              <span>
-                <input type="checkbox" name="delivered" /> Đã giao đủ hàng
-              </span>
-            </label>
-          </>
-        )}
-        {action === "hold" && (
-          <label>
-            Lý do tạm giữ · để trống khi bỏ giữ
-            <input name="reason" maxLength={500} />
-          </label>
-        )}
-        {prerequisite && (
-          <p id={prerequisiteId} className="crmActionPrerequisite028">
-            {prerequisite}
-          </p>
-        )}
-        <button
-          className="primary"
-          disabled={busy || !action || Boolean(prerequisite)}
-          aria-describedby={prerequisite ? prerequisiteId : undefined}
-          type="submit"
-        >
-          {busy ? "Đang lưu…" : actionLabels[action]}
-        </button>
+          )}
+          <button
+            className="primary"
+            disabled={busy || !action || Boolean(prerequisite)}
+            aria-describedby={prerequisite ? prerequisiteId : undefined}
+            type="submit"
+          >
+            {busy ? "Đang lưu…" : actionLabels[action]}
+          </button>
+        </StepStage>
       </fieldset>
-    </form>
+    </StepForm>
   );
 }

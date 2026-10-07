@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "task_id": "RELEASE099",
+  "status": "BLOCKED",
+  "cycle": 1,
+  "candidate": "CANDIDATE.json",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Combined completion not yet met: Admin and Finance acceptance reviews still BLOCKED.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No auth/IAM/provider-hold weakening; bounded credential scan zero matches, no production data writes.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current894tests and compilation/build plus lint pass. Metadata rendering regression2tests pass.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Full combined native Admin/Finance error/uncertain/accessibility matrix incomplete in current owner records.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Excel normal authorized save and version readback observed; missing display metadata no literal null.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "product_content": {
+      "status": "NOT_RUN",
+      "summary": "Scoped cleanup review passes; combined Admin/Finance all8principles evidence remains incomplete.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Preflight passed; release not executed before completion gate.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Retain provider holds and unrelated WIP; exclude ephemeral2.2GBoutput/browser logs from proposed source commit, preserve on disk.",
+      "evidence_refs": [
+        "ACCEPTANCE.json",
+        "CANDIDATE.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "location": "src/features/settings/Settings.tsx",
+      "status": "fixed",
+      "summary": "Missing version literal null display corrected; executable2test and native text verified."
+    },
+    {
+      "severity": "medium",
+      "location": "docs/reviews/ADMIN-096,ADMIN096-TABS,FINANCE-CONTENT-095",
+      "status": "open",
+      "summary": "Current combined release lacks required completed native state/product-language reviews; requested owner-chat coordination not yet authorized."
+    }
+  ],
+  "limitations": [
+    "DEGRADED repository intelligence",
+    "Final review must be refreshed after remaining acceptance",
+    "No production readback, commit or remote push yet"
+  ],
+  "residual_risks": [
+    "Concurrent shared WIP can invalidate candidate"
+  ]
+}

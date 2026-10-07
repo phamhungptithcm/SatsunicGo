@@ -1,3 +1,7 @@
+import {
+  loginFeedback,
+  publishAuthFailure,
+} from "../features/auth/auth-feedback";
 import { withProgress } from "./feedback";
 import { serviceError } from "./service-error";
 import { initializeApp } from "firebase/app";
@@ -81,13 +85,17 @@ export async function login() {
   try {
     await signInWithPopup(auth, p);
   } catch (e) {
-    if (captureMfa(e, auth))
-      throw Error(
-        "Cần xác thực hai lớp. Mở Bảo mật tài khoản để nhập mã xác thực.",
-      );
+    if (captureMfa(e, auth)) return;
     const code = (e as { code?: string }).code;
-    if (code === "auth/popup-blocked") await signInWithRedirect(auth, p);
-    else throw Error("Chưa đăng nhập được. Hãy thử lại.");
+    if (code === "auth/popup-blocked") {
+      try {
+        await signInWithRedirect(auth, p);
+      } catch (failure) {
+        throw Object.assign(new Error(loginFeedback(failure)), {
+          code: (failure as { code?: string }).code,
+        });
+      }
+    } else throw Object.assign(new Error(loginFeedback(e)), { code });
   }
 }
 export async function logout() {
@@ -98,7 +106,7 @@ export async function logout() {
 }
 if (auth)
   void getRedirectResult(auth).catch((error) => {
-    captureMfa(error, auth);
+    if (!captureMfa(error, auth)) publishAuthFailure(error);
   });
 export async function sendCommand(
   action: string,

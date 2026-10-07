@@ -1,3 +1,5 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import "../settings/admin-workbench096.css";
 import {
   useEffect,
   useId,
@@ -768,7 +770,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
   }
 
   return (
-    <section className="shippingRates">
+    <section className={`shippingRates${staff ? " admin096" : ""}`}>
       <CrmHeading
         title={staff ? "Cấu hình cước vận chuyển" : "Cước vận chuyển"}
         actions={
@@ -951,6 +953,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
       )}
       {staff && snapshot && (
         <section className="rateEditor">
+          <span className="adminStep">Chỉnh sửa → Lưu bản nháp → Công bố</span>
           <h2>Bản nháp bảng giá</h2>
           <p>
             Chỉ chủ doanh nghiệp được lưu và công bố. Lưu nháp không đổi bảng
@@ -971,262 +974,280 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
             </button>
           )}
           {draft && (
-            <>
-              <fieldset disabled={busy || uncertain}>
-                <legend>Nguồn và điều kiện</legend>
-                <label>
-                  Nhãn nguồn
-                  <input
-                    value={draft.sourceLabel}
-                    maxLength={160}
-                    onChange={(e) =>
-                      setDraft({ ...draft, sourceLabel: e.target.value })
-                    }
-                  />
-                </label>
-                <label>
-                  Điều kiện (mỗi dòng một điều kiện)
-                  <textarea
-                    value={draft.conditions.join("\n")}
-                    onChange={(e) =>
-                      setDraft({
-                        ...draft,
-                        conditions: e.target.value.split("\n"),
-                      })
-                    }
-                  />
-                </label>
-              </fieldset>
-              <fieldset disabled={busy || uncertain}>
-                <legend>Dòng giá</legend>
-                <label>
-                  Chọn dòng
-                  <select
-                    value={selected}
-                    onChange={(e) => setSelected(e.target.value)}
-                  >
-                    {draft.rows.map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.id} · {r.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                {selectedRow && (
-                  <div className="rateFields">
-                    <label>
-                      Tên mốc / nhóm hàng
-                      <input
-                        maxLength={240}
-                        value={selectedRow.label}
-                        onChange={(e) => updateRow({ label: e.target.value })}
-                      />
-                    </label>
-                    <label>
-                      Chiều
-                      <select
-                        value={selectedRow.direction}
-                        onChange={(e) =>
-                          updateRow(
-                            e.target.value === "VN_US"
-                              ? {
-                                  direction: "VN_US",
-                                  warehouse: "vietnam",
-                                  currency: "VND",
-                                  service: "standard",
-                                }
-                              : {
-                                  direction: "US_VN",
-                                  warehouse: "texas_cali",
-                                  currency: "USD",
-                                  service: "cargo",
-                                },
-                          )
-                        }
-                      >
-                        <option value="VN_US">Việt Nam → Mỹ</option>
-                        <option value="US_VN">Mỹ → Việt Nam</option>
-                      </select>
-                    </label>
-                    <label>
-                      Kho
-                      <select
-                        value={selectedRow.warehouse}
-                        onChange={(e) =>
-                          updateRow({
-                            warehouse: e.target
-                              .value as ShippingRateRow["warehouse"],
-                          })
-                        }
-                      >
-                        {(selectedRow.direction === "VN_US"
-                          ? (["vietnam"] as const)
-                          : (["texas_cali", "oregon"] as const)
-                        ).map((w) => (
-                          <option key={w} value={w}>
-                            {warehouseLabels[w]}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      Dịch vụ
-                      <select
-                        value={selectedRow.service}
-                        onChange={(e) =>
-                          updateRow({
-                            service: e.target
-                              .value as ShippingRateRow["service"],
-                          })
-                        }
-                      >
-                        {Object.entries(serviceLabels).map(([k, v]) => (
-                          <option key={k} value={k}>
-                            {v}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      Kiểu tính
-                      <select
-                        value={selectedRow.pricing}
-                        onChange={(e) => {
-                          const pricing = e.target
-                            .value as ShippingRateRow["pricing"];
-                          updateRow({
-                            pricing,
-                            amountMinor:
-                              pricing === "quote"
-                                ? null
-                                : (selectedRow.amountMinor ?? 0),
-                          });
-                        }}
-                      >
-                        <option value="total">Tổng cước đúng mốc</option>
-                        <option value="per_kg">Cước mỗi kg</option>
-                        <option value="quote">Cần xác nhận giá</option>
-                      </select>
-                    </label>
-                    <label>
-                      Giá ({selectedRow.currency === "USD" ? "cent USD" : "VND"}
-                      )
-                      <input
-                        type="number"
-                        min="0"
-                        max="100000000000"
-                        step="1"
-                        disabled={selectedRow.pricing === "quote"}
-                        value={selectedRow.amountMinor ?? ""}
-                        onChange={(e) =>
-                          updateRow({ amountMinor: Number(e.target.value) })
-                        }
-                      />
-                    </label>
-                    <label>
-                      Giá hiển thị và đơn vị
-                      <input
-                        maxLength={80}
-                        value={selectedRow.priceDisplay}
-                        onChange={(e) =>
-                          updateRow({ priceDisplay: e.target.value })
-                        }
-                      />
-                    </label>
-                    <label>
-                      Khối lượng từ (gram)
-                      <input
-                        type="number"
-                        min="1"
-                        max="1000000000"
-                        step="1"
-                        value={selectedRow.minGrams}
-                        onChange={(e) =>
-                          updateRow({ minGrams: Number(e.target.value) })
-                        }
-                      />
-                    </label>
-                    <label>
-                      Khối lượng đến (gram; để trống nếu không có trần)
-                      <input
-                        type="number"
-                        min="1"
-                        max="1000000000"
-                        step="1"
-                        value={selectedRow.maxGrams ?? ""}
-                        onChange={(e) =>
-                          updateRow({
-                            maxGrams:
-                              e.target.value === ""
-                                ? null
-                                : Number(e.target.value),
-                          })
-                        }
-                      />
-                    </label>
-                    <label>
-                      Thông quan / điều kiện
-                      <input
-                        maxLength={80}
-                        value={selectedRow.clearance}
-                        onChange={(e) =>
-                          updateRow({ clearance: e.target.value })
-                        }
-                      />
-                    </label>
+            <StepForm
+              steps={["Nguồn & điều kiện", "Mức cước", "Kiểm tra"]}
+              disabled={busy || uncertain}
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <StepStage index={0}>
+                <fieldset disabled={busy || uncertain}>
+                  <legend>Nguồn và điều kiện</legend>
+                  <label>
+                    Nhãn nguồn
+                    <input
+                      value={draft.sourceLabel}
+                      maxLength={160}
+                      onChange={(e) =>
+                        setDraft({ ...draft, sourceLabel: e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
+                    Điều kiện (mỗi dòng một điều kiện)
+                    <textarea
+                      value={draft.conditions.join("\n")}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          conditions: e.target.value.split("\n"),
+                        })
+                      }
+                    />
+                  </label>
+                </fieldset>
+              </StepStage>
+              <StepStage index={1}>
+                <fieldset disabled={busy || uncertain}>
+                  <legend>Dòng giá</legend>
+                  <label>
+                    Chọn dòng
+                    <select
+                      value={selected}
+                      onChange={(e) => setSelected(e.target.value)}
+                    >
+                      {draft.rows.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.id} · {r.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {selectedRow && (
+                    <div className="rateFields">
+                      <label>
+                        Tên mốc / nhóm hàng
+                        <input
+                          maxLength={240}
+                          value={selectedRow.label}
+                          onChange={(e) => updateRow({ label: e.target.value })}
+                        />
+                      </label>
+                      <label>
+                        Chiều
+                        <select
+                          value={selectedRow.direction}
+                          onChange={(e) =>
+                            updateRow(
+                              e.target.value === "VN_US"
+                                ? {
+                                    direction: "VN_US",
+                                    warehouse: "vietnam",
+                                    currency: "VND",
+                                    service: "standard",
+                                  }
+                                : {
+                                    direction: "US_VN",
+                                    warehouse: "texas_cali",
+                                    currency: "USD",
+                                    service: "cargo",
+                                  },
+                            )
+                          }
+                        >
+                          <option value="VN_US">Việt Nam → Mỹ</option>
+                          <option value="US_VN">Mỹ → Việt Nam</option>
+                        </select>
+                      </label>
+                      <label>
+                        Kho
+                        <select
+                          value={selectedRow.warehouse}
+                          onChange={(e) =>
+                            updateRow({
+                              warehouse: e.target
+                                .value as ShippingRateRow["warehouse"],
+                            })
+                          }
+                        >
+                          {(selectedRow.direction === "VN_US"
+                            ? (["vietnam"] as const)
+                            : (["texas_cali", "oregon"] as const)
+                          ).map((w) => (
+                            <option key={w} value={w}>
+                              {warehouseLabels[w]}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label>
+                        Dịch vụ
+                        <select
+                          value={selectedRow.service}
+                          onChange={(e) =>
+                            updateRow({
+                              service: e.target
+                                .value as ShippingRateRow["service"],
+                            })
+                          }
+                        >
+                          {Object.entries(serviceLabels).map(([k, v]) => (
+                            <option key={k} value={k}>
+                              {v}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <label>
+                        Kiểu tính
+                        <select
+                          value={selectedRow.pricing}
+                          onChange={(e) => {
+                            const pricing = e.target
+                              .value as ShippingRateRow["pricing"];
+                            updateRow({
+                              pricing,
+                              amountMinor:
+                                pricing === "quote"
+                                  ? null
+                                  : (selectedRow.amountMinor ?? 0),
+                            });
+                          }}
+                        >
+                          <option value="total">Tổng cước đúng mốc</option>
+                          <option value="per_kg">Cước mỗi kg</option>
+                          <option value="quote">Cần xác nhận giá</option>
+                        </select>
+                      </label>
+                      <label>
+                        Giá (
+                        {selectedRow.currency === "USD" ? "cent USD" : "VND"}
+                        )
+                        <input
+                          type="number"
+                          min="0"
+                          max="100000000000"
+                          step="1"
+                          disabled={selectedRow.pricing === "quote"}
+                          value={selectedRow.amountMinor ?? ""}
+                          onChange={(e) =>
+                            updateRow({ amountMinor: Number(e.target.value) })
+                          }
+                        />
+                      </label>
+                      <label>
+                        Giá hiển thị và đơn vị
+                        <input
+                          maxLength={80}
+                          value={selectedRow.priceDisplay}
+                          onChange={(e) =>
+                            updateRow({ priceDisplay: e.target.value })
+                          }
+                        />
+                      </label>
+                      <label>
+                        Khối lượng từ (gram)
+                        <input
+                          type="number"
+                          min="1"
+                          max="1000000000"
+                          step="1"
+                          value={selectedRow.minGrams}
+                          onChange={(e) =>
+                            updateRow({ minGrams: Number(e.target.value) })
+                          }
+                        />
+                      </label>
+                      <label>
+                        Khối lượng đến (gram; để trống nếu không có trần)
+                        <input
+                          type="number"
+                          min="1"
+                          max="1000000000"
+                          step="1"
+                          value={selectedRow.maxGrams ?? ""}
+                          onChange={(e) =>
+                            updateRow({
+                              maxGrams:
+                                e.target.value === ""
+                                  ? null
+                                  : Number(e.target.value),
+                            })
+                          }
+                        />
+                      </label>
+                      <label>
+                        Thông quan / điều kiện
+                        <input
+                          maxLength={80}
+                          value={selectedRow.clearance}
+                          onChange={(e) =>
+                            updateRow({ clearance: e.target.value })
+                          }
+                        />
+                      </label>
+                    </div>
+                  )}
+                  <div className="rateActions">
+                    <button
+                      type="button"
+                      disabled={draft.rows.length >= 160}
+                      onClick={() => {
+                        const row = {
+                          ...vietCargoReferenceRates.rows[0],
+                          id: `custom-${crypto.randomUUID()}`,
+                          label: "Dòng giá mới",
+                          pricing: "quote" as const,
+                          amountMinor: null,
+                          priceDisplay: "Liên hệ xác nhận",
+                        };
+                        setDraft({ ...draft, rows: [...draft.rows, row] });
+                        setSelected(row.id);
+                      }}
+                    >
+                      Thêm dòng giá
+                    </button>
+                    <button
+                      type="button"
+                      disabled={draft.rows.length <= 1}
+                      onClick={() => {
+                        const rows = draft.rows.filter(
+                          (r) => r.id !== selected,
+                        );
+                        setDraft({ ...draft, rows });
+                        setSelected(rows[0].id);
+                      }}
+                    >
+                      Xóa dòng khỏi bản nháp
+                    </button>
                   </div>
-                )}
+                </fieldset>
+              </StepStage>
+              <StepStage index={2}>
                 <div className="rateActions">
                   <button
-                    disabled={draft.rows.length >= 160}
-                    onClick={() => {
-                      const row = {
-                        ...vietCargoReferenceRates.rows[0],
-                        id: `custom-${crypto.randomUUID()}`,
-                        label: "Dòng giá mới",
-                        pricing: "quote" as const,
-                        amountMinor: null,
-                        priceDisplay: "Liên hệ xác nhận",
-                      };
-                      setDraft({ ...draft, rows: [...draft.rows, row] });
-                      setSelected(row.id);
-                    }}
+                    type="button"
+                    disabled={busy || uncertain}
+                    onClick={() => void mutate("save")}
                   >
-                    Thêm dòng giá
+                    Lưu bản nháp
                   </button>
                   <button
-                    disabled={draft.rows.length <= 1}
-                    onClick={() => {
-                      const rows = draft.rows.filter((r) => r.id !== selected);
-                      setDraft({ ...draft, rows });
-                      setSelected(rows[0].id);
-                    }}
+                    type="button"
+                    disabled={busy || uncertain || dirty || !snapshot.config}
+                    onClick={() => setConfirmation("publish")}
                   >
-                    Xóa dòng khỏi bản nháp
+                    Công bố bản đã lưu
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy || uncertain}
+                    onClick={() => setConfirmation("delete")}
+                  >
+                    Xóa và gỡ bảng công khai
                   </button>
                 </div>
-              </fieldset>
-              <div className="rateActions">
-                <button
-                  disabled={busy || uncertain}
-                  onClick={() => void mutate("save")}
-                >
-                  Lưu bản nháp
-                </button>
-                <button
-                  disabled={busy || uncertain || dirty || !snapshot.config}
-                  onClick={() => setConfirmation("publish")}
-                >
-                  Công bố bản đã lưu
-                </button>
-                <button
-                  disabled={busy || uncertain}
-                  onClick={() => setConfirmation("delete")}
-                >
-                  Xóa và gỡ bảng công khai
-                </button>
-              </div>
-            </>
+              </StepStage>
+            </StepForm>
           )}
           {confirmation && (
             <div
@@ -1440,7 +1461,7 @@ function ShippingRateSupport({ context }: { context: string }) {
             <>
               <p className="rateSupportSummary">{summary}</p>
               <label>
-                Mô tả hàng (không bắt buộc)
+                Mô tả hàng
                 <textarea
                   value={details}
                   disabled={busy || uncertain}

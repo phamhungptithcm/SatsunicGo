@@ -1,0 +1,226 @@
+[
+  {
+    "path": "src/features/operations/Workbench.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Thao tác",
+      "Thông tin xử lý",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/operations/Returns.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Hàng trả",
+      "Bằng chứng",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/orders/Changes.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Hàng thay đổi",
+      "Giá trị & lý do",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/payments/Refunds.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Đơn & số tiền",
+      "Lý do",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/payments/Refunds.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Quyết định",
+      "Giao dịch & bằng chứng",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/payments/FinancialReview.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Giao dịch",
+      "Lý do & bằng chứng",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/content/Campaigns.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Nội dung",
+      "Theo dõi",
+      "Lịch & trạng thái",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/content/WebsiteBanners.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Nội dung",
+      "Hiển thị & lịch",
+      "Ảnh",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/membership/PlanEditor.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Gói",
+      "Giá & quyền lợi",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/membership/PlanEditor.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Người nhận",
+      "Gói & lý do",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/settings/StaffAccess.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Vai trò",
+      "Phạm vi & trạng thái",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/settings/Settings.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Điều khoản",
+      "Tỷ giá",
+      "Hiệu lực",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/crm/Customer.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Phân loại & ghi chú",
+      "Phân công & lịch",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/content/ContentEditor.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Thông tin",
+      "Phân loại",
+      "Ảnh & chi tiết",
+      "Giá & hiển thị",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/shipping/ShippingRates.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Nguồn & điều kiện",
+      "Mức cước",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/shipping/Shipping.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Chọn đơn",
+      "Hàng trong kiện",
+      "Thông tin kiện",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/features/shipping/Consolidation.tsx",
+    "state": "current/completed/future; stage heading",
+    "strings": [
+      "Chọn kiện",
+      "Phân bổ",
+      "Cước & dịch vụ",
+      "Kiểm tra"
+    ],
+    "meaning": "Names the current business group; checked means input validation only."
+  },
+  {
+    "path": "src/shared/StepForm.tsx",
+    "state": "navigation, summary, error, disabled",
+    "strings": [
+      "Các bước nhập thông tin",
+      "Thông tin trước khi gửi",
+      "Xem toàn bộ",
+      "Kiểm tra thông tin của bước này.",
+      "Đã kiểm tra",
+      "Đang nhập",
+      "Đã chọn",
+      "Chưa chọn",
+      "Chưa nhập",
+      "← Quay lại",
+      "Tiếp tục →"
+    ],
+    "meaning": "Navigation validates without mutation; review mirrors mounted controls; empty optional values are not zeros or saved results."
+  },
+  {
+    "path": "src/features/shipping/Shipping.tsx",
+    "state": "review and invalid selection",
+    "strings": [
+      "Chọn ít nhất một đơn đủ điều kiện đóng kiện.",
+      "Nhập số lượng cho ít nhất một sản phẩm trong kiện.",
+      "Đơn đã chọn",
+      "Hàng trong kiện",
+      "Kho → Tuyến",
+      "Khối lượng",
+      "Kích thước"
+    ],
+    "meaning": "Uses selected eligible orders, positive quantities and actual parcel dimensions/grams; final action remains Tạo kiện nội bộ."
+  },
+  {
+    "path": "src/features/shipping/Consolidation.tsx",
+    "state": "review and invalid allocation",
+    "strings": [
+      "Chọn kiện đủ điều kiện và tải đủ các đơn liên quan.",
+      "Tổng khối lượng phân bổ phải bằng tổng khối lượng kiện đã chọn.",
+      "Kiện và đơn đã chọn",
+      "Khối lượng phân bổ",
+      "Tổng cước quốc tế",
+      "Hub đích",
+      "Dịch vụ vận chuyển",
+      "Hạn bàn giao"
+    ],
+    "meaning": "Actual selected parcels, order references, weight, freight and local cutoff; chốt lô does not record payment."
+  }
+]

@@ -1,0 +1,6 @@
+# OAUTH089 enrollment origin recovery
+Observed user error400origin_mismatch for localhost5199. Exact matching satsunicgo Web OAuth client inspected in authenticated Google Cloud UI; current origin list contains http://localhost, localhost5000,localhost5173,127.0.0.1:5173 and two production Hosting origins;5199 absent. Official Google OAuth JavaScript documentation requires exact scheme/domain/port.
+
+Recovery uses existing allowed localhost5173. Current prepared dist served via owned Vite preview5173; site URL/title/account shell verified in fresh Chrome tab, marked human handoff. No cloud/client/redirect/secret change, no new access grant, no automated credential/TOTP entry. Source unchanged; current release candidate build retained. User must privately sign in at new origin and scan/enterOTP. Origin configuration mismatch is established; actual interactive sign-in/enrollment acceptance NOT_TESTED pending human action. No security bypass/production deploy or OWNER grant.
+
+Final scoped recovery review PASSED: existing-allowlisted origin preserved, correct project/client verified, no secret retrieval, live page opened. Overall2FA/release remains BLOCKED pending actual human enrollment/readback. Intelligence DEGRADED native/source/live UI; no new product text. Tokens/cost unavailable; memory candidates None.

@@ -271,7 +271,12 @@ export function SchedulePicker({
       </div>
       <div className="schedule-time">
         <label htmlFor={timeId}>
-          <StudioIcon name="clock" size={14} /> Giờ xuất bản
+          <span className="formLabelText">
+            <StudioIcon name="clock" size={14} /> Giờ xuất bản{" "}
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
+          </span>
         </label>
         <input
           id={timeId}

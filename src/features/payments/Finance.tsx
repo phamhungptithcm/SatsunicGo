@@ -1,3 +1,5 @@
+import { PageTabs } from "../../shared/PageTabs";
+import "../crm/finance-content095.css";
 import {
   CrmIcon,
   CrmHeading,
@@ -356,7 +358,7 @@ export function Finance() {
   }
   if (authority)
     return (
-      <section ref={surface} tabIndex={-1}>
+      <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
         <CrmHeading title="Đối soát thanh toán" />
         <CrmState kind="error" title="Cần kiểm tra lại quyền truy cập." />
         {busy && (
@@ -369,42 +371,48 @@ export function Finance() {
       </section>
     );
   return (
-    <section ref={surface} tabIndex={-1}>
-      <CrmHeading title="Đối soát thanh toán" />
-      <p>
+    <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
+      <CrmHeading
+        title="Đối soát thanh toán"
+        description="Kiểm tra tiền vào, kích hoạt gói và xử lý giao dịch chưa khớp."
+        actions={
+          <button disabled={busy || blocked} onClick={() => void load()}>
+            <CrmIcon name="refresh" /> Tải lại
+          </button>
+        }
+      />
+      <p className="fc095Notice">
         Tiền membership được phân bổ cho hóa đơn gói riêng, không thanh toán số
         dư đơn mua hộ. Chỉ xác nhận khi đã đối chiếu tiền vào tài khoản doanh
         nghiệp.
       </p>
-      <FinancialReview disabled={busy || blocked} transport={transport} />
+      <div className="fc095Secondary">
+        <FinancialReview disabled={busy || blocked} transport={transport} />
+      </div>
       <p className="muted">
         Mỗi nhóm hiển thị tối đa 30 bản ghi đã tải; không phải tổng toàn hệ
         thống.
       </p>
-      <button disabled={busy || blocked} onClick={() => void load()}>
-        <CrmIcon name="refresh" />
-        Tải lại tài chính
-      </button>
-      <div className="crmActions" role="group" aria-label="Nhóm đối soát">
-        {(
-          [
-            ["transferReviews", "Chuyển khoản"],
-            ["membershipInvoices", "Hóa đơn thành viên"],
-            ["paymentExceptions", "Ngoại lệ"],
-          ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            disabled={busy || blocked}
-            aria-pressed={scope === key}
-            onClick={() => setScope(key)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <PageTabs
+        id="finance"
+        label="Nhóm đối soát"
+        value={scope}
+        onChange={setScope}
+        disabled={busy || blocked}
+        items={[
+          { value: "transferReviews", label: "Chuyển khoản" },
+          { value: "membershipInvoices", label: "Hóa đơn thành viên" },
+          { value: "paymentExceptions", label: "Ngoại lệ" },
+        ]}
+      />
       {busy && <CrmState kind="loading" title="Đang tải / lưu tài chính…" />}
-      <section hidden={scope !== "transferReviews"}>
+      <section
+        id="finance-panel-transferReviews"
+        role="tabpanel"
+        aria-labelledby="finance-tab-transferReviews"
+        tabIndex={0}
+        hidden={scope !== "transferReviews"}
+      >
         <h2 className="crmSectionHeading">
           <CrmIcon name="clock" /> Thông báo chuyển khoản
         </h2>
@@ -434,7 +442,13 @@ export function Finance() {
           </button>
         )}
       </section>
-      <section hidden={scope !== "membershipInvoices"}>
+      <section
+        id="finance-panel-membershipInvoices"
+        role="tabpanel"
+        aria-labelledby="finance-tab-membershipInvoices"
+        tabIndex={0}
+        hidden={scope !== "membershipInvoices"}
+      >
         <h2 className="crmSectionHeading">
           <CrmIcon name="document" /> Hóa đơn thành viên
         </h2>
@@ -473,7 +487,12 @@ export function Finance() {
                   <form className="form" onSubmit={(e) => void confirm(e, i)}>
                     <fieldset className="form" disabled={busy || blocked}>
                       <label>
-                        Mã giao dịch ngân hàng
+                        <span className="formLabelText">
+                          Mã giao dịch ngân hàng{" "}
+                          <span className="requiredMark" aria-hidden="true">
+                            *
+                          </span>
+                        </span>
                         <input
                           name="reference"
                           minLength={4}
@@ -482,7 +501,12 @@ export function Finance() {
                         />
                       </label>
                       <label>
-                        Bằng chứng đối soát
+                        <span className="formLabelText">
+                          Bằng chứng đối soát{" "}
+                          <span className="requiredMark" aria-hidden="true">
+                            *
+                          </span>
+                        </span>
                         <textarea
                           name="evidence"
                           minLength={5}
@@ -509,7 +533,13 @@ export function Finance() {
           </button>
         )}
       </section>
-      <section hidden={scope !== "paymentExceptions"}>
+      <section
+        id="finance-panel-paymentExceptions"
+        role="tabpanel"
+        aria-labelledby="finance-tab-paymentExceptions"
+        tabIndex={0}
+        hidden={scope !== "paymentExceptions"}
+      >
         <h2 className="crmSectionHeading">
           <CrmIcon name="warning" /> Ngoại lệ thanh toán
         </h2>
@@ -575,16 +605,6 @@ export function Finance() {
           {message}
         </p>
       )}
-      {!busy &&
-        !error &&
-        !reviews.length &&
-        !invoices.length &&
-        !exceptions.length && (
-          <CrmState
-            kind="empty"
-            title="Chưa có bản ghi trong trang hiện tại."
-          />
-        )}
       {error && <CrmState kind="error" title={error} />}
     </section>
   );
@@ -737,11 +757,21 @@ function TransferReviewForm({
           <form className="form" onSubmit={(event) => void verify(event)}>
             <fieldset className="form" disabled={busy || uncertain || disabled}>
               <label>
-                Mã giao dịch trên tài khoản ngân hàng doanh nghiệp
+                <span className="formLabelText">
+                  Mã giao dịch trên tài khoản ngân hàng doanh nghiệp{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <input name="bank" minLength={4} maxLength={120} required />
               </label>
               <label>
-                Bằng chứng đã đối chiếu đúng tài khoản, đơn và số tiền
+                <span className="formLabelText">
+                  Bằng chứng đã đối chiếu đúng tài khoản, đơn và số tiền{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <textarea
                   name="evidence"
                   minLength={5}

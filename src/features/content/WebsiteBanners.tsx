@@ -1,3 +1,4 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -249,8 +250,18 @@ export function WebsiteBanners() {
   const disabled = busy || uncertain;
   return (
     <section className="websiteBanners" aria-label="Banner website">
-      <h2>Banner website</h2>
-      <p>
+      <div className="fc095SectionHead">
+        <div>
+          <h2>Banner website</h2>
+          <p className="muted">
+            Quản lý vị trí, bản nháp và thời gian hiển thị.
+          </p>
+        </div>
+        <button type="button" disabled={disabled} onClick={() => void load()}>
+          Tải lại banner
+        </button>
+      </div>
+      <p className="fc095Notice">
         Hiển thị chương trình trên website. Không có banner đang chạy, trang sẽ
         giữ bố cục bình thường.
       </p>
@@ -266,35 +277,39 @@ export function WebsiteBanners() {
           Thử lại thao tác đang chờ
         </button>
       )}
-      <button type="button" disabled={disabled} onClick={() => void load()}>
-        Tải lại banner
-      </button>
+
       {listing && (
         <>
           {listing.owner && (
-            <fieldset disabled={disabled}>
+            <fieldset className="fc095Placement" disabled={disabled}>
               <legend>Cách hiển thị</legend>
-              {(["home", "products"] as const).map((placement) => (
-                <label key={placement}>
-                  {placement === "home" ? "Trang chủ" : "Trang sản phẩm"}
-                  <select
-                    value={listing.modes[placement]}
-                    onChange={(e) =>
-                      void execute({
-                        action: "mode",
-                        placement,
-                        mode: e.target.value,
-                        expectedVersion: listing.manifestVersion,
-                        operationId: crypto.randomUUID(),
-                      })
-                    }
-                  >
-                    <option value="auto">Tự động</option>
-                    <option value="static">Một banner</option>
-                    <option value="slider">Slider thủ công</option>
-                  </select>
-                </label>
-              ))}
+              <p className="muted">
+                Thay đổi cách hiển thị được lưu ngay. Xuất bản banner là thao
+                tác riêng.
+              </p>
+              <div className="fc095FieldGrid">
+                {(["home", "products"] as const).map((placement) => (
+                  <label key={placement}>
+                    {placement === "home" ? "Trang chủ" : "Trang sản phẩm"}
+                    <select
+                      value={listing.modes[placement]}
+                      onChange={(e) =>
+                        void execute({
+                          action: "mode",
+                          placement,
+                          mode: e.target.value,
+                          expectedVersion: listing.manifestVersion,
+                          operationId: crypto.randomUUID(),
+                        })
+                      }
+                    >
+                      <option value="auto">Tự động</option>
+                      <option value="static">Một banner</option>
+                      <option value="slider">Slider thủ công</option>
+                    </select>
+                  </label>
+                ))}
+              </div>
             </fieldset>
           )}
           <button
@@ -412,194 +427,231 @@ export function WebsiteBanners() {
         </>
       )}
       {editing && (
-        <form key={editSession} onSubmit={save}>
+        <StepForm
+          steps={["Nội dung", "Hiển thị & lịch", "Ảnh", "Kiểm tra"]}
+          disabled={disabled}
+          key={editSession}
+          onSubmit={save}
+        >
           <fieldset disabled={disabled}>
             <legend>{row ? "Sửa bản nháp" : "Banner mới"}</legend>
-            <label>
-              Tên chương trình
-              <input
-                value={draft.title}
-                maxLength={80}
-                required
-                onChange={(e) => update("title", e.target.value)}
-              />
-            </label>
-            <label>
-              Mô tả ngắn
-              <textarea
-                value={draft.description}
-                maxLength={160}
-                onChange={(e) => update("description", e.target.value)}
-              />
-            </label>
-            <label>
-              Nút hành động
-              <input
-                value={draft.cta}
-                maxLength={40}
-                required
-                onChange={(e) => update("cta", e.target.value)}
-              />
-            </label>
-            <label>
-              Đường dẫn trên website
-              <input
-                value={draft.path}
-                required
-                onChange={(e) => update("path", e.target.value)}
-              />
-            </label>
-            <p>
-              Ví dụ: /products, /products/ten-san-pham, /request. Chỉ dùng đường
-              dẫn nội bộ.
-            </p>
-            <fieldset>
-              <legend>Nơi hiển thị</legend>
-              {(["home", "products"] as const).map((p) => (
-                <label key={p}>
-                  <input
-                    type="checkbox"
-                    checked={draft.placements.includes(p)}
-                    onChange={(e) =>
-                      update(
-                        "placements",
-                        e.target.checked
-                          ? [...draft.placements, p]
-                          : draft.placements.filter((v) => v !== p),
-                      )
-                    }
-                  />
-                  {p === "home" ? "Trang chủ" : "Trang sản phẩm"}
-                </label>
-              ))}
-            </fieldset>
-            <label>
-              Ưu tiên (0–100)
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={draft.priority}
-                onChange={(e) => update("priority", Number(e.target.value))}
-              />
-            </label>
-            {(["startsAt", "endsAt"] as const).map((k) => (
-              <label key={k}>
-                {k === "startsAt" ? "Bắt đầu" : "Kết thúc"} · giờ Việt Nam
-                (UTC+7)
+            <StepStage index={0}>
+              <label>
+                <span className="formLabelText">
+                  Tên chương trình{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <input
-                  type="datetime-local"
+                  value={draft.title}
+                  maxLength={80}
                   required
-                  value={vietnamTimeInput(draft[k])}
-                  onChange={(e) => {
-                    try {
-                      update(k, parseVietnamTime(e.target.value));
-                    } catch {
-                      setMessage("Nhập ngày và giờ Việt Nam hợp lệ.");
-                    }
-                  }}
+                  onChange={(e) => update("title", e.target.value)}
                 />
               </label>
-            ))}
-            <h3>Ảnh máy tính</h3>
-            <p>
-              Gợi ý 1440 × 960 px, chừa khoảng trống quanh sản phẩm. Đã chọn
-              ảnh: {draft.desktopMediaId ? "Có" : "Chưa"}.
-            </p>
-            <MediaUpload
-              onUploaded={(id) => {
-                if (editSession === draftSession.current)
-                  update("desktopMediaId", id);
-              }}
-            />
-            <h3>Ảnh điện thoại (tùy chọn)</h3>
-            <p>Nếu bỏ trống, dùng ảnh máy tính.</p>
-            <MediaUpload
-              onUploaded={(id) => {
-                if (editSession === draftSession.current)
-                  update("mobileMediaId", id);
-              }}
-            />
-            {draft.mobileMediaId && (
+              <label>
+                Mô tả ngắn
+                <textarea
+                  value={draft.description}
+                  maxLength={160}
+                  onChange={(e) => update("description", e.target.value)}
+                />
+              </label>
+              <label>
+                <span className="formLabelText">
+                  Nút hành động{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  value={draft.cta}
+                  maxLength={40}
+                  required
+                  onChange={(e) => update("cta", e.target.value)}
+                />
+              </label>
+              <label>
+                <span className="formLabelText">
+                  Đường dẫn trên website{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  value={draft.path}
+                  required
+                  onChange={(e) => update("path", e.target.value)}
+                />
+              </label>
+              <p>
+                Ví dụ: /products, /products/ten-san-pham, /request. Chỉ dùng
+                đường dẫn nội bộ.
+              </p>
+            </StepStage>
+            <StepStage index={1}>
+              <fieldset>
+                <legend>Nơi hiển thị</legend>
+                {(["home", "products"] as const).map((p) => (
+                  <label key={p}>
+                    <input
+                      type="checkbox"
+                      checked={draft.placements.includes(p)}
+                      onChange={(e) =>
+                        update(
+                          "placements",
+                          e.target.checked
+                            ? [...draft.placements, p]
+                            : draft.placements.filter((v) => v !== p),
+                        )
+                      }
+                    />
+                    {p === "home" ? "Trang chủ" : "Trang sản phẩm"}
+                  </label>
+                ))}
+              </fieldset>
+              <label>
+                Ưu tiên (0–100)
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={draft.priority}
+                  onChange={(e) => update("priority", Number(e.target.value))}
+                />
+              </label>
+              {(["startsAt", "endsAt"] as const).map((k) => (
+                <label key={k}>
+                  <span className="formLabelText">
+                    {k === "startsAt" ? "Bắt đầu" : "Kết thúc"} · giờ Việt Nam
+                    (UTC+7){" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={vietnamTimeInput(draft[k])}
+                    onChange={(e) => {
+                      try {
+                        update(k, parseVietnamTime(e.target.value));
+                      } catch {
+                        setMessage("Nhập ngày và giờ Việt Nam hợp lệ.");
+                      }
+                    }}
+                  />
+                </label>
+              ))}
+            </StepStage>
+            <StepStage index={2}>
+              <h3>Ảnh máy tính</h3>
+              <p>
+                Gợi ý 1440 × 960 px, chừa khoảng trống quanh sản phẩm. Đã chọn
+                ảnh: {draft.desktopMediaId ? "Có" : "Chưa"}.
+              </p>
+              <MediaUpload
+                onUploaded={(id) => {
+                  if (editSession === draftSession.current)
+                    update("desktopMediaId", id);
+                }}
+              />
+              <h3>Ảnh điện thoại</h3>
+              <p>Nếu bỏ trống, dùng ảnh máy tính.</p>
+              <MediaUpload
+                onUploaded={(id) => {
+                  if (editSession === draftSession.current)
+                    update("mobileMediaId", id);
+                }}
+              />
+              {draft.mobileMediaId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    previewSequence.current++;
+                    setPreview(null);
+                    setPreviewBusy(false);
+                    setDraft((v) => {
+                      const next = { ...v };
+                      delete next.mobileMediaId;
+                      return next;
+                    });
+                  }}
+                >
+                  Bỏ ảnh điện thoại
+                </button>
+              )}
+            </StepStage>
+            <StepStage index={3}>
+              <fieldset>
+                <legend>Xem trước bố cục</legend>
+                <button
+                  type="button"
+                  disabled={previewBusy}
+                  onClick={() => void showPreview(false)}
+                >
+                  Máy tính
+                </button>
+                <button
+                  type="button"
+                  disabled={previewBusy}
+                  onClick={() => void showPreview(true)}
+                >
+                  Điện thoại
+                </button>
+                {previewBusy && (
+                  <LoadingState overlay={false}>
+                    Đang tải ảnh xem trước…
+                  </LoadingState>
+                )}
+                {preview && (
+                  <div
+                    className={`sgBannerPreview ${previewMobile ? "sgBannerPreview--mobile" : ""}`}
+                  >
+                    <div className="sgBannerPanel">
+                      <div className="sgBannerCopy">
+                        <span className="sgBannerEyebrow">Đang diễn ra</span>
+                        <h2>{draft.title || "Tên chương trình"}</h2>
+                        {draft.description && <p>{draft.description}</p>}
+                        <span className="sgBannerCta">
+                          {draft.cta || "Xem ngay"} ↗
+                        </span>
+                      </div>
+                      <div className="sgBannerImage">
+                        <img
+                          src={preview.image}
+                          alt={preview.alt}
+                          width="720"
+                          height="480"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <p>Bản xem trước chưa xuất bản chương trình.</p>
+              </fieldset>
+              <p>
+                Lưu bản nháp chưa làm banner hiển thị. OWNER bật theo lịch hoặc
+                bắt đầu ngay sau khi kiểm tra nội dung.
+              </p>
+              <button className="websiteBannerPrimary" type="submit">
+                Lưu bản nháp
+              </button>
               <button
                 type="button"
                 onClick={() => {
+                  draftSession.current++;
                   previewSequence.current++;
-                  setPreview(null);
                   setPreviewBusy(false);
-                  setDraft((v) => {
-                    const next = { ...v };
-                    delete next.mobileMediaId;
-                    return next;
-                  });
+                  setEditing(false);
                 }}
               >
-                Bỏ ảnh điện thoại
+                Đóng
               </button>
-            )}
-            <fieldset>
-              <legend>Xem trước bố cục</legend>
-              <button
-                type="button"
-                disabled={previewBusy}
-                onClick={() => void showPreview(false)}
-              >
-                Máy tính
-              </button>
-              <button
-                type="button"
-                disabled={previewBusy}
-                onClick={() => void showPreview(true)}
-              >
-                Điện thoại
-              </button>
-              {previewBusy && <LoadingState overlay={false}>Đang tải ảnh xem trước…</LoadingState>}
-              {preview && (
-                <div
-                  className={`sgBannerPreview ${previewMobile ? "sgBannerPreview--mobile" : ""}`}
-                >
-                  <div className="sgBannerPanel">
-                    <div className="sgBannerCopy">
-                      <span className="sgBannerEyebrow">Đang diễn ra</span>
-                      <h2>{draft.title || "Tên chương trình"}</h2>
-                      {draft.description && <p>{draft.description}</p>}
-                      <span className="sgBannerCta">
-                        {draft.cta || "Xem ngay"} ↗
-                      </span>
-                    </div>
-                    <div className="sgBannerImage">
-                      <img
-                        src={preview.image}
-                        alt={preview.alt}
-                        width="720"
-                        height="480"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-              <p>Bản xem trước chưa xuất bản chương trình.</p>
-            </fieldset>
-            <p>
-              Lưu bản nháp chưa làm banner hiển thị. OWNER bật theo lịch hoặc
-              bắt đầu ngay sau khi kiểm tra nội dung.
-            </p>
-            <button className="websiteBannerPrimary" type="submit">
-              Lưu bản nháp
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                draftSession.current++;
-                previewSequence.current++;
-                setPreviewBusy(false);
-                setEditing(false);
-              }}
-            >
-              Đóng
-            </button>
+            </StepStage>
           </fieldset>
-        </form>
+        </StepForm>
       )}
     </section>
   );

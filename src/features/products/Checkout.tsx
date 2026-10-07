@@ -188,7 +188,12 @@ export function ProductCheckout({
           </p>
           {parsed.data.catalogOptions.length > 0 && (
             <label>
-              Mẫu sản phẩm
+              <span className="formLabelText">
+                Mẫu sản phẩm{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
               <select
                 value={variant}
                 disabled={busy || !!pending}
@@ -203,7 +208,12 @@ export function ProductCheckout({
             </label>
           )}
           <label>
-            Số lượng
+            <span className="formLabelText">
+              Số lượng{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               type="number"
               min={1}

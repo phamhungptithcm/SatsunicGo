@@ -1,0 +1,26 @@
+{
+  "revision": "visual-v2",
+  "application_scope": [
+    "src/features/crm/dashboard094.css"
+  ],
+  "candidate": "V2-CANDIDATE.json",
+  "browser": {
+    "status": "PASSED",
+    "tests": 7,
+    "unexpected": 0,
+    "command": "DASHBOARD094_EVIDENCE=/private/tmp/dashboard094-v2-evidence npx playwright test --config /private/tmp/dashboard094-v2.playwright.config.mjs",
+    "duration_ms": 8569.271999999999
+  },
+  "static_analysis": "PASSED scoped ESLint and Prettier",
+  "unit": "NOT_RUN for visual v2; no logic/test source changed; full seven state/browser tests repeated",
+  "compilation": "PASSED actual Vite CSS/module loading in browser; TypeScript NOT_RUN for CSS-only change",
+  "production": "NOT_READY / NOT_RUN",
+  "indexes": "DEGRADED; bounded current source and scoped hash comparison",
+  "usage": "Unavailable",
+  "cost": "Unavailable",
+  "memory_candidates": "None",
+  "actual_shared_app": {
+    "status": "NOT_VERIFIED",
+    "summary": "Current demo login/path check did not render dashboard within timeout; no service changes made. Fixture visual checks passed."
+  }
+}

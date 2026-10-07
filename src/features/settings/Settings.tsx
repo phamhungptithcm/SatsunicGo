@@ -1,3 +1,6 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { policyDateLabel, policyVersionLabel } from "./policy-display099";
+import "./admin-workbench096.css";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
 import { CrmHeading, CrmIcon, CrmState } from "../crm/CrmPresentation";
@@ -132,117 +135,168 @@ export function Settings() {
     }
   }
   return (
-    <section>
+    <section className="admin096">
       <CrmHeading
-        title="Cấu hình"
+        title="Tỷ giá & điều khoản"
         description="Điều khoản và tỷ giá áp dụng cho báo giá mới."
       />
       {ready && (
         <p className="notice">
           {policy
-            ? `Phiên bản ${policy.version} · ${policy.approved ? "Đã phê duyệt" : "Chưa phê duyệt"} · ${new Date(policy.effectiveFrom).toLocaleString("vi-VN")} → ${new Date(policy.expiresAt).toLocaleString("vi-VN")}`
+            ? `${policyVersionLabel(policy.version)} · ${policy.approved ? "Đã phê duyệt" : "Chưa phê duyệt"} · ${policyDateLabel(policy.effectiveFrom)} → ${policyDateLabel(policy.expiresAt)}`
             : "Chưa có chính sách."}
         </p>
       )}
-      <details className="panel crmPolicy">
-        <summary>Chính sách tỷ giá và điều khoản</summary>
-        <p>
-          Chỉ chủ doanh nghiệp phê duyệt chính sách. Tỷ lệ quy đổi tính trên đơn
-          vị tiền nguồn nhỏ nhất; không điền giá thử vào cấu hình thương mại.
-        </p>
-        {reading && <CrmState kind="loading" title="Đang tải chính sách…" />}
-        <form
-          key={policy?.version ?? "new"}
-          className="form"
-          onSubmit={(e) => void save(e)}
-        >
-          <fieldset
-            className="form"
+      <div className="adminLayout">
+        <details open className="panel crmPolicy">
+          <summary>Chính sách tỷ giá và điều khoản</summary>
+          <p>
+            Chỉ chủ doanh nghiệp phê duyệt chính sách. Tỷ lệ quy đổi tính trên
+            đơn vị tiền nguồn nhỏ nhất; không điền giá thử vào cấu hình thương
+            mại.
+          </p>
+          {reading && <CrmState kind="loading" title="Đang tải chính sách…" />}
+          <StepForm
+            steps={["Điều khoản", "Tỷ giá", "Hiệu lực", "Kiểm tra"]}
             disabled={!ready || busy || reading || uncertain}
+            key={policy?.version ?? "new"}
+            className="form"
+            onSubmit={(e) => void save(e)}
           >
-            <label>
-              Phiên bản điều khoản
-              <input
-                name="terms"
-                required
-                maxLength={80}
-                defaultValue={policy?.termsVersion}
-              />
-            </label>
-            {["USD", "JPY", "KRW"].map((c) => (
-              <fieldset className="crmRateFields" key={c}>
-                <legend>{c} · VND cho đơn vị nhỏ nhất</legend>
-                <label>
-                  Tử số
-                  <input
-                    name={`${c}-num`}
-                    type="number"
-                    min={1}
-                    max={1000000000}
-                    required
-                    defaultValue={policy?.rates[c]?.numerator}
-                  />
-                </label>
-                <label>
-                  Mẫu số
-                  <input
-                    name={`${c}-den`}
-                    type="number"
-                    min={1}
-                    max={1000000000}
-                    required
-                    defaultValue={policy?.rates[c]?.denominator}
-                  />
-                </label>
-              </fieldset>
-            ))}
-            <label>
-              Áp dụng từ · giờ trên thiết bị
-              <input
-                name="from"
-                type="datetime-local"
-                required
-                defaultValue={localTime(policy?.effectiveFrom)}
-              />
-            </label>
-            <label>
-              Hết hạn · giờ trên thiết bị
-              <input
-                name="until"
-                type="datetime-local"
-                required
-                defaultValue={localTime(policy?.expiresAt)}
-              />
-            </label>
-            <label>
-              <input
-                name="approved"
-                type="checkbox"
-                defaultChecked={policy?.approved}
-              />{" "}
-              Đã duyệt điều khoản và tỷ giá thương mại
-            </label>
-            <button
-              className="primary"
+            <fieldset
+              className="form"
               disabled={!ready || busy || reading || uncertain}
             >
-              {busy ? "Đang lưu…" : "Lưu chính sách"}
-            </button>
-          </fieldset>
-        </form>
-        {error && (
-          <CrmState kind="error" title={error}>
-            <button
-              type="button"
-              disabled={busy || reading || uncertain}
-              onClick={() => void load()}
-            >
-              <CrmIcon name="refresh" /> Tải lại chính sách
-            </button>
-          </CrmState>
-        )}
-        {message && <p role="status">{message}</p>}
-      </details>
+              <StepStage index={0}>
+                <label>
+                  <span className="formLabelText">
+                    Phiên bản điều khoản{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="terms"
+                    required
+                    maxLength={80}
+                    defaultValue={policy?.termsVersion}
+                  />
+                </label>
+              </StepStage>
+              <StepStage index={1}>
+                {["USD", "JPY", "KRW"].map((c) => (
+                  <fieldset className="crmRateFields adminRateRow" key={c}>
+                    <legend>{c} · VND cho đơn vị nhỏ nhất</legend>
+                    <label>
+                      <span className="formLabelText">
+                        Tử số{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input
+                        name={`${c}-num`}
+                        type="number"
+                        min={1}
+                        max={1000000000}
+                        required
+                        defaultValue={policy?.rates[c]?.numerator}
+                      />
+                    </label>
+                    <label>
+                      <span className="formLabelText">
+                        Mẫu số{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
+                        </span>
+                      </span>
+                      <input
+                        name={`${c}-den`}
+                        type="number"
+                        min={1}
+                        max={1000000000}
+                        required
+                        defaultValue={policy?.rates[c]?.denominator}
+                      />
+                    </label>
+                  </fieldset>
+                ))}
+              </StepStage>
+              <StepStage index={2}>
+                <label>
+                  <span className="formLabelText">
+                    Áp dụng từ · giờ trên thiết bị{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="from"
+                    type="datetime-local"
+                    required
+                    defaultValue={localTime(policy?.effectiveFrom)}
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Hết hạn · giờ trên thiết bị{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name="until"
+                    type="datetime-local"
+                    required
+                    defaultValue={localTime(policy?.expiresAt)}
+                  />
+                </label>
+              </StepStage>
+              <StepStage index={3}>
+                <label>
+                  <input
+                    name="approved"
+                    type="checkbox"
+                    defaultChecked={policy?.approved}
+                  />{" "}
+                  Đã duyệt điều khoản và tỷ giá thương mại
+                </label>
+                <button
+                  className="primary"
+                  disabled={!ready || busy || reading || uncertain}
+                >
+                  {busy ? "Đang lưu…" : "Lưu chính sách"}
+                </button>
+              </StepStage>
+            </fieldset>
+          </StepForm>
+          {error && (
+            <CrmState kind="error" title={error}>
+              <button
+                type="button"
+                disabled={busy || reading || uncertain}
+                onClick={() => void load()}
+              >
+                <CrmIcon name="refresh" /> Tải lại chính sách
+              </button>
+            </CrmState>
+          )}
+          {message && <p role="status">{message}</p>}
+        </details>
+        <aside
+          className="panel adminGuide"
+          aria-label="Phạm vi áp dụng chính sách"
+        >
+          <h2>Áp dụng cho báo giá mới</h2>
+          <p>
+            Báo giá đã chấp nhận giữ nguyên tỷ giá và điều khoản tại thời điểm
+            chấp nhận.
+          </p>
+          <p className="muted">
+            Thời gian bắt đầu và hết hạn hiển thị theo giờ trên thiết bị.
+          </p>
+        </aside>
+      </div>
       {uncertain && (
         <button
           className="primary"

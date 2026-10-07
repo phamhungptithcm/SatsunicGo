@@ -1,0 +1,15 @@
+# CONTENT-EDITOR092 task report
+
+Status: IN_PROGRESS / final review BLOCKED cycle2. Implementation approved and local source written. Not a successful handoff or release.
+
+Completed source: primary full-width product list/search/status/category/loadedcounts; selected/filteredloaded/all export scopes; separate reference/selling prices; grouped editor preserving old fields/posts, new slug suggestion/manual protection, validation summary/focus, new-form reset, unsaved link/unload checks, draft/content preview. Excel/CSV template/mapping/preview/caps/duplicate/current-version validation and normal audited per-row saves with stable receipts, bounded sequential writes, one paginated committed readback, retry/cancel/result CSV. Vietnamese labels, scoped focus/mobile cards/reduced motion. Reused product information/media/review components preserved.
+
+Actual evidence:43 tests pass across4 files, current TypeScript and scoped lint pass. Downloaded real template workbook verified31 headers and Vietnamese instruction sheet. Prior build passes; dynamic ExcelJS payload measured256.44KB gzip. Candidate source hashes CANDIDATE.json. npm audit23 other dependency advisories, none ExcelJS identified.
+
+Remaining acceptance: source-matched native template→parse→preview→authorized draft save→export→roundtrip; actual partial/conflict/offline/error/cancel UI; keyboard/Escape/focus;390/768/1440 final responsive screenshots; all8 product principles and fresh passing final review. Final build/source freeze must follow those fixes. No production write, deploy,commit or push for092.
+
+Blocking evidence: shared5207 frontend unavailable; Auth19207,Functions15207,Storage19208 unavailable while Firestore18207 alive. Automatic review rejected frontend restart because shared runtime coordination not established. Human backup/recovery approval requested. Preserve current data and other WIP. A separate cross-chat coordination message also rejected for unverified messaging authority; human permission requested. No rejected action bypassed.
+
+Review cycles:1 found scoped defects, corrected and executably verified (REVIEW-CYCLE-1.json);2 current checks pass but native/product acceptance blocked (FINAL-REVIEW.json). Runtime CLI unavailable/manual evidence retained. Production readiness NOT_READY. Git dirty with unrelated parallel work; only092-owned source/Excel dependency edited. Intelligence DEGRADED and READY-only helper mismatch disclosed. Token usage and actual/API-equivalent cost Unavailable. Memory candidates None.
+
+Runtime recovery update: explicit human approval received; preserved available disk export and recovered demo suite using repositoryCLI15.32.1/installedJDK24/bundledNode24. Normal demo OWNER login and listWork observed. CRM095 newer22:38 snapshot retained; data equivalence NOT_VERIFIED. Current ContentEditor concurrently changed toStepForm by another task;390px narrow-layout finding pending owning-task coordination. Latestreviewcycle3BLOCKED, currentTS passed, full nativeExcelacceptance pending. No production writes/deploy. Token usage/cost unavailable; memory candidatesNone.

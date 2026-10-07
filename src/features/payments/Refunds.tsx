@@ -1,3 +1,5 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { WorkbenchComposer095 } from "../crm/FinanceContent095";
 import {
   CrmIcon,
   CrmHeading,
@@ -16,6 +18,7 @@ export type Refund = {
   state: string;
 };
 export function Refunds() {
+  const [creating, setCreating] = useState(false);
   const [rows, setRows] = useState<Refund[]>([]),
     [next, setNext] = useState<string | null>(null),
     [busy, setBusy] = useState(false),
@@ -93,6 +96,7 @@ export function Refunds() {
       pending.current = null;
       if (context !== reading.current) return;
       setRequestUncertain(false);
+      setCreating(false);
       await load(null);
     } catch (e) {
       if (context !== reading.current) return;
@@ -112,50 +116,105 @@ export function Refunds() {
   }
 
   return (
-    <section>
+    <section className="fc095 fc095Refunds">
       <CrmHeading
-        title="Yêu cầu & xác nhận hoàn tiền"
+        title="Hoàn tiền"
+        description="Tạo yêu cầu và đối chiếu giao dịch hoàn tiền theo đơn."
         actions={
-          <button disabled={busy} onClick={() => void load()}>
-            <CrmIcon name="refresh" /> Tải lại
-          </button>
+          <>
+            <button
+              disabled={busy || requestUncertain}
+              onClick={() => void load()}
+            >
+              <CrmIcon name="refresh" /> Tải lại
+            </button>
+            <button
+              className="primary"
+              disabled={busy || requestUncertain}
+              onClick={() => setCreating(true)}
+            >
+              <CrmIcon name="document" /> Tạo yêu cầu hoàn tiền
+            </button>
+          </>
         }
       />
-      <p className="muted">
+      <p className="fc095Notice">
         Yêu cầu chỉ dành trước số tiền có thể hoàn. Chỉ xác nhận sau khi đã đối
         chiếu giao dịch tiền ra thực tế; không tự chuyển tiền.
       </p>
-      <details className="crmItemDetails">
-        <summary>Tạo yêu cầu hoàn tiền</summary>
-        <form className="form" onSubmit={(e) => void request(e)}>
+      <WorkbenchComposer095
+        open={creating}
+        title="Yêu cầu hoàn tiền mới"
+        locked={busy || requestUncertain}
+        onClose={() => setCreating(false)}
+      >
+        <StepForm
+          steps={["Đơn & số tiền", "Lý do", "Kiểm tra"]}
+          disabled={busy || requestUncertain}
+          className="form"
+          onSubmit={(e) => void request(e)}
+        >
           <fieldset className="form" disabled={busy || requestUncertain}>
-            <label>
-              Mã đơn
-              <input name="orderId" maxLength={80} required />
-            </label>
-            <label>
-              Số tiền (₫)
-              <input
-                name="amount"
-                type="number"
-                min={1}
-                max={1000000000000}
-                required
-              />
-            </label>
-            <label>
-              Lý do
-              <textarea name="reason" minLength={5} maxLength={500} required />
-            </label>
-            <button disabled={busy}>Tạo yêu cầu, chưa xác nhận tiền ra</button>
+            <StepStage index={0}>
+              <label>
+                <span className="formLabelText">
+                  Mã đơn{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="orderId" maxLength={80} required />
+              </label>
+              <label>
+                <span className="formLabelText">
+                  Số tiền cần hoàn (₫){" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input
+                  name="amount"
+                  type="number"
+                  min={1}
+                  step={1}
+                  max={1000000000000}
+                  required
+                />
+              </label>
+            </StepStage>
+            <StepStage index={1}>
+              <label>
+                <span className="formLabelText">
+                  Lý do{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <textarea
+                  name="reason"
+                  minLength={5}
+                  maxLength={500}
+                  required
+                />
+              </label>
+            </StepStage>
+            <StepStage index={2}>
+              <button className="primary" disabled={busy}>
+                Tạo yêu cầu hoàn tiền
+              </button>
+            </StepStage>
           </fieldset>
           {requestUncertain && (
             <button type="submit" disabled={busy}>
               {busy ? "Đang kiểm tra…" : "Thử lại yêu cầu đã gửi"}
             </button>
           )}
-        </form>
-      </details>
+        </StepForm>
+      </WorkbenchComposer095>
+      <div className="fc095SectionHead">
+        <h2>Yêu cầu hoàn tiền</h2>
+        <span className="muted">Danh sách theo trang</span>
+      </div>
       {busy && <CrmState kind="loading" title="Đang tải / lưu…" />}
       {error && <CrmState kind="error" title={error} />}
       <div className="crmList">
@@ -225,12 +284,22 @@ export function RefundDecisionFields({ action }: { action: string }) {
     <>
       {action === "confirm" && (
         <label>
-          Mã giao dịch ngân hàng
+          <span className="formLabelText">
+            Mã giao dịch ngân hàng{" "}
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
+          </span>
           <input name="bank" minLength={4} maxLength={120} required />
         </label>
       )}
       <label>
-        {action === "cancel" ? "Lý do hủy" : "Bằng chứng đối soát"}
+        <span className="formLabelText">
+          {action === "cancel" ? "Lý do hủy" : "Bằng chứng đối soát"}{" "}
+          <span className="requiredMark" aria-hidden="true">
+            *
+          </span>
+        </span>
         <textarea name="evidence" minLength={5} maxLength={500} required />
       </label>
     </>
@@ -357,29 +426,41 @@ function RefundForm({
           <summary>
             <CrmIcon name="check" /> Xử lý yêu cầu
           </summary>
-          <form className="form" onSubmit={(e) => void submit(e)}>
+          <StepForm
+            steps={["Quyết định", "Giao dịch & bằng chứng", "Kiểm tra"]}
+            disabled={busy || uncertain}
+            resetKey={action}
+            className="form"
+            onSubmit={(e) => void submit(e)}
+          >
             <fieldset className="form" disabled={busy || uncertain}>
-              <label>
-                Thao tác
-                <select
-                  name="action"
-                  value={action}
-                  onChange={(e) => setAction(e.target.value)}
-                >
-                  <option value="confirm">Xác nhận giao dịch tiền ra</option>
-                  <option value="cancel">
-                    Hủy yêu cầu, giải phóng tiền đã dành
-                  </option>
-                </select>
-              </label>
-              <RefundDecisionFields action={action} />
-              <button className="primary" disabled={busy}>
-                {busy
-                  ? "Đang xử lý…"
-                  : action === "cancel"
-                    ? "Hủy yêu cầu hoàn tiền"
-                    : "Xác nhận tiền đã hoàn"}
-              </button>
+              <StepStage index={0}>
+                <label>
+                  Thao tác
+                  <select
+                    name="action"
+                    value={action}
+                    onChange={(e) => setAction(e.target.value)}
+                  >
+                    <option value="confirm">Xác nhận giao dịch tiền ra</option>
+                    <option value="cancel">
+                      Hủy yêu cầu, giải phóng tiền đã dành
+                    </option>
+                  </select>
+                </label>
+              </StepStage>
+              <StepStage index={1}>
+                <RefundDecisionFields action={action} />
+              </StepStage>
+              <StepStage index={2}>
+                <button className="primary" disabled={busy}>
+                  {busy
+                    ? "Đang xử lý…"
+                    : action === "cancel"
+                      ? "Hủy yêu cầu hoàn tiền"
+                      : "Xác nhận tiền đã hoàn"}
+                </button>
+              </StepStage>
             </fieldset>
             {uncertain && (
               <button
@@ -391,7 +472,7 @@ function RefundForm({
                 {busy ? "Đang kiểm tra…" : "Thử lại quyết định đã gửi"}
               </button>
             )}
-          </form>
+          </StepForm>
         </details>
       )}
       {error && <CrmState kind="error" title={error} />}

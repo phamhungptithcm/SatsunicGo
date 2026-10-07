@@ -1,0 +1,73 @@
+.loginChallenge {
+  width: min(400px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 28px;
+  border: 1px solid #e2e7f1;
+  border-radius: 20px;
+  color: #111c35;
+  background: #fff;
+  box-shadow: 0 24px 80px #111c3526;
+}
+.loginChallenge::backdrop {
+  background: #111c3573;
+}
+.loginChallenge h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 1.25;
+}
+.loginChallenge p {
+  margin: 0 0 22px;
+  color: #66758e;
+  font-size: 14px;
+}
+.loginChallenge label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.loginChallenge input {
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #dce3ef;
+  border-radius: 12px;
+  color: #111c35;
+  font-family: inherit;
+  text-align: center;
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.35em;
+  min-height: 60px;
+}
+.loginChallenge select {
+  margin-bottom: 16px;
+}
+.loginChallenge .loginChallengeError {
+  margin: 12px 0 0;
+  color: #b42318;
+}
+.loginChallengeActions {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  margin-top: 24px;
+}
+.loginChallengeActions button {
+  min-height: 44px;
+  padding: 10px 20px;
+}
+.loginChallenge :focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .loginChallenge {
+    padding: 22px;
+  }
+  .loginChallengeActions button {
+    flex: 1;
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "kind": "LOCAL_SYNTHETIC_PROJECTION",
+  "final_captures": {
+    "/private/tmp/crm095/follow-ups-390.png": {
+      "sha256": "10e7e9da3e21dce210ab873b93d97cdc03f1e2b5fff2f76d19b90701ca39376a",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-390.png": {
+      "sha256": "5c5465db6375121ab276cd8a8d5765ebd2fad1c18d129869581db4417c1a6e36",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/customers-320.png": {
+      "sha256": "5827dac3a56aa9f9d3d03c5af11869d29502475565ecf55a5c2fbd1bdbec7fcd",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-target-empty.png": {
+      "sha256": "a96248c659f491e86b96c38def09bee88c6883baad10ac5ad756eb3d6a7fe319",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/customers-720.png": {
+      "sha256": "58dc23ab38e1ef88577af13e32ce84dfb751f419c37661ea7d7152a3a627613a",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-empty.png": {
+      "sha256": "bbe8002597e6581bafc271f2202a9992e7c7df9824cfdaa8b227470c20b39996",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/follow-ups-720.png": {
+      "sha256": "e489b44024c31d35a5c9aa6e4a9ef26844df0295f6dff595805ee523daa3ef6a",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/follow-ups-1440.png": {
+      "sha256": "7d020059c6d394c656fb21ab64adb6a1cfe34d1072ef76d6164e6817f2db4ebe",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-720.png": {
+      "sha256": "0e947157b5107d9828abadd58581596ab4e71bf505b9de04e7a03cae85b73a5c",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/customers-390.png": {
+      "sha256": "b450bd9548b1a3772dcc1adfa25654f2bdbd60833f100e11ef561bb234d1126c",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-320.png": {
+      "sha256": "be2fea312ca0a63d72e020e7c69261915d01dc954e59138be8da5491fd1f2294",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/follow-ups-320.png": {
+      "sha256": "5eb92268e63ca28f619a19cb9bef860c65b26adf601644bb7916491ba5e9f13c",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-1440.png": {
+      "sha256": "7df913d8eb393a122fec7bc859d61ff0c081ffeda54df32b98640a7376bd3045",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/customers-empty.png": {
+      "sha256": "d31bc7b00a63ce6381a52a453bb8d283d49d361456e60a1d9258314d865f8b89",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-uncertain.png": {
+      "sha256": "5f4f10ee256090c7200d651d42da4bcd89727a567828a9830c9a318a5bc99075",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/support-error.png": {
+      "sha256": "9fac5cce16aa5e8a8f63f88efc37fbaaee9e09ef2fa3559c1224a75482138dc3",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/care-empty.png": {
+      "sha256": "5a80ae2d30b5ca9e701b89a03e241a2eaaddce128cfa8722d41fce6da6afb6d1",
+      "candidate": "CANDIDATE.json"
+    },
+    "/private/tmp/crm095/customers-1440.png": {
+      "sha256": "414ad47c470c2d6ab0536725d6b7138933276914d8f40130d4f35e413b77146c",
+      "candidate": "CANDIDATE.json"
+    }
+  }
+}

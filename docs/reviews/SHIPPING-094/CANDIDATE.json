@@ -1,0 +1,45 @@
+{
+  "head": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "businessFunctions": [
+    {
+      "file": "src/features/shipping/Shipping.tsx",
+      "unchangedFunctions": [
+        "parcelDecision",
+        "noteAuthority",
+        "beginRead",
+        "endRead",
+        "acquire",
+        "release",
+        "load",
+        "pageQueue",
+        "refresh",
+        "addOrder",
+        "readResult",
+        "reconcileRecords",
+        "submit",
+        "execute"
+      ]
+    },
+    {
+      "file": "src/features/shipping/Consolidation.tsx",
+      "unchangedFunctions": [
+        "consolidationSelection",
+        "noteAuthority",
+        "load",
+        "pageQueue",
+        "refresh",
+        "selectParcel",
+        "readResult",
+        "reconcileRecords",
+        "submit",
+        "execute"
+      ]
+    }
+  ],
+  "sha256": {
+    "src/features/shipping/Shipping.tsx": "b6e5c435e6ae85f3475b9e4d5fe74d85123d151fd9c020dad158aa1cfee2f7ce",
+    "src/features/shipping/Consolidation.tsx": "8f0a8e76eb03b2f2f7a234dae6c2fdad005b2879bfe5987117a4ed6241a490ef",
+    "src/features/shipping/shipping-workbench.css": "85a0251fb9c0a3a6a98605685ce8c20087d0fdf6f873abe89154ea01475e4b38",
+    "tests/browser/shipping094.spec.ts": "3d88935a4ab43fb90f8797ea37fd04b5edb40d222bdcf24303748f8a77f3a39a"
+  }
+}

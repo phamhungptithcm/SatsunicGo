@@ -247,7 +247,12 @@ export function Profile({ user }: { user: User | null }) {
               disabled={busy || !visible.profileReady || visible.locked}
             >
               <label>
-                Tên hiển thị
+                <span className="formLabelText">
+                  Tên hiển thị{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
                 <input
                   name="displayName"
                   autoComplete="name"
@@ -260,7 +265,7 @@ export function Profile({ user }: { user: User | null }) {
                 />
               </label>
               <label>
-                Tên hộ kinh doanh <span>Không bắt buộc</span>
+                Tên hộ kinh doanh
                 <input
                   name="businessName"
                   autoComplete="organization"
@@ -360,7 +365,12 @@ export function Profile({ user }: { user: User | null }) {
               >
                 <div className="profileFieldsRow">
                   <label>
-                    Người nhận
+                    <span className="formLabelText">
+                      Người nhận{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <input
                       name="recipient"
                       autoComplete="shipping name"
@@ -370,7 +380,12 @@ export function Profile({ user }: { user: User | null }) {
                     />
                   </label>
                   <label>
-                    Số điện thoại
+                    <span className="formLabelText">
+                      Số điện thoại{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <input
                       name="phone"
                       type="tel"
@@ -382,7 +397,12 @@ export function Profile({ user }: { user: User | null }) {
                   </label>
                 </div>
                 <label>
-                  Địa chỉ
+                  <span className="formLabelText">
+                    Địa chỉ{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <textarea
                     name="address"
                     autoComplete="shipping street-address"

@@ -1,0 +1,43 @@
+[
+  {
+    "cycle": 1,
+    "status": "CHANGES_REQUESTED",
+    "findings": [
+      {
+        "severity": "medium",
+        "finding": "CSS extraction left card-body and reduced-motion selectors incorrect",
+        "fix": "Scoped selectors and corrected card-body; actual mobile browser verified"
+      },
+      {
+        "severity": "medium",
+        "finding": "Missing backend retry could create endless checking",
+        "fix": "Disable unavailable retry; source/unit verification"
+      },
+      {
+        "severity": "medium",
+        "finding": "Sign-out while access check pending could retain loading",
+        "fix": "Reset access/error/loading when user/db absent; only show checking for user; final compiler/unit/browser rerun"
+      }
+    ],
+    "test_harness_fixes": [
+      "Vite preamble/import React optimizer identity",
+      "UTF-8 fixture charset"
+    ],
+    "remaining_findings": []
+  },
+  {
+    "cycle": 2,
+    "status": "PASSED",
+    "findings": [],
+    "evidence": [
+      "CANDIDATE.json",
+      "PRODUCT_CONTENT_REVIEW.md",
+      "14 unit tests",
+      "2 browser tests",
+      "TypeScript",
+      "ESLint",
+      "Prettier",
+      "git diff --check"
+    ]
+  }
+]

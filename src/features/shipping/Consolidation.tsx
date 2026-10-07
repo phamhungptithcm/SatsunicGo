@@ -1,3 +1,4 @@
+import { ShippingStepForm } from "./ShippingStepForm";
 import { LoadingState } from "../../shared/Loading";
 import { CrmIcon, CrmReference, CrmState } from "../crm/CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -84,6 +85,7 @@ export function Consolidation({
   const pending = useRef<Record<string, unknown> | null>(null);
   const submittedForm = useRef<HTMLFormElement | null>(null);
   const needsFinalReview = useRef(false);
+  const createForm = useRef<HTMLDetailsElement | null>(null);
   const root = useRef<HTMLElement | null>(null);
   const formIntent = useFormIntent(root);
   const resultTarget = useRef<HTMLDivElement | null>(null);
@@ -477,7 +479,7 @@ export function Consolidation({
   );
   if (authorityDenied)
     return (
-      <section ref={root} className="workbench">
+      <section ref={root} className="workbench shippingConsolidation">
         <p role="alert">
           Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền.
         </p>
@@ -490,27 +492,41 @@ export function Consolidation({
       </section>
     );
   return (
-    <section ref={root} className="workbench">
-      <h2 className="crmSectionHeading">
-        <CrmIcon name="box" /> Gom kiện và phân bổ cước
-      </h2>
-      <p className="muted">
-        Mỗi trang hiển thị tối đa 30 bản ghi. Mỗi lô phải gồm toàn bộ kiện của
-        các đơn tham gia, cùng kho và tuyến. Chốt lô chưa ghi nhận thu tiền.
-      </p>
-      <div className="crmActions">
-        <button
-          disabled={
-            lock.blocked ||
-            busy ||
-            loading ||
-            parcelQueue.loading ||
-            batchQueue.loading
-          }
-          onClick={() => void refresh()}
-        >
-          <CrmIcon name="refresh" /> Tải lại lô gom
-        </button>
+    <section ref={root} className="workbench shippingConsolidation">
+      <div className="shippingToolbar">
+        <div>
+          <h2>Lô gom & cước</h2>
+          <p>Gom kiện cùng kho và tuyến, phân bổ cước rồi bàn giao theo lô.</p>
+        </div>
+        <div className="crmActions">
+          <button
+            disabled={
+              lock.blocked ||
+              busy ||
+              loading ||
+              parcelQueue.loading ||
+              batchQueue.loading
+            }
+            onClick={() => void refresh()}
+          >
+            <CrmIcon name="refresh" /> Tải lại lô gom
+          </button>
+          <button
+            className="primary"
+            data-shipping-create
+            disabled={lock.blocked || busy || loading || uncertain}
+            onClick={() => {
+              if (createForm.current) {
+                createForm.current.open = true;
+                createForm.current
+                  .querySelector<HTMLElement>("summary")
+                  ?.focus();
+              }
+            }}
+          >
+            <CrmIcon name="box" /> Tạo lô gom
+          </button>
+        </div>
       </div>
       {loading && <CrmState kind="loading" title="Đang tải lô gom…" />}
       {loadError && (
@@ -537,31 +553,134 @@ export function Consolidation({
         </CrmState>
       )}
       {!loading && !loadError && !batches.length && (
-        <CrmState kind="empty" title="Chưa có lô gom trong phạm vi đang xem" />
+        <div className="shippingEmpty">
+          <CrmIcon name="box" />
+          <h3>Chưa có lô gom trong trang này</h3>
+          <p>
+            Tạo lô gom từ các kiện đã đóng gói để phân bổ cước và bàn giao cùng
+            nhau.
+          </p>
+        </div>
       )}
-      <details className="crmItemDetails" name="crm-shipping-actions">
+      <details
+        ref={createForm}
+        onToggle={(event) => {
+          const details = event.currentTarget;
+          if (
+            !details.open &&
+            document.activeElement === details.querySelector("summary")
+          )
+            root.current
+              ?.querySelector<HTMLButtonElement>("button[data-shipping-create]")
+              ?.focus();
+        }}
+        className="crmItemDetails shippingCreate"
+        name="crm-shipping-actions"
+      >
         <summary>
           <CrmIcon name="box" /> Tạo lô gom
+          <span className="shippingCollapse">Thu gọn</span>
         </summary>
-        <form
-          className="form panel"
+        <ShippingStepForm
+          steps={["Chọn kiện", "Phân bổ", "Cước & dịch vụ", "Kiểm tra"]}
+          className="form panel shippingStepForm"
           data-intent="seal"
+          disabled={
+            lock.blocked ||
+            busy ||
+            loading ||
+            uncertain ||
+            parcelQueue.loading ||
+            batchQueue.loading
+          }
+          navigationBlocked={reconcile || unavailable}
           onChange={(e) => formIntent.capture(e.currentTarget)}
           onSubmit={(e) => void submit(e)}
-        >
-          <fieldset
-            style={{ minWidth: 0 }}
-            className="form"
-            disabled={
-              lock.blocked ||
-              busy ||
-              loading ||
-              uncertain ||
-              parcelQueue.loading ||
-              batchQueue.loading
+          validateStep={(step, form) => {
+            if (
+              step === 0 &&
+              (!selected.length ||
+                !selectedOrderIds.length ||
+                invalidSelection ||
+                missingOrders)
+            )
+              return "Chọn kiện đủ điều kiện và tải đủ các đơn liên quan.";
+            if (step === 1) {
+              const data = new FormData(form);
+              const total = selectedOrderIds.reduce(
+                (sum, id) => sum + Number(data.get(`weight:${id}`)),
+                0,
+              );
+              if (total !== weightGrams)
+                return "Tổng khối lượng phân bổ phải bằng tổng khối lượng kiện đã chọn.";
             }
-          >
-            <div className="crmActions" aria-label="Trang kiện gom lô">
+            return null;
+          }}
+          review={(data) => (
+            <dl>
+              <div>
+                <dt>Kiện và đơn đã chọn</dt>
+                <dd>
+                  {selected.length} kiện · {selectedOrderIds.length} đơn
+                </dd>
+              </div>
+              <div>
+                <dt>Khối lượng phân bổ</dt>
+                <dd>{weightGrams.toLocaleString("vi-VN")} g</dd>
+              </div>
+              <div>
+                <dt>Tổng cước quốc tế</dt>
+                <dd>{Number(data.get("freight")).toLocaleString("vi-VN")} ₫</dd>
+              </div>
+              <div>
+                <dt>Hub đích</dt>
+                <dd>{String(data.get("hub") ?? "")}</dd>
+              </div>
+              <div>
+                <dt>Dịch vụ vận chuyển</dt>
+                <dd>{String(data.get("service") ?? "")}</dd>
+              </div>
+              <div>
+                <dt>Hạn bàn giao</dt>
+                <dd>
+                  {new Date(String(data.get("cutoff"))).toLocaleString("vi-VN")}
+                </dd>
+              </div>
+            </dl>
+          )}
+          finalAction={
+            <button
+              className="primary"
+              disabled={
+                lock.blocked ||
+                busy ||
+                loading ||
+                parcelQueue.loading ||
+                batchQueue.loading ||
+                reconcile ||
+                uncertain ||
+                invalidSelection ||
+                unavailable ||
+                missingOrders ||
+                !selectedOrderIds.length
+              }
+            >
+              <CrmIcon name="check" /> Chốt lô và phân bổ cước
+            </button>
+          }
+        >
+          <div className="shippingFormSection">
+            <h3 tabIndex={-1}>
+              <span>1</span> Chọn kiện
+            </h3>
+            <p className="shippingHint">
+              Chọn toàn bộ kiện của các đơn tham gia. Các kiện phải cùng kho và
+              tuyến.
+            </p>
+            <div
+              className="crmActions shippingPagination"
+              aria-label="Trang kiện gom lô"
+            >
               <button
                 type="button"
                 disabled={parcelQueue.page === 1}
@@ -580,26 +699,32 @@ export function Consolidation({
                 Trang kiện gom sau
               </button>
             </div>
-            {parcels
-              .filter((p) => p.state === "packed" && !p.batchId)
-              .map((p) => (
-                <label key={p.id}>
-                  <input
-                    type="checkbox"
-                    name="parcel"
-                    value={p.id}
-                    checked={
-                      pendingChoice?.id === p.id
-                        ? pendingChoice.checked
-                        : selected.includes(p.id)
-                    }
-                    onChange={(e) => void selectParcel(p, e.target.checked)}
-                  />
-                  <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    {p.id} · {p.weightGrams} g · {p.route}
-                  </span>
-                </label>
-              ))}
+            <div
+              className="shippingSelectionList"
+              role="group"
+              aria-label="Kiện đủ điều kiện gom lô"
+            >
+              {parcels
+                .filter((p) => p.state === "packed" && !p.batchId)
+                .map((p) => (
+                  <label key={p.id}>
+                    <input
+                      type="checkbox"
+                      name="parcel"
+                      value={p.id}
+                      checked={
+                        pendingChoice?.id === p.id
+                          ? pendingChoice.checked
+                          : selected.includes(p.id)
+                      }
+                      onChange={(e) => void selectParcel(p, e.target.checked)}
+                    />
+                    <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                      {p.id} · {p.weightGrams} g · {p.route}
+                    </span>
+                  </label>
+                ))}
+            </div>
             <p className="muted">
               Đã chọn {selected.length}/20 kiện · {selectedOrderIds.length}/10
               đơn
@@ -625,11 +750,21 @@ export function Consolidation({
                 </button>
               </div>
             ))}
+          </div>
+          <div className="shippingFormSection">
+            <h3 tabIndex={-1}>
+              <span>2</span> Phân bổ khối lượng
+            </h3>
             {(unavailable ? [] : orders)
               .filter((o) => selectedOrderIds.includes(o.id))
               .map((o) => (
                 <label key={o.id}>
-                  Khối lượng phân bổ cho đơn {o.id} (g)
+                  <span className="formLabelText">
+                    Khối lượng phân bổ cho đơn {o.id} (g){" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <input
                     name={`weight:${o.id}`}
                     type="number"
@@ -659,42 +794,60 @@ export function Consolidation({
               {weightGrams.toLocaleString("vi-VN")} g. Khối lượng phân bổ phải
               bằng tổng này.
             </p>
-            <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-              Tổng cước quốc tế (₫)
-              <input name="freight" type="number" min={0} step={1} required />
-            </label>
-            <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-              Hub đích
-              <input name="hub" minLength={2} required />
-            </label>
-            <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-              Dịch vụ vận chuyển
-              <input name="service" minLength={2} required />
-            </label>
-            <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-              Hạn bàn giao theo giờ địa phương
-              <input name="cutoff" type="datetime-local" required />
-            </label>
-            <button
-              className="primary"
-              disabled={
-                lock.blocked ||
-                busy ||
-                loading ||
-                parcelQueue.loading ||
-                batchQueue.loading ||
-                reconcile ||
-                uncertain ||
-                invalidSelection ||
-                unavailable ||
-                missingOrders ||
-                !selectedOrderIds.length
-              }
-            >
-              <CrmIcon name="check" /> Chốt lô và phân bổ cước
-            </button>
-          </fieldset>
-        </form>
+          </div>
+          <div className="shippingFormSection">
+            <h3 tabIndex={-1}>
+              <span>3</span> Cước & dịch vụ
+            </h3>
+            <div className="shippingFieldGrid">
+              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                <span className="formLabelText">
+                  Tổng cước quốc tế (₫){" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="freight" type="number" min={0} step={1} required />
+              </label>
+              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                <span className="formLabelText">
+                  Hub đích{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="hub" minLength={2} required />
+              </label>
+              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                <span className="formLabelText">
+                  Dịch vụ vận chuyển{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="service" minLength={2} required />
+              </label>
+              <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
+                <span className="formLabelText">
+                  Hạn bàn giao theo giờ địa phương{" "}
+                  <span className="requiredMark" aria-hidden="true">
+                    *
+                  </span>
+                </span>
+                <input name="cutoff" type="datetime-local" required />
+              </label>
+            </div>
+          </div>
+          <div className="shippingFormSection">
+            <h3 tabIndex={-1}>
+              <span>4</span> Kiểm tra và chốt lô
+            </h3>
+            <p className="shippingHint">
+              Chốt lô chỉ phân bổ cước, chưa ghi nhận thu tiền. Tổng cuối của
+              đơn mua hộ cần được khách duyệt trước khi xuất gửi.
+            </p>
+          </div>
+        </ShippingStepForm>
       </details>
       {uncertain && (
         <div className="crmActions">
@@ -725,30 +878,6 @@ export function Consolidation({
           </button>
         </div>
       )}
-      <div className="crmActions" aria-label="Trang lô gom">
-        <button
-          disabled={
-            lock.blocked ||
-            loading ||
-            batchQueue.loading ||
-            batchQueue.page === 1
-          }
-          onClick={() => void pageQueue(batchQueue, "back")}
-        >
-          Trang lô trước
-        </button>
-        <span>
-          Trang {batchQueue.page} · {batches.length} lô
-        </span>
-        <button
-          disabled={
-            lock.blocked || loading || batchQueue.loading || !batchQueue.next
-          }
-          onClick={() => void pageQueue(batchQueue, "forward")}
-        >
-          Trang lô sau
-        </button>
-      </div>
       {resultId && (
         <div
           className="panel"
@@ -819,15 +948,30 @@ export function Consolidation({
                   }
                 >
                   <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Hãng vận chuyển
+                    <span className="formLabelText">
+                      Hãng vận chuyển{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <input name="carrier" minLength={2} required />
                   </label>
                   <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Mã vận đơn lô
+                    <span className="formLabelText">
+                      Mã vận đơn lô{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <input name="tracking" minLength={3} required />
                   </label>
                   <label style={{ minWidth: 0, overflowWrap: "anywhere" }}>
-                    Bằng chứng bàn giao
+                    <span className="formLabelText">
+                      Bằng chứng bàn giao{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
                     <textarea name="evidence" minLength={5} required />
                   </label>
                   <button
@@ -851,6 +995,35 @@ export function Consolidation({
           )}
         </article>
       ))}
+      {(batches.length > 0 || batchQueue.page > 1 || batchQueue.next) && (
+        <div
+          className="crmActions shippingPagination"
+          aria-label="Trang lô gom"
+        >
+          <button
+            disabled={
+              lock.blocked ||
+              loading ||
+              batchQueue.loading ||
+              batchQueue.page === 1
+            }
+            onClick={() => void pageQueue(batchQueue, "back")}
+          >
+            Trang lô trước
+          </button>
+          <span>
+            Trang {batchQueue.page} · {batches.length} lô trong trang
+          </span>
+          <button
+            disabled={
+              lock.blocked || loading || batchQueue.loading || !batchQueue.next
+            }
+            onClick={() => void pageQueue(batchQueue, "forward")}
+          >
+            Trang lô sau
+          </button>
+        </div>
+      )}
       {message && <p role="status">{message}</p>}
     </section>
   );

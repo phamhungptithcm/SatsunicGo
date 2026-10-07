@@ -1,3 +1,6 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import { OperationsEmpty } from "./OperationsPresentation";
+import "./operations-workbench.css";
 import {
   CrmHeading,
   CrmIcon,
@@ -70,7 +73,7 @@ export function Returns({ roles }: { roles: string[] }) {
     };
   }, []);
   return (
-    <section>
+    <section className="operations095 operationsReturns">
       <CrmHeading
         title="Nhận & kiểm tra hàng trả"
         actions={
@@ -98,7 +101,13 @@ export function Returns({ roles }: { roles: string[] }) {
         </CrmState>
       )}
       {!busy && !error && !rows.length && (
-        <CrmState kind="empty" title="Chưa có hàng trả trong trang này" />
+        <OperationsEmpty title="Chưa có hàng trả trong trang này">
+          Hồ sơ hàng trả xuất hiện tại đây khi đề xuất trả hàng đã được khách
+          duyệt.
+        </OperationsEmpty>
+      )}
+      {!busy && !error && rows.length > 0 && (
+        <p className="operationsCount">{rows.length} hồ sơ trong trang</p>
       )}
       {rows.map((r) => (
         <ReturnForm
@@ -167,7 +176,12 @@ export function ReturnActionFields({
             </select>
           </label>
           <label>
-            Số lượng
+            <span className="formLabelText">
+              Số lượng{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <input
               name="quantity"
               type="number"
@@ -309,7 +323,7 @@ function ReturnForm({
     await execute();
   }
   return (
-    <article className="panel order crmItem">
+    <article className="panel order crmItem operationsReturnCard">
       <div className="crmItemMain">
         <h2 className="crmItemTitle">
           <CrmIcon name="box" /> {returnCardTitle(row.lines)}
@@ -383,42 +397,65 @@ function ReturnForm({
           <summary>
             <CrmIcon name="check" /> Xử lý hàng trả
           </summary>
-          <form className="form" onSubmit={(e) => void submit(e)}>
+          <StepForm
+            steps={["Hàng trả", "Bằng chứng", "Kiểm tra"]}
+            disabled={busy || uncertain}
+            resetKey={action}
+            className="form operationsReturnForm"
+            onSubmit={(e) => void submit(e)}
+          >
             <fieldset className="form" disabled={busy || uncertain}>
-              <label>
-                Thao tác
-                <select
-                  name="action"
-                  value={action}
-                  onChange={(e) => setAction(e.target.value)}
-                >
-                  <option value="receive">Ghi nhận hàng đã nhận</option>
-                  <option value="inspect">Ghi kết quả kiểm tra</option>
-                  {canClose && (
-                    <option value="close">Hoàn tất kiểm tra toàn bộ</option>
-                  )}
-                </select>
-              </label>
-              <ReturnActionFields action={action} lines={row.lines} />
-              <label>
-                Bằng chứng nội bộ
-                <textarea
-                  name="evidence"
-                  minLength={5}
-                  maxLength={1000}
-                  required
-                />
-              </label>
-              <button className="primary" disabled={busy}>
-                <CrmIcon name="check" />{" "}
-                {busy
-                  ? "Đang lưu…"
-                  : action === "close"
-                    ? "Hoàn tất kiểm tra"
-                    : action === "inspect"
-                      ? "Lưu kết quả kiểm tra"
-                      : "Ghi nhận hàng đã nhận"}
-              </button>
+              <StepStage index={0}>
+                <label>
+                  Thao tác
+                  <select
+                    name="action"
+                    value={action}
+                    onChange={(e) => setAction(e.target.value)}
+                  >
+                    <option value="receive">Ghi nhận hàng đã nhận</option>
+                    <option value="inspect">Ghi kết quả kiểm tra</option>
+                    {canClose && (
+                      <option value="close">Hoàn tất kiểm tra toàn bộ</option>
+                    )}
+                  </select>
+                </label>
+                <ReturnActionFields action={action} lines={row.lines} />
+              </StepStage>
+              <StepStage index={1}>
+                <label>
+                  <span className="formLabelText">
+                    Bằng chứng nội bộ{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <textarea
+                    name="evidence"
+                    minLength={5}
+                    maxLength={1000}
+                    required
+                  />
+                </label>
+              </StepStage>
+              <StepStage index={2}>
+                {action === "close" && (
+                  <p className="notice">
+                    Hoàn tất kiểm tra không tự hoàn tiền hoặc gỡ tạm giữ đơn.
+                    Tài chính cần đối soát riêng.
+                  </p>
+                )}
+                <button className="primary" disabled={busy}>
+                  <CrmIcon name="check" />{" "}
+                  {busy
+                    ? "Đang lưu…"
+                    : action === "close"
+                      ? "Hoàn tất kiểm tra"
+                      : action === "inspect"
+                        ? "Lưu kết quả kiểm tra"
+                        : "Ghi nhận hàng đã nhận"}
+                </button>
+              </StepStage>
             </fieldset>
             {uncertain && (
               <button
@@ -430,7 +467,7 @@ function ReturnForm({
                 {busy ? "Đang kiểm tra…" : "Thử lại thao tác đã gửi"}
               </button>
             )}
-          </form>
+          </StepForm>
         </details>
       )}
       {error && <p role="alert">{error}</p>}

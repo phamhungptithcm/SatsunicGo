@@ -1,0 +1,15 @@
+{
+  "commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "shared_worktree": "dirty; hashes bind these current files, not other chats changes",
+  "hashes": {
+    "src/shared/PageTabs.tsx": "bc330c2a4c469dcedb045495bc5583fe84b950fccb677cc45596c9d2f2e50ce5",
+    "src/shared/page-tabs.css": "2dd190186eeabbdd987e93f9ee38776af7ff6dfb05beabfce6c55e4a16a8106e",
+    "src/features/membership/PlanEditor.tsx": "0b4ca7745b5da4e70ed542bfdc60d0ee1bafd03ca229496468c308163d4653db",
+    "src/features/crm/Activity.tsx": "926a4c99a43c28a7c6fcbdd47ba23ec3af395889db518e2be25e191572d6c1d7",
+    "src/features/payments/Finance.tsx": "2257488aaca53ba61e4156d46989e744499216aa45465394364f8f0b94157908",
+    "src/features/content/Campaigns.tsx": "03ea190680220b136c7588bcfa45783c8d78b7863fec61b141a988913f86efcb",
+    "src/features/shipping/Shipping.tsx": "35f391d8ec6ec55a698892d1d5c4fff2d188bb269e81a1e5e45965bb2b9364c7",
+    "src/features/settings/admin-workbench096.css": "543233ff0344ce0a0c4872e811525eaa0ca58087aa75e226ee533066fcabe26a",
+    "tests/unit/page-tabs.test.ts": "88c1163e98b8659e5fe725e4f3e771988ee90891f57d27c5933cd8929e0671de"
+  }
+}

@@ -1,0 +1,668 @@
+
+> satsunicgo@0.1.0 release:build
+> node scripts/release/check-public-config.mjs && npm run build && npm run build --workspace functions && node scripts/release/preflight.mjs --project satsunicgo
+
+{"scope":"LOCAL_PUBLIC_CONFIG_NOT_PROVIDER_ACCEPTANCE","ok":true,"codes":[]}
+
+> satsunicgo@0.1.0 build
+> tsc --noEmit && vite build && node scripts/public-assets.mjs
+
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 2547 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                           1.23 kB │ gzip:   0.57 kB
+dist/.vite/manifest.json                                 70.16 kB │ gzip:   6.93 kB
+dist/assets/PageTabs-CfjWD-M1.css                         1.12 kB │ gzip:   0.50 kB
+dist/assets/OrderConversation-BZ5x3swq.css                1.53 kB │ gzip:   0.63 kB
+dist/assets/Loading-DaVxGKnt.css                          1.77 kB │ gzip:   0.73 kB
+dist/assets/Notifications-CiOL6CTE.css                    2.74 kB │ gzip:   0.95 kB
+dist/assets/Campaigns-CUUosifE.css                        2.77 kB │ gzip:   0.89 kB
+dist/assets/admin-workbench096-Bg7hkc6Q.css               4.58 kB │ gzip:   1.04 kB
+dist/assets/Profile-IJ9vbDCX.css                          4.62 kB │ gzip:   1.35 kB
+dist/assets/finance-content095-DRNgWW4f.css               4.81 kB │ gzip:   1.50 kB
+dist/assets/product-detail080-UKD4YNjp.css                5.91 kB │ gzip:   1.66 kB
+dist/assets/Documents-B0uoYBjq.css                        6.17 kB │ gzip:   1.66 kB
+dist/assets/ContentEditor-DvCQ4bhT.css                    6.46 kB │ gzip:   1.80 kB
+dist/assets/Content-B6D3_UVF.css                          6.62 kB │ gzip:   1.79 kB
+dist/assets/customer-workspace095-Bxz8Fetr.css            6.87 kB │ gzip:   1.53 kB
+dist/assets/BlogComments-CJ2HPyd8.css                     6.93 kB │ gzip:   1.96 kB
+dist/assets/Shipping-C8g8xEe3.css                         7.24 kB │ gzip:   1.50 kB
+dist/assets/RequestForm-D4XYndRM.css                      8.53 kB │ gzip:   1.83 kB
+dist/assets/ShippingRates-D3EgATc2.css                   10.97 kB │ gzip:   2.67 kB
+dist/assets/Dashboard-BBlxCmCJ.css                       11.67 kB │ gzip:   2.33 kB
+dist/assets/Workspace-cy6aBF9a.css                       20.21 kB │ gzip:   3.93 kB
+dist/assets/Studio-CN4XU0c6.css                          91.21 kB │ gzip:  16.94 kB
+dist/assets/index-CO8dYUmH.css                          119.69 kB │ gzip:  23.93 kB
+dist/assets/array-BifhSqXX.js                             0.10 kB │ gzip:   0.11 kB
+dist/assets/channel-sK6eEReD.js                           0.11 kB │ gzip:   0.12 kB
+dist/assets/pie-XZMESJXO-8OcldhqV.js                      0.12 kB │ gzip:   0.13 kB
+dist/assets/info-OHQRW6UA-DXpVf_yU.js                     0.12 kB │ gzip:   0.13 kB
+dist/assets/radar-ABXABTNO-CDXml_iB.js                    0.12 kB │ gzip:   0.13 kB
+dist/assets/packet-JDAUHWVQ-CeVD_oR6.js                   0.12 kB │ gzip:   0.13 kB
+dist/assets/cynefin-EF2NZ3EQ-BtnrPWfh.js                  0.12 kB │ gzip:   0.13 kB
+dist/assets/treemap-SAJKECNS-uFdPM9Ks.js                  0.12 kB │ gzip:   0.13 kB
+dist/assets/wardley-7MLQ67FV-7B0qjwHe.js                  0.12 kB │ gzip:   0.13 kB
+dist/assets/gitGraph-VSP46ZUC-oc90_K2O.js                 0.12 kB │ gzip:   0.13 kB
+dist/assets/railroad-I3PHUGI6-DB5zPYsb.js                 0.12 kB │ gzip:   0.13 kB
+dist/assets/treeView-D4JQ5SDB-D3RehXnb.js                 0.12 kB │ gzip:   0.13 kB
+dist/assets/railroad-peg-JR7BVNR7-C3C1-cph.js             0.13 kB │ gzip:   0.13 kB
+dist/assets/architecture-WOLXFQ4H-Bhv53Shi.js             0.13 kB │ gzip:   0.13 kB
+dist/assets/railroad-abnf-LNEFI6M7-wcHrJp0K.js            0.13 kB │ gzip:   0.13 kB
+dist/assets/railroad-ebnf-DWYD2UWJ-Bfw2MGN1.js            0.13 kB │ gzip:   0.13 kB
+dist/assets/eventmodeling-K75KTNOO-CHXZjM1e.js            0.13 kB │ gzip:   0.13 kB
+dist/assets/init-C-OQMol4.js                              0.14 kB │ gzip:   0.12 kB
+dist/assets/chunk-Y2CYZVJY-DsF7k-Jl.js                    0.15 kB │ gzip:   0.14 kB
+dist/assets/chunk-2Q5K7J3B-C1jixKkw.js                    0.19 kB │ gzip:   0.16 kB
+dist/assets/chunk-JWPE2WC7-DVXcaiue.js                    0.22 kB │ gzip:   0.17 kB
+dist/assets/chunk-XXDRQBXY-BvKO0v-W.js                    0.26 kB │ gzip:   0.22 kB
+dist/assets/chunk-5VM5RSS4-ZNzvKenW.js                    0.36 kB │ gzip:   0.27 kB
+dist/assets/media-DoHQYgEY.js                             0.53 kB │ gzip:   0.38 kB
+dist/assets/chunk-WEXAMYUT-BTnKJA-7.js                    0.57 kB │ gzip:   0.40 kB
+dist/assets/flowDiagram-KWPJA3E3-Cz29Biyb.js              0.57 kB │ gzip:   0.31 kB
+dist/assets/chunk-J5ZVWO5B-oDCd-gWO.js                    0.63 kB │ gzip:   0.43 kB
+dist/assets/infoDiagram-VRGFBTTK-CDlby2fw.js              0.65 kB │ gzip:   0.41 kB
+dist/assets/swimlanesDiagram-TC7HE7FX-D351N1Uu.js         0.83 kB │ gzip:   0.48 kB
+dist/assets/sizeCapture-INFHLROL-3uHXrFqA.js              0.87 kB │ gzip:   0.51 kB
+dist/assets/chunk-DUW6YSOI-Dgx8z5s3.js                    0.89 kB │ gzip:   0.46 kB
+dist/assets/line-BdgrbIk5.js                              0.94 kB │ gzip:   0.47 kB
+dist/assets/rolldown-runtime-Dd_uD5pT.js                  1.10 kB │ gzip:   0.62 kB
+dist/assets/ordinal-BDEzSJ7C.js                           1.17 kB │ gzip:   0.56 kB
+dist/assets/Loading-gx_DPA10.js                           1.18 kB │ gzip:   0.60 kB
+dist/assets/PageTabs-p3uiqO2r.js                          1.18 kB │ gzip:   0.68 kB
+dist/assets/chunk-5DYCD2WN-D0VwjKdD.js                    1.41 kB │ gzip:   0.79 kB
+dist/assets/railroadDiagram-XR7U4H2S-BPdEHfDy.js          1.65 kB │ gzip:   0.76 kB
+dist/assets/CustomerShipments-BxZf3-Gs.js                 1.77 kB │ gzip:   0.96 kB
+dist/assets/abnfDiagram-O67JEVCF-CI0DhEjp.js              1.84 kB │ gzip:   0.89 kB
+dist/assets/chunk-7PRAP22T-DAQaIW7s.js                    1.95 kB │ gzip:   0.95 kB
+dist/assets/chunk-GWA4HPMP-CYv3T_td.js                    1.97 kB │ gzip:   0.89 kB
+dist/assets/pegDiagram-GJSIUBJH-d2cpLqJB.js               2.01 kB │ gzip:   0.94 kB
+dist/assets/ebnfDiagram-ZINNZB2B-Dv1Tbn_D.js              2.05 kB │ gzip:   0.89 kB
+dist/assets/TransferNotice-DZs2P5Mn.js                    2.06 kB │ gzip:   1.01 kB
+dist/assets/dist-B_J_HbC0.js                              2.17 kB │ gzip:   0.97 kB
+dist/assets/path-fybaL0A-.js                              2.27 kB │ gzip:   0.98 kB
+dist/assets/MediaUpload-CIrn4k7P.js                       2.29 kB │ gzip:   1.20 kB
+dist/assets/CrmPresentation-CdL8Ji2C.js                   2.46 kB │ gzip:   0.96 kB
+dist/assets/AccountTracking-CnfdWt9a.js                   2.61 kB │ gzip:   1.33 kB
+dist/assets/RichPreview-CCzdY98o.js                       3.32 kB │ gzip:   1.29 kB
+dist/assets/arc-DgcGdgmL.js                               3.47 kB │ gzip:   1.46 kB
+dist/assets/MermaidDiagram-qFgSN213.js                    3.51 kB │ gzip:   1.95 kB
+dist/assets/blog-studio-BI1v6FmQ.js                       3.91 kB │ gzip:   1.68 kB
+dist/assets/diagram-MLGK6HIB-RlPiKObs.js                  4.28 kB │ gzip:   1.84 kB
+dist/assets/defaultLocale-BFoDCU3G.js                     4.63 kB │ gzip:   2.12 kB
+dist/assets/Support-D1J2vQ1F.js                           4.85 kB │ gzip:   2.03 kB
+dist/assets/Checkout-UvPE_UDG.js                          5.19 kB │ gzip:   2.32 kB
+dist/assets/chunk-NETBCI7D-GaxHVeUG.js                    5.43 kB │ gzip:   2.50 kB
+dist/assets/linear-BUnzfXgk.js                            5.51 kB │ gzip:   2.25 kB
+dist/assets/chunk-742MDFTN-Q1YB1_YQ.js                    5.83 kB │ gzip:   2.68 kB
+dist/assets/graphlib-C9Tl7QrK.js                          5.85 kB │ gzip:   1.82 kB
+dist/assets/Notifications-BKf9GF2h.js                     5.87 kB │ gzip:   2.39 kB
+dist/assets/diagram-MPIPVDR6-C-DCG7gR.js                  6.06 kB │ gzip:   2.56 kB
+dist/assets/StaffAccess-DUmf_fzw.js                       6.07 kB │ gzip:   2.54 kB
+dist/assets/pieDiagram-5QR66LMP-DE-02aQ1.js               6.22 kB │ gzip:   2.59 kB
+dist/assets/firebase-DmwURCy4.js                          6.56 kB │ gzip:   3.22 kB
+dist/assets/Settings-D_vr1pjI.js                          6.77 kB │ gzip:   2.55 kB
+dist/assets/Customers-CnwSzOX3.js                         7.11 kB │ gzip:   2.51 kB
+dist/assets/Membership-3r0x39QB.js                        7.12 kB │ gzip:   2.69 kB
+dist/assets/_basePickBy-QJXUw_pr.js                       7.58 kB │ gzip:   3.15 kB
+dist/assets/Thread-BPSYa3ZB.js                            7.81 kB │ gzip:   3.00 kB
+dist/assets/diagram-CDSNMT55-Dl2iqHyl.js                  8.19 kB │ gzip:   3.65 kB
+dist/assets/Activity-CUM8ew85.js                          8.32 kB │ gzip:   3.16 kB
+dist/assets/OrderTools-B1YXrRax.js                        8.59 kB │ gzip:   3.63 kB
+dist/assets/OrderConversation-fWqvNWA3.js                 8.64 kB │ gzip:   3.11 kB
+dist/assets/Returns-CZNxtEtJ.js                           9.21 kB │ gzip:   3.23 kB
+dist/assets/Refunds-CYvY7Zi1.js                           9.73 kB │ gzip:   3.19 kB
+dist/assets/cynefinDiagram-VND7K2PF-CxO2Sg5e.js           9.93 kB │ gzip:   3.50 kB
+dist/assets/ui-W7XrcUVI.js                               10.01 kB │ gzip:   4.45 kB
+dist/assets/Profile-1fzZDvS9.js                          10.06 kB │ gzip:   3.13 kB
+dist/assets/Customer-DEfaMv2e.js                         10.61 kB │ gzip:   3.85 kB
+dist/assets/diagram-ATOU4E4O-DykcVM6f.js                 10.65 kB │ gzip:   4.12 kB
+dist/assets/chunk-3FUC2YCW-BrGMv6Np.js                   10.72 kB │ gzip:   4.31 kB
+dist/assets/product-detail080-CHiIOCrV.js                12.07 kB │ gzip:   4.09 kB
+dist/assets/Workspace-c8yDkS_m.js                        12.42 kB │ gzip:   3.95 kB
+dist/assets/Dashboard-B2PjZlyL.js                        12.87 kB │ gzip:   4.53 kB
+dist/assets/BlogComments-CZs_WkE4.js                     13.51 kB │ gzip:   4.47 kB
+dist/assets/chunk-UA2S7LBM-Cv0rcnAU.js                   14.83 kB │ gzip:   4.19 kB
+dist/assets/PlanEditor-DCHXwI1G.js                       14.90 kB │ gzip:   4.81 kB
+dist/assets/chunk-GTNCS2PH-BgszXV18.js                   15.64 kB │ gzip:   4.35 kB
+dist/assets/diagram-3UASUU5V-DydRERLd.js                 15.75 kB │ gzip:   5.52 kB
+dist/assets/mermaid-parser.core-BfnlY58n.js              16.45 kB │ gzip:   3.91 kB
+dist/assets/Documents-D9o5mLsy.js                        16.82 kB │ gzip:   5.50 kB
+dist/assets/ishikawaDiagram-OU5B5YK6-TzIlNBki.js         17.31 kB │ gzip:   6.53 kB
+dist/assets/RequestForm-DfgMlE3p.js                      17.90 kB │ gzip:   6.41 kB
+dist/assets/_baseUniq-DR4vVjyC.js                        18.23 kB │ gzip:   6.72 kB
+dist/assets/kanban-definition-PNTS6WVX-CjPBtU_L.js       20.26 kB │ gzip:   7.14 kB
+dist/assets/Campaigns-DwXWODFR.js                        20.36 kB │ gzip:   6.10 kB
+dist/assets/Finance-90xS1ge0.js                          21.03 kB │ gzip:   5.65 kB
+dist/assets/Workbench-DHbXtlWa.js                        22.30 kB │ gzip:   6.28 kB
+dist/assets/sankeyDiagram-IPEJSGJF-4r8PvVWz.js           22.78 kB │ gzip:   8.25 kB
+dist/assets/journeyDiagram-ZHPQQLJL-G0Ed6-UT.js          23.16 kB │ gzip:   8.16 kB
+dist/assets/mindmap-definition-NLK3R4M7-CSciPvg_.js      23.68 kB │ gzip:   8.09 kB
+dist/assets/Content-niTh3B_Y.js                          23.96 kB │ gzip:   7.25 kB
+dist/assets/wardleyDiagram-VNRHLVJA-l44pE5J3.js          25.20 kB │ gzip:   6.54 kB
+dist/assets/rough.esm-Dy-Kn_BL.js                        27.10 kB │ gzip:   8.85 kB
+dist/assets/ShippingRates-vGBemD9W.js                    28.96 kB │ gzip:   7.96 kB
+dist/assets/gitGraphDiagram-X574FWY7-CN9kNKyK.js         29.00 kB │ gzip:   8.55 kB
+dist/assets/timeline-definition-EJHVYXUP-DSzAShob.js     30.45 kB │ gzip:  10.03 kB
+dist/assets/erDiagram-OPXOYQCR-D5lRl6dn.js               30.64 kB │ gzip:  10.56 kB
+dist/assets/chunk-ZIGJFQKS-BqFUSTwU.js                   30.74 kB │ gzip:   8.51 kB
+dist/assets/requirementDiagram-PLB6GJNP-VFiW6W4F.js      31.06 kB │ gzip:   9.83 kB
+dist/assets/Security-CElJok6Q.js                         31.40 kB │ gzip:  11.59 kB
+dist/assets/quadrantDiagram-O4NWA36T-BBooxuYb.js         33.52 kB │ gzip:   9.74 kB
+dist/assets/chunk-Z7XXMR3K-DxfkYFQN.js                   37.41 kB │ gzip:   8.06 kB
+dist/assets/dagre-6A5THRUB-CUjJVkUp.js                   40.76 kB │ gzip:  14.56 kB
+dist/assets/vennDiagram-UO4OBE2U-DXkjqr8K.js             41.18 kB │ gzip:  15.12 kB
+dist/assets/stateDiagram-v2-GCMORJYK-Bj9Ir9Aq.js         41.54 kB │ gzip:  13.89 kB
+dist/assets/blockDiagram-BEXU5L5S-CSmZprUr.js            42.46 kB │ gzip:  13.88 kB
+dist/assets/xychartDiagram-PMCCYNJV-Bz6GLQgl.js          44.14 kB │ gzip:  12.22 kB
+dist/assets/Shipping-EK7TqKN-.js                         44.53 kB │ gzip:  10.20 kB
+dist/assets/ContentEditor-Dhua8zxo.js                    45.39 kB │ gzip:  14.03 kB
+dist/assets/src-oBChb5qS.js                              45.68 kB │ gzip:  16.00 kB
+dist/assets/classDiagram-v2-NBCMYWYE-Stwvvzni.js         49.70 kB │ gzip:  16.15 kB
+dist/assets/chunk-MBY4JIJT-b-4VGNQq.js                   51.87 kB │ gzip:  16.63 kB
+dist/assets/chunk-7M6MHVWA-BhuBExSh.js                   62.72 kB │ gzip:  20.33 kB
+dist/assets/c4Diagram-YGBWAQC7-C5Wosk4f.js               65.08 kB │ gzip:  18.61 kB
+dist/assets/ganttDiagram-FUAMR5RP-DCM9JUfV.js            69.35 kB │ gzip:  22.74 kB
+dist/assets/diagram-22UHCM2B-Bn2vWXTU.js                 80.49 kB │ gzip:  25.16 kB
+dist/assets/cose-bilkent-JH36ORCC-COXSdE6a.js            81.25 kB │ gzip:  21.54 kB
+dist/assets/mermaid.core-BYMSci_S.js                     84.04 kB │ gzip:  29.07 kB
+dist/assets/schemas-CTHe0jFM.js                          86.81 kB │ gzip:  24.66 kB
+dist/assets/swimlanes-2SLR337P-pjbtHogY.js              106.24 kB │ gzip:  36.12 kB
+dist/assets/chunk-7INBJB4K-Be5J__af.js                  115.49 kB │ gzip:  29.18 kB
+dist/assets/sequenceDiagram-PO4LG4MO-CouXJaJA.js        117.31 kB │ gzip:  31.31 kB
+dist/assets/architectureDiagram-NJMV4G6O-Bb6Rt_Sy.js    148.90 kB │ gzip:  41.13 kB
+dist/assets/index-Dlqnl-jq.js                           178.97 kB │ gzip:  57.83 kB
+dist/assets/usecaseDiagram-POWQR4AR-De5on11K.js         186.67 kB │ gzip:  50.10 kB
+dist/assets/chunk-O7XYJQB3-IL8vVqv5.js                  239.46 kB │ gzip:  39.57 kB
+dist/assets/katex-ZlcWpGUi.js                           258.68 kB │ gzip:  77.43 kB
+dist/assets/react-C0PBjpjw.js                           259.27 kB │ gzip:  82.26 kB
+dist/assets/cytoscape.esm-Yq6u8L66.js                   434.85 kB │ gzip: 137.78 kB
+dist/assets/firebase-u8DDmQcB.js                        558.39 kB │ gzip: 165.11 kB
+dist/assets/Studio-DfnN0K2U.js                          620.70 kB │ gzip: 193.10 kB
+dist/assets/chunk-NGNAAXSQ-DqoPQk1a.js                  629.05 kB │ gzip: 127.32 kB
+dist/assets/exceljs.min-DgbhWywh.js                     929.56 kB │ gzip: 256.44 kB
+dist/assets/elk-276RUBZZ-DgTpXhDb.js                  1,456.41 kB │ gzip: 453.23 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/features/orders/Changes.tsx is dynamically imported by src/app/App.tsx, src/features/crm/Workspace.tsx but also statically imported by src/features/ask/Commerce.tsx, src/features/operations/Workbench.tsx, dynamic import will not move module into another chunk.
+
+✓ built in 1.78s
+
+> satsunicgo-functions@0.1.0 build
+> tsc -p tsconfig.json
+
+{
+  "status": "PREPARED_NOT_DEPLOYED",
+  "readiness": "NOT_READY",
+  "localChecks": "PASSED",
+  "project": "satsunicgo",
+  "region": "asia-southeast1",
+  "inventory": [
+    {
+      "name": "command",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/index.ts"
+    },
+    {
+      "name": "ask",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask.ts"
+    },
+    {
+      "name": "askWorkflow",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask-workflow.ts"
+    },
+    {
+      "name": "currentAskConversation",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask-workflow.ts"
+    },
+    {
+      "name": "listWork",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "workspaceCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "readOwnerConfiguration",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "ticketMessages",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "membershipCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/membership.ts"
+    },
+    {
+      "name": "publicPage",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/public.ts"
+    },
+    {
+      "name": "publicDiscovery",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/public.ts"
+    },
+    {
+      "name": "maintenance",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "readNotification",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "createPaymentLink",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "payosWebhook",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "reconcilePayments",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "deliverEmail",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/email.ts"
+    },
+    {
+      "name": "readOrderConversation",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-conversation.ts"
+    },
+    {
+      "name": "orderConversationCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-conversation.ts"
+    },
+    {
+      "name": "shippingCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping.ts"
+    },
+    {
+      "name": "orderHistory",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-history.ts"
+    },
+    {
+      "name": "changeCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/changes.ts"
+    },
+    {
+      "name": "returnCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/returns.ts"
+    },
+    {
+      "name": "refundCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/refunds.ts"
+    },
+    {
+      "name": "uploadContentImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/media.ts"
+    },
+    {
+      "name": "publicImage",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/media.ts"
+    },
+    {
+      "name": "consolidationCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/consolidation.ts"
+    },
+    {
+      "name": "readStaffAccess",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "readCustomer",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "saveCustomerNotes",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listCustomers",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listFollowUps",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listCrmStaff",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "operationalDashboard",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "uploadOrderImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "listOrderImages",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "readOrderImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "financeReview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/finance-review.ts"
+    },
+    {
+      "name": "membershipReminderPolicy",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/membership-reminder-policy.ts"
+    },
+    {
+      "name": "readOrderOperations",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "catalogCheckout",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/catalog-checkout.ts"
+    },
+    {
+      "name": "invoiceCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceList",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceDetail",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceShare",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoice-share.ts"
+    },
+    {
+      "name": "outboxCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/outbox-command.ts"
+    },
+    {
+      "name": "customerOrderTracking",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/customer-order-tracking.ts"
+    },
+    {
+      "name": "shippingRatesPublic",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping-rates.ts"
+    },
+    {
+      "name": "shippingRatesAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping-rates.ts"
+    },
+    {
+      "name": "studioRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioMediaUpload",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioMediaRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "blogCommentSubmit",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentList",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentReport",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "studioAdvancedRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio-advanced.ts"
+    },
+    {
+      "name": "studioAdvancedCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio-advanced.ts"
+    },
+    {
+      "name": "websiteBannerCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "websiteBannerAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "websiteBannerPreview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "campaignBannersPublic",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "productReviewRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewEligibility",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewWrite",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewModerate",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    }
+  ],
+  "hashes": {
+    "firebase.json": "8c3f8e1e73b8aee68c13c0348c8ef01bfdc721c760caf38ba8c44cbdd4330e53",
+    "functions/package.json": "66ab62e3367e0d813f08ad6e5d46994b753bc9fd7656c7621e815299eae10c90",
+    "firestore.rules": "d29eedf94367252c3aff96b1c71382b8d3346335d3dea30fca8f3d906e9e6b20",
+    "firestore.indexes.json": "6c645bf23e4f930cce03b7ddeb66a0e12bd3e4528910d4292cb31aaa0368b496",
+    "storage.rules": "4a043206e7ecbd14ffb97ce055cd22fe2a1f1300fb4f61d1a984f5b27b6889cf",
+    "functions/src/index.ts": "90f2a01bb30cced3ab71d68de3d85a7160735226852cb7c05368cf253a05512d",
+    "functions/src/ai/ask.ts": "d5795a9529446bdf250cd6daba37672a5fb7b0d8409ec39c5a1db20bc64ffe94",
+    "functions/src/ai/ask-workflow.ts": "9c0faeb5814aea71064535cdf077bf40da57e8a6a58d23283734406f4a0c9730",
+    "functions/src/workspace.ts": "749ec31e857e9c06e0aac502ce392ab438841ded8a3a78dea527e504a56465ba",
+    "functions/src/membership.ts": "2e78ae77c42a70f8d8095443535492171c1d75fcc7a4599ef8c935c2e5c1e8e7",
+    "functions/src/public.ts": "adc882055ea61f55e6d02ae0c12993fc3444f1dfac08aaea4a54be716b87e329",
+    "functions/src/jobs.ts": "c260b5c4598ba6f3ace915c75fc42cf6d32d195b6cbdddbc2299a357883a9453",
+    "functions/src/payments/payos.ts": "7c83910b23b8ae8af85c064d76559416842fa893237e45d8682d4dc10f14ade0",
+    "functions/src/email.ts": "c65f9406a3755a46ffd7f23313272482f551eb54c41bccd51de28d6798c5b265",
+    "functions/src/order-conversation.ts": "89ab576d9b88b21a0492ec95711a76cf55801d976afcf2b4442ba7c0d81c664c",
+    "functions/src/shipping.ts": "c1e06c65f0fbdc137c6dabc2b6616a9931b7a660928b66119e13b3f50e220359",
+    "functions/src/order-history.ts": "4e087625e410ffde2fbf88b614da339d00504a7867b570afba43b8adf46ce952",
+    "functions/src/changes.ts": "ab299c74eaf165bcdc79b199011298386ed6fd0e62a68f583ba73edf62a01ad2",
+    "functions/src/returns.ts": "54292b7087bf28fdde73b4703d4b45dd7aa52adb5a7bccc58a4b46ac76276775",
+    "functions/src/refunds.ts": "e66f81d87a4e90d1725d837167d4ccb93fda888ee495d90e14cdb04095e36b70",
+    "functions/src/media.ts": "fad3fe0f9836ca527d73de52927b4c96868a0bce817f81ccf920471ed688c302",
+    "functions/src/consolidation.ts": "540a16e261ebde5a8a13bc030038032d9515038206b5bc16230819ed92c55605",
+    "functions/src/crm.ts": "8e5089ed96f3f5516c2cb2d5c780b89dfc88a9413b78a7b51c2b7432a01880bc",
+    "functions/src/order-media.ts": "e128312d5b16a8077906ced0ed21f8b4cfeae8c7ef2d19d9ca4feb077ab58b1d",
+    "functions/src/finance-review.ts": "822c7e326e4ea49dea724429573f7598cae582f44acd8fdcb1e9ff575e4d9657",
+    "functions/src/membership-reminder-policy.ts": "3d72b621f4fcb2b67caca1416f322e86a22ad6bcd2c16818be7040e23dc2fc31",
+    "functions/src/catalog-checkout.ts": "73411c0206b104ec1afd8987c1e29d5e640385a5bc60d3597e39aca5db4f6ded",
+    "functions/src/invoices.ts": "c59c18d197bc3536edd8f9dccf272aebc331cbb36f53f7955d1c02e9df9f5e7f",
+    "functions/src/invoice-share.ts": "1dfe9c524b3e823ffd9566dd6838053e31d9ef0e37ba7593586de5c420a54d72",
+    "functions/src/outbox-command.ts": "d49091a97ca74fe010f50fe3423a2f0848148afd1ea7304003f6be9604269094",
+    "functions/src/customer-order-tracking.ts": "e7f279b5805a9041236a7b75f4a5196c489c85f338f61e4995bc5b8c76f8bc75",
+    "functions/src/shipping-rates.ts": "6425657e2f057d4bbd794b87eb8bba62226a6508ce9e2d90ae603931c5bdc432",
+    "functions/src/blog-studio.ts": "1afe42f66a5aa193dc9a3ec186f8112542f65408ac40bf80cfb97d89677fd2e7",
+    "functions/src/blog-comments.ts": "2accf89f6cdd7fc63f753ef6abb0e12178a2b551cfa5ff70fdfdc67bf23911e3",
+    "functions/src/blog-studio-advanced.ts": "797d1657ff9a92b4dede1d10e858814e135720ae95c5d331992bf9ee2efce2a3",
+    "functions/src/campaign-banners.ts": "4a3bc16b255df113d9d6185da44815c05d5cdb49f0e6c23249e36e6fffd52852",
+    "functions/src/product-reviews.ts": "e00a5506bec542ebc321a9419ee03d4c7ff31796169de4d5dcd6e3509b7153d8",
+    "dist/.vite/manifest.json": "fe1a62c4069e6fff0c6823724fcb4ec4db2df3df34242145b0ced47eda9e2c80",
+    "functions/generated/public-assets.json": "9ac7b80cb610d5f434fe659bd591cc965de12e4076af5e54d4e2829d506aeaec",
+    "dist/assets/index-Dlqnl-jq.js": "f9bdcdb80f5e7fc0d2f97c60c51e54c6f9d2263acd0aa637785ba45a5be93e3a",
+    "dist/assets/index-CO8dYUmH.css": "6399e20fab6e68cf5d670a8607605ae33887422a24ca2acff84ddf81e70c0362",
+    "dist/index.html": "b39c5e0114e7e9d1f86d8b620ef132f27786d5a233b4a17bf1f7e9d969d11e0f"
+  },
+  "errors": [],
+  "compiledLibraryFreshness": "UNVERIFIED_NO_SOURCE_BUILD_MANIFEST",
+  "cloud": "NOT_CHECKED",
+  "publicConfiguration": "NOT_CHECKED",
+  "limits": [
+    "Source inventory is not deployed inventory",
+    "No runtime imports, credentials, provider, network or deployment checks",
+    "Only entry CSS/JS bindings checked; chunk graph and application configuration not fully certified"
+  ]
+}

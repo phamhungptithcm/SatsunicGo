@@ -1,3 +1,5 @@
+import { StepForm, StepStage } from "../../shared/StepForm";
+import "./admin-workbench096.css";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CrmHeading, CrmReference } from "../crm/CrmPresentation";
 import { callService } from "../../shared/firebase";
@@ -161,91 +163,128 @@ export function StaffAccess() {
     }
   }
   return (
-    <section>
+    <section className="admin096">
       <CrmHeading
         title="Nhân viên"
         description="Kiểm tra tài khoản trước khi cập nhật quyền làm việc."
       />
-      <section className="panel">
-        <h2>Phân quyền</h2>
-        <p>
-          Chỉ chủ doanh nghiệp được cấp quyền. Mỗi lần lưu cần xác thực gần đây
-          và hai lớp. Định danh lấy từ tài khoản Firebase đã xác minh.
-        </p>
-        <form className="form" onSubmit={(e) => void load(e)}>
-          <label>
-            Định danh nhân viên
-            <input
-              value={uid}
+      <div className="adminLayout">
+        <section className="panel">
+          <span className="adminStep">Bước 1 · Kiểm tra tài khoản</span>
+          <h2>Phân quyền nhân viên</h2>
+
+          <form className="form" onSubmit={(e) => void load(e)}>
+            <label>
+              <span className="formLabelText">
+                Mã tài khoản nhân viên{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
+              <input
+                value={uid}
+                disabled={busy || uncertain}
+                onChange={(e) => {
+                  request.current++;
+                  setUid(e.target.value);
+                  setReady(false);
+                  setAccess(null);
+                  setTarget("");
+                  setBusy(false);
+                  setMessage("");
+                }}
+                aria-describedby="admin-staff-hint"
+                required
+                pattern="[a-zA-Z0-9-]{1,128}"
+              />
+            </label>
+            <p id="admin-staff-hint" className="muted">
+              Dùng mã định danh của tài khoản đã xác minh.
+            </p>
+            <button className="primary" disabled={busy || uncertain}>
+              {busy ? "Đang kiểm tra…" : "Kiểm tra quyền hiện tại"}
+            </button>
+          </form>
+          {ready && (
+            <StepForm
+              steps={["Vai trò", "Phạm vi & trạng thái", "Kiểm tra"]}
               disabled={busy || uncertain}
-              onChange={(e) => {
-                request.current++;
-                setUid(e.target.value);
-                setReady(false);
-                setAccess(null);
-                setTarget("");
-                setBusy(false);
-                setMessage("");
-              }}
-              required
-              pattern="[a-zA-Z0-9-]{1,128}"
-            />
-          </label>
-          <button disabled={busy || uncertain}>Kiểm tra quyền hiện tại</button>
-        </form>
-        {ready && (
-          <form
-            key={target + access?.version}
-            className="form"
-            onSubmit={(e) => void save(e)}
-          >
-            <CrmReference label="Tài khoản đang chỉnh quyền" value={target} />
-            <fieldset className="form" disabled={busy || uncertain}>
-              <fieldset className="crmRoleOptions">
-                <legend>Vai trò được phép</legend>
-                {roles.map((role, i) => (
-                  <label key={role}>
+              key={target + access?.version}
+              className="form"
+              onSubmit={(e) => void save(e)}
+            >
+              <span className="adminStep">Cập nhật quyền</span>
+              <CrmReference label="Tài khoản đang chỉnh quyền" value={target} />
+              <fieldset className="form" disabled={busy || uncertain}>
+                <StepStage index={0}>
+                  <fieldset className="crmRoleOptions">
+                    <legend>Vai trò được phép</legend>
+                    {roles.map((role, i) => (
+                      <label key={role}>
+                        <input
+                          type="checkbox"
+                          name="role"
+                          value={role}
+                          defaultChecked={access?.roles.includes(role)}
+                        />
+                        {names[i]}
+                      </label>
+                    ))}
+                  </fieldset>
+                </StepStage>
+                <StepStage index={1}>
+                  <label>
                     <input
                       type="checkbox"
-                      name="role"
-                      value={role}
-                      defaultChecked={access?.roles.includes(role)}
+                      name="active"
+                      defaultChecked={access?.active}
                     />
-                    {names[i]}
+                    Được phép làm việc
                   </label>
-                ))}
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="locked"
+                      defaultChecked={access?.locked}
+                    />
+                    Khóa quyền nhân viên
+                  </label>
+                  <label>
+                    Các đơn giao cho nhân viên mua hàng (mỗi mã một dòng)
+                    <textarea
+                      name="orders"
+                      defaultValue={access?.orderIds.join("\n")}
+                    />
+                  </label>
+                </StepStage>
+                <StepStage index={2}>
+                  <button className="primary" disabled={busy || uncertain}>
+                    {busy ? "Đang lưu…" : "Lưu quyền nhân viên"}
+                  </button>
+                </StepStage>
               </fieldset>
-              <label>
-                <input
-                  type="checkbox"
-                  name="active"
-                  defaultChecked={access?.active}
-                />
-                Được phép làm việc
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="locked"
-                  defaultChecked={access?.locked}
-                />
-                Khóa quyền nhân viên
-              </label>
-              <label>
-                Các đơn giao cho nhân viên mua hàng (mỗi mã một dòng)
-                <textarea
-                  name="orders"
-                  defaultValue={access?.orderIds.join("\n")}
-                />
-              </label>
-              <button className="primary" disabled={busy || uncertain}>
-                {busy ? "Đang lưu…" : "Lưu quyền nhân viên"}
-              </button>
-            </fieldset>
-          </form>
-        )}
-        {message && <p role="status">{message}</p>}
-      </section>
+            </StepForm>
+          )}
+          {message && <p role="status">{message}</p>}
+        </section>
+        <aside
+          className="panel adminGuide"
+          aria-label="Điều kiện cập nhật quyền"
+        >
+          <h2>Trước khi lưu quyền</h2>
+          <p>
+            Chỉ chủ doanh nghiệp được cấp quyền. Mỗi lần lưu cần xác thực gần
+            đây và hai lớp.
+          </p>
+          <p>
+            Kiểm tra đúng mã tài khoản trước khi chọn vai trò và phạm vi đơn
+            hàng.
+          </p>
+          <p className="muted">
+            Sau khi lưu, kiểm tra lại quyền trước khi chỉnh sửa tiếp.
+          </p>
+        </aside>
+      </div>
       {uncertain && (
         <button
           className="primary"

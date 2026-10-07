@@ -52,8 +52,14 @@ export function MediaUpload({
     <fieldset>
       <legend>Ảnh nội dung</legend>
       <label>
-        Mô tả ảnh cho người đọc
+        <span className="formLabelText">
+          Mô tả ảnh{" "}
+          <span className="requiredMark" aria-hidden="true">
+            *
+          </span>
+        </span>
         <input
+          aria-required="true"
           value={alt}
           onChange={(e) => setAlt(e.target.value)}
           maxLength={300}
@@ -62,10 +68,16 @@ export function MediaUpload({
       <label>
         <input
           type="checkbox"
+          aria-required="true"
           checked={rightsConfirmed}
           onChange={(e) => setRightsConfirmed(e.target.checked)}
         />
-        Tôi có quyền dùng ảnh này trên website
+        <span className="formLabelText">
+          Tôi có quyền dùng ảnh này trên website{" "}
+          <span className="requiredMark" aria-hidden="true">
+            *
+          </span>
+        </span>
       </label>
       <label>
         Tải ảnh từ thiết bị

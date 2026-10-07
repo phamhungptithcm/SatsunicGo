@@ -6,10 +6,9 @@ export function ProductInformationFields({ row }: { row: ContentRow | null }) {
   const [steps, setSteps] = useState<string[]>(row?.usageSteps ?? []);
   const [summary, setSummary] = useState(row?.productSummary ?? "");
   return (
-    <details className="crmItemDetails sgProductFields" open>
-      <summary>Thông tin sản phẩm</summary>
+    <section className="sgProductFields" aria-label="Thông tin sản phẩm">
       <label>
-        Xuất xứ sản xuất
+        Xuất xứ
         <input
           name="manufacturingOrigin"
           maxLength={200}
@@ -32,7 +31,7 @@ export function ProductInformationFields({ row }: { row: ContentRow | null }) {
         />
       </div>
       <label>
-        Nơi dự kiến mua
+        Nơi mua
         <input
           name="retailer"
           maxLength={120}
@@ -41,7 +40,7 @@ export function ProductInformationFields({ row }: { row: ContentRow | null }) {
         />
       </label>
       <label>
-        Nguồn kiểm chứng
+        Nguồn thông tin
         <input
           type="url"
           name="sourceUrl"
@@ -105,17 +104,6 @@ export function ProductInformationFields({ row }: { row: ContentRow | null }) {
           hướng dẫn dạng danh sách.
         </p>
       )}
-      <details>
-        <summary>Xem trước</summary>
-        {summary && <p>{summary}</p>}
-        <ul className="sgUsagePreview">
-          {steps
-            .filter((s) => s.trim())
-            .map((s, i) => (
-              <li key={i}>{s}</li>
-            ))}
-        </ul>
-      </details>
-    </details>
+    </section>
   );
 }

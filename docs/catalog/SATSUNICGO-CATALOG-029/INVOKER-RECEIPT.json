@@ -1,0 +1,242 @@
+[
+  {
+    "service": "shippingratespublic",
+    "ok": true
+  },
+  {
+    "service": "productreviewadmin",
+    "ok": true
+  },
+  {
+    "service": "blogcommentreport",
+    "ok": true
+  },
+  {
+    "service": "readstaffaccess",
+    "ok": true
+  },
+  {
+    "service": "studiomediaread",
+    "ok": true
+  },
+  {
+    "service": "catalogcheckout",
+    "ok": true
+  },
+  {
+    "service": "studioread",
+    "ok": true
+  },
+  {
+    "service": "studiocommand",
+    "ok": true
+  },
+  {
+    "service": "orderconversationcommand",
+    "ok": true
+  },
+  {
+    "service": "savecustomernotes",
+    "ok": true
+  },
+  {
+    "service": "workspacecommand",
+    "ok": true
+  },
+  {
+    "service": "shippingratesadmin",
+    "ok": true
+  },
+  {
+    "service": "readorderoperations",
+    "ok": true
+  },
+  {
+    "service": "studiomediaupload",
+    "ok": true
+  },
+  {
+    "service": "studioadvancedcommand",
+    "ok": true
+  },
+  {
+    "service": "listfollowups",
+    "ok": true
+  },
+  {
+    "service": "studioadvancedread",
+    "ok": true
+  },
+  {
+    "service": "campaignbannerspublic",
+    "ok": true
+  },
+  {
+    "service": "readnotification",
+    "ok": true
+  },
+  {
+    "service": "publicpage",
+    "ok": true
+  },
+  {
+    "service": "blogcommentsubmit",
+    "ok": true
+  },
+  {
+    "service": "invoicedetail",
+    "ok": true
+  },
+  {
+    "service": "membershipreminderpolicy",
+    "ok": true
+  },
+  {
+    "service": "readorderimage",
+    "ok": true
+  },
+  {
+    "service": "consolidationcommand",
+    "ok": true
+  },
+  {
+    "service": "blogcommentcommand",
+    "ok": true
+  },
+  {
+    "service": "websitebannercommand",
+    "ok": true
+  },
+  {
+    "service": "publicdiscovery",
+    "ok": true
+  },
+  {
+    "service": "orderhistory",
+    "ok": true
+  },
+  {
+    "service": "operationaldashboard",
+    "ok": true
+  },
+  {
+    "service": "changecommand",
+    "ok": true
+  },
+  {
+    "service": "outboxcommand",
+    "ok": true
+  },
+  {
+    "service": "membershipcommand",
+    "ok": true
+  },
+  {
+    "service": "readownerconfiguration",
+    "ok": true
+  },
+  {
+    "service": "listcustomers",
+    "ok": true
+  },
+  {
+    "service": "productreviewread",
+    "ok": true
+  },
+  {
+    "service": "refundcommand",
+    "ok": true
+  },
+  {
+    "service": "customerordertracking",
+    "ok": true
+  },
+  {
+    "service": "command",
+    "ok": true
+  },
+  {
+    "service": "uploadcontentimage",
+    "ok": true
+  },
+  {
+    "service": "websitebanneradmin",
+    "ok": true
+  },
+  {
+    "service": "financereview",
+    "ok": true
+  },
+  {
+    "service": "shippingcommand",
+    "ok": true
+  },
+  {
+    "service": "invoiceshare",
+    "ok": true
+  },
+  {
+    "service": "invoicecommand",
+    "ok": true
+  },
+  {
+    "service": "readorderconversation",
+    "ok": true
+  },
+  {
+    "service": "publicimage",
+    "ok": true
+  },
+  {
+    "service": "invoicelist",
+    "ok": true
+  },
+  {
+    "service": "listwork",
+    "ok": true
+  },
+  {
+    "service": "websitebannerpreview",
+    "ok": true
+  },
+  {
+    "service": "productrevieweligibility",
+    "ok": true
+  },
+  {
+    "service": "productreviewwrite",
+    "ok": true
+  },
+  {
+    "service": "blogcommentlist",
+    "ok": true
+  },
+  {
+    "service": "returncommand",
+    "ok": true
+  },
+  {
+    "service": "listcrmstaff",
+    "ok": true
+  },
+  {
+    "service": "ticketmessages",
+    "ok": true
+  },
+  {
+    "service": "uploadorderimage",
+    "ok": true
+  },
+  {
+    "service": "listorderimages",
+    "ok": true
+  },
+  {
+    "service": "readcustomer",
+    "ok": true
+  },
+  {
+    "service": "productreviewmoderate",
+    "ok": true
+  }
+]

@@ -1,3 +1,4 @@
+import "../crm/customer-workspace095.css";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useSearchParams, Link } from "react-router-dom";
@@ -201,13 +202,19 @@ export function Thread({
     void send(e.currentTarget);
   }
   return (
-    <div>
-      {loading && <LoadingState overlay={false}>Đang tải phản hồi…</LoadingState>}
+    <div className="customerWorkspace095-thread">
+      {loading && (
+        <LoadingState overlay={false}>Đang tải phản hồi…</LoadingState>
+      )}
       {!loading && !readError && !messages.length && (
         <p className="muted">Chưa có phản hồi.</p>
       )}
       {messages.map((m) => (
-        <div className="panel crmMessage" key={m.id}>
+        <div
+          className="panel crmMessage"
+          data-sender={m.fromCustomer ? "customer" : "staff"}
+          key={m.id}
+        >
           <strong>{m.fromCustomer ? "Khách hàng" : "Nhân viên hỗ trợ"}</strong>
           <p>{m.text}</p>
           <time>{new Date(m.createdAt).toLocaleString("vi-VN")}</time>
@@ -217,10 +224,15 @@ export function Thread({
       <form ref={formRef} key={ticket.id} className="form" onSubmit={reply}>
         <fieldset className="form" disabled={busy || uncertain || mustReload}>
           <label>
-            Phản hồi
+            <span className="formLabelText">
+              Phản hồi{" "}
+              <span className="requiredMark" aria-hidden="true">
+                *
+              </span>
+            </span>
             <textarea name="message" minLength={3} maxLength={4000} required />
           </label>
-          <label>
+          <label className="customerWorkspace095-resolved">
             <input type="checkbox" name="resolved" /> Đánh dấu đã giải quyết
           </label>
           <button disabled={busy || uncertain || mustReload}>
@@ -313,7 +325,7 @@ export function StaffSupport() {
   const [params] = useSearchParams();
   const target = params.get("ticket");
   const [next, setNext] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<
       {
         id: string;
@@ -366,55 +378,81 @@ export function StaffSupport() {
     };
   }, [target]);
   return (
-    <section>
+    <section
+      className="customerWorkspace095 customerWorkspace095--support"
+      aria-label="Hội thoại hỗ trợ"
+    >
       <CrmHeading
         title="Hội thoại hỗ trợ"
+        description="Mở hội thoại để xem nội dung, phản hồi và cập nhật trạng thái giải quyết."
         actions={
           <>
             {target && <Link to="/crm/support">← Tất cả hội thoại</Link>}
-            <button
-              disabled={loading || locked}
-              onClick={() => void load()}
-            >
+            <button disabled={loading || locked} onClick={() => void load()}>
               <CrmIcon name="refresh" />
               Tải lại hội thoại
             </button>
           </>
         }
       />
-      {loading && <CrmState kind="loading" title="Đang tải hội thoại…" />}
-      {tickets.map((t) => (
-        <StaffTicket
-          key={t.id}
-          ticket={t}
-          initiallyOpen={!!target}
-          onChanged={() => void load()}
-          onBusyChange={(busy) => lock(t.id, busy)}
-        />
-      ))}
-      {!loading && !error && !tickets.length && (
-        <CrmState
-          kind="empty"
-          title="Chưa có hội thoại trong trang hiện tại."
-        />
-      )}
-      {next && (
-        <button disabled={loading || locked} onClick={() => void load(next)}>
-          Trang tiếp theo
-        </button>
-      )}
-      {error && (
-        <CrmState
-          kind="error"
-          title={error}
-          action={
-            <button disabled={loading || locked} onClick={() => void load()}>
-              <CrmIcon name="refresh" />
-              Thử tải lại
+      <div
+        className="customerWorkspace095-surface customerWorkspace095-supportList"
+        aria-busy={loading}
+      >
+        <div className="customerWorkspace095-resultHeading">
+          <h2>{target ? "Hội thoại được chọn" : "Danh sách hội thoại"}</h2>
+          {!loading && !error && (
+            <span>{tickets.length} hội thoại trong trang</span>
+          )}
+        </div>
+        {loading && <CrmState kind="loading" title="Đang tải hội thoại…" />}
+        {tickets.map((t) => (
+          <StaffTicket
+            key={t.id}
+            ticket={t}
+            initiallyOpen={!!target}
+            onChanged={() => void load()}
+            onBusyChange={(busy) => lock(t.id, busy)}
+          />
+        ))}
+        {!loading && !error && !tickets.length && (
+          <CrmState
+            kind="empty"
+            title={
+              target
+                ? "Chưa tìm thấy hội thoại được chọn"
+                : "Chưa có hội thoại trong trang hiện tại"
+            }
+          >
+            {target
+              ? "Thử tải lại hoặc quay về danh sách hội thoại."
+              : "Bạn có thể tải lại để kiểm tra hội thoại mới."}
+          </CrmState>
+        )}
+        {next && (
+          <div className="crmPagination">
+            <span>Đang xem một phần danh sách hội thoại</span>
+            <button
+              disabled={loading || locked}
+              onClick={() => void load(next)}
+            >
+              Trang tiếp theo
             </button>
-          }
-        />
-      )}
+          </div>
+        )}
+        {error && (
+          <CrmState
+            kind="error"
+            title={error}
+            action={
+              <button disabled={loading || locked} onClick={() => void load()}>
+                <CrmIcon name="refresh" />
+                Thử tải lại
+              </button>
+            }
+          />
+        )}
+      </div>
     </section>
   );
 }

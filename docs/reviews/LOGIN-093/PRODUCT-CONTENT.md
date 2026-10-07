@@ -1,0 +1,13 @@
+# Product Content Review LOGIN093
+
+Scope: Vietnamese web login challenge; people signing into account/CRM. Firebase factor challenge is verification, not enrollment or completed login. No OTP/secret/account identifier stored, logged or screenshot from real sessions. Synthetic codes only in fixture. No Apple-platform compliance claim.
+
+Content inventory: title Xác nhận đăng nhập; description Nhập6số từ ứng dụng xác thực; Mã xác thực input/000000 example; optional Ứng dụng xác thực/Ứng dụngN selector; Hủy; Tiếp tục; Đang xác nhận…; invalid/expired retry message; expired-session cancel/restart instruction; unsupported-method message. Removed popup/OneTap MFA error instructions requiring navigation to security page. Existing enrollment copy unchanged.
+
+States: default/autofocus and disabled submit observed; six-digit input enables action; wrong code clears input, announces retry and focuses field; success closes dialog and retains route/focus; cancel/Escape closes without auth completion; pending blocks duplicate submit/cancel; unsupported factor offers cancel; session expiry asks restart; network/failure preserves challenge for retry. Empty no challenge renders no dialog. Unauthorized real API protections unchanged. Async identity protection unit verified; logout clears challenge. No transaction, currency or destructive state changed.
+
+Eight principles: Purpose PASSED direct login step; Agency PASSED Hủy/Escape and retry observed; Responsibility PASSED code stays memory-only, never claim enrollment/login before Firebase success; Familiarity PASSED native web dialog/form6digits/autocomplete; Flexibility PASSED keyboard/autofocus/selector and small viewport without overflow; Simplicity PASSED one field/two actions, no route detour; Craft PASSED wrong-code focus defect found/fixed/reverified, success/cancel returns focus; Delight PASSED reduced interruption, preserves original work, no animation penalty.
+
+Platform fit PASSED native dialog focus containment/escape, labelled/described form, alert recovery, numeric keyboard, one-time-code autofill, button minimum44px, navy/royal-blue existing design. No Apple-only UI copied. Locale vi-VN natural compact messages; no semantic promise or marketing health claim. In-context evidence: shared5207 fixture actual component; desktop and requested390px viewport (browser reported487CSSpx), autofocus, wrong/retry/success/cancel observed, no horizontal overflow. Actual Google/OTP provider acceptance NOT_TESTED; user must enter real codes privately. Generic failure does not expose backend error details.
+
+Gate PASSED for executed source/fixture review. Browser reload after deployment required; provider acceptance separate.

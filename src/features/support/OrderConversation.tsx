@@ -211,7 +211,9 @@ export function OrderConversation({
           <p className="conversationChannels">
             Zalo · Chưa kết nối &nbsp; Messenger · Chưa kết nối
           </p>
-          {loading && <LoadingState overlay={false}>Đang tải cuộc trao đổi…</LoadingState>}
+          {loading && (
+            <LoadingState overlay={false}>Đang tải cuộc trao đổi…</LoadingState>
+          )}
           {data && (
             <>
               {staffView && (
@@ -306,7 +308,12 @@ export function OrderConversation({
               </div>
             )}
             <label htmlFor={labelId}>
-              {staff ? "Tin nhắn cho khách" : "Tin nhắn cho SatsunicGo"}
+              <span className="formLabelText">
+                {staff ? "Tin nhắn cho khách" : "Tin nhắn cho SatsunicGo"}{" "}
+                <span className="requiredMark" aria-hidden="true">
+                  *
+                </span>
+              </span>
             </label>
             <textarea
               id={labelId}
@@ -339,7 +346,12 @@ export function OrderConversation({
               ))}
               <form className="form" onSubmit={(e) => submit(e, "note")}>
                 <label>
-                  Ghi chú bàn giao
+                  <span className="formLabelText">
+                    Ghi chú bàn giao{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
                   <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}

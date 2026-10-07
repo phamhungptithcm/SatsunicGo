@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-OPERATIONS-095",
+  "status": "PASSED",
+  "scope": "local approved frontend implementation; not release certification",
+  "candidate": {
+    "src/features/operations/Workbench.tsx": "6802fc05eccc2bd5a2296aeb4887e91bee10cd76be0c800b8be5da5a6e6cf8c5",
+    "src/features/operations/Returns.tsx": "778caf657501c6c513bf7aad274fd89fa0a65c6c198e7b26c6a280dea0d3aef9",
+    "src/features/operations/OperationsPresentation.tsx": "7730861c57c302bca0218ab9eb47c43fdeb4308f40984b549b9253cca7a970e5",
+    "src/features/operations/operations-workbench.css": "895daf4c93275afa31a57132a2d59228395bbb70920299a2fe2218d44f3efbed",
+    "src/features/orders/Changes.tsx": "6de20c6958e3bc86d73b5f243d5cde970009069e1fcfedb0f779ea845186d821",
+    "tests/browser/operations095.spec.ts": "670bbb5452709c6f1bc4886777d23cd54302938eb5a63212693e7d2ce0d98953"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Five routes redesigned with compact hierarchy, grouped forms, common brand/primitives and responsive scoped CSS; no shared-file conflicts.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped diff contains no API, authorization, payload, money, dependency or persistence changes. Role/prerequisite regression tests pass; React escapes displayed text.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript noEmit, scoped ESLint, Prettier and diff whitespace checks passed. React/TypeScript/frontend/web-app/visual-design/product-content profiles applied.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "24 tests preserve role/catalog restrictions, pending controls, contextual payloads and lifecycle. Browser checks empty/error/recovery with zero writes. Existing timeout/idempotency/version handlers unchanged.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing alert/retry and draft handling retained; failed read never appears as empty success. Return close warning describes actual consequence.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "product_language": {
+      "status": "PASSED",
+      "summary": "Full changed-string inventory and all eight principles in PRODUCT_CONTENT_REVIEW.md; in-context desktop/mobile screenshots inspected and browser projection passed.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Local frontend review only; no schema/runtime/config/deploy changes. Production/provider/actual financial writes NOT_RUN. Rollback uses scoped files; unrelated WIP preserved.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "No new design dependency, no fabricated totals or metrics. Current role action choices retained; backend remains authority. 720px reflow is zoom-equivalent space, actual zoom controls not tested.",
+      "evidence_refs": [
+        "CANDIDATE.json",
+        "BEHAVIOR_PRESERVATION.json",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "REVIEW_CYCLES.json"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Actual provider/production financial transactions and browser zoom controls not exercised.",
+    "Optional repository-index metadata stale in concurrently edited worktree; bounded source evidence used."
+  ],
+  "limitations": [
+    "Synthetic local callable responses, no production readiness assertion.",
+    "Runtime ledger CLI unavailable on PATH; persisted review/report used per fail-open rendering policy."
+  ]
+}

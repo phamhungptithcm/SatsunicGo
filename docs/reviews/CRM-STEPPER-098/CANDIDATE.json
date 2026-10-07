@@ -1,0 +1,28 @@
+{
+  "hashes": {
+    "src/features/content/Campaigns.tsx": "b3ae05ec555c223224deccb34cbe195bc971d11ac3127f17ed435fa9d0fc1084",
+    "src/features/content/ContentEditor.tsx": "e151b005ce6e867bbe4afec461da6d850fec7632a68dcaab7db4e7a0ee820417",
+    "src/features/content/WebsiteBanners.tsx": "b1ff29a8c613ca4a26d5f559f120cee0fa07b4a9a53eb4d4dfc0f2f1b8812304",
+    "src/features/crm/Customer.tsx": "35d124490f24f2ed00fbe98e78a98c0e8ff1d1dd52dc7808b294b8939e68f94b",
+    "src/features/membership/PlanEditor.tsx": "9a18be97e12ac3243a51c27e884625639e64ce8debc7820c555dae357db17d65",
+    "src/features/operations/Returns.tsx": "87336f1f3f7bdd0c67ff0c0aebebd020f51ef72df61683f00bb064df4185ea5a",
+    "src/features/operations/Workbench.tsx": "bede5d1f981f178cba60b1b32ed5f57f798a918cf246f02610bba9ef4f895e3f",
+    "src/features/orders/Changes.tsx": "de0ccc03edd3a89358fe350c4838ecb1c197f677e9790e85b00753c2abc647dc",
+    "src/features/payments/FinancialReview.tsx": "ee4891a39672e842174a39f87f1d6922b2ee65c7d325f5458c3995f8fba29bc4",
+    "src/features/payments/Refunds.tsx": "3be40ba79242428980685c4c4727f8efa044e0ed23ef1a47ffb07b7a429df305",
+    "src/features/settings/Settings.tsx": "b222c26c1d403f930bdd0e4c6808121ac895826b371c67f271e547fa8baf0d00",
+    "src/features/settings/StaffAccess.tsx": "8fe5313434d04281f5e0ea96f2cb22e9598e4b5471c1b96a9d5846c290f3c366",
+    "src/features/shipping/ShippingRates.tsx": "8813e9b361dcd1342e951e5c33a2d254e9c1ee0255ca304ddd6fd90f86b36222",
+    "src/shared/StepForm.tsx": "fb7dc18db2a2fa57bd22b57f2162a8d7edff16a3037d062eae08aabef5bf3c8d",
+    "src/shared/step-form.css": "ad4c854aaab2bdd3d2d53c2250e9aa6c8ced630a2812981310fdcdcd3006b874",
+    "src/features/shipping/Shipping.tsx": "8311b8e9c5736837782c74e2abf8df77c11023e1aa2803d201ffccbf28e69a95",
+    "src/features/shipping/Consolidation.tsx": "a8727d360ffd7c75d8d03ae33704523ebdecae0dbb4234bfa190648c48383c54",
+    "src/features/shipping/ShippingStepForm.tsx": "d41f2c4c3058d5a314febffd803f8fade8b50f99121d5f65cd3d655d2157d8b1",
+    "src/features/shipping/shipping-workbench.css": "85a0251fb9c0a3a6a98605685ce8c20087d0fdf6f873abe89154ea01475e4b38",
+    "tests/browser/crm-stepper098.spec.ts": "b423d215ef8b8345bc0156da1e0129d55dde3cd92a0603fc5f7b19cee58d3235",
+    "tests/browser/shipping094.spec.ts": "a998682d0174080620f24bc354d07a106cdde0be11933d086c4922904276be87",
+    "tests/browser/operations095.spec.ts": "f26f73567c2603db22c0a44e16c0fbd856fc5a46bcab34f79cb874a7e8abbba5",
+    "src/features/content/content-editor092.css": "098496b9f35a020dd39b598bd2260c02948bdb8e180468e37961e7efb13dd10e",
+    "src/styles/form-labels.css": "e6c828f953101ad7bc4f73cfdd3b30b574a5e3a7dfba603e7c2f3cebc3616151"
+  }
+}

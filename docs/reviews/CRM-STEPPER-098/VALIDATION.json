@@ -1,0 +1,29 @@
+{
+  "scope": "Local synthetic; shared frontend 5207, demo identity; business commands intercepted.",
+  "typescript": "PASSED",
+  "scopedLint": "PASSED",
+  "unit": {
+    "status": "PASSED",
+    "tests": 153,
+    "report": "/private/tmp/crm098/unit-final.json",
+    "environment": "Unit-process-only blank reCAPTCHA site key avoids browser AppCheck initialization in Node; no app/runtime change."
+  },
+  "browser": {
+    "status": "PASSED",
+    "tests": 6,
+    "report": "/private/tmp/crm098/final-results.json",
+    "scope": "17 form instances; functional navigation, drafts, native validation, final-only original commands, unknown retry, permissions, mobile320/390 and desktop. Fixtures intercept business commands."
+  },
+  "history": [
+    "Initial Node unit environment failed browser AppCheck initialization; corrected only test environment.",
+    "Earlier broad browser run affected by concurrent source edits and exact label locators after required markers; fixtures adjusted, five unaffected tests rerun passed.",
+    "Latest isolated ContentEditor fails only mobile layout requirement.",
+    "ContentEditor owner adopted shared rail and full-width header; latest all-six browser run passed."
+  ],
+  "provider": "NOT_TESTED",
+  "deployment": "NOT_RUN",
+  "screenReader": "NOT_TESTED",
+  "memoryCandidates": "None",
+  "tokenUsage": "Unavailable",
+  "actualCost": "Unavailable"
+}

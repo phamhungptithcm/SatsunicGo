@@ -1,0 +1,11 @@
+# FORM-REQUIRED092
+Explicit approval/scope: user2026-10-06 requests * on required labels, optional labels unmarked, apply to all system forms. Direct extension of approved UI work.
+Intelligence DEGRADED; current bounded AST scan verifies121 wrappinglabels and5 external htmlFor labels across public/CRM/auth/studio forms. Existing native required and conditional expression are source of truth.
+Implementation: wrap existing visible title in an inline span; append aria-hidden star using exact existing required expression; associated external labels matched by exact id/htmlFor AST source. Shared classCSS keeps mark inline and preserves inherited label style. Remove only optional suffixes in labels. Do not change validators/native attributes/auth/commands/data. Preserve all surrounding WIP and fail if source changes during transform.
+Validation: AST inventory before/after required attributes identical; every required label marked and conditional expressions retained; optional labels not marked. TypeScript, scopedlint, representative rendered public/CRM screens and current review. New unit source contract prevents missing marker regressions. Rollback limited marker/copy hunks and CSS source. No deployment or production writes.
+
+Source-backed custom RequestForm requirements: quantity has existing domain min1/int/max100; add its native required semantic and label marker. ProductComposer accepts text OR images (normalizeRequestInput image fallback), so visible label marker and aria-required only apply when its line has no images. No schema/command changes.127 native required controls after1 additive annotation;126 existing required attributes preserved.
+
+Content orderable conditional requirements verified from catalogProductSchema: market/listedPrice/termsVersion required only when orderable; catalogOptions required when orderable AND nonblank variants. Bind native markers and constraints to identical controlled flags. No server schema/command changes.
+
+MediaUpload independent upload flow validates alt and rightsConfirmed before upload and server media schema agrees. Mark these required for upload via aria-required, preserving parent content draft save (photo itself optional). Never add native required to upload fields in parent content form.

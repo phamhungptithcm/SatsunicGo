@@ -1,0 +1,31 @@
+{
+  "scope": "owner delegated initial plan choices; production testing, payment hold remains",
+  "plans": [
+    {
+      "name": "FREE",
+      "price": 0,
+      "periodDays": 365,
+      "serviceDiscountBps": 0,
+      "discountCap": 0,
+      "status": "published"
+    },
+    {
+      "name": "PLUS",
+      "price": 199000,
+      "periodDays": 365,
+      "serviceDiscountBps": 500,
+      "discountCap": 50000,
+      "status": "draft"
+    },
+    {
+      "name": "BUSINESS",
+      "price": 599000,
+      "periodDays": 365,
+      "serviceDiscountBps": 1000,
+      "discountCap": 150000,
+      "status": "draft"
+    }
+  ],
+  "publication": "FREE available without money; paid plans draft while payments held; publish only through authenticated OWNER UI with version/audit",
+  "productionWrites": 0
+}

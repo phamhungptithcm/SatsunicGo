@@ -1,0 +1,12 @@
+{
+  "task_id": "SATSUNICGO-DASHBOARD-094",
+  "commit": "269aca833a748ac08b4152aa7de5a23d6cc4900a",
+  "scope": "local frontend only; shared unrelated WIP preserved",
+  "sha256": {
+    "src/features/crm/Dashboard.tsx": "8e1847127f0bd6066722cf4defceeb7c18f17d2de48309494198db1d398e0580",
+    "src/features/crm/dashboard094-model.ts": "49aa8db4989e03e26284c453281e9df3e9fa39a4db82f238ece28de671062296",
+    "src/features/crm/dashboard094.css": "16fbb9d41be3c9abebf19cf432738617328d5e3561078bb02c6fbd76850f7357",
+    "tests/unit/dashboard094.test.ts": "45a1834cc43a300a5a2977d9ed9db6fd3e278a15a97b7d897b13151ed6480af5",
+    "tests/browser/dashboard094.spec.ts": "0d88b8280c644b14d9c849906a988184de180452100984ae3d21d373fbd6aad0"
+  }
+}

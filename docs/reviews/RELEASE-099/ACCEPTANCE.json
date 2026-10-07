@@ -1,0 +1,22 @@
+{
+  "scope": "current combined workspace release",
+  "unit": "894 passed104files Node22",
+  "lint": "full lint passed + metadata fix targeted lint passed",
+  "excel": {
+    "environment": "demo-satsunicgo shared5207",
+    "create": "draft QA092 row saved version1 readback verified",
+    "export": "Chrome actual downloaded /Users/hunpeo97/Downloads/satsunicgo-products.xlsx mtime2026-10-07T04:29:41.247Z,31cols2rows",
+    "roundtrip": "same ID/version recognized as valid update with0errors; no second write"
+  },
+  "settingsFix": "Missing version/date safe formatting; actual epoch-near numeric fixture date retained. Native text verified Chua co phien ban.",
+  "credentialPatternScan": {
+    "files": 267,
+    "matches": 0,
+    "limit": "pattern scan not exhaustive privacy certification"
+  },
+  "pendingCoordination": "Human question to authorize messaging Admin/Finance/release chats is pending",
+  "productionWrites": 0,
+  "commit": "NOT_RUN",
+  "push": "NOT_RUN",
+  "deploy": "NOT_RUN"
+}

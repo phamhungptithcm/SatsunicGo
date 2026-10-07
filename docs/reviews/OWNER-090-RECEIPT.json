@@ -1,0 +1,25 @@
+{
+  "status": "APPLIED_AND_READ_BACK",
+  "approval": "OWNER075 direct tracked approval, existing scope",
+  "scriptSha256": "154baf39ffa538ef774964884b0e36c8defd14f51a3ebf379df77e1e5a819ddc",
+  "tests": {
+    "Node22": 11,
+    "passed": true
+  },
+  "identity": {
+    "verified": true,
+    "googleLinked": true,
+    "mfaEnrolled": true
+  },
+  "apply": {
+    "status": "BOOTSTRAPPED",
+    "rolePresent": true,
+    "auditPresent": true
+  },
+  "independentReadback": {
+    "status": "ALREADY_BOOTSTRAPPED",
+    "rolePresent": true,
+    "auditPresent": true
+  },
+  "protectedActionAcceptance": "NOT_TESTED"
+}

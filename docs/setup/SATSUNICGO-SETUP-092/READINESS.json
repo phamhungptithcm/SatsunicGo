@@ -1,0 +1,270 @@
+{
+  "products": [
+    {
+      "researchId": "catalog029-01",
+      "slug": "kirkland-signature-vitamin-e-180-mg-500-softgels",
+      "title": "Kirkland Signature Vitamin E 180 mg, 500 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-02",
+      "slug": "osteo-bi-flex-triple-strength-200-tablets",
+      "title": "Osteo Bi-Flex Triple Strength, 200 Tablets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-03",
+      "slug": "trunature-ginkgo-biloba-120-mg-340-softgels",
+      "title": "Trunature Ginkgo Biloba 120 mg, 340 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-04",
+      "slug": "citracal-maximum-plus-calcium-citrate-d3-280-caplets",
+      "title": "Citracal Maximum Plus Calcium Citrate + D3, 280 Caplets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-05",
+      "slug": "nature-made-prenatal-folic-acid-dha-150-softgels",
+      "title": "Nature Made Prenatal Folic Acid + DHA, 150 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-06",
+      "slug": "kirkland-signature-fish-oil-1000-mg-400-softgels",
+      "title": "Kirkland Signature Fish Oil 1000 mg, 400 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-07",
+      "slug": "one-a-day-men-s-50-healthy-advantage-multivitamin-300-tablets",
+      "title": "One A Day Men's 50+ Healthy Advantage Multivitamin, 300 Tablets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-08",
+      "slug": "one-a-day-women-s-50-healthy-advantage-multivitamin-300-tablets",
+      "title": "One A Day Women's 50+ Healthy Advantage Multivitamin, 300 Tablets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-09",
+      "slug": "olay-regenerist-10-1-7-oz-2-pack",
+      "title": "Olay Regenerist 10, 1.7 oz, 2-pack",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-10",
+      "slug": "l-oreal-plump-ambition-hyaluron-lip-oil-24hr-care",
+      "title": "L'Oréal Plump Ambition Hyaluron Lip Oil 24HR Care",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-11",
+      "slug": "preparation-h-rapid-relief-hemorrhoid-cream-with-lidocaine-0-75-oz",
+      "title": "Preparation H Rapid Relief Hemorrhoid Cream With Lidocaine, 0.75 oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-12",
+      "slug": "eagle-brand-medicated-oil-36-ml",
+      "title": "Eagle Brand Medicated Oil, 36 ml",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-13",
+      "slug": "puritan-s-pride-biotin-10000-mcg-100-softgels",
+      "title": "Puritan's Pride Biotin 10000 mcg, 100 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-14",
+      "slug": "neutrogena-rapid-firming-collagen-triple-lift-face-serum-1-fl-oz",
+      "title": "Neutrogena Rapid Firming Collagen Triple Lift Face Serum, 1 fl oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-15",
+      "slug": "one-a-day-women-s-multivitamin-300-tablets",
+      "title": "One A Day Women's Multivitamin, 300 Tablets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-16",
+      "slug": "ensure-original-vanilla-nutrition-powder-14-1-oz",
+      "title": "Ensure Original Vanilla Nutrition Powder, 14.1 oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-17",
+      "slug": "kirkland-signature-glucosamine-with-msm-375-tablets",
+      "title": "Kirkland Signature Glucosamine with MSM, 375 Tablets",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-18",
+      "slug": "trunature-advanced-strength-cinsulin-cinnamon",
+      "title": "Trunature Advanced Strength CinSulin Cinnamon",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-19",
+      "slug": "n1n-premium-tart-cherry-extract-3000-mg-200-veggie-caps",
+      "title": "N1N Premium Tart Cherry Extract, 3000 mg, 200 Veggie Caps",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-20",
+      "slug": "sports-research-triple-strength-omega-3-fish-oil-150-fish-softgels",
+      "title": "Sports Research Triple Strength Omega-3 Fish Oil, 150 Fish Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-21",
+      "slug": "azelaic-acid-suspension-10",
+      "title": "Azelaic Acid Suspension 10%",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-22",
+      "slug": "cerave-eye-repair-cream-0-5-oz",
+      "title": "CeraVe Eye Repair Cream, 0.5 oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-23",
+      "slug": "cetaphil-daily-facial-cleanser-8-fl-oz",
+      "title": "Cetaphil Daily Facial Cleanser, 8 fl oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-24",
+      "slug": "paula-s-choice-skin-balancing-invisible-finish-gel-moisturizer-2-fl-oz",
+      "title": "Paula's Choice SKIN BALANCING Invisible Finish Gel Moisturizer, 2 fl oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-25",
+      "slug": "cerave-foaming-facial-cleanser-12-fl-oz",
+      "title": "CeraVe Foaming Facial Cleanser, 12 fl oz",
+      "imageHashVerified": true,
+      "referencePriceAvailable": true,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    },
+    {
+      "researchId": "catalog029-26",
+      "slug": "nature-made-vitamin-d-extra-strength-125-mcg-240-softgels",
+      "title": "Nature Made Vitamin D Extra Strength 125 mcg, 240 Softgels",
+      "imageHashVerified": true,
+      "referencePriceAvailable": false,
+      "proposedStatus": "draft",
+      "priceMode": "reference_only",
+      "orderable": false
+    }
+  ],
+  "count": 26,
+  "productionWritesThisTask": 0,
+  "membershipPublishedObserved": 0,
+  "membershipConfiguration": "WAITING_USER_PRICES_BENEFITS",
+  "auth": "Normal production Studio login failed; human OWNER signin/MFA handoff",
+  "intelligence": "DEGRADED stale indexes, bounded source verified"
+}

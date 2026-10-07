@@ -109,7 +109,7 @@ export function CrmState({
 }) {
   if (kind === "loading")
     return (
-      <LoadingState className="crmState crmState--loading">
+      <LoadingState className="crmLoading" variant="overlay">
         <strong>{title}</strong>
         {children}
         {action}

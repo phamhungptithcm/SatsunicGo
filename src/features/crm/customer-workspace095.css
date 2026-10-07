@@ -1,0 +1,321 @@
+/* Only the customer/care/support workspaces. Shared shell and public threads retain their styles. */
+.workspaceShell .workspaceContent .customerWorkspace095 {
+  min-width: 0;
+  color: var(--navy);
+}
+.workspaceShell .customerWorkspace095 .crmHeading {
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.workspaceShell .customerWorkspace095 .crmHeading h1 {
+  font-size: clamp(24px, 2vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.workspaceShell .customerWorkspace095 .crmHeading p {
+  margin: 0;
+  max-width: 680px;
+}
+.workspaceShell .customerWorkspace095 :is(button, input, select, textarea) {
+  font: inherit;
+  font-size: 14px;
+}
+.workspaceShell .customerWorkspace095 button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+.workspaceShell
+  .customerWorkspace095
+  :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.workspaceShell .customerWorkspace095-surface {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  overflow: clip;
+}
+.workspaceShell .customerWorkspace095 .customerWorkspace095-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 0;
+  padding: 20px 20px 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.workspaceShell .customerWorkspace095-filters label {
+  gap: 6px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 500;
+}
+.workspaceShell .customerWorkspace095-filters .customerWorkspace095-mode {
+  flex: 0 1 220px;
+}
+.workspaceShell .customerWorkspace095-filters .customerWorkspace095-search {
+  flex: 1 1 240px;
+}
+.workspaceShell
+  .customerWorkspace095-filters
+  :is(input:not([type="checkbox"]), select) {
+  min-height: 44px;
+  padding: 9px 12px;
+  width: 100%;
+  font-weight: 400;
+}
+.workspaceShell .customerWorkspace095-filters .crmCheck {
+  flex: 1 1 180px;
+  align-self: flex-end;
+  min-height: 44px;
+  gap: 8px;
+}
+.workspaceShell
+  .customerWorkspace095
+  :is(.crmCheck, .customerWorkspace095-resolved)
+  input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  accent-color: var(--blue);
+}
+.workspaceShell .customerWorkspace095-hint {
+  padding: 0 20px 18px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.workspaceShell .customerWorkspace095-results {
+  min-width: 0;
+  border-top: 1px solid var(--border);
+}
+.workspaceShell .customerWorkspace095-results > p[role="status"] {
+  padding: 16px 20px;
+  margin: 0;
+}
+.workspaceShell .customerWorkspace095-resultHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 18px 20px;
+}
+.workspaceShell .customerWorkspace095-resultHeading h2 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+.workspaceShell .customerWorkspace095-resultHeading > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.workspaceShell .customerWorkspace095 .crmState {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 28px 20px;
+  min-width: 0;
+}
+.workspaceShell .customerWorkspace095 .crmState--empty {
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.workspaceShell .customerWorkspace095 .crmState--empty .crmStateIcon {
+  display: none;
+}
+.workspaceShell .customerWorkspace095 .crmStateDescription {
+  max-width: 480px;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.workspaceShell .customerWorkspace095 .crmState--error {
+  background: #fff8f7;
+  flex-wrap: wrap;
+}
+.workspaceShell .workspaceContent .customerWorkspace095 .tableWrap {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+.workspaceShell .customerWorkspace095 .crmCustomersTable th {
+  background: #f8f9fc;
+  font-size: 12px;
+  padding: 12px 20px;
+}
+.workspaceShell .customerWorkspace095 .crmCustomersTable td {
+  padding: 16px 20px;
+  font-size: 13px;
+  vertical-align: top;
+}
+.workspaceShell .customerWorkspace095 .crmCustomersTable tbody tr:hover {
+  background: #f8faff;
+}
+.workspaceShell .customerWorkspace095 .crmCustomerLink {
+  font-size: 14px;
+  font-weight: 600;
+}
+.workspaceShell .customerWorkspace095 .crmCustomersTable td:last-child a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+.workspaceShell .customerWorkspace095--care .crmCustomersTable time {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--navy);
+}
+.workspaceShell .customerWorkspace095 .crmPagination {
+  margin: 0;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.workspaceShell .customerWorkspace095-supportList {
+  padding-bottom: 8px;
+}
+.workspaceShell .workspaceContent .customerWorkspace095 .crmTicket {
+  border-radius: 10px;
+  padding: 0;
+  margin: 0 16px 12px;
+  min-width: 0;
+}
+.workspaceShell .customerWorkspace095 .crmTicket > summary {
+  padding: 16px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.workspaceShell .customerWorkspace095 .crmTicket[open] > summary {
+  background: #f8faff;
+  border-bottom: 1px solid var(--border);
+  border-radius: 10px 10px 0 0;
+}
+.workspaceShell .customerWorkspace095 .crmTicket > summary .crmItemTitle {
+  flex: 1 1 220px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.workspaceShell .customerWorkspace095 .crmTicket > p {
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.workspaceShell .customerWorkspace095-thread {
+  padding: 0 16px 16px;
+  min-width: 0;
+}
+.workspaceShell .workspaceContent .customerWorkspace095 .crmMessage {
+  margin: 12px 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #f6f7fa;
+  font-size: 13px;
+}
+.workspaceShell .customerWorkspace095 .crmMessage[data-sender="staff"] {
+  background: #f0f4ff;
+  border-color: #dce5ff;
+}
+.workspaceShell .customerWorkspace095 .crmMessage p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 8px 0;
+}
+.workspaceShell .customerWorkspace095 .crmMessage time {
+  color: var(--muted);
+  font-size: 11px;
+}
+.workspaceShell .customerWorkspace095-thread .form {
+  min-width: 0;
+  padding: 0;
+  gap: 12px;
+}
+.workspaceShell .customerWorkspace095-thread textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+.workspaceShell .customerWorkspace095-thread .customerWorkspace095-resolved {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  min-height: 44px;
+}
+.workspaceShell .customerWorkspace095-thread button {
+  justify-self: start;
+}
+@media (max-width: 1000px) {
+  .workspaceShell .workspaceContent .customerWorkspace095 .crmRecordTable {
+    padding: 0 16px;
+  }
+  .workspaceShell .workspaceContent .customerWorkspace095 .crmRecordTable td {
+    padding: 4px 0;
+  }
+}
+@media (max-width: 600px) {
+  .workspaceShell .customerWorkspace095 .crmHeading {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .workspaceShell .customerWorkspace095 .customerWorkspace095-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px 16px 8px;
+  }
+  .workspaceShell .customerWorkspace095-filters button {
+    width: 100%;
+  }
+  .workspaceShell .customerWorkspace095-hint {
+    padding: 0 16px 16px;
+  }
+  .workspaceShell .customerWorkspace095-resultHeading {
+    padding: 16px;
+  }
+  .workspaceShell .customerWorkspace095 .crmTicket > summary {
+    padding: 14px;
+  }
+  .workspaceShell .customerWorkspace095 .crmTicket > summary .crmItemTitle {
+    flex-basis: calc(100% - 32px);
+  }
+  .workspaceShell .customerWorkspace095 .crmState {
+    padding: 24px 16px;
+  }
+}
+
+@media (min-width: 1001px) {
+  .workspaceShell .customerWorkspace095 .crmCustomersTable th:nth-child(3) {
+    min-width: 150px;
+  }
+  .workspaceShell .customerWorkspace095 .crmCustomersTable th:nth-child(4) {
+    min-width: 140px;
+  }
+  .workspaceShell .customerWorkspace095 .crmCustomersTable th:last-child {
+    min-width: 140px;
+  }
+}
+.workspaceShell .customerWorkspace095-thread textarea {
+  font-weight: 400;
+}
+.workspaceShell .customerWorkspace095-thread form button {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}

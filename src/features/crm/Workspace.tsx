@@ -351,7 +351,9 @@ export function Workspace({
   }
   if (current?.path === "studio") {
     return (
-      <Suspense fallback={<LoadingState>Đang mở Studio…</LoadingState>}>
+      <Suspense
+        fallback={<LoadingState variant="panel">Đang mở Studio…</LoadingState>}
+      >
         <Studio uid={uid} roles={roles} name={name} />
       </Suspense>
     );
@@ -394,7 +396,11 @@ export function Workspace({
           </div>
         </header>
         <div className="workspaceContent">
-          <Suspense fallback={<LoadingState>Đang mở công việc…</LoadingState>}>
+          <Suspense
+            fallback={
+              <LoadingState variant="panel">Đang mở công việc…</LoadingState>
+            }
+          >
             <Routes>
               <Route
                 index

@@ -1,0 +1,186 @@
+/* Unlayered, scoped overrides: shared CRM primitives remain owned by the shell. */
+.workspaceShell .workspaceContent .operations095 {
+  color: #111c35;
+  min-width: 0;
+}
+.workspaceShell .operations095 .crmHeading {
+  margin: 0 0 20px;
+  gap: 16px;
+  align-items: start;
+}
+.workspaceShell .operations095 .crmHeading h1 {
+  font-size: clamp(24px, 2vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+.workspaceShell .operations095 .crmHeading p {
+  max-width: 720px;
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+.operations095 .operationsToolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.workspaceShell .operations095 .crmQueueFilter {
+  margin: 0;
+  width: min(100%, 340px);
+}
+.operations095 .operationsCount {
+  font-size: 13px;
+  color: #647087;
+  margin: 0;
+}
+.workspaceShell .workspaceContent .operations095 .workColumns {
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.workspaceShell .operations095 .workColumns:has(.operationsEmpty) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.operations095 .operationsList {
+  min-width: 0;
+}
+.workspaceShell .operations095 .operationsList > .crmItem {
+  padding: 16px;
+  margin: 0;
+}
+.operations095 .operationsList .crmItem:has([aria-pressed="true"]) {
+  border-color: #163cff;
+  background: #f4f6ff;
+}
+.operations095 .operationsEmpty {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  background: white;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  padding: 48px 24px;
+  min-height: 240px;
+  align-content: center;
+  gap: 12px;
+}
+.operations095 .operationsEmptyIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: #f0f3ff;
+  color: #163cff;
+  border-radius: 12px;
+}
+.operations095 .operationsEmpty h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.operations095 .operationsEmpty p {
+  margin: 0;
+  max-width: 500px;
+  color: #647087;
+  line-height: 1.6;
+}
+.workspaceShell .operations095 .crmWorkbenchDetail028 {
+  padding: 24px;
+  min-width: 0;
+}
+.operations095 .crmFacts {
+  padding: 12px 16px;
+  background: #f6f8fc;
+  border-radius: 8px;
+}
+.operations095 .operationsActionForm {
+  border-top: 1px solid #e3e7ef;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.operations095 .operationsActionForm > fieldset {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.operations095 .operationsActionForm legend {
+  font-size: 13px;
+  color: #647087;
+  margin-bottom: 12px;
+}
+.operations095 .operationsFieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.operations095 .operationsFieldGrid > .notice,
+.operations095 .operationsGroupTitle {
+  grid-column: 1 / -1;
+}
+.operations095 .operationsGroupTitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+.operations095 .operationsFieldGrid label {
+  min-width: 0;
+}
+.workspaceShell .operations095 input:not([type="checkbox"]),
+.workspaceShell .operations095 select {
+  min-height: 42px;
+  width: 100%;
+  min-width: 0;
+}
+.operations095 input[type="checkbox"] {
+  width: auto;
+}
+.operations095 button {
+  min-height: 42px;
+}
+.operations095 .operationsActionForm button[type="submit"] {
+  justify-self: start;
+}
+.operations095 .operationsReturnCard {
+  margin-top: 16px;
+  padding: 20px;
+}
+.operations095 .operationsReturnForm fieldset {
+  gap: 16px;
+}
+.operations095 .crmReference,
+.operations095 p,
+.operations095 h2,
+.operations095 label {
+  overflow-wrap: anywhere;
+}
+.operations095 .crmReference code {
+  word-break: break-all;
+}
+.operations095 .operationsReturnCard > .crmItemMain {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+@media (max-width: 1100px) {
+  .workspaceShell .workspaceContent .operations095 .workColumns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .workspaceShell .operations095 .crmHeading {
+    flex-direction: column;
+  }
+  .operations095 .operationsFieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspaceShell .operations095 .crmWorkbenchDetail028,
+  .operations095 .operationsReturnCard {
+    padding: 16px;
+  }
+  .operations095 .operationsEmpty {
+    padding: 32px 16px;
+  }
+}

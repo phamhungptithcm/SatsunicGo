@@ -1,0 +1,15 @@
+.form label .formLabelText,
+label .formLabelText {
+  display: inline;
+  color: inherit;
+  font: inherit;
+}
+.form label .requiredMark,
+label .requiredMark,
+.requestFieldLabel .requiredMark {
+  display: inline;
+  color: #b42318;
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+}

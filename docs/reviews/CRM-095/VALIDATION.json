@@ -1,0 +1,77 @@
+{
+  "candidate": "CANDIDATE.json",
+  "typecheck": {
+    "status": "PASSED",
+    "command": "node_modules/.bin/tsc --noEmit --project /private/tmp/crm095/tsconfig.json",
+    "scope": "changed TSX and browser test with transitive dependencies; root compiler options and explicit project type roots"
+  },
+  "full_repository_typecheck": {
+    "status": "NOT_RUN",
+    "reason": "Initial full checks stopped after multiple competing long-lived compiler processes; no full-repository certification"
+  },
+  "lint": {
+    "status": "PASSED",
+    "command": "node_modules/.bin/eslint src/features/crm/Customers.tsx src/features/support/Thread.tsx tests/browser/crm095.spec.ts"
+  },
+  "unit_tests": {
+    "status": "PASSED",
+    "files": 3,
+    "tests": 13,
+    "command": "VITE_RECAPTCHA_ENTERPRISE_SITE_KEY='' node_modules/.bin/vitest run tests/unit/customers-contextual.test.ts tests/unit/support-contextual.test.ts tests/unit/crm.test.ts",
+    "initial_attempt": "Node test import initialized browser App Check and failed document-is-not-defined; only test-process App Check env cleared; application configuration unchanged"
+  },
+  "browser": {
+    "status": "PASSED",
+    "url": "http://127.0.0.1:5207",
+    "kind": "LOCAL_SYNTHETIC_PROJECTION",
+    "tests": 6,
+    "passed": 6,
+    "widths": [
+      1440,
+      720,
+      390,
+      320
+    ],
+    "evidence": "/private/tmp/crm095/results.json",
+    "no_business_mutations": "workspaceCommand intercepted; no seed/reset",
+    "test_fix": "Three pagination assertions now poll captured requests; disappearing button during busy was insufficient evidence."
+  },
+  "repository_intelligence": {
+    "status": "DEGRADED",
+    "codegraph": "health passed, global metadata stale; exact source/impact query performed",
+    "cocoindex": "health/search passed, metadata stale; historical pointers only"
+  },
+  "approval": {
+    "status": "APPROVED",
+    "record": "docs/approvals/SATSUNICGO-CRM-REDESIGN-095.md",
+    "validator": "FAILED: script hard-requires READY, inconsistent with repository DEGRADED fallback; no false READY record or validator modification"
+  },
+  "format": "PASSED",
+  "diff_check": "PASSED",
+  "build": {
+    "status": "PASSED",
+    "command": "node_modules/.bin/vite build --outDir /private/tmp/crm095/dist --emptyOutDir",
+    "warnings": [
+      "Large application chunks over 500kB",
+      "Changes.tsx has ineffective dynamic import due static consumers; outside CRM095 scope"
+    ]
+  },
+  "runtime": {
+    "status": "RECOVERED",
+    "approval": "docs/approvals/SATSUNICGO-CRM-095-RUNTIME-RECOVERY.md",
+    "ports": [
+      5207,
+      19207,
+      18207,
+      15207,
+      19208
+    ],
+    "backup": "RUNTIME-BACKUP.json",
+    "comparison": "RUNTIME-RECOVERY-COMPARISON.json",
+    "limitation": "Fresh Firestore export and peer active import differ; both retained, exact data equivalence NOT_VERIFIED. Existing peer-owned runtime reused without overwrite."
+  },
+  "production_readiness": "NOT_READY",
+  "provider_tokens": "Unavailable",
+  "actual_cost": "Unavailable",
+  "memory_candidates": "None"
+}
