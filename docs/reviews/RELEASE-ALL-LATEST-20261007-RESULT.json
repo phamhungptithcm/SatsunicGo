@@ -1,0 +1,676 @@
+{
+  "status": "DEPLOYED_VERIFIED_BOUNDED_SMOKE",
+  "sourceCommit": "5f6393dd63453e0c305808ca7998c385eea527a9",
+  "project": "satsunicgo",
+  "region": "asia-southeast1",
+  "runtime": "nodejs22",
+  "hostingVersion": "sites/satsunicgo/versions/17febd4ca60bf7b8",
+  "hostingEntrySha256": "a3da1ffb871d9b74a20110e2144d5cc977168980fc78bb77de7b5690b9327270",
+  "rollbackHostingVersion": "sites/satsunicgo/versions/d00a11401c656813",
+  "beforeRulesets": {
+    "firestore": "projects/satsunicgo/rulesets/daf45f7a-fe21-48dd-a31d-de041108c491",
+    "storage": "projects/satsunicgo/rulesets/fd974402-21c3-4a2e-8158-3fbcb0db1b88"
+  },
+  "afterRulesets": [
+    {
+      "name": "projects/satsunicgo/releases/cloud.firestore",
+      "rulesetName": "projects/satsunicgo/rulesets/15e89198-13c3-42b7-b172-d5f5972a15c8",
+      "updateTime": "2026-10-07T22:25:19.030285Z"
+    },
+    {
+      "name": "projects/satsunicgo/releases/firebase.storage/satsunicgo.firebasestorage.app",
+      "rulesetName": "projects/satsunicgo/rulesets/fd974402-21c3-4a2e-8158-3fbcb0db1b88",
+      "updateTime": "2026-10-07T22:25:18.805521Z"
+    }
+  ],
+  "sourceArtifactByteMatch": {
+    "package.json": true,
+    "package-lock.json": true,
+    "lib/functions/src/index.js": true,
+    "lib/functions/src/release-all-entry.js": true,
+    "generated/public-assets.json": true
+  },
+  "functions": [
+    {
+      "id": "ask",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "blogCommentCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "blogCommentList",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "blogCommentReport",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "blogCommentSubmit",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "campaignBannersPublic",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "cartCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "catalogCheckout",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "changeCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "command",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "consolidationCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "customerOrderTracking",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "financeReview",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "invoiceCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "invoiceDetail",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "invoiceList",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "invoiceShare",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "listCrmStaff",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "listCustomers",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "listFollowUps",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "listOrderImages",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "listWork",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "membershipCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "membershipReminderPolicy",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "operationalDashboard",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "orderConversationCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "orderHistory",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "outboxCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "productReviewAdmin",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "productReviewEligibility",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "productReviewModerate",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "productReviewRead",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "productReviewWrite",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "publicDiscovery",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "publicImage",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "publicPage",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readCustomer",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readNotification",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readOrderConversation",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readOrderImage",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readOrderOperations",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readOwnerConfiguration",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "readStaffAccess",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "refundCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "returnCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "saveCustomerNotes",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "shippingCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "shippingRatesAdmin",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "shippingRatesPublic",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioAdvancedCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioAdvancedRead",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioMediaRead",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioMediaUpload",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "studioRead",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "ticketMessages",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "uploadContentImage",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "uploadOrderImage",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "websiteBannerAdmin",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "websiteBannerCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "websiteBannerPreview",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    },
+    {
+      "id": "workspaceCommand",
+      "state": "ACTIVE",
+      "runtime": "nodejs22",
+      "hashChanged": true,
+      "deploymentHash": "5f972050d288af27e383eade7e5e206c08134521"
+    }
+  ],
+  "http": {
+    "status": "PASSED",
+    "entryHash": "a3da1ffb871d9b74a20110e2144d5cc977168980fc78bb77de7b5690b9327270",
+    "assets": [
+      {
+        "path": "/assets/index-DebZ70Ke.js",
+        "match": true
+      },
+      {
+        "path": "/assets/rolldown-runtime-Dd_uD5pT.js",
+        "match": true
+      },
+      {
+        "path": "/assets/react-C0PBjpjw.js",
+        "match": true
+      },
+      {
+        "path": "/assets/firebase-B_ySEtyY.js",
+        "match": true
+      },
+      {
+        "path": "/assets/firebase-W4k7nsh8.js",
+        "match": true
+      },
+      {
+        "path": "/assets/Loading-BHEimaMF.js",
+        "match": true
+      },
+      {
+        "path": "/assets/schemas-CTHe0jFM.js",
+        "match": true
+      },
+      {
+        "path": "/assets/domain-D7bhOXc1.js",
+        "match": true
+      },
+      {
+        "path": "/assets/catalog-checkout-DyyLAimO.js",
+        "match": true
+      },
+      {
+        "path": "/assets/CrmPresentation-P9gbnLHs.js",
+        "match": true
+      },
+      {
+        "path": "/assets/firebase--Y9bcBsH.css",
+        "match": true
+      },
+      {
+        "path": "/assets/Loading-DaVxGKnt.css",
+        "match": true
+      },
+      {
+        "path": "/assets/index-rgbwyx1p.css",
+        "match": true
+      }
+    ],
+    "publicRoutes": [
+      {
+        "route": "/privacy",
+        "status": 200
+      },
+      {
+        "route": "/restricted",
+        "status": 200
+      },
+      {
+        "route": "/products",
+        "status": 200
+      },
+      {
+        "route": "/robots.txt",
+        "status": 200
+      },
+      {
+        "route": "/sitemap.xml",
+        "status": 200
+      }
+    ],
+    "anonymous": [
+      {
+        "name": "cartCommand",
+        "status": 401,
+        "errorStatus": "UNAUTHENTICATED"
+      },
+      {
+        "name": "workspaceCommand",
+        "status": 401,
+        "errorStatus": "UNAUTHENTICATED"
+      },
+      {
+        "name": "command",
+        "status": 401,
+        "errorStatus": "UNAUTHENTICATED"
+      }
+    ]
+  },
+  "browser": {
+    "status": "PASSED",
+    "results": [
+      {
+        "route": "/",
+        "width": 390,
+        "text": 1315,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/privacy",
+        "width": 390,
+        "text": 2694,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/restricted",
+        "width": 390,
+        "text": 1124,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/cart",
+        "width": 390,
+        "text": 245,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "text": 163,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "text": 1376,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/privacy",
+        "width": 1440,
+        "text": 2755,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/restricted",
+        "width": 1440,
+        "text": 1185,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/cart",
+        "width": 1440,
+        "text": 306,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      },
+      {
+        "route": "/login",
+        "width": 1440,
+        "text": 224,
+        "root": true,
+        "overflow": false,
+        "raw": false,
+        "errors": []
+      }
+    ]
+  },
+  "indexes": "46 unchanged, normalized source/live equality",
+  "heldExports": [
+    "askWorkflow",
+    "currentAskConversation",
+    "maintenance",
+    "deliverEmail",
+    "createPaymentLink",
+    "payosWebhook",
+    "reconcilePayments"
+  ],
+  "realAuthenticatedProviderAcceptance": "BLOCKED_REMOTE_GOOGLE_POPUP",
+  "wholeSystemReadiness": "NOT_READY",
+  "cleanupPolicy": "UNCHANGED_NOT_CONFIGURED",
+  "tokens": "Unavailable",
+  "actualCost": "Unavailable"
+}
