@@ -1,0 +1,3 @@
+f4c9d677fbc3f10fd0e1110add488d479e9fab579072d68141a297571de0bd6a  functions/src/crm.ts
+e3fe76a3b005515ddd70402de7fbf091db25b06b23c5fcf863df7b65e360bc71  tests/rules/crm-authority026.test.ts
+690002d14963fd5f87e35723b8081239a6b05cd166d5cae2b012e9e4b96bf2cc  docs/reviews/release026/backend/CRM-MIXED-IMPACT.md

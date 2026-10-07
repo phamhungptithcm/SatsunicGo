@@ -1,0 +1,10 @@
+{
+  "baseHead": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "hashes": {
+    "scripts/release/bootstrap-owner.mjs": "154baf39ffa538ef774964884b0e36c8defd14f51a3ebf379df77e1e5a819ddc",
+    "tests/unit/bootstrap-owner075.test.mjs": "f63ea538417165007ffed6587af947eb6e2e740e989664bc197d2b178d53bb4c",
+    "tests/http/bootstrap-owner075.mjs": "99032f17a2dffa438544cb4c56be480c4f1f5337ea3d35578c25855385fd7999"
+  },
+  "scope": "OWNER075_OPERATOR_ONLY_NOT_APPLICATION_RELEASE",
+  "cycle": 5
+}

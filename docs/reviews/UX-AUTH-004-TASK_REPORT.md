@@ -1,0 +1,13 @@
+# UX-AUTH-004 — current task report
+
+Approval v1 is recorded in docs/approvals/SATSUNICGO-UX-AUTH-004.md. Intelligence DEGRADED (stale CodeGraph, CocoIndex daemon permission failure). No managed-policy changes, provider mutation, billing, production seed, push or release.
+
+Implemented locally: compact fixed navigation, accessible mobile hamburger, Escape/focus and route/desktop close, reduced-motion transitions; compact footer with composer clearance; removed preview labels and navbar login; truthful neutral unpublished catalog copy; guarded One Tap credential lifecycle, FedCM, script identity validation and visible account recovery. Firebase preview safety lock retained. No current browser visual or frame-time evidence. Production currently remains the previous static release.
+
+Validation: 42 unit tests /14 files pass (3 new One Tap lifecycle tests); lint, root TypeScript and Functions compiler pass; Vite build passes, approximately950KB entry remains a performance warning. Compiler caught accidentally removed RequestForm signIn prop during editing; restored and rechecked. Tests exercise duplicate credential concurrency, error/retry, empty credentials, disposed callbacks and late failure. Script timeout and live suppression/MFA paths lack rendered/provider acceptance.
+
+Review cycle1: found lost RequestForm prop, missing account recovery link and missing OAuth public Client ID. First two corrected; provider/data blockers remain. Cycle2 complete current bounded-source review: security controls unchanged; no private auth token logged; prompt cancellation and concurrency tests pass; UI/product-content review remains BLOCKED without current in-context evidence. Overall decision BLOCKED, master NOT_READY. See UX-AUTH-004-CONTENT_REVIEW.md and GOOGLE_ONE_TAP_SETUP.md.
+
+Remaining: verify OAuth client/provider and local/production domains; live sign-in/sign-out/MFA/suppressed-prompt recovery; mobile and keyboard rendered checks, animation frame times; complete full master requirements, actual commercial catalog/fees and owner-approved data; Functions/Storage infrastructure and6 high backend dependency advisories. Auth/Google/Firestore/Functions read-only APIs still403; billing false; buckets empty. User requested public Client ID/provider setup, no secret requested.
+
+Git: local changes atop3bd0d09; prior public-push automatic review rejection remains unresolved; UX approval does not authorize public payload disclosure. Do not claim current candidate committed or pushed. Earlier master review cycles preserved; latest master cycle6 references this blocked report. Runtime review ledger unavailable; no fabricated receipt. Weighted progress, provider token usage and billed cost Unavailable. Memory candidates None.

@@ -1,0 +1,12 @@
+{
+  "environment": "LOCAL_EMULATOR_HEADLESS_CHROMIUM",
+  "phase": "AFTER_ONLY",
+  "width": 1440,
+  "switches": 5,
+  "frames": 32,
+  "maxFrameGapMs": 16.799999999999955,
+  "longTasks": 0,
+  "longestTaskMs": 0,
+  "longTasksSupported": true,
+  "stopped": true
+}

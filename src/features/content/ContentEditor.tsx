@@ -1,3 +1,5 @@
+import { ProductInformationFields } from "./ProductInformationFields";
+import { ProductReviewModeration } from "./ProductReviewModeration";
 import {
   CrmHeading,
   CrmIcon,
@@ -101,6 +103,14 @@ export function ContentEditor() {
               .filter(Boolean),
             featured: f.get("featured") === "on",
             featuredOrder: Number(f.get("featuredOrder") || 9999),
+            manufacturingOrigin: String(
+              f.get("manufacturingOrigin") ?? "",
+            ).trim(),
+            brand: String(f.get("brand") ?? "").trim(),
+            productSummary: String(f.get("productSummary") ?? "").trim(),
+            retailer: String(f.get("retailer") ?? "").trim(),
+            sourceUrl: String(f.get("sourceUrl") ?? "").trim(),
+            usageSteps: JSON.parse(String(f.get("usageSteps") || "[]")),
             origin: String(f.get("origin") ?? "").trim(),
             functions: String(f.get("functions") ?? "").trim(),
             usage: String(f.get("usage") ?? "").trim(),
@@ -321,6 +331,10 @@ export function ContentEditor() {
           </details>
           {kind === "products" && (
             <>
+              <ProductInformationFields
+                key={`${current?.id ?? "new"}-${current?.version ?? 0}`}
+                row={current}
+              />
               <details className="crmItemDetails">
                 <summary>Giới thiệu sản phẩm</summary>
                 <label>
@@ -344,7 +358,7 @@ export function ContentEditor() {
                   <small>Số nhỏ hơn được ưu tiên giới thiệu.</small>
                 </label>
                 <label>
-                  Nguồn gốc
+                  Thông tin nguồn gốc đã lưu
                   <textarea
                     name="origin"
                     maxLength={4000}
@@ -370,7 +384,7 @@ export function ContentEditor() {
               </details>
               <h3 className="crmSectionHeading">Đặt mua và giá trọn gói</h3>
               <label>
-                Quốc gia nguồn
+                Quốc gia mua hàng
                 <select name="market" defaultValue={current?.market ?? "US"}>
                   <option value="US">Mỹ</option>
                   <option value="JP">Nhật Bản</option>
@@ -506,6 +520,12 @@ export function ContentEditor() {
           </button>
         </form>
       </div>
+      {kind === "products" && (
+        <details className="crmItemDetails">
+          <summary>Đánh giá sản phẩm</summary>
+          <ProductReviewModeration />
+        </details>
+      )}
     </section>
   );
 }

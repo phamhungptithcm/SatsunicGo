@@ -1,3 +1,4 @@
+import { LoadingState } from "../../../shared/Loading";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
@@ -509,7 +510,7 @@ export function SourceStudio({
     stateProvenance.current?.uid !== uid ||
     stateProvenance.current.path !== path ||
     stateProvenance.current.search !== location.search ? (
-    <p role="status">Đang mở Studio…</p>
+    <LoadingState>Đang mở Studio…</LoadingState>
   ) : suffix === "settings" ? (
     state.role === "admin" ? (
       <Settings

@@ -1,0 +1,54 @@
+
+> satsunicgo@0.1.0 build
+> tsc --noEmit && vite build && node scripts/public-assets.mjs
+
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 241 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.82 kB │ gzip:   0.45 kB
+dist/.vite/manifest.json                     10.80 kB │ gzip:   1.34 kB
+dist/assets/OrderConversation-BZ5x3swq.css    1.53 kB │ gzip:   0.63 kB
+dist/assets/index-C8plSZvJ.css               84.53 kB │ gzip:  17.94 kB
+dist/assets/editor-state-BW4wVEa8.js          0.44 kB │ gzip:   0.30 kB
+dist/assets/rolldown-runtime-hePW80VL.js      0.71 kB │ gzip:   0.42 kB
+dist/assets/CustomerShipments-CTveUbce.js     1.60 kB │ gzip:   0.87 kB
+dist/assets/TransferNotice-BxdOHUXg.js        1.77 kB │ gzip:   0.96 kB
+dist/assets/StaffAccess-BZ-ud6jt.js           2.79 kB │ gzip:   1.40 kB
+dist/assets/Dashboard-C93HVoaX.js             2.97 kB │ gzip:   1.48 kB
+dist/assets/Settings-CjoGxOf9.js              3.15 kB │ gzip:   1.48 kB
+dist/assets/Thread-CsxIn8g7.js                3.27 kB │ gzip:   1.52 kB
+dist/assets/Security-CzUsVycN.js              3.29 kB │ gzip:   1.57 kB
+dist/assets/Activity-maHVqx7H.js              3.32 kB │ gzip:   1.57 kB
+dist/assets/Profile-C94D6frE.js               3.75 kB │ gzip:   1.57 kB
+dist/assets/Notifications-CEBXL5Fc.js         4.10 kB │ gzip:   1.90 kB
+dist/assets/Customers-DIIwcUVv.js             4.41 kB │ gzip:   1.76 kB
+dist/assets/Support-fFYRmSFw.js               4.52 kB │ gzip:   1.97 kB
+dist/assets/Returns-C02fDGh7.js               4.55 kB │ gzip:   1.88 kB
+dist/assets/Campaigns-CONsd8uA.js             4.67 kB │ gzip:   1.94 kB
+dist/assets/Refunds-atfRjEQ7.js               5.10 kB │ gzip:   1.98 kB
+dist/assets/Customer-Dc3D1-GS.js              7.04 kB │ gzip:   2.80 kB
+dist/assets/Membership-BZH_vr_y.js            7.09 kB │ gzip:   2.68 kB
+dist/assets/Changes-CpibPFPe.js               7.20 kB │ gzip:   2.67 kB
+dist/assets/PlanEditor-CglPny5h.js            7.61 kB │ gzip:   2.77 kB
+dist/assets/OrderTools-Cv0LIyKh.js            7.72 kB │ gzip:   3.39 kB
+dist/assets/OrderConversation-BdMn2sYT.js     8.32 kB │ gzip:   3.01 kB
+dist/assets/Finance-CIONOa6I.js               9.01 kB │ gzip:   3.02 kB
+dist/assets/Shipping-DqYA1rnC.js              9.95 kB │ gzip:   3.13 kB
+dist/assets/ContentEditor-CH173rFN.js        10.87 kB │ gzip:   3.86 kB
+dist/assets/Workbench-CepzhnTu.js            14.19 kB │ gzip:   4.64 kB
+dist/assets/RequestForm-D-RlBcqT.js          15.08 kB │ gzip:   5.79 kB
+dist/assets/vendor-tC-8nePI.js               86.23 kB │ gzip:  24.50 kB
+dist/assets/index-Df_ntmry.js               105.03 kB │ gzip:  32.68 kB
+dist/assets/react-tuUoifJV.js               259.27 kB │ gzip:  82.23 kB
+dist/assets/firebase-C0WRHRCO.js            558.23 kB │ gzip: 165.35 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/shared/firebase.ts is dynamically imported by src/features/ask/transport.ts but also statically imported by src/app/App.tsx, src/app/SiteChrome.tsx, src/features/ask/Commerce.tsx, src/features/ask/ImageIntake.tsx, src/features/ask/InlineSupport.tsx, ..., dynamic import will not move module into another chunk.
+
+✓ built in 651ms

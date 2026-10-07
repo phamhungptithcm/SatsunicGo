@@ -1,0 +1,275 @@
+{
+  "source": "src/features/ask/Commerce.tsx",
+  "strings": [
+    {
+      "line": 424,
+      "vi": "\"Chưa tạo được trang thanh toán. Thử lại; đơn chưa được ghi nhận thêm tiền.\"",
+      "en": "\"Payment page unavailable. Retry; no additional payment has been recorded.\""
+    },
+    {
+      "line": 460,
+      "vi": "\"Kiểm tra thị trường, tên sản phẩm, số lượng và link.\"",
+      "en": "\"Check the market, product names, quantities and links.\""
+    },
+    {
+      "line": 484,
+      "vi": "\"Yêu cầu mua hộ trong chat\"",
+      "en": "\"Buying request in chat\""
+    },
+    {
+      "line": 489,
+      "vi": "\"Chuẩn bị yêu cầu mua hộ\"",
+      "en": "\"Prepare buying request\""
+    },
+    {
+      "line": 494,
+      "vi": "\"Mua từ\"",
+      "en": "\"Source market\""
+    },
+    {
+      "line": 501,
+      "vi": "\"Chọn thị trường\"",
+      "en": "\"Choose market\""
+    },
+    {
+      "line": 513,
+      "vi": "`Sản phẩm ${i + 1}`",
+      "en": "`Item ${i + 1}`"
+    },
+    {
+      "line": 515,
+      "vi": "\"Tên sản phẩm\"",
+      "en": "\"Product name\""
+    },
+    {
+      "line": 525,
+      "vi": "\"Link · nếu có\"",
+      "en": "\"Link · optional\""
+    },
+    {
+      "line": 534,
+      "vi": "\"Màu / size / phiên bản\"",
+      "en": "\"Color / size / variant\""
+    },
+    {
+      "line": 542,
+      "vi": "\"Số lượng\"",
+      "en": "\"Quantity\""
+    },
+    {
+      "line": 555,
+      "vi": "\"Ghi chú · không bắt buộc\"",
+      "en": "\"Notes · optional\""
+    },
+    {
+      "line": 563,
+      "vi": "\"Lưu bản nháp\"",
+      "en": "\"Save draft\""
+    },
+    {
+      "line": 570,
+      "vi": "\"Chưa chọn phiên bản\"",
+      "en": "\"Variant unspecified\""
+    },
+    {
+      "line": 576,
+      "vi": "\"Thị trường\"",
+      "en": "\"Market\""
+    },
+    {
+      "line": 581,
+      "vi": "\"Ngân sách\"",
+      "en": "\"Budget\""
+    },
+    {
+      "line": 587,
+      "vi": "\"Kiểm tra sản phẩm trước khi gửi. Đây là yêu cầu báo giá, chưa mua hoặc thanh toán.\"",
+      "en": "\"Review the items before sending. This requests a quote; it does not purchase or pay.\""
+    },
+    {
+      "line": 604,
+      "vi": "\"Gửi yêu cầu mua hộ\"",
+      "en": "\"Send buying request\""
+    },
+    {
+      "line": 614,
+      "vi": "\"Chưa đăng nhập được. Thử lại.\"",
+      "en": "\"Sign-in failed. Try again.\""
+    },
+    {
+      "line": 623,
+      "vi": "\"Đăng nhập để lưu và gửi yêu cầu\"",
+      "en": "\"Sign in to save and send\""
+    },
+    {
+      "line": 628,
+      "vi": "\"Đơn mua hộ\"",
+      "en": "\"Buying order\""
+    },
+    {
+      "line": 649,
+      "vi": "\"Đơn đang tạm giữ. Nhân viên sẽ xử lý bước tiếp theo.\"",
+      "en": "\"Order on hold. Staff will handle the next step.\""
+    },
+    {
+      "line": 662,
+      "vi": "\"Báo giá\"",
+      "en": "\"Quote\""
+    },
+    {
+      "line": 683,
+      "vi": "a",
+      "en": "b"
+    },
+    {
+      "line": 687,
+      "vi": "\"Tổng báo giá\"",
+      "en": "\"Quote total\""
+    },
+    {
+      "line": 691,
+      "vi": "\"Cọc 50%\"",
+      "en": "\"50% deposit\""
+    },
+    {
+      "line": 695,
+      "vi": "\"Hiệu lực đến\"",
+      "en": "\"Valid until\""
+    },
+    {
+      "line": 701,
+      "vi": "\"Phiên bản điều khoản\"",
+      "en": "\"Terms version\""
+    },
+    {
+      "line": 719,
+      "vi": "\"Thông tin nhận hàng\"",
+      "en": "\"Delivery details\""
+    },
+    {
+      "line": 722,
+      "vi": "\"Dùng địa chỉ đã lưu\"",
+      "en": "\"Use saved address\""
+    },
+    {
+      "line": 738,
+      "vi": "\"Chọn địa chỉ\"",
+      "en": "\"Choose address\""
+    },
+    {
+      "line": 749,
+      "vi": "\"Người nhận\"",
+      "en": "\"Recipient\""
+    },
+    {
+      "line": 762,
+      "vi": "\"Số điện thoại\"",
+      "en": "\"Phone\""
+    },
+    {
+      "line": 776,
+      "vi": "\"Địa chỉ nhận\"",
+      "en": "\"Delivery address\""
+    },
+    {
+      "line": 789,
+      "vi": "\"Thông tin này dùng để giao hàng, không gửi cho AI. Kiểm tra trước khi chốt báo giá.\"",
+      "en": "\"These details are used for delivery, not sent to AI. Review before accepting the quote.\""
+    },
+    {
+      "line": 795,
+      "vi": "\"Lưu thông tin nhận hàng\"",
+      "en": "\"Save delivery details\""
+    },
+    {
+      "line": 802,
+      "vi": "\"Thông tin nhận hàng đã lưu\"",
+      "en": "\"Saved delivery details\""
+    },
+    {
+      "line": 812,
+      "vi": "\"Kiểm tra / sửa địa chỉ\"",
+      "en": "\"Review / edit address\""
+    },
+    {
+      "line": 834,
+      "vi": "\"Chấp nhận báo giá và mức cọc\"",
+      "en": "\"Accept quote and deposit\""
+    },
+    {
+      "line": 841,
+      "vi": "\"Báo giá đã hết hạn. Cần báo giá mới từ nhân viên.\"",
+      "en": "\"Quote expired. Staff must provide a new quote.\""
+    },
+    {
+      "line": 849,
+      "vi": "\"Tổng phí cuối\"",
+      "en": "\"Final total\""
+    },
+    {
+      "line": 853,
+      "vi": "\"Tiền đã xác nhận, trừ hoàn tiền\"",
+      "en": "\"Verified payments less refunds\""
+    },
+    {
+      "line": 871,
+      "vi": "\"Duyệt tổng phí cuối\"",
+      "en": "\"Approve final total\""
+    },
+    {
+      "line": 877,
+      "vi": "\"Còn cần thanh toán\"",
+      "en": "\"Amount due\""
+    },
+    {
+      "line": 894,
+      "vi": "\"Mở bước thanh toán\"",
+      "en": "\"Prepare payment\""
+    },
+    {
+      "line": 901,
+      "vi": "\"Kiểm tra và thanh toán tại payOS\"",
+      "en": "\"Review and pay at payOS\""
+    },
+    {
+      "line": 907,
+      "vi": "\"Quay lại chat để theo dõi. Tiền chỉ được xác nhận sau khi hệ thống đối chiếu.\"",
+      "en": "\"Return to chat to track progress. Payment is confirmed only after verification.\""
+    },
+    {
+      "line": 915,
+      "vi": "\"Đang chờ nhân viên hoặc đơn vị vận chuyển xử lý. Tiến độ sẽ cập nhật tại đây.\"",
+      "en": "\"Waiting for staff or the carrier. Progress will update here.\""
+    },
+    {
+      "line": 933,
+      "vi": "\"Xác nhận đã nhận đủ hàng\"",
+      "en": "\"Confirm all items received\""
+    },
+    {
+      "line": 938,
+      "vi": "\"Mã vận chuyển\"",
+      "en": "\"Tracking reference\""
+    },
+    {
+      "line": 942,
+      "vi": "\"Yêu cầu hỗ trợ / đổi trả\"",
+      "en": "\"Request support / returns\""
+    },
+    {
+      "line": 948,
+      "vi": "\"Đối chiếu thao tác đang chờ\"",
+      "en": "\"Recover pending action\""
+    },
+    {
+      "line": 957,
+      "vi": "\"Bắt đầu yêu cầu khác\"",
+      "en": "\"Start another request\""
+    },
+    {
+      "line": 961,
+      "vi": "\"Đang xử lý…\"",
+      "en": "\"Processing…\""
+    }
+  ]
+}

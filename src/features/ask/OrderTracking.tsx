@@ -84,18 +84,14 @@ export function OrderTracking({
         className="orderTrackingSteps"
         aria-label={vi ? "Các bước xử lý" : "Processing steps"}
       >
-        {steps.map((step) => (
+        {steps.map((step, index) => (
           <li
             key={step.label}
             data-state={step.state}
             aria-current={step.state === "current" ? "step" : undefined}
           >
             <span className="orderTrackingStepIcon" aria-hidden="true">
-              {step.state === "completed"
-                ? "✓"
-                : step.state === "current"
-                  ? "●"
-                  : "○"}
+              {index + 1}
             </span>
             <div className="orderTrackingStepContent">
               <span className="orderTrackingStepLabel">{step.label}</span>{" "}

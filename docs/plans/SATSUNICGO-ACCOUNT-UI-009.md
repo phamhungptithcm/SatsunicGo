@@ -1,0 +1,5 @@
+# Account UI correction — 009
+
+Approved scope basis: existing E2E005/UX004 UI polish and owner's current screenshot correction request. No new backend scope.
+Observed source: adjacent unstyled profile/security links, unstyled reorder/export controls, plain details summaries, and unspaced shipment section reproduce screenshot. Tailwind reset removes default button/heading styling; these controls need explicit scoped styling.
+Plan: add account-only stylesheet; Account root/navigation/secondary-panel wrappers in App.tsx; group reorder/export controls in OrderTools. Preserve order data, role checks, listeners, financial commands and all state semantics. White/light-gray, navy and royal blue; quiet borders, compact spacing, responsive stacking, keyboard focus and reduced-motion support. No invented delivery progress or paid status. Current intelligence DEGRADED; bounded source reads authoritative. Validate scoped lint/typecheck, rendered desktop/mobile and expanded disclosures. Preserve parallel UI/Ask source ownership.

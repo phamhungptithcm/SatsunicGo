@@ -1,0 +1,747 @@
+--- before/src/app/App.tsx
++++ after/src/app/App.tsx
+@@ -1,3 +1,4 @@
++import { routeModules } from "./route-modules";
+ import { LoadingState } from "../shared/Loading";
+ import { CampaignBanner } from "../features/content/CampaignBanner";
+ import { AccountRail } from "../features/account/AccountRail";
+@@ -13,12 +14,12 @@
+ );
+ import { staffRoles } from "../shared/staff-access";
+ const Documents = lazy(() =>
+-  import("../features/invoices/Documents").then((m) => ({
++  routeModules.documents().then((m) => ({
+     default: m.Documents,
+   })),
+ );
+ const SharedDocument = lazy(() =>
+-  import("../features/invoices/Documents").then((m) => ({
++  routeModules.documents().then((m) => ({
+     default: m.SharedDocument,
+   })),
+ );
+@@ -66,7 +67,7 @@
+   type Order,
+ } from "../../packages/domain";
+ const RequestForm = lazy(() =>
+-  import("../features/requests/RequestForm").then((m) => ({
++  routeModules.request().then((m) => ({
+     default: m.RequestForm,
+   })),
+ );
+@@ -81,7 +82,7 @@
+   })),
+ );
+ const CustomerShipments = lazy(() =>
+-  import("../features/shipping/CustomerShipments").then((m) => ({
++  routeModules.shipments().then((m) => ({
+     default: m.CustomerShipments,
+   })),
+ );
+@@ -98,7 +99,7 @@
+ );
+ import { OneTap } from "../features/auth/OneTap";
+ const Security = lazy(() =>
+-  import("../features/auth/Security").then((m) => ({ default: m.Security })),
++  routeModules.security().then((m) => ({ default: m.Security })),
+ );
+ const CustomerChanges = lazy(() =>
+   import("../features/orders/Changes").then((m) => ({
+@@ -107,30 +108,30 @@
+ );
+ 
+ const Notifications = lazy(() =>
+-  import("../features/notifications/Notifications").then((m) => ({
++  routeModules.notifications().then((m) => ({
+     default: m.Notifications,
+   })),
+ );
+ const Profile = lazy(() =>
+-  import("../features/profile/Profile").then((m) => ({ default: m.Profile })),
++  routeModules.profile().then((m) => ({ default: m.Profile })),
+ );
+ 
+ const Catalog = lazy(() =>
+-  import("../features/content/Content").then((m) => ({ default: m.Catalog })),
++  routeModules.content().then((m) => ({ default: m.Catalog })),
+ );
+ const ContentDetail = lazy(() =>
+-  import("../features/content/Content").then((m) => ({
++  routeModules.content().then((m) => ({
+     default: m.ContentDetail,
+   })),
+ );
+ 
+ const Membership = lazy(() =>
+-  import("../features/membership/Membership").then((m) => ({
++  routeModules.membership().then((m) => ({
+     default: m.Membership,
+   })),
+ );
+ const Support = lazy(() =>
+-  import("../features/support/Support").then((m) => ({ default: m.Support })),
++  routeModules.support().then((m) => ({ default: m.Support })),
+ );
+ import { Ask } from "../features/ask/Ask";
+ const money = (n: number) =>
+@@ -221,10 +222,14 @@
+     [authBusy, setAuthBusy] = useState(false),
+     [authReady, setAuthReady] = useState(!auth);
+   const location = useLocation();
++  const accountView =
++    location.pathname === "/account"
++      ? new URLSearchParams(location.search).get("view")
++      : null;
+   useEffect(() => {
+     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+     document.getElementById("main")?.focus({ preventScroll: true });
+-  }, [location.pathname]);
++  }, [location.pathname, accountView]);
+   useEffect(() => {
+     if (auth)
+       return onAuthStateChanged(auth, (current) => {
+@@ -311,7 +316,15 @@
+                   <section className="accountWorkspace securityWorkspace">
+                     <AccountRail active="security" />
+                     <div className="accountPage">
+-                      <Security key={user?.uid ?? "anonymous"} user={user} />
++                      <Suspense
++                        fallback={
++                          <LoadingState className="accountLoading">
++                            Đang mở mục này…
++                          </LoadingState>
++                        }
++                      >
++                        <Security key={user?.uid ?? "anonymous"} user={user} />
++                      </Suspense>
+                     </div>
+                   </section>
+                 }
+@@ -322,7 +335,15 @@
+                   <section className="accountWorkspace securityWorkspace">
+                     <AccountRail active="profile" />
+                     <div className="accountPage">
+-                      <Profile key={user?.uid ?? "anonymous"} user={user} />
++                      <Suspense
++                        fallback={
++                          <LoadingState className="accountLoading">
++                            Đang mở mục này…
++                          </LoadingState>
++                        }
++                      >
++                        <Profile key={user?.uid ?? "anonymous"} user={user} />
++                      </Suspense>
+                     </div>
+                   </section>
+                 }
+@@ -737,7 +758,7 @@
+   return (
+     <section className="accountWorkspace">
+       <AccountRail active={space} />
+-      <div className="accountPage" key={`${space}:${selectedId ?? "list"}`}>
++      <div className="accountPage">
+         {selectedId && space === "orders" && (
+           <Link className="accountBack" to="/account">
+             ← Tất cả đơn của tôi
+--- before/src/app/SiteChrome.tsx
++++ after/src/app/SiteChrome.tsx
+@@ -4,6 +4,7 @@
+ import type { User } from "firebase/auth";
+ import { doc, onSnapshot } from "firebase/firestore";
+ import { db } from "../shared/firebase";
++import { preloadNavigation } from "./route-modules";
+ const navigation = [
+   ["Sản phẩm", "/products"],
+   ["Mua hộ", "/request"],
+@@ -137,7 +138,11 @@
+         </svg>
+       </button>
+       {open && (
+-        <div className="accountDropdown">
++        <div
++          className="accountDropdown"
++          onPointerOver={preloadNavigation}
++          onFocusCapture={preloadNavigation}
++        >
+           <div className="accountIdentity">
+             <strong>{name}</strong>
+             {email && <span>{email}</span>}
+@@ -270,6 +275,8 @@
+           id="primary-navigation"
+           aria-label="Điều hướng chính"
+           data-open={open}
++          onPointerOver={preloadNavigation}
++          onFocusCapture={preloadNavigation}
+         >
+           {navigation.map(([label, path]) => (
+             <NavLink key={path} to={path} onClick={() => setOpen(false)}>
+@@ -283,7 +290,12 @@
+           )}
+         </nav>
+         <div className="headerActions">
+-          <Link className="headerRequest" to="/request">
++          <Link
++            className="headerRequest"
++            to="/request"
++            onPointerEnter={preloadNavigation}
++            onFocus={preloadNavigation}
++          >
+             Mua hộ <span aria-hidden="true">↗</span>
+           </Link>
+           {user && (
+--- before/src/features/account/AccountRail.tsx
++++ after/src/features/account/AccountRail.tsx
+@@ -1,5 +1,6 @@
+ import "./account-rail.css";
+ import { Link } from "react-router-dom";
++import { preloadNavigation } from "../../app/route-modules";
+ function RailIcon({
+   kind,
+ }: {
+@@ -67,7 +68,11 @@
+   active: "orders" | "shipments" | "notifications" | "profile" | "security";
+ }) {
+   return (
+-    <aside className="customerRail">
++    <aside
++      className="customerRail"
++      onPointerOver={preloadNavigation}
++      onFocusCapture={preloadNavigation}
++    >
+       <span className="customerRailLabel">TÀI KHOẢN</span>
+       <nav aria-label="Không gian khách hàng">
+         <Link
+--- before/src/features/ask/Ask.module.css
++++ after/src/features/ask/Ask.module.css
+@@ -492,19 +492,6 @@
+     transform: none;
+   }
+ }
+-.idle {
+-  animation: composerEnter 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+-}
+-@keyframes composerEnter {
+-  from {
+-    opacity: 0;
+-    transform: translate(-50%, 6px);
+-  }
+-  to {
+-    opacity: 1;
+-    transform: translate(-50%, 0);
+-  }
+-}
+ @media (prefers-reduced-motion: reduce) {
+   .idle {
+     animation: none;
+--- before/src/shared/Loading.tsx
++++ after/src/shared/Loading.tsx
+@@ -6,7 +6,7 @@
+ export function LoadingState({
+   children,
+   className = "",
+-  overlay = true,
++  overlay = false,
+ }: {
+   children: ReactNode;
+   className?: string;
+--- before/src/shared/loading.css
++++ after/src/shared/loading.css
+@@ -6,8 +6,6 @@
+   place-items: center;
+   padding: 20px;
+   background: rgba(244, 247, 253, 0.38);
+-  backdrop-filter: blur(3px);
+-  -webkit-backdrop-filter: blur(3px);
+   pointer-events: none;
+ }
+ .loadingOverlayCard {
+@@ -76,11 +74,6 @@
+     border-right-color: #163cff;
+   }
+ }
+-@supports not (backdrop-filter: blur(3px)) {
+-  .loadingOverlay {
+-    background: rgba(244, 247, 253, 0.94);
+-  }
+-}
+ 
+ .siteToast[data-kind] {
+   z-index: 1001;
+--- before/src/styles/account.css
++++ after/src/styles/account.css
+@@ -71,7 +71,6 @@
+ }
+ .accountPage {
+   min-width: 0;
+-  animation: accountReveal 180ms ease-out;
+ }
+ .accountPage > .pageHeading {
+   align-items: center;
+@@ -234,9 +233,6 @@
+ .detailSection {
+   padding-top: 28px;
+ }
+-.detailSection.isVisible {
+-  animation: accountReveal 160ms ease-out;
+-}
+ .orderNextStep {
+   display: flex;
+   align-items: flex-start;
+@@ -381,16 +377,6 @@
+   color: #788295;
+   font-size: 14px;
+ }
+-@keyframes accountReveal {
+-  from {
+-    opacity: 0;
+-    transform: translateY(4px);
+-  }
+-  to {
+-    opacity: 1;
+-    transform: translateY(0);
+-  }
+-}
+ @media (max-width: 900px) {
+   .accountWorkspace {
+     grid-template-columns: 156px minmax(0, 1fr);
+--- before/src/styles/global.css
++++ after/src/styles/global.css
+@@ -812,14 +812,10 @@
+   font-size: clamp(45px, 5vw, 70px);
+   letter-spacing: -2.8px;
+ }
+-.heroCopy {
+-  animation: content-enter 420ms var(--ease-out) both;
+-}
+ .journey {
+   background: #f6f8fc;
+   border-radius: 24px;
+   box-shadow: 0 12px 36px #111c3505;
+-  animation: content-enter 480ms var(--ease-out) both;
+ }
+ .marketSection {
+   max-width: 1280px;
+@@ -1208,16 +1204,6 @@
+   from {
+     opacity: 0;
+     transform: translateY(-8px);
+-  }
+-  to {
+-    opacity: 1;
+-    transform: translateY(0);
+-  }
+-}
+-@keyframes content-enter {
+-  from {
+-    opacity: 0.7;
+-    transform: translateY(12px);
+   }
+   to {
+     opacity: 1;
+--- before/src/app/route-modules.ts
++++ after/src/app/route-modules.ts
+@@ -0,0 +1,73 @@
++import type { SyntheticEvent } from "react";
++
++/** Share one code request between intent preloading and React.lazy. Failed
++ * preloads release our cache; the browser may still require reload to retry
++ * a failed module URL. No data loads. */
++export function cacheModule<T>(load: () => Promise<T>) {
++  let request: Promise<T> | undefined;
++  return () => {
++    request ??= load().catch((error: unknown) => {
++      request = undefined;
++      throw error;
++    });
++    return request;
++  };
++}
++
++export const routeModules = {
++  request: cacheModule(() => import("../features/requests/RequestForm")),
++  content: cacheModule(() => import("../features/content/Content")),
++  membership: cacheModule(() => import("../features/membership/Membership")),
++  support: cacheModule(() => import("../features/support/Support")),
++  profile: cacheModule(() => import("../features/profile/Profile")),
++  security: cacheModule(() => import("../features/auth/Security")),
++  documents: cacheModule(() => import("../features/invoices/Documents")),
++  shipments: cacheModule(
++    () => import("../features/shipping/CustomerShipments"),
++  ),
++  notifications: cacheModule(
++    () => import("../features/notifications/Notifications"),
++  ),
++};
++
++/** Only destinations actually offered by public/account navigation. */
++export function routeModuleKey(pathname: string, search = "") {
++  switch (pathname) {
++    case "/request":
++      return "request";
++    case "/products":
++    case "/posts":
++      return "content";
++    case "/membership":
++      return "membership";
++    case "/support":
++      return "support";
++    case "/account/profile":
++      return "profile";
++    case "/account/security":
++      return "security";
++    case "/account/documents":
++      return "documents";
++    case "/account": {
++      const view = new URLSearchParams(search).get("view");
++      if (view === "shipments" || view === "notifications") return view;
++      return undefined;
++    }
++    default:
++      return undefined;
++  }
++}
++
++export function preloadNavigation(event: SyntheticEvent<HTMLElement>) {
++  if (!(event.target instanceof Element)) return;
++  const link = event.target.closest("a[href]");
++  if (!link || !event.currentTarget.contains(link)) return;
++  const url = new URL(link.getAttribute("href")!, window.location.href);
++  if (url.origin !== window.location.origin) return;
++  const key = routeModuleKey(url.pathname, url.search);
++  if (key) {
++    // Optional optimization: a preload failure must never become an unhandled
++    // rejection or replace the destination's normal error boundary.
++    void routeModules[key]().catch(() => undefined);
++  }
++}
+--- before/tests/unit/navigation-performance087.test.ts
++++ after/tests/unit/navigation-performance087.test.ts
+@@ -0,0 +1,47 @@
++import { describe, expect, it, vi } from "vitest";
++import { cacheModule, routeModuleKey } from "../../src/app/route-modules";
++
++describe("navigation code preloading", () => {
++  it("shares concurrent preload/navigation work and the resolved module", async () => {
++    let resolve!: (value: { component: string }) => void;
++    const request = new Promise<{ component: string }>((done) => {
++      resolve = done;
++    });
++    const load = vi.fn(() => request);
++    const cached = cacheModule(load);
++    const first = cached();
++    expect(cached()).toBe(first);
++    resolve({ component: "profile" });
++    await expect(first).resolves.toEqual({ component: "profile" });
++    expect(cached()).toBe(first);
++    expect(load).toHaveBeenCalledTimes(1);
++  });
++
++  it("releases a failed preload for a subsequent navigation attempt", async () => {
++    const load = vi
++      .fn()
++      .mockRejectedValueOnce(new Error("offline"))
++      .mockResolvedValueOnce({ component: "security" });
++    const cached = cacheModule(load);
++    await expect(cached()).rejects.toThrow("offline");
++    await expect(cached()).resolves.toEqual({ component: "security" });
++    expect(load).toHaveBeenCalledTimes(2);
++  });
++
++  it("maps account query views and only the offered navigation destinations", () => {
++    expect(routeModuleKey("/account", "?view=shipments&filter=all")).toBe(
++      "shipments",
++    );
++    expect(routeModuleKey("/account", "?view=notifications")).toBe(
++      "notifications",
++    );
++    expect(routeModuleKey("/account", "?view=untrusted")).toBeUndefined();
++    expect(routeModuleKey("/account", "?filter=all")).toBeUndefined();
++    expect(routeModuleKey("/account/orders/private-order")).toBeUndefined();
++    expect(routeModuleKey("/crm")).toBeUndefined();
++    expect(routeModuleKey("/products/private-slug")).toBeUndefined();
++    expect(routeModuleKey("/posts")).toBe("content");
++    expect(routeModuleKey("/products")).toBe("content");
++    expect(routeModuleKey("/account/security")).toBe("security");
++  });
++});
+--- before/tests/browser/navigation-performance087.spec.ts
++++ after/tests/browser/navigation-performance087.spec.ts
+@@ -0,0 +1,278 @@
++import { expect, test } from "@playwright/test";
++import { writeFile } from "node:fs/promises";
++
++type NavigationMetrics = {
++  frames: number;
++  maxFrameGapMs: number;
++  longTasks: number;
++  longestTaskMs: number;
++  longTasksSupported: boolean;
++  stopped: boolean;
++};
++declare global {
++  interface Window {
++    nav087: NavigationMetrics;
++  }
++}
++
++const origin = "http://127.0.0.1:5207";
++test.use({ baseURL: origin });
++
++async function account(
++  page: import("@playwright/test").Page,
++  authenticated = false,
++) {
++  await page.goto("/account");
++  await expect(page.locator(".customerRail")).toBeVisible();
++  if (authenticated) {
++    // UI-only demo sign-in. No seeding, cleanup or real Google/provider use.
++    await expect(
++      page.getByRole("heading", { name: "Tài khoản thử nghiệm" }),
++    ).toBeVisible();
++    await page.getByLabel("Vai trò thử").selectOption("customer-a");
++    await page.getByRole("button", { name: "Đăng nhập thử nghiệm" }).click();
++    await expect(page.locator(".demoLogin")).toHaveCount(0);
++    await expect(page.locator(".accountLoading")).toHaveCount(0);
++  }
++}
++
++for (const width of [1440, 390]) {
++  test(`query tabs keep their content host at ${width}px`, async ({
++    page,
++  }, testInfo) => {
++    await page.setViewportSize({ width, height: 900 });
++    await account(page, true);
++    await page.evaluate(() => {
++      const metrics: NavigationMetrics = {
++        frames: 0,
++        maxFrameGapMs: 0,
++        longTasks: 0,
++        longestTaskMs: 0,
++        longTasksSupported:
++          PerformanceObserver.supportedEntryTypes.includes("longtask"),
++        stopped: false,
++      };
++      window.nav087 = metrics;
++      let previous = performance.now();
++      const frame = (now: number) => {
++        if (metrics.stopped) return;
++        metrics.frames++;
++        metrics.maxFrameGapMs = Math.max(metrics.maxFrameGapMs, now - previous);
++        previous = now;
++        requestAnimationFrame(frame);
++      };
++      requestAnimationFrame(frame);
++      if (metrics.longTasksSupported) {
++        const observer = new PerformanceObserver((list) => {
++          for (const entry of list.getEntries()) {
++            metrics.longTasks++;
++            metrics.longestTaskMs = Math.max(
++              metrics.longestTaskMs,
++              entry.duration,
++            );
++          }
++          if (metrics.stopped) observer.disconnect();
++        });
++        observer.observe({ type: "longtask" });
++      }
++    });
++    const host = await page.locator(".accountPage").elementHandle();
++    for (const [label, title] of [
++      ["Vận chuyển", "Vận chuyển"],
++      ["Thông báo", "Thông báo"],
++      ["Đơn của tôi", "Đơn của tôi"],
++      ["Vận chuyển", "Vận chuyển"],
++      ["Thông báo", "Thông báo"],
++    ]) {
++      await page
++        .locator(".customerRail")
++        .getByRole("link", { name: label, exact: true })
++        .click();
++      await expect(page.locator(".accountPage h1")).toHaveText(title);
++      expect(await host!.evaluate((element) => element.isConnected)).toBe(true);
++      expect(
++        await page
++          .locator(".accountPage")
++          .evaluate((element) => getComputedStyle(element).animationName),
++      ).toBe("none");
++      await expect(page.locator(".loadingOverlay")).toHaveCount(0);
++      await expect(page.locator("#main")).toBeFocused();
++    }
++    await expect
++      .poll(() =>
++        page.evaluate(
++          () => document.documentElement.scrollWidth <= window.innerWidth,
++        ),
++      )
++      .toBe(true);
++    const metrics = await page.evaluate(() => {
++      window.nav087.stopped = true;
++      return window.nav087;
++    });
++    const evidence = JSON.stringify(
++      {
++        environment: "LOCAL_EMULATOR_HEADLESS_CHROMIUM",
++        phase: "AFTER_ONLY",
++        width,
++        switches: 5,
++        ...metrics,
++        longTasks: metrics.longTasksSupported ? metrics.longTasks : null,
++        longestTaskMs: metrics.longTasksSupported
++          ? metrics.longestTaskMs
++          : null,
++      },
++      null,
++      2,
++    );
++    await writeFile(
++      `docs/reviews/NAV-PERF-087-${width}-metrics.json`,
++      evidence,
++    );
++    await testInfo.attach("frame-sample", {
++      body: evidence,
++      contentType: "application/json",
++    });
++    await page.screenshot({
++      path: `docs/reviews/NAV-PERF-087-${width}.png`,
++      fullPage: true,
++    });
++    await testInfo.attach("screen", {
++      path: `docs/reviews/NAV-PERF-087-${width}.png`,
++      contentType: "image/png",
++    });
++  });
++}
++
++test("a cold slow account module keeps navigation and announces inline loading", async ({
++  page,
++}) => {
++  let release!: () => void;
++  const hold = new Promise<void>((resolve) => {
++    release = resolve;
++  });
++  await page.route("**/src/features/auth/Security.tsx*", async (route) => {
++    await hold;
++    await route.continue();
++  });
++  await account(page);
++  const link = page
++    .locator(".customerRail")
++    .getByRole("link", { name: "Bảo mật tài khoản" });
++  const started = await page.evaluate(() => performance.now());
++  await link.click();
++  await expect(page.locator(".customerRail")).toBeVisible();
++  await expect(page.locator(".accountPage [role=status]")).toHaveText(
++    "Đang mở mục này…",
++  );
++  // Observe through the overlay's existing 400ms threshold without arbitrary sleeps.
++  await expect
++    .poll(() =>
++      page.evaluate(() => performance.now()).then((now) => now - started),
++    )
++    .toBeGreaterThan(450);
++  await expect(page.locator(".loadingOverlay")).toHaveCount(0);
++  await page.screenshot({
++    path: "docs/reviews/NAV-PERF-087-inline-loading.png",
++    fullPage: true,
++  });
++  await page
++    .locator(".customerRail")
++    .getByRole("link", { name: "Đơn của tôi", exact: true })
++    .click();
++  await expect(page.locator(".accountPage h1")).toHaveText("Đơn của tôi");
++  release();
++  await link.click();
++  await expect(page.locator(".accountPage h1")).toHaveText("Bảo mật tài khoản");
++});
++
++test("a failed optional preload can recover on navigation", async ({
++  page,
++}) => {
++  let requests = 0;
++  await page.route("**/src/features/auth/Security.tsx*", async (route) => {
++    requests++;
++    if (requests === 1) await route.abort("failed");
++    else await route.continue();
++  });
++  await account(page);
++  const link = page
++    .locator(".customerRail")
++    .getByRole("link", { name: "Bảo mật tài khoản" });
++  await link.focus();
++  await expect.poll(() => requests).toBe(1);
++  await expect(page.locator(".accountPage h1")).toHaveText("Đơn của tôi");
++  await link.press("Enter");
++  // Native module maps may retain a failed fetch. In that case the existing
++  // reload recovery must stay reachable; a full reload resets the module map.
++  await expect
++    .poll(() => page.locator("h1").allTextContents())
++    .toContainEqual(
++      expect.stringMatching(/Bảo mật tài khoản|Chưa mở được màn hình/),
++    );
++  if (await page.getByRole("button", { name: "Tải lại trang" }).isVisible()) {
++    await page.getByRole("button", { name: "Tải lại trang" }).click();
++  }
++  await expect(page.locator(".accountPage h1")).toHaveText("Bảo mật tài khoản");
++});
++
++test("keyboard, reduced motion, zoom and browser history", async ({ page }) => {
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await page.setViewportSize({ width: 1440, height: 1000 });
++  await account(page);
++  await page.evaluate(() => {
++    document.documentElement.style.zoom = "2";
++  });
++  const link = page
++    .locator(".customerRail")
++    .getByRole("link", { name: "Thông báo", exact: true });
++  await link.focus();
++  await link.press("Enter");
++  await expect(page.locator(".accountPage h1")).toHaveText("Thông báo");
++  await expect(page.locator("#main")).toBeFocused();
++  expect(
++    await page.evaluate(
++      () =>
++        document.documentElement.scrollWidth <=
++        document.documentElement.clientWidth,
++    ),
++  ).toBe(true);
++  await page.goBack();
++  await expect(page.locator(".accountPage h1")).toHaveText("Đơn của tôi");
++  await page.goForward();
++  await expect(page.locator(".accountPage h1")).toHaveText("Thông báo");
++});
++
++test("public routes and Ask retain identity-bound route resets without entrance bounce", async ({
++  page,
++}) => {
++  await page.goto("/");
++  for (const selector of [".heroCopy", ".journey"]) {
++    expect(
++      await page
++        .locator(selector)
++        .evaluate((element) => getComputedStyle(element).animationName),
++    ).toBe("none");
++  }
++  const ask = page.getByRole("textbox", {
++    name: "Hỏi SatsunicGo",
++    exact: true,
++  });
++  await ask.fill("Navigation test draft — do not send");
++  await page
++    .locator("#primary-navigation")
++    .getByRole("link", { name: "Mua hộ", exact: true })
++    .click();
++  await expect(page).toHaveURL(/\/request$/);
++  await expect(page.locator("#main h1")).toBeVisible();
++  await expect(
++    page.getByRole("button", { name: "Hỏi SatsunicGo", exact: true }),
++  ).toBeVisible();
++  await page.getByRole("link", { name: "SatsunicGo — Trang chủ" }).click();
++  await expect(ask).toHaveValue("");
++  expect(
++    await ask.evaluate(
++      (element) => getComputedStyle(element.closest("aside")!).animationName,
++    ),
++  ).toBe("none");
++  await expect(page.locator(".loadingOverlay")).toHaveCount(0);
++});

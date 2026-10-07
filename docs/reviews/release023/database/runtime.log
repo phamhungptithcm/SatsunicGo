@@ -1,0 +1,452 @@
+task create --id SATSUNICGO-HARDENING-023-DATABASE --goal Restore composable private order media grants and verify rules privacy with local regressions --acceptance Existing media grants compose without bank-receipt leakage --acceptance Current scoped privacy/concurrency/revocation regressions and compilation pass --path functions/src/order-media.ts --path tests/rules/order-media.test.ts --path tests/rules/firestore.test.ts --risk medium
+{
+  "version": 1,
+  "id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "goal": "Restore composable private order media grants and verify rules privacy with local regressions",
+  "acceptance_criteria": [
+    "Existing media grants compose without bank-receipt leakage",
+    "Current scoped privacy/concurrency/revocation regressions and compilation pass"
+  ],
+  "state": "DISCOVER",
+  "created_at": "2026-10-05T15:46:56.038Z",
+  "updated_at": "2026-10-05T15:46:56.067Z",
+  "capability": {
+    "allowed_tools": [
+      "read"
+    ],
+    "allowed_paths": [
+      "functions/src/order-media.ts",
+      "tests/rules/order-media.test.ts",
+      "tests/rules/firestore.test.ts"
+    ],
+    "network_domains": [],
+    "max_risk": "medium",
+    "max_actions": 100,
+    "expires_at": "2026-10-06T15:46:56.038Z",
+    "approval_hash": null,
+    "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+    "policy_revision": "4840e53081dc27fbb941753ace1670fa3c9028ce8113b1add7f3c3cca3492356",
+    "agent_adapter": "unknown"
+  },
+  "capability_hash": "4a8c3cb6c490e6d0b295eae9269cf49ec2d43cc0a1fea6bc0e9efa3c588646ae",
+  "action_count": 0,
+  "context": {
+    "facts": [],
+    "assumptions": []
+  },
+  "skill_routing": {
+    "status": "ABSTAIN",
+    "reason": "NO_MATCH",
+    "config_id": "ai-agent-kit-canonical-router-v1",
+    "config_hash": "c4297894c1da0d86721abbdb9a1ba161ed05f7d8550cc39c685e17de99c87d22",
+    "route_id": null,
+    "skill": null,
+    "suggested_route": "start-task",
+    "confidence": "low",
+    "score": 0,
+    "margin": 0
+  },
+  "execution_context": null,
+  "plan": {
+    "revision": 0,
+    "trigger": "task-created",
+    "steps": []
+  },
+  "transitions": [],
+  "orchestration": {
+    "status": "PLANNED",
+    "team_type": "BUG_WORKCELL",
+    "team_hash": "7dea47ce39b55afbf19e34f9105f10d1c46c1c773c818a84566414c378a1153f"
+  }
+}
+
+criterion record --id SATSUNICGO-HARDENING-023-DATABASE --criterion 1 --status verified --source docs/reviews/release023/database/integration-evidence.json
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "criterion": 1,
+  "criterion_hash": "3292e14e62c69f4f9863a62a61c084cf6e72fec00a5f182b0d91e6867cfb0558",
+  "status": "VERIFIED",
+  "weight": 1,
+  "evidence_source_hash": "8b3cfbbce9b9a54c923d4d8649e14c6d663bc3602dd7950e7e9eaa268bea59cc",
+  "summary": null,
+  "recorded_at": "2026-10-05T15:46:56.198Z",
+  "record_id": "bcc1eea78a301425396dba0291da9717010b6954febd26f8784a451d8ab8efde"
+}
+
+criterion record --id SATSUNICGO-HARDENING-023-DATABASE --criterion 2 --status pending --summary 16 scoped integration passed; latest test-only frontend compilation rerun requested
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "criterion": 2,
+  "criterion_hash": "d00c31af124eff4fd0c2e1adf66cae273ccb1412e585a7d77321abf1a686581b",
+  "status": "PENDING",
+  "weight": 1,
+  "evidence_source_hash": null,
+  "summary": "16 scoped integration passed; latest test-only frontend compilation rerun requested",
+  "recorded_at": "2026-10-05T15:46:56.313Z",
+  "record_id": "31069eaefad28c9ad27c27df4fa7628ae211da2fbc928cce93f7f0f9521c6488"
+}
+
+check record --id SATSUNICGO-HARDENING-023-DATABASE --gate integration --status passed --source output/playwright/release023/integration-results.json --exit-code 0 --summary 16/16 owned cases in 71/71 root integration
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "integration",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "abe881255f0792618229664c5f9d0e893063e3ffc7815bea1e4cc1eda85ca189",
+  "summary": "16/16 owned cases in 71/71 root integration",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:46:56.442Z",
+  "record_id": "ee29ad83269fc20aa22e60ed62a2c52b9aeff355d6453abdda87058986a8e4e0"
+}
+
+check record --id SATSUNICGO-HARDENING-023-DATABASE --gate static-analysis --status passed --source docs/reviews/release023/database/lint.log --exit-code 0
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "static-analysis",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "d9e119b6a3a42b15b614c4285dfa2ac0eb0b95a7ce40862995cd21b599f093ee",
+  "summary": null,
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:46:56.572Z",
+  "record_id": "017cff4f3a47fc8e36f7c88049823168401efe5f048ebb6e9fc5895b372ebf07"
+}
+
+check record --id SATSUNICGO-HARDENING-023-DATABASE --gate compilation --status not_run --summary Prior compile passed before latest test-only update; fresh frontend noemit requested
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "compilation",
+  "status": "NOT_RUN",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": null,
+  "summary": "Prior compile passed before latest test-only update; fresh frontend noemit requested",
+  "exit_code": null,
+  "recorded_at": "2026-10-05T15:46:56.703Z",
+  "record_id": "55cb3f8d40e7120486dc5540b5370cfcf37e4f77edad0492b7cbebfb45196c1f"
+}
+
+review record --id SATSUNICGO-HARDENING-023-DATABASE --file docs/reviews/release023/database/REVIEW_CYCLE1.json
+unknown final review fields: cycle
+
+check record --id SATSUNICGO-HARDENING-023-DATABASE --gate production-provider-retention --status not_run --summary Production auth/AppCheck/index plans/backup/retention/rollout acceptance outside local scope; NOT_READY
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "production-provider-retention",
+  "status": "NOT_RUN",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": null,
+  "summary": "Production auth/AppCheck/index plans/backup/retention/rollout acceptance outside local scope; NOT_READY",
+  "exit_code": null,
+  "recorded_at": "2026-10-05T15:49:48.556Z",
+  "record_id": "5d660e474048c3c51cc9c8e65951bd5df24b0cb2a56cff98913174078a6e199d"
+}
+
+criterion record --id SATSUNICGO-HARDENING-023-DATABASE --criterion 2 --status verified --source docs/reviews/release023/database/integration-evidence.json --summary 16 integration cases; fresh root frontend compile exit0 session85583
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "criterion": 2,
+  "criterion_hash": "d00c31af124eff4fd0c2e1adf66cae273ccb1412e585a7d77321abf1a686581b",
+  "status": "VERIFIED",
+  "weight": 1,
+  "evidence_source_hash": "8b3cfbbce9b9a54c923d4d8649e14c6d663bc3602dd7950e7e9eaa268bea59cc",
+  "summary": "16 integration cases; fresh root frontend compile exit0 session85583",
+  "recorded_at": "2026-10-05T15:51:04.000Z",
+  "record_id": "e4b05eb012b6d21a67f3a404b5c7b5b9206621e03bf35b31267393bd9883b630"
+}
+
+check record --id SATSUNICGO-HARDENING-023-DATABASE --gate compilation --status passed --source output/playwright/release023/frontend-typecheck.log --exit-code 0 --summary Root confirmed current frontend noEmit exit0 after test update session85583
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "compilation",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "34c9f928054eb401d702cd7b7b668970c695c9fc308425b1a54e5978ea073e48",
+  "summary": "Root confirmed current frontend noEmit exit0 after test update session85583",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:51:04.138Z",
+  "record_id": "2377726a8b6858eec7a3dee0e2e8e4d5d8319227be057174f6e15c242eadbf85"
+}
+
+review record --id SATSUNICGO-HARDENING-023-DATABASE --file docs/reviews/release023/database/FINAL_REVIEW.json
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "status": "PASSED",
+  "reviewed_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Role union corrects two reproducible code-path inconsistencies within approved local ownership. No new commercial rule.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google, active current role, UID ownership, assignment, receipt restriction and account/staff lock checks preserved. No token/secret/public Storage grant.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped ESLint/Prettier pass; root full lint, declared Node22 Functions compile and current frontend noEmit pass. Root confirmed fresh frontend exit0 session85583 after final test update. Current owned hashes match source freeze.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "All16 owned emulator cases passed in71/71 aggregate: cross-owner denial, provider claims, nested lock/query isolation, mixed role union, revoked assignment/current staff locks, three concurrent identical uploads with one counter/audit, replay and changed-id denial,20quota bound, active content rejection, authorization revoked during download denies bytes.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing safe HttpsError responses and retries preserved; no new message or external I/O inside Firestore transaction.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "NOT_READY; no deploy/index/datafix. Real auth/provider/retention/query execution plans not verified.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Share role-kind union between list/read; keep writing grant checks and bounded indexed query. Existing pending reservations kept for operator review.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "DB023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/order-media.ts authorized/listOrderImages",
+      "summary": "Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration.",
+      "resolution": "Shared union of existing role-kind grants used by list/read. Mixed-role tests pass while receipt denial and current revocation remain enforced.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending upload failures retain quota until retry/operator review; no automated confidential-file cleanup.",
+    "Real auth/AppCheck/provider, production index plans, backup/retention/rollout acceptance unverified; production NOT_READY."
+  ],
+  "limitations": [
+    "DEGRADED indexes; bounded source audit only. Shared dirty checkout with immutable owner hashes.",
+    "During-I/O test uses mocked download and actual Firestore lock commit; concurrent upload uses demo Firestore/Storage. No real provider or customer data.",
+    "Runtime reviewer declaration is LEGACY_UNVERIFIED; no independent authenticated reviewer/provider evidence.",
+    "Token usage and actual billed cost Unavailable."
+  ],
+  "recorded_at": "2026-10-05T15:51:04.268Z",
+  "reviewed_worktree_signature": "ffb801232f06d8e433fb65069fb71898c9abeb746ef5ea0860d4622a37900e97",
+  "previous_review_hash": "d25fe4ffefa3f7cac835aa045de1c36903dfa0cc78af2cd480a31e44a4eb975f",
+  "review_hash": "3b89a03ab1fddb5b3544d03026cd6873ff10d3dc5926deec27dbb5439dc613a2"
+}
+
+task report --id SATSUNICGO-HARDENING-023-DATABASE --format text
+AI Agent Kit — Final Task Report
+Task: SATSUNICGO-HARDENING-023-DATABASE
+State: DISCOVER
+Commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+Generated: 2026-10-05T15:51:04.844Z
+
+Progress: 100% — 2/2 applicable criteria verified
+
+Usage & Cost
+  Tokens used: Unavailable — no_usage_evidence
+  Estimated cost: Unavailable
+
+Completed
+  - [VERIFIED] 1. Existing media grants compose without bank-receipt leakage
+  - [VERIFIED] 2. Current scoped privacy/concurrency/revocation regressions and compilation pass
+
+Remaining
+  - No applicable acceptance criterion remains.
+
+Quality
+  - build: NOT_RUN — No current evidence recorded.
+  - compilation: PASSED — Root confirmed current frontend noEmit exit0 after test update session85583
+  - final-implementation-review: STALE — Final implementation review is STALE.
+  - integration: PASSED — 16/16 owned cases in 71/71 root integration
+  - lint: NOT_RUN — No current evidence recorded.
+  - production-provider-retention: NOT_RUN — Production auth/AppCheck/index plans/backup/retention/rollout acceptance outside local scope; NOT_READY
+  - security: NOT_RUN — No current evidence recorded.
+  - static-analysis: PASSED
+  - tests: NOT_RUN — No current evidence recorded.
+  - typecheck: NOT_RUN — No current evidence recorded.
+
+Final Implementation Review
+Decision: STALE
+Review cycles: 2
+Reviewed:
+  - requirement_match: PASSED — Role union corrects two reproducible code-path inconsistencies within approved local ownership. No new commercial rule.
+  - security: PASSED — Verified Google, active current role, UID ownership, assignment, receipt restriction and account/staff lock checks preserved. No token/secret/public Storage grant.
+  - code_quality: PASSED — Scoped ESLint/Prettier pass; root full lint, declared Node22 Functions compile and current frontend noEmit pass. Root confirmed fresh frontend exit0 session85583 after final test update. Current owned hashes match source freeze.
+  - failure_paths: PASSED — All16 owned emulator cases passed in71/71 aggregate: cross-owner denial, provider claims, nested lock/query isolation, mixed role union, revoked assignment/current staff locks, three concurrent identical uploads with one counter/audit, replay and changed-id denial,20quota bound, active content rejection, authorization revoked during download denies bytes.
+  - error_handling: PASSED — Existing safe HttpsError responses and retries preserved; no new message or external I/O inside Firestore transaction.
+  - production_readiness: PASSED — NOT_READY; no deploy/index/datafix. Real auth/provider/retention/query execution plans not verified.
+  - trade_offs: PASSED — Share role-kind union between list/read; keep writing grant checks and bounded indexed query. Existing pending reservations kept for operator review.
+Findings and fixes:
+  - cycle 1 [MEDIUM/OPEN] DB023-1 at functions/src/order-media.ts authorized/listOrderImages: Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration.
+  - cycle 2 [MEDIUM/FIXED] DB023-1 at functions/src/order-media.ts authorized/listOrderImages: Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration. — Shared union of existing role-kind grants used by list/read. Mixed-role tests pass while receipt denial and current revocation remain enforced.
+Residual risks:
+  - Pending upload failures retain quota until retry/operator review; no automated confidential-file cleanup.
+  - Real auth/AppCheck/provider, production index plans, backup/retention/rollout acceptance unverified; production NOT_READY.
+Limitations:
+  - DEGRADED indexes; bounded source audit only. Shared dirty checkout with immutable owner hashes.
+  - During-I/O test uses mocked download and actual Firestore lock commit; concurrent upload uses demo Firestore/Storage. No real provider or customer data.
+  - Runtime reviewer declaration is LEGACY_UNVERIFIED; no independent authenticated reviewer/provider evidence.
+  - Token usage and actual billed cost Unavailable.
+
+Engineering Team
+  Type: BUG_WORKCELL
+  Execution: UNSELECTED
+  Status: NOT_READY
+  Review independence: VERIFIED
+  Shared context: READY
+  Handoffs: 0
+  Open conflicts: 0
+
+Architecture Pulse
+  Evidence: NOT_RUN
+  Outcome: Unavailable
+  Artifact: Unavailable
+  Coverage: Unavailable
+  Confidence: Unavailable
+
+Code Status
+  Git worktree: DIRTY — 0 staged, 68 modified, 1064 untracked, 0 conflicts
+  No known issues were found within the executed checks.
+
+Production Readiness: NOT_READY
+  Production readiness is fail-closed until every blocker has current evidence.
+
+Blockers
+  - Task state is DISCOVER; REVIEW_READY or RELEASED is required.
+  - Git worktree is DIRTY.
+  - Final implementation review is STALE.
+  - Skill routing is ABSTAIN (NO_MATCH).
+  - Agent workcell is NOT_READY; the latest independent review must complete cleanly.
+  - Required quality gate build is NOT_RUN.
+  - Required quality gate final-implementation-review is STALE.
+  - Required quality gate lint is NOT_RUN.
+  - Required quality gate production-provider-retention is NOT_RUN.
+  - Required quality gate security is NOT_RUN.
+  - Required quality gate tests is NOT_RUN.
+  - Required quality gate typecheck is NOT_RUN.
+
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "tests",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "0f31d6e17f9c19d060e3569c2e51a79d81609003b029eb60d462f896e598cf4d",
+  "summary": "Root178/178 unit PASS; module behavior verified by16 integration cases",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:52:26.321Z",
+  "record_id": "78ec5bd998de62e906674f7563ca7cfc5b07662724c5e2ed16473b9b82b9788c"
+}
+
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "security",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "8b3cfbbce9b9a54c923d4d8649e14c6d663bc3602dd7950e7e9eaa268bea59cc",
+  "summary": "Scoped synthetic privacy/role/revocation/claim denial checks passed; production not certified",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:52:26.439Z",
+  "record_id": "0f9f47a3c6a47001629636eee644f0002125888d64a42c862feb3ef3c7a28907"
+}
+
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "typecheck",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "34c9f928054eb401d702cd7b7b668970c695c9fc308425b1a54e5978ea073e48",
+  "summary": "Root fresh noEmit confirmed exit0 session85583 after last test edit",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:52:26.557Z",
+  "record_id": "0e574eb1555927f257980f56c1ef042626a8beb8e585d5778e596a55d32caeee"
+}
+
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "lint",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "c76b8650f104fe1ff240e69c37583e82fbf8e8ce471d1da2ca8afdd967fb985a",
+  "summary": "Root full lint plus own scoped lint PASS",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:52:26.679Z",
+  "record_id": "34b14b8cebf63140a82ca6e68276fee916c2ea318278e2ba8d44ba685c689ce1"
+}
+
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "gate": "build",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "92ddecf00a3ec97ea79471cd994201da64209f0000a6c50134293aa08c81a054",
+  "summary": "Root typecheck includes Functions workspace tsc build exit0; no frontend packaging claim",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:52:26.799Z",
+  "record_id": "f040a6844b0b55101167af73d9cdcebea554095809d62a8288e303cfa9130882"
+}
+

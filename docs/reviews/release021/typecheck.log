@@ -1,0 +1,8 @@
+
+> satsunicgo@0.1.0 typecheck
+> tsc --noEmit && npm run build --workspace functions
+
+
+> satsunicgo-functions@0.1.0 build
+> tsc -p tsconfig.json
+

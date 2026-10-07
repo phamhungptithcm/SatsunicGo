@@ -1,0 +1,12 @@
+{
+  "head": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "scope": "database023 local candidate, shared dirty checkout",
+  "files": {
+    "functions/src/order-media.ts": "a7e437dbb7dc6528aaa0db939d05b4e64923762a6f7e0f893c63d918bc1be964",
+    "tests/rules/order-media.test.ts": "b72fae49833749d15735b1ffc398a08c5d631fb92d212540a0b7f0cbdf70fbfd",
+    "tests/rules/firestore.test.ts": "85d35477b56bcd02cef3088bcf4e36784d06d69bc942af016968a8a7200761c6",
+    "firestore.rules": "fd67b3edbd95eaf4fe11e645806f312a0eec2f08a4f0dce5d6b5d19142b2159a",
+    "storage.rules": "4a043206e7ecbd14ffb97ce055cd22fe2a1f1300fb4f61d1a984f5b27b6889cf",
+    "firestore.indexes.json": "ca0c50f8b62f4b4e5a2acbe88bfe146858dba706c872f581f7d0971f729c18b8"
+  }
+}

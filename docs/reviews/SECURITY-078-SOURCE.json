@@ -1,0 +1,21 @@
+{
+  "scope": "compact idle/enabled UI",
+  "files": [
+    {
+      "path": "src/features/auth/Security.tsx",
+      "sha256": "31f6a6afd4ad823423f53d35cc26e326798c47caa12291707b8877242d0bd797"
+    },
+    {
+      "path": "src/styles/security.css",
+      "sha256": "3c065fd7fee2911f94fc43fe5e164efedb86a47103a8883d92cd551836bfa379"
+    },
+    {
+      "path": "tests/browser/security-enrollment076.spec.ts",
+      "sha256": "794f42d245efb7929ca5f49ac2ab6bbcc31fdb5d124399b4bc567e82bb6d678a"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/mock.ts",
+      "sha256": "c46901323b9c01cd1eaecd00a3b16afb36871db7434f34cc66b4a389707e9574"
+    }
+  ]
+}

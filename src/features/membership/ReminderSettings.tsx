@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
 type Policy = {
@@ -134,7 +135,9 @@ export function ReminderSettings() {
       >
         Tải lại cấu hình nhắc hết hạn
       </button>
-      {busy && <p role="status">Đang xử lý cấu hình…</p>}
+      {busy && (
+        <LoadingState overlay={false}>Đang xử lý cấu hình…</LoadingState>
+      )}
       <form className="form" onSubmit={(e) => void save(e)}>
         <label>
           <input

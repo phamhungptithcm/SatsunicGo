@@ -1,0 +1,18 @@
+# Product080 archived-product independent review
+
+Read-only source/contracts review, bounded DEGRADED intelligence fallback. No shared writes, runners, SDK, providers or builds. Reviewed current private freeze `04f8a8f63389cd96f7e1931482d0abb3c4c522fcf3c2206100b4bb49680e2abb`.
+
+## Result
+Scoped private source/contracts PASS. No new medium/high source defect identified. Integration HELD; production NOT_READY. All 22 source files independently hash-match FREEZE; FINAL-RECEIPT candidate hash matches this freeze. Every named original, rebase and archived-check log hash matches. Latest archived Playwright log reports 8 PASS, including actual component fixture archived submission case. Prior 46 unit/23 isolated Auth-Firestore-Functions emulator checks remain unchanged-file evidence; they are not a new whole integrated runtime run.
+
+## Archived error and retry
+ProductReviews.tsx handles `functions/not-found` as an authoritative response, alongside denied/unauthenticated private-state clearing. It clears mine/eligibility/open/order/name/text/rating/withdraw/notice and clears pending retry operation. New text accurately says the product currently no longer accepts reviews; it does not assert an earlier lost-ACK operation never committed. Server product() generates not-found for missing/unpublished products and checks product status before submit replay. Genuine unknown ACK errors remain in the existing immutable pending payload/operation branch; controls prevent edit/new eligibility requests during pending retry. Account epoch/actual UID guards remain. Eight-suite test verifies not-found leaves no retry button or private textarea; four width cases retain lost-ACK same-operation retry coverage. Mock injects the exact declared callable error, no manufactured provider success.
+
+## Other contracts retained
+Manufacturing origin is explicit independent bounded optional metadata; missing value unverified, legacy origin retains sourcing narrative, country/retailer not manufacturing inference. Verified-purchase eligibility remains based on canonical owned paid catalog order, bounded package allocations and owner projections with actual delivered units. CAS, fresh actor/lock/role checks before replay, payload collision checks and transactional summary/public revision publication remain unchanged. No buyer UID/order identifiers in public DTO; approved moderation retains customer words and rating. Existing generic order/operation validation is not broadened.
+
+## Integration hold
+At review time five of six shared adapter base hashes matched actual files. Content.tsx base mismatched current Loading081 source; its old adapter must not be copied over. Parent also requires refreshed ContentEditor/loading integration context and additive Firebase three read-service names/index five exports preserving Banner, even where current base matches. Obtain final rebased freeze/receipt, inspect exact deltas, and run combined compiler/lint/tests/source preflight before root-only apply/lease. This receipt does not authorize stale adapter integration.
+
+## Limits
+Actual browser fixtures mount real components with SDK ports; emulator checks use isolated demo Auth/Firestore/Functions, not live Google/AppCheck/production. 200% is CSS body.zoom scaling, not browser native zoom; OS IME and screen-reader NOT_RUN. Product-content report declares these limits, but principle PASS is scoped private automated context, not production/full platform completion. Receipt checkedAt retains original timestamp; per-stage rebase/archived logs provide incremental provenance rather than simultaneous whole-candidate execution. Keep previous failure/review history. Overall final integrated handoff remains BLOCKED until current rebase/checks/review.

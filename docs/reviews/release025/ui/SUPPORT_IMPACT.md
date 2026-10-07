@@ -1,0 +1,17 @@
+# SUP025 bounded support-list impact plan
+
+Coordinator explicitly approved ownership of Support.tsx, new release-support-hardening.spec.ts and private025 docs. Before implementation root must run deterministic fail-before; UI runs no browser/emulator. Gate rerun DEGRADED: both indexes stale, CodeGraph health passed, CocoIndex health failed due daemon.log filesystem permission. Bounded actual source evidence used.
+
+Observed Support query filters ownerId and limits30 without ordering; Firestore implicit document-ID order can omit a newly committed UUID ticket behind31 older 000-prefixed IDs. Existing supportTickets index is ownerId ASC / createdAt DESC / __name__ DESC at firestore.indexes.json106–123. Initial coordinator ASC handoff corrected explicitly: approved orderBy(createdAt,desc) then orderBy(documentId(),desc); no index edit.
+
+Native regression seeds31 own old tickets createdAt1 using batch persistence plus future foreign marker. It submits through real form and polls actual persisted unique ticket before requiring visible first row, count30 and no foreign row. This separates command success from list failure. Root owns fail-before/postfix runs and evidence. Fixture writes are dedicated synthetic emulator only.
+
+After confirmed fail-before, change only query ordering/imports and heading `Yêu cầu của bạn` to `Yêu cầu gần đây`. Preserve owner constraint, limit30, listener lifecycle, ticket actions, form, auth and financial/server behavior. No pagination/refactor/schema/new index. New heading truthfully describes a recent bounded window, not complete history. Ordering excludes records without createdAt; current server openTicket writes createdAt (verified source), historical data completeness remains unverified. Risk is low-to-moderate list meaning/query compatibility; current index supports exact approved ordering. Validate actual submission beyond30, foreign exclusion and existing support lifecycle; in-context language/keyboard/responsive evidence and fresh final review required before scoped PASS.
+
+Product string inventory: one heading only, visible when tickets exist. Purpose shows recent requests; Agency retains send/reply; Responsibility avoids claiming complete history; Familiarity uses natural Vietnamese; Flexibility requires current native context; Simplicity no new controls; Craft requires correct ordering and rendered heading; Delight restores immediate visibility after submission. Current content/final status BLOCKED pending fail-before/fix/current evidence. ActualAT/provider/production acceptance NOT_RUN. No memory candidates; token usage/cost unavailable.
+
+## Confirmed fail-before and approved implementation
+
+Read support-before.log: SUP025-A01 FAIL at unique new ticket heading visibility after the persisted-ticket poll passed. No heading-copy assertion existed before this failure, so regression proves actual list omission. Root authorized implementation. Applied exactly two query orderBy constraints/imports plus recent heading; test now also asserts `Yêu cầu gần đây`. Scoped ESLint PASS. No changes to existing surrounding shared WIP, index, backend, actions or listener.
+
+Source/test frozen for root compiler/full49 pipeline. SHA256 Support.tsx: 1dd866125e36eb4d44cd33e2eaa8367c05f6d0cc2b8c60b685364ad0d7f26f72. Test: 8bfe955db2748b971a650ea857ac56d70edc854562ccd82863a831fff52b97db. Postfix/native in-context content evidence pending; scoped final review BLOCKED until current checks.

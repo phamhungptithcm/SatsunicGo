@@ -1,5 +1,7 @@
 const listeners = new Set<() => void>();
 let pending = 0;
+let overlayPending = 0;
+export const overlayProgressSnapshot = () => overlayPending;
 export const progressSnapshot = () => pending;
 export const subscribeProgress = (listener: () => void) => {
   listeners.add(listener);
@@ -7,19 +9,24 @@ export const subscribeProgress = (listener: () => void) => {
     listeners.delete(listener);
   };
 };
-export function beginProgress() {
+export function beginProgress({ overlay = true }: { overlay?: boolean } = {}) {
   pending++;
+  if (overlay) overlayPending++;
   listeners.forEach((l) => l());
   let finished = false;
   return () => {
     if (finished) return;
     finished = true;
     pending--;
+    if (overlay) overlayPending--;
     listeners.forEach((l) => l());
   };
 }
-export async function withProgress<T>(operation: () => Promise<T>) {
-  const finish = beginProgress();
+export async function withProgress<T>(
+  operation: () => Promise<T>,
+  options?: { overlay?: boolean },
+) {
+  const finish = beginProgress(options);
   try {
     return await operation();
   } finally {

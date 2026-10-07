@@ -1,11 +1,25 @@
+import { routeModules } from "./route-modules";
+import { LoadingState } from "../shared/Loading";
+import { CampaignBanner } from "../features/content/CampaignBanner";
+import { AccountRail } from "../features/account/AccountRail";
+import {
+  customerOrderFilters,
+  parseCustomerOrderFilter,
+  matchesCustomerOrderFilter,
+} from "../../packages/domain/customer-order-filter";
+const AccountTracking = lazy(() =>
+  import("../features/orders/AccountTracking").then((m) => ({
+    default: m.AccountTracking,
+  })),
+);
 import { staffRoles } from "../shared/staff-access";
 const Documents = lazy(() =>
-  import("../features/invoices/Documents").then((m) => ({
+  routeModules.documents().then((m) => ({
     default: m.Documents,
   })),
 );
 const SharedDocument = lazy(() =>
-  import("../features/invoices/Documents").then((m) => ({
+  routeModules.documents().then((m) => ({
     default: m.SharedDocument,
   })),
 );
@@ -22,6 +36,7 @@ const Workspace = lazy(() =>
   import("../features/crm/Workspace").then((m) => ({ default: m.Workspace })),
 );
 import "../styles/account.css";
+import "../styles/security.css";
 import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
 import { notify, withProgress } from "../shared/feedback";
@@ -52,7 +67,7 @@ import {
   type Order,
 } from "../../packages/domain";
 const RequestForm = lazy(() =>
-  import("../features/requests/RequestForm").then((m) => ({
+  routeModules.request().then((m) => ({
     default: m.RequestForm,
   })),
 );
@@ -67,7 +82,7 @@ const ShippingRates = lazy(() =>
   })),
 );
 const CustomerShipments = lazy(() =>
-  import("../features/shipping/CustomerShipments").then((m) => ({
+  routeModules.shipments().then((m) => ({
     default: m.CustomerShipments,
   })),
 );
@@ -84,7 +99,7 @@ const OrderTools = lazy(() =>
 );
 import { OneTap } from "../features/auth/OneTap";
 const Security = lazy(() =>
-  import("../features/auth/Security").then((m) => ({ default: m.Security })),
+  routeModules.security().then((m) => ({ default: m.Security })),
 );
 const CustomerChanges = lazy(() =>
   import("../features/orders/Changes").then((m) => ({
@@ -93,30 +108,30 @@ const CustomerChanges = lazy(() =>
 );
 
 const Notifications = lazy(() =>
-  import("../features/notifications/Notifications").then((m) => ({
+  routeModules.notifications().then((m) => ({
     default: m.Notifications,
   })),
 );
 const Profile = lazy(() =>
-  import("../features/profile/Profile").then((m) => ({ default: m.Profile })),
+  routeModules.profile().then((m) => ({ default: m.Profile })),
 );
 
 const Catalog = lazy(() =>
-  import("../features/content/Content").then((m) => ({ default: m.Catalog })),
+  routeModules.content().then((m) => ({ default: m.Catalog })),
 );
 const ContentDetail = lazy(() =>
-  import("../features/content/Content").then((m) => ({
+  routeModules.content().then((m) => ({
     default: m.ContentDetail,
   })),
 );
 
 const Membership = lazy(() =>
-  import("../features/membership/Membership").then((m) => ({
+  routeModules.membership().then((m) => ({
     default: m.Membership,
   })),
 );
 const Support = lazy(() =>
-  import("../features/support/Support").then((m) => ({ default: m.Support })),
+  routeModules.support().then((m) => ({ default: m.Support })),
 );
 import { Ask } from "../features/ask/Ask";
 const money = (n: number) =>
@@ -207,10 +222,14 @@ export function App() {
     [authBusy, setAuthBusy] = useState(false),
     [authReady, setAuthReady] = useState(!auth);
   const location = useLocation();
+  const accountView =
+    location.pathname === "/account"
+      ? new URLSearchParams(location.search).get("view")
+      : null;
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.getElementById("main")?.focus({ preventScroll: true });
-  }, [location.pathname]);
+  }, [location.pathname, accountView]);
   useEffect(() => {
     if (auth)
       return onAuthStateChanged(auth, (current) => {
@@ -268,16 +287,16 @@ export function App() {
       >
         <Suspense
           fallback={
-            <section className="page routeLoading" role="status">
+            <LoadingState className="page routeLoading">
               Đang mở trang…
-            </section>
+            </LoadingState>
           }
         >
           {!authReady &&
           /^(?:\/account|\/staff|\/crm)(?:\/|$)/.test(location.pathname) ? (
-            <section className="page" role="status">
+            <LoadingState className="page">
               Đang khôi phục tài khoản…
-            </section>
+            </LoadingState>
           ) : (
             <Routes>
               <Route path="/" element={<Home />} />
@@ -294,12 +313,40 @@ export function App() {
               <Route
                 path="/account/security"
                 element={
-                  <Security key={user?.uid ?? "anonymous"} user={user} />
+                  <section className="accountWorkspace securityWorkspace">
+                    <AccountRail active="security" />
+                    <div className="accountPage">
+                      <Suspense
+                        fallback={
+                          <LoadingState className="accountLoading">
+                            Đang mở mục này…
+                          </LoadingState>
+                        }
+                      >
+                        <Security key={user?.uid ?? "anonymous"} user={user} />
+                      </Suspense>
+                    </div>
+                  </section>
                 }
               />
               <Route
                 path="/account/profile"
-                element={<Profile key={user?.uid ?? "anonymous"} user={user} />}
+                element={
+                  <section className="accountWorkspace securityWorkspace">
+                    <AccountRail active="profile" />
+                    <div className="accountPage">
+                      <Suspense
+                        fallback={
+                          <LoadingState className="accountLoading">
+                            Đang mở mục này…
+                          </LoadingState>
+                        }
+                      >
+                        <Profile key={user?.uid ?? "anonymous"} user={user} />
+                      </Suspense>
+                    </div>
+                  </section>
+                }
               />
               <Route
                 path="/account"
@@ -358,7 +405,9 @@ export function App() {
                 path="/crm/*"
                 element={
                   <Suspense
-                    fallback={<p role="status">Đang mở không gian vận hành…</p>}
+                    fallback={
+                      <LoadingState>Đang mở không gian vận hành…</LoadingState>
+                    }
                   >
                     <Staff
                       key={user?.uid ?? "anonymous"}
@@ -608,6 +657,7 @@ function Home() {
         </div>
         <JourneyTimeline />
       </section>
+      <CampaignBanner placement="home" />
       <section className="marketSection" aria-labelledby="market-title">
         <div className="sectionHeading">
           <div>
@@ -687,9 +737,13 @@ function Account({
     /^\/account\/orders\/([a-zA-Z0-9-]+)$/,
   )?.[1];
   const { orders, error, loading } = useOrders(user, selectedId);
+  const filter = parseCustomerOrderFilter(
+    new URLSearchParams(location.search).get("filter"),
+  );
+  const ownerOrders = orders.filter((o) => o.ownerId === user?.uid);
   const visibleOrders = selectedId
-    ? orders.filter((o) => o.id === selectedId)
-    : orders;
+    ? ownerOrders.filter((o) => o.id === selectedId)
+    : ownerOrders.filter((o) => matchesCustomerOrderFilter(o.stage, filter));
   const view = new URLSearchParams(location.search).get("view");
   const space =
     view === "shipments" || view === "notifications" ? view : "orders";
@@ -703,43 +757,8 @@ function Account({
           : "Đơn của tôi";
   return (
     <section className="accountWorkspace">
-      <aside className="customerRail">
-        <span className="customerRailLabel">TÀI KHOẢN</span>
-        <nav aria-label="Không gian khách hàng">
-          <Link
-            to="/account"
-            aria-current={space === "orders" ? "page" : undefined}
-          >
-            <Icon kind="box" /> Đơn của tôi
-          </Link>
-          <Link
-            to="/account?view=shipments"
-            aria-current={space === "shipments" ? "page" : undefined}
-          >
-            Vận chuyển
-          </Link>
-          <Link
-            to="/account?view=notifications"
-            aria-current={space === "notifications" ? "page" : undefined}
-          >
-            Thông báo
-          </Link>
-          <div className="customerRailDivider" />
-          <Link className="customerSecondary" to="/account/documents">
-            Chứng từ của tôi
-          </Link>
-          <Link className="customerSecondary" to="/account/profile">
-            Hồ sơ và địa chỉ
-          </Link>
-          <Link className="customerSecondary" to="/account/security">
-            Bảo mật tài khoản
-          </Link>
-        </nav>
-        <Link className="customerHelp" to="/support">
-          Cần hỗ trợ? <Icon />
-        </Link>
-      </aside>
-      <div className="accountPage" key={`${space}:${selectedId ?? "list"}`}>
+      <AccountRail active={space} />
+      <div className="accountPage">
         {selectedId && space === "orders" && (
           <Link className="accountBack" to="/account">
             ← Tất cả đơn của tôi
@@ -766,17 +785,36 @@ function Account({
             )}
           </header>
         )}
+        {user && space === "orders" && !selectedId && (
+          <nav className="customerOrderFilters" aria-label="Lọc đơn hàng">
+            {customerOrderFilters.map((value) => (
+              <Link
+                key={value}
+                to={value === "all" ? "/account" : `/account?filter=${value}`}
+                aria-current={filter === value ? "page" : undefined}
+              >
+                {
+                  {
+                    all: "Tất cả",
+                    undelivered: "Chưa giao",
+                    delivered: "Đã giao",
+                    cancelled: "Đã hủy",
+                  }[value]
+                }
+              </Link>
+            ))}
+          </nav>
+        )}
         <Suspense
           fallback={
-            <p className="accountLoading" role="status">
+            <LoadingState className="accountLoading">
               Đang mở mục này…
-            </p>
+            </LoadingState>
           }
         >
           {import.meta.env.DEV && !user && <EmulatorLogin />}
           {!user ? (
             <div className="empty">
-              <Icon kind="box" />
               <h2>Đăng nhập để xem đơn của bạn</h2>
               <button
                 className="primary"
@@ -791,13 +829,19 @@ function Account({
           ) : space === "notifications" ? (
             <Notifications uid={user.uid} expanded />
           ) : loading ? (
-            <div className="accountLoading" role="status">
+            <LoadingState className="accountLoading">
               Đang tải đơn của bạn…
-            </div>
+            </LoadingState>
           ) : visibleOrders.length ? (
             <>
               {selectedId ? (
-                visibleOrders.map((o) => <OrderCard key={o.id} order={o} />)
+                visibleOrders.map((o) => (
+                  <OrderCard
+                    key={`${user.uid}:${o.id}`}
+                    order={o}
+                    uid={user.uid}
+                  />
+                ))
               ) : (
                 <div className="customerOrderList">
                   {[...visibleOrders]
@@ -829,29 +873,38 @@ function Account({
                       </Link>
                     ))}
                   <p className="listScope">
-                    Hiển thị tối đa 50 đơn trong tài khoản.
+                    Bộ lọc áp dụng cho tối đa 50 đơn đã tải trong tài khoản.
                   </p>
                 </div>
               )}
             </>
           ) : (
             <div className="empty">
-              <Icon kind="box" />
               <h2>
                 {error
                   ? "Chưa tải được đơn hàng"
                   : selectedId
                     ? "Chưa mở được đơn này"
-                    : "Chưa có yêu cầu nào"}
+                    : filter !== "all"
+                      ? "Không có đơn trong nhóm này"
+                      : "Chưa có yêu cầu nào"}
               </h2>
               <p>
                 {error ||
                   (selectedId
                     ? "Kiểm tra liên kết hoặc quay lại danh sách đơn của bạn."
-                    : "Bắt đầu bằng món hàng bạn muốn mua.")}
+                    : filter !== "all"
+                      ? "Bộ lọc áp dụng cho tối đa 50 đơn đã tải. Xem tất cả để đổi nhóm đơn."
+                      : "Bắt đầu bằng món hàng bạn muốn mua.")}
               </p>
-              <Link to={selectedId ? "/account" : "/request"}>
-                {selectedId ? "Về danh sách đơn" : "Gửi yêu cầu mua hộ"}
+              <Link
+                to={selectedId || filter !== "all" ? "/account" : "/request"}
+              >
+                {selectedId
+                  ? "Về danh sách đơn"
+                  : filter !== "all"
+                    ? "Xem tất cả đơn"
+                    : "Gửi yêu cầu mua hộ"}
               </Link>
             </div>
           )}
@@ -860,7 +913,7 @@ function Account({
     </section>
   );
 }
-function OrderCard({ order: o }: { order: Order }) {
+function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
   const [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [section, setSection] = useState<"overview" | "files" | "history">(
@@ -938,6 +991,15 @@ function OrderCard({ order: o }: { order: Order }) {
               </div>
             </div>
           )}
+          <Suspense
+            fallback={
+              <LoadingState overlay={false}>
+                Đang mở tiến trình đơn hàng…
+              </LoadingState>
+            }
+          >
+            <AccountTracking uid={uid} orderId={o.id} version={o.version} />
+          </Suspense>
           <section className="orderItems">
             <h2>Sản phẩm</h2>
             {o.items.map((item, index) => (
@@ -1046,7 +1108,13 @@ function OrderCard({ order: o }: { order: Order }) {
               Duyệt tổng phí cuối
             </button>
           )}
-          <Suspense fallback={<p role="status">Đang mở thao tác của đơn…</p>}>
+          <Suspense
+            fallback={
+              <LoadingState overlay={false}>
+                Đang mở thao tác của đơn…
+              </LoadingState>
+            }
+          >
             <CustomerChanges order={o} />
             <TransferNotice order={o} />
             <OrderTools order={o} section="actions" />
@@ -1081,7 +1149,11 @@ function OrderCard({ order: o }: { order: Order }) {
               hidden={section !== value}
             >
               <Suspense
-                fallback={<p role="status">Đang mở thông tin của đơn…</p>}
+                fallback={
+                  <LoadingState overlay={false}>
+                    Đang mở thông tin của đơn…
+                  </LoadingState>
+                }
               >
                 <OrderTools order={o} section={value} />
               </Suspense>
@@ -1138,9 +1210,9 @@ function Staff({
   }, [user]);
   if (loading)
     return (
-      <section className="page" role="status">
+      <LoadingState className="page">
         Đang kiểm tra quyền vận hành…
-      </section>
+      </LoadingState>
     );
   const roles = staffRoles(access);
   if (error || !user || roles === null)

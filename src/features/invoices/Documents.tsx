@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import {
   CrmIcon,
   CrmHeading,
@@ -41,7 +42,7 @@ const amount = (n: number) => `${n.toLocaleString("vi-VN")} ₫`;
 export function StatementView({ document: d }: { document: Statement }) {
   return (
     <article className="salesStatement">
-      <h2>Chứng từ đơn hàng nội bộ</h2>
+      <h2>Hóa đơn nội bộ</h2>
       <p className="muted">
         Không phải hóa đơn điện tử thuế.{" "}
         {d.state === "draft"
@@ -56,7 +57,7 @@ export function StatementView({ document: d }: { document: Statement }) {
         {d.seller.contact}
       </p>
       <p>
-        Số chứng từ: {d.issueNumber ?? "Bản nháp"}
+        Số hóa đơn: {d.issueNumber ?? "Bản nháp"}
         <br />
         {d.issuedAt
           ? `Xuất: ${new Date(d.issuedAt).toLocaleString("vi-VN")}`
@@ -112,15 +113,15 @@ export function StatementView({ document: d }: { document: Statement }) {
       </dl>
       <p>
         {d.purchaseKind === "catalog"
-          ? "Đơn niêm yết thanh toán toàn bộ một lần; chứng từ không tạo khoản thu thứ hai."
+          ? "Đơn niêm yết thanh toán toàn bộ một lần; hóa đơn không tạo khoản thu thứ hai."
           : "Đơn mua hộ tùy chỉnh thanh toán hai đợt; xem đơn để kiểm tra số dư hiện tại."}
       </p>
       <p>
-        Điều khoản: {d.termsVersion}. Chứng từ không xác nhận ngân hàng đã
-        chuyển tiền ngoài các khoản hệ thống ghi nhận.
+        Điều khoản: {d.termsVersion}. Hóa đơn không xác nhận ngân hàng đã chuyển
+        tiền ngoài các khoản hệ thống ghi nhận.
       </p>
       <button
-        className="noPrint"
+        className="noPrint primary"
         disabled={d.state !== "issued"}
         onClick={() => window.print()}
       >
@@ -138,6 +139,13 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [share, setShare] = useState("");
+  const [mobileDetail, setMobileDetail] = useState(false);
+  const detailTarget = useRef<HTMLElement | null>(null);
+  const returnTarget = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (selected && !detailLoading)
+      detailTarget.current?.focus({ preventScroll: true });
+  }, [selected, detailLoading]);
   const orderFilter = search.get("order") ?? "";
   const listRequest = useRef(0);
   const detailRequest = useRef(new LatestDocumentRequest());
@@ -161,7 +169,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       if (request === listRequest.current) setList(r);
     } catch {
       if (request === listRequest.current)
-        setError("Chưa tải được chứng từ. Đăng nhập và thử lại.");
+        setError("Chưa tải được hóa đơn. Đăng nhập và thử lại.");
     }
   }
   useEffect(() => {
@@ -172,6 +180,8 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     setPending(false);
     operation.current = null;
     setSelected(null);
+    setMobileDetail(false);
+    returnTarget.current = null;
     setDetailLoading(false);
     setList(null);
     setShare("");
@@ -208,7 +218,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     setError("");
     setMessage("");
     const key = JSON.stringify(payload);
-    if (!retry && pending) {
+    if (!retry && (pending || operation.current)) {
       executing.current = false;
       setBusy(false);
       setError("Kiểm tra lại thao tác đang chờ trước khi tạo thao tác khác.");
@@ -241,7 +251,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
         setMessage(
           current.payload.action === "queueEmail"
             ? "Đã xếp lịch gửi email (kiểm tra mỗi 30 phút); chưa xác nhận khách đã nhận."
-            : "Đã lưu thao tác chứng từ.",
+            : "Đã lưu thao tác hóa đơn.",
         );
       }
       await load();
@@ -252,13 +262,14 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           () => callService<SalesDocument>("invoiceDetail", { id: r.id }),
           (document) => {
             setSelected(document);
+            setMobileDetail(true);
             setDetailLoading(false);
           },
           () => {
             setDetailLoading(false);
             setSelected(null);
             setError(
-              "Thao tác đã lưu nhưng chưa tải được chứng từ. Tải lại rồi mở chứng từ.",
+              "Thao tác đã lưu nhưng chưa tải được hóa đơn. Tải lại rồi mở hóa đơn.",
             );
           },
         );
@@ -291,7 +302,10 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       }
     }
   }
-  async function open(id: string) {
+  async function open(id: string, trigger?: HTMLButtonElement) {
+    if (executing.current || operation.current || busy || pending) return;
+    if (trigger) returnTarget.current = trigger;
+    setMobileDetail(true);
     setError("");
     setShare("");
     setMessage("");
@@ -305,13 +319,17 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       },
       () => {
         setDetailLoading(false);
-        setError("Không thể mở chứng từ này. Thử mở lại.");
+        setError("Không thể mở hóa đơn này. Thử mở lại.");
       },
     );
   }
 
   function create(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (executing.current || operation.current || busy || pending) return;
+    returnTarget.current = e.currentTarget.querySelector<HTMLButtonElement>(
+      "button[type=submit], button:not([type])",
+    );
     const f = new FormData(e.currentTarget);
     void execute({ action: "createDraft", orderId: String(f.get("order")) });
   }
@@ -337,18 +355,25 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       ...extra,
     });
   return (
-    <section className={staff ? "" : "page"}>
+    <section
+      className={`invoiceWorkspace ${staff ? "" : "page"} ${mobileDetail ? "invoiceWorkspace--detail" : ""}`}
+    >
       <CrmHeading
-        title="Chứng từ đơn hàng"
+        title="Hóa đơn"
+        description={
+          staff
+            ? "Lập và quản lý hóa đơn nội bộ theo đơn hàng."
+            : "Xem hóa đơn đã xuất từ đơn hàng của bạn."
+        }
         actions={
           <button disabled={busy} onClick={() => void load()}>
             <CrmIcon name="refresh" /> Tải lại
           </button>
         }
       />
-      <p>
-        Chứng từ nội bộ tách khỏi báo giá và sổ tiền. Khách xem bản đã xuất;
-        không sửa bản đã xuất.
+      <p className="invoiceContext">
+        Hóa đơn nội bộ, không phải hóa đơn điện tử thuế. Bản đã xuất giữ nguyên
+        nội dung tại thời điểm xuất.
       </p>
       {error && <CrmState kind="error" title={error} />}
       {message && <p role="status">{message}</p>}
@@ -360,245 +385,304 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           </button>
         </p>
       )}
-      {!list && !error && (
-        <CrmState kind="loading" title="Đang tải chứng từ…" />
-      )}
-      {staff && list?.canConfigure && (
-        <details className="noPrint">
-          <summary>Thông tin người bán</summary>
-          <form
-            className="form"
-            key={list.seller?.version ?? 0}
-            onSubmit={configure}
-          >
-            <label>
-              Tên doanh nghiệp/người bán
-              <input
-                name="name"
-                minLength={2}
-                maxLength={160}
-                required
-                defaultValue={list.seller?.seller.name}
-              />
-            </label>
-            <label>
-              Địa chỉ
-              <input
-                name="address"
-                minLength={5}
-                maxLength={300}
-                required
-                defaultValue={list.seller?.seller.address}
-              />
-            </label>
-            <label>
-              Thông tin liên hệ
-              <input
-                name="contact"
-                minLength={3}
-                maxLength={160}
-                required
-                defaultValue={list.seller?.seller.contact}
-              />
-            </label>
-            <button disabled={busy || pending}>Lưu thông tin người bán</button>
-          </form>
-        </details>
-      )}
-      {staff && list?.canIssue && (
-        <form className="form noPrint" onSubmit={create}>
-          <label>
-            Mã đơn đã chốt tổng cuối
-            <input
-              key={orderFilter}
-              name="order"
-              required
-              maxLength={80}
-              pattern={"[a-zA-Z0-9\\-]+"}
-              defaultValue={search.get("order") ?? ""}
-            />
-          </label>
-          <button disabled={busy || pending}>Tạo bản nháp từ đơn</button>
-        </form>
-      )}
-      <div className="noPrint documentList crmList">
-        {list?.rows.map((d) => (
-          <article className="crmItem" key={d.id}>
-            <div className="crmItemMain">
-              <h2 className="crmItemTitle">
-                <CrmIcon name="document" />
-                {d.issueNumber ?? "Bản nháp"}
-              </h2>
-              <strong>{amount(d.total)}</strong>
-              <div className="crmItemMeta">
-                <span className="crmBadge">
-                  {d.state === "issued"
-                    ? "Đã xuất"
-                    : d.state === "void"
-                      ? "Đã hủy"
-                      : "Chưa xuất"}{" "}
-                </span>
-                <CrmReference label="Mã chứng từ" value={d.id} />
-              </div>
-            </div>
-            <div className="crmActions">
-              <button disabled={busy} onClick={() => void open(d.id)}>
-                <CrmIcon name="arrow" /> Mở chứng từ
-              </button>
-            </div>
-          </article>
-        ))}
-        {list && !list.rows.length && (
-          <CrmState kind="empty" title="Chưa có chứng từ trong trang này." />
-        )}
-      </div>
-      {list?.next && (
-        <div className="crmActions noPrint">
-          <button disabled={busy} onClick={() => void load(list.next!)}>
-            Trang tiếp
-          </button>
-        </div>
-      )}
-      {detailLoading && <CrmState kind="loading" title="Đang mở chứng từ…" />}
-      {selected && (
-        <>
-          <StatementView document={selected} />
-          {selected.replacesId && (
-            <button
-              className="noPrint"
-              onClick={() => void open(selected.replacesId!)}
-            >
-              Mở chứng từ được thay thế
-            </button>
-          )}
-          {selected.sourceOrderId && (
-            <Link
-              className="noPrint"
-              to={
-                staff
-                  ? `/crm/orders?order=${selected.sourceOrderId}`
-                  : `/account/orders/${selected.sourceOrderId}`
-              }
-            >
-              Mở đơn và số dư hiện tại
-            </Link>
+      {!list && !error && <CrmState kind="loading" title="Đang tải hóa đơn…" />}
+      <div className="invoiceLayout">
+        <aside className="invoiceSidebar" aria-label="Danh sách hóa đơn">
+          <h2 className="invoicePanelTitle">Danh sách hóa đơn</h2>
+          {staff && list?.canConfigure && (
+            <details className="noPrint">
+              <summary>Thông tin người bán</summary>
+              <form
+                className="form"
+                key={list.seller?.version ?? 0}
+                onSubmit={configure}
+              >
+                <label>
+                  Tên doanh nghiệp/người bán
+                  <input
+                    disabled={busy || pending}
+                    name="name"
+                    minLength={2}
+                    maxLength={160}
+                    required
+                    defaultValue={list.seller?.seller.name}
+                  />
+                </label>
+                <label>
+                  Địa chỉ
+                  <input
+                    disabled={busy || pending}
+                    name="address"
+                    minLength={5}
+                    maxLength={300}
+                    required
+                    defaultValue={list.seller?.seller.address}
+                  />
+                </label>
+                <label>
+                  Thông tin liên hệ
+                  <input
+                    disabled={busy || pending}
+                    name="contact"
+                    minLength={3}
+                    maxLength={160}
+                    required
+                    defaultValue={list.seller?.seller.contact}
+                  />
+                </label>
+                <button disabled={busy || pending}>
+                  Lưu thông tin người bán
+                </button>
+              </form>
+            </details>
           )}
           {staff && list?.canIssue && (
-            <div className="statementActions noPrint">
-              {selected.state !== "draft" && (
-                <button
+            <form className="form noPrint" onSubmit={create}>
+              <label>
+                Mã đơn đã chốt tổng cuối
+                <input
+                  key={orderFilter}
                   disabled={busy || pending}
-                  onClick={() =>
-                    void execute({
-                      action: "createDraft",
-                      orderId: selected.sourceOrderId,
-                      replacesId: selected.id,
-                    })
-                  }
-                >
-                  Tạo bản nháp thay thế cho cùng đơn
-                </button>
-              )}
-              {selected.state === "draft" && (
-                <>
+                  name="order"
+                  required
+                  maxLength={80}
+                  pattern={"[a-zA-Z0-9\\-]+"}
+                  defaultValue={search.get("order") ?? ""}
+                />
+              </label>
+              <button disabled={busy || pending}>Tạo bản nháp từ đơn</button>
+            </form>
+          )}
+          <div
+            className="noPrint documentList crmList"
+            aria-busy={!list && !error}
+          >
+            {list?.rows.map((d) => (
+              <article
+                className={`crmItem invoiceRow ${selected?.id === d.id ? "invoiceRow--selected" : ""}`}
+                key={d.id}
+              >
+                <div className="crmItemMain">
+                  <h2 className="crmItemTitle">
+                    <CrmIcon name="document" />
+                    {d.issueNumber ?? "Bản nháp"}
+                  </h2>
+                  <strong>{amount(d.total)}</strong>
+                  <div className="crmItemMeta">
+                    <span className="crmBadge">
+                      {d.state === "issued"
+                        ? "Đã xuất"
+                        : d.state === "void"
+                          ? "Đã hủy"
+                          : "Bản nháp"}{" "}
+                    </span>
+                    <CrmReference label="Mã hóa đơn" value={d.id} />
+                  </div>
+                </div>
+                <div className="crmActions">
                   <button
                     disabled={busy || pending}
-                    onClick={() => act("refreshDraft")}
+                    aria-pressed={selected?.id === d.id}
+                    onClick={(event) => void open(d.id, event.currentTarget)}
                   >
-                    Cập nhật bản nháp từ đơn
+                    <CrmIcon name="arrow" /> Mở hóa đơn
                   </button>
-                  <button
-                    disabled={busy || pending}
-                    onClick={() => act("issue")}
-                  >
-                    Xuất và đóng băng chứng từ
-                  </button>
-                </>
-              )}
-              {selected.state === "issued" && (
-                <>
-                  <button
-                    disabled={busy || pending}
-                    onClick={() => act("queueEmail")}
-                  >
-                    Xếp lịch gửi email cho chủ đơn
-                  </button>
-                  <details>
-                    <summary>Chia sẻ link trong 24 giờ</summary>
-                    <p>
-                      Ai có link xem được người bán, sản phẩm và số tiền; không
-                      hiển thị tên khách hay địa chỉ nhận hàng. Tạo link mới sẽ
-                      thu hồi link trước.
-                    </p>
-                    <button
-                      disabled={busy || pending}
-                      onClick={() => act("createShare")}
-                    >
-                      Tạo link để chia sẻ thủ công
-                    </button>
-                    {share && (
-                      <>
-                        <input
-                          aria-label="Link chia sẻ chứng từ"
-                          readOnly
-                          value={share}
-                        />
-                        <button
-                          onClick={() =>
-                            void navigator.clipboard.writeText(share).then(
-                              () =>
-                                setMessage(
-                                  "Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin.",
-                                ),
-                              () =>
-                                setError(
-                                  "Chưa sao chép được. Chọn và sao chép link.",
-                                ),
-                            )
-                          }
-                        >
-                          Sao chép link
-                        </button>
-                      </>
-                    )}
-                  </details>
-                  <button
-                    disabled={busy || pending}
-                    onClick={() => act("revokeShare")}
-                  >
-                    Thu hồi toàn bộ link chia sẻ
-                  </button>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      act("void", {
-                        reason: String(
-                          new FormData(e.currentTarget).get("reason"),
-                        ),
-                      });
-                    }}
-                  >
-                    <label>
-                      Lý do hủy chứng từ
-                      <input
-                        name="reason"
-                        minLength={5}
-                        maxLength={500}
-                        required
-                      />
-                    </label>
-                    <p>
-                      Hủy chứng từ giữ lịch sử và thu hồi link; không hủy đơn
-                      hay hoàn tiền.
-                    </p>
-                    <button disabled={busy || pending}>Hủy chứng từ này</button>
-                  </form>
-                </>
-              )}
+                </div>
+              </article>
+            ))}
+            {list && !list.rows.length && (
+              <CrmState kind="empty" title="Chưa có hóa đơn trong trang này." />
+            )}
+          </div>
+          {list?.next && (
+            <div className="crmActions noPrint">
+              <button disabled={busy} onClick={() => void load(list.next!)}>
+                Trang tiếp
+              </button>
             </div>
           )}
-        </>
-      )}
+        </aside>
+        <section
+          className="invoiceDetail"
+          ref={detailTarget}
+          tabIndex={-1}
+          aria-label="Chi tiết hóa đơn"
+          aria-busy={detailLoading}
+        >
+          <button
+            className="invoiceBack noPrint"
+            onClick={() => {
+              setMobileDetail(false);
+              requestAnimationFrame(
+                () =>
+                  returnTarget.current?.isConnected &&
+                  returnTarget.current.focus(),
+              );
+            }}
+          >
+            ← Danh sách hóa đơn
+          </button>
+          {detailLoading && (
+            <CrmState kind="loading" title="Đang mở hóa đơn…" />
+          )}
+          {!selected && !detailLoading && (
+            <CrmState kind="empty" title="Chọn hóa đơn để xem chi tiết">
+              <p>Nội dung và các thao tác phù hợp sẽ hiển thị tại đây.</p>
+            </CrmState>
+          )}
+          {selected && (
+            <>
+              <StatementView document={selected} />
+              {selected.replacesId && (
+                <button
+                  className="noPrint"
+                  disabled={busy || pending}
+                  onClick={(event) =>
+                    void open(selected.replacesId!, event.currentTarget)
+                  }
+                >
+                  Mở hóa đơn được thay thế
+                </button>
+              )}
+              {selected.sourceOrderId && (
+                <Link
+                  className="noPrint"
+                  to={
+                    staff
+                      ? `/crm/orders?order=${selected.sourceOrderId}`
+                      : `/account/orders/${selected.sourceOrderId}`
+                  }
+                >
+                  Mở đơn và số dư hiện tại
+                </Link>
+              )}
+              {staff && list?.canIssue && (
+                <div className="statementActions noPrint">
+                  {selected.state !== "draft" && (
+                    <button
+                      disabled={busy || pending}
+                      onClick={() =>
+                        void execute({
+                          action: "createDraft",
+                          orderId: selected.sourceOrderId,
+                          replacesId: selected.id,
+                        })
+                      }
+                    >
+                      Tạo bản nháp thay thế
+                    </button>
+                  )}
+                  {selected.state === "draft" && (
+                    <>
+                      <button
+                        disabled={busy || pending}
+                        onClick={() => act("refreshDraft")}
+                      >
+                        Cập nhật từ đơn
+                      </button>
+                      <button
+                        disabled={busy || pending}
+                        className="primary"
+                        onClick={() => act("issue")}
+                      >
+                        Xuất hóa đơn
+                      </button>
+                    </>
+                  )}
+                  {selected.state === "issued" && (
+                    <>
+                      <details className="invoiceSecondaryActions">
+                        <summary>Thao tác khác</summary>
+                        <button
+                          disabled={busy || pending}
+                          onClick={() => act("queueEmail")}
+                        >
+                          Xếp lịch gửi email
+                        </button>
+                        <details>
+                          <summary>Chia sẻ link trong 24 giờ</summary>
+                          <p>
+                            Ai có link xem được người bán, sản phẩm và số tiền;
+                            không hiển thị tên khách hay địa chỉ nhận hàng. Tạo
+                            link mới sẽ thu hồi link trước.
+                          </p>
+                          <button
+                            disabled={busy || pending}
+                            onClick={() => act("createShare")}
+                          >
+                            Tạo link để chia sẻ thủ công
+                          </button>
+                          {share && (
+                            <>
+                              <input
+                                aria-label="Link chia sẻ hóa đơn"
+                                readOnly
+                                value={share}
+                              />
+                              <button
+                                onClick={() =>
+                                  void navigator.clipboard
+                                    .writeText(share)
+                                    .then(
+                                      () =>
+                                        setMessage(
+                                          "Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin.",
+                                        ),
+                                      () =>
+                                        setError(
+                                          "Chưa sao chép được. Chọn và sao chép link.",
+                                        ),
+                                    )
+                                }
+                              >
+                                Sao chép link
+                              </button>
+                            </>
+                          )}
+                        </details>
+                        <button
+                          disabled={busy || pending}
+                          onClick={() => act("revokeShare")}
+                        >
+                          Thu hồi toàn bộ link chia sẻ
+                        </button>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            act("void", {
+                              reason: String(
+                                new FormData(e.currentTarget).get("reason"),
+                              ),
+                            });
+                          }}
+                        >
+                          <label>
+                            Lý do hủy hóa đơn
+                            <input
+                              disabled={busy || pending}
+                              name="reason"
+                              minLength={5}
+                              maxLength={500}
+                              required
+                            />
+                          </label>
+                          <p>
+                            Hủy hóa đơn giữ lịch sử và thu hồi link; không hủy
+                            đơn hay hoàn tiền.
+                          </p>
+                          <button disabled={busy || pending}>
+                            Hủy hóa đơn này
+                          </button>
+                        </form>
+                      </details>
+                    </>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      </div>
     </section>
   );
 }
@@ -652,13 +736,13 @@ export function SharedDocument() {
   }, [request]);
   return (
     <section className="page">
-      <h1>Chứng từ được chia sẻ</h1>
+      <h1>Hóa đơn được chia sẻ</h1>
       {error ? (
         <p role="alert">{error}</p>
       ) : d ? (
         <StatementView document={d} />
       ) : (
-        <p role="status">Đang kiểm tra liên kết…</p>
+        <LoadingState>Đang kiểm tra liên kết…</LoadingState>
       )}
     </section>
   );

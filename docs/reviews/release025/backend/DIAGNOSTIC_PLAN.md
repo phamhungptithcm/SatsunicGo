@@ -1,0 +1,9 @@
+# Isolated demo transaction diagnosis — NOT_RUN
+
+Root requested preparation after full51 yielded50pass1FLOWtimeout at unchanged45s. Current scopedfix receipts do not establish full performance acceptance. No speculative sourcefix or timeoutchange. Root alone authorizes serial execution after active runnerends.
+
+Script diagnose-transaction.mjs strictly requires GCLOUD_PROJECT=demo-satsunicgo, FUNCTIONS_EMULATOR=true, FIRESTORE_EMULATOR_HOST=127.0.0.1:8187 before imports. No Auth/SMTP/payment/providers. Records exclusively perfDiagnostics with UUIDnamespace; seed4syntheticdocs then3serial transactions (same SDK+Promise.all4reads as command), each creates5newdocs. Threeattempts max each transaction, countcallbackentries to detect retry. Logs only fixedstage/index/timings/retrycount; no IDs/paths/bodies/credentials/PII. Retains syntheticdocs; no delete/reset/reseedexistingdata. No sources/runtimeconfig edits. Root compare alreadyrecordedHTTP latency, not perform addedHTTP grants.
+
+Measurement: seed latency; per-callback read phase and callbacktotal; overall transactionreturn latency; derived after-last-callback latency (includes SDK commit/retry backoff, not purewirecommit). Wallclock monotonic performance.now; output approximate diagnostic, cannot prove prodSLA. Fast directSDK with slowHTTP points upstreamhandler/runtime/collection-specific costs; slow isolatedcommit indicates8187/SDK transactionruntime path, not appdomaincode. Retryentries>1 reveals retries but does not identify conflicting writer. Small3sample measurements not fullbenchmark. No instrumentation installed into product.
+
+Prepared ONLY, NOT_RUN. Rootcommand: env with explicitdemo flags then node docs/reviews/release025/backend/diagnose-transaction.mjs (Node22path supplied by root). Findings must bind actualmetadata/existinghttp timings and preserve initial51timeout receipts. Source remainsfrozen; productionNOT_READY.

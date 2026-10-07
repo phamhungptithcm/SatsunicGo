@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-COMMERCE-008-v1",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Not reviewed yet.",
+      "evidence_refs": []
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK008-IDENTITY",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/Commerce.tsx and Ask.tsx",
+      "summary": "Late AI or payment result could cross account/conversation boundary",
+      "resolution": "Identity-bound results and aborted stale replies; cross-owner tests/browser A/B/A verified",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-008-SOURCE.json"
+      ]
+    },
+    {
+      "id": "ASK008-RECOVERY",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/Commerce.tsx and Ask.tsx",
+      "summary": "Pending operation session metadata remained after recovery",
+      "resolution": "Server resume clears stale pending metadata; lost-finalization test passed",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-008-SOURCE.json"
+      ]
+    },
+    {
+      "id": "ASK008-RECIPIENT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/Commerce.tsx and Ask.tsx",
+      "summary": "Saved recipient lacked customer review/correction",
+      "resolution": "Recipient display/edit plus acceptance lock while editing; rules/browser validated",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-008-SOURCE.json"
+      ]
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "Independent source re-review passed fixed mechanics; final rendered-content and rollout-gate validation still pending"
+  ]
+}

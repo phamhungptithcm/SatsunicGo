@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Approved compact CRM composition implemented across19routes; full current local199 passes. Complete every nested state/usability/global production objective lacks required in-context/live evidence; not a successful all-product handoff.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped role-array family92/reminder12/conversation25 authority regressions included in unchanged-backend408PASS; native current role/ownership/read races pass. No whole-security/live-auth/dependency-audit certification.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current build/typecheck/lint0,207unitPASS,408integrationPASS; shared semantic CRM composition and original handlers/contracts retained, test-only SPA delta scopedlint0. Independent fresh bounded review found no new confirmed defect.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current199 native includes invalid input, ownership/revocation, stale/held responses, lost committed writes, explicit recovery and no duplicate/unauthorized effects at original budgets; unobserved contexts remain limited.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current native loading/error/empty/retry, settings verified-read guard, stale-target cleanup and source-generation fences verified. Runtime misconfiguration/slow tests preserved separately, not hidden with larger budgets.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Real QA identities/auth/MFA/AppCheck, providers, deployed source/indexes/Storage, rollback/restore, load/soak/AT and dependency advisory audit not verified.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Keep decisive financial/fulfilment evidence visible; optional details via native disclosure, fullIDs retained, no new dependency/motion/schema/cloud action. Local synthetic performance/visual proof is explicitly bounded.",
+      "evidence_refs": [
+        "docs/reviews/release026/SOURCE_MANIFEST.json",
+        "docs/reviews/release026/QUALITY_GATES.md",
+        "docs/reviews/release026/CODE_QUALITY_REVIEW.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ROLE026-FAMILY",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "summary": "Malformed mixed trusted role arrays admitted21 staff boundaries; narrow helper guard fix verified92/92.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "resolution": "Malformed mixed trusted role arrays admitted21 staff boundaries; narrow helper guard fix verified92/92.",
+      "category": "security",
+      "location": "functions/src/auth/guards.ts"
+    },
+    {
+      "id": "ROLE026-REMINDER",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "summary": "Reminder read/save/replay mixed OWNER authority admitted; BEFORE3PASS9FAIL AFTER12PASS.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "resolution": "Reminder read/save/replay mixed OWNER authority admitted; BEFORE3PASS9FAIL AFTER12PASS.",
+      "category": "security",
+      "location": "functions/src/membership-reminder-policy.ts"
+    },
+    {
+      "id": "ROLE026-CONVERSATION",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "summary": "Conversation actor/assignee/list/recipient mixed authority admitted; BEFORE4PASS21FAIL AFTER25PASS.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "resolution": "Conversation actor/assignee/list/recipient mixed authority admitted; BEFORE4PASS21FAIL AFTER25PASS.",
+      "category": "security",
+      "location": "packages/domain/order-conversation.ts"
+    },
+    {
+      "id": "CRM026-RECORDS",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "summary": "Customers/followups/outbox mobile horizontal table gap and missing Settings read retry; BEFORE6PASS4FAIL AFTER10PASS.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "resolution": "Customers/followups/outbox mobile horizontal table gap and missing Settings read retry; BEFORE6PASS4FAIL AFTER10PASS.",
+      "category": "failure_paths",
+      "location": "src/features/crm/Workspace.css"
+    },
+    {
+      "id": "CRM026-OUTBOX-CRAFT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "summary": "Actual label-control crowding despite containment pass; stricter geometry BEFORE2FAIL AFTER2PASS plus current390pixels.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "resolution": "Actual label-control crowding despite containment pass; stricter geometry BEFORE2FAIL AFTER2PASS plus current390pixels.",
+      "category": "failure_paths",
+      "location": "src/features/crm/Activity.tsx"
+    },
+    {
+      "id": "CRM026-WHOLE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "summary": "Whole candidate regression pending in interim review.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md"
+      ],
+      "category": "failure_paths",
+      "location": "tests/browser/release-crm-presentation026.spec.ts",
+      "resolution": "Current whole199PASS0skip/flaky541883.666ms and325input0drift; historical failed/skipped receipts preserved."
+    },
+    {
+      "id": "CRM026-FINANCIAL-GAPS",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/payments/Finance.tsx",
+      "summary": "Populated financial rows touched despite containment checks.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ],
+      "resolution": "Source list wrappers restore8pxgap; genuine before preserved, AFTER18 and finalwhole199PASS with actual images."
+    },
+    {
+      "id": "CRM026-RETURNS-OVERFLOW",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/operations/Returns.tsx",
+      "summary": "Actual narrow return table overflow obscured quantity facts.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ],
+      "resolution": "Semantic five-column table/labeled narrow rows and native processing disclosure retain all quantities/fullIDs/handlers; corrected focused18 and whole199PASS."
+    },
+    {
+      "id": "ASK026-INITIAL-SNAPSHOT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Composer allowed new turn before first actual owned durable snapshot delivery.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ],
+      "resolution": "Actual held firstSDK snapshot BEFORE failed; hydration readiness guard AFTER and whole199PASS. This does not prove cached-first server-verification semantics."
+    },
+    {
+      "id": "ASK026-OLD-AUTH-READ",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Older same-identity context response replaced a newer verified conversation.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ],
+      "resolution": "Genuine reordered actual HTTP responses showed CID overwrite; restorationEpoch/currentUID/CID fences fixed; focused3 and finalwhole199PASS."
+    },
+    {
+      "id": "CRM026-ALL-STATE-ACCEPTANCE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "failure_paths",
+      "location": "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md",
+      "summary": "Complete changed-item every applicable state/usability/AT acceptance lacks current evidence despite scoped19route/18populated/native checks. Owner whole-content gates remainBLOCKED; exact limits retained.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "PROD026-EVIDENCE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "failure_paths",
+      "location": "docs/reviews/release026/PRODUCTION_QA_SETUP.md",
+      "summary": "Production QA identities/provider/deployed-candidate/indexes/Storage/rollback/restore/load/dependency acceptance remains unavailable. No release certification or production action performed.",
+      "evidence_refs": [
+        "docs/reviews/release026/CYCLE_JOURNAL.json",
+        "docs/reviews/release026/PLAN.md",
+        "docs/reviews/release026/ROOT_PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Local synthetic native/emulator results do not prove production/provider acceptance.",
+    "Recurring warm-runtime latency/EAGAIN internalcauseUNKNOWN; preserved-data recovery and explicit Functions host evidence is local only, no productionSLA.",
+    "Ask cachedmissing/cachedpresent-first restoration is a source-backed hypothesis; native BEFORE NOT_RUN and no additional Appfix claimed.",
+    "All nested valid financial/shipping writes, errors/offline/rolevariants/hugevalues/actualAT/physicaldevice states are not established by default screenshots."
+  ],
+  "limitations": [
+    "Optional repository indexesDEGRADED; bounded source/test fallback.",
+    "Audit externalmetadata export rejected by automatic approval review because npm would receive package names/versions; no bypass.",
+    "Dirty unrelatedWIP preserved; no commit/PR/Jira/deployment/productiondatafix/financialcorrection/secretaccess.",
+    "Provider tokens/APIestimated/actualbilledcostUnavailable; memorycandidatesNone.",
+    "Independent strictREADYroles returnedNOT_RUN; fresh bounded reviewer not misrepresented as complete independentQA."
+  ]
+}

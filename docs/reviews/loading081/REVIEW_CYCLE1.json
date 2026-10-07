@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-LOADING-081",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Initial scoped implementation review before fixes and in-context verification.",
+      "evidence_refs": [
+        "docs/reviews/loading081/PLAN.md",
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "L081-1",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "code_quality",
+      "location": "src/shared/Toast.tsx",
+      "summary": "Automated import replacement added extra subscription arguments.",
+      "resolution": "Pending exact3argument correction and compiler/browser verification.",
+      "evidence_refs": [
+        "/private/tmp/loading081-ui/FINAL.md"
+      ]
+    },
+    {
+      "id": "L081-2",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "failure_paths",
+      "location": "src/features/profile/Profile.tsx",
+      "summary": "Mounted inactive Profile steps can register foreground overlay.",
+      "resolution": "Pending active-step scope and actualtoken lifecycle checks.",
+      "evidence_refs": [
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    },
+    {
+      "id": "L081-3",
+      "severity": "low",
+      "status": "OPEN",
+      "category": "code_quality",
+      "location": "src/shared/Loading.tsx",
+      "summary": "Slowcopy inferred network fault solely from elapsed wait.",
+      "resolution": "Pending neutral elapsed-wait message and rendered review.",
+      "evidence_refs": [
+        "/private/tmp/loading081-independent-review.md"
+      ]
+    }
+  ],
+  "limitations": [
+    "DEGRADED indexes; local scope, liveproviders/production NOT_RUN."
+  ],
+  "residual_risks": []
+}

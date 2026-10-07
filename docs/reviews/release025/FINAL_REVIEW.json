@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Approved bounded local fixes match plan; exhaustive product and production acceptance remains incomplete.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "security": {
+      "status": "FAILED",
+      "summary": "Exact role/assignment/version/money regressions pass locally; live controls, provider acceptance and historical dependency findings remain unresolved; fresh audit rejected pending specific permission.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "194unit/133integration/51complete native E2E PASS zero skips/retries; final product compile/lint/build and latest alltest lint exit0; manifest no drift.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current complete51 exercises denial/races/unknown response/retry/cleanup/navigation/identity/money boundaries; historical transient failures retained as unresolved residual risks. Runtime recovered without data or testthreshold relaxation.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe denials and original error codes preserved; native cancelled transfer alert clearly rejects extra allocation with unchanged ledger.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Real auth, merchant, mail/model/provider, actual AT, comprehensive load/frame and production restore/deploy readback NOT_RUN.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Minimal scoped guards/context changes; existing Support index and limit preserved; launcher behavior retained; no budgets, retries, financial correction or auth controls relaxed. Owned runtime recovery preserves data and shared services.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json",
+        "output/playwright/release025/browser-final51-complete.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "025-metadata",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "functions/src/crm.ts",
+      "summary": "Malformed or exhausted stored CRM version could overwrite notes",
+      "resolution": "Fail-closed safe-version guard after prior replay with negative and valid boundary tests",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-authority",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "functions/src/index.ts",
+      "summary": "Truthy/malformed staff or BUYER assignments could grant writes or cause TypeError",
+      "resolution": "Exact active and array authority in affected paths, retain valid role unions/owner override",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-cancel",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "functions/src/index.ts",
+      "summary": "New manual transfer allocation accepted after order cancellation",
+      "resolution": "Reject before bank and ledger writes, preserve prior-operation replay",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-crm-context",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/crm/Activity.tsx",
+      "summary": "Late reconciliation response could reload obsolete view context",
+      "resolution": "Separate synchronous mutation lock and context epoch; distinct Customers mounts",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-support-window",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/features/support/Support.tsx",
+      "summary": "Submitted support ticket disappears beyond bounded implicitID30 window",
+      "resolution": "Existing createdAt DESC/documentId DESC index and honest recent heading; 31old/foreign regression",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-ask-auth",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/app/App.tsx",
+      "summary": "Ask could mount transient anonymous identity before initial auth resolution",
+      "resolution": "Gate initial mount on authReady, preserve private remount and launcher flow",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-error-copy",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "failure_paths",
+      "location": "src/shared/service-error.ts",
+      "summary": "Callable SDK technical HTTP suffix leaked into displayed error",
+      "resolution": "Bounded known final suffix normalization for functions/* codes,16cases and exact native alert",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-test-mechanics",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "code_quality",
+      "location": "tests/browser/release-sanity.spec.ts",
+      "summary": "Ask helper assumed a single launcher click always opened a modal",
+      "resolution": "Await actual launcher/composer/resume contract without force or weakened business assertions",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-runtime",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "code_quality",
+      "location": "docs/reviews/release025/RUNTIME_RECOVERY.md",
+      "summary": "Long-lived owned demo JVM degraded cumulative transaction timing",
+      "resolution": "Two preserved export/import recoveries, equal canaries, unchanged budgets; actual internal JVM cause unproven",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-transient",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "production_readiness",
+      "location": "docs/reviews/release025/READINESS.md",
+      "summary": "Historical document share and image-click transient failures not fully root-caused; focused probes and whole final receipt needed; no source patch on hypothesis",
+      "resolution": "Fresh complete51 and focused probes PASS; historical transient rootcause remainsUNKNOWN, retain residual and do not certify all future timing races.",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    },
+    {
+      "id": "025-production",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "production_readiness",
+      "location": "docs/reviews/release025/READINESS.md",
+      "summary": "Broad real-environment release, security and full product-content/performance acceptance incomplete",
+      "resolution": "Keep unresolved and fail closed; local scoped pass does not certify exhaustive or production readiness",
+      "evidence_refs": [
+        "docs/reviews/release025/COMPLETION_REPORT.md",
+        "docs/reviews/release025/SOURCE_MANIFEST.json",
+        "docs/reviews/release025/CYCLE_JOURNAL.json",
+        "docs/reviews/release025/ui/PRODUCT_CONTENT_REVIEW.md",
+        "output/playwright/release025/unit-final-complete.json",
+        "output/playwright/release025/integration-final-complete.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Historical13 moderate dependency entries unresolved; no refreshed audit",
+    "Support legacy documents missing createdAt NOT_TESTED; normal writer includes field",
+    "Unexplained historical transient failures retained; no claim all future timing races eliminated",
+    "Long-lived synthetic emulator degrades despite same source; recovery not production performance proof",
+    "Dirty shared WIP bound by current manifest rather than HEAD alone"
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED; bounded source/compiler/native evidence",
+    "Root aggregate declared self-review, specialist scoped handoffs not authenticated production approval",
+    "Actual AT/provider/load/frame/production restore/deploy NOT_RUN",
+    "Legacy standalone HTTP/restore scripts NOT_RUN025 due dedicated port requirements; selected native HTTP flows covered",
+    "Native200 image capture limitation retained; AX/keyboard/geometry distinct",
+    "Dependency metadata external upload automatically rejected; exact permission question pending",
+    "Provider token usage/API-equivalent cost/actual bill Unavailable; memory candidates None"
+  ]
+}

@@ -1,0 +1,13 @@
+
+> satsunicgo@0.1.0 test
+> vitest run --run tests/unit/loading-progress081.test.ts
+
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:49:31
+   Duration  250ms (transform 23ms, setup 0ms, import 33ms, tests 4ms, environment 0ms)
+

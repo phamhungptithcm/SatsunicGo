@@ -1,0 +1,11 @@
+# Hardening 023 — current acceptance
+
+Production: **NOT_READY**. Current local candidate: unit178/178, integration71/71, native browser38/38 passed with zero skips. Frontend typecheck/lint, Functions compile and build passed. The browser recovery run is `output/playwright/release023/browser-cycle5-final.log`; result JSON is `browser-results.json` in that directory.
+
+Eight confirmed product defects fixed: obsolete support reply completions; obsolete/private image completions and busy locks; support toolbar spacing; workbench link spacing; invalid invoice-document outbox starvation; uncertain SMTP reconciliation flag; inconsistent mixed-role media permissions; purchased variant substitution bypass. Specialist impact, review, source manifests and regression evidence live in `ui`, `backend`, `database`, `biz` subdirectories. Shipping-ceiling suspicion was rejected by a passing pre-edit regression; no shipping source change.
+
+Business contract remains: published catalog uses fixed all-inclusive price and one full verified collection before buying. Unlisted custom requests require review, accepted quote, 50% initial payment, final approval/balance before dispatch. QR/redirect/AI/transfer notices do not establish receipt of money. Customer receipt is explicit. Issued internal statements remain immutable and are not tax invoices.
+
+Review remains BLOCKED for broad release acceptance. Actual production Google login/MFA/App Check, money collection, SMTP, model provider, billing authority, backup/restore/rollback and exact deployment acceptance are NOT_RUN or unknown. Prior production inventory/readback is historical, not refreshed by these tests. Actual assistive technology and full product-state/performance acceptance remain NOT_RUN. Dependency manifests are unchanged; prior audit13moderate/0high/0critical is not a fresh audit. Current UI200 keyboard/AX/geometry and toolbar spacing assertions pass; image screenshot capture remains misaligned and is not visual-image acceptance.
+
+The shared worktree contains unrelated pre-existing WIP. HEAD alone is not this candidate. Repository intelligence is DEGRADED; bounded source, compiler and executed tests support these conclusions. No production datafix, financial correction, deployment, credential access or external customer messaging was performed.

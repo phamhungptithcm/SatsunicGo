@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-PRODUCT-DETAIL-080",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Retrospective historical cycle entry; not a current or earlier Git-source certification. Superseded by exact integrated final review.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/REVIEW_CYCLES.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "080-private-revocation",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/features/content/ProductReviews.tsx",
+      "summary": "Same owner failed reads/writes retained private values",
+      "resolution": "Clear private display on denied reads/writes, staged browser checks",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "Recorded after integration from preserved review/fix history; original stage receipts remain distinct."
+  ]
+}

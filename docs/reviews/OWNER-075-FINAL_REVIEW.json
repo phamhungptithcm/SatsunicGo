@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-OWNER-075",
+  "status": "BLOCKED",
+  "latest_cycle": 5,
+  "source_manifest": "OWNER-075-SOURCE.json",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Human Google identity/TOTP enrollment, role grant and protected action remain pending.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Exact project identity, verified Google+TOTP guards, explicit credential isolation, create-only atomic role+audit and no sensitive output verified.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Node22 unit11, syntax, ESLint and Prettier pass; source manifest current.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Missing identity, malformed config, locked profile, unrelated role, competing owner, audit conflict and provider failure checks verified.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe error codes, bounded requests/transaction retries, idempotency and uncertain-outcome readback verified.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_APPLICABLE",
+      "summary": "No product UI strings or displayed-data meaning changed.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "ProductionTOTP and readonly adapter verified; full OWNER/action/release acceptance pending.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Cross-service Auth/Firestore race, admin authority and legacy approval-validator limitations disclosed.",
+      "evidence_refs": [
+        "OWNER-075-STATUS.md",
+        "OWNER-075-PREAPPLY-REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "credential-adapter",
+      "status": "FIXED_VERIFIED"
+    },
+    {
+      "id": "provider-mfa-enum",
+      "status": "FIXED_VERIFIED"
+    },
+    {
+      "id": "oauth-ttl-and-host-version",
+      "status": "FIXED_VERIFIED"
+    }
+  ],
+  "residual_risks": [
+    "Auth and Firestore do not share an atomic transaction",
+    "Privileged administrators can write outside bootstrap sentinel",
+    "Legacy approval validator lacks degraded-policy support"
+  ],
+  "limitations": [
+    "Human credentials and TOTP enrollment pending",
+    "No production role write or application deployment",
+    "Manual review receipt; runtime CLI unavailable"
+  ]
+}

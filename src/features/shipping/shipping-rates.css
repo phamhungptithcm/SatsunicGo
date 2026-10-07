@@ -83,3 +83,584 @@
     padding: 8px 4px;
   }
 }
+
+/* Public calculator is self-contained; CRM workspace styles are not required. */
+.shippingRates--public {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 28px 40px;
+  box-sizing: border-box;
+  gap: 16px;
+  color: #111c35;
+}
+.shippingRates--public h1 {
+  margin: 0 0 4px;
+  font-size: 26px;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+.shippingRates--public button,
+.rateSupportDialog button {
+  min-height: 44px;
+  border: 1px solid #dce2ed;
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: #fff;
+  color: #111c35;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 160ms,
+    border-color 160ms,
+    color 160ms,
+    transform 160ms;
+}
+.shippingRates--public button:hover,
+.rateSupportDialog button:hover {
+  background: #f4f6fc;
+  border-color: #bbc8e4;
+}
+.shippingRates--public button:active,
+.rateSupportDialog button:active {
+  transform: scale(0.98);
+}
+.shippingRates--public :focus-visible,
+.rateSupportDialog :focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+.shippingRates--public button:disabled,
+.rateSupportDialog button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.rateCalculator {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  border: 1px solid #e1e6ef;
+  border-radius: 16px;
+  background: #fff;
+  min-width: 0;
+}
+.rateInputs,
+.rateResult {
+  padding: 24px;
+  min-width: 0;
+}
+.rateResult {
+  border-left: 1px solid #e8ebf2;
+  border-radius: 0 16px 16px 0;
+  background: #fafbff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.rateDirections {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  position: relative;
+  isolation: isolate;
+  border-radius: 10px;
+  background: #f0f2f7;
+}
+.rateDirections::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 1px 5px #111c3512;
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.rateDirections[data-direction="US_VN"]::before {
+  transform: translateX(100%);
+}
+.shippingRates--public .rateDirections button {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  color: #68738a;
+  padding: 10px 8px;
+}
+.shippingRates--public .rateDirections button[aria-pressed="true"] {
+  color: #163cff;
+}
+.ratePublicFields {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+.ratePublicFields label {
+  font-size: 12px;
+  font-weight: 600;
+  gap: 7px;
+}
+.ratePublicFields label + label {
+  margin-top: 8px;
+}
+.shippingRates--public input,
+.shippingRates--public select,
+.rateSupportDialog textarea {
+  min-height: 44px;
+  border: 1px solid #dce2ed;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+  color: #111c35;
+  font: inherit;
+  transition: border-color 160ms;
+}
+.shippingRates--public select {
+  font-size: 14px;
+}
+.shippingRates--public input:hover,
+.shippingRates--public select:hover {
+  border-color: #a9b8d4;
+}
+.rateWeight {
+  position: relative;
+}
+.shippingRates--public .rateWeight input {
+  font-size: 22px;
+  padding: 10px 42px 10px 12px;
+}
+.rateWeight > span {
+  position: absolute;
+  right: 13px;
+  top: 15px;
+  color: #66718a;
+  font-size: 13px;
+  pointer-events: none;
+}
+.ratePresets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.shippingRates--public .ratePresets button {
+  min-height: 36px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.shippingRates--public .ratePresets button[aria-pressed="true"] {
+  color: #163cff;
+  border-color: #bac8ff;
+  background: #f0f4ff;
+}
+.rateWeightHelp {
+  margin-top: 17px;
+  font-size: 12px;
+  color: #66718a;
+}
+.rateWeightHelp p {
+  padding-top: 10px;
+  line-height: 1.65;
+}
+.rateResultLabel {
+  color: #5b6880;
+  font-size: 12px;
+  font-weight: 600;
+}
+.rateFeedback {
+  animation: rate-feedback 180ms ease-out;
+}
+.shippingRates--public .rateAmount {
+  color: #111c35;
+  margin: 12px 0 7px;
+  font-size: 38px;
+  font-weight: 750;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.shippingRates--public .rateAmount--message {
+  font-size: 25px;
+  letter-spacing: -0.5px;
+}
+.rateExplanation,
+.rateQualification,
+.rateSource {
+  color: #626e83;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.rateResultLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.shippingRates--public .rateContact,
+.rateSupportDialog .rateContact {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid #163cff;
+  border-radius: 8px;
+  background: #163cff;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+.shippingRates--public .rateContact:hover,
+.rateSupportDialog .rateContact:hover {
+  background: #1032de;
+  border-color: #1032de;
+}
+.ratePublicDetails {
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #e1e6ef;
+  border-radius: 12px;
+  font-size: 13px;
+  min-width: 0;
+}
+.ratePublicDetails > summary,
+.rateWeightHelp > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+}
+.ratePublicDetails > summary::-webkit-details-marker,
+.rateWeightHelp > summary::-webkit-details-marker {
+  display: none;
+}
+.ratePublicDetails > summary::after,
+.rateWeightHelp > summary::after {
+  content: "+";
+  color: #637189;
+}
+.ratePublicDetails[open] > summary::after,
+.rateWeightHelp[open] > summary::after {
+  content: "−";
+}
+.shippingRates--public .rateSource {
+  margin: 12px 0;
+}
+.shippingRates--public table {
+  font-size: 12px;
+}
+.shippingRates--public caption {
+  font-weight: 400;
+  color: #626e83;
+}
+.shippingRates--public th {
+  color: #637189;
+}
+.rateRow--selected {
+  background: #f0f4ff;
+}
+.ratePublicDetails li {
+  margin: 8px 0;
+  line-height: 1.65;
+}
+.rateNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 13px 16px;
+  background: #fff5df;
+  border: 1px solid #ecdcb8;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.rateSupportDialog {
+  max-width: 440px;
+  width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 1px solid #e1e6ef;
+  border-radius: 14px;
+  padding: 24px;
+  color: #111c35;
+  background: #fff;
+  animation: rate-feedback 180ms ease-out;
+}
+.rateSupportDialog::backdrop {
+  background: #111c3555;
+}
+.rateSupportDialog h2 {
+  margin: 0;
+  font-size: 19px;
+}
+.rateSupportDialog label {
+  display: grid;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.rateSupportDialog textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 90px;
+}
+.rateSupportSummary {
+  white-space: pre-line;
+  font-size: 12px;
+  color: #626e83;
+  overflow-wrap: anywhere;
+  margin: 16px 0;
+  line-height: 1.65;
+}
+.rateSupportError {
+  color: #9b2626;
+  font-size: 13px;
+}
+.rateSupportDialog .rateDialogClose {
+  width: 100%;
+  margin-top: 8px;
+}
+@keyframes rate-feedback {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 680px) {
+  .shippingRates--public {
+    padding: 20px 16px 32px;
+  }
+  .shippingRates--public h1 {
+    font-size: 24px;
+  }
+  .rateCalculator {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rateInputs,
+  .rateResult {
+    padding: 18px;
+  }
+  .rateResult {
+    border-left: 0;
+    border-top: 1px solid #e8ebf2;
+    border-radius: 0 0 16px 16px;
+  }
+  .ratePublicFields {
+    margin-top: 16px;
+  }
+  .shippingRates--public .rateAmount {
+    font-size: 34px;
+  }
+  .shippingRates--public .rateAmount--message {
+    font-size: 25px;
+  }
+  .ratePublicDetails {
+    padding: 16px;
+  }
+  .rateResultLine {
+    margin: 12px 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shippingRates--public *,
+  .shippingRates--public *::before,
+  .rateSupportDialog,
+  .rateSupportDialog * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .shippingRates--public {
+    padding-inline: 20px;
+  }
+}
+
+/* Public detail tools share the calculator's route, not a second quote. */
+.shippingRates--public .rateDetailToolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1.2fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+.shippingRates--public .rateDetailToolbar label,
+.shippingRates--public .rateConditionSearch {
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 0;
+}
+.shippingRates--public .rateDetailToolbar input,
+.shippingRates--public .rateDetailToolbar select,
+.shippingRates--public .rateConditionSearch input {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #dce3ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #111c35;
+  font-size: 13px;
+}
+.shippingRates--public .rateDetailCount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  color: #626e83;
+  font-size: 12px;
+}
+.shippingRates--public .rateDetailCount button {
+  min-height: 40px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.shippingRates--public .rateCommonCondition {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  background: #f5f7fb;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.shippingRates--public .rateDetailedTable table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+.shippingRates--public .rateDetailedTable th,
+.shippingRates--public .rateDetailedTable td {
+  padding: 12px 14px;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.shippingRates--public .rateDetailedTable caption {
+  font-size: 12px;
+  padding-block: 12px;
+}
+.shippingRates--public .rateConditionSearch {
+  margin-top: 20px;
+  max-width: 560px;
+}
+.shippingRates--public .rateConditionGroups {
+  display: grid;
+  gap: 14px;
+}
+.shippingRates--public .rateConditionGroups section {
+  padding: 16px;
+  border: 1px solid #e5eaf3;
+  border-radius: 12px;
+  background: #fafbfe;
+}
+.shippingRates--public .rateConditionGroups h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+.shippingRates--public .rateConditionGroups ul {
+  display: grid;
+  gap: 12px;
+  padding-left: 18px;
+  margin: 0;
+}
+.shippingRates--public .rateConditionGroups li {
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.shippingRates--public .rateSourceLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 16px;
+  font-size: 12px;
+}
+.shippingRates--public .rateDetailEmpty {
+  padding: 16px;
+  background: #f5f7fb;
+  border-radius: 9px;
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .shippingRates--public .rateDetailToolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .shippingRates--public .rateDetailToolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shippingRates--public .rateDetailedTable th,
+  .shippingRates--public .rateDetailedTable td {
+    padding: 10px 7px;
+    font-size: 12px;
+  }
+}
+
+.shippingRates--public .rateDetailMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #626e83;
+}
+.shippingRates--public .rateDetailMetaSource {
+  margin-right: 4px;
+  overflow-wrap: anywhere;
+}
+.shippingRates--public .rateDetailMetaBadge {
+  padding: 3px 8px;
+  border: 1px solid #e5eaf3;
+  border-radius: 999px;
+  background: #f5f7fb;
+  white-space: nowrap;
+}
+.shippingRates--public .rateDetailMetaStatus {
+  color: #163cff;
+  background: #eef2ff;
+  border-color: #dce4ff;
+}
+.shippingRates--public .rateDetailHint {
+  margin: 0 0 12px;
+  color: #626e83;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.shippingRates--public .rateDetailedTable .rateDetailCaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

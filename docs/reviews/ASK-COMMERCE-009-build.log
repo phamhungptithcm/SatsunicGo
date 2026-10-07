@@ -1,0 +1,54 @@
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 241 modules transformed.
+
+(!) outDir /tmp/ask009-build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../../../../../../tmp/ask009-build/index.html                               0.82 kB │ gzip:   0.45 kB
+../../../../../../tmp/ask009-build/.vite/manifest.json                     10.80 kB │ gzip:   1.35 kB
+../../../../../../tmp/ask009-build/assets/OrderConversation-BPbv_tuc.css    1.46 kB │ gzip:   0.61 kB
+../../../../../../tmp/ask009-build/assets/index-CcAqSj9r.css               83.24 kB │ gzip:  17.63 kB
+../../../../../../tmp/ask009-build/assets/editor-state-BW4wVEa8.js          0.44 kB │ gzip:   0.30 kB
+../../../../../../tmp/ask009-build/assets/rolldown-runtime-hePW80VL.js      0.71 kB │ gzip:   0.42 kB
+../../../../../../tmp/ask009-build/assets/CustomerShipments-O4PT1VBY.js     1.60 kB │ gzip:   0.88 kB
+../../../../../../tmp/ask009-build/assets/TransferNotice-Evu-IzOb.js        1.77 kB │ gzip:   0.96 kB
+../../../../../../tmp/ask009-build/assets/StaffAccess-REqgju5W.js           2.79 kB │ gzip:   1.40 kB
+../../../../../../tmp/ask009-build/assets/Dashboard-BPnqRDyk.js             2.97 kB │ gzip:   1.48 kB
+../../../../../../tmp/ask009-build/assets/Settings-DYsJC3X9.js              3.15 kB │ gzip:   1.48 kB
+../../../../../../tmp/ask009-build/assets/Thread-De1RkzVx.js                3.27 kB │ gzip:   1.52 kB
+../../../../../../tmp/ask009-build/assets/Security-CFEA3Eku.js              3.29 kB │ gzip:   1.57 kB
+../../../../../../tmp/ask009-build/assets/Activity-BWKjKgYT.js              3.32 kB │ gzip:   1.57 kB
+../../../../../../tmp/ask009-build/assets/Profile-Bv9F1WQU.js               3.75 kB │ gzip:   1.57 kB
+../../../../../../tmp/ask009-build/assets/Notifications-C1IwCj0O.js         4.10 kB │ gzip:   1.90 kB
+../../../../../../tmp/ask009-build/assets/Customers-CBoNS6p8.js             4.41 kB │ gzip:   1.76 kB
+../../../../../../tmp/ask009-build/assets/Support-IiSnFApi.js               4.52 kB │ gzip:   1.97 kB
+../../../../../../tmp/ask009-build/assets/Returns-B_EjCmlB.js               4.55 kB │ gzip:   1.88 kB
+../../../../../../tmp/ask009-build/assets/Campaigns-D9qeyzj9.js             4.67 kB │ gzip:   1.94 kB
+../../../../../../tmp/ask009-build/assets/Refunds-Bj3zkJCY.js               5.10 kB │ gzip:   1.98 kB
+../../../../../../tmp/ask009-build/assets/Customer-CTTkUV9w.js              7.04 kB │ gzip:   2.80 kB
+../../../../../../tmp/ask009-build/assets/Membership-CZ2E6waK.js            7.09 kB │ gzip:   2.68 kB
+../../../../../../tmp/ask009-build/assets/Changes-CkC06EXx.js               7.20 kB │ gzip:   2.68 kB
+../../../../../../tmp/ask009-build/assets/PlanEditor-D8OcrRGF.js            7.61 kB │ gzip:   2.77 kB
+../../../../../../tmp/ask009-build/assets/OrderTools-ZeTteFqR.js            7.72 kB │ gzip:   3.39 kB
+../../../../../../tmp/ask009-build/assets/OrderConversation-BZxpln56.js     8.25 kB │ gzip:   3.00 kB
+../../../../../../tmp/ask009-build/assets/Finance-BqBDII8d.js               9.01 kB │ gzip:   3.02 kB
+../../../../../../tmp/ask009-build/assets/Shipping-BV8snqjT.js              9.95 kB │ gzip:   3.12 kB
+../../../../../../tmp/ask009-build/assets/ContentEditor-DfHfo-YH.js        10.87 kB │ gzip:   3.86 kB
+../../../../../../tmp/ask009-build/assets/Workbench-BObvg6iq.js            14.19 kB │ gzip:   4.64 kB
+../../../../../../tmp/ask009-build/assets/RequestForm-C8moZJiv.js          15.08 kB │ gzip:   5.79 kB
+../../../../../../tmp/ask009-build/assets/vendor-tC-8nePI.js               86.23 kB │ gzip:  24.50 kB
+../../../../../../tmp/ask009-build/assets/index-DfnYcrKo.js                98.81 kB │ gzip:  30.55 kB
+../../../../../../tmp/ask009-build/assets/react-tuUoifJV.js               259.27 kB │ gzip:  82.23 kB
+../../../../../../tmp/ask009-build/assets/firebase-C0WRHRCO.js            558.23 kB │ gzip: 165.35 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/shared/firebase.ts is dynamically imported by src/features/ask/transport.ts but also statically imported by src/app/App.tsx, src/app/SiteChrome.tsx, src/features/ask/Commerce.tsx, src/features/ask/ImageIntake.tsx, src/features/ask/InlineSupport.tsx, ..., dynamic import will not move module into another chunk.
+
+✓ built in 1.98s

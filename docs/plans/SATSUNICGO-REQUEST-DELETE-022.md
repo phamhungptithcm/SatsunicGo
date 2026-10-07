@@ -1,0 +1,3 @@
+# Request delete 022 v1
+APPROVED: owner current chat `apporved` following concrete proposed delete icon / final-item reset / submitted lock plan.
+Scope: RequestForm.tsx and scoped public-ux.css styles. Add always-visible top-right trash icon accessible name/title; remove selected item and its photos with line remap; reset final item to empty quantity1/variant blank and clear its photos; freeze controls throughout submission/attempt. No backend/schema/dependencies/deploy. Preserve shared WIP. Risk low UI draft state; compiler/lint plus browser single/reset/multiple delete verification and independent final review. Intelligence gate DEGRADED bounded source. Product-content skills apply. Rollback restore exact before snapshots.

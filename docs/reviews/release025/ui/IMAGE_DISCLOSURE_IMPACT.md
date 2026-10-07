@@ -1,0 +1,9 @@
+# IMG025 disclosure investigation plan
+
+Approved ownership: NEW release-image-disclosure-hardening.spec.ts and OrderImages only if deterministic reproduction confirms defect. Root owns existing HARD-UI03 and all serial native execution. Current full50 running; no parallel runner or source edits. Read release025/PLAN.md and actual OrderImages/Workbench/Workspace/App source. Optional indexes remain DEGRADED from prior gate.
+
+Observed HARD-UI03 failed before held image read; late screenshot same selected order with image disclosure closed. No image-leak proof. Hypotheses include native open attribute reset on row update vs parent remount. Test holds actual listOrderImages response for seeded synthetic order, opens actual details before rows arrive, releases and asserts same node remains open and seeded row visible. Count requests and compare node identity without logging IDs/bodies. No forceclick/timeouts/retries/skip. Preserve expanded contract, native controls, listener/mutation/privacy guards. No source change until root reproduction; if PASS this hypothesis is not confirmed and scope stays read-only. Product/state review and smallest impact delta must precede any source fix. ActualAT/provider/production NOT_RUN; no memory candidates, usage/cost unavailable.
+
+## Executed diagnostic result
+
+Root actual image-disclosure-probe-repeat.log: new IMG025-A01 and unchanged HARD-UI03 each repeated3,6/6PASS50.1s. Initial-list-arrival disclosure hypothesis not confirmed: current probe requires same node/open state/visible row after actual held response. No source fix justified or performed. Historical full50 failure49PASS1HARDUI03 retained; cause UNKNOWN, cannot infer flake absence or image-leak acceptance from repeats alone. Root full51 now pending; no runner or source edits by UI.

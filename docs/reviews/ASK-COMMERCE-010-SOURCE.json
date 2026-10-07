@@ -1,0 +1,21 @@
+{
+  "files": [
+    {
+      "path": "src/features/ask/Ask.tsx",
+      "sha256": "8c723a98da48d999f1441fa602c894a00213f58a5fd0214289e0310be42ddd52"
+    },
+    {
+      "path": "src/features/ask/Ask.module.css",
+      "sha256": "bad4af8f542241d29f097e41e797261618c71227d925270079fabc22baa0f904"
+    },
+    {
+      "path": "src/features/ask/ImageIntake.tsx",
+      "sha256": "6a5a08ddb20b4dd10c2f8a83a8b65d0aa7bf4a2ef1d9dde1731dd9d5eae03d27"
+    },
+    {
+      "path": "src/features/ask/Commerce.tsx",
+      "sha256": "2df455d48e48601037e94405db67a8f8010242d53d743f71bc93937960294b38"
+    }
+  ],
+  "scope": "010 approvedfrontendonly; backend/manual018sharedcontracts unchanged"
+}

@@ -24,6 +24,8 @@
       "**/node_modules/**"
     ],
     "rewrites": [
+      {"source":"/campaign-banners","function":{"functionId":"campaignBannersPublic","region":"asia-southeast1"}},
+      {"source":"/campaign-banners/**","function":{"functionId":"campaignBannersPublic","region":"asia-southeast1"}},
       {
         "source": "/robots.txt",
         "function": {

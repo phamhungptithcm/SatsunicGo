@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Executed165unit/67integration/35nativebrowser checks pass; real production and full content/AT acceptance incomplete.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "docs/reviews/release021/CONTENT_REVIEW.md",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "security": {
+      "status": "FAILED",
+      "summary": "Nohigh/critical audit entries;13moderate legacy Baggage entries and workspace override diagnostic remainOPEN; live authorization/configuration not verified.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current Node22 frontend/Functions compile,lint,build,165unit/67integration/35browser PASS; standalone46exports and direct dependency compatibility checked.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Stale source, concurrent retry, quota/revocation, locks, ledger isolation, held/unfunded operations and uncertain delivery covered by executed tests/source.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe prerequisite/version errors and deterministic operation retries; late email outcome cannot overwrite reconciled job.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Production target selected; backend inventory empty; billing403 and actual auth/App Check/MFA/provider/restore/rollout acceptance unknown.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped compatible telemetry/UUID patch preserves Genkit1; raw moderate risk remainsvisible; render-only20row PDF not financial issuance; dirtysharedcandidate not certified fromHEADalone.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "output/playwright/release021/unit-results.json",
+        "output/playwright/release021/integration-results.json",
+        "output/playwright/release021/browser-results.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "021-1",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "tests/helpers/demo-setup.ts",
+      "summary": "Firebase tests could route ambient cloud credentials before test hooks",
+      "resolution": "Pre-import fail-closed demo bootstrap; invalid environments rejected.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/rules/server.test.ts",
+      "summary": "Shared scheduled outbox fixtures could starve bounded queue and timeout",
+      "resolution": "Disposable demo namespaces;31focused and66full current tests passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-3",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "functions/src/email.ts",
+      "summary": "Late SMTP completion could overwrite manual reconciliation",
+      "resolution": "Claim/version CAS with auditable late outcome; delivery test passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-4",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "functions/src/invoices.ts",
+      "summary": "Stale source/seller or retry could duplicate document/mutate issued history",
+      "resolution": "Source version guard, unique counter, actor/op idempotency; integration passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-5",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/invoices/Documents.tsx",
+      "summary": "Browser Unicode regex mode rejected literal hyphen in pattern",
+      "resolution": "Escaped hyphen in JSX; browser detected issue, current compile passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-6",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "package-lock.json",
+      "summary": "Six high telemetry advisory entries removed by scoped compatible runtime upgrade",
+      "resolution": "Actual workspace and standalone audits0high/0critical; regressions/coldloadPASS. Remainingmoderates tracked separately.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-7",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "docs/reviews/release021/CONTENT_REVIEW.md",
+      "summary": "Complete product-language acceptance still missing for some new states",
+      "resolution": "Native zoom, recovery and state inventory updated; actual assistive technology/fullCraft coverage stillNOT_RUN.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-8",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "code_quality",
+      "location": "tests/rules/email-delivery.test.ts",
+      "summary": "Mock used Transaction/DocumentReference constructor type rather than instance",
+      "resolution": "Instance import types; current frontend and Functions typecheck passed",
+      "evidence_refs": [
+        "docs/reviews/release021/candidate-typecheck.log"
+      ]
+    },
+    {
+      "id": "021-9",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Client pending envelope could remain stranded after completed server response was lost",
+      "resolution": "Derived client/server pending operation and identity-preserving server resume; completed replay/lock-denial regression passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/CONTINUATION_EVIDENCE.json"
+      ]
+    },
+    {
+      "id": "021-10",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/invoices/Documents.tsx",
+      "summary": "Changing order filter did not reload documents; stale list response could overwrite latest",
+      "resolution": "Effect depends on order filter; request serial guards stale responses; browser filtered print fixture and empty route exercised.",
+      "evidence_refs": [
+        "docs/reviews/release021/CONTINUATION_EVIDENCE.json"
+      ]
+    },
+    {
+      "id": "021-11",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Activity.tsx",
+      "summary": "Selecting the current filter cleared rows without refetch",
+      "resolution": "Ignore unchanged selection; native reload verified reconciled failed job.",
+      "evidence_refs": [
+        "docs/reviews/release021/CONTINUATION_EVIDENCE.json"
+      ]
+    },
+    {
+      "id": "021-12",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/invoices/Documents.tsx",
+      "summary": "Reused shared URL retained revoked public projection",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-13",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/app/App.tsx",
+      "summary": "Customer standalone receipt action missing",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-14",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/profile/Profile.tsx",
+      "summary": "Known account lock retained private/typed address state",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-15",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/operations/Workbench.tsx",
+      "summary": "Colliding sibling keys duplicated action forms",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-16",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/app/App.tsx",
+      "summary": "Own order deep link limited to first50 results",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-17",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/package.json",
+      "summary": "Standalone functions lacked direct Zod4 dependency",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-18",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "vite.config.ts",
+      "summary": "Playwright artifacts forced development page reload",
+      "resolution": "Bounded approved correction verified by current full suite or standalone coldload",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "022-residual",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "security",
+      "location": "package-lock.json",
+      "summary": "Legacy Baggage advisory remains in13runtime entries",
+      "resolution": "ActiveSDKcore2.11 caps empirically verified; no owner risk acceptance/deployedconfig verification",
+      "evidence_refs": [
+        "docs/reviews/release021/SECURITY_022_RESIDUAL.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Production provider acceptance not established",
+    "Current source includes unrelated dirty shared WIP",
+    "Internal statements are not tax e-invoices"
+  ],
+  "limitations": [
+    "Central refreshed intelligence stillDEGRADED/stale; bothhealthPASS",
+    "IndependentUIQA NOT_RUN due higherREADY prerequisite",
+    "Root selfreview and namedjourney evidence only",
+    "Actual assistive technology/providers/productionrestoreNOT_RUN",
+    "Tokenusage/costUnavailable;memoryNone",
+    "CurrentnativeLogoutPASS; actualGooglesessionNOT_RUN; freshproductionFunctions0 and localHostingcandidate mismatch verified"
+  ]
+}

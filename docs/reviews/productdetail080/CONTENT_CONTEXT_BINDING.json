@@ -1,0 +1,161 @@
+{
+  "candidateHash": "d511e4f4409c931c5692b2f742940ad8b78dfcd8a81fc7a20037a3e1e9671d45",
+  "scope": "LOCAL shared UI and unchanged staged context, not production/full authenticated CRM",
+  "stageReferenceHash": "0319d9ade0b4dce37dfb4cf4df1ee166ef4f367dceb3aecc54b225e41adc35c2",
+  "paths": [
+    {
+      "path": "src/features/content/Content.tsx",
+      "baseSha256": "ea2c84911ab06c4817b51b0035f3caaab0619cd04ec43afe0dcb96b97fe85161",
+      "candidateSha256": "4f8473b40d579424516801d008b66b5026c25bfff5481b3cc924758ab3df55ed",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/features/content/ContentEditor.tsx",
+      "baseSha256": "4ce4370bcbd6e5482de4298dbeeabb00ccac3b7bfc28c3341caec4a1227203c1",
+      "candidateSha256": "c77f03aad3a29ee5edd97c9453ddff57605b54ed2a5a766f882ac93b58b8b75f",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/shared/public-content.ts",
+      "baseSha256": "01a62bd7b698eaf8e4134deef873a7fe48676180fd2321f1b805ab4ca673c484",
+      "candidateSha256": "2d56f8172b64a0e48c14b66aa0cf20cb52e318f4ea8e449ad0d95c0605f5548f",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/shared/firebase.ts",
+      "baseSha256": "795665bbbb089dbeaf63441d1724338129bed16679cdc75213f58c4af1076c7f",
+      "candidateSha256": "9d64d4fcba38f5c97488b79fad4706578d3edd78fa7a787c0e3f283554321f2e",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "functions/src/workspace.ts",
+      "baseSha256": "17263680e9c8f9af2dbf7d463046a734fdf91a4e5d7b915ce7437b96e9df45c8",
+      "candidateSha256": "749ec31e857e9c06e0aac502ce392ab438841ded8a3a78dea527e504a56465ba",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "functions/src/index.ts",
+      "baseSha256": "a706bdacc2dc7f8555cd43f1f54382535abce7bd0917022561637e07bcc5d03f",
+      "candidateSha256": "90f2a01bb30cced3ab71d68de3d85a7160735226852cb7c05368cf253a05512d",
+      "kind": "shared-adapter",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "packages/domain/product-information.ts",
+      "baseSha256": null,
+      "candidateSha256": "783fa4cdad194b6a5423bd8da737020adaf1f37f4ccd53c75ef1e09d15d37ce4",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "packages/domain/product-reviews.ts",
+      "baseSha256": null,
+      "candidateSha256": "9e8357ae83409cbd7ed193ff3267795f259ecddb380206de3b05299ed5137693",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "functions/src/product-reviews.ts",
+      "baseSha256": null,
+      "candidateSha256": "e00a5506bec542ebc321a9419ee03d4c7ff31796169de4d5dcd6e3509b7153d8",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/features/content/ProductDetail.tsx",
+      "baseSha256": null,
+      "candidateSha256": "88082224e51e721adb44396c9eaaaa9a2b16f7cc94c727c4300b6469ea9a23a2",
+      "kind": "new",
+      "contextEvidence": "Current CUA5207 empty+populated cases and four actualReact SSR checks"
+    },
+    {
+      "path": "src/features/content/ProductReviews.tsx",
+      "baseSha256": null,
+      "candidateSha256": "87253ff3430f439fac0a850652dfbfa39b8a4c8acc9ee36bb111cd9a08b6d509",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/features/content/ProductReviewModeration.tsx",
+      "baseSha256": null,
+      "candidateSha256": "c693a2ee55507a83d3aa4ee969b77a76491e99a6ca638b0397d650ae22313a37",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/features/content/ProductInformationFields.tsx",
+      "baseSha256": null,
+      "candidateSha256": "9713d09e4ea969382114238f52538ed767f69633e1ddb2c3ba55c75ddf14c79b",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "src/features/content/product-detail080.css",
+      "baseSha256": null,
+      "candidateSha256": "05485282a4e140a33f4fc797c80a8b894d09ac5f089da8735440e17841012532",
+      "kind": "new",
+      "contextEvidence": "UNCHANGED_FROM_STAGED_CONTEXT"
+    },
+    {
+      "path": "tests/unit/product-reviews080.test.ts",
+      "baseSha256": null,
+      "candidateSha256": "62940d2c0a332c3d2799016b3461bf038f94bbf2cba0daae51d350823dd1ba76",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/unit/review-retry080.test.ts",
+      "baseSha256": null,
+      "candidateSha256": "653833dff41d477eb62285b236b47dd045c75c382d1257a28fa349bb9e9c6ccc",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/product-detail080.spec.ts",
+      "baseSha256": null,
+      "candidateSha256": "38edc9e7d2459f878828aa6d4a68633f921e62adce7187bb07867c7b16f4e6e6",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/fixtures/productdetail080/index.html",
+      "baseSha256": null,
+      "candidateSha256": "1fe853d48d87013949f1d1649bb983fe6a9a549e60c6e9982e43be72e5a9a6e3",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/fixtures/productdetail080/main.tsx",
+      "baseSha256": null,
+      "candidateSha256": "1354e61adafeed734660feca85b2115fd0292de16338e17c78955623497fc066",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/fixtures/productdetail080/mock.ts",
+      "baseSha256": null,
+      "candidateSha256": "ba714b304e20934977c3f67d552ebff845b5a94623ec1aa4db59aec2da81f9e7",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/fixtures/productdetail080/playwright.config.mjs",
+      "baseSha256": null,
+      "candidateSha256": "d1ac0d22c954201eb4eef5a31ea04349da5f094fd5197cf2d9f6784e96d08901",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    },
+    {
+      "path": "tests/browser/fixtures/productdetail080/vite.config.mjs",
+      "baseSha256": null,
+      "candidateSha256": "d9d7b552edd8eca12a4a83473e263210e13fb66e7bceb1421f66c00c3d200454",
+      "kind": "new",
+      "contextEvidence": "Current tests or executable logs"
+    }
+  ]
+}

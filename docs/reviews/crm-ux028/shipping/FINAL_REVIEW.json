@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Bounded thirteen native Shipping/Consolidation workflows pass on current candidate; whole UI acceptance separate.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Bounded native authority/missing-reference/CAS conditions pass without baseline mutation; no full security certification.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current spec targeted lint and strict compiler pass; independent source review PASS.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Bounded missing-response replay/CAS/authority/missing-reference native cases pass.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current native explicit recovery and immutable replay pass; historical navigation cause unverified.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider, deployment or complete visual/AT/zoom acceptance.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing controls, bounded queues and actual allocation conservation retained.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json",
+        "output/playwright/release027/shipping-current-round4/browser-results.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "SHIP028-DENSITY",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/shipping/Shipping.tsx, src/features/shipping/Consolidation.tsx",
+      "summary": "Repeated full forms/share rows and unrelated order-weight inputs overwhelmed queue browsing.",
+      "resolution": "Grouped contextual forms, disclosed shares, actual selected-member weights;6scoped regressions pass.",
+      "evidence_refs": [
+        "tests/unit/shipping-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "SHIP028-LINT",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "code_quality",
+      "location": "src/features/shipping/Consolidation.tsx",
+      "summary": "Initial selected weight preview replacement missed formatted markup, leaving unused weightGrams.",
+      "resolution": "Actual gram preview now rendered; rerun targeted lint and20tests pass.",
+      "evidence_refs": [
+        "src/features/shipping/Consolidation.tsx"
+      ]
+    },
+    {
+      "id": "SHIP028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+      "summary": "Current bounded thirteen interaction/fault workflows pass; comprehensive visual, AT, zoom and uncovered state acceptance remain pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "shipping",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta retains structural fieldsets and existing form layout. Current bounded native overflow/focus checks pass; independent comprehensive visual approval remains pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    },
+    {
+      "id": "SHIP028-STATUS-ORACLE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "validation",
+      "location": "tests/browser/release-package-batch-positive028.spec.ts",
+      "summary": "Unique actual status paragraph and first split parcel persisted state/event replace option-matching assertions. Current 13 native pass."
+    }
+  ],
+  "residual_risks": [
+    "Pending command metadata remains memory-only across full browser reload.",
+    "Current scoped synchronization and fault cases pass; comprehensive interleavings, uncovered states, visual/AT/zoom and live-provider evidence remain pending."
+  ],
+  "limitations": [
+    "Scope is bounded local Shipping/Consolidation evidence, not complete CRM acceptance.",
+    "Old navigation failure cause and old unknown orphan cleanup remain unverified.",
+    "Full visual, assistive technology, zoom and provider/production checks pending.",
+    "Token usage and cost unavailable; memory candidates None."
+  ],
+  "historical_dimensions_superseded": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Exclusive page plan implements compact contextual forms/selected member weights.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No authority/backend changes; allocations/order versions/proof remain enforced server-side.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "6newshipping+14other focused tests and targeted lint pass; compiler root-owned.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Frozen command retry/generation guards reviewed, native missing-response/partial cases pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Unknown versus explicit rejection displayed distinctly; native timing/recovery pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider/deploy/current full product acceptance.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing native controls/shared styles; no artificial remaining quantity from bounded30record window.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/shipping/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/shipping/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "review_cycles_current": [
+    {
+      "candidate": "389225",
+      "outcome": "21 PASS / 4 FAIL combined Admin/Shipping; Shipping 9 PASS / 4 FAIL",
+      "findings": "Three broad status oracles matched native options; one navigation context failure, cause unverified."
+    },
+    {
+      "candidate": "d4ce788",
+      "outcome": "Independent source PASS; actual 13 PASS at 328933.251 ms",
+      "remaining": "Split-parcel broad status oracle P2 discovered by independent review."
+    },
+    {
+      "candidate": "18d508",
+      "outcome": "Independent source PASS; split P2 CLOSED; current actual 13 PASS at 374843.833 ms",
+      "remaining": "ProductGate BLOCKED: full visual/AT/zoom and production evidence missing."
+    }
+  ]
+}

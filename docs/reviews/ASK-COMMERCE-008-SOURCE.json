@@ -1,0 +1,23 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "scope": "Ask008 source checkpoint; unrelated shared App changes excluded",
+  "files": {
+    "src/features/ask/Ask.tsx": "ca8a22822e108fb3f93dabc2a611a1ae1f72063b00a23820c06913b0dd5f7674",
+    "src/features/ask/Commerce.tsx": "f69ca0ce10b7bd198c0cb7f5bc6ab7bb9a47036f8483977c6896a6b227d6fde7",
+    "src/features/ask/Ask.module.css": "54b235583cbc8e66edafe7c5e62004adc567eeeeb1e544151f36f0486d395f9e",
+    "src/features/ask/knowledge.ts": "05fc995f93b1fc83bfec6cd3d9f1b593153262bfb15227894c550143418f7ed3",
+    "src/features/ask/transport.ts": "1abfe91734517ab5088cdf88ad206c4c8c9385bff2d1241178277bf8461bb628",
+    "src/shared/firebase.ts": "67d3c3af9e1327564f2e99331d7b92bb706f5f7e3f8ce9f93ccd8c7e2a7c59b3",
+    "packages/domain/index.ts": "e6bfd0be2c750584617d477328a550f8f2fb5e1dac0d7587ec94438d100b3d07",
+    "packages/domain/ask-workflow.ts": "17e6f71588f39ea7e9535638c353494a2c4922e40c4a1cb9b4751723340aba7f",
+    "packages/domain/ask-stream.ts": "db1fffd93ab8762d66a4a95bd49fb4249aa52453e196ab28d6bba028ab7b4afc",
+    "functions/src/ai/ask.ts": "834d233163df0ec50cdc07d7f5cef58afdd4d6fac922d2c5a105c14e1fcfcdff",
+    "functions/src/ai/ask-workflow.ts": "abb0233ce3a30bd0a276f5e1cf6a9249513af201b726f6c3b42fbd184ce40e17",
+    "functions/src/index.ts": "ec9bfafd38f23c44145beb7ec110a7f69e770e164c89ee676d878f0f7292840a",
+    "functions/src/workspace.ts": "f31c77ceed56cecc321c3219cbf5895569b7048e66844ac342c4085fec5690be",
+    "src/features/operations/OperationsDetails.tsx": "4e22b292547c76c352e32ae6c385298a27f10eefa1e5369443f56fffc55ea2a6",
+    "firestore.rules": "442d6bfd07e064ce53ec6aeec79e35120e4e1d9cac03641cdd9c64e3d50d7041",
+    "tests/unit/ask-workflow.test.ts": "c4817f004be8cca9dc36818f77e3006d8aaa9a2f0af754006287c85bbcccf69b",
+    "tests/rules/ask-workflow.test.ts": "53254d315da6b27e8d2796f253aac1e685fe6d70b60b2fa1da11927800bb3bdd"
+  }
+}

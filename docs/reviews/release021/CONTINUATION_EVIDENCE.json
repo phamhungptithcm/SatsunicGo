@@ -1,0 +1,57 @@
+{
+  "scope": "Approved local integration021; synthetic emulator only",
+  "recordedAt": "2026-10-05T04:29:19.688342+00:00",
+  "checks": {
+    "typecheck": {
+      "status": "PASSED",
+      "command": "npm run typecheck",
+      "toolSession": 60328
+    },
+    "lint": {
+      "status": "PASSED",
+      "command": "npm run lint",
+      "toolSession": 10443
+    },
+    "unit": {
+      "status": "PASSED",
+      "files": 34,
+      "tests": 147,
+      "toolSession": 21911
+    },
+    "integration": {
+      "status": "PASSED",
+      "files": 12,
+      "tests": 67,
+      "skipped": 0,
+      "toolSession": 97296
+    },
+    "build": {
+      "status": "PASSED",
+      "toolSession": 81414,
+      "warnings": [
+        "Firebase chunk over500kB",
+        "static and dynamic firebase import"
+      ]
+    }
+  },
+  "restore": {
+    "status": "PASSED_LOCAL_ONLY",
+    "project": "demo-satsunicgo-restore021",
+    "firestorePort": 8187,
+    "storagePort": 9397,
+    "writeLog": "/private/tmp/release021-restore021-write.log",
+    "verifyLog": "/private/tmp/release021-restore021-verify.log",
+    "export": "/private/tmp/release021-restore021-export",
+    "production": "NOT_TESTED",
+    "invalidFirstAttempt": "Same demo project collided with shared hub discovery; rejected as isolation evidence, unique project fixed."
+  },
+  "browser": {
+    "catalogSelection": "Large, quantity2, total240000VND; native UI",
+    "recipientPayment": "Disabled before recipient; enabled after private recipient saved; provider configuration error displayed; collected/refunded remain0",
+    "outbox": "Unknown reconciled to failed version2 with synthetic evidence; no resend",
+    "pdf": "20long synthetic lines,3A4pages, all row markers and total extracted with pypdf; first/last pages visually inspected",
+    "lostResponse": "Browser interception failed with route already handled; NOT claimed as browser loss-recovery evidence. Backend completed-operation replay and lock denial passed.",
+    "cleanup": "Pointer and seller restored with compare-and-set; immutable synthetic orders/documents retained."
+  },
+  "production": "NOT_READY"
+}

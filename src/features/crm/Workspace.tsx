@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { Documents } from "../invoices/Documents";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import "./Workspace.css";
@@ -132,7 +133,7 @@ function NavIcon({ path }: { path: string }) {
 export const workspacePages = [
   {
     path: "documents",
-    label: "Chứng từ",
+    label: "Hóa đơn",
     group: "Tài chính",
     roles: ["OWNER", "FINANCE", "SUPPORT"],
   },
@@ -350,7 +351,7 @@ export function Workspace({
   }
   if (current?.path === "studio") {
     return (
-      <Suspense fallback={<p role="status">Đang mở Studio…</p>}>
+      <Suspense fallback={<LoadingState>Đang mở Studio…</LoadingState>}>
         <Studio uid={uid} roles={roles} name={name} />
       </Suspense>
     );
@@ -393,7 +394,7 @@ export function Workspace({
           </div>
         </header>
         <div className="workspaceContent">
-          <Suspense fallback={<p role="status">Đang mở công việc…</p>}>
+          <Suspense fallback={<LoadingState>Đang mở công việc…</LoadingState>}>
             <Routes>
               <Route
                 index

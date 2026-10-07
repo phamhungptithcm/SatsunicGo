@@ -1,0 +1,7 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "sha256": {
+    "src/app/SiteChrome.tsx": "629e9d30adbb200075be7f746808608f1a3c8becbbdce169381b71df2c3bf919",
+    "src/styles/global.css": "7cb17942d05a99483b8f241a4c9c836b20e6a199510aa69c40aa8583851b4c02"
+  }
+}

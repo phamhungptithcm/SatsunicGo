@@ -1,0 +1,4 @@
+5af196e248cb9471e88d0394a17b38d1ef61da9c30c0fc4187bf758ecbd36c09  src/features/shipping/ShippingRates.tsx
+4c01025882fcc465678b047f7b79480cbd6bc1b85c06139cfc44432841ff88eb  src/features/shipping/shipping-rates.css
+064d878e02f8f8ecf9622c06e4d7bb0a870e5d52835d61a4e3b96d00f865439c  src/features/shipping/rate-detail-view.ts
+48907d7e70fcac066af04b3b528962997b77f58f57a7285297fc151837b8fd75  tests/unit/rate-detail-view086.test.ts

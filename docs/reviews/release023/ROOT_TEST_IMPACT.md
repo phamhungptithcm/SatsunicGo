@@ -1,0 +1,5 @@
+# Root test correction and additional UI evidence
+
+Human authorizes full local hardening/testing; root owns browser fixture/spec/config. Full cycle1 was37pass/1fail: ORDER-B01 expired45s before navigating (blank screenshot), with51 independent product+order creations (>100individual writes). Do not label this product failure or increase timeout. Batch51synthetic order snapshots using one published product and one bounded Firestore batch; retain own order outside first50 proof and foreign-owner denial. No production writes, business assertion weakening or fixture cleanup.
+
+UI Thread/OrderImages scoped ProductLanguageGate still needs keyboard/layout/text scaling in context. Extend actual native200% owned Chrome test to both components, keyboard input/focus and no overflow, screenshots/AX; AX remains distinct from actual screen reader. Run deferred regressions at768/390/1440 and strengthen ticket recovery by submitting a new reply to the current ticket after stale completion. All app source remains specialist-frozen. Verify frontendcompile/lint, affected browser cases and full38; retain failed cycle evidence.

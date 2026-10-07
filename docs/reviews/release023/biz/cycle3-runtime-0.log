@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "criterion": 2,
+  "criterion_hash": "83a0fa911799794dea2b9bd5da76e8213deb361afe1df7b2d06c8597515078fc",
+  "status": "VERIFIED",
+  "weight": 1,
+  "evidence_source_hash": "a87b6ea604fc712721fd026cc0c783e3495b82339a9ffbd520eecb33b162a69b",
+  "summary": null,
+  "recorded_at": "2026-10-05T15:45:15.586Z",
+  "record_id": "88c4abb3d32bb85983e4256c58987410583ffea9325fb42f4cd627205a3010b8"
+}

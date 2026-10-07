@@ -61,7 +61,7 @@ it("issued amounts retain their historical meaning and a voided document never b
     }),
   );
   expect(html).toContain("Còn phải thanh toán tại thời điểm xuất");
-  expect(html).toContain("chứng từ không tạo khoản thu thứ hai");
+  expect(html).toContain("hóa đơn không tạo khoản thu thứ hai");
   expect(html).not.toMatch(/<button[^>]*disabled=""/);
   const voided = renderToStaticMarkup(
     createElement(StatementView, {

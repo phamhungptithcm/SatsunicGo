@@ -1,0 +1,61 @@
+{
+  "task": "RELEASE087",
+  "status": "BLOCKED",
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "BLOCKED",
+      "findings": [
+        "stale invoice literal assertion",
+        "three undefined fixture built-ins",
+        "sandbox telemetry listener denied"
+      ]
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "fixed": [
+        "invoice assertion updated to current equivalent payment meaning",
+        "explicit Node URL/process imports",
+        "Node22 authorized loopback unit execution"
+      ],
+      "remaining": [
+        "designated owner mfaEnrolledfalse; guarded audited OWNER bootstrap cannot proceed",
+        "full live auth/AppCheck/protected-action acceptance missing",
+        "AI/email/payment/maintenance provider holds disabled and production secrets absent",
+        "PITR/delete protection disabled; backup/restore/monitoring acceptance missing",
+        "current full-candidate integration/content/security/browser failure-path gates incomplete"
+      ]
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "scope_change": "AI/payment activation explicitly deferred by user",
+      "remaining": [
+        "Owner MFA remains unenrolled in current metadata",
+        "audited OWNER/protected-action acceptance incomplete",
+        "backup/restore/monitoring/full core candidate acceptance incomplete"
+      ]
+    }
+  ],
+  "dimensions": {
+    "requirements": "BLOCKED full production release not achieved",
+    "security": "BLOCKED missing privileged identity and current provider operational acceptance; protections retained",
+    "quality": "PASSED local Node22 release build, root lint,845unit tests",
+    "failure_paths": "PARTIAL six request browser checks, full integration/recovery NOT_RUN",
+    "error_handling": "PARTIAL source guards preserved; actual provider errors NOT_TESTED",
+    "product_language": "PARTIAL scoped prior UI reviews; full527file candidate acceptance NOT_RUN",
+    "production_readiness": "NOT_READY for core release; AI/payment provider acceptance no longer required in this scope",
+    "trade_offs": "PASSED no gate bypass/secret provisioning/role mutation inferred"
+  },
+  "evidence": [
+    "RELEASE-087-SOURCE.json",
+    "RELEASE-087-ARTIFACTS.json",
+    "RELEASE-087-CLOUD.json",
+    "RELEASE-087-PRODUCTION-BASELINE.json"
+  ],
+  "deployment": "NOT_RUN",
+  "tokens": "Unavailable",
+  "cost": "Unavailable",
+  "scope": "core production release with AI/payments disabled and deferred"
+}

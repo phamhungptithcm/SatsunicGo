@@ -1,0 +1,36 @@
+{
+  "task_id": "SATSUNICGO-FINANCE-PRIVACY-032",
+  "files": [
+    {
+      "path": "src/features/payments/Finance.tsx",
+      "sha256": "be2dd84daf141133c9e0422e6f3a173e77075062a3cee3245edb26a4cec5973b"
+    },
+    {
+      "path": "src/features/payments/FinancialReview.tsx",
+      "sha256": "6840c66f836e11a11be9d5b9d32cc23930db88f3d1c797173b97dfb740f3d4fc"
+    },
+    {
+      "path": "tests/browser/release-finance-privacy032.spec.ts",
+      "sha256": "a1f4894ee9e4a785c39dc2d60cc40a890da8021ef8491f1cdfb048cf47f90449"
+    },
+    {
+      "path": "docs/reviews/crm-ux028/finance032/IMPLEMENTATION_PLAN.md",
+      "sha256": "1703a61f9728cfc215d64992a3d82fb8a8145da4fe9fd2812b05c551f4f843d9"
+    },
+    {
+      "path": "docs/reviews/crm-ux028/finance032/PRODUCT_CONTENT_REVIEW.md",
+      "sha256": "2fe5406f81b456dfcd75d0be02c7733d46d875c3c50a2985b9c9f00db565db87"
+    }
+  ],
+  "native_status": "PASSED_SCOPED_9",
+  "production_status": "NOT_READY",
+  "native_evidence": "output/playwright/release027/finance-refund-current-round2/browser-results.json",
+  "product_language_status": "BLOCKED_PARTIAL_PLATFORM_EVIDENCE",
+  "native_case_count": 9,
+  "combined_archive_case_count": 15,
+  "review_history_evidence": [
+    "output/playwright/release027/finance-early-auth-prefix-round2/browser-results.json",
+    "output/playwright/release027/finance-early-auth-postfix-round1/browser-results.json",
+    "output/playwright/release027/finance-refund-current-round2/browser-results.json"
+  ]
+}

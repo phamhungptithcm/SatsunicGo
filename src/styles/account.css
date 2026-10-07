@@ -5,9 +5,9 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  max-width: 1240px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 56px 32px 144px;
+  padding: 56px 28px 144px;
   display: grid;
   grid-template-columns: 196px minmax(0, 1fr);
   gap: 64px;
@@ -71,7 +71,6 @@
 }
 .accountPage {
   min-width: 0;
-  animation: accountReveal 180ms ease-out;
 }
 .accountPage > .pageHeading {
   align-items: center;
@@ -234,9 +233,6 @@
 .detailSection {
   padding-top: 28px;
 }
-.detailSection.isVisible {
-  animation: accountReveal 160ms ease-out;
-}
 .orderNextStep {
   display: flex;
   align-items: flex-start;
@@ -377,19 +373,11 @@
   border-radius: 16px;
 }
 .accountLoading {
-  padding: 48px 0;
+  justify-content: center;
+  min-height: 280px;
+  padding: 48px 16px;
   color: #788295;
   font-size: 14px;
-}
-@keyframes accountReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 @media (max-width: 900px) {
   .accountWorkspace {
@@ -500,3 +488,9 @@
     transition: none;
   }
 }
+
+.customerOrderFilters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.customerOrderFilters a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #e2e6ef; border-radius: 999px; color: #526078; text-decoration: none; }
+.customerOrderFilters a[aria-current="page"] { color: #163cff; background: #edf0ff; border-color: #163cff; font-weight: 600; }
+.customerOrderFilters a:focus-visible { outline: 2px solid #163cff; outline-offset: 3px; }
+.accountTrackingNotice { padding: 12px 0; color: #526078; }

@@ -1,0 +1,11 @@
+# CRM024 scenario coverage
+
+Baseline023 is preserved separately; do not certify024 from historical178/71/38. Actual fixtures demo-only, strict bootstraps, invalid ADC, existing loopback services never reset. Source owner map TEAM_CONTEXT and root impact ROOT_PLAN.
+
+CRM native at390/768/1440: authorized owner landing overview; customer prefix-search empty recovery; keyboardTab/Enter; no page overflow; removedemptytable; shelltop0; ninebounded snapshotcards; native mobilemenuEscape/focus; publicrouteheaderpadding restored. Finance/SUPPORT retain authorized documents fallback and overviewguard. Membership endedterm shows expired; malformedterm unknown, no InvalidDate/bare0, storedsubscriptionunchanged. Native proposal journey uses2lines, onepurchased; staffproposesunboughtreplacement→customeraccept→staffapply→replayreject, plussecondproposalreject; verifiesuntouchedboughtline/quantities/funds/oneadjustment/noextra ledgerentry/privateevidencehidden.
+
+29CRM integration regressions: missingrecordexpectedVersion aborted/no-write, malformedactor/assignee/dashboardrole state safe denial, legitimate create/replay/concurrent update and locks, past/equal/future/cancelled membership, invalidexpiry sentinels and numericstring normalization, persistedsubscription unchanged.
+
+UI review findings: adjacentdocumentbuttons, weakform/list hierarchy, publicheaderblankstrip withinCRM, clippedirrelevantemptytableheads, stray0 membership, incorrecthủy0 substitutioncopy. Scoped layout/copyfixes preserve payloads/financialauthority. Workbenchprimaryexistingactionmovedabove secondaryforms, displayedimplementationversionremoved; no actionoptions/default/role rules changed. Newowner/manager defaultentry overview affectsonly authorized /crm index; deep linksunchanged.
+
+Inherited happy/badregressions remain executable in browserrelease-api/release-sanity/release-hardening/release-accessibility +fullunits/rules. Nativekeyboard/AX/geometry/visualinspection does not prove actualscreenreader, productionauth/providers, frame/load profiling, backup/restore/deploy. Internal statements are nottaxinvoices. Confirmedsourceissues and rejectedhypotheses recorded in cyclejournal/privatehandoffs; actual A→B retainedcustomer hypothesis refuted by route/principal keys.

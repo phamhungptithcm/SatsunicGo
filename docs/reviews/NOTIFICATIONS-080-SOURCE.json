@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "path": "src/features/notifications/Notifications.tsx",
+      "sha256": "184731be467f826f7465c196d3976daa978e6c6cd4d8148c26ec252a9d2bd30d"
+    },
+    {
+      "path": "src/features/notifications/notifications.css",
+      "sha256": "99292c1275d20c3fc6688f8bd44ddf94b6b240e18dc8d4606212e8727883b36f"
+    },
+    {
+      "path": "tests/browser/notifications079.spec.ts",
+      "sha256": "78189ce8e2113d323d80c05c31e1cb735b792d02e518aa7ae4a8e36dad6ff029"
+    }
+  ]
+}

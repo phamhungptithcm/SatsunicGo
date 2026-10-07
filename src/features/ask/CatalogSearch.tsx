@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
@@ -99,19 +100,15 @@ export function CatalogSearch({
         </p>
       )}
       {!data.rows.length && (
-        <p role="status">
-          {loading
-            ? vi
+        <>{loading ? <LoadingState overlay={false}>{vi
               ? "Đang tìm tiếp trong danh mục…"
-              : "Searching more of the catalog…"
-            : data.hasMore
+              : "Searching more of the catalog…"}</LoadingState> : <p role="status">{data.hasMore
               ? vi
                 ? "Chưa thấy sản phẩm trong phần đã kiểm tra. Có thể tìm tiếp."
                 : "No match in the products checked so far. You can search further."
               : vi
                 ? "Chưa có sản phẩm phù hợp. Anh/chị có thể gửi yêu cầu mua hộ ngay trong chat."
-                : "No matching products yet. You can request an item within this chat."}
-        </p>
+                : "No matching products yet. You can request an item within this chat."}</p>}</>
       )}
       <ul className={styles.catalogResultList}>
         {data.rows.map((row) => {

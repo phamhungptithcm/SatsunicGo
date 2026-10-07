@@ -1,0 +1,13 @@
+
+> satsunicgo@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+
+ Test Files  32 passed (32)
+      Tests  140 passed (140)
+   Start at  22:11:55
+   Duration  1.51s (transform 1.03s, setup 0ms, import 4.33s, tests 330ms, environment 3ms)
+

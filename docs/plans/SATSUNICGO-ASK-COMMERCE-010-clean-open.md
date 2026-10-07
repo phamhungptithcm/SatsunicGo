@@ -1,0 +1,4 @@
+# ASK-COMMERCE-010 clean opening delta v1
+Approval: owner current chat explicitly requests removal of screenshot welcome/manual disclosure on opening. Within approved natural-panel/fewer-controls scope. No new business action.
+Observed: CommercePanel renders greeting and manual disclosure before first turn; 021 added CatalogPurchase in same region. Intelligence refresh DEGRADED: unavailable healthy current semantic index; bounded source inspected.
+Plan: remove greeting; show existing manual fallback only after messages or a populated draft. Preserve catalog cards, order/payment/recipient/support, composer, shell and all mutation handlers. Single source owner: Commerce.tsx. Risk low, presentation only; removal of blank manual entry on fresh opening intentional. Existing manual Request page unchanged. Validate focused ESLint/TS and actual localhost empty panel. Independent review required. Rollback: restore removed greeting and unconditional disclosure.

@@ -1,0 +1,652 @@
+--- src/features/content/Content.tsx (task-start)
++++ src/features/content/Content.tsx
+@@ -9,8 +9,127 @@
+ } from "firebase/firestore";
+ import { betaRelease, db } from "../../shared/firebase";
+ import { usePublicContent, type ContentRow } from "../../shared/public-content";
++function PostsHeading() {
++  return (
++    <header className="postsHeading">
++      <span className="editorialEyebrow">Bài viết · SatsunicGo</span>
++      <h1>
++        Hiểu rõ hơn
++        <br />
++        <span>trước khi mua.</span>
++      </h1>
++      <p>Thông tin mua hộ và những điều cần biết trước khi chọn hàng.</p>
++    </header>
++  );
++}
++function PostsEmpty({
++  failed = false,
++  beta = false,
++}: {
++  failed?: boolean;
++  beta?: boolean;
++}) {
++  return (
++    <div className="postsEmpty">
++      <div className="postsIllustration" aria-hidden="true">
++        <svg viewBox="0 0 200 180" fill="none">
++          <rect
++            x="38"
++            y="32"
++            width="118"
++            height="138"
++            rx="12"
++            fill="white"
++            stroke="currentColor"
++            strokeWidth="2"
++            transform="rotate(-9 38 32)"
++          />
++          <rect
++            x="57"
++            y="18"
++            width="118"
++            height="138"
++            rx="12"
++            fill="white"
++            stroke="currentColor"
++            strokeWidth="2"
++          />
++          <rect x="73" y="35" width="86" height="48" rx="6" fill="#eef2ff" />
++          <path
++            d="M83 71l19-20 13 14 13-12 22 18M76 102h80M76 115h63M76 128h43"
++            stroke="currentColor"
++            strokeWidth="3"
++            strokeLinecap="round"
++            strokeLinejoin="round"
++          />
++          <circle cx="164" cy="137" r="25" fill="currentColor" />
++          <path
++            d="M153 137h22m-8-8 8 8-8 8"
++            stroke="white"
++            strokeWidth="2"
++            strokeLinecap="round"
++            strokeLinejoin="round"
++          />
++        </svg>
++      </div>
++      <div className="postsEmptyCopy">
++        <span className="editorialEyebrow">
++          {failed ? "Tải nội dung" : "Góc đọc của bạn"}
++        </span>
++        <h2>
++          {failed ? "Nội dung chưa tải được" : "Bài viết đang được cập nhật"}
++        </h2>
++        <p>
++          {failed
++            ? "Thử tải lại hoặc gửi yêu cầu mua hộ nếu bạn đã chọn được món hàng."
++            : beta
++              ? "Nội dung sẽ xuất hiện tại đây khi được xuất bản."
++              : "Chưa có bài viết được xuất bản. Nếu đã có món hàng muốn mua, bạn có thể gửi tên hoặc link cho SatsunicGo."}
++        </p>
++        <Link className="primary postsPrimary" to="/request">
++          {beta ? "Xem yêu cầu mua hộ" : "Gửi yêu cầu mua hộ"}
++          <span aria-hidden="true">↗</span>
++        </Link>
++      </div>
++    </div>
++  );
++}
++function PostsShortcuts() {
++  return (
++    <nav className="postsShortcuts" aria-label="Thông tin mua hộ">
++      <Link to="/how-it-works">
++        <span className="shortcutNumber" aria-hidden="true">
++          01
++        </span>
++        <span>
++          <strong>Cách mua hộ</strong>
++          <span>Tìm hiểu các bước gửi yêu cầu</span>
++        </span>
++        <span aria-hidden="true">↗</span>
++      </Link>
++      <Link to="/fees">
++        <span className="shortcutNumber" aria-hidden="true">
++          02
++        </span>
++        <span>
++          <strong>Biểu phí</strong>
++          <span>Xem thông tin phí mua hộ</span>
++        </span>
++        <span aria-hidden="true">↗</span>
++      </Link>
++    </nav>
++  );
++}
+ export function Catalog({ kind }: { kind: "products" | "posts" }) {
+   const { rows, error, loading, stale, retry } = usePublicContent(kind);
++  if (betaRelease && kind === "posts")
++    return (
++      <section className="page postsPage">
++        <PostsHeading />
++        <PostsEmpty beta />
++        <PostsShortcuts />
++      </section>
++    );
+   if (betaRelease)
+     return (
+       <section className="page">
+@@ -27,13 +146,18 @@
+       </section>
+     );
+   return (
+-    <section className="page">
+-      <h1>{kind === "products" ? "Sản phẩm tham khảo" : "Bài viết"}</h1>
+-      <p>
+-        {kind === "products"
+-          ? "Tìm món bạn thích. Nhân viên xác minh giá và khả năng mua trước khi báo giá."
+-          : "Thông tin mua hộ và những điều cần biết trước khi chọn hàng."}
+-      </p>
++    <section className={kind === "posts" ? "page postsPage" : "page"}>
++      {kind === "posts" ? (
++        <PostsHeading />
++      ) : (
++        <>
++          <h1>Sản phẩm tham khảo</h1>
++          <p>
++            Tìm món bạn thích. Nhân viên xác minh giá và khả năng mua trước khi
++            báo giá.
++          </p>
++        </>
++      )}
+       {error && (
+         <p className="error" role="alert">
+           {error}{" "}
+@@ -113,6 +237,8 @@
+             </article>
+           ))}
+         </div>
++      ) : kind === "posts" ? (
++        <PostsEmpty failed={Boolean(error)} />
+       ) : (
+         <div className="empty">
+           <h2>
+@@ -122,6 +248,7 @@
+           <Link to="/request">Gửi yêu cầu mua hộ</Link>
+         </div>
+       )}
++      {kind === "posts" && <PostsShortcuts />}
+     </section>
+   );
+ }
+--- src/features/support/Support.tsx (task-start)
++++ src/features/support/Support.tsx
+@@ -19,6 +19,13 @@
+ };
+ export function Support({ user }: { user: User | null }) {
+   const topic = new URLSearchParams(useLocation().search).get("topic");
++  const defaultTopic = ["data-export", "data-deletion"].includes(topic ?? "")
++    ? topic!
++    : "purchase";
++  const [selectedTopic, setSelectedTopic] = useState(defaultTopic);
++  useEffect(() => {
++    setSelectedTopic(defaultTopic);
++  }, [defaultTopic]);
+   const [tickets, setTickets] = useState<Ticket[]>([]),
+     [error, setError] = useState(""),
+     [busy, setBusy] = useState(false);
+@@ -53,6 +60,7 @@
+         },
+       });
+       form.reset();
++      setSelectedTopic(defaultTopic);
+     } catch (e) {
+       setError((e as Error).message);
+     } finally {
+@@ -60,13 +68,36 @@
+     }
+   }
+   return (
+-    <section className="page requestPage">
+-      <div>
+-        <h1>Điều gì cần làm rõ?</h1>
++    <section className="page supportPage">
++      <div className="supportIntro">
++        <span className="editorialEyebrow">Hỗ trợ · SatsunicGo</span>
++        <h1>
++          Bạn cần
++          <br />
++          <span>hỗ trợ gì?</span>
++        </h1>
+         <p>
+-          Gửi câu hỏi về yêu cầu mua hộ hoặc đơn của bạn. Giờ nhân viên trực
+-          đang chờ đơn vị vận hành xác nhận.
++          Gửi câu hỏi về mua hộ hoặc đơn của bạn. Xem và trao đổi phản hồi ngay
++          tại đây.
+         </p>
++        <div className="supportGuide">
++          <span className="supportGuideIcon" aria-hidden="true">
++            ↗
++          </span>
++          <div>
++            <h2>Thêm một chút thông tin</h2>
++            <p>
++              Nếu câu hỏi liên quan đến đơn hàng, bạn có thể ghi kèm mã đơn để
++              nhân viên dễ kiểm tra.
++            </p>
++          </div>
++        </div>
++        <p className="supportHours">
++          Giờ nhân viên trực đang chờ đơn vị vận hành xác nhận.
++        </p>
++        {tickets.length > 0 && (
++          <h2 className="supportTicketsHeading">Yêu cầu của bạn</h2>
++        )}
+         {tickets.map((t) => (
+           <article className="panel order" key={t.id}>
+             <h2>{t.subject}</h2>
+@@ -81,15 +112,24 @@
+           </article>
+         ))}
+       </div>
+-      <form className="form panel" onSubmit={(e) => void submit(e)}>
++      <form
++        className="form panel supportForm"
++        onSubmit={(e) => void submit(e)}
++        aria-labelledby="support-form-title"
++        aria-busy={busy}
++      >
++        <div className="supportFormHeading">
++          <h2 id="support-form-title">Gửi yêu cầu hỗ trợ</h2>
++          <p>Mô tả điều bạn cần giúp trong biểu mẫu dưới đây.</p>
++        </div>
+         <label>
+           Loại yêu cầu
+           <select
+             name="topic"
+-            defaultValue={
+-              ["data-export", "data-deletion"].includes(topic ?? "")
+-                ? topic!
+-                : "purchase"
++            value={selectedTopic}
++            onChange={(event) => setSelectedTopic(event.target.value)}
++            aria-describedby={
++              selectedTopic !== "purchase" ? "support-data-note" : undefined
+             }
+           >
+             <option value="purchase">Hỗ trợ mua hộ</option>
+@@ -97,21 +137,43 @@
+             <option value="data-deletion">Yêu cầu xóa dữ liệu cá nhân</option>
+           </select>
+         </label>
+-        <p>
+-          Yêu cầu dữ liệu sẽ được nhân viên kiểm tra danh tính và phạm vi xử lý.
+-          Gửi ticket chưa phải xác nhận đã xuất hoặc xóa dữ liệu; chứng từ có
+-          thể cần lưu theo chính sách được duyệt.
+-        </p>
++        {selectedTopic !== "purchase" && (
++          <p className="supportDataNote" id="support-data-note">
++            Nhân viên sẽ kiểm tra danh tính và phạm vi xử lý. Gửi yêu cầu không
++            có nghĩa là dữ liệu đã được xuất hoặc xóa; chứng từ có thể cần lưu
++            theo chính sách được duyệt.
++          </p>
++        )}
+         <label>
+           Chủ đề
+-          <input name="subject" required minLength={3} maxLength={160} />
++          <input
++            name="subject"
++            placeholder={
++              selectedTopic === "purchase"
++                ? "Ví dụ: Cần kiểm tra thông tin món hàng"
++                : "Ví dụ: Yêu cầu về dữ liệu cá nhân"
++            }
++            required
++            minLength={3}
++            maxLength={160}
++          />
+         </label>
+         <label>
+           Nội dung
+-          <textarea name="message" required minLength={3} maxLength={4000} />
++          <textarea
++            name="message"
++            placeholder={
++              selectedTopic === "purchase"
++                ? "Mô tả câu hỏi của bạn, kèm link món hàng hoặc mã đơn nếu có…"
++                : "Mô tả dữ liệu bạn cần xuất hoặc xóa…"
++            }
++            required
++            minLength={3}
++            maxLength={4000}
++          />
+         </label>
+         {!user && (
+-          <p className="notice">
++          <p className="notice supportSignIn">
+             Đăng nhập để gửi và xem phản hồi riêng của bạn.
+           </p>
+         )}
+@@ -121,7 +183,7 @@
+           </p>
+         )}
+         <button className="primary" disabled={!configured || !user || busy}>
+-          {busy ? "Đang gửi…" : "Gửi hỗ trợ"}
++          {busy ? "Đang gửi…" : "Gửi yêu cầu hỗ trợ"}
+         </button>
+       </form>
+     </section>
+--- src/styles/global.css (task-start)
++++ src/styles/global.css
+@@ -2013,3 +2013,319 @@
+     display: block;
+   }
+ }
++
++/* PAGES-007: public editorial and support surfaces. */
++.postsPage,
++.supportPage {
++  max-width: 1164px;
++  padding-top: 64px;
++  padding-bottom: 72px;
++}
++.editorialEyebrow {
++  display: block;
++  color: var(--blue);
++  font-size: 11px;
++  font-weight: 650;
++  letter-spacing: 1.6px;
++  text-transform: uppercase;
++}
++.postsHeading {
++  position: relative;
++  margin-bottom: 36px;
++  padding-left: 24px;
++  border-left: 3px solid var(--blue);
++}
++.postsHeading h1,
++.supportIntro h1 {
++  font-size: clamp(36px, 4vw, 54px);
++  line-height: 1.14;
++  font-weight: 650;
++  letter-spacing: -2px;
++  margin: 16px 0;
++}
++.postsHeading h1 span,
++.supportIntro h1 span {
++  color: var(--blue);
++}
++.postsHeading p,
++.supportIntro > p {
++  max-width: 450px;
++  color: #647087;
++  font-size: 15px;
++  line-height: 1.8;
++}
++.postsEmpty {
++  display: grid;
++  grid-template-columns: 240px 1fr;
++  align-items: center;
++  gap: 44px;
++  border: 1px solid var(--border);
++  border-radius: 20px;
++  padding: 44px 56px;
++  background: linear-gradient(115deg, #f4f6ff, #fafbff 40%, #fff 75%);
++}
++.postsIllustration {
++  color: var(--blue);
++  padding: 20px;
++  border-radius: 50%;
++  background: #e9eeff;
++  aspect-ratio: 1;
++  display: grid;
++  place-items: center;
++}
++.postsIllustration svg {
++  width: 100%;
++  max-width: 200px;
++}
++.postsEmptyCopy h2 {
++  font-size: 25px;
++  font-weight: 600;
++  letter-spacing: -0.7px;
++  line-height: 1.35;
++  margin: 12px 0;
++}
++.postsEmptyCopy p {
++  max-width: 470px;
++  color: #647087;
++  font-size: 14px;
++  line-height: 1.8;
++  margin: 0 0 24px;
++}
++.postsPrimary {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 24px;
++  border-radius: 10px;
++  font-size: 13px;
++  min-height: 46px;
++  padding: 12px 20px;
++}
++.postsShortcuts {
++  display: grid;
++  grid-template-columns: repeat(2, minmax(0, 1fr));
++  gap: 32px;
++  margin-top: 28px;
++}
++.postsShortcuts > a {
++  display: flex;
++  align-items: center;
++  gap: 18px;
++  padding: 20px 4px;
++  border-bottom: 1px solid var(--border);
++}
++.shortcutNumber {
++  color: #647087;
++  font-size: 12px;
++  font-variant-numeric: tabular-nums;
++}
++.postsShortcuts strong {
++  display: block;
++  font-size: 14px;
++  font-weight: 600;
++  margin-bottom: 4px;
++}
++.postsShortcuts strong + span {
++  color: #647087;
++  font-size: 12px;
++}
++.postsShortcuts > a > span:last-child {
++  margin-left: auto;
++  color: var(--blue);
++}
++.postsShortcuts a:hover strong {
++  color: var(--blue);
++}
++.postsPage .catalogGrid {
++  gap: 24px;
++}
++.postsPage .productCard {
++  box-shadow: none;
++}
++.supportPage {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
++  align-items: start;
++  gap: 72px;
++}
++.supportIntro {
++  padding-top: 12px;
++  min-width: 0;
++}
++.supportGuide {
++  display: flex;
++  align-items: flex-start;
++  gap: 16px;
++  border-top: 1px solid var(--border);
++  padding-top: 24px;
++  margin-top: 36px;
++}
++.supportGuideIcon {
++  display: grid;
++  place-items: center;
++  width: 38px;
++  height: 38px;
++  flex-shrink: 0;
++  background: #eef2ff;
++  color: var(--blue);
++  border-radius: 10px;
++  font-size: 20px;
++}
++.supportGuide h2 {
++  font-size: 14px;
++  font-weight: 600;
++  margin: 0 0 8px;
++}
++.supportGuide p {
++  font-size: 13px;
++  line-height: 1.8;
++  color: #647087;
++  margin: 0;
++}
++.supportIntro > .supportHours {
++  font-size: 12px;
++  margin-top: 24px;
++}
++.supportTicketsHeading {
++  font-size: 18px;
++  font-weight: 600;
++  margin-top: 32px;
++}
++.supportIntro .order {
++  overflow-wrap: anywhere;
++}
++.supportForm {
++  gap: 20px;
++  padding: 30px;
++  border-radius: 18px;
++  box-shadow: 0 12px 40px #111c3506;
++  min-width: 0;
++}
++.supportFormHeading {
++  padding-bottom: 20px;
++  border-bottom: 1px solid var(--border);
++}
++.supportFormHeading h2 {
++  font-size: 19px;
++  font-weight: 600;
++  letter-spacing: -0.4px;
++  margin: 0 0 8px;
++}
++.supportFormHeading p {
++  font-size: 13px;
++  color: #647087;
++  line-height: 1.7;
++  margin: 0;
++}
++.supportForm select {
++  width: 100%;
++  min-width: 0;
++  padding: 12px;
++  min-height: 46px;
++  font: inherit;
++  color: #111c35;
++  background: #f8f9fc;
++  border: 1px solid var(--border);
++  border-radius: 10px;
++  outline-offset: 3px;
++}
++.supportForm select:focus-visible {
++  outline: 2px solid var(--blue);
++}
++.supportForm input,
++.supportForm textarea {
++  font-size: 14px;
++  line-height: 1.6;
++}
++.supportForm input::placeholder,
++.supportForm textarea::placeholder {
++  color: #6b778e;
++  opacity: 1;
++}
++.supportForm textarea {
++  min-height: 130px;
++}
++.supportDataNote {
++  font-size: 12px;
++  line-height: 1.8;
++  color: #536179;
++  border-left: 2px solid var(--blue);
++  background: #f5f7ff;
++  padding: 12px 14px;
++  margin: 0;
++}
++.supportSignIn {
++  font-size: 12px;
++  background: #f6f7fa;
++  padding: 12px 14px;
++}
++.supportForm > .primary {
++  min-height: 48px;
++  border-radius: 10px;
++  font-size: 14px;
++}
++@media (max-width: 850px) {
++  .supportPage {
++    gap: 36px;
++    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
++  }
++  .postsEmpty {
++    grid-template-columns: 180px 1fr;
++    padding: 32px;
++    gap: 28px;
++  }
++}
++@media (max-width: 650px) {
++  .postsPage .catalogGrid {
++    grid-template-columns: minmax(0, 1fr);
++  }
++  .postsPage,
++  .supportPage {
++    padding: 36px 20px 48px;
++  }
++  .postsHeading {
++    padding-left: 18px;
++    margin-bottom: 28px;
++  }
++  .postsHeading h1,
++  .supportIntro h1 {
++    font-size: 36px;
++    letter-spacing: -1.3px;
++  }
++  .postsEmpty {
++    grid-template-columns: minmax(0, 1fr);
++    gap: 24px;
++    padding: 28px 24px;
++  }
++  .postsIllustration {
++    width: 140px;
++    padding: 12px;
++  }
++  .postsEmptyCopy h2 {
++    font-size: 23px;
++  }
++  .postsShortcuts {
++    grid-template-columns: minmax(0, 1fr);
++    gap: 0;
++    margin-top: 12px;
++  }
++  .supportPage {
++    grid-template-columns: minmax(0, 1fr);
++    gap: 28px;
++  }
++  .supportIntro {
++    padding: 0;
++  }
++  .supportGuide {
++    margin-top: 24px;
++    padding-top: 20px;
++  }
++  .supportForm {
++    padding: 24px 20px;
++  }
++  .supportForm input,
++  .supportForm select,
++  .supportForm textarea {
++    font-size: 16px;
++  }
++}

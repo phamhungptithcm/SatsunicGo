@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import {
   useCallback,
   useEffect,
@@ -210,7 +211,7 @@ export function OrderConversation({
           <p className="conversationChannels">
             Zalo · Chưa kết nối &nbsp; Messenger · Chưa kết nối
           </p>
-          {loading && <p role="status">Đang tải cuộc trao đổi…</p>}
+          {loading && <LoadingState overlay={false}>Đang tải cuộc trao đổi…</LoadingState>}
           {data && (
             <>
               {staffView && (

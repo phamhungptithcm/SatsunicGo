@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ACCOUNT-MENU-009",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved Google name/avatar menu with six verified routes and logout; owner navbar/footer attribution refinement implemented.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Provider name rendered as React text; HTTPS bounded image with no-referrer; auth/OneTap/staff and logout callback retained; no secrets or new reads/mutations.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "tsc, scoped eslint/format and17 auth regressions passed; component ownership, route/identity and outside/Escape/blur lifecycle inspected.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Fixture verifies missing/failed photo, missing/long name, signed-out/UID change, mobile overlays and pending/failed logout; no provider success claim.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Image falls back to initials; existing parent logout error feedback preserved; pending action disabled; links close/navigation and Escape focus verified.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Deployment impact inspected; no API/config/migrations/dependencies/release change. Local build passes. Full production/live provider acceptance NOT_READY; manual review is not authenticated release approval.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Shared public-UX WIP retained; narrow signed-in mobile request CTA hidden in favor of duplicate menu destination. Current source hashes and synthetic fixture evidence bound; full screen-reader/cross-browser/zoom not certified.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "A009-NAV",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "css-compatibility",
+      "location": "src/styles/global.css",
+      "summary": "Inherited main-nav styles hide nested account links on mobile.",
+      "resolution": "Scoped .topbar .accountDropdown nav resets position/visibility/gaps and pseudo underline; desktop/mobile DOM and screenshot confirm six visible links.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    {
+      "id": "A009-REMOUNT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "state-lifecycle",
+      "location": "src/app/SiteChrome.tsx",
+      "summary": "Profile key tied to mobile menu state resets opening on account activation.",
+      "resolution": "UID-only key, navigationOpen prop closes account when mobile opens; browser confirms reciprocal exclusive menus.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    {
+      "id": "A009-BOUNDS",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "responsive",
+      "location": "src/styles/global.css",
+      "summary": "Mobile panel right-offset clips at320px.",
+      "resolution": "Viewport-bounded panel and compact trigger; bounds left28/right308 at320, right378 at390.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    },
+    {
+      "id": "A009-NAME",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "product-content",
+      "location": "src/app/SiteChrome.tsx",
+      "summary": "Missing-name accessible label repeats account wording.",
+      "resolution": "Fallback accessible label is T\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n; source and missing-identity UI checked.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-MENU-009-SOURCE_MANIFEST.json",
+        "docs/reviews/ACCOUNT-MENU-009-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-MENU-009-TASK_REPORT.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Shared worktree contains concurrent public-UX modifications; this is scoped manual UI review only.",
+    "Full production readiness remains NOT_READY; live auth/logout not tested here."
+  ],
+  "limitations": [
+    "Synthetic fixtures exercise current components but do not prove live Google credential/provider acceptance.",
+    "Legacy approval validator hardcodes READY while governing policy explicitly permits degraded native evidence.",
+    "Cross-browser/full screen-reader/actual200 percent zoom certification not performed."
+  ]
+}

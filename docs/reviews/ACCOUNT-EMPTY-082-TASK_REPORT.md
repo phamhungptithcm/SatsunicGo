@@ -1,0 +1,5 @@
+# ACCOUNT-EMPTY082 report
+
+Removed two shared large decorative box icons from account sign-in/empty states, covering account/orders/shipments/notifications. User explicitly expanded request to remaining pages. Small sidebar box/logo/homepage parcel preserved. Shared App WIP untouched except two lines.
+
+Scoped source TypeScript/ESLint and isolated Vite build PASSED. New tests/browser QA NOT_RUN, low-impact decorative removal; no functionality/copy changes. Existing build warnings retained. Source exact replacement asserted two matches; remaining large box use is homepage journey only. Review cycle1 fresh scoped PASSED: requirement/privacy/correctness/failure/error unaffected, product decorative semantics checked, local build/rollback and limitations recorded. Product Language Gate PASSED; full repository/production readiness not certified. Intelligence DEGRADED/native fallback; runtime unavailable/manual evidence. Dirty shared worktree; no commit/push/deploy. Rollback restore two JSX lines only. Tokens/cost/API estimate Unavailable. Memory candidates None.

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CRM024-UI",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Post-copy native evidence pending",
+      "evidence_refs": [
+        "docs/reviews/release024/ui/PLAN.md",
+        "docs/reviews/release024/ui/REPORT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "summary": "UI024-4 substitution h\u1ee7y0 copy",
+      "status": "RECORDED_IN_REPORT"
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "Historical review snapshot reconstructed from append-only scoped PLAN/REPORT cycle evidence; no runtime receipt claimed",
+    "Membership rendering corrected and proposalcopy change"
+  ]
+}

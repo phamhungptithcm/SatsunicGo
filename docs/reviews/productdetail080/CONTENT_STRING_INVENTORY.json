@@ -1,0 +1,3978 @@
+{
+  "candidateHash": "d511e4f4409c931c5692b2f742940ad8b78dfcd8a81fc7a20037a3e1e9671d45",
+  "scope": "Superset of actual current JSX and literal strings; business code literals included for audit, not claimed as UI copy",
+  "inventory": [
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 4,
+      "kind": "StringLiteral",
+      "text": "./BlogComments"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 9,
+      "kind": "StringLiteral",
+      "text": "./studio/RichPreview"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 28,
+      "kind": "StringLiteral",
+      "text": "string"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 35,
+      "kind": "StringLiteral",
+      "text": "https:"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 36,
+      "kind": "StringLiteral",
+      "text": ".googleusercontent.com"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 48,
+      "kind": "StringLiteral",
+      "text": "postsHeading"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 49,
+      "kind": "StringLiteral",
+      "text": "editorialEyebrow"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 49,
+      "kind": "JSXText",
+      "text": "Bài viết · SatsunicGo"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 51,
+      "kind": "JSXText",
+      "text": "Hiểu rõ hơn"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 53,
+      "kind": "JSXText",
+      "text": "trước khi mua."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 55,
+      "kind": "JSXText",
+      "text": "Thông tin mua hộ và những điều cần biết trước khi chọn hàng."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 67,
+      "kind": "StringLiteral",
+      "text": "postsEmpty"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 68,
+      "kind": "StringLiteral",
+      "text": "postsIllustration"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 68,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 69,
+      "kind": "StringLiteral",
+      "text": "0 0 200 180"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 69,
+      "kind": "StringLiteral",
+      "text": "none"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 71,
+      "kind": "StringLiteral",
+      "text": "38"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 72,
+      "kind": "StringLiteral",
+      "text": "32"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 73,
+      "kind": "StringLiteral",
+      "text": "118"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 74,
+      "kind": "StringLiteral",
+      "text": "138"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 75,
+      "kind": "StringLiteral",
+      "text": "12"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 76,
+      "kind": "StringLiteral",
+      "text": "white"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 77,
+      "kind": "StringLiteral",
+      "text": "currentColor"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 78,
+      "kind": "StringLiteral",
+      "text": "2"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 79,
+      "kind": "StringLiteral",
+      "text": "rotate(-9 38 32)"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 82,
+      "kind": "StringLiteral",
+      "text": "57"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 83,
+      "kind": "StringLiteral",
+      "text": "18"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 84,
+      "kind": "StringLiteral",
+      "text": "118"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 85,
+      "kind": "StringLiteral",
+      "text": "138"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "12"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 87,
+      "kind": "StringLiteral",
+      "text": "white"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 88,
+      "kind": "StringLiteral",
+      "text": "currentColor"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 89,
+      "kind": "StringLiteral",
+      "text": "2"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "73"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "35"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "86"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "48"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "6"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "#eef2ff"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 93,
+      "kind": "StringLiteral",
+      "text": "M83 71l19-20 13 14 13-12 22 18M76 102h80M76 115h63M76 128h43"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 94,
+      "kind": "StringLiteral",
+      "text": "currentColor"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 95,
+      "kind": "StringLiteral",
+      "text": "3"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 96,
+      "kind": "StringLiteral",
+      "text": "round"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 97,
+      "kind": "StringLiteral",
+      "text": "round"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 99,
+      "kind": "StringLiteral",
+      "text": "164"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 99,
+      "kind": "StringLiteral",
+      "text": "137"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 99,
+      "kind": "StringLiteral",
+      "text": "25"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 99,
+      "kind": "StringLiteral",
+      "text": "currentColor"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 101,
+      "kind": "StringLiteral",
+      "text": "M153 137h22m-8-8 8 8-8 8"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 102,
+      "kind": "StringLiteral",
+      "text": "white"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 103,
+      "kind": "StringLiteral",
+      "text": "2"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 104,
+      "kind": "StringLiteral",
+      "text": "round"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 105,
+      "kind": "StringLiteral",
+      "text": "round"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 109,
+      "kind": "StringLiteral",
+      "text": "postsEmptyCopy"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 110,
+      "kind": "StringLiteral",
+      "text": "editorialEyebrow"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 111,
+      "kind": "StringLiteral",
+      "text": "Tải nội dung"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 111,
+      "kind": "StringLiteral",
+      "text": "Góc đọc của bạn"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 114,
+      "kind": "StringLiteral",
+      "text": "Nội dung chưa tải được"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 114,
+      "kind": "StringLiteral",
+      "text": "Bài viết đang được cập nhật"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 118,
+      "kind": "StringLiteral",
+      "text": "Thử tải lại hoặc gửi yêu cầu mua hộ nếu bạn đã chọn được món hàng."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 120,
+      "kind": "StringLiteral",
+      "text": "Nội dung sẽ xuất hiện tại đây khi được xuất bản."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 121,
+      "kind": "StringLiteral",
+      "text": "Chưa có bài viết được xuất bản. Nếu đã có món hàng muốn mua, bạn có thể gửi tên hoặc link cho SatsunicGo."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 123,
+      "kind": "StringLiteral",
+      "text": "primary postsPrimary"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 123,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 124,
+      "kind": "StringLiteral",
+      "text": "Xem yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 124,
+      "kind": "StringLiteral",
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 125,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 125,
+      "kind": "JSXText",
+      "text": "↗"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 133,
+      "kind": "StringLiteral",
+      "text": "postsShortcuts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 133,
+      "kind": "StringLiteral",
+      "text": "Thông tin mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 134,
+      "kind": "StringLiteral",
+      "text": "/how-it-works"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 135,
+      "kind": "StringLiteral",
+      "text": "shortcutNumber"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 135,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 136,
+      "kind": "JSXText",
+      "text": "01"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 139,
+      "kind": "JSXText",
+      "text": "Cách mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 140,
+      "kind": "JSXText",
+      "text": "Tìm hiểu các bước gửi yêu cầu"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 142,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 142,
+      "kind": "JSXText",
+      "text": "↗"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 144,
+      "kind": "StringLiteral",
+      "text": "/fees"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 145,
+      "kind": "StringLiteral",
+      "text": "shortcutNumber"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 145,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 146,
+      "kind": "JSXText",
+      "text": "02"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 149,
+      "kind": "JSXText",
+      "text": "Biểu phí"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 150,
+      "kind": "JSXText",
+      "text": "Xem thông tin phí mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 152,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 152,
+      "kind": "JSXText",
+      "text": "↗"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 157,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 157,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 158,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 164,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 164,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 166,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 168,
+      "kind": "StringLiteral",
+      "text": "page postsPage"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 176,
+      "kind": "StringLiteral",
+      "text": "page"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 177,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 177,
+      "kind": "StringLiteral",
+      "text": "Sản phẩm tham khảo"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 177,
+      "kind": "StringLiteral",
+      "text": "Bài viết"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 178,
+      "kind": "StringLiteral",
+      "text": "emptyState"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 180,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 181,
+      "kind": "StringLiteral",
+      "text": "Danh mục đang được cập nhật"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 182,
+      "kind": "StringLiteral",
+      "text": "Bài viết đang được cập nhật"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 184,
+      "kind": "JSXText",
+      "text": "Nội dung sẽ xuất hiện tại đây khi được xuất bản."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 185,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 185,
+      "kind": "JSXText",
+      "text": "Xem yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 190,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 190,
+      "kind": "StringLiteral",
+      "text": "page postsPage"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 190,
+      "kind": "StringLiteral",
+      "text": "page"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 191,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 195,
+      "kind": "JSXText",
+      "text": "Sản phẩm tham khảo"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 197,
+      "kind": "JSXText",
+      "text": "Tìm món bạn thích. Nhân viên xác minh giá và khả năng mua trước khi\n            báo giá."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 203,
+      "kind": "StringLiteral",
+      "text": "error"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 203,
+      "kind": "StringLiteral",
+      "text": "alert"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 205,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 205,
+      "kind": "StringLiteral",
+      "text": "textbutton"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 206,
+      "kind": "JSXText",
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 211,
+      "kind": "StringLiteral",
+      "text": "smallNote"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 211,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 212,
+      "kind": "JSXText",
+      "text": "Đang hiển thị nội dung lần tải trước; chờ cập nhật."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 216,
+      "kind": "StringLiteral",
+      "text": "catalogLoading"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 217,
+      "kind": "JSXText",
+      "text": "Đang tải nội dung…"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 218,
+      "kind": "StringLiteral",
+      "text": "catalogGrid"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 218,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 220,
+      "kind": "StringLiteral",
+      "text": "catalogSkeleton"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 229,
+      "kind": "StringLiteral",
+      "text": "catalogGrid"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 231,
+      "kind": "StringLiteral",
+      "text": "productCard"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 233,
+      "kind": "StringLiteral",
+      "text": "productArt"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 236,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 242,
+      "kind": "StringLiteral",
+      "text": "lazy"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 243,
+      "kind": "StringLiteral",
+      "text": "async"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 244,
+      "kind": "StringLiteral",
+      "text": "640"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 245,
+      "kind": "StringLiteral",
+      "text": "480"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 248,
+      "kind": "StringLiteral",
+      "text": "productMonogram"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 249,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 249,
+      "kind": "StringLiteral",
+      "text": "Go"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 249,
+      "kind": "StringLiteral",
+      "text": "↗"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 253,
+      "kind": "StringLiteral",
+      "text": "productBody"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 255,
+      "kind": "StringLiteral",
+      "text": "productCategory"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 263,
+      "kind": "JSXText",
+      "text": "Giá tham khảo:"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 263,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 263,
+      "kind": "JSXText",
+      "text": "₫\n                    · kiểm tra"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 266,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 267,
+      "kind": "StringLiteral",
+      "text": "Chưa có thời điểm"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 271,
+      "kind": "StringLiteral",
+      "text": "productAction"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 272,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 272,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 274,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 274,
+      "kind": "StringLiteral",
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 274,
+      "kind": "StringLiteral",
+      "text": "Đọc bài viết"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 275,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 275,
+      "kind": "JSXText",
+      "text": "↗"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 281,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 284,
+      "kind": "StringLiteral",
+      "text": "empty"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 286,
+      "kind": "StringLiteral",
+      "text": "Nội dung chưa tải được"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 286,
+      "kind": "StringLiteral",
+      "text": "Chưa có nội dung đã xuất bản"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 288,
+      "kind": "JSXText",
+      "text": "Bạn vẫn có thể gửi tên hoặc link món hàng muốn mua."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 289,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 289,
+      "kind": "JSXText",
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 292,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 296,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 296,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 307,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 322,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 322,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 322,
+      "kind": "StringLiteral",
+      "text": "blogPublished"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 327,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 327,
+      "kind": "StringLiteral",
+      "text": "=="
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 327,
+      "kind": "StringLiteral",
+      "text": "published"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 328,
+      "kind": "StringLiteral",
+      "text": "slug"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 328,
+      "kind": "StringLiteral",
+      "text": "=="
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 347,
+      "kind": "StringLiteral",
+      "text": "Chưa tải được nội dung."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 365,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 365,
+      "kind": "StringLiteral",
+      "text": "page productDetail"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 365,
+      "kind": "StringLiteral",
+      "text": "page"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 366,
+      "kind": "JSXText",
+      "text": "Quay lại danh sách"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 367,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 374,
+      "kind": "StringLiteral",
+      "text": "articleAuthor027"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 381,
+      "kind": "StringLiteral",
+      "text": "lazy"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 382,
+      "kind": "StringLiteral",
+      "text": "no-referrer"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 386,
+      "kind": "JSXText",
+      "text": "·"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 389,
+      "kind": "JSXText",
+      "text": "·"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 389,
+      "kind": "JSXText",
+      "text": "phút đọc"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 396,
+      "kind": "StringLiteral",
+      "text": "Ảnh minh họa nội dung"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 397,
+      "kind": "StringLiteral",
+      "text": "lazy"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 398,
+      "kind": "StringLiteral",
+      "text": "100%"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 398,
+      "kind": "StringLiteral",
+      "text": "auto"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 402,
+      "kind": "JSXText",
+      "text": "Đang mở bài viết…"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 409,
+      "kind": "StringLiteral",
+      "text": "pre-wrap"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 417,
+      "kind": "StringLiteral",
+      "text": "Nguồn tham khảo"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 418,
+      "kind": "JSXText",
+      "text": "Nguồn tham khảo"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 425,
+      "kind": "StringLiteral",
+      "text": "http:"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 425,
+      "kind": "StringLiteral",
+      "text": "https:"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 437,
+      "kind": "StringLiteral",
+      "text": "_blank"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 438,
+      "kind": "StringLiteral",
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 448,
+      "kind": "JSXText",
+      "text": "Đang mở bình luận…"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 454,
+      "kind": "JSXText",
+      "text": "Giá tham khảo:"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 454,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 454,
+      "kind": "JSXText",
+      "text": "₫ ·"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 456,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 457,
+      "kind": "StringLiteral",
+      "text": "Chưa có thời điểm xác minh"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 458,
+      "kind": "JSXText",
+      "text": ". Nhân viên xác minh lại trước khi báo giá."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 461,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 461,
+      "kind": "JSXText",
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 466,
+      "kind": "JSXText",
+      "text": "Không có nội dung đã xuất bản tại địa chỉ này."
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 468,
+      "kind": "JSXText",
+      "text": "Đang tải nội dung…"
+    },
+    {
+      "file": "src/features/content/Content.tsx",
+      "line": 472,
+      "kind": "StringLiteral",
+      "text": "alert"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 21,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 21,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 21,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 38,
+      "kind": "StringLiteral",
+      "text": "listWork"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 80,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 82,
+      "kind": "StringLiteral",
+      "text": "title"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 83,
+      "kind": "StringLiteral",
+      "text": "slug"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 84,
+      "kind": "StringLiteral",
+      "text": "body"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "category"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "referenceUrl"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "variants"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "seoTitle"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 86,
+      "kind": "StringLiteral",
+      "text": "seoDescription"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 90,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 92,
+      "kind": "StringLiteral",
+      "text": "market"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 93,
+      "kind": "StringLiteral",
+      "text": "orderable"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 93,
+      "kind": "StringLiteral",
+      "text": "on"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 94,
+      "kind": "StringLiteral",
+      "text": "listedPrice"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 95,
+      "kind": "StringLiteral",
+      "text": "listedPrice"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 97,
+      "kind": "StringLiteral",
+      "text": "termsVersion"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 98,
+      "kind": "StringLiteral",
+      "text": "termsVersion"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 100,
+      "kind": "StringLiteral",
+      "text": "catalogOptions"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 104,
+      "kind": "StringLiteral",
+      "text": "featured"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 104,
+      "kind": "StringLiteral",
+      "text": "on"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 105,
+      "kind": "StringLiteral",
+      "text": "featuredOrder"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 107,
+      "kind": "StringLiteral",
+      "text": "manufacturingOrigin"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 109,
+      "kind": "StringLiteral",
+      "text": "brand"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 110,
+      "kind": "StringLiteral",
+      "text": "productSummary"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 111,
+      "kind": "StringLiteral",
+      "text": "retailer"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 112,
+      "kind": "StringLiteral",
+      "text": "sourceUrl"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 113,
+      "kind": "StringLiteral",
+      "text": "usageSteps"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 113,
+      "kind": "StringLiteral",
+      "text": "[]"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 114,
+      "kind": "StringLiteral",
+      "text": "origin"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 115,
+      "kind": "StringLiteral",
+      "text": "functions"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 116,
+      "kind": "StringLiteral",
+      "text": "usage"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 117,
+      "kind": "StringLiteral",
+      "text": "price"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 118,
+      "kind": "StringLiteral",
+      "text": "price"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 120,
+      "kind": "StringLiteral",
+      "text": "priceTime"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 123,
+      "kind": "StringLiteral",
+      "text": "priceTime"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 131,
+      "kind": "StringLiteral",
+      "text": "scheduled"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 134,
+      "kind": "StringLiteral",
+      "text": "publishAt"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 143,
+      "kind": "StringLiteral",
+      "text": "workspaceCommand"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 144,
+      "kind": "StringLiteral",
+      "text": "saveContent"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 158,
+      "kind": "StringLiteral",
+      "text": "Đã lưu nội dung."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 158,
+      "kind": "StringLiteral",
+      "text": "success"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 172,
+      "kind": "StringLiteral",
+      "text": "Nội dung website"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 173,
+      "kind": "StringLiteral",
+      "text": "Biên tập sản phẩm, bài viết và trạng thái xuất bản."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 177,
+      "kind": "StringLiteral",
+      "text": "Loại nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 182,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 182,
+      "kind": "JSXText",
+      "text": "Sản phẩm"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 183,
+      "kind": "StringLiteral",
+      "text": "posts"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 183,
+      "kind": "JSXText",
+      "text": "Bài viết"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 186,
+      "kind": "StringLiteral",
+      "text": "refresh"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 187,
+      "kind": "JSXText",
+      "text": "Tải lại danh sách"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 190,
+      "kind": "StringLiteral",
+      "text": "document"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 191,
+      "kind": "JSXText",
+      "text": "Nội dung mới"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 196,
+      "kind": "StringLiteral",
+      "text": "workColumns contentEditorColumns"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 197,
+      "kind": "StringLiteral",
+      "text": "contentEditorSidebar"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 198,
+      "kind": "StringLiteral",
+      "text": "loading"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 198,
+      "kind": "StringLiteral",
+      "text": "Đang tải nội dung…"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 200,
+      "kind": "StringLiteral",
+      "text": "empty"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 200,
+      "kind": "StringLiteral",
+      "text": "Chưa có nội dung."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 203,
+      "kind": "StringLiteral",
+      "text": "contentEditorList"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 204,
+      "kind": "StringLiteral",
+      "text": "region"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 205,
+      "kind": "StringLiteral",
+      "text": "Danh sách nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 211,
+      "kind": "StringLiteral",
+      "text": "contentRow crmItem"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 215,
+      "kind": "StringLiteral",
+      "text": "crmItemTitle"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 216,
+      "kind": "StringLiteral",
+      "text": "crmBadge"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 217,
+      "kind": "StringLiteral",
+      "text": "published"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 218,
+      "kind": "StringLiteral",
+      "text": "Đã xuất bản"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 219,
+      "kind": "StringLiteral",
+      "text": "scheduled"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 220,
+      "kind": "StringLiteral",
+      "text": "Đã lên lịch"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 221,
+      "kind": "StringLiteral",
+      "text": "archived"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 222,
+      "kind": "StringLiteral",
+      "text": "Đã lưu trữ"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 223,
+      "kind": "StringLiteral",
+      "text": "Bản nháp"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 232,
+      "kind": "JSXText",
+      "text": "Xem thêm nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 238,
+      "kind": "StringLiteral",
+      "text": "new"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 239,
+      "kind": "StringLiteral",
+      "text": "panel form"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 249,
+      "kind": "StringLiteral",
+      "text": "crmSectionHeading"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 250,
+      "kind": "StringLiteral",
+      "text": "Chỉnh sửa nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 250,
+      "kind": "StringLiteral",
+      "text": "Nội dung mới"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 253,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 254,
+      "kind": "JSXText",
+      "text": "Thông tin bản đã lưu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 255,
+      "kind": "StringLiteral",
+      "text": "Mã nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 258,
+      "kind": "StringLiteral",
+      "text": "crmSectionHeading"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 258,
+      "kind": "JSXText",
+      "text": "Nội dung chính"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 260,
+      "kind": "JSXText",
+      "text": "Tiêu đề"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 262,
+      "kind": "StringLiteral",
+      "text": "title"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 270,
+      "kind": "JSXText",
+      "text": "Slug"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 272,
+      "kind": "StringLiteral",
+      "text": "slug"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 274,
+      "kind": "StringLiteral",
+      "text": "[a-z0-9-]{2,100}"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 279,
+      "kind": "JSXText",
+      "text": "Nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 281,
+      "kind": "StringLiteral",
+      "text": "body"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 288,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 289,
+      "kind": "JSXText",
+      "text": "Phân loại và thông tin tìm kiếm"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 291,
+      "kind": "JSXText",
+      "text": "Phân loại"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 293,
+      "kind": "StringLiteral",
+      "text": "category"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 299,
+      "kind": "JSXText",
+      "text": "Link tham khảo · không bắt buộc"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 301,
+      "kind": "StringLiteral",
+      "text": "url"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 302,
+      "kind": "StringLiteral",
+      "text": "referenceUrl"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 308,
+      "kind": "JSXText",
+      "text": "Biến thể tham khảo"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 310,
+      "kind": "StringLiteral",
+      "text": "variants"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 316,
+      "kind": "JSXText",
+      "text": "Tiêu đề tìm kiếm · để trống dùng tiêu đề nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 318,
+      "kind": "StringLiteral",
+      "text": "seoTitle"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 324,
+      "kind": "JSXText",
+      "text": "Mô tả tìm kiếm · để trống dùng đầu nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 326,
+      "kind": "StringLiteral",
+      "text": "seoDescription"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 332,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 335,
+      "kind": "StringLiteral",
+      "text": "new"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 338,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 339,
+      "kind": "JSXText",
+      "text": "Giới thiệu sản phẩm"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 342,
+      "kind": "StringLiteral",
+      "text": "featured"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 343,
+      "kind": "StringLiteral",
+      "text": "checkbox"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 346,
+      "kind": "JSXText",
+      "text": "Hiển thị trong sản phẩm được chọn"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 349,
+      "kind": "JSXText",
+      "text": "Thứ tự giới thiệu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 351,
+      "kind": "StringLiteral",
+      "text": "featuredOrder"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 352,
+      "kind": "StringLiteral",
+      "text": "number"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 358,
+      "kind": "JSXText",
+      "text": "Số nhỏ hơn được ưu tiên giới thiệu."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 361,
+      "kind": "JSXText",
+      "text": "Thông tin nguồn gốc đã lưu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 363,
+      "kind": "StringLiteral",
+      "text": "origin"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 369,
+      "kind": "JSXText",
+      "text": "Chức năng và công dụng"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 371,
+      "kind": "StringLiteral",
+      "text": "functions"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 377,
+      "kind": "JSXText",
+      "text": "Cách dùng"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 379,
+      "kind": "StringLiteral",
+      "text": "usage"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 385,
+      "kind": "StringLiteral",
+      "text": "crmSectionHeading"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 385,
+      "kind": "JSXText",
+      "text": "Đặt mua và giá trọn gói"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 387,
+      "kind": "JSXText",
+      "text": "Quốc gia mua hàng"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 388,
+      "kind": "StringLiteral",
+      "text": "market"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 388,
+      "kind": "StringLiteral",
+      "text": "US"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 389,
+      "kind": "StringLiteral",
+      "text": "US"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 389,
+      "kind": "JSXText",
+      "text": "Mỹ"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 390,
+      "kind": "StringLiteral",
+      "text": "JP"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 390,
+      "kind": "JSXText",
+      "text": "Nhật Bản"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 391,
+      "kind": "StringLiteral",
+      "text": "KR"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 391,
+      "kind": "JSXText",
+      "text": "Hàn Quốc"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 396,
+      "kind": "StringLiteral",
+      "text": "checkbox"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 397,
+      "kind": "StringLiteral",
+      "text": "orderable"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 400,
+      "kind": "JSXText",
+      "text": "Cho phép đặt mua và thanh toán toàn bộ"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 403,
+      "kind": "JSXText",
+      "text": "Giá niêm yết trọn gói (₫ / sản phẩm)"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 405,
+      "kind": "StringLiteral",
+      "text": "number"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 406,
+      "kind": "StringLiteral",
+      "text": "listedPrice"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 413,
+      "kind": "JSXText",
+      "text": "Bao gồm toàn bộ phí mua hộ và giao hàng. Không thu thêm đợt\n                  hai."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 418,
+      "kind": "JSXText",
+      "text": "Phiên bản điều khoản mua hàng"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 420,
+      "kind": "StringLiteral",
+      "text": "termsVersion"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 426,
+      "kind": "JSXText",
+      "text": "Lựa chọn đặt mua · mỗi dòng một mẫu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 428,
+      "kind": "StringLiteral",
+      "text": "catalogOptions"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 432,
+      "kind": "JSXText",
+      "text": "Các mẫu dùng chung giá niêm yết. Mẫu khác giá cần sản phẩm\n                  riêng."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 436,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 437,
+      "kind": "JSXText",
+      "text": "Giá tham khảo nội bộ"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 439,
+      "kind": "JSXText",
+      "text": "Giá tham khảo nội bộ (₫) · không dùng để thu tiền"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 441,
+      "kind": "StringLiteral",
+      "text": "number"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 442,
+      "kind": "StringLiteral",
+      "text": "price"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 450,
+      "kind": "JSXText",
+      "text": "Thời điểm kiểm tra giá (giờ địa phương)"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 452,
+      "kind": "StringLiteral",
+      "text": "priceTime"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 453,
+      "kind": "StringLiteral",
+      "text": "datetime-local"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 474,
+      "kind": "JSXText",
+      "text": "Xem trước nội dung bản đã lưu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 476,
+      "kind": "StringLiteral",
+      "text": "pre-wrap"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 478,
+      "kind": "JSXText",
+      "text": "Bản nháp không hiển thị trên trang public. Các thay đổi chưa lưu\n                không có trong bản xem trước này."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 483,
+      "kind": "StringLiteral",
+      "text": "crmSectionHeading"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 483,
+      "kind": "JSXText",
+      "text": "Ảnh và xuất bản"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 487,
+      "kind": "StringLiteral",
+      "text": "Ảnh đã lưu"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 487,
+      "kind": "JSXText",
+      "text": ". Lưu nội dung\n              để gắn ảnh."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 492,
+      "kind": "JSXText",
+      "text": "Trạng thái"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 493,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 493,
+      "kind": "StringLiteral",
+      "text": "draft"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 494,
+      "kind": "StringLiteral",
+      "text": "draft"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 494,
+      "kind": "JSXText",
+      "text": "Bản nháp"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 495,
+      "kind": "StringLiteral",
+      "text": "published"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 495,
+      "kind": "JSXText",
+      "text": "Xuất bản trên website"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 496,
+      "kind": "StringLiteral",
+      "text": "scheduled"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 496,
+      "kind": "JSXText",
+      "text": "Lên lịch xuất bản"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 497,
+      "kind": "StringLiteral",
+      "text": "archived"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 497,
+      "kind": "JSXText",
+      "text": "Lưu trữ"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 501,
+      "kind": "JSXText",
+      "text": "Giờ xuất bản theo lịch"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 503,
+      "kind": "StringLiteral",
+      "text": "datetime-local"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 504,
+      "kind": "StringLiteral",
+      "text": "publishAt"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 508,
+      "kind": "StringLiteral",
+      "text": "notice"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 509,
+      "kind": "JSXText",
+      "text": "Xuất bản hiển thị công khai. Không đưa chứng từ, thông tin khách\n            hoặc nội dung chưa được duyệt vào đây."
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 513,
+      "kind": "StringLiteral",
+      "text": "error"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 513,
+      "kind": "StringLiteral",
+      "text": "alert"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 517,
+      "kind": "StringLiteral",
+      "text": "primary"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 518,
+      "kind": "StringLiteral",
+      "text": "check"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 519,
+      "kind": "StringLiteral",
+      "text": "Đang lưu…"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 519,
+      "kind": "StringLiteral",
+      "text": "Lưu nội dung"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 523,
+      "kind": "StringLiteral",
+      "text": "products"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 524,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails"
+    },
+    {
+      "file": "src/features/content/ContentEditor.tsx",
+      "line": 525,
+      "kind": "JSXText",
+      "text": "Đánh giá sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 15,
+      "kind": "StringLiteral",
+      "text": "Mỹ"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 15,
+      "kind": "StringLiteral",
+      "text": "Nhật Bản"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 15,
+      "kind": "StringLiteral",
+      "text": "Hàn Quốc"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 29,
+      "kind": "StringLiteral",
+      "text": "vi"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 30,
+      "kind": "StringLiteral",
+      "text": "vi"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 34,
+      "kind": "StringLiteral",
+      "text": "sgProductDetail"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 35,
+      "kind": "StringLiteral",
+      "text": "sgProductHero"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 36,
+      "kind": "StringLiteral",
+      "text": "sgProductImage"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 42,
+      "kind": "StringLiteral",
+      "text": "async"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 45,
+      "kind": "StringLiteral",
+      "text": "sgProductImageMissing"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 46,
+      "kind": "StringLiteral",
+      "text": "Chưa tải được ảnh"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 46,
+      "kind": "StringLiteral",
+      "text": "Chưa có ảnh"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 50,
+      "kind": "StringLiteral",
+      "text": "sgProductOverview"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 51,
+      "kind": "StringLiteral",
+      "text": "sgProductBrand"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 54,
+      "kind": "StringLiteral",
+      "text": "sgProductLead"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 56,
+      "kind": "StringLiteral",
+      "text": "sgProductFacts"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 58,
+      "kind": "JSXText",
+      "text": "Xuất xứ"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 59,
+      "kind": "StringLiteral",
+      "text": "Chưa xác minh"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 63,
+      "kind": "JSXText",
+      "text": "Quốc gia mua hàng"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 68,
+      "kind": "JSXText",
+      "text": "Nơi dự kiến mua"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 69,
+      "kind": "StringLiteral",
+      "text": "Chưa xác minh"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 73,
+      "kind": "JSXText",
+      "text": "Quy cách"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 80,
+      "kind": "StringLiteral",
+      "text": "sgProductSource"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 82,
+      "kind": "StringLiteral",
+      "text": "_blank"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 83,
+      "kind": "StringLiteral",
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 85,
+      "kind": "JSXText",
+      "text": "Nguồn sản phẩm ↗"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 88,
+      "kind": "StringLiteral",
+      "text": "sgProductPurchase"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 91,
+      "kind": "StringLiteral",
+      "text": "sgProductPrice"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 92,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 92,
+      "kind": "JSXText",
+      "text": "₫"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 93,
+      "kind": "JSXText",
+      "text": "/ sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 95,
+      "kind": "StringLiteral",
+      "text": "primary"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 96,
+      "kind": "JSXText",
+      "text": "Chọn mua và thanh toán"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 98,
+      "kind": "StringLiteral",
+      "text": "sgProductHint"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 99,
+      "kind": "JSXText",
+      "text": "Giá trọn gói, thanh toán toàn bộ."
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 104,
+      "kind": "StringLiteral",
+      "text": "sgProductPrice"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 104,
+      "kind": "JSXText",
+      "text": "Chờ báo giá"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 105,
+      "kind": "StringLiteral",
+      "text": "primary"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 105,
+      "kind": "StringLiteral",
+      "text": "/request"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 106,
+      "kind": "JSXText",
+      "text": "Yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 108,
+      "kind": "StringLiteral",
+      "text": "sgProductHint"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 109,
+      "kind": "JSXText",
+      "text": "Nhận báo giá trước khi thanh toán."
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 117,
+      "kind": "StringLiteral",
+      "text": "sgProductInformation"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 120,
+      "kind": "JSXText",
+      "text": "Chi tiết sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 121,
+      "kind": "StringLiteral",
+      "text": "sgProductBody"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 122,
+      "kind": "StringLiteral",
+      "text": "sgProductBody"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 132,
+      "kind": "JSXText",
+      "text": "Công dụng"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 133,
+      "kind": "StringLiteral",
+      "text": "sgProductBody"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 140,
+      "kind": "JSXText",
+      "text": "Hướng dẫn sử dụng"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "line": 141,
+      "kind": "StringLiteral",
+      "text": "sgProductUsage"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 21,
+      "kind": "StringLiteral",
+      "text": "sgReviewStars"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 22,
+      "kind": "StringLiteral",
+      "text": "img"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 23,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 25,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 25,
+      "kind": "JSXText",
+      "text": "☆☆☆☆☆"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 27,
+      "kind": "StringLiteral",
+      "text": "sgReviewStarsFill"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 28,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 31,
+      "kind": "JSXText",
+      "text": "★★★★★"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 98,
+      "kind": "StringLiteral",
+      "text": "productReviewRead"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 127,
+      "kind": "StringLiteral",
+      "text": "Chưa tải được đánh giá. Anh/chị thử tải lại nhé."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 151,
+      "kind": "StringLiteral",
+      "text": "productReviewEligibility"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 186,
+      "kind": "StringLiteral",
+      "text": "Chưa kiểm tra được quyền đánh giá. Anh/chị thử lại nhé."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 207,
+      "kind": "StringLiteral",
+      "text": "Thử lại thao tác đang chờ trước khi thay đổi nội dung."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 214,
+      "kind": "StringLiteral",
+      "text": "mine"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 215,
+      "kind": "StringLiteral",
+      "text": "productReviewWrite"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 223,
+      "kind": "StringLiteral",
+      "text": "withdraw"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 224,
+      "kind": "StringLiteral",
+      "text": "Đã gỡ đánh giá."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 225,
+      "kind": "StringLiteral",
+      "text": "Đã gửi đánh giá, đang chờ duyệt."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 235,
+      "kind": "StringLiteral",
+      "text": "functions/permission-denied"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 236,
+      "kind": "StringLiteral",
+      "text": "functions/unauthenticated"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 237,
+      "kind": "StringLiteral",
+      "text": "functions/not-found"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 252,
+      "kind": "StringLiteral",
+      "text": "functions/invalid-argument"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 253,
+      "kind": "StringLiteral",
+      "text": "functions/permission-denied"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 254,
+      "kind": "StringLiteral",
+      "text": "functions/unauthenticated"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 255,
+      "kind": "StringLiteral",
+      "text": "functions/not-found"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 256,
+      "kind": "StringLiteral",
+      "text": "functions/failed-precondition"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 257,
+      "kind": "StringLiteral",
+      "text": "functions/aborted"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 258,
+      "kind": "StringLiteral",
+      "text": "functions/already-exists"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 259,
+      "kind": "StringLiteral",
+      "text": "functions/resource-exhausted"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 265,
+      "kind": "StringLiteral",
+      "text": "functions/not-found"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 266,
+      "kind": "StringLiteral",
+      "text": "Sản phẩm hiện không còn nhận đánh giá."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 267,
+      "kind": "StringLiteral",
+      "text": "functions/aborted"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 268,
+      "kind": "StringLiteral",
+      "text": "Đánh giá đã thay đổi. Tải lại trước khi gửi."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 269,
+      "kind": "StringLiteral",
+      "text": "Chưa gửi được đánh giá. Kiểm tra đơn đã nhận và thử lại."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 272,
+      "kind": "StringLiteral",
+      "text": "Chưa nhận được kết quả. Thử lại để kiểm tra cùng thao tác."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 283,
+      "kind": "StringLiteral",
+      "text": "Chọn số sao, tên hiển thị và nhận xét từ 10 đến 2.000 ký tự."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 287,
+      "kind": "StringLiteral",
+      "text": "submit"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 296,
+      "kind": "StringLiteral",
+      "text": "sgProductReviews"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 296,
+      "kind": "StringLiteral",
+      "text": "Đánh giá sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 297,
+      "kind": "StringLiteral",
+      "text": "sgReviewHeader"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 299,
+      "kind": "JSXText",
+      "text": "Đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 302,
+      "kind": "StringLiteral",
+      "text": "sgReviewScore"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 305,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 308,
+      "kind": "JSXText",
+      "text": "/ 5 ·"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 308,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 308,
+      "kind": "JSXText",
+      "text": "đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 312,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 312,
+      "kind": "JSXText",
+      "text": "Chưa có đánh giá."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 316,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 316,
+      "kind": "JSXText",
+      "text": "Chưa tải được điểm tổng hợp."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 326,
+      "kind": "StringLiteral",
+      "text": "Chưa đăng nhập được. Anh/chị thử lại nhé."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 332,
+      "kind": "StringLiteral",
+      "text": "Sửa đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 333,
+      "kind": "StringLiteral",
+      "text": "Viết đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 334,
+      "kind": "StringLiteral",
+      "text": "Đăng nhập để đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 338,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 339,
+      "kind": "JSXText",
+      "text": "Đang tải đánh giá…"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 343,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 344,
+      "kind": "JSXText",
+      "text": "Đang xử lý…"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 348,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 348,
+      "kind": "StringLiteral",
+      "text": "alert"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 353,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 353,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 359,
+      "kind": "JSXText",
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 364,
+      "kind": "JSXText",
+      "text": "Thử lại thao tác"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 368,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 372,
+      "kind": "StringLiteral",
+      "text": "Đánh giá của anh/chị đang chờ duyệt."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 373,
+      "kind": "StringLiteral",
+      "text": "Đánh giá của anh/chị đã đăng."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 374,
+      "kind": "StringLiteral",
+      "text": "Đánh giá chưa được duyệt."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 375,
+      "kind": "StringLiteral",
+      "text": "Đánh giá của anh/chị đã gỡ."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 376,
+      "kind": "StringLiteral",
+      "text": "Đánh giá của anh/chị đã ẩn."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 384,
+      "kind": "StringLiteral",
+      "text": "sgReviewForm"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 388,
+      "kind": "JSXText",
+      "text": "Đơn đã nhận sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 395,
+      "kind": "JSXText",
+      "text": "Chọn đơn hàng"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 405,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 409,
+      "kind": "JSXText",
+      "text": "Xem thêm đơn"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 412,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 413,
+      "kind": "JSXText",
+      "text": "Chỉ đánh giá sản phẩm đã nhận tại SatsunicGo. Quyền được kiểm\n                tra khi gửi."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 417,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 418,
+      "kind": "JSXText",
+      "text": "Chưa tìm thấy đơn có thể đối chiếu với sản phẩm này."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 424,
+      "kind": "JSXText",
+      "text": "Số sao"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 425,
+      "kind": "StringLiteral",
+      "text": "sgReviewChoices"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 429,
+      "kind": "StringLiteral",
+      "text": "radio"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 437,
+      "kind": "StringLiteral",
+      "text": "true"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 437,
+      "kind": "JSXText",
+      "text": "★"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 438,
+      "kind": "StringLiteral",
+      "text": "sr-only"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 438,
+      "kind": "JSXText",
+      "text": "sao"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 444,
+      "kind": "JSXText",
+      "text": "Tên hiển thị"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 454,
+      "kind": "StringLiteral",
+      "text": "sgReviewTextField"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 455,
+      "kind": "JSXText",
+      "text": "Nhận xét"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 466,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 467,
+      "kind": "JSXText",
+      "text": "Nội dung được duyệt trước khi đăng. Không đưa thông tin riêng tư vào\n            nhận xét."
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 472,
+      "kind": "StringLiteral",
+      "text": "primary"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 475,
+      "kind": "StringLiteral",
+      "text": "Đang gửi…"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 475,
+      "kind": "StringLiteral",
+      "text": "Gửi đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 478,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 482,
+      "kind": "JSXText",
+      "text": "Đóng"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 487,
+      "kind": "StringLiteral",
+      "text": "withdrawn"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 490,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 491,
+      "kind": "JSXText",
+      "text": "Gỡ đánh giá khỏi trang sản phẩm?"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 496,
+      "kind": "StringLiteral",
+      "text": "withdraw"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 502,
+      "kind": "JSXText",
+      "text": "Gỡ đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 505,
+      "kind": "JSXText",
+      "text": "Giữ lại"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 513,
+      "kind": "JSXText",
+      "text": "Gỡ đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 519,
+      "kind": "StringLiteral",
+      "text": "sgReviewItem"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 522,
+      "kind": "StringLiteral",
+      "text": "sgReviewBadge"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 522,
+      "kind": "JSXText",
+      "text": "Đã mua tại SatsunicGo"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 526,
+      "kind": "StringLiteral",
+      "text": "sgReviewNotice"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 526,
+      "kind": "JSXText",
+      "text": "Mẫu:"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 528,
+      "kind": "StringLiteral",
+      "text": "vi-VN"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 531,
+      "kind": "StringLiteral",
+      "text": "sgReviewReply"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 532,
+      "kind": "JSXText",
+      "text": "SatsunicGo"
+    },
+    {
+      "file": "src/features/content/ProductReviews.tsx",
+      "line": 543,
+      "kind": "JSXText",
+      "text": "Xem thêm đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "id"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "productId"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "version"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "draft"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "reason"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 36,
+      "kind": "StringLiteral",
+      "text": "productReviewAdmin"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 58,
+      "kind": "StringLiteral",
+      "text": "Chưa tải được đánh giá. Kiểm tra quyền và tải lại."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 100,
+      "kind": "StringLiteral",
+      "text": "Thử lại thao tác đang chờ trước khi đổi nội dung."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 107,
+      "kind": "StringLiteral",
+      "text": "productReviewModerate"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 111,
+      "kind": "StringLiteral",
+      "text": "Đã lưu quyết định."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 117,
+      "kind": "StringLiteral",
+      "text": "functions/permission-denied"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 117,
+      "kind": "StringLiteral",
+      "text": "functions/unauthenticated"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 127,
+      "kind": "StringLiteral",
+      "text": "functions/invalid-argument"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 128,
+      "kind": "StringLiteral",
+      "text": "functions/permission-denied"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 129,
+      "kind": "StringLiteral",
+      "text": "functions/unauthenticated"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 130,
+      "kind": "StringLiteral",
+      "text": "functions/not-found"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 131,
+      "kind": "StringLiteral",
+      "text": "functions/failed-precondition"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 132,
+      "kind": "StringLiteral",
+      "text": "functions/aborted"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 133,
+      "kind": "StringLiteral",
+      "text": "functions/already-exists"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 138,
+      "kind": "StringLiteral",
+      "text": "Chưa lưu được quyết định. Tải lại và kiểm tra nội dung."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 139,
+      "kind": "StringLiteral",
+      "text": "Chưa nhận được kết quả. Thử lại cùng thao tác."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 149,
+      "kind": "StringLiteral",
+      "text": "approve"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 150,
+      "kind": "StringLiteral",
+      "text": "Nhập lý do hoặc nội dung phản hồi trước khi lưu."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 156,
+      "kind": "StringLiteral",
+      "text": "sgReviewAdmin"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 157,
+      "kind": "JSXText",
+      "text": "Đánh giá sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 158,
+      "kind": "StringLiteral",
+      "text": "notice"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 159,
+      "kind": "JSXText",
+      "text": "Giữ nguyên lời nhận xét và số sao. Không từ chối chỉ vì đánh giá thấp."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 162,
+      "kind": "JSXText",
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 164,
+      "kind": "StringLiteral",
+      "text": "alert"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 165,
+      "kind": "JSXText",
+      "text": "Đang xử lý…"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 166,
+      "kind": "StringLiteral",
+      "text": "status"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 169,
+      "kind": "JSXText",
+      "text": "Thử lại thao tác"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 172,
+      "kind": "JSXText",
+      "text": "Chưa có đánh giá."
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 176,
+      "kind": "JSXText",
+      "text": "·"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 179,
+      "kind": "StringLiteral",
+      "text": "notice"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 183,
+      "kind": "StringLiteral",
+      "text": "Chờ duyệt"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 184,
+      "kind": "StringLiteral",
+      "text": "Đã đăng"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 185,
+      "kind": "StringLiteral",
+      "text": "Chưa được duyệt"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 186,
+      "kind": "StringLiteral",
+      "text": "Đã gỡ"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 187,
+      "kind": "StringLiteral",
+      "text": "Đã ẩn"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 191,
+      "kind": "JSXText",
+      "text": "·"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 193,
+      "kind": "JSXText",
+      "text": "Xem sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 198,
+      "kind": "JSXText",
+      "text": "Lý do / phản hồi"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 210,
+      "kind": "StringLiteral",
+      "text": "pending"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 213,
+      "kind": "StringLiteral",
+      "text": "primary"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 215,
+      "kind": "StringLiteral",
+      "text": "approve"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 217,
+      "kind": "JSXText",
+      "text": "Cho hiển thị"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 221,
+      "kind": "StringLiteral",
+      "text": "reject"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 223,
+      "kind": "JSXText",
+      "text": "Từ chối"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 231,
+      "kind": "StringLiteral",
+      "text": "reply"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 233,
+      "kind": "JSXText",
+      "text": "Phản hồi"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 237,
+      "kind": "StringLiteral",
+      "text": "hide"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 239,
+      "kind": "JSXText",
+      "text": "Ẩn đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductReviewModeration.tsx",
+      "line": 251,
+      "kind": "JSXText",
+      "text": "Xem thêm đánh giá"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 9,
+      "kind": "StringLiteral",
+      "text": "crmItemDetails sgProductFields"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 10,
+      "kind": "JSXText",
+      "text": "Thông tin sản phẩm"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 12,
+      "kind": "JSXText",
+      "text": "Xuất xứ sản xuất"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 14,
+      "kind": "StringLiteral",
+      "text": "manufacturingOrigin"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 17,
+      "kind": "StringLiteral",
+      "text": "Theo nhãn hoặc nguồn hãng"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 21,
+      "kind": "JSXText",
+      "text": "Thương hiệu"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 22,
+      "kind": "StringLiteral",
+      "text": "brand"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 25,
+      "kind": "JSXText",
+      "text": "Mô tả ngắn"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 28,
+      "kind": "StringLiteral",
+      "text": "productSummary"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 35,
+      "kind": "JSXText",
+      "text": "Nơi dự kiến mua"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 37,
+      "kind": "StringLiteral",
+      "text": "retailer"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 40,
+      "kind": "StringLiteral",
+      "text": "Costco, Walmart…"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 44,
+      "kind": "JSXText",
+      "text": "Nguồn kiểm chứng"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 46,
+      "kind": "StringLiteral",
+      "text": "url"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 47,
+      "kind": "StringLiteral",
+      "text": "sourceUrl"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 52,
+      "kind": "StringLiteral",
+      "text": "crmSectionHeading"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 52,
+      "kind": "JSXText",
+      "text": "Hướng dẫn sử dụng"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 54,
+      "kind": "StringLiteral",
+      "text": "hidden"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 55,
+      "kind": "StringLiteral",
+      "text": "usageSteps"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 59,
+      "kind": "StringLiteral",
+      "text": "sgUsageRow"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 71,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 82,
+      "kind": "JSXText",
+      "text": "↑"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 85,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 89,
+      "kind": "JSXText",
+      "text": "×"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 93,
+      "kind": "StringLiteral",
+      "text": "sgUsageActions"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 95,
+      "kind": "StringLiteral",
+      "text": "button"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 99,
+      "kind": "JSXText",
+      "text": "Thêm hướng dẫn"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 103,
+      "kind": "StringLiteral",
+      "text": "notice"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 104,
+      "kind": "JSXText",
+      "text": "Trang sản phẩm tiếp tục dùng cách dùng đã lưu bên dưới khi chưa có\n          hướng dẫn dạng danh sách."
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 109,
+      "kind": "JSXText",
+      "text": "Xem trước"
+    },
+    {
+      "file": "src/features/content/ProductInformationFields.tsx",
+      "line": 111,
+      "kind": "StringLiteral",
+      "text": "sgUsagePreview"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 13,
+      "kind": "StringLiteral",
+      "text": "app"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 14,
+      "kind": "StringLiteral",
+      "text": "product"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 17,
+      "kind": "StringLiteral",
+      "text": "editor"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 18,
+      "kind": "StringLiteral",
+      "text": "workspaceShell"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 19,
+      "kind": "StringLiteral",
+      "text": "workspaceContent"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 23,
+      "kind": "StringLiteral",
+      "text": "moderation"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 24,
+      "kind": "StringLiteral",
+      "text": "page"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 28,
+      "kind": "StringLiteral",
+      "text": "page productDetail"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 30,
+      "kind": "StringLiteral",
+      "text": "long"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 30,
+      "kind": "StringLiteral",
+      "text": "short"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 32,
+      "kind": "StringLiteral",
+      "text": "product-1"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 34,
+      "kind": "StringLiteral",
+      "text": "Tên sản phẩm Việt Nam rất dài"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 35,
+      "kind": "StringLiteral",
+      "text": "Kirkland Signature Vitamin E 180 mg"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 36,
+      "kind": "StringLiteral",
+      "text": "vitamin-e"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 38,
+      "kind": "StringLiteral",
+      "text": "Thông tin sản phẩm đã xác minh."
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 39,
+      "kind": "StringLiteral",
+      "text": "500 viên nang mềm."
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 40,
+      "kind": "StringLiteral",
+      "text": "published"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 42,
+      "kind": "StringLiteral",
+      "text": "US"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 43,
+      "kind": "StringLiteral",
+      "text": "Kirkland Signature"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 44,
+      "kind": "StringLiteral",
+      "text": "Costco"
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 46,
+      "kind": "StringLiteral",
+      "text": "Đọc hướng dẫn trên nhãn."
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 47,
+      "kind": "StringLiteral",
+      "text": "Xem lưu ý và bảo quản."
+    },
+    {
+      "file": "tests/browser/fixtures/productdetail080/main.tsx",
+      "line": 50,
+      "kind": "StringLiteral",
+      "text": "javascript:alert(1)"
+    }
+  ]
+}

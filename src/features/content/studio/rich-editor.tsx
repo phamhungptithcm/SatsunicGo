@@ -1,3 +1,4 @@
+import { LoadingState } from "../../../shared/Loading";
 import { auth } from "../../../shared/firebase";
 import { privateStudioImage } from "./media";
 
@@ -552,10 +553,10 @@ export function RichEditor({
   }
   if (!editor)
     return (
-      <div className="state-card" role="status">
-        <div className="skeleton" />
-        <div className="skeleton short" />
-        <p>Đang mở trình soạn thảo…</p>
+      <div className="state-card">
+        <div className="skeleton" aria-hidden="true" />
+        <div className="skeleton short" aria-hidden="true" />
+        <LoadingState overlay={false}>Đang mở trình soạn thảo…</LoadingState>
       </div>
     );
   return (
@@ -849,9 +850,7 @@ export function RichEditor({
         </button>
       </div>
       <div className="writing-context-row">
-        <span role="status">
-          {uploading ? "Đang tải ảnh…" : "Gõ / ở dòng mới để chèn nhanh"}
-        </span>
+        <>{uploading ? <LoadingState overlay={false}>{"Đang tải ảnh…"}</LoadingState> : <span role="status">{"Gõ / ở dòng mới để chèn nhanh"}</span>}</>
       </div>
       {activeBlock && (
         <details className="writing-block-menu" style={activeBlock}>

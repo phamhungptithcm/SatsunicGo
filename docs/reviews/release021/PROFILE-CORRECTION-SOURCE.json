@@ -1,0 +1,5 @@
+{
+  "src/features/profile/Profile.tsx": "8ed27cc670b388c77156b29aa9382b1c507aa5be378c10250177cbc1d2699884",
+  "src/features/profile/profile-state.ts": "5b59f91aecc0dbda3d8366af0d41f982e4a3981efec2c3afdfcfb22afde025f2",
+  "tests/unit/profile-state.test.ts": "f61b1af6666d9cf06bbce8ddc820569361278c7fd256e404a019b1c6191e938e"
+}

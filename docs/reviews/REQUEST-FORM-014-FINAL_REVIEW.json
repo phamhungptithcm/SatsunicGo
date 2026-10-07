@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-REQUEST-FORM-014",
+  "status": "BLOCKED",
+  "cycle": 1,
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "BLOCKED",
+      "summary": "Fresh typecheck fails in functions/src/public.ts:181, missing slug/body properties; outside form014 scope. Earlier typecheck passed before concurrent edits.",
+      "evidence_refs": []
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    },
+    "product_content": {
+      "status": "PASSED",
+      "summary": "Scoped JSX/CSS delta reviewed: direct navigation, visible fields, input handlers retained, responsive rendering and add/remove verified; typecheck/format and4 input tests pass. No deployment claim.",
+      "evidence_refs": [
+        "docs/reviews/REQUEST-FORM-014-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Concurrent request-prefill changes from other work present, preserved and outside this review scope."
+  ],
+  "limitations": [
+    "Local browser only; live auth/upload/submission not tested.",
+    "Intelligence DEGRADED; runtime CLI unavailable.",
+    "Fresh whole-worktree compiler blocked by functions/src/public.ts:181 slug/body errors; no backend fix authorized."
+  ],
+  "hashes": {
+    "src/features/requests/RequestForm.tsx": "e6e1e051c819153bb1b8bbc3952b6fc0412aa4278c33f9318deb5a199f6b8226",
+    "src/styles/public-ux.css": "48c3138c1343dcc3e83699038374a75c0c8fdf1b8ca8232b524c18c9626c1277"
+  }
+}

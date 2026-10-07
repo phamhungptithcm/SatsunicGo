@@ -1,0 +1,7 @@
+{
+  "task_id": "SATSUNICGO-SUPPORT-028",
+  "files": {
+    "src/features/support/Thread.tsx": "fb48699141da400a30f38596787dacf7edf7745a9dd66cf6345e2e2199db74c2",
+    "tests/unit/support-contextual.test.ts": "86f39fab38dd60955e07fe33c32f65eb53615551435dbb1222ade1b536def4fa"
+  }
+}

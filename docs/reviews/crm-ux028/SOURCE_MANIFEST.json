@@ -1,0 +1,14 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "scope": "Read-time hashes only; shared dirty worktree, not frozen release candidate",
+  "sha256": {
+    "src/features/crm/Workspace.tsx": "303f15ebce243672bc113095c1c7fe46a35bd7d3c10ee87480df6ce75b4fcb4a",
+    "src/features/crm/CrmPresentation.tsx": "4f796a1d3cce955a52af5f5c24849024de7bf60292908d6064b3fa61b2195ec8",
+    "src/features/crm/Dashboard.tsx": "4ccd253bcb7a29296882ea498b486c396e4fb5ae2fa139171c607ca233089964",
+    "src/features/crm/Customers.tsx": "c382b69446047784ddb7a29d988cde88bbda09f87bf40243c23e3143d4ddace6",
+    "src/features/crm/Customer.tsx": "89ba0b27d94da49eef9a1f0f32ea9200a35f6753a1d7288c62350ab9e5e9060b",
+    "src/features/operations/Workbench.tsx": "6a98a2d5b86837804d2e37a9441b05529558828246173dc0acadaf8fe72a5d0c",
+    "src/styles/global.css": "d6074ace94e6217e0b8a0bc06f886a9ac8bece83774a34374bd4c9826667b7f2",
+    "packages/domain/index.ts": "096de3876d58648bb98e035f8b158e455b7b674624e4513e9d1d68b0f6b8faec"
+  }
+}

@@ -1,0 +1,5 @@
+# Changes028 task report
+
+Decision BLOCKED. Approved whole-file source frozen, shared callers/backend/styles untouched. 5 new contextual+3existing domain tests =8 PASS, scoped lint PASS. Cycle1 scoped implementation/review; cycle2 pre-read epoch and unknown public status corrections then checks rerun PASS. Compiler/native proposal/customer approve/reject/apply, widths, bilingual keyboard/AT and lost-response/denied/stale/pre-read recovery still pending. Pending metadata lost on route unmount/reload. No runtime/provider/deployment action. Whole CRM/production NOT_READY. Tokens/cost unavailable; memory candidates None.
+
+Independent-review cycle: variant-only additional substitution lines now retained, including explicit empty clear. Variant field starts with actual original value, unchanged variants omitted; domain≥1replacementName retained. Multi-line named+variant-only+clear and unchanged-line tests validate actual checkProposal. No new visible copy. 19focused tests and lint PASS. Current compiler/native and independent re-review pending; production/whole CRM NOT_READY. No runtime writes under source-only lease.

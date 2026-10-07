@@ -1,0 +1,379 @@
+{
+  "report_version": 1,
+  "generated_at": "2026-10-07T01:12:53.892Z",
+  "task": {
+    "id": "SATSUNICGO-SHIPPING-DETAIL-086",
+    "goal": "Improve public shipping price and condition discovery without changing tariffs or quote semantics",
+    "state": "DISCOVER",
+    "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+    "adapter": "unknown"
+  },
+  "progress": {
+    "status": "ASSESSED",
+    "percent": 100,
+    "verified": 2,
+    "applicable": 2,
+    "total": 2,
+    "criteria": [
+      {
+        "criterion": 1,
+        "description": "Search and filter detailed rates with unchanged prices quote and configuration",
+        "status": "VERIFIED",
+        "weight": 1,
+        "evidence_recorded": true,
+        "summary": null
+      },
+      {
+        "criterion": 2,
+        "description": "Readable searchable lossless conditions and responsive keyboard-accessible UI",
+        "status": "VERIFIED",
+        "weight": 1,
+        "evidence_recorded": true,
+        "summary": null
+      }
+    ],
+    "completed": [
+      {
+        "criterion": 1,
+        "description": "Search and filter detailed rates with unchanged prices quote and configuration",
+        "status": "VERIFIED",
+        "weight": 1,
+        "evidence_recorded": true,
+        "summary": null
+      },
+      {
+        "criterion": 2,
+        "description": "Readable searchable lossless conditions and responsive keyboard-accessible UI",
+        "status": "VERIFIED",
+        "weight": 1,
+        "evidence_recorded": true,
+        "summary": null
+      }
+    ],
+    "remaining": []
+  },
+  "evidence": {
+    "status": "VERIFIED",
+    "receipt_count": 2,
+    "latest_receipt_hash": "02a460c3c6bda3965a789abac2239a44ddb13740c17adc0cd19daf7ba57acbc2",
+    "errors": []
+  },
+  "quality": {
+    "gates": [
+      {
+        "gate": "browser",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Frozen source local scope only; native200 screen-reader and live providers NOT_RUN",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "build",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Root session10739 npm run build exit0 verified; compiler Vite generated assets PASS with existing chunk warnings",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "final-implementation-review",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Evidence-backed final implementation review passed.",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "lint",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Current frozen source local check only; no production provider proof",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "product-content",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Frozen source local scope only; native200 screen-reader and live providers NOT_RUN",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "security",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Root current scoped source review confirms display-only change preserves auth backend financial and configuration contracts; no live provider test claimed",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "tests",
+        "status": "NOT_RUN",
+        "required": true,
+        "summary": "No current evidence recorded.",
+        "repository_commit": null,
+        "evidence_recorded": false
+      },
+      {
+        "gate": "typecheck",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Current frozen source local check only; no production provider proof",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      },
+      {
+        "gate": "unit",
+        "status": "PASSED",
+        "required": true,
+        "summary": "Frozen source local scope only; native200 screen-reader and live providers NOT_RUN",
+        "repository_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+        "evidence_recorded": true
+      }
+    ],
+    "counts": {
+      "BLOCKED": 0,
+      "FAILED": 0,
+      "NOT_APPLICABLE": 0,
+      "NOT_RUN": 1,
+      "PASSED": 8,
+      "STALE": 0
+    },
+    "known_issues": "NONE_FOUND_WITHIN_EXECUTED_CHECKS"
+  },
+  "final_review": {
+    "schema_version": 1,
+    "task_id": "SATSUNICGO-SHIPPING-DETAIL-086",
+    "status": "PASSED",
+    "reviewed_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+    "dimensions": {
+      "requirement_match": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "security": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "code_quality": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "failure_paths": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "error_handling": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "production_readiness": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      },
+      "trade_offs": {
+        "status": "PASSED",
+        "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+        "evidence_refs": [
+          "docs/reviews/shipping-detail086/PLAN.md",
+          "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+          "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+          "/private/tmp/shipping086-root44-receipt.json"
+        ]
+      }
+    },
+    "findings": [],
+    "residual_risks": [],
+    "limitations": [],
+    "recorded_at": "2026-10-07T01:12:42.617Z",
+    "reviewed_worktree_signature": "428b27ede7ae09ada38237ae7e58710503ed36ef0f130bbd570bc3e80c758644",
+    "assurance": {
+      "status": "LEGACY_UNVERIFIED",
+      "evidence_level": "DECLARED",
+      "limitations": [
+        "Legacy review references and reviewer identity are not authenticated."
+      ]
+    },
+    "previous_review_hash": "280e904530cf27970f40fa431c3eebe34e31e473966a3cec2708f2e7a3508be5",
+    "review_hash": "9cbab1f4a3c712482e3fc4867860af1ea624cf2d0591f976b86cb201bcde796b",
+    "stale": false,
+    "cycle_count": 2,
+    "finding_history": [],
+    "resolved_findings": [],
+    "unresolved_findings": []
+  },
+  "architecture_pulse": {
+    "status": "NOT_RUN",
+    "outcome": null,
+    "artifact": null,
+    "reason": "No task-bound Architecture Pulse artifact exists."
+  },
+  "team": {
+    "schema_version": 2,
+    "task_id": "SATSUNICGO-SHIPPING-DETAIL-086",
+    "team_type": "PRODUCT_WORKCELL",
+    "planning": {
+      "revision": 1,
+      "planning_hash": "54e68911c2708a88d02ebf8e8670355fa42dd4cf987cecf4738d23c67eb04f31",
+      "signal_hash": "2fddf929c9a0e6ed188d062651c559c6539da758179c8f7cdee615b85599408d",
+      "signals": {
+        "risk": "medium",
+        "area_count": 3,
+        "path_count": 5,
+        "docs_only": false,
+        "tests": true,
+        "bug": false,
+        "feature": true,
+        "security": false,
+        "payment": false,
+        "migration": false,
+        "api": false,
+        "concurrency": false,
+        "infrastructure": false,
+        "performance": false,
+        "frontend": true,
+        "trivial_docs": false,
+        "signal_hash": "2fddf929c9a0e6ed188d062651c559c6539da758179c8f7cdee615b85599408d"
+      },
+      "requested_shape": null,
+      "risk": "medium",
+      "skill_routing": {
+        "status": "ABSTAIN",
+        "reason": "NO_MATCH",
+        "config_id": "ai-agent-kit-canonical-router-v1",
+        "config_hash": "c4297894c1da0d86721abbdb9a1ba161ed05f7d8550cc39c685e17de99c87d22",
+        "route_id": null,
+        "skill": null,
+        "suggested_route": "start-task",
+        "confidence": "low",
+        "score": 0,
+        "margin": 0,
+        "entry_action": null,
+        "product_id": null,
+        "reason_codes": []
+      },
+      "execution_context": null
+    },
+    "execution_mode": "UNSELECTED",
+    "adapter_capabilities": null,
+    "control_plane": null,
+    "run": null,
+    "status": "NOT_READY",
+    "completed_assignments": 0,
+    "total_assignments": 6,
+    "optional_failures": [
+      {
+        "assignment_id": "design-reviewer",
+        "status": "PENDING"
+      }
+    ],
+    "optional_finding_count": 0,
+    "review_independence": "VERIFIED",
+    "findings": [],
+    "context": {
+      "status": "READY",
+      "revision": 1,
+      "knowledge_revision": 0,
+      "handoff_count": 0,
+      "open_conflicts": 0,
+      "context_hash": "662a407a34925f3dbe44111d17f1697ca8856e51dbd82ed820d84bdb0a5ddfef"
+    },
+    "usage": {
+      "tokens": 0,
+      "actions": 0,
+      "duration_seconds": 0
+    },
+    "budgets": {
+      "max_agents": 6,
+      "max_depth": 1,
+      "token_budget": 60000,
+      "timeout_seconds": 1800,
+      "max_actions": 100,
+      "max_concurrency": 3
+    },
+    "evidence_hashes": [],
+    "blockers": [
+      "team state is PLANNED",
+      "independent review is incomplete"
+    ],
+    "team_hash": "613bbc8b602f80e4c2a65ea514086d54207ace6a7668ae6ad4aa1e11f0b6efba",
+    "state": "PLANNED"
+  },
+  "code_status": {
+    "git": {
+      "status": "DIRTY",
+      "commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+      "staged": 0,
+      "modified": 50,
+      "untracked": 8248,
+      "conflicts": 0,
+      "total_changes": 8298
+    },
+    "known_issues": "NONE_FOUND_WITHIN_EXECUTED_CHECKS",
+    "claim": "No known issues were found within the executed checks."
+  },
+  "production_readiness": {
+    "status": "NOT_READY",
+    "blockers": [
+      "Task state is DISCOVER; REVIEW_READY or RELEASED is required.",
+      "Git worktree is DIRTY.",
+      "Final review requires authenticated independence and resolved execution evidence for production readiness.",
+      "Skill routing is ABSTAIN (NO_MATCH).",
+      "Agent workcell is NOT_READY; the latest independent review must complete cleanly.",
+      "Required quality gate tests is NOT_RUN."
+    ],
+    "rationale": "Production readiness is fail-closed until every blocker has current evidence."
+  },
+  "production_harness": null,
+  "usage": {
+    "task_id": "SATSUNICGO-SHIPPING-DETAIL-086",
+    "status": "UNAVAILABLE",
+    "reason": "no_usage_evidence",
+    "event_count": 0,
+    "usage": null,
+    "cost": {
+      "status": "UNAVAILABLE",
+      "estimated_cost_usd_micros": null,
+      "actual_billed_cost": "UNAVAILABLE",
+      "reason": "no_usage_evidence"
+    }
+  }
+}

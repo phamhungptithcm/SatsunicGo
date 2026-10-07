@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-06T02:08:36.521380+00:00",
+  "scope": "immutable failing full199 round1 bounded populated evidence",
+  "files": {
+    "docs/reviews/release026/database/CRM_OPERATIONS_CONTENT_REVIEW.md": "26f34af516261dcb761fff38685d5d215bfc0a760644145f261e8a451f6439fb",
+    "src/features/operations/Returns.tsx": "9dd77f004c628fecfb65aa5895410fc6e0334a48874ce212a676a72b951f3f03",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-returns-390.png": "b0c61bd177bc91aa97a3a7ed3bd193f84ba6fd9bfebddbc8e407320b58cc6092",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-returns-768.png": "3c36710b49eba64ba50092cc4966d4283ebaf161bc18d1b6a15011481b5990ae",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-returns-1440.png": "920ac18ac4a2723fba7b81b184db14430f1491b44683324ee607f1d0ddb07d0e",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-shipping-390.png": "95d02dc977a66506277adbb7bed4f3fbfea4f4da2af7bbd230b2a44f9827cf3e",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-shipping-768.png": "045f995c62f549a9fcbddbe01d86dc3eefe9f4c34c65926b85d6be794a451b65",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-shipping-1440.png": "e8bff55bccbf06e59d352d3c91748477a0845712298e7497ddee9ad640ff2f6a",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-batches-390.png": "26df7b608f7147a6c088dd02f04a5588416ed7d9b13963c52955dfecd6dfac08",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-batches-768.png": "af9534b9755c8bdb1b9942d227d8a57e871d17cacab1b67ebaa6103973270fc0",
+    "output/playwright/release026/crm-final199-native-round1-images/crm-populated-batches-1440.png": "7bbb2c4d1cd922e86a6185d71c18b974aa4e7fcd2dce8bfc41944ee68ec7b14a",
+    "output/playwright/release026/crm-final199-native-round1.json": "1e31eda659bb11ec6d687579683e691c523a5f8ea796700ad26622a8eb53d4c4"
+  }
+}

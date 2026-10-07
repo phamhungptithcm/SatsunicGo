@@ -1,0 +1,107 @@
+{
+  "recordedAt": "2026-10-05T14:01:01.476866+00:00",
+  "status": "PREPARED_NOT_DEPLOYED",
+  "target": "satsunicgo",
+  "baseCommit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "region": "asia-southeast1",
+  "runtime": "nodejs22",
+  "functions": {
+    "sourceExports": 46,
+    "http": [
+      "payosWebhook",
+      "publicDiscovery",
+      "publicImage",
+      "publicPage"
+    ],
+    "scheduled": [
+      "deliverEmail",
+      "maintenance",
+      "reconcilePayments"
+    ],
+    "callable": [
+      "ask",
+      "askWorkflow",
+      "catalogCheckout",
+      "changeCommand",
+      "command",
+      "consolidationCommand",
+      "createPaymentLink",
+      "currentAskConversation",
+      "financeReview",
+      "invoiceCommand",
+      "invoiceDetail",
+      "invoiceList",
+      "invoiceShare",
+      "listCrmStaff",
+      "listCustomers",
+      "listFollowUps",
+      "listOrderImages",
+      "listWork",
+      "membershipCommand",
+      "membershipReminderPolicy",
+      "operationalDashboard",
+      "orderConversationCommand",
+      "orderHistory",
+      "outboxCommand",
+      "readCustomer",
+      "readNotification",
+      "readOrderConversation",
+      "readOrderImage",
+      "readOrderOperations",
+      "readOwnerConfiguration",
+      "readStaffAccess",
+      "refundCommand",
+      "returnCommand",
+      "saveCustomerNotes",
+      "shippingCommand",
+      "ticketMessages",
+      "uploadContentImage",
+      "uploadOrderImage",
+      "workspaceCommand"
+    ]
+  },
+  "hostingRewrites": [
+    "publicDiscovery",
+    "publicImage",
+    "publicPage"
+  ],
+  "coupledArtifacts": [
+    "dist",
+    "functions/generated/public-assets.json"
+  ],
+  "rules": [
+    "firestore.rules",
+    "storage.rules"
+  ],
+  "indexes": "firestore.indexes.json",
+  "heldComponents": [
+    "ask",
+    "createPaymentLink",
+    "payosWebhook",
+    "reconcilePayments",
+    "deliverEmail",
+    "maintenance"
+  ],
+  "holdReason": "Provider/scheduled/data lifecycle acceptance is not authorized or verified; no blanket deploy. maintenance mutates publishing, membership, capabilities and outbox.",
+  "deploymentAuthority": "NOT_GRANTED_BY_LOCAL_021_022",
+  "rollback": "Capture current Hosting version and immutable local build/source manifest before release; current production function inventory empty, so no previous backend revision assumed. Disable approved new traffic/job components using reviewed operator procedures; preserve financial and issued-history data. No destructive rollback/datafix.",
+  "configReadbackChecklist": [
+    "Google provider, authorized origin and redirect",
+    "AppCheck production enforcement and browser site key presence",
+    "Current active OWNER/FINANCE membership and recent MFA",
+    "Seller identity, catalog listedPrice/terms/version, approved FX policy",
+    "Payments disabled until separately approved; credentials bound but never logged",
+    "Email disabled until approved controlled-inbox test; schedulers reviewed individually",
+    "Ask disabled until approved model/IAM/quota acceptance",
+    "Billing/IAM known and least-privilege service accounts",
+    "Backup and monitoring/alert destination verified"
+  ],
+  "acceptanceAfterAuthorizedRollout": [
+    "Actual Google login/logout + locked/revoked user denial",
+    "Deployed callable rejection without valid AppCheck/MFA",
+    "Catalog full once vs custom two installments under explicit financial authority",
+    "Issued share revoke/expiry and ownership on production origin",
+    "No duplicate effect after lost response/replay",
+    "Operator-approved rollback/readback without data deletion"
+  ]
+}

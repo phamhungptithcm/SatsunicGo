@@ -1,0 +1,411 @@
+.productDetail .sgProductDetail {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  color: #111c35;
+}
+.sgProductDetail * {
+  box-sizing: border-box;
+}
+.sgProductDetail .sgProductHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+  margin-top: 24px;
+}
+.sgProductImage {
+  aspect-ratio: 1.1;
+  background: #f6f8fc;
+  border: 1px solid #e7ecf5;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.sgProductImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 520px;
+  padding: 24px;
+}
+.sgProductImageMissing {
+  color: #627089;
+  font-size: 14px;
+}
+.sgProductDetail .sgProductOverview h1 {
+  font-size: clamp(25px, 3vw, 34px);
+  line-height: 1.25;
+  font-weight: 550;
+  letter-spacing: -0.7px;
+  margin: 8px 0 16px;
+  overflow-wrap: anywhere;
+}
+.sgProductBrand {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #627089;
+  margin: 0;
+}
+.sgProductLead,
+.sgProductBody,
+.sgProductUsage {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #53617a;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sgProductFacts {
+  margin: 22px 0 12px;
+  font-size: 13px;
+}
+.sgProductFacts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #e7ecf5;
+  padding: 13px 0;
+}
+.sgProductFacts dt {
+  color: #627089;
+  flex: 0 0 130px;
+}
+.sgProductFacts dd {
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.sgProductSource,
+.sgProductHint {
+  font-size: 12px;
+  color: #627089;
+}
+.sgProductPurchase {
+  margin-top: 28px;
+}
+.sgProductPrice {
+  font-size: 26px;
+  font-weight: 550;
+  margin: 0 0 16px;
+}
+.sgProductPrice small {
+  font-size: 13px;
+  font-weight: 400;
+  color: #627089;
+}
+.sgProductPurchase .primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  text-align: center;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #163cff;
+  color: white;
+  text-decoration: none;
+}
+.sgProductHint {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+.sgProductInformation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  border-top: 1px solid #e7ecf5;
+  margin-top: 40px;
+  padding-top: 28px;
+}
+.sgProductDetail h2 {
+  font-size: 21px;
+  font-weight: 550;
+  margin: 0 0 18px;
+  letter-spacing: -0.3px;
+}
+.sgProductDetail h3 {
+  font-size: 15px;
+  font-weight: 550;
+  margin: 22px 0 8px;
+}
+.sgProductBody p {
+  margin: 0 0 14px;
+}
+.sgProductUsage {
+  padding-left: 20px;
+  margin: 0;
+}
+.sgProductUsage li + li {
+  margin-top: 9px;
+}
+.sgProductReviews {
+  border-top: 1px solid #e7ecf5;
+  margin-top: 36px;
+  padding-top: 28px;
+}
+.sgReviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sgReviewHeader h2 {
+  margin-bottom: 8px;
+}
+.sgReviewStars {
+  color: #b77908;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.sgReviewScore {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #627089;
+  margin: 0 0 16px;
+}
+.sgReviewItem {
+  padding: 22px 0;
+  border-top: 1px solid #e7ecf5;
+  font-size: 14px;
+}
+.sgReviewItem header {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.sgReviewBadge {
+  font-size: 11px;
+  color: #163cff;
+  background: #eef2ff;
+  padding: 5px 8px;
+  border-radius: 7px;
+}
+.sgReviewItem p {
+  color: #53617a;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sgReviewItem time {
+  font-size: 12px;
+  color: #627089;
+}
+.sgReviewReply {
+  border-left: 2px solid #e7ecf5;
+  padding-left: 14px;
+  margin-top: 16px;
+}
+.sgProductReviews button,
+.sgReviewAdmin button,
+.sgProductFields button {
+  min-height: 44px;
+  border: 1px solid #dde4ef;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: white;
+  color: #163cff;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sgProductReviews button:disabled,
+.sgReviewAdmin button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.sgProductReviews button.primary,
+.sgReviewAdmin button.primary {
+  background: #163cff;
+  border-color: #163cff;
+  color: white;
+}
+.sgProductReviews button + button,
+.sgReviewAdmin button + button {
+  margin-left: 8px;
+}
+.sgReviewForm {
+  background: #f6f8fc;
+  border: 1px solid #e7ecf5;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 18px 0;
+  display: grid;
+  gap: 16px;
+  max-width: 640px;
+}
+.sgReviewForm label {
+  display: grid;
+  gap: 7px;
+  font-size: 13px;
+}
+.sgReviewForm input:not([type="radio"]),
+.sgReviewForm select,
+.sgReviewForm textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #d8e0ed;
+  border-radius: 9px;
+  background: white;
+  color: #111c35;
+  font: inherit;
+  font-size: 16px;
+}
+.sgReviewForm textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.sgReviewForm fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.sgReviewForm legend {
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.sgReviewChoices {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sgReviewChoices label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: #b77908;
+}
+.sgReviewChoices input {
+  accent-color: #b77908;
+}
+.sgReviewNotice {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #627089;
+}
+.sgReviewNotice[role="alert"] {
+  color: #9b2828;
+}
+.sgProductFields .sgUsageRow {
+  display: flex;
+  gap: 8px;
+  align-items: start;
+}
+.sgUsageRow input {
+  min-width: 0;
+  flex: 1;
+}
+.sgUsageRow button {
+  flex-shrink: 0;
+}
+.sgProductFields .sgUsagePreview {
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sgProductFields .sgUsageActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.sgReviewAdmin {
+  margin: 32px 0;
+}
+.sgReviewAdmin article {
+  border-top: 1px solid #e7ecf5;
+  padding: 20px 0;
+}
+.sgReviewAdmin p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sgReviewAdmin textarea {
+  width: 100%;
+  font-size: 16px;
+  min-height: 80px;
+}
+.sgReviewAdmin label {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+@media (max-width: 700px) {
+  .sgProductDetail .sgProductHero,
+  .sgProductInformation {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .sgProductImage {
+    aspect-ratio: 1.3;
+  }
+  .sgProductImage img {
+    max-height: 350px;
+  }
+  .sgProductDetail .sgProductOverview h1 {
+    font-size: 26px;
+  }
+  .sgProductFacts dt {
+    flex-basis: 115px;
+  }
+  .sgProductInformation,
+  .sgProductReviews {
+    margin-top: 28px;
+    padding-top: 24px;
+  }
+  .sgReviewForm {
+    padding: 16px;
+  }
+  .sgReviewChoices {
+    gap: 9px;
+  }
+  .sgProductDetail h2 {
+    font-size: 19px;
+  }
+}
+
+.productDetail .sgProductDetail .sgReviewItem {
+  display: block;
+}
+
+.sgReviewStars {
+  position: relative;
+  display: inline-block;
+}
+.sgReviewStarsFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sgReviewTextField {
+  display: grid;
+  gap: 7px;
+}
+
+.sgProductUsage,
+.sgProductFields .sgUsagePreview {
+  list-style: disc;
+  padding-left: 20px;
+}
+.sgProductFields > label,
+.sgProductFields > div {
+  margin-top: 14px;
+}
+.sgProductFields input,
+.sgProductFields textarea {
+  font-size: 16px;
+}

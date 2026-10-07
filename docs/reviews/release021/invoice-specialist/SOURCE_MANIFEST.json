@@ -1,0 +1,18 @@
+{
+  "scope": "Invoice021 specialist only; shared WIP retained; no server/app/routes/rules/email edits",
+  "base_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "changed": {
+    "src/features/invoices/Documents.tsx": "275fd0c483b647dd08afddaf1c027f422ab4fbb0ceda625470c1792d435d5a98",
+    "src/features/invoices/document-requests.ts": "bffb36f32afd3cab41126e4e25ee029723fcaf0af231df075b41e78cdd0f1724",
+    "tests/unit/invoice-document-requests.test.ts": "ea8fcb9eb233cfec99fc0063ef5b17d9494e82119f2f10790d0fd9e85bf8753e",
+    "tests/unit/invoice-statement-view.test.ts": "c24eca7b6927bc3ef3fd03e6f8b92101be73e43e711a0dfe270b094c4831198f"
+  },
+  "reviewed_read_only": {
+    "functions/src/invoices.ts": "7b0a00c3fb5afdb3c1a9eaa0e7c8032e2a17d85eb66c8b7a1047462d210a1e0d",
+    "functions/src/invoice-share.ts": "1dfe9c524b3e823ffd9566dd6838053e31d9ef0e37ba7593586de5c420a54d72",
+    "packages/domain/invoices.ts": "2d65053c4a53b5a41e9c2309de909a3df2f6446be869906404bf9342201802f2",
+    "src/features/invoices/documents.css": "8b81341f001308b098d7fc2ccdedef157063013e524bf95d2cf9f90c333ab6b7",
+    "tests/rules/invoices.test.ts": "66d460d978eb1d47fb19bfc1e026942c9bd50995dc57b1475d729538eb36b3fc"
+  },
+  "shared_document_root_fix_preserved": true
+}

@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "src/features/notifications/Notifications.tsx",
+      "sha256": "dd8dd1a9c017d1bb0209ecf897f9402bba2cadd2f60c146274a1a30a2c2f3054"
+    },
+    {
+      "path": "src/features/notifications/notifications.css",
+      "sha256": "511f75992590c1fa63186f7de16c8265b00719e836970527b7b9b3bf4bcc09e4"
+    },
+    {
+      "path": "tests/browser/notifications079.spec.ts",
+      "sha256": "ae608f50592f18c02abe062b87733c50ef30fdb38ee4337fe907e9b1c79259a4"
+    },
+    {
+      "path": "tests/browser/fixtures/notifications079/mock.ts",
+      "sha256": "eb341ec65556df1373c5d950b024207b348125847be91358d282109c92207230"
+    },
+    {
+      "path": "tests/browser/fixtures/notifications079/main.tsx",
+      "sha256": "aa55f2199cb5be9c0b5e371e0442026bfb9f312e17b3b839e7e56af478879cea"
+    },
+    {
+      "path": "tests/browser/fixtures/notifications079/index.html",
+      "sha256": "2c1ed1f521fbc1e60c2a1a244ecfb865954d1f780e5bbb0060b37a7a07feee03"
+    },
+    {
+      "path": "tests/browser/fixtures/notifications079/vite.config.mjs",
+      "sha256": "78b6ddbd730bd902011a8e942cc98320480265a1a8d9bf6437315ea9a32013d2"
+    },
+    {
+      "path": "tests/browser/fixtures/notifications079/playwright.config.mjs",
+      "sha256": "4c3e12b3f245d0a9295ea84cb26deaef8327b245cfbba63443342574696732e9"
+    }
+  ]
+}

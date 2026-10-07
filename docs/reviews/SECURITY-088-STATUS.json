@@ -1,0 +1,19 @@
+{
+  "status": "WAITING_FOR_HUMAN_ENROLLMENT",
+  "source": {
+    "src/features/auth/Security.tsx": "31f6a6afd4ad823423f53d35cc26e326798c47caa12291707b8877242d0bd797",
+    "src/features/auth/mfa.ts": "d7a7b8da81023d13ba9c4ae87759d7a90ee0eb82bf975eb14d8a48f3da767835",
+    "tests/browser/security-enrollment076.spec.ts": "794f42d245efb7929ca5f49ac2ab6bbcc31fdb5d124399b4bc567e82bb6d678a"
+  },
+  "provider": {
+    "totpEnabled": true,
+    "mfaEnrolled": false
+  },
+  "syntheticBrowserTests": {
+    "passed": 17,
+    "notLiveAcceptance": true
+  },
+  "sourceChanges": false,
+  "privateMaterialAccessed": false,
+  "remaining": "Human scan QR in personal authenticator and enter current OTP in application, then metadata readback."
+}

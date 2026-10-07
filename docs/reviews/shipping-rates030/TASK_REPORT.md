@@ -1,0 +1,13 @@
+# SHIPPING-RATES-030 — implementation local, online release BLOCKED
+
+Implemented approved revision2 in real public ShippingRates UI: compact route/weight/result, single-choice fields hidden, collapsed details, 180ms result/240ms tab transitions and reduced motion. Added existing openTicket support form carrying shipment context, Google sign-in on explicit send, private response link, immutable idempotent uncertain retry and account-switch fencing. Owner editor/domain tariff/backend schema retained. Five backend public-read boundary unit tests added; no backend code patch because observed issue is missing deployment.
+
+Evidence: isolated frontend/backend candidate builds PASSED; scoped ESLint/format/diff PASSED; 43 unit and47 emulator tests PASSED; 30 component checks plus16 actual /fees fixture checks PASSED; mobile320/390, keyboard/native dialog focus, source decimals, reduced motion,200% zoom and screenshot evidence. Provider describe404 and v2list empty for satsunicgo/asia-southeast1. No actual provider delivery or production data changes.
+
+Review history: planning cycles1/2 BLOCKED for missing render/backend evidence. Implementation cycle3 found/fixed mutable-UID issue, decimal gram noise, accessible kg/stable live feedback, absent-rule suppression; appropriate checks rerun. Fresh cycle4 confirms current scoped hashes/evidence and remains BLOCKED solely by missing cloud deployment outside approved scope. CONTENT_REVIEW now PASSED locally. Production readiness NOT_READY.
+
+Candidate: /tmp/shipping030-candidate = baseline1d9c5824e5d0647948a1986dabc7480c4b7b8cb2 plus only component/CSS/unit-test files. Isolated repository scripts generate artifacts; no shared WIP copied. No deploy, commit, push, PR, DB migration, IAM, App Check weakening or publication. Shared full-build check exit2 because unrelated campaign-banners-service076 test errors; preserve them. Failed command stopped before generator; shared manifest byte-identical to pre-build snapshot. Shared checkout is not certified as a release artifact.
+
+Remaining: approve RELEASE_PLAN for cloud/Hosting release; verify prerequisite current identities, provider deployment/rollback and real authenticated support flow. Actual tariff freshness and manual physical-device/screen-reader speech remain unverified. Live provider missing-callable gate blocks successful overall handoff.
+
+Token usage Unavailable; actual billed cost/API-equivalent estimate Unavailable. Memory candidates: None. Runtime receipts/report recorded separately, with fail-closed readiness. Scope source hash manifest attached; whole-worktree review may become stale as other chats continue modifying unrelated files.

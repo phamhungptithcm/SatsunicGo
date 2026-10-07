@@ -1,0 +1,9 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "files": {
+    "packages/domain/changes.ts": "1f21ced188f3122d5b965b728c17a43713fce73f905a217cf3c3cf32a7459760",
+    "tests/unit/changes.test.ts": "b9e23108a50332c879aed81edc94f4b1e4c87f5eed85f81c156737faf2bafc5d",
+    "tests/unit/shipping.test.ts": "c7a770ca58b7c69b7963a822ba5751b9cd7b812a874545d79bdd096d57159a3c",
+    "tests/rules/server.test.ts": "f4f9235ce5b86817503b7925bbd5c7c611596168c2e7eb0a73a846865b30c985"
+  }
+}

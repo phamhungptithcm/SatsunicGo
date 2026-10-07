@@ -1,0 +1,20 @@
+{
+  "scope": "Database026 read-only source snapshot; owners may subsequently change candidate",
+  "files": {
+    "src/shared/public-content.ts": "debb17ac8a4cefc7bd4f6c723caf8c39ce5d8aeac6026ffd825f3daf71095e0b",
+    "src/shared/live-cache.ts": "2eae81105ee8d060535e7fa84638f5ee107e08cdff0dd4d0572b8d34b9c0192f",
+    "src/app/App.tsx": "15ddd225dfb4a21f90be04e0f227cd00976e4225dafc5e4d2b825326f5b0d7ab",
+    "src/features/ask/InlineSupport.tsx": "bbe9133e31132f7a3ec38e335faa5049d9efb032097bc75c3acb411ab1ef1e44",
+    "src/features/ask/Commerce.tsx": "820a9a904c602ab4828d0d5116a0728577e6d1e50db8086bb727d1572ba37499",
+    "src/features/ask/CatalogPurchase.tsx": "c98881273666ec6faac657c0712bc9724bf09800e4552d59768eaee7aaf4e5b1",
+    "functions/src/ai/ask.ts": "8493e17611db89d1752287492cc93788d94b554d88267c33c7afc7bb92956343",
+    "functions/src/ai/knowledge-retrieval.ts": "ccfef1439ba6d756b0c3c7204bba23b10f139f639559b4c8350f14fd12c2c18b",
+    "functions/src/crm.ts": "4f840d779241ec2b1c9b5c45d21c2c317be914794b3efb07c9e5be156c6002d7",
+    "functions/src/workspace.ts": "e05921aacd6c3902261b70e9c938f5f3c53013b12dadcbdf9ea4f2c4446d3d27",
+    "functions/src/order-conversation.ts": "89ab576d9b88b21a0492ec95711a76cf55801d976afcf2b4442ba7c0d81c664c",
+    "functions/src/public.ts": "d37b7d9b2b97f9b90c5ca9bcfc4310dceca357d655475f72a6fa6edb39daf754",
+    "firestore.rules": "fd67b3edbd95eaf4fe11e645806f312a0eec2f08a4f0dce5d6b5d19142b2159a",
+    "storage.rules": "4a043206e7ecbd14ffb97ce055cd22fe2a1f1300fb4f61d1a984f5b27b6889cf",
+    "firestore.indexes.json": "ca0c50f8b62f4b4e5a2acbe88bfe146858dba706c872f581f7d0971f729c18b8"
+  }
+}

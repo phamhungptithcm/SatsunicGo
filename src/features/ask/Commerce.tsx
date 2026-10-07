@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { CatalogPurchase } from "./CatalogPurchase";
 import { InlineSupport } from "./InlineSupport";
 import { CustomerChanges } from "../orders/Changes";
@@ -1364,7 +1365,9 @@ function CommercePanelContext({
           </button>
         )}
       {(c.busy || paymentBusy) && (
-        <p role="status">{t("Đang xử lý…", "Processing…")}</p>
+        <LoadingState overlay={false}>
+          {t("Đang xử lý…", "Processing…")}
+        </LoadingState>
       )}
       {c.error && (
         <p role="alert">

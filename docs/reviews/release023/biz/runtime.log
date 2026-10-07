@@ -1,0 +1,172 @@
+criterion record --id SATSUNICGO-HARDENING023-BIZ --criterion 1 --status verified --source test://64-domain-units
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "criterion": 1,
+  "criterion_hash": "98366758babd8b212ce2694d080276ae1a3f8b30cb86203cb3de6fd6a0de012e",
+  "status": "VERIFIED",
+  "weight": 1,
+  "evidence_source_hash": "550f49d2f9983a873b23a3042a71b3498e68378c9b2daa7c1efb6404df12df6f",
+  "summary": null,
+  "recorded_at": "2026-10-05T15:39:31.160Z",
+  "record_id": "6d2ac5df3b4dfb7cb8c305135113b8f09b5c11cb9109c048787cdf4df135c956"
+}
+
+criterion record --id SATSUNICGO-HARDENING023-BIZ --criterion 2 --status pending --summary Root serialized server integration pending
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "criterion": 2,
+  "criterion_hash": "83a0fa911799794dea2b9bd5da76e8213deb361afe1df7b2d06c8597515078fc",
+  "status": "PENDING",
+  "weight": 1,
+  "evidence_source_hash": null,
+  "summary": "Root serialized server integration pending",
+  "recorded_at": "2026-10-05T15:39:31.247Z",
+  "record_id": "1830d422785050c79617395c49f799419855f3ef508c242d98ee485a3b9ef6db"
+}
+
+check record --id SATSUNICGO-HARDENING023-BIZ --gate tests --status passed --source command://biz-unit --exit-code 0 --summary 64 focused unit tests passed
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "gate": "tests",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "abe46de557d9c9d0d24d305a3786ef2b8c39d275c3a9fcd106fef8248581a17b",
+  "summary": "64 focused unit tests passed",
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:39:31.339Z",
+  "record_id": "4c4ecf6dae03bea0fb8f86b1d60446100a6f2fe34cca0f5df4221de362842e04"
+}
+
+check record --id SATSUNICGO-HARDENING023-BIZ --gate static-analysis --status passed --source command://biz-eslint --exit-code 0
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "gate": "static-analysis",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "530f354f4d634b5b75ab222153b3570de2388e6d579f500e2e406fd8a8c1c1ff",
+  "summary": null,
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:39:31.421Z",
+  "record_id": "c6c90d6c3a62cc0a17d09a1091cbe595e5fe72d04a944b4cf8407460a1dc0f7f"
+}
+
+check record --id SATSUNICGO-HARDENING023-BIZ --gate compilation --status not_run --summary Root compile window pending
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "gate": "compilation",
+  "status": "NOT_RUN",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": null,
+  "summary": "Root compile window pending",
+  "exit_code": null,
+  "recorded_at": "2026-10-05T15:39:31.502Z",
+  "record_id": "f85dc93df5ed839e5b91eb6bba080f40ec5e736c56449d82d96d39ad50ebdc96"
+}
+
+check record --id SATSUNICGO-HARDENING023-BIZ --gate integration --status not_run --summary Root server no-write regression pending
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "gate": "integration",
+  "status": "NOT_RUN",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": null,
+  "summary": "Root server no-write regression pending",
+  "exit_code": null,
+  "recorded_at": "2026-10-05T15:39:31.585Z",
+  "record_id": "70929123cadf178a46a5bc17f70895b47d2b075d9210db2edc278ab3028b4a1d"
+}
+
+review record --id SATSUNICGO-HARDENING023-BIZ --file docs/reviews/release023/biz/FINAL_REVIEW.json
+findings[0].severity must be non-empty and at most 16 characters
+
+task report --id SATSUNICGO-HARDENING023-BIZ --format text
+AI Agent Kit — Final Task Report
+Task: SATSUNICGO-HARDENING023-BIZ
+State: DISCOVER
+Commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+Generated: 2026-10-05T15:39:31.800Z
+
+Progress: 50% — 1/2 applicable criteria verified
+
+Usage & Cost
+  Tokens used: Unavailable — no_usage_evidence
+  Estimated cost: Unavailable
+
+Completed
+  - [VERIFIED] 1. Domain guard regressions pass
+
+Remaining
+  - [PENDING] 2. Server rejection leaves no writes
+
+Quality
+  - build: NOT_RUN — No current evidence recorded.
+  - compilation: NOT_RUN — Root compile window pending
+  - final-implementation-review: NOT_RUN — Final implementation review is NOT_RUN.
+  - integration: NOT_RUN — Root server no-write regression pending
+  - lint: NOT_RUN — No current evidence recorded.
+  - security: NOT_RUN — No current evidence recorded.
+  - static-analysis: PASSED
+  - tests: PASSED — 64 focused unit tests passed
+  - typecheck: NOT_RUN — No current evidence recorded.
+
+Final Implementation Review
+Decision: NOT_RUN
+Review cycles: 0
+Reviewed:
+  - No review dimensions recorded.
+Findings and fixes:
+  - No findings recorded.
+Residual risks:
+  - None recorded.
+Limitations:
+  - None recorded.
+
+Engineering Team
+  Type: PRODUCT_WORKCELL
+  Execution: UNSELECTED
+  Status: NOT_READY
+  Review independence: VERIFIED
+  Shared context: READY
+  Handoffs: 0
+  Open conflicts: 0
+
+Architecture Pulse
+  Evidence: NOT_RUN
+  Outcome: Unavailable
+  Artifact: Unavailable
+  Coverage: Unavailable
+  Confidence: Unavailable
+
+Code Status
+  Git worktree: DIRTY — 0 staged, 68 modified, 1014 untracked, 0 conflicts
+  No known issues were found within the executed checks.
+
+Production Readiness: NOT_READY
+  Production readiness is fail-closed until every blocker has current evidence.
+
+Blockers
+  - Task state is DISCOVER; REVIEW_READY or RELEASED is required.
+  - Acceptance criteria are not 100% verified.
+  - Git worktree is DIRTY.
+  - Final implementation review is NOT_RUN.
+  - Final review requires authenticated independence and resolved execution evidence for production readiness.
+  - Skill routing is ABSTAIN (NO_MATCH).
+  - Agent workcell is NOT_READY; the latest independent review must complete cleanly.
+  - Required quality gate build is NOT_RUN.
+  - Required quality gate compilation is NOT_RUN.
+  - Required quality gate final-implementation-review is NOT_RUN.
+  - Required quality gate integration is NOT_RUN.
+  - Required quality gate lint is NOT_RUN.
+  - Required quality gate security is NOT_RUN.
+  - Required quality gate typecheck is NOT_RUN.
+

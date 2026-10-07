@@ -1,0 +1,23 @@
+{
+  "scope": "CRM024 backend only",
+  "freeze": true,
+  "files": [
+    {
+      "path": "functions/src/crm.ts",
+      "sha256": "633113c4970746b3c759d81d121e501848ace77bef328206119c6ed8aacfcf49"
+    },
+    {
+      "path": "tests/rules/crm-hardening.test.ts",
+      "sha256": "cb1527dd443c998e9d115e6c861be327ef49d69fe141298cf0df96fbf8e75a6f"
+    }
+  ],
+  "evidence": [
+    "output/playwright/release024/crm-before.json",
+    "output/playwright/release024/crm-after.json",
+    "output/playwright/release024/crm-expiry-before.json",
+    "output/playwright/release024/crm-expiry-after.json",
+    "output/playwright/release024/integration-results.json",
+    "output/playwright/release024/unit-results.json",
+    "output/playwright/release024/crm-browser-round3.json"
+  ]
+}

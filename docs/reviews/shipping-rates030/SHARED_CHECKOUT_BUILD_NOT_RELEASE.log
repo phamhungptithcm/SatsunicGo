@@ -1,0 +1,7 @@
+
+> satsunicgo@0.1.0 build
+> tsc --noEmit && vite build && node scripts/public-assets.mjs
+
+tests/unit/campaign-banners-service076.test.ts(96,9): error TS7022: 'ref' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/unit/campaign-banners-service076.test.ts(178,5): error TS2345: Argument of type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>' is not assignable to parameter of type 'Request'.
+  Property 'rawBody' is missing in type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>' but required in type 'Request'.

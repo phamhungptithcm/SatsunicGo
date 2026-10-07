@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-KNOWLEDGE-022",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped source review and focused checks; see task report for evidence and limits.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-SOURCE_MANIFEST.json",
+        "ASK-KNOWLEDGE-022-task.diff",
+        "ASK-KNOWLEDGE-022-TASK_REPORT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No provider, cloud activation or deployment acceptance evidence.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-CONTENT_REVIEW.md"
+      ]
+    },
+    "product_content": {
+      "status": "NOT_RUN",
+      "summary": "Instructions reviewed but generated displayed meaning lacks provider-backed in-context evidence.",
+      "evidence_refs": [
+        "ASK-KNOWLEDGE-022-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "severity": "Medium",
+      "location": "functions/src/ai/ask.ts model instruction and retrieval context",
+      "evidence": "No provider-backed current-candidate rendered response run",
+      "production_impact": "Cannot certify uncertainty disclosure, citation fidelity or multilingual answer quality",
+      "correction": "Run approved provider acceptance against real published fixtures before enabling/deploying.",
+      "status": "BLOCKED"
+    }
+  ],
+  "residual_risks": [
+    "Lexical retrieval is bounded to 100 published posts and 20000 body characters; no complete-corpus guarantee.",
+    "More Firestore reads than prior implementation; live latency/cost unknown."
+  ],
+  "limitations": [
+    "Provider-backed answer and rendered product-language verification NOT_RUN.",
+    "Emulator integration NOT_RUN; no owned environment established.",
+    "Final intelligence gate DEGRADED after refresh failed on CocoIndex daemon.log permissions."
+  ]
+}

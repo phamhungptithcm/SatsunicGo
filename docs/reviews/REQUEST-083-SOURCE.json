@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "src/features/requests/RequestForm.tsx",
+      "sha256": "d42b89bcaecc175a7bf6237642d25873094600fc597f2448503f90c14a7597ef"
+    },
+    {
+      "path": "src/features/requests/request-form.css",
+      "sha256": "618713fb530bde77707ded6d7db954bc3866c9fa72c33ec38ca366837c0f0b18"
+    },
+    {
+      "path": "tests/browser/request083.spec.ts",
+      "sha256": "10b5e9554d31b7ded48c04e6005d74a3f4fd2ea51d8430b8ad8d42a7ee738251"
+    },
+    {
+      "path": "tests/browser/fixtures/request083/mock.ts",
+      "sha256": "59cd07f876a244fa80c5160cea6569d0ce1a1d2efe1d1ee31a3b40ed080ce22b"
+    },
+    {
+      "path": "tests/browser/fixtures/request083/main.tsx",
+      "sha256": "dc52aa13684dae9d794eda67d1d68cd8ae78e41830411a32d5062e630ba0273e"
+    },
+    {
+      "path": "tests/browser/fixtures/request083/index.html",
+      "sha256": "90ff540309678e739b02f70b7502882fd0c1b6ef70fce82855c0b95454d3ee0a"
+    },
+    {
+      "path": "tests/browser/fixtures/request083/vite.config.mjs",
+      "sha256": "6bfdfef8745da847fee90cdd054500536a406606a5b26bcefa06682eed42366b"
+    },
+    {
+      "path": "tests/browser/fixtures/request083/playwright.config.mjs",
+      "sha256": "10cecb3bd4aa9269d568c51b84ccff513ad57daf3ddf289698be2e49368bb201"
+    }
+  ]
+}

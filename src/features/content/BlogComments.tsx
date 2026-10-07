@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import {
   useCallback,
   useEffect,
@@ -279,9 +280,9 @@ export function BlogComments({ postId }: { postId: string }) {
         />
       )}
       {!page && !loadError && (
-        <div role="status">
-          <div className="skeleton" />
-          <p className="private-note">Đang tải bình luận…</p>
+        <div>
+          <div className="skeleton" aria-hidden="true" />
+          <LoadingState className="private-note" overlay={false}>Đang tải bình luận…</LoadingState>
         </div>
       )}
       {loadError && (

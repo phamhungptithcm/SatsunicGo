@@ -33,6 +33,12 @@ export type ContentRow = {
   publishAt?: number;
   featured?: boolean;
   featuredOrder?: number;
+  manufacturingOrigin?: string;
+  brand?: string;
+  productSummary?: string;
+  retailer?: string;
+  sourceUrl?: string;
+  usageSteps?: string[];
   origin?: string;
   functions?: string;
   usage?: string;

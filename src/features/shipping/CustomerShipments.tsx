@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -50,7 +51,7 @@ export function CustomerShipments({ uid }: { uid: string }) {
   return (
     <section>
       <h2>Kiện vận chuyển của bạn</h2>
-      {loading && <p role="status">Đang tải kiện hàng…</p>}
+      {loading && <LoadingState>Đang tải kiện hàng…</LoadingState>}
       {!loading && !error && rows.length === 0 && (
         <p>Chưa có kiện được phân bổ.</p>
       )}

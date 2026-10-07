@@ -1,0 +1,89 @@
+{
+  "candidateHash": "d511e4f4409c931c5692b2f742940ad8b78dfcd8a81fc7a20037a3e1e9671d45",
+  "previousReviewedCandidateHash": "b0c0ebcce606d2b5ed7749ff10918aff44d1ed71d97fccbdd335fc94e4ec0156",
+  "all22SharedSourceHashMatch": true,
+  "checkedAt": "2026-10-07T01:07:28.629186+00:00",
+  "onlyPostReviewSourceDelta": "ProductDetail truthful unknown retailer and empty-information region omission; four listener-free actualReact SSR regressions in existing owned unit file",
+  "checks": {
+    "frontend-integrated.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "backend-integrated.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lint-integrated.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "unit-integrated.log": {
+      "exitCode": 0,
+      "sha256": "2c3867bc9187cc23411acd4a9cfe37abc54744723e04e28942f7840a430a185a"
+    },
+    "build-copy-final.log": {
+      "exitCode": 0,
+      "sha256": "d9c78636887d01a38a8a746420cd403d5eb24990d1594d60414ce43fc15d4712"
+    },
+    "backend-build-copy-final.log": {
+      "exitCode": 0,
+      "sha256": "880d1fd8ea5d62229e570adc4b51e27c3ef67c1a713458c028381b3842954005"
+    },
+    "lint-copy-final.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preflight-copy-final.log": {
+      "exitCode": 0,
+      "sha256": "e22410da2adbdbf4fa876dd6cc0a94bda8effd7c54268f33e88298c58e2477f8"
+    },
+    "regression-integrated.log": {
+      "exitCode": 0,
+      "sha256": "7e80222ae75be6d4ea4aa776d6c1edb4b963df6b3c0e96387364f31d6f4b15f7"
+    },
+    "unit-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "889dcdd997a68d3a69cd72305c0b928f585b844ea74113bb16c262f0badd2ee9"
+    },
+    "lint-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typecheck-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "9c0fe8dfc550406d4ca720fad8d0a83c776b268c739482f9d871971278413aa0"
+    },
+    "backend-build-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "880d1fd8ea5d62229e570adc4b51e27c3ef67c1a713458c028381b3842954005"
+    },
+    "preflight-empty-final.log": {
+      "exitCode": 0,
+      "sha256": "62bad7e516b062e238b9da42fcb903416924137545bc8bd23368e28b577c2c4e"
+    }
+  },
+  "unit": 50,
+  "relatedRegression": 52,
+  "canonicalDependencies": {
+    "src/shared/Loading.tsx": "d4ef2864cf18143bab2a508ab8e2c56f47a8166ac9731a12e7c053cab3c2b10a",
+    "src/shared/loading.css": "47e47445f0a936f47dbc7ac679f9b5cce57d9594eb5db401be0feae5a0c18977",
+    "src/shared/feedback.ts": "520c6bce55ee93b3aba39b6c6eede10526c04c4bd8d081360bbe0ac6aa6acf94",
+    "src/shared/Toast.tsx": "0653b2be43905dd77a2dbc03285c80f8efaa9878c6eaecf1ddf1e0ff5e94e56c",
+    "src/features/crm/CrmPresentation.tsx": "9517b6d9552757131599bcd9b6becd3703f593cc59fc5bd8ee86fd19f64a524d"
+  },
+  "buildCoupling": {
+    "functions/generated/public-assets.json": "c66cfe7f1112c58ca4e56c7443b7dfa17762cda6832d412cc609789a005f2d78",
+    "dist/.vite/manifest.json": "4ff7ea7d577c3496c83515b0588cc2518429c54d23a086475c40e957f4242b06",
+    "functions/lib/functions/src/index.js": "38339a62416424a890934e84f3e0645bba4cf0445c62c85f8f63979561b96a32"
+  },
+  "assetCouplingMeaning": "Backendpublic.ts reads functions/generated/public-assets.json at runtime; compiler does not copy JSON to lib. Frontendbuild regenerates source manifest then backendbuild compiled latest source.",
+  "native5207": "Read-only actual catalog\u2192product detail observed current sourcing/manufacturing unknown labels and real publicReviewRead empty state; no restart/newdata/listener",
+  "production": "NOT_DEPLOYED",
+  "nativeZoomIMEAndAT": "NOT_RUN",
+  "emulatorWriteProof": "23 historical isolated synthetic checks, backend/domain unchanged; no new5207 writes",
+  "currentNativeContext": "5207 actual existing empty product: no empty detail heading; existing populated synthetic product: correct heading/body retained; labels unchanged/checkouts and real public review empty-state observed; no runtime restart/datawrite"
+}

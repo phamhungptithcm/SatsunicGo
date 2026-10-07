@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import type { ReactNode } from "react";
 
 export type CrmIconName =
@@ -106,24 +107,21 @@ export function CrmState({
   children?: ReactNode;
   action?: ReactNode;
 }) {
+  if (kind === "loading")
+    return (
+      <LoadingState className="crmState crmState--loading">
+        <strong>{title}</strong>
+        {children}
+        {action}
+      </LoadingState>
+    );
   return (
     <div
       className={`crmState crmState--${kind}`}
-      role={
-        kind === "error" ? "alert" : kind === "loading" ? "status" : undefined
-      }
-      aria-live={kind === "loading" ? "polite" : undefined}
+      role={kind === "error" ? "alert" : undefined}
     >
       <span className="crmStateIcon">
-        <CrmIcon
-          name={
-            kind === "error"
-              ? "warning"
-              : kind === "loading"
-                ? "clock"
-                : "check"
-          }
-        />
+        <CrmIcon name={kind === "error" ? "warning" : "check"} />
       </span>
       <div className="crmStateContent">
         <strong>{title}</strong>

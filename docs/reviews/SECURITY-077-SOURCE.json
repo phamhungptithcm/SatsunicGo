@@ -1,0 +1,17 @@
+{
+  "scope": "SECURITY077 compact QR/manual clipboard delta",
+  "files": [
+    {
+      "path": "src/features/auth/Security.tsx",
+      "sha256": "3bdfc2e393f912d86385f1d0e64bfba5e369b67abffbe3d9f7da987a4fe4d735"
+    },
+    {
+      "path": "src/styles/security.css",
+      "sha256": "cb82f1f1fafe80abed2de8eee63ee0cd198e210cd432b67703384e150574eb75"
+    },
+    {
+      "path": "tests/browser/security-enrollment076.spec.ts",
+      "sha256": "980abc8a793740d3b62687052453f26e2661fc672a311fce3226edf28506b6a7"
+    }
+  ]
+}

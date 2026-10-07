@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-PUBLIC-UX-007",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Owner-curated fields and structured details implemented; final selected-query browser verification incomplete.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Existing role/private media guards preserved, scoped negative saveContent test passed; live production not reviewed.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current typecheck and lint passed after malformed-pending fail-closed guard; focused selection/input tests 5 passed. Build passed before that final guard.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "File paste/picker success observed; refresh and interrupted upload browser coverage incomplete.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Durable operation/order retry and malformed pending fail-closed guard reviewed; rendered fault injection pending.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Local emulator only; index not deployed, commercial records not supplied.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Curated indexed query prioritizes selected items across catalog; unflagged legacy fallback avoids data migration; imagery remains private.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+        "docs/team/session-crm.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UX007-TYPING",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/public.ts",
+      "summary": "Selected projection lacked explicit slug/body static types.",
+      "resolution": "Projected actual slug/body as strings; typecheck passed before final guard.",
+      "evidence_refs": [
+        "functions/src/public.ts"
+      ]
+    },
+    {
+      "id": "UX007-CONTENT",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md",
+      "summary": "Required in-context failure-path and principle coverage remains incomplete.",
+      "evidence_refs": [
+        "docs/reviews/PUBLIC-UX-007-CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pre-submit image bytes are memory-only; refresh loses attachments and requires truthful recovery verification.",
+    "Real drag/drop and interrupted image upload not yet browser-tested."
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED: stale indexes; bounded source/tests used.",
+    "Shared worktree has other approved changes; no cloud deployment.",
+    "Tokens and billed cost Unavailable; memory candidates None."
+  ]
+}

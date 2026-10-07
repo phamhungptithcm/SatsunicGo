@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Local named happy/bad scenarios verified, but requested comprehensive production/provider/full product-state acceptance incomplete.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "security": {
+      "status": "FAILED",
+      "summary": "Executed current ownership/lock/revocation/transaction/media/email security regressions pass. Prior unchanged dependency audit retains13moderates; live Google/MFA/AppCheck and deployed controls unverified.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped source freeze, Node22 frontend/Functions compile, lint/build and178unit71integration38browser evidence. Candidate includes unrelated dirty WIP.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Executed named malformed input, identity switch, stale completions, uncertain delivery, concurrent retry, purchased substitution, ownership and revocation regressions pass.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Canonical document validation prevents queue starvation; unknown SMTP flags reconciliation; mutation sequences preserve current controls and committed writes; role union keeps existing denials.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Real money/provider/identity/AppCheck/MFA/restore/rollback/deployment acceptance NOT_RUN; exact production release remains NOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "No new commercial rule or extra financial authority. Shipping hypothesis rejected without changing source. Demo runtime recovery preserved Firestore; screenshot capture limitation disclosed, not misclassified as app defect.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Obsolete reply completion reset or changed current ticket; lifecycle guard and immediate duplicate-submit lock",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "UI023-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/orders/OrderImages.tsx",
+      "summary": "Obsolete upload/read/list completion published private data or retained busy state; independent lifecycle sequences",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "UI023-3",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Support toolbar controls concatenated; wrapping gap layout",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "UI023-4",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/operations/Workbench.tsx",
+      "summary": "Order target links concatenated; wrapping gap layout",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "BE023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/email.ts",
+      "summary": "Malformed invoice document ID could starve queue; block before claiming",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "BE023-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/email.ts",
+      "summary": "Uncertain SMTP exception omitted reconciliation marker; explicit marker without blind retry",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "DB023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/order-media.ts",
+      "summary": "Mixed roles incorrectly subtracted existing permissions; shared role-kind union preserving authorization",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "BIZ023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "packages/domain/changes.ts",
+      "summary": "Purchased variant-only substitution bypass; guard both replacement fields",
+      "resolution": "Approved bounded change with current scoped regression evidence.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    {
+      "id": "023-acceptance",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "production_readiness",
+      "location": "docs/reviews/release023/READINESS.md",
+      "summary": "Production/provider and full content/actual AT/performance acceptance incomplete",
+      "resolution": "Requires controlled provider/production acceptance and actual assistive-technology/performance evidence; local green suites do not substitute.",
+      "evidence_refs": [
+        "docs/reviews/release023/READINESS.md",
+        "docs/reviews/release023/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/CONTENT_REVIEW.md",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/browser-results.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Prior13moderate dependency entries remain OPEN; no fresh audit claimed",
+    "Pending media reservations require existing retry/operator review",
+    "Internal statements are not tax invoices",
+    "Shared dirty WIP not certified by HEAD"
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED; bounded source/compiler/test evidence",
+    "Root aggregate self-review; specialist scoped reviews not independent authenticated production approval",
+    "Image native200 screenshot capture misaligned; live AX/keyboard/geometry proxy only",
+    "Native complete multi-line proposal apply journey NOT_RUN",
+    "Actual AT/providers/production restore/load and frame profiling NOT_RUN",
+    "Token usage and actual/API-equivalent cost Unavailable; memory candidates None"
+  ]
+}

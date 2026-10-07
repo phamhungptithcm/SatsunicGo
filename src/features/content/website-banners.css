@@ -1,0 +1,169 @@
+.websiteBanners {
+  border-top: 1px solid #e4e8f2;
+  margin-top: 40px;
+  padding-top: 32px;
+  min-width: 0;
+}
+.websiteBanners > p {
+  color: #586987;
+  max-width: 68ch;
+}
+.websiteBanners h2 {
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+.websiteBanners ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+.websiteBanners li {
+  padding: 20px;
+  border: 1px solid #e4e8f2;
+  border-radius: 16px;
+  background: #fff;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.websiteBanners li p {
+  font-size: 13px;
+  color: #586987;
+}
+.websiteBanners button {
+  min-height: 44px;
+  margin: 4px;
+  max-width: 100%;
+  white-space: normal;
+}
+.websiteBanners fieldset {
+  border: 1px solid #e4e8f2;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 0;
+  min-width: 0;
+}
+.websiteBanners label {
+  display: block;
+  margin: 12px 0;
+}
+.websiteBanners input:not([type="checkbox"]),
+.websiteBanners textarea,
+.websiteBanners select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.websiteBanners legend {
+  padding: 0 8px;
+  font-weight: 600;
+}
+.websiteBanners form > fieldset {
+  background: #f9faff;
+}
+.websiteBanners h3 {
+  margin: 24px 0 8px;
+  font-size: 16px;
+}
+.sgBannerPreview {
+  max-width: 100%;
+  margin-top: 20px;
+}
+.sgBannerPreview--mobile {
+  max-width: 390px;
+}
+.sgBannerPreview--mobile .sgBannerPanel {
+  grid-template-columns: minmax(0, 1fr);
+}
+.sgBannerPreview--mobile .sgBannerImage {
+  grid-row: 1;
+}
+.sgBannerPreview--mobile .sgBannerImage img {
+  height: 180px;
+}
+.sgBannerPreview--mobile .sgBannerCopy {
+  padding: 24px;
+}
+.sgBannerPreview--mobile .sgBannerCopy h2 {
+  font-size: 24px;
+}
+@media (max-width: 400px) {
+  .websiteBanners fieldset,
+  .websiteBanners li {
+    padding: 14px;
+  }
+  .websiteBanners button {
+    margin: 4px 0;
+  }
+}
+.websiteBanners button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid #dce2ed;
+  border-radius: 10px;
+  background: #fff;
+  color: #111c35;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.websiteBanners button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.websiteBanners button:focus-visible,
+.websiteBanners input:focus-visible,
+.websiteBanners select:focus-visible,
+.websiteBanners textarea:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 2px;
+}
+.websiteBanners input:not([type="checkbox"]),
+.websiteBanners select,
+.websiteBanners textarea {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #dce2ed;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #111c35;
+}
+.websiteBanners textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.websiteBanners label {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+.websiteBanners input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+  accent-color: #163cff;
+}
+.websiteBanners button.websiteBannerPrimary {
+  background: #163cff;
+  color: #fff;
+  border-color: #163cff;
+}
+.websiteBanners li strong {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.websiteBanners form p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #586987;
+}

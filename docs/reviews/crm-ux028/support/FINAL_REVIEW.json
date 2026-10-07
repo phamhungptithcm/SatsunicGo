@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SUPPORT-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Accepted staff lazy mount and shared Thread recovery correction implemented.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing authorization/verified Google/server replay/status contract unchanged; failed reads clear private messages.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Frontend tsc --noEmit,19focused tests and scoped lint pass after exact refresh argument correction; root fullbuild/functions/native current acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Native unknown result, stale version, denied access and route boundary checks pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Immutable issued reply and separate acknowledged/read-error states source reviewed; actual transport replay pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No provider or production acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Staff lazy first mount retains visited drafts; public mounting retained. Pending identity memory-only across route unmount/reload.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "SUP028-EAGER",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "performance",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Collapsed staff tickets eagerly mounted private conversation fetch/editor.",
+      "resolution": "Staff-only first-open mount with visited draft retention; native request counts pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUP028-REPLAY",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Unknown replies could change replay identity, fields and expected version.",
+      "resolution": "Immutable issued command, field/list locks and explicit exact retry; focused rejection tests pass, native acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUP028-READ-GUIDANCE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Conversation read could erase unresolved reply feedback.",
+      "resolution": "Separate read and command errors; 3 tests and lint rerun pass.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUP028-NATIVE",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/support",
+      "summary": "Native staff/public, widths, lazy request count, exact replay, keyboard/AT and compiler evidence pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUP028-STALE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Explicit stale-version aborted rejection was conservatively retained as unknown.",
+      "resolution": "Source-verified precommit aborted classified definite; assertion and scoped checks pass. Native stale recovery pending.",
+      "evidence_refs": [
+        "tests/unit/support-contextual.test.ts",
+        "functions/src/workspace.ts"
+      ]
+    },
+    {
+      "id": "SUPPORT-CAS-BADGE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "StaffTicket now displays Ph\u1ea3n h\u1ed3i ch\u1edd x\u00e1c nh\u1eadn while existing onBusyChange is true, covering issued busy/unknown result even when details closes; public Support has no badge change. Prior5native passes predate this visual delta.",
+      "resolution": "Approved source correction verified;13existing regression checks and scoped lint pass. Actual native affected-state acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CAS_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUPPORT-INDEPENDENT-P2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/support/Thread.tsx",
+      "summary": "Independent-review cycle: definite rejection blocks new reply until explicit T\u1ea3i l\u1ea1i ph\u1ea3n h\u1ed3i reads actual positive integer version through existing staff listWork exact-ID or owner getDocFromServer with current Firestore owner-only rules. Typed body/resolve selection preserved. Unknown pending replay remains exact original operation/version/body, independent of refreshed props. No backend/API/permission changes or public callsite edit; staff inner wrapper passes context only to select existing enforced read. Missing/invalid version never defaults to invented value. Existing read/rejection strings apply; no additional visible labels. ",
+      "resolution": "Approved bounded source correction,19focused domain/version-boundary regressions and scoped lint pass. Actual rendered behavior and independent fresh review remain pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/REVIEW_RECOVERY_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SUP028-COMPILER-REFRESH",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/support/Thread.tsx:376",
+      "summary": "Staff list cursor loader accidentally received a boolean intended for child version loader.",
+      "resolution": "Exact caller changed to load(); child load(true) remains authorized-version reload. Frontend TypeScript and19focused tests/lint pass.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/REVIEW_RECOVERY_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/support/SOURCE_MANIFEST.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending metadata lost on route unmount/full reload.",
+    "Whole CRM acceptance incomplete."
+  ],
+  "limitations": [
+    "Root owns compiler/native runners.",
+    "Tokens/cost unavailable. Memory candidates None.",
+    "Current CAS/badge native and compiler acceptance pending; no runtime writes under source-only window."
+  ]
+}

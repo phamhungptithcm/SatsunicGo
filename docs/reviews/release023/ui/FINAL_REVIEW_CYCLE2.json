@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-UI",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Three actual browser deferred-completion/navigation cases pass; unit deferred failure/invalidation contract passes. Broader timeout/actualAT/performance not certified.",
+      "evidence_refs": [
+        "output/playwright/release023/browser-focused-results.json",
+        "tests/browser/release-hardening.spec.ts",
+        "docs/reviews/release023/ui/REPORT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Current rendered lifecycle/browser/provider acceptance pending root coordination.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI-023-1",
+      "status": "FIXED_VERIFIED",
+      "summary": "Obsolete reply completion can reload an old ticket."
+    },
+    {
+      "id": "UI-023-2",
+      "status": "FIXED_VERIFIED",
+      "summary": "Old order image completion can stick busy/publish obsolete state."
+    }
+  ],
+  "residual_risks": [
+    "Already submitted server mutation is not cancelled by leaving screen."
+  ],
+  "limitations": [
+    "Product Language Gate BLOCKED: Flexibility current keyboard/layout/text-scaling proof missing",
+    "Actual AT NOT_TESTED; full product performance NOT_RUN",
+    "ai-agent-kit CLI unavailable on PATH; no review receipt",
+    "Full38 browser result pending"
+  ]
+}

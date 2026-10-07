@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState } from "react";
 import {
   collection,
@@ -327,7 +328,7 @@ export function InlineSupport({
                   : "Send a private question to staff. This does not create a buying order."}
           </p>
           {!ready && !error && (
-            <p role="status">{vi ? "Đang tải hỗ trợ…" : "Loading support…"}</p>
+            <LoadingState overlay={false}>{vi ? "Đang tải hỗ trợ…" : "Loading support…"}</LoadingState>
           )}
           {!ready && error && (
             <button type="button" onClick={() => setReadAttempt((n) => n + 1)}>

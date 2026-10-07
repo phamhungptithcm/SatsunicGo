@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-STUDIO-027-BIZ",
+  "status": "BLOCKED",
+  "cycle": 9,
+  "dimensions": {
+    "requirement_match": {
+      "status": "PARTIAL",
+      "summary": "Original source port and both delta2 adapters implemented; full current native parity NOT_RUN",
+      "evidence_refs": [
+        "STUDIO_EXACT_PARITY_DELTA.md"
+      ]
+    },
+    "security": {
+      "status": "PARTIAL",
+      "summary": "UID response fencing, viewed CAS, verified backend capabilities, canonical blob media and SVG isolation; native negatives pending",
+      "evidence_refs": [
+        "tests/unit/studio-source-services027.test.ts",
+        "STUDIO_CANDIDATE_HASHES.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Affected ESLintexit0, scoped TypeScriptdiagnostics0,31focusedtestsPASS",
+      "evidence_refs": [
+        "STUDIO_PARITY_AND_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PARTIAL",
+      "summary": "Retry/account/CAS/preview rejection unit verified; native dialog/media/recovery paths not run",
+      "evidence_refs": [
+        "STUDIO_PARITY_AND_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PARTIAL",
+      "summary": "Missing contracts fail closed; lifecycle focus/timeouts require native proof",
+      "evidence_refs": [
+        "STUDIO_EXACT_PARITY_DELTA.md"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "699string candidates; all eight principles require current in-context native evidence",
+      "evidence_refs": [
+        "STUDIO_STRING_INVENTORY.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "No current native/provider/production evidence; full parity incomplete",
+      "evidence_refs": [
+        "STUDIO_PARITY_AND_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Explicit Go identity/callable/CAS/media/privacy adapters and main-landmark changes; direct source layout retained",
+      "evidence_refs": [
+        "STUDIO_EXACT_PARITY_DELTA.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "status": "FIXED",
+      "summary": "Dirty source-link handler preserved"
+    },
+    {
+      "status": "FIXED",
+      "summary": "New author uses server ID; existing catalog uses CAS"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Member self guard uses UID; reader maps revoke without CRM grants"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Schedule cancel uses viewed revision instead of adopting latest"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Reports queue/resolve and exclusive Google-email pending member adapters implemented; native acceptance pending"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Report query matches inspected strict reportState schema; report revision independent from comment revision"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Bound member email uses invite revision; UID-only uses uidRevision; new invite CAS1; reports schema compatibility verified"
+    },
+    {
+      "status": "FIXED",
+      "summary": "Members/assignable now complete raw staff and invite cursor paging with bounds, current UID/epoch and no partial return"
+    }
+  ],
+  "residual_risks": [
+    "Native exact-port workflow not run",
+    "390 prior disappearance cause unproven",
+    "Current source index refresh pending coordinator"
+  ],
+  "limitations": [
+    "Whole typecheck outside-owned advanced rules test306 failed at last invocation",
+    "Runtime CLI unavailable on PATH; private review does not claim runtime ledger record",
+    "Tokens and cost unavailable",
+    "Memory candidates None",
+    "Changed pagination candidate native not run by specialist; root serialized verification required"
+  ]
+}

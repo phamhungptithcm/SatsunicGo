@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { OrderImages } from "./OrderImages";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -138,7 +139,7 @@ export function OrderTools({
             Bảng đối chiếu nội bộ, không phải hóa đơn thuế. Chỉ các khoản đã xác
             nhận mới xuất hiện ở đây.
           </p>
-          {historyLoading && <p role="status">Đang tải lịch sử…</p>}
+          {historyLoading && <LoadingState overlay={false}>Đang tải lịch sử…</LoadingState>}
           {history?.entries.map((e) => (
             <p key={e.id}>
               {e.kind === "refund"

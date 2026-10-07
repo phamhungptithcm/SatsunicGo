@@ -1,0 +1,214 @@
+[
+  {
+    "location": "src/features/support/OrderConversation.tsx:74",
+    "content": "Chưa tải được cuộc trao đổi. Kiểm tra kết nối và quyền truy cập, rồi tải lại."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:135",
+    "content": "Đã lưu tin nhắn trong cuộc trao đổi trên SatsunicGo."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:137",
+    "content": "Đã lưu ghi chú nội bộ."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:138",
+    "content": "Đã cập nhật người phụ trách."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:155",
+    "content": "Chưa rõ kết quả. Thử lại đúng thao tác này để tránh gửi trùng."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:156",
+    "content": "Chưa hoàn tất thao tác. Nội dung vẫn được giữ; tải lại cuộc trao đổi và kiểm tra người phụ trách trước khi thử lại."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:172",
+    "content": "Thao tác đã phản hồi nhưng chưa tải được cuộc trao đổi. Tải lại để kiểm tra."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:193",
+    "content": "Trao đổi với khách"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:193",
+    "content": "Trao đổi về đơn này"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:197",
+    "content": "SatsunicGo"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:213",
+    "content": "Đang tải cuộc trao đổi…"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:233",
+    "content": "Chưa có người nhận"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:243",
+    "content": "Chọn nhân viên"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:256",
+    "content": "Danh sách nhân viên đang hiển thị một phần."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:261",
+    "content": "Đang hiển thị 50 tin nhắn gần nhất."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:267",
+    "content": "Tin nhắn về đơn hàng"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:270",
+    "content": "Chưa có tin nhắn. Bạn có thể bắt đầu trao đổi tại đây."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:278",
+    "content": "Khách hàng"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:278",
+    "content": "Nhân viên SatsunicGo"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:291",
+    "content": "Gợi ý soạn tin"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:305",
+    "content": "Tin nhắn cho khách"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:305",
+    "content": "Tin nhắn cho SatsunicGo"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:320",
+    "content": "Đang lưu…"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:320",
+    "content": "Gửi trên SatsunicGo"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:325",
+    "content": "Ghi chú nội bộ · khách không thấy"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:327",
+    "content": "Đang hiển thị 50 ghi chú gần nhất."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:329",
+    "content": "Chưa có ghi chú nội bộ."
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:76",
+    "content": "Xác nhận yêu cầu"
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:77",
+    "content": "Mình đã nhận yêu cầu mua hộ của bạn. Mình sẽ kiểm tra thông tin sản phẩm và phản hồi trong cuộc trao đổi này."
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:80",
+    "content": "Hỏi thêm sản phẩm"
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:81",
+    "content": "Bạn gửi thêm giúp mình link sản phẩm, màu hoặc kích cỡ mong muốn để mình kiểm tra đúng món nhé."
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:84",
+    "content": "Mời xem báo giá"
+  },
+  {
+    "location": "packages/domain/order-conversation.ts:85",
+    "content": "Bạn mở phần báo giá của đơn để xem chi phí và điều kiện mua hộ. Nếu cần làm rõ thông tin, bạn trả lời ngay tại đây nhé."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:40",
+    "content": "Không thể truy cập cuộc trao đổi này."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:56",
+    "content": "Thông tin đơn không hợp lệ."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:100",
+    "content": "Nhân viên"
+  },
+  {
+    "location": "functions/src/order-conversation.ts:153",
+    "content": "Kiểm tra nội dung và thử lại."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:165",
+    "content": "Thao tác này dành cho nhân viên phụ trách."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:180",
+    "content": "Nhân viên này hiện không thể nhận cuộc trao đổi."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:189",
+    "content": "Mã thao tác đã được dùng cho nội dung khác."
+  },
+  {
+    "location": "functions/src/order-conversation.ts:196",
+    "content": "Có cập nhật mới. Tải lại cuộc trao đổi trước khi gửi."
+  },
+  {
+    "location": "packages/domain/notification-content.ts",
+    "content": "orderConversationReply: \"Nhân viên có tin nhắn mới về đơn của bạn\","
+  },
+  {
+    "location": "packages/domain/notification-content.ts",
+    "content": "staffConversationUpdate: \"Cuộc trao đổi được phân công có cập nhật mới\","
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:202",
+    "content": "Tải lại trao đổi"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:206",
+    "content": "Tin nhắn được lưu tại đây. Cuộc trao đổi tự cập nhật mỗi 15 giây khi đang mở."
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:210",
+    "content": "Zalo · Chưa kết nối &nbsp; Messenger · Chưa kết nối"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:226",
+    "content": "Nhận phụ trách"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:237",
+    "content": "Nhận hoặc chuyển người phụ trách"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:254",
+    "content": "Lưu người phụ trách"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:340",
+    "content": "Ghi chú bàn giao"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:350",
+    "content": "Lưu ghi chú nội bộ"
+  },
+  {
+    "location": "src/features/support/OrderConversation.tsx:372",
+    "content": "Thử lại thao tác chưa rõ kết quả"
+  },
+  {
+    "location": "src/features/content/notification-target.ts",
+    "content": "Mở cuộc trao đổi của đơn"
+  }
+]

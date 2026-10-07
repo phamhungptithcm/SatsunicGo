@@ -1,0 +1,91 @@
+AI Agent Kit — Final Task Report
+Task: SATSUNICGO-SUPPORT-028
+State: DISCOVER
+Commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+Generated: 2026-10-06T05:31:09.412Z
+
+Progress: 50% — 1/2 applicable criteria verified
+
+Usage & Cost
+  Tokens used: Unavailable — no_usage_evidence
+  Estimated cost: Unavailable
+
+Completed
+  - [VERIFIED] 1. Approved source and focused checks
+
+Remaining
+  - [PENDING] 2. Native public/staff recovery and accessibility acceptance
+
+Quality
+  - build: NOT_RUN — No current evidence recorded.
+  - final-implementation-review: BLOCKED — Final implementation review is BLOCKED.
+  - lint: PASSED — Cycle3 3 focused tests and scoped lint pass
+  - product-content: BLOCKED — Native widths, keyboard, AT and recovery pending
+  - security: NOT_RUN — No current evidence recorded.
+  - tests: PASSED — Cycle3 3 focused tests and scoped lint pass
+  - typecheck: NOT_RUN — No current evidence recorded.
+
+Final Implementation Review
+Decision: BLOCKED
+Review cycles: 2
+Reviewed:
+  - requirement_match: PASSED — Accepted staff lazy mount and shared Thread recovery correction implemented.
+  - security: PASSED — Existing authorization/verified Google/server replay/status contract unchanged; failed reads clear private messages.
+  - code_quality: PASSED — 3 focused tests and scoped lint pass; compiler root-owned pending.
+  - failure_paths: NOT_RUN — Native unknown result, stale version, denied access and route boundary checks pending.
+  - error_handling: NOT_RUN — Immutable issued reply and separate acknowledged/read-error states source reviewed; actual transport replay pending.
+  - production_readiness: NOT_RUN — No provider or production acceptance evidence.
+  - trade_offs: PASSED — Staff lazy first mount retains visited drafts; public mounting retained. Pending identity memory-only across route unmount/reload.
+Findings and fixes:
+  - cycle 1 [MEDIUM/FIXED] SUP028-EAGER at src/features/support/Thread.tsx: Collapsed staff tickets eagerly mounted private conversation fetch/editor. — Staff-only first-open mount with visited draft retention; native request counts pending.
+  - cycle 1 [HIGH/FIXED] SUP028-REPLAY at src/features/support/Thread.tsx: Unknown replies could change replay identity, fields and expected version. — Immutable issued command, field/list locks and explicit exact retry; focused rejection tests pass, native acceptance pending.
+  - cycle 1 [MEDIUM/FIXED] SUP028-READ-GUIDANCE at src/features/support/Thread.tsx: Conversation read could erase unresolved reply feedback. — Separate read and command errors; 3 tests and lint rerun pass.
+  - cycle 1 [HIGH/OPEN] SUP028-NATIVE at docs/reviews/crm-ux028/support: Native staff/public, widths, lazy request count, exact replay, keyboard/AT and compiler evidence pending.
+  - cycle 2 [MEDIUM/FIXED] SUP028-EAGER at src/features/support/Thread.tsx: Collapsed staff tickets eagerly mounted private conversation fetch/editor. — Staff-only first-open mount with visited draft retention; native request counts pending.
+  - cycle 2 [HIGH/FIXED] SUP028-REPLAY at src/features/support/Thread.tsx: Unknown replies could change replay identity, fields and expected version. — Immutable issued command, field/list locks and explicit exact retry; focused rejection tests pass, native acceptance pending.
+  - cycle 2 [MEDIUM/FIXED] SUP028-READ-GUIDANCE at src/features/support/Thread.tsx: Conversation read could erase unresolved reply feedback. — Separate read and command errors; 3 tests and lint rerun pass.
+  - cycle 2 [HIGH/OPEN] SUP028-NATIVE at docs/reviews/crm-ux028/support: Native staff/public, widths, lazy request count, exact replay, keyboard/AT and compiler evidence pending.
+  - cycle 2 [MEDIUM/FIXED] SUP028-STALE at src/features/support/Thread.tsx: Explicit stale-version aborted rejection was conservatively retained as unknown. — Source-verified precommit aborted classified definite; assertion and scoped checks pass. Native stale recovery pending.
+Residual risks:
+  - Pending metadata lost on route unmount/full reload.
+  - Whole CRM acceptance incomplete.
+Limitations:
+  - Root owns compiler/native runners.
+  - Tokens/cost unavailable. Memory candidates None.
+
+Engineering Team
+  Type: SOLO
+  Execution: UNSELECTED
+  Status: NOT_READY
+  Review independence: VERIFIED
+  Shared context: READY
+  Handoffs: 0
+  Open conflicts: 0
+
+Architecture Pulse
+  Evidence: NOT_RUN
+  Outcome: Unavailable
+  Artifact: Unavailable
+  Coverage: Unavailable
+  Confidence: Unavailable
+
+Code Status
+  Git worktree: DIRTY — 0 staged, 74 modified, 3913 untracked, 0 conflicts
+  Code health is not fully verified.
+
+Production Readiness: NOT_READY
+  Production readiness is fail-closed until every blocker has current evidence.
+
+Blockers
+  - Task state is DISCOVER; REVIEW_READY or RELEASED is required.
+  - Acceptance criteria are not 100% verified.
+  - Git worktree is DIRTY.
+  - Final implementation review is BLOCKED.
+  - Final review requires authenticated independence and resolved execution evidence for production readiness.
+  - Skill routing is ABSTAIN (NO_MATCH).
+  - Agent workcell is NOT_READY; the latest independent review must complete cleanly.
+  - Required quality gate build is NOT_RUN.
+  - Required quality gate final-implementation-review is BLOCKED.
+  - Required quality gate product-content is BLOCKED.
+  - Required quality gate security is NOT_RUN.
+  - Required quality gate typecheck is NOT_RUN.

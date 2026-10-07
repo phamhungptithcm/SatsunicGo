@@ -166,3 +166,61 @@ describe("RATES027 official exact source semantics", () => {
     }
   });
 });
+
+// Public read must never revive disabled, malformed or unreachable tariffs.
+describe("RATES030 public snapshot failure boundaries", () => {
+  async function readWith(exists: boolean, value: Record<string, unknown>) {
+    const { readPublicShippingRates } =
+      await import("../../functions/src/shipping-rates");
+    const db = {
+      doc: (path: string) => {
+        expect(path).toBe("shippingRatePublic/current");
+        return { get: async () => ({ exists, data: () => value }) };
+      },
+    };
+    return readPublicShippingRates(
+      db as unknown as Parameters<typeof readPublicShippingRates>[0],
+    );
+  }
+  it("absent snapshot is explicitly reference, never published", async () => {
+    await expect(readWith(false, {})).resolves.toMatchObject({
+      origin: "reference",
+      version: null,
+      config: rates,
+    });
+  });
+  it("disabled snapshot does not fall back to reference", async () => {
+    await expect(
+      readWith(true, { version: 3, disabled: true }),
+    ).resolves.toEqual({ origin: "unavailable", version: 3, config: null });
+  });
+  it("published snapshot retains version and safe configuration", async () => {
+    await expect(
+      readWith(true, { version: 4, config: rates }),
+    ).resolves.toEqual({ origin: "published", version: 4, config: rates });
+  });
+  it("malformed configuration and unsafe version fail closed", async () => {
+    await expect(
+      readWith(true, { version: 4, config: {} }),
+    ).rejects.toMatchObject({ code: "failed-precondition" });
+    await expect(
+      readWith(true, { version: -1, config: rates }),
+    ).rejects.toMatchObject({ code: "failed-precondition" });
+  });
+  it("Firestore read failure is propagated without reference prices", async () => {
+    const { readPublicShippingRates } =
+      await import("../../functions/src/shipping-rates");
+    const db = {
+      doc: () => ({
+        get: async () => {
+          throw Error("Synthetic unavailable read");
+        },
+      }),
+    };
+    await expect(
+      readPublicShippingRates(
+        db as unknown as Parameters<typeof readPublicShippingRates>[0],
+      ),
+    ).rejects.toThrow("Synthetic unavailable read");
+  });
+});

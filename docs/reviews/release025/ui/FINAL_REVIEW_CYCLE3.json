@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "task_id": "UI025",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Both CRM native regressions PASS after confirmed fail-before.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing authorization, CAS, operation ID and outcome payload retained; bounded source review.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript and scoped lint pass; minimal context guard and route keys.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Held actual committed command response cannot overwrite switched dataset; route navigation reloads correct source.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current exact native alert excludes HTTP suffix; helper preserves error code and unrelated guidance.",
+      "evidence_refs": [
+        "output/playwright/release025/browser-recovered-final.log",
+        "output/playwright/release025/cancelled-transfer-error.png",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Scoped UI acceptance passed; full48 receipt pending and production/provider acceptance NOT_RUN.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Submitted write continues; only obsolete UI completion suppressed; route switch intentionally resets local list state.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI025-C01",
+      "severity": "P2",
+      "status": "RESOLVED",
+      "summary": "Approved helper plus exact native alert assertion and current screenshot resolve technical suffix.",
+      "evidence_refs": [
+        "output/playwright/release025/cancelled-transfer-error.png",
+        "src/shared/firebase.ts"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Production NOT_READY; emulator evidence does not establish provider or bank behavior."
+  ],
+  "limitations": [
+    "Full48 receipt pending at cycle3",
+    "Actual AT/provider/full product performance NOT_RUN",
+    "Repository intelligence DEGRADED",
+    "Token usage/cost unavailable"
+  ],
+  "scope_status": "PASSED"
+}

@@ -1,0 +1,2607 @@
+[
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1,
+    "text": "use client"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 2,
+    "text": "../../../packages/domain/chat-action"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 3,
+    "text": "../../../packages/domain/ask-images"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 5,
+    "text": "../../../packages/domain"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 7,
+    "text": "react-router-dom"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 32,
+    "text": "react"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 40,
+    "text": "./knowledge"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 41,
+    "text": "./Ask.module.css"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 42,
+    "text": "./transport"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 43,
+    "text": "./ImageIntake"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 44,
+    "text": "./Commerce"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 45,
+    "text": "../../../packages/domain/ask-workflow"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 51,
+    "text": "pending"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 51,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 51,
+    "text": "error"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 51,
+    "text": "stopped"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 55,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 58,
+    "text": "send"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 58,
+    "text": "close"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 58,
+    "text": "stop"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 58,
+    "text": "chat"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 61,
+    "text": "22"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 62,
+    "text": "22"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 63,
+    "text": "0 0 24 24"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 64,
+    "text": "none"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 65,
+    "text": "currentColor"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 66,
+    "text": "2.3"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 67,
+    "text": "round"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 68,
+    "text": "round"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 69,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 71,
+    "text": "chat"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 73,
+    "text": "M20 11.5a7.5 7.5 0 0 1-7.5 7.5H9l-5 3v-5a7.5 7.5 0 1 1 16-5.5Z"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 74,
+    "text": "M8 10h8M8 14h5"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 76,
+    "text": "send"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 77,
+    "text": "M12 20V4m-7 7 7-7 7 7"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 78,
+    "text": "close"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 79,
+    "text": "m7 7 10 10M17 7 7 17"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 82,
+    "text": "7"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 83,
+    "text": "7"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 84,
+    "text": "10"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 85,
+    "text": "10"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 86,
+    "text": "1"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 87,
+    "text": "currentColor"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 88,
+    "text": "none"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 100,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 108,
+    "text": "Bản nháp chưa hợp lệ. Tạo yêu cầu mới để kiểm tra sản phẩm."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 109,
+    "text": "This draft needs review. Start a new request."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 114,
+    "text": "request-draft:anonymous"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 117,
+    "text": "/request?from=ask"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 136,
+    "text": "Nguồn:"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 136,
+    "text": "Sources:"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 141,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 141,
+    "text": "↗"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 149,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 154,
+    "text": "Xem và chỉnh bản nháp · chưa gửi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 155,
+    "text": "Review draft · not submitted"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 158,
+    "text": "alert"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 161,
+    "text": "Gửi yêu cầu mua hộ"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 161,
+    "text": "Request an item"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 162,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 162,
+    "text": "↗"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 177,
+    "text": "retrieving"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 177,
+    "text": "selecting"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 182,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 194,
+    "text": "pending"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 195,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 196,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 197,
+    "text": "SG"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 199,
+    "text": "selecting"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 201,
+    "text": "Đang tìm thông tin phù hợp…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 202,
+    "text": "Finding the right information…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 204,
+    "text": "Đang kiểm tra thông tin SatsunicGo…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 205,
+    "text": "Checking SatsunicGo information…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 212,
+    "text": "error"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 212,
+    "text": "alert"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 212,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 215,
+    "text": "stopped"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 217,
+    "text": "Đã dừng câu trả lời."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 218,
+    "text": "Response stopped."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 221,
+    "text": "Bạn đã hỏi nhiều câu liên tiếp. Hãy thử lại sau một phút."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 222,
+    "text": "You have asked several questions in a row. Please try again in a minute."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 224,
+    "text": "Chưa thể trả lời lúc này. Câu hỏi của bạn vẫn được giữ lại."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 225,
+    "text": "We couldn’t answer just now. Your question is still here."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 228,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 232,
+    "text": "Thử lại"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 232,
+    "text": "Try again"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 234,
+    "text": "/request"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 235,
+    "text": "Gửi yêu cầu mua hộ"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 235,
+    "text": "Request an item"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 235,
+    "text": "↗"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 262,
+    "text": "modal"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 264,
+    "text": "launcher"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 265,
+    "text": "composer"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 278,
+    "text": "retrieving"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 278,
+    "text": "selecting"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 278,
+    "text": "retrieving"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 279,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 295,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 307,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 317,
+    "text": "COMPLETED"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 317,
+    "text": "CANCELLED"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 321,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 334,
+    "text": "(prefers-reduced-motion: reduce)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 347,
+    "text": "inset(0px 0px 0px 0px round 28px)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 348,
+    "text": "translateY(0)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 351,
+    "text": "cubic-bezier(.22,1,.36,1)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 356,
+    "text": "hidden"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 378,
+    "text": "wheel"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 379,
+    "text": "touchstart"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 380,
+    "text": "pointerdown"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 394,
+    "text": "(prefers-reduced-motion: reduce)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 395,
+    "text": "instant"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 405,
+    "text": "instant"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 413,
+    "text": "wheel"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 414,
+    "text": "touchstart"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 415,
+    "text": "pointerdown"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 435,
+    "text": "(prefers-reduced-motion: reduce)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 442,
+    "text": "visible"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 465,
+    "text": "pending"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 466,
+    "text": "stopped"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 485,
+    "text": "none"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 486,
+    "text": "inset(0px 0px 0px 0px round 28px)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 488,
+    "text": "none"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 490,
+    "text": "(prefers-reduced-motion: reduce)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 505,
+    "text": "inset(0px 0px 0px 0px round 28px)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 513,
+    "text": "cubic-bezier(.22,1,.36,1)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 513,
+    "text": "forwards"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 532,
+    "text": "(prefers-reduced-motion: reduce)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 552,
+    "text": "translate(-50%, 0) scale(1)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 560,
+    "text": "cubic-bezier(.22,1,.36,1)"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 561,
+    "text": "forwards"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 595,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 600,
+    "text": "pending"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 604,
+    "text": "retrieving"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 616,
+    "text": "submitRequest"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 618,
+    "text": "acceptQuote"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 620,
+    "text": "confirmReceipt"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 627,
+    "text": "ACTION_NOT_CONFIRMED"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 633,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 634,
+    "text": "Thao tác đã được hệ thống xử lý. Bạn xem trạng thái và bước tiếp theo trong thẻ đơn bên dưới."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 635,
+    "text": "The system processed this action. Review the current order status and next step below."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 639,
+    "text": "order"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 645,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 658,
+    "text": "outside"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 669,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 688,
+    "text": "/"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 696,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 704,
+    "text": "answered"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 716,
+    "text": "error"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 736,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 739,
+    "text": "Mua hộ hoạt động thế nào?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 740,
+    "text": "Cọc và số dư tính thế nào?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 741,
+    "text": "Chưa có link sản phẩm thì sao?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 744,
+    "text": "How does buying assistance work?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 745,
+    "text": "How does the deposit work?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 746,
+    "text": "Can I request an item without a link?"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 756,
+    "text": "Giúp mình tìm sản phẩm trong ảnh. Nếu chưa chắc, hỏi mình thêm."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 757,
+    "text": "Help find the product in this image. Ask if uncertain."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 769,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 783,
+    "text": "Files"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 816,
+    "text": "Ảnh sản phẩm đã chọn"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 816,
+    "text": "Selected product image"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 819,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 820,
+    "text": "Bỏ ảnh"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 820,
+    "text": "Remove image"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 821,
+    "text": "Bỏ ảnh"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 821,
+    "text": "Remove image"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 825,
+    "text": "×"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 833,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 836,
+    "text": "Thêm ảnh sản phẩm"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 836,
+    "text": "Add product images"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 837,
+    "text": "Thêm ảnh sản phẩm"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 837,
+    "text": "Add product images"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 843,
+    "text": "18"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 844,
+    "text": "18"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 845,
+    "text": "0 0 24 24"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 846,
+    "text": "none"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 847,
+    "text": "currentColor"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 848,
+    "text": "1.7"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 849,
+    "text": "round"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 851,
+    "text": "M12 5v14M5 12h14"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 856,
+    "text": "file"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 859,
+    "text": "image/png,image/jpeg,image/webp"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 868,
+    "text": "Hỏi SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 868,
+    "text": "Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 869,
+    "text": "Hỏi bất cứ điều gì…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 869,
+    "text": "Ask anything..."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 876,
+    "text": "Enter"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 882,
+    "text": "submit"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 886,
+    "text": "Dừng câu trả lời"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 887,
+    "text": "Stop response"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 889,
+    "text": "Gửi câu hỏi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 890,
+    "text": "Send question"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 895,
+    "text": "Dừng câu trả lời"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 896,
+    "text": "Stop response"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 898,
+    "text": "Gửi câu hỏi"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 899,
+    "text": "Send question"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 908,
+    "text": "stop"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 908,
+    "text": "send"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 912,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 917,
+    "text": "Đóng hội thoại"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 918,
+    "text": "Close conversation"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 920,
+    "text": "Thu gọn Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 921,
+    "text": "Hide Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 926,
+    "text": "Đóng hội thoại"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 927,
+    "text": "Close conversation"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 929,
+    "text": "Thu gọn Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 930,
+    "text": "Hide Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 934,
+    "text": "close"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 938,
+    "text": "alert"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 943,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 944,
+    "text": "Đang xử lý ảnh…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 944,
+    "text": "Processing images…"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 950,
+    "text": "Tối đa 3 ảnh sản phẩm · 2 MB/ảnh. Ảnh được gửi cho AI và lưu cùng đơn khi có đơn. Không gửi giấy tờ hoặc biên lai."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 951,
+    "text": "Up to 3 product photos · 2 MB each. Photos go to AI and are stored with your order once created. Avoid documents or receipts."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 957,
+    "text": "Khi dùng AI, câu hỏi có thể được Google xử lý. Không chia sẻ thông tin nhạy cảm."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 958,
+    "text": "When AI is used, questions may be processed by Google. Avoid sharing sensitive information."
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 959,
+    "text": "/privacy"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 959,
+    "text": "Quyền riêng tư"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 959,
+    "text": "Privacy"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 973,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 974,
+    "text": "Hỏi SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 974,
+    "text": "Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 975,
+    "text": "Ask Anything"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 987,
+    "text": "chat"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 988,
+    "text": "true"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 989,
+    "text": "Ask Anything"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1003,
+    "text": "Hỏi SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1003,
+    "text": "Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1010,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1013,
+    "text": "Tiếp tục hội thoại"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1013,
+    "text": "Continue conversation"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1023,
+    "text": "ask-title"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1044,
+    "text": "ask-title"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1045,
+    "text": "Satsunic"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1045,
+    "text": "Go"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1047,
+    "text": "Hỏi SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1047,
+    "text": "Ask SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1052,
+    "text": "log"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1053,
+    "text": "Conversation with SatsunicGo"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1078,
+    "text": "Đã gửi yêu cầu"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1078,
+    "text": "Request sent"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1079,
+    "text": "Đã duyệt báo giá"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1079,
+    "text": "Quote accepted"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1080,
+    "text": "Đã duyệt tổng phí cuối"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1080,
+    "text": "Final total approved"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1081,
+    "text": "Đã xác nhận nhận đủ hàng"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1081,
+    "text": "Receipt confirmed"
+  },
+  {
+    "path": "src/features/ask/Ask.tsx",
+    "line": 1083,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1,
+    "text": "./InlineSupport"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 2,
+    "text": "./InvoiceSummary"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 6,
+    "text": "../../../packages/domain/payment-qr"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 13,
+    "text": "react"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 14,
+    "text": "firebase/auth"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 22,
+    "text": "firebase/firestore"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 23,
+    "text": "../../shared/firebase"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 30,
+    "text": "../../../packages/domain"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 36,
+    "text": "../../../packages/domain/ask-workflow"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 37,
+    "text": "./knowledge"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 38,
+    "text": "./Ask.module.css"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 93,
+    "text": "currentAskConversation"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 104,
+    "text": "Chưa tải được hội thoại. Đăng nhập lại hoặc kiểm tra kết nối."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 118,
+    "text": "askConversations"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 136,
+    "text": "Chưa tải được hội thoại. Kiểm tra kết nối và thử lại."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 143,
+    "text": "orders"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 147,
+    "text": "Chưa cập nhật được đơn. Thông tin đang hiển thị có thể đã cũ."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 154,
+    "text": "Đăng nhập để lưu và tiếp tục yêu cầu."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 165,
+    "text": "Đang tải hội thoại. Thử lại sau."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 178,
+    "text": "Cần thử lại thao tác đang chờ trước khi tiếp tục."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 180,
+    "text": "submitRequest"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 181,
+    "text": "acceptQuote"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 182,
+    "text": "approveFinal"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 183,
+    "text": "confirmReceipt"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 191,
+    "text": "askWorkflow"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 205,
+    "text": "functions/aborted"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 206,
+    "text": "functions/failed-precondition"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 207,
+    "text": "functions/permission-denied"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 208,
+    "text": "functions/invalid-argument"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 209,
+    "text": "functions/already-exists"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 233,
+    "text": "saveDraft"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 242,
+    "text": "saveTurn"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 247,
+    "text": "Câu trả lời chưa được lưu vào hội thoại. Thử lại khi có kết nối."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 270,
+    "text": "askWorkflow"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 274,
+    "text": "saveDraft"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 293,
+    "text": "Chưa mở được yêu cầu mới. Thử lại khi có kết nối."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 304,
+    "text": "askWorkflow"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 308,
+    "text": "resume"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 316,
+    "text": "Chưa đối chiếu được thao tác. Thử lại; không gửi yêu cầu mới."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 345,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 345,
+    "text": "en"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 347,
+    "text": "vi"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 384,
+    "text": "addresses"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 385,
+    "text": "ownerId"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 385,
+    "text": "=="
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 409,
+    "text": "orderRecipients"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 421,
+    "text": "Chưa tải được thông tin nhận hàng. Thử lại khi có kết nối."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 432,
+    "text": "createPaymentLink"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 439,
+    "text": "INVALID_CHECKOUT"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 443,
+    "text": "EXPIRED_PAYMENT"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 446,
+    "text": "INVALID_PAYMENT"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 453,
+    "text": "qrcode"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 457,
+    "text": "M"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 469,
+    "text": "Chưa tạo được trang thanh toán. Thử lại; đơn chưa được ghi nhận thêm tiền."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 470,
+    "text": "Payment page unavailable. Retry; no additional payment has been recorded."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 490,
+    "text": "name-0"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 491,
+    "text": "variant-0"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 492,
+    "text": "quantity-0"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 493,
+    "text": "url-0"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 498,
+    "text": "market"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 500,
+    "text": "notes"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 505,
+    "text": "Kiểm tra thị trường, tên sản phẩm, số lượng và link."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 506,
+    "text": "Check the market, product names, quantities and links."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 513,
+    "text": "saveDraft"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 519,
+    "text": "vi-VN"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 519,
+    "text": "en-US"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 520,
+    "text": "currency"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 521,
+    "text": "VND"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 527,
+    "text": "Yêu cầu mua hộ trong chat"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 527,
+    "text": "Buying request in chat"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 533,
+    "text": "Bạn đang tìm món gì?"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 533,
+    "text": "What are you looking for?"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 536,
+    "text": "Gửi tên, link hoặc ảnh sản phẩm. Mình sẽ giúp bạn chuẩn bị yêu cầu mua hộ."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 537,
+    "text": "Send a product name, link or photo. I can help prepare your buying request."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 544,
+    "text": "Điền thông tin nếu cần"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 544,
+    "text": "Enter details if needed"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 549,
+    "text": "Mua từ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 549,
+    "text": "Source market"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 551,
+    "text": "market"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 556,
+    "text": "Chọn thị trường"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 556,
+    "text": "Choose market"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 558,
+    "text": "US"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 558,
+    "text": "US"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 559,
+    "text": "JP"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 559,
+    "text": "JP"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 560,
+    "text": "KR"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 560,
+    "text": "KR"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 570,
+    "text": "Tên sản phẩm"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 570,
+    "text": "Product name"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 580,
+    "text": "Link · nếu có"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 580,
+    "text": "Link · optional"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 584,
+    "text": "url"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 589,
+    "text": "Màu / size / phiên bản"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 589,
+    "text": "Color / size / variant"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 597,
+    "text": "Số lượng"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 597,
+    "text": "Quantity"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 600,
+    "text": "number"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 610,
+    "text": "Ghi chú · không bắt buộc"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 610,
+    "text": "Notes · optional"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 612,
+    "text": "notes"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 618,
+    "text": "Lưu bản nháp"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 618,
+    "text": "Save draft"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 625,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 626,
+    "text": "Chưa chọn phiên bản"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 626,
+    "text": "Variant unspecified"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 626,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 632,
+    "text": "Thị trường"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 632,
+    "text": "Market"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 632,
+    "text": ":"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 637,
+    "text": "Ngân sách"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 637,
+    "text": "Budget"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 637,
+    "text": ":"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 644,
+    "text": "Kiểm tra sản phẩm trước khi gửi. Đây là yêu cầu báo giá, chưa mua hoặc thanh toán."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 645,
+    "text": "Review the items before sending. This requests a quote; it does not purchase or pay."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 652,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 655,
+    "text": "submitRequest"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 660,
+    "text": "Gửi yêu cầu mua hộ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 660,
+    "text": "Send buying request"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 667,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 672,
+    "text": "Chưa đăng nhập được. Thử lại."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 673,
+    "text": "Sign-in failed. Try again."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 679,
+    "text": "Đăng nhập để lưu và gửi yêu cầu"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 679,
+    "text": "Sign in to save and send"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 685,
+    "text": "Đơn mua hộ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 685,
+    "text": "Buying order"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 686,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 690,
+    "text": "Request sent"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 691,
+    "text": "Review quote"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 693,
+    "text": "catalog"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 695,
+    "text": "Awaiting full payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 696,
+    "text": "Paid · awaiting purchase"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 697,
+    "text": "Awaiting deposit"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 698,
+    "text": "Purchasing"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 699,
+    "text": "Purchased"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 700,
+    "text": "Received at source warehouse"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 702,
+    "text": "catalog"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 703,
+    "text": "Packed"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 704,
+    "text": "Awaiting remaining payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 705,
+    "text": "Ready to ship"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 706,
+    "text": "In transit"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 707,
+    "text": "Delivered"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 708,
+    "text": "Completed"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 709,
+    "text": "Cancelled"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 716,
+    "text": "Đơn đang tạm giữ. Nhân viên sẽ xử lý bước tiếp theo."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 717,
+    "text": "Order on hold. Staff will handle the next step."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 726,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 726,
+    "text": "Số lượng"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 726,
+    "text": "Quantity"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 726,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 734,
+    "text": "REQUESTED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 734,
+    "text": "QUOTED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 740,
+    "text": "saveRecipient"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 746,
+    "text": "Thông tin nhận hàng"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 746,
+    "text": "Delivery details"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 749,
+    "text": "Dùng địa chỉ đã lưu"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 749,
+    "text": "Use saved address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 765,
+    "text": "Chọn địa chỉ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 765,
+    "text": "Choose address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 769,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 776,
+    "text": "Người nhận"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 776,
+    "text": "Recipient"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 785,
+    "text": "name"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 789,
+    "text": "Số điện thoại"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 789,
+    "text": "Phone"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 798,
+    "text": "tel"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 799,
+    "text": "tel"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 803,
+    "text": "Địa chỉ nhận"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 803,
+    "text": "Delivery address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 812,
+    "text": "street-address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 817,
+    "text": "Thông tin này dùng để giao hàng, không gửi cho AI. Kiểm tra trước khi chốt báo giá."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 818,
+    "text": "These details are used for delivery, not sent to AI. Review before accepting the quote."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 822,
+    "text": "Lưu thông tin nhận hàng"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 822,
+    "text": "Save delivery details"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 829,
+    "text": "Giao đến"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 829,
+    "text": "Delivery address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 829,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 832,
+    "text": "Thông tin nhận hàng đã lưu"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 832,
+    "text": "Saved delivery details"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 832,
+    "text": ":"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 833,
+    "text": "·"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 837,
+    "text": "REQUESTED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 837,
+    "text": "QUOTED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 839,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 842,
+    "text": "Kiểm tra / sửa địa chỉ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 842,
+    "text": "Review / edit address"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 847,
+    "text": "acceptQuote"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 850,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 859,
+    "text": "acceptQuote"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 865,
+    "text": "Chấp nhận báo giá và mức cọc"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 865,
+    "text": "Accept quote and deposit"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 869,
+    "text": "acceptQuote"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 873,
+    "text": "Báo giá đã hết hạn. Cần báo giá mới từ nhân viên."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 874,
+    "text": "Quote expired. Staff must provide a new quote."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 878,
+    "text": "approveFinal"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 882,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 885,
+    "text": "approveFinal"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 891,
+    "text": "Duyệt tổng phí cuối"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 891,
+    "text": "Approve final total"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 894,
+    "text": "payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 897,
+    "text": "Còn cần thanh toán"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 897,
+    "text": "Amount due"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 897,
+    "text": ":"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 905,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 908,
+    "text": "Mở bước thanh toán"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 908,
+    "text": "Prepare payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 913,
+    "text": "payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 920,
+    "text": "QR thanh toán cho khoản đang cần thanh toán"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 921,
+    "text": "QR for the current amount due"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 928,
+    "text": "_blank"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 928,
+    "text": "noopener noreferrer"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 930,
+    "text": "Kiểm tra và thanh toán tại payOS"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 931,
+    "text": "Review and pay at payOS"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 936,
+    "text": "Quay lại chat để theo dõi. Tiền chỉ được xác nhận sau khi hệ thống đối chiếu."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 937,
+    "text": "Return to chat to track progress. Payment is confirmed only after verification."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 944,
+    "text": "payment"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 945,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 947,
+    "text": "QR đã hết hạn. Gửi yêu cầu hỗ trợ để nhân viên đối chiếu trước khi thanh toán lại."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 948,
+    "text": "QR expired. Ask staff to reconcile before paying again."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 952,
+    "text": "waiting"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 955,
+    "text": "Đang chờ nhân viên hoặc đơn vị vận chuyển xử lý. Tiến độ sẽ cập nhật tại đây."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 956,
+    "text": "Waiting for staff or the carrier. Progress will update here."
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 960,
+    "text": "confirmReceipt"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 963,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 967,
+    "text": "confirmReceipt"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 973,
+    "text": "Xác nhận đã nhận đủ hàng"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 973,
+    "text": "Confirm all items received"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 978,
+    "text": "Mã vận chuyển"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 978,
+    "text": "Tracking reference"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 978,
+    "text": ":"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 985,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 986,
+    "text": "Đối chiếu thao tác đang chờ"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 986,
+    "text": "Recover pending action"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 990,
+    "text": "COMPLETED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 990,
+    "text": "CANCELLED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 990,
+    "text": "DELIVERED"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 996,
+    "text": "button"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 999,
+    "text": "Bắt đầu yêu cầu khác"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 999,
+    "text": "Start another request"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1003,
+    "text": "status"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1003,
+    "text": "Đang xử lý…"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1003,
+    "text": "Processing…"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1006,
+    "text": "alert"
+  },
+  {
+    "path": "src/features/ask/Commerce.tsx",
+    "line": 1009,
+    "text": "This step could not finish. Check your connection and retry."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 1,
+    "text": "react"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 2,
+    "text": "../../../packages/domain/ask-images"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 3,
+    "text": "../../shared/firebase"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 49,
+    "text": "uploadOrderImage"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 51,
+    "text": "request"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 55,
+    "text": "Product reference supplied in Ask"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 88,
+    "text": "Ảnh chưa gắn vào đơn. Gửi lại tin nhắn để thử lại; nhân viên chưa có ảnh này."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 89,
+    "text": "Photos are not attached yet. Resend your message to retry; staff cannot see them yet."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 108,
+    "text": "Chọn tối đa 3 ảnh sản phẩm."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 108,
+    "text": "Choose up to 3 product images."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 115,
+    "text": "Có 20 ảnh đang chờ gắn vào đơn. Gửi yêu cầu mua hộ trước khi thêm ảnh."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 116,
+    "text": "20 photos are waiting for an order. Submit your buying request before adding more."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 128,
+    "text": "image/png"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 128,
+    "text": "image/jpeg"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 128,
+    "text": "image/webp"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 130,
+    "text": "image"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 138,
+    "text": "image"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 140,
+    "text": "canvas"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 145,
+    "text": "2d"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 148,
+    "text": "image/jpeg"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 149,
+    "text": "image"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 152,
+    "text": "image/jpeg"
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 153,
+    "text": ","
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 162,
+    "text": "Dùng ảnh PNG, JPEG hoặc WebP rõ nét, tối đa 2 MB."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 163,
+    "text": "Use a clear PNG, JPEG or WebP image up to 2 MB."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 177,
+    "text": "Đăng nhập trước khi gửi ảnh cho AI."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 178,
+    "text": "Sign in before sending images to AI."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 193,
+    "text": "Ảnh chưa gắn vào đơn. Thử gửi lại."
+  },
+  {
+    "path": "src/features/ask/ImageIntake.tsx",
+    "line": 194,
+    "text": "Photos are not attached. Retry sending."
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-06T01:11:43.473919+00:00",
+  "files": {
+    "src/features/operations/Returns.tsx": "9dd77f004c628fecfb65aa5895410fc6e0334a48874ce212a676a72b951f3f03",
+    "docs/reviews/release026/database/RETURNS_COMPACT_PLAN.md": "dcd18fcfcbd9e430e9301991cf63ef3dc8b067e795d8ec49825a9902bf448e59",
+    "docs/reviews/release026/database/RETURNS_COMPACT_IMPLEMENTATION.md": "2f8281716c58cc88ef5b4eaba7a89f75e04ec3a4901f2b2d9918e9047c95d466",
+    "docs/reviews/release026/database/CRM_OPERATIONS_CONTENT_REVIEW.md": "91d55b55c4600b2661874f10d8fb1a3798f08c6db416a9c9dd2e39edbfb67c12"
+  }
+}

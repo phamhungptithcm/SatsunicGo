@@ -1,0 +1,85 @@
+{
+  "scope": "009 contents only; payos shared018 handoff; existing shell CSS prefix unchanged",
+  "files": [
+    {
+      "path": "src/features/ask/Ask.tsx",
+      "sha256": "c0518072d08fdacc57d3f4518887a1939555cf6ecd41bdbb920112304d42d855"
+    },
+    {
+      "path": "src/features/ask/Commerce.tsx",
+      "sha256": "fb15082723d2d0bf77561e1144b283d4963a4505f3ccfa7b1b7dbbaed2162a39"
+    },
+    {
+      "path": "src/features/ask/InvoiceSummary.tsx",
+      "sha256": "8a916e6ca763a4b869ee8bac089eae9e6269f3dfcdffa4ae63382f58fab9fc91"
+    },
+    {
+      "path": "src/features/ask/ImageIntake.tsx",
+      "sha256": "d61084bd57a8cabbd58c4ac62d32a1bbc254f054bb7e1efb770fb03459f2a4f2"
+    },
+    {
+      "path": "src/features/ask/InlineSupport.tsx",
+      "sha256": "bbe9133e31132f7a3ec38e335faa5049d9efb032097bc75c3acb411ab1ef1e44"
+    },
+    {
+      "path": "src/features/ask/Ask.module.css",
+      "sha256": "d368b356c2d37fccc8acf6d924e1533b7f5df1f84056865600361d3f4b86bac8"
+    },
+    {
+      "path": "packages/domain/ask-images.ts",
+      "sha256": "60679f238a009a41d99ca0d635a8fab92462f05c5466f33715fad327aafcca8e"
+    },
+    {
+      "path": "packages/domain/chat-action.ts",
+      "sha256": "060e5fb9b72bdadd0884d2ca72ec80f9a61a58c156cc49e98ce5c63b84dfa513"
+    },
+    {
+      "path": "packages/domain/payment-qr.ts",
+      "sha256": "1d0aa3875943667c8865882de52b9a3a5c7320bc8ed7c8fe30fc6c8b5c6364c6"
+    },
+    {
+      "path": "packages/domain/ask-workflow.ts",
+      "sha256": "cb40109ccd50ff5680fa716875c136a4e6591bd5bc5d42c5530d0ee462d7ee33"
+    },
+    {
+      "path": "functions/src/ai/ask.ts",
+      "sha256": "40aed963dee1ee54f188a4c390a1107b4fd41fe064e26087432d1792e7ab079e"
+    },
+    {
+      "path": "functions/src/ai/product-images.ts",
+      "sha256": "13b00749c34f479f12f1607f662e8afa00f1d42db762f8e5305f653859465d48"
+    },
+    {
+      "path": "functions/src/payments/payos.ts",
+      "sha256": "a67584213cb5407e69b08713423f400c4e7b22f345cee3c3ba2f9ef773bb8209"
+    },
+    {
+      "path": "tests/unit/ask-content.test.ts",
+      "sha256": "756ad364e7a3ce5c545585732b744fa04e8c2efcec755359a9310ed97efb137e"
+    },
+    {
+      "path": "tests/rules/ask-payment.test.ts",
+      "sha256": "ce5ddd9696b8301bcde96d6f6ed49acdafc29968d31c772d9d84c6653da91ba4"
+    },
+    {
+      "path": "tests/fixtures/ask009.ts",
+      "sha256": "c4aa963d76638dc7877f8680a7ec0a0f6ca7954401af29cc334d4f2c64c75a97"
+    },
+    {
+      "path": "package.json",
+      "sha256": "706f7418c358338fff313a146a8822b2ba041def88baa8f53bb26667726d3191"
+    },
+    {
+      "path": "functions/package.json",
+      "sha256": "e65fff0da7239f8143ef3e0a37ea780374eadb9ada1aa9071ce69b88bb4d8751"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "30fb7f7a1544fae124cbb2b0818022829de6d733a930c04d71826e008f7ecdd1"
+    }
+  ],
+  "dependencies": [
+    "packages/domain/index.ts (shared018 owner)",
+    "packages/domain/catalog-checkout.ts (shared018 owner)"
+  ]
+}

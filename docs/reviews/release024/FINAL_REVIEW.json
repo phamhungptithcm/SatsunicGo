@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Approved local CRM simplification and confirmed fixes match scope; exhaustive product/production acceptance remains incomplete.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "security": {
+      "status": "FAILED",
+      "summary": "Current malformed-role, locks, ownership and transaction regressions pass. Prior moderate dependency entries and live identity/AppCheck/MFA/deployed controls remain unresolved.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Final frontend typecheck/lint/build and unchanged Functions compilation pass;178 unit/100 integration/45 broad browser plus4 final color-delta browser cases pass without skips.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current no-write stale versions, malformed actors/assignees, expiry boundaries/unknown data, deferred completions, response loss, retry, empty recovery, role denial and full native proposal rejection/replay paths pass.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing safe denials, idempotency/version checks and audit retained. Projection corrections do not persist subscriptions; UI remains explicit about unknown/snapshot semantics.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Real identity, payment/mail/model/provider, restore/rollback and exact deployment acceptance NOT_RUN; actual AT and full load/frame/product-state coverage incomplete.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Small scoped stylesheet and display corrections preserve role/actions/authority; primary action reordered without changing defaults. Final color-only delta verified by4 affected cases rather than falsely claiming another complete45 run.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CRM024-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/crm.ts",
+      "summary": "Missing CRM record accepted an update version and recreated stale data",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "CRM024-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/crm.ts",
+      "summary": "Malformed active/role records could authorize or throw unsafe errors",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "CRM024-3",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/crm.ts",
+      "summary": "Stored active membership displayed as effective after expiry",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Workspace.css",
+      "summary": "Public header reservation left a blank strip inside CRM",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Customers.tsx",
+      "summary": "Empty customer results displayed irrelevant clipped table headings",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-3",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Customer.tsx",
+      "summary": "Unknown membership date rendered a stray zero",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-4",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/orders/Changes.tsx",
+      "summary": "Substitution incorrectly described a zero cancellation",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-5",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Workspace.css",
+      "summary": "Checkbox label inherited column layout",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "UI024-6",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Workspace.css",
+      "summary": "Small menu group captions measured below minimum contrast",
+      "resolution": "Approved scoped correction verified by current source and relevant negative/native/visual evidence.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    },
+    {
+      "id": "024-release-acceptance",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "production_readiness",
+      "location": "docs/reviews/release024/READINESS.md",
+      "summary": "Broad release/provider/AT/performance and prior dependency gates remain incomplete",
+      "resolution": "Requires current real-environment acceptance and authenticated release evidence; local fixture tests do not substitute.",
+      "evidence_refs": [
+        "docs/reviews/release024/READINESS.md",
+        "docs/reviews/release024/SOURCE_MANIFEST.json",
+        "docs/reviews/release024/CONTENT_REVIEW.md",
+        "docs/reviews/release024/CYCLE_JOURNAL.json",
+        "output/playwright/release024/unit-results.json",
+        "output/playwright/release024/integration-results.json",
+        "output/playwright/release024/browser-full-results.json",
+        "output/playwright/release024/browser-post-contrast-results.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Prior13 moderate dependency entries remain OPEN; unchanged manifests, no fresh audit",
+    "Existing pending media reservations require retry/operator review",
+    "Dirty shared WIP requires exact candidate review",
+    "Internal statements are not tax invoices"
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED; bounded source/compiler/test evidence",
+    "Root declared aggregate self-review, not authenticated independent production approval",
+    "45 broad browser cases precede final caption color;4 affected cases validate that last delta",
+    "Actual AT/provider/production restore/load/frame acceptance NOT_RUN",
+    "Native200 image capture limitation; genuine AX/keyboard/geometry distinguished",
+    "Provider token usage, actual billed cost and API-equivalent estimate Unavailable; memory candidates None"
+  ]
+}

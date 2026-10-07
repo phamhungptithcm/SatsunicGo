@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { Link } from "react-router-dom";
 import {
   CrmHeading,
@@ -278,9 +279,9 @@ export function CustomerChanges({
   return (
     <>
       {readState === "loading" && (
-        <p role="status">
+        <LoadingState>
           {vi ? "Đang tải đề xuất thay đổi…" : "Loading change proposals…"}
-        </p>
+        </LoadingState>
       )}
       {(readState === "offline" || readState === "error") && (
         <>

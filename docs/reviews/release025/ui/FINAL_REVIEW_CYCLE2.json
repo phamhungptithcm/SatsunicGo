@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "UI025",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Both CRM native regressions PASS after confirmed fail-before.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing authorization, CAS, operation ID and outcome payload retained; bounded source review.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript and scoped lint pass; minimal context guard and route keys.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Held actual committed command response cannot overwrite switched dataset; route navigation reloads correct source.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "BLOCKED",
+      "summary": "CRM current-context error ownership passes; financial alert has unresolved technical suffix.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Targeted synthetic browser evidence only; full regression and external acceptance pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Submitted write continues; only obsolete UI completion suppressed; route switch intentionally resets local list state.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI025-C01",
+      "severity": "P2",
+      "status": "OPEN",
+      "summary": "Actual cancelled-transfer alert displays technical [400] suffix; origin unresolved.",
+      "evidence_refs": [
+        "output/playwright/release025/cancelled-transfer-error.png",
+        "src/shared/firebase.ts"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Production NOT_READY; emulator evidence does not establish provider or bank behavior."
+  ],
+  "limitations": [
+    "Full48 pending",
+    "Current keyboard/mobile/zoom and actual AT NOT_RUN",
+    "Repository intelligence DEGRADED",
+    "Token usage and cost unavailable"
+  ]
+}

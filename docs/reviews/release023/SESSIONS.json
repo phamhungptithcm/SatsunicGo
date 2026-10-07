@@ -1,0 +1,31 @@
+{
+  "coordinator": {
+    "threadId": "01a109b5-e7bb-75a3-8c43-08eb284a0854",
+    "hostId": "local"
+  },
+  "sessions": [
+    {
+      "role": "ui",
+      "threadId": "01a10cb1-9d81-7ff2-a05a-373fcfc61cd2",
+      "hostId": "local"
+    },
+    {
+      "role": "backend",
+      "threadId": "01a10cb1-bbd4-7a12-a5b8-1dbe6e6482d8",
+      "hostId": "local"
+    },
+    {
+      "role": "database",
+      "threadId": "01a10cb1-dfe0-7781-9de6-edde7cdc784d",
+      "hostId": "local"
+    },
+    {
+      "role": "biz",
+      "threadId": "01a10cb2-049b-7e22-91c8-cd10926aee92",
+      "hostId": "local"
+    }
+  ],
+  "ownership": "TEAM_CONTEXT.md",
+  "runtimeWindow": "No shared compile/install/integration/browser window granted; coordinate via root",
+  "sourceFreeze": "No blanket freeze yet; root will request before aggregate tests"
+}

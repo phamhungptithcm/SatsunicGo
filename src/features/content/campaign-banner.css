@@ -1,0 +1,169 @@
+.sgBanner {
+  position: relative;
+  width: 100%;
+  margin: 0 0 48px;
+  color: #111c35;
+}
+.sgBannerPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid #e4e8f2;
+  border-radius: 24px;
+  background: #f6f8ff;
+  min-height: 260px;
+  touch-action: pan-y;
+}
+.sgBannerCopy {
+  padding: 36px 40px;
+  align-self: center;
+  min-width: 0;
+}
+.sgBannerEyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #586987;
+  margin-bottom: 12px;
+}
+.sgBannerCopy h2 {
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+.sgBannerCopy p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #586987;
+  margin: 0 0 22px;
+  max-width: 46ch;
+  overflow-wrap: anywhere;
+}
+.sgBannerCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  max-width: 100%;
+  font-weight: 600;
+  color: #163cff;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.sgBannerImage {
+  display: block;
+  min-width: 0;
+  background: #edf1fb;
+}
+.sgBannerImage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 360px;
+  object-fit: contain;
+}
+.sgBannerControls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.sgBannerControls > span {
+  font-size: 12px;
+  color: #586987;
+  margin-right: 8px;
+}
+.sgBannerControls button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e4e8f2;
+  background: white;
+  border-radius: 50%;
+  color: #111c35;
+  cursor: pointer;
+}
+.sgBannerControls button:focus-visible,
+.sgBannerCta:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+.sgBanner--products {
+  margin: 24px 0;
+}
+.sgBanner--products .sgBannerPanel {
+  min-height: 180px;
+}
+.sgBanner--products .sgBannerCopy {
+  padding: 24px 32px;
+}
+.sgBanner--products .sgBannerCopy h2 {
+  font-size: 26px;
+}
+.sgBanner--products .sgBannerImage img {
+  max-height: 240px;
+}
+@media (max-width: 600px) {
+  .sgBanner {
+    margin-bottom: 32px;
+  }
+  .sgBannerPanel {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 18px;
+  }
+  .sgBannerCopy,
+  .sgBanner--products .sgBannerCopy {
+    padding: 24px;
+  }
+  .sgBannerImage {
+    grid-row: 1;
+  }
+  .sgBannerImage img {
+    height: 180px;
+    max-height: 180px;
+  }
+  .sgBanner--products .sgBannerImage img {
+    height: 140px;
+  }
+  .sgBannerCopy h2,
+  .sgBanner--products .sgBannerCopy h2 {
+    font-size: 24px;
+  }
+  .sgBannerCopy p {
+    font-size: 14px;
+  }
+  .sgBannerCta {
+    gap: 8px;
+  }
+}
+@media (max-width: 280px) {
+  .sgBannerCopy,
+  .sgBanner--products .sgBannerCopy {
+    padding: 16px;
+  }
+  .sgBannerCopy h2,
+  .sgBanner--products .sgBannerCopy h2 {
+    font-size: 21px;
+  }
+}
+/* Match the observed Home hero/market content rail, including its wide-screen rule. */
+.sgBanner--home {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+@media (min-width: 1281px) {
+  .sgBanner--home {
+    max-width: calc(50vw + 640px);
+  }
+}
+@media (max-width: 720px) {
+  .sgBanner--home {
+    padding-inline: 22px;
+    margin-bottom: 0;
+  }
+}

@@ -1,6 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, callService } from "../../shared/firebase";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
+import { Link } from "react-router-dom";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import { auth, callService, configured, login } from "../../shared/firebase";
 import {
   calculateShippingRate,
   shippingRateConfigSchema,
@@ -11,6 +19,11 @@ import {
   type ShippingRatesPublicSnapshot,
 } from "../../../packages/domain/shipping-rates";
 import { CrmHeading, CrmState } from "../crm/CrmPresentation";
+import {
+  filterRateRows,
+  filterConditions,
+  type PriceAvailability,
+} from "./rate-detail-view";
 import "./shipping-rates.css";
 const serviceLabels = {
   standard: "Thông thường · 8–12 ngày",
@@ -48,7 +61,11 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
   const [warehouse, setWarehouse] = useState<
     "vietnam" | "texas_cali" | "oregon"
   >("vietnam");
-  const [weight, setWeight] = useState("1"),
+  const inputId = useId();
+  const [detailSearch, setDetailSearch] = useState("");
+  const [availability, setAvailability] = useState<PriceAvailability>("all");
+  const [conditionSearch, setConditionSearch] = useState("");
+  const [weight, setWeight] = useState(staff ? "1" : "2"),
     [product, setProduct] = useState("");
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -94,14 +111,21 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
           {},
         );
         if (!mounted.current || current !== epoch.current) return;
+        if (
+          result.config &&
+          !shippingRateConfigSchema.safeParse(result.config).success
+        )
+          throw new Error("Invalid shipping configuration");
         setPublicSnapshot(result);
       }
     } catch (e) {
       if (mounted.current && current === epoch.current)
         setError(
-          e instanceof Error
+          staff && e instanceof Error
             ? e.message
-            : "Chưa tải được bảng giá. Thử tải lại.",
+            : (e as { code?: string })?.code === "functions/failed-precondition"
+              ? "Bảng giá cần được kiểm tra. Nhờ xác nhận cước."
+              : "Chưa tải được bảng giá. Thử lại.",
         );
     } finally {
       if (current === epoch.current) {
@@ -245,7 +269,13 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
         r.warehouse === warehouse &&
         r.service === service,
     ) ?? [];
-  const grams = Number(weight) * 1000;
+  const scaledGrams = Number(weight) * 1000;
+  // Decimal kg values such as 1.001 must not fail because of binary float noise.
+  const grams =
+    Number.isFinite(scaledGrams) &&
+    Math.abs(scaledGrams - Math.round(scaledGrams)) < 0.000001
+      ? Math.round(scaledGrams)
+      : Number.NaN;
   const quote =
     config && Number.isSafeInteger(grams) && grams > 0 && grams <= 1_000_000_000
       ? calculateShippingRate(config, {
@@ -270,6 +300,473 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
     });
     setConfirmation(null);
   }
+  const detailRows = filterRateRows(rows, detailSearch, availability);
+  const conditions = filterConditions(
+    config?.conditions ?? [],
+    conditionSearch,
+  );
+  const rowResults = useResultFade(
+    JSON.stringify(detailRows.map((row) => row.id)),
+  );
+  const conditionResults = useResultFade(
+    JSON.stringify(conditions.map((item) => item.index)),
+  );
+  if (!staff) {
+    const commonClearance =
+      rows.length && rows.every((row) => row.clearance === rows[0].clearance)
+        ? rows[0].clearance
+        : null;
+    const validWeight =
+      Number.isSafeInteger(grams) && grams > 0 && grams <= 1_000_000_000;
+    const routeLabel =
+      direction === "VN_US" ? "Việt Nam → Mỹ" : "Mỹ → Việt Nam";
+    const estimate = quote?.status === "estimate" ? quote : null;
+    const amountLabel = busy
+      ? "Đang tải…"
+      : !config
+        ? "Chưa có cước"
+        : !validWeight
+          ? "Kiểm tra khối lượng"
+          : estimate
+            ? money(estimate.freightMinor, estimate.currency)
+            : "Cần xác nhận cước";
+    const explanation =
+      busy || !config || estimate
+        ? ""
+        : !validWeight
+          ? "Nhập từ 0,001 đến 1.000.000 kg."
+          : direction === "US_VN" && !product
+            ? "Chọn nhóm hàng để xem cước."
+            : warehouse === "oregon"
+              ? "Kho Oregon cần xác nhận phụ thu."
+              : "Lựa chọn này cần báo giá riêng.";
+    const supportContext = [
+      routeLabel,
+      warehouseLabels[warehouse],
+      service === "standard"
+        ? "Thông thường"
+        : service === "express"
+          ? "Nhanh"
+          : "Hàng theo kg",
+      validWeight ? `${weight} kg` : "Chưa xác nhận khối lượng",
+      direction === "US_VN"
+        ? rows.find((row) => row.id === product)?.label
+        : null,
+      estimate
+        ? `Cước tham khảo: ${money(estimate.freightMinor, estimate.currency)}; chưa gồm thuế, thông quan, phụ thu và bảo hiểm.`
+        : "Cần báo giá riêng.",
+      config
+        ? `${config.sourceLabel} · ${publicSnapshot?.origin === "reference" ? "Bảng tham khảo" : "Bảng đã công bố"}`
+        : "Chưa có bảng giá.",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    return (
+      <section
+        className="shippingRates shippingRates--public"
+        aria-labelledby={`${inputId}-title`}
+      >
+        <h1 id={`${inputId}-title`}>Cước vận chuyển</h1>
+        {error && (
+          <div className="rateNotice" role="alert">
+            <span>{error}</span>
+            <button disabled={busy} onClick={() => void load()}>
+              Tải lại
+            </button>
+          </div>
+        )}
+        {!busy && !error && !config && (
+          <p className="rateNotice" role="status">
+            Chưa có bảng giá. Nhờ xác nhận cước theo kiện hàng.
+          </p>
+        )}
+        <div className="rateCalculator" aria-busy={busy}>
+          <div className="rateInputs">
+            <div
+              className="rateDirections"
+              data-direction={direction}
+              aria-label="Chiều gửi"
+            >
+              {(["VN_US", "US_VN"] as const).map((next) => (
+                <button
+                  key={next}
+                  type="button"
+                  aria-pressed={direction === next}
+                  onClick={() => {
+                    if (direction === next) return;
+                    setDirection(next);
+                    setWarehouse(next === "VN_US" ? "vietnam" : "texas_cali");
+                    setService(next === "VN_US" ? "standard" : "cargo");
+                    setProduct("");
+                  }}
+                >
+                  {next === "VN_US" ? "Việt Nam → Mỹ" : "Mỹ → Việt Nam"}
+                </button>
+              ))}
+            </div>
+            <div className="ratePublicFields">
+              {direction === "VN_US" ? (
+                <label>
+                  Dịch vụ
+                  <select
+                    value={service}
+                    onChange={(event) =>
+                      setService(event.target.value as typeof service)
+                    }
+                  >
+                    <option value="standard">Thông thường</option>
+                    <option value="express">Nhanh</option>
+                    <option value="cargo">Hàng theo kg</option>
+                  </select>
+                </label>
+              ) : (
+                <>
+                  <label>
+                    Kho gửi
+                    <select
+                      value={warehouse}
+                      onChange={(event) => {
+                        setWarehouse(event.target.value as typeof warehouse);
+                        setProduct("");
+                      }}
+                    >
+                      <option value="texas_cali">Texas / California</option>
+                      <option value="oregon">Oregon</option>
+                    </select>
+                  </label>
+                  <label>
+                    Nhóm hàng
+                    <select
+                      value={product}
+                      disabled={!config}
+                      onChange={(event) => setProduct(event.target.value)}
+                    >
+                      <option value="">Chọn nhóm hàng</option>
+                      {rows.map((row) => (
+                        <option key={row.id} value={row.id}>
+                          {row.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </>
+              )}
+              <label htmlFor={inputId}>Khối lượng tính cước</label>
+              <div className="rateWeight">
+                <input
+                  id={inputId}
+                  type="number"
+                  inputMode="decimal"
+                  min="0.001"
+                  max="1000000"
+                  step="0.001"
+                  value={weight}
+                  aria-label="Khối lượng tính cước (kg)"
+                  aria-describedby={`${inputId}-help`}
+                  aria-invalid={!validWeight}
+                  onChange={(event) => setWeight(event.target.value)}
+                />
+                <span aria-hidden="true">kg</span>
+              </div>
+            </div>
+            <div className="ratePresets" aria-label="Chọn nhanh khối lượng">
+              {[1, 2, 5, 10].map((kg) => (
+                <button
+                  type="button"
+                  key={kg}
+                  aria-pressed={Number(weight) === kg}
+                  onClick={() => setWeight(String(kg))}
+                >
+                  {kg} kg
+                </button>
+              ))}
+            </div>
+            <details className="rateWeightHelp">
+              <summary>Cách tính khối lượng</summary>
+              <p id={`${inputId}-help`}>
+                Khối lượng quy đổi = dài × rộng × cao / 5000 (cm). Nhân viên xác
+                nhận khối lượng tính cước trước khi gửi.
+              </p>
+            </details>
+          </div>
+          <div className="rateResult">
+            <span className="rateResultLabel">Cước tham khảo</span>
+            <div role="status" aria-live="polite" aria-atomic="true">
+              <div className="rateFeedback" key={amountLabel}>
+                <p
+                  className={`rateAmount${estimate ? "" : " rateAmount--message"}`}
+                >
+                  {amountLabel}
+                </p>
+                {explanation && (
+                  <p className="rateExplanation">{explanation}</p>
+                )}
+              </div>
+            </div>
+            <div className="rateResultLine">
+              <span>{routeLabel}</span>
+              <strong>
+                {estimate
+                  ? `${(estimate.chargeableGrams / 1000).toLocaleString("vi-VN")} kg tính cước`
+                  : validWeight
+                    ? `${Number(weight).toLocaleString("vi-VN")} kg`
+                    : "—"}
+              </strong>
+            </div>
+            <p className="rateQualification">
+              Chưa gồm thuế, thông quan, phụ thu và bảo hiểm.
+              <br />
+              Tổng phí được xác nhận trước khi gửi.
+            </p>
+            <ShippingRateSupport context={supportContext} />
+          </div>
+        </div>
+        {config && (
+          <>
+            <details className="ratePublicDetails">
+              <summary>Bảng giá chi tiết</summary>
+              <div className="rateDetailMeta">
+                <span className="rateDetailMetaSource">
+                  {config.sourceLabel}
+                </span>
+                <span className="rateDetailMetaBadge rateDetailMetaStatus">
+                  {publicSnapshot?.origin === "reference"
+                    ? "Bảng tham khảo"
+                    : "Bảng đã công bố"}
+                </span>
+                <span className="rateDetailMetaBadge">{routeLabel}</span>
+                <span className="rateDetailMetaBadge">
+                  {warehouseLabels[warehouse]}
+                </span>
+                <span className="rateDetailMetaBadge">
+                  {service === "standard"
+                    ? "Thông thường"
+                    : service === "express"
+                      ? "Nhanh"
+                      : "Hàng theo kg"}
+                </span>
+              </div>
+              <p className="rateDetailHint">
+                Chiều gửi, kho và dịch vụ dùng chung với phần tính cước ở trên.
+              </p>
+              <div className="rateDetailToolbar">
+                <label>
+                  Chiều gửi
+                  <select
+                    value={direction}
+                    onChange={(event) => {
+                      const next = event.target.value as typeof direction;
+                      setDirection(next);
+                      setWarehouse(next === "VN_US" ? "vietnam" : "texas_cali");
+                      setService(next === "VN_US" ? "standard" : "cargo");
+                      setProduct("");
+                    }}
+                  >
+                    <option value="VN_US">Việt Nam → Mỹ</option>
+                    <option value="US_VN">Mỹ → Việt Nam</option>
+                  </select>
+                </label>
+                <label>
+                  {direction === "VN_US" ? "Dịch vụ" : "Kho gửi"}
+                  {direction === "VN_US" ? (
+                    <select
+                      value={service}
+                      onChange={(event) =>
+                        setService(event.target.value as typeof service)
+                      }
+                    >
+                      <option value="standard">Thông thường</option>
+                      <option value="express">Nhanh</option>
+                      <option value="cargo">Hàng theo kg</option>
+                    </select>
+                  ) : (
+                    <select
+                      value={warehouse}
+                      onChange={(event) => {
+                        setWarehouse(event.target.value as typeof warehouse);
+                        setProduct("");
+                      }}
+                    >
+                      <option value="texas_cali">Texas / California</option>
+                      <option value="oregon">Oregon</option>
+                    </select>
+                  )}
+                </label>
+                <label className="rateDetailSearch">
+                  Tìm trong bảng
+                  <input
+                    type="search"
+                    value={detailSearch}
+                    placeholder="Khối lượng, nhóm hàng, điều kiện…"
+                    onChange={(event) => setDetailSearch(event.target.value)}
+                  />
+                </label>
+                <label>
+                  Hiển thị
+                  <select
+                    value={availability}
+                    onChange={(event) =>
+                      setAvailability(event.target.value as PriceAvailability)
+                    }
+                  >
+                    <option value="all">Tất cả mức cước</option>
+                    <option value="listed">Có giá niêm yết</option>
+                    <option value="confirm">Cần xác nhận giá</option>
+                  </select>
+                </label>
+              </div>
+              <div className="rateDetailCount">
+                <span role="status">
+                  {detailRows.length} / {rows.length} dòng giá
+                </span>
+                {(detailSearch || availability !== "all") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDetailSearch("");
+                      setAvailability("all");
+                    }}
+                  >
+                    Xóa bộ lọc
+                  </button>
+                )}
+              </div>
+              {commonClearance && (
+                <p className="rateCommonCondition">
+                  <strong>Thông quan / điều kiện</strong>
+                  <span>{commonClearance}</span>
+                </p>
+              )}
+              <div ref={rowResults} className="rateTableWrap rateDetailedTable">
+                <table>
+                  <caption className="rateDetailCaption">
+                    {routeLabel} · {warehouseLabels[warehouse]} ·{" "}
+                    {service === "standard"
+                      ? "Thông thường"
+                      : service === "express"
+                        ? "Nhanh"
+                        : "Hàng theo kg"}
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Khối lượng / nhóm hàng</th>
+                      <th scope="col">Cước</th>
+                      {commonClearance === null && (
+                        <th scope="col">Thông quan / điều kiện</th>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detailRows.map((row) => (
+                      <tr
+                        key={row.id}
+                        className={
+                          estimate?.rowId === row.id
+                            ? "rateRow--selected"
+                            : undefined
+                        }
+                        aria-current={
+                          estimate?.rowId === row.id ? "true" : undefined
+                        }
+                      >
+                        <th scope="row">{row.label}</th>
+                        <td>
+                          {row.pricing === "quote" || row.amountMinor === null
+                            ? row.priceDisplay
+                            : `${money(row.amountMinor, row.currency)} / ${row.pricing === "per_kg" ? "kg" : "mốc"}`}
+                        </td>
+                        {commonClearance === null && <td>{row.clearance}</td>}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {!detailRows.length && (
+                <p className="rateDetailEmpty">
+                  {rows.length
+                    ? "Không tìm thấy dòng giá. Thử từ khóa khác hoặc xóa bộ lọc."
+                    : "Chưa có giá cho lựa chọn này."}
+                </p>
+              )}
+            </details>
+            <details className="ratePublicDetails">
+              <summary>Điều kiện vận chuyển</summary>
+              <label className="rateConditionSearch">
+                Tìm điều kiện
+                <input
+                  type="search"
+                  value={conditionSearch}
+                  placeholder="Thuế, khối lượng, bảo hiểm…"
+                  onChange={(event) => setConditionSearch(event.target.value)}
+                />
+              </label>
+              <div className="rateDetailCount">
+                <span role="status">
+                  {conditions.length} / {config.conditions.length} điều kiện
+                </span>
+                {conditionSearch && (
+                  <button type="button" onClick={() => setConditionSearch("")}>
+                    Xóa tìm kiếm
+                  </button>
+                )}
+              </div>
+              <div ref={conditionResults} className="rateConditionGroups">
+                {(["general", "VN_US", "US_VN"] as const).map((group) => {
+                  const items = conditions.filter(
+                    (item) => item.group === group,
+                  );
+                  return items.length ? (
+                    <section key={group}>
+                      <h3>
+                        {group === "general"
+                          ? "Điều kiện chung"
+                          : group === "VN_US"
+                            ? "Việt Nam → Mỹ"
+                            : "Mỹ → Việt Nam"}
+                      </h3>
+                      <ul>
+                        {items.map((item) => (
+                          <li key={item.index}>{item.text}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  ) : null;
+                })}
+              </div>
+              {!conditions.length && (
+                <p className="rateDetailEmpty">
+                  {config.conditions.length
+                    ? "Không tìm thấy điều kiện. Thử từ khóa khác hoặc xóa tìm kiếm."
+                    : "Chưa có điều kiện vận chuyển trong bảng giá."}
+                </p>
+              )}
+              <div className="rateSourceLinks">
+                {[...new Set(config.sourceUrls)].map((url, index) => (
+                  <a
+                    key={url}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Nguồn VietCargo ·{" "}
+                    {url.includes("vietnam-di-my") ||
+                    url.includes("viet-nam-di-my")
+                      ? "Việt Nam → Mỹ"
+                      : url.includes("my-ve-viet-nam") ||
+                          url.includes("my-di-viet-nam") ||
+                          url.includes("bang-gia-ship-hang-tu-my")
+                        ? "Mỹ → Việt Nam"
+                        : `Nguồn ${index + 1}`}
+                  </a>
+                ))}
+              </div>
+            </details>
+          </>
+        )}
+      </section>
+    );
+  }
+
   return (
     <section className="shippingRates">
       <CrmHeading
@@ -442,7 +939,8 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
               <p key={url}>
                 <a href={url} target="_blank" rel="noopener noreferrer">
                   Nguồn VietCargo ·{" "}
-                  {url.includes("vietnam-di-my")
+                  {url.includes("vietnam-di-my") ||
+                  url.includes("viet-nam-di-my")
                     ? "Việt Nam → Mỹ"
                     : "Mỹ → Việt Nam"}
                 </a>
@@ -758,5 +1256,240 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
         </section>
       )}
     </section>
+  );
+}
+
+/** Animate only committed result identity changes; never delay authoritative text. */
+function useResultFade(signature: string) {
+  const ref = useRef<HTMLDivElement>(null);
+  const previous = useRef<string | null>(null);
+  useLayoutEffect(() => {
+    const changed = previous.current !== null && previous.current !== signature;
+    previous.current = signature;
+    const element = ref.current;
+    if (!changed || !element || typeof element.animate !== "function") return;
+    const preference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (preference?.matches) return;
+    const animation = element.animate([{ opacity: 0.82 }, { opacity: 1 }], {
+      duration: 140,
+      easing: "ease-out",
+    });
+    const cancel = () => animation.cancel();
+    const preferenceChanged = () => {
+      if (preference?.matches) cancel();
+    };
+    preference?.addEventListener?.("change", preferenceChanged);
+    return () => {
+      cancel();
+      preference?.removeEventListener?.("change", preferenceChanged);
+    };
+  }, [signature]);
+  return ref;
+}
+
+/** Uses the existing private support-ticket contract, not an order or payment. */
+function ShippingRateSupport({ context }: { context: string }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  const [user, setUser] = useState<User | null>(auth?.currentUser ?? null);
+  const [details, setDetails] = useState("");
+  const [summary, setSummary] = useState(context);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+  const [uncertain, setUncertain] = useState(false);
+  const running = useRef(false);
+  const generation = useRef(0);
+  const attempt = useRef<{
+    uid: string;
+    payload: {
+      action: "openTicket";
+      operationId: string;
+      payload: { subject: string; message: string };
+    };
+  } | null>(null);
+  useEffect(() => {
+    let previousUid = auth?.currentUser?.uid ?? null;
+    const unsubscribe = auth
+      ? onAuthStateChanged(auth, (next) => {
+          const uid = next?.uid ?? null;
+          if (attempt.current && attempt.current.uid !== uid) {
+            attempt.current = null;
+            setUncertain(false);
+          }
+          if (uid !== previousUid) {
+            previousUid = uid;
+            generation.current++;
+            running.current = false;
+            setBusy(false);
+            setDetails("");
+            setError("");
+            setSent(false);
+          }
+          setUser(next);
+        })
+      : undefined;
+    return () => {
+      generation.current++;
+      unsubscribe?.();
+    };
+    // Subscription lifetime is independent of rendering; UID checks also fence replies.
+  }, []);
+  async function signIn() {
+    if (running.current) return;
+    const current = generation.current;
+    running.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      await login();
+    } catch {
+      if (current === generation.current)
+        setError("Chưa đăng nhập được. Thử lại.");
+    } finally {
+      if (current === generation.current) {
+        running.current = false;
+        setBusy(false);
+      }
+    }
+  }
+  async function send(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const uid = auth?.currentUser?.uid;
+    if (running.current || sent || !uid || uid !== user?.uid) return;
+    attempt.current ??= {
+      uid,
+      payload: {
+        action: "openTicket",
+        operationId: crypto.randomUUID(),
+        payload: {
+          subject: "Xác nhận cước vận chuyển",
+          message: [summary, details.trim()].filter(Boolean).join("\n\n"),
+        },
+      },
+    };
+    if (attempt.current.uid !== uid) return;
+    const current = generation.current;
+    running.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      await callService("workspaceCommand", attempt.current.payload);
+      if (current !== generation.current || auth?.currentUser?.uid !== uid)
+        return;
+      attempt.current = null;
+      setUncertain(false);
+      setSent(true);
+    } catch (failure) {
+      if (current !== generation.current || auth?.currentUser?.uid !== uid)
+        return;
+      const code = (failure as { code?: string })?.code;
+      const unknownResult =
+        !code ||
+        [
+          "functions/internal",
+          "functions/unavailable",
+          "functions/unknown",
+          "functions/deadline-exceeded",
+        ].includes(code);
+      if (!unknownResult) attempt.current = null;
+      setUncertain(unknownResult);
+      setError(
+        unknownResult
+          ? "Chưa nhận được kết quả. Thử lại cùng yêu cầu."
+          : "Chưa gửi được yêu cầu. Kiểm tra tài khoản và thử lại.",
+      );
+    } finally {
+      if (current === generation.current) {
+        running.current = false;
+        setBusy(false);
+      }
+    }
+  }
+  return (
+    <>
+      <button
+        type="button"
+        className="rateContact"
+        onClick={() => {
+          if (!attempt.current && !busy) {
+            setSummary(context);
+            setSent(false);
+            setError("");
+          }
+          dialog.current?.showModal();
+        }}
+      >
+        Nhờ xác nhận cước
+      </button>
+      <dialog
+        className="rateSupportDialog"
+        ref={dialog}
+        aria-labelledby={titleId}
+      >
+        <form onSubmit={(event) => void send(event)} aria-busy={busy}>
+          <h2 id={titleId}>Nhờ xác nhận cước</h2>
+          {sent ? (
+            <>
+              <p role="status">Đã gửi yêu cầu.</p>
+              <Link className="rateContact" to="/support">
+                Xem phản hồi
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="rateSupportSummary">{summary}</p>
+              <label>
+                Mô tả hàng (không bắt buộc)
+                <textarea
+                  value={details}
+                  disabled={busy || uncertain}
+                  maxLength={3000}
+                  placeholder="Loại hàng, kích thước kiện…"
+                  onChange={(event) => setDetails(event.target.value)}
+                />
+              </label>
+              {error && (
+                <p role="alert" className="rateSupportError">
+                  {error}
+                </p>
+              )}
+              {!configured ? (
+                <p role="status">Chưa thể gửi yêu cầu lúc này.</p>
+              ) : user ? (
+                <button className="rateContact" type="submit" disabled={busy}>
+                  {busy
+                    ? "Đang gửi…"
+                    : uncertain
+                      ? "Thử gửi lại"
+                      : "Gửi yêu cầu"}
+                </button>
+              ) : (
+                <>
+                  <p className="rateQualification">
+                    Đăng nhập để gửi và xem phản hồi riêng.
+                  </p>
+                  <button
+                    className="rateContact"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => void signIn()}
+                  >
+                    {busy ? "Đang đăng nhập…" : "Đăng nhập để gửi"}
+                  </button>
+                </>
+              )}
+            </>
+          )}
+          <button
+            type="button"
+            className="rateDialogClose"
+            onClick={() => dialog.current?.close()}
+          >
+            Đóng
+          </button>
+        </form>
+      </dialog>
+    </>
   );
 }

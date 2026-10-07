@@ -1,0 +1,82 @@
+{
+  "scope": "Shipping detail086 public UI only",
+  "decision": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "evidence": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    }
+  },
+  "findings": [],
+  "cycles": [
+    "Initial browser harness denied read-only callable POST; allowlisted exact local public read, no product change.",
+    "Initial private locator assumptions corrected; final actual UI PASS, source frozen."
+  ],
+  "productionReadiness": "NOT_READY; local UI scope only",
+  "limitations": [
+    "Native200/AT/live providers NOT_RUN",
+    "Intelligence DEGRADED bounded source verification"
+  ],
+  "memoryCandidates": "None",
+  "tokenUsage": "Unavailable",
+  "cost": "Unavailable"
+}

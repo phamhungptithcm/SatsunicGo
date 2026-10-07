@@ -1,0 +1,5 @@
+{
+  "src/features/operations/Workbench.tsx": "068efca3fbb712bea24d16ed4605fb652f6b9db56f749ae95244f4ceb3086996",
+  "src/features/operations/OperationsDetails.tsx": "32ca2d3650289be39b4e6818dfb70f4e2c2454dd63a3553e3e5e1e78509f17c1",
+  "tests/unit/workbench-ui.test.ts": "f73dbc7eb9725d9cae79bbb29940034b663e519390550813c922164b0d86e919"
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-PURCHASE-FLOW-018",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Two approved purchasing paths implemented; custom legacy retained.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Server authority, verified identity, ownership, locked accounts and idempotent verified financial events reviewed/tested.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Shared typed policy and schemas; compile, lint, build and proportional tests passed.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Stale/unavailable/invalid/partial payment/refund/hold and unknown response paths checked.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No false payment success; persisted operation prevents duplicate order and allows recovery.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Assessment passed: production NOT_READY; no deployment, real prices/provider/auth acceptance absent.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing technical QUOTE_ACCEPTED stage reused with catalog display policy; all-inclusive prices required; paginated loaded-subset search disclosed.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-SOURCE_MANIFEST.json",
+        "docs/reviews/PURCHASE-FLOW-018-QUALITY_GATES.md",
+        "docs/reviews/PURCHASE-FLOW-018-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "018-1",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "functions/src/payments/payos.ts",
+      "summary": "Undefined accepted quote version prevented catalog intent persistence",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    },
+    {
+      "id": "018-2",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "packages/domain/index.ts",
+      "summary": "Universal deposit/quote/final freight semantics incompatible with catalog full payment",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    },
+    {
+      "id": "018-3",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "src/features/products/Checkout.tsx",
+      "summary": "Unknown checkout result could create duplicate order after reload",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    },
+    {
+      "id": "018-4",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "src/features/content/Content.tsx",
+      "summary": "Catalog was bounded and featured-only; malformed body crashed surface",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    },
+    {
+      "id": "018-5",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "functions/src/ai/ask.ts",
+      "summary": "Ask/CRM wording assumed all orders need quotation/deposit",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    },
+    {
+      "id": "018-6",
+      "severity": "LOW",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "src/features/products/Checkout.tsx",
+      "summary": "Reload reset visible variant during pending retry",
+      "resolution": "Required scoped fix before final handoff.",
+      "evidence_refs": [
+        "docs/reviews/PURCHASE-FLOW-018-task.diff"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Real listed prices and terms must be configured; no automatic conversion from reference prices.",
+    "Live payOS/auth/AI and production deployment acceptance not performed.",
+    "Shared dirty worktree includes unrelated changes; no commit or deployment made."
+  ],
+  "limitations": [
+    "Self-review, not independent human audit.",
+    "Final repository intelligence DEGRADED; bounded source/test evidence used.",
+    "Browser tests use synthetic emulator data; assistive technology and complete staff UI not certified."
+  ]
+}

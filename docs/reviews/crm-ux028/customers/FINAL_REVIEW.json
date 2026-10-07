@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CUSTOMERS-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped contextual search and care hierarchy implemented.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Exact authorized identity fallback; existing server contracts unchanged.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current19focused domain/version-boundary regressions and scoped lint pass; root current compiler/native regression pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Current source guards reviewed; native fault and navigation cases pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Unknown frozen retry implemented; native timing unverified.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider or full acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing controls/shared styles and bounded real staff identities.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CUSTOMERS028-UI",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/crm/Customers.tsx, src/features/crm/Customer.tsx",
+      "summary": "Generic search and always-visible care form obscured browsing and related work.",
+      "resolution": "Contextual search, identity disclosure and explicit care edit disclosure.",
+      "evidence_refs": [
+        "tests/unit/customers-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "CUSTOMERS028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md",
+      "summary": "Required native responsive, fault and AT acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/customers/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "customers",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta applies established form layout to new wrappers; structural fieldsets retained.29current focused tests and scoped lint pass; native layout pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    },
+    {
+      "id": "CUST028-TAG-BOUNDARY",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/crm/Customer.tsx",
+      "summary": "Input614 limit excluded maximum valid15tags\u00d740chars with comma-space separators.",
+      "resolution": "Input628 matches current domain15\u00d740+14\u00d72. Maximum-valid domain fixture and overcount rejection pass; no schema/authority change.",
+      "evidence_refs": [
+        "tests/unit/customers-contextual.test.ts",
+        "packages/domain/crm.ts"
+      ]
+    },
+    {
+      "id": "CUSTOMERS-CAS-BADGE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/crm/Customers.tsx, src/features/crm/Customer.tsx",
+      "summary": "Customer saveCustomerNotes explicit aborted is precommit: authority and prior replay precede CAS360/366. Pending metadata releases with existing reload guidance; valid tag boundary628 remains.",
+      "resolution": "Approved source correction verified;13existing regression checks and scoped lint pass. Actual native affected-state acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CAS_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "CUSTOMERS-INDEPENDENT-P2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/crm/Customers.tsx, src/features/crm/Customer.tsx",
+      "summary": "Independent-review cycle: memory-only current-customer care draft captured independently of DOM. Read failure still clears unavailable private data; successful authorized read restores draft. Changed/created/removed care version requires explicit reconcile/discard before fresh CAS. UI inventory: H\u1ed3 s\u01a1 \u0111\u00e3 thay \u0111\u1ed5i. B\u1ea3n nh\u00e1p c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u01b0\u1ee3c l\u01b0u.; N\u1ed9i dung m\u1edbi nh\u1ea5t; Ph\u00e2n lo\u1ea1i / Ghi ch\u00fa / Ng\u01b0\u1eddi ph\u1ee5 tr\u00e1ch / L\u1ecbch h\u1eb9n actual latest authorized values and existing truthful empty fallbacks; \u0110\u00e3 \u0111\u1ed1i chi\u1ebfu, ti\u1ebfp t\u1ee5c b\u1ea3n nh\u00e1p (explicit continue, no save); B\u1ecf b\u1ea3n nh\u00e1p, d\u00f9ng d\u1eef li\u1ec7u m\u1edbi (local discard, no mutation). Full tag/notes/assignee/appointment draft retained; successful save/identity change clears draft. Current UID/roles route key remains authority boundary; no persistent storage. ",
+      "resolution": "Approved bounded source correction,19focused domain/version-boundary regressions and scoped lint pass. Actual rendered behavior and independent fresh review remain pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/REVIEW_RECOVERY_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/customers/SOURCE_MANIFEST.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending operation remains memory-only across route unmount/full browser reload.",
+    "Native customer navigation, roster failure and lost-save-response validation pending."
+  ],
+  "limitations": [
+    "Compiler and browser runner root-owned, not run here.",
+    "Tokens/cost unavailable. Memory candidates None.",
+    "Current CAS/badge native and compiler acceptance pending; no runtime writes under source-only window."
+  ]
+}

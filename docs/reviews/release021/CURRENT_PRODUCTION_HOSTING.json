@@ -1,0 +1,15 @@
+{
+  "checkedAtUtc": "2026-10-05T14:58:57.069999+00:00",
+  "url": "https://satsunicgo.web.app/",
+  "method": "GET",
+  "status": 200,
+  "title": "SatsunicGo · Mua hộ Mỹ, Nhật, Hàn",
+  "headings": [
+    "Bạn chọn món. SatsunicGo lo phần còn lại."
+  ],
+  "entryScripts": [
+    "/assets/index-DiMxNafc.js"
+  ],
+  "htmlSha256": "69d74f1747f9ea3ef0ad3c783b37b24ce0344ddadeb272981fb5cdac272a1a45",
+  "scope": "PublicHTML only; no OAuth,interactiveapp,provider or release acceptance"
+}

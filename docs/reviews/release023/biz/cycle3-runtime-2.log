@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "gate": "integration",
+  "status": "PASSED",
+  "required": true,
+  "repository_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "evidence_source_hash": "ff13e67acd5283a7fa46a466f2dd3da3d4ddc722008ac01e0000e8ac29d0007b",
+  "summary": null,
+  "exit_code": 0,
+  "recorded_at": "2026-10-05T15:45:15.807Z",
+  "record_id": "180d9dd36c6975802f5585c071af13e3e0b2ea08cbef5f438d4389969754925a"
+}

@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "src/features/account/AccountRail.tsx",
+      "sha256": "61d4bd493569beef55bc2f999c9a01487f7b9b8d8bcbec977c6544751015fd4e"
+    },
+    {
+      "path": "src/features/account/account-rail.css",
+      "sha256": "9dceec2cf14e0e235fa331fa4693f6a3aec368335ee80f5695c5740baeed3c2b"
+    },
+    {
+      "path": "src/features/notifications/Notifications.tsx",
+      "sha256": "c8b1ece9da7c7ba5212f4d3710a42f94eab34a356cb5bf5849fb7710fefcb81e"
+    },
+    {
+      "path": "src/features/notifications/notifications.css",
+      "sha256": "511f75992590c1fa63186f7de16c8265b00719e836970527b7b9b3bf4bcc09e4"
+    },
+    {
+      "path": "tests/browser/notifications079.spec.ts",
+      "sha256": "55d1b2af5343882b9f91cdf5ae072bf7487df05658afd7255969f82df5ae0ddd"
+    }
+  ]
+}

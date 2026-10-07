@@ -1,0 +1,10 @@
+{
+  "scope": "comments UI only",
+  "files": {
+    "src/features/content/BlogComments.tsx": "374c40381517bcfd1dd20df651a97341a8b2e8a6bcad4fe60f6773c1a13be57c",
+    "src/features/content/blog-comments027.css": "0c54f6c2dda4b017906763a740b278ca5d2e9175e638f89a1e2189638922af6b",
+    "src/features/content/comments-ui/state.ts": "24cac8d0f2519d805e768066a43c253da4135703b710524ff0085f9d05f69804",
+    "tests/unit/blog-comments-ui027.test.ts": "4623ead6accc0915cea22f3c9315710a93d706d0f384ee94527c63fc4dec24ab"
+  },
+  "native": "NOT_RUN"
+}

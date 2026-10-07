@@ -1,0 +1,71 @@
+{
+  "candidateHash": "0319d9ade0b4dce37dfb4cf4df1ee166ef4f367dceb3aecc54b225e41adc35c2",
+  "sourceHashesVerifiedAfterChecks": true,
+  "sourceChangedDuringChecks": false,
+  "checkedAt": "2026-10-07T00:24:36.993546+00:00",
+  "unit": 46,
+  "browserSuites": 8,
+  "emulatorChecks": 23,
+  "frontendTypecheck": "PASS",
+  "backendTypecheck": "PASS",
+  "scopedLint": "PASS_ZERO_WARNINGS",
+  "production": "NOT_DEPLOYED",
+  "scope": "PRIVATE_CANDIDATE_SYNTHETIC_ONLY",
+  "fixturesCleaned": true,
+  "logs": {
+    "unit-final.log": "57eb215053d290c919e719a9767db72660cb6182c5cf057e7a8871ad87c3c7f0",
+    "frontend-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "playwright-final.log": "5dfc44ef9cc2d59ec352ea8fa78c0473bdd4d6d1ba666084a2a33ccbfe132983",
+    "emulator-final.log": "33f957f02fb09c29d6b7731d63c45e319ceabfc8f5447a5812ab2301b03d8e68",
+    "playwright-write-revocation.log": "936c0cd2cf7214b2fc79b9a66c560a413dea83f74aaa68a84423f8b4d784ac7b",
+    "frontend-write-revocation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint-write-revocation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "priorBackendAndDomainChecks": "Unchanged backend/domain files from final emulator/unit run; source path hashes retained",
+  "priorCandidateHash": "2c5a09c84510f578932a6880f1d7892ca8dae45280f8ba55008d40b55ae42869",
+  "rebaseChangedFiles": [
+    "src/shared/firebase.ts",
+    "functions/src/index.ts"
+  ],
+  "rebaseChecks": {
+    "frontend-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rebaseSourceHashesVerified": true,
+  "previousReviewedCandidateHash": "04f8a8f63389cd96f7e1931482d0abb3c4c522fcf3c2206100b4bb49680e2abb",
+  "archivedProductChecks": {
+    "playwright-archived.log": "114014c95307f79a94d08a79d24f179ac6cf8164a61cb38246491b3317333b17",
+    "frontend-archived.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint-archived.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archivedProductChangedFiles": [
+    "src/features/content/ProductReviews.tsx",
+    "tests/browser/product-detail080.spec.ts",
+    "tests/browser/fixtures/productdetail080/mock.ts"
+  ],
+  "latestStageCheckedAt": "2026-10-07T00:49:11.798105+00:00",
+  "loadingRebaseChecks": {
+    "playwright-loading-rebase.log": "a7769351ec0493064cf64a13be004e1ab1bca524cfb090d8ea5536f70487b09b",
+    "frontend-loading-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend-loading-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint-loading-rebase.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unit-loading-rebase.log": "c70c11a748e2d4c1bbef6b0dbffba8bc62d087baa23c567b3bc2bd708726a83c"
+  },
+  "canonicalLoadingDependencies": {
+    "src/shared/Loading.tsx": "d4ef2864cf18143bab2a508ab8e2c56f47a8166ac9731a12e7c053cab3c2b10a",
+    "src/shared/loading.css": "47e47445f0a936f47dbc7ac679f9b5cce57d9594eb5db401be0feae5a0c18977",
+    "src/shared/feedback.ts": "520c6bce55ee93b3aba39b6c6eede10526c04c4bd8d081360bbe0ac6aa6acf94",
+    "src/shared/Toast.tsx": "0653b2be43905dd77a2dbc03285c80f8efaa9878c6eaecf1ddf1e0ff5e94e56c",
+    "src/features/crm/CrmPresentation.tsx": "9517b6d9552757131599bcd9b6becd3703f593cc59fc5bd8ee86fd19f64a524d"
+  },
+  "loadingRebaseSourceHashesVerified": true,
+  "dependencyRefreshCheckedAt": "2026-10-07T00:53:32.702080+00:00",
+  "dependencyRefreshChecks": {
+    "playwright-dependency-refresh.log": "67cad412c222e3dece8a0ff7c6c2cc776fca18469bcc1cbd100aab65da787e00",
+    "inline-loading-refreshed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "INLINE-LOADING-RECEIPT.json": "95358e9d88c4b33788efb475161f99a0976face12ba6e478127c7a16b2da20ec"
+  }
+}

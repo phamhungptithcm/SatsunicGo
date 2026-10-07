@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { callService, db } from "../../shared/firebase";
@@ -201,7 +202,7 @@ export function Thread({
   }
   return (
     <div>
-      {loading && <p role="status">Đang tải phản hồi…</p>}
+      {loading && <LoadingState overlay={false}>Đang tải phản hồi…</LoadingState>}
       {!loading && !readError && !messages.length && (
         <p className="muted">Chưa có phản hồi.</p>
       )}

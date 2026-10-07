@@ -1,0 +1,13 @@
+
+> satsunicgo@0.1.0 test
+> vitest run --run tests/unit/request-input.test.ts
+
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:54:10
+   Duration  503ms (transform 46ms, setup 0ms, import 125ms, tests 20ms, environment 0ms)
+

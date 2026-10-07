@@ -1,0 +1,74 @@
+{
+  "task_id": "SATSUNICGO-NAV-PERF-087",
+  "commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "baseline": "Task-start copies preserve pre-existing WIP; not a HEAD-only diff.",
+  "files": [
+    {
+      "path": "src/app/App.tsx",
+      "before_sha256": "dc35f33bd186871640c9ba6d4636c5e810deebfbc19fd908cbecd62a184ec947",
+      "after_sha256": "38ac183da530c47c7cf6583558644ec58d73e107d6b00a96d24ccf6874a5e257",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/app/SiteChrome.tsx",
+      "before_sha256": "613d638d695587224f8c3c6b7e058a80f8f7fb463ced967b6e4636a08be627cd",
+      "after_sha256": "7f68a9c969315037e4097be69cded11cd19e838eb3e08776eb654b7ef24965f3",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/features/account/AccountRail.tsx",
+      "before_sha256": "61d4bd493569beef55bc2f999c9a01487f7b9b8d8bcbec977c6544751015fd4e",
+      "after_sha256": "2201345ad34962a8644fc0097865813f14433173ad534f603ec9d33c42b21fc8",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/features/ask/Ask.module.css",
+      "before_sha256": "be666422f2d6c119d6a8ca3de261b600fd4e8104541297098bbebb62ded0ad3b",
+      "after_sha256": "99cae7a347b2334c45f1c16f902a222d6c4f84a0bba7265535969155ade04e4a",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/shared/Loading.tsx",
+      "before_sha256": "d4ef2864cf18143bab2a508ab8e2c56f47a8166ac9731a12e7c053cab3c2b10a",
+      "after_sha256": "f081bcc95b858ca0f40ab97a98020a1519c63a8eb752f0d7f3f4e525c3b93395",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/shared/loading.css",
+      "before_sha256": "47e47445f0a936f47dbc7ac679f9b5cce57d9594eb5db401be0feae5a0c18977",
+      "after_sha256": "3dc19c06fe7e734da096c65e0ac2cffdcf2e383783ed848e105ce6925ca8e927",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/styles/account.css",
+      "before_sha256": "cf3d134d3ad7a60b1f28aefd40bf29568ac5a889d26ac94c94c9a8a04554dc00",
+      "after_sha256": "3c5e942f70c6a74f960b156aadc8901f49433f33687d809d6f633506674ca926",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/styles/global.css",
+      "before_sha256": "0cd36b9a04a4da8953050091fc111cc9759fa7a78ae0c6302aa39cc5690f9abf",
+      "after_sha256": "8df4bd300414b744e9d73f18c0d29496ec9152004c4f5c59ba490ef24ba4e3c9",
+      "changed_by_task": true
+    },
+    {
+      "path": "src/app/route-modules.ts",
+      "before_sha256": null,
+      "after_sha256": "95312b1c60de7e00e3ec4f2c88c26433d88ecf64b30f4b65f2bee999ca92e6a0",
+      "changed_by_task": true
+    },
+    {
+      "path": "tests/unit/navigation-performance087.test.ts",
+      "before_sha256": null,
+      "after_sha256": "50996aedfb08fc5742f7a9bf193609fc98b027113cbee48dfb9eef4de74c3166",
+      "changed_by_task": true
+    },
+    {
+      "path": "tests/browser/navigation-performance087.spec.ts",
+      "before_sha256": null,
+      "after_sha256": "8e82246c9db248a697462b6ed80c6da07d969b6a4644fd3d6d2fdab986777cc6",
+      "changed_by_task": true
+    }
+  ],
+  "candidate_hash": "a284c5a1c1bc507093a6ca727d3b81895aaa5c865a2573de2a9d7e0573e7dba3"
+}

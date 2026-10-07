@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-PRODUCT-DETAIL-080",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved product detail, CRM metadata and verified purchase reviews implemented in shared source; local acceptance2criteria verified.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Fresh Google actor lock and staff guards before replay; strict payload/CAS, server purchase eligibility and public DTO privacy; production auth is not live-tested.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "50 scoped and52 adjacent tests pass; both compilers, scopedlint, frontend/backend builds and sourcepreflight pass; no new dependency or unrelated refactor.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current empty/populated/instructions-only SSR and native5207; unchanged staged retry, revocation, archive, A-B-A and transaction proofs explicitly bounded.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Definitive denials clear private state; unknown ACK retains immutable operation; aggregate corruption fails closed; current loading dependencies preserved.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Assessment complete: productionNOT_READY. No deploy/commit/IAM/datafix; dirty shared tree and live Google/AppCheck, Node22 cloud, nativeIME/AT/zoom, fullCRM/provider gates unverified. Deploy Functions before Hosting and retain review audit on UIrollback.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "One review per customer/product after actual received unit; moderation required, edits keep approved revision; later refund does not erase proof; no untrusted review AI ingestion/images.",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md",
+        "docs/reviews/productdetail080/DEPENDENCY_REFRESH_RECEIPT.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "080-counter-parity",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "functions/src/product-reviews.ts",
+      "summary": "Missing summary or public revision mismatch could corrupt rating contribution",
+      "resolution": "Public-presence probe and parity guards with unit/emulator checks",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "080-labels-context",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/features/content/ProductReviewModeration.tsx",
+      "summary": "Labels and moderation lacked stable accessible context",
+      "resolution": "Explicit labels and bounded product context verified",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "080-private-revocation",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/features/content/ProductReviews.tsx",
+      "summary": "Same owner failed reads/writes retained private values",
+      "resolution": "Clear private display on denied reads/writes, staged browser checks",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "080-archived-retry",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/features/content/ProductReviews.tsx",
+      "summary": "Authoritative archived notfound trapped uncertain retry",
+      "resolution": "Definitive notfound branch and eighth browser regression",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "080-dependency-binding",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/shared/Loading.tsx",
+      "summary": "Staged dependency receipts drifted from shared current loading",
+      "resolution": "Private copies refreshed and exact current hashes/inline checks verified",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "080-empty-copy",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "correctness-content",
+      "location": "src/features/content/ProductDetail.tsx",
+      "summary": "Missing retailer implied active verification and empty description rendered heading",
+      "resolution": "Truthful unknown fallback and empty region omission, four currentSSR/native cases",
+      "evidence_refs": [
+        "docs/reviews/productdetail080/SOURCE_FREEZE.json",
+        "docs/reviews/productdetail080/INTEGRATED_RECEIPT.json",
+        "docs/reviews/productdetail080/ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md",
+        "docs/reviews/productdetail080/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Existing large frontend chunks and ineffective dynamic imports remain baseline performance limits",
+    "Existing shared synthetic catalog includes invalid undefined item; current lease excluded data cleanup"
+  ],
+  "limitations": [
+    "Local scoped source/content acceptance only, not whole dirty worktree release proof",
+    "50 scoped plus52 adjacent currenttests;8 staged actualReact suites and3 inline checks;23 prior unchanged-backend isolated emulator checks",
+    "Native OSIME, screen-reader/AT, native200percent zoom, full authenticated5207CRM, liveGoogle/AppCheck/provider/deployment NOT_RUN",
+    "Provider token usage and monetary cost unavailable; memory candidates None",
+    "Independent source review covers unchanged22d511 only; current Loading integration refresh reviewed locally against54tests/native5207 and current root frontendbuild, no independent current082 certification."
+  ]
+}

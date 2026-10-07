@@ -1,0 +1,9 @@
+Baseline024 frozen before continuation. Prior output copied to /private/tmp/satsunicgo-release024-preserved. Current025 before runs retained; never substitute fixture errors for product defects.
+
+178 unit/100 integration initial PASS. Media malformed access4/4 negative fail-before; full media8/8 after PASS. CAS2negative fail/1valid PASS before. Authority returns/consolidation8negative fail/2valid PASS before. Business3PASS1FAIL before confirms cancelled catalog extra collection. Workspace4negative fail/1valid PASS before. UI2native fail-before, both passed after. Root finance native new test wrong submit label failed once; corrected existinglabel1/1PASS. Sharedcommand first fixture incorrect snapshot total; corrected before proves valid PASS, four malformed grants commit and malformed object assignment TypeError; audit historical assertion contaminated by earlier samefixture commits and corrected to unchanged count.
+
+Whole unit first final attempt177PASS1telemetryofflineFAIL; isolated unchangedmodule4PASS. Serial full rerun required. No skip/assertion relaxation. Legacy HTTP smoke requires different ports9198/5101; restore requires startup/import/export on dedicatedports, not run against shared services. Browser native endpoints provide selected HTTP evidence; full production provider/auth/restore/load/actualAT are unverified.
+
+npm audit automatic approval rejected metadata upload to external registry. User question pending; no workaround or registry call.
+
+Pre-display final serial178unit/133integration PASS. Owned browser runner interrupted SIGINT exit130 once actualSDK technicalsuffix confirmed; partial browser run is NOT_PASS and retained browser-interrupted-before-display.json. Sharedservices preserved. Display fix adds16unitcases; final expected194unit/133integration/48browser, actualcounts must be read from receipts.

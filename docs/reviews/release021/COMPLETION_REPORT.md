@@ -1,0 +1,9 @@
+# Current task report — release021/022
+
+Local executed checks:165unit/67integration/35browserPASS, no skips; Node22compile/lint/buildPASS. Review cycles and every correction retained in CYCLE_JOURNAL.json and FINAL_REVIEW.json. Canonical catalog/custom money authority and CRM/document ownership/history criteria verified. Full content/assistive technology and production/provider/dependency-risk acceptance criteria remain pending; this is not a completed production release. Runtime weighted progress2/4 (50%) is criteria evidence, not a percentage of product implemented.
+
+HEAD3bd0d093255963a2cbf66ddd80d27456da7076e0, dirty shared WIP preserved; SOURCE_MANIFEST.json binds actual candidate files. Final review BLOCKED, productionNOT_READY. Actual dependencies0high/0critical13moderate; unresolved legacy Baggage risk and workspace installation diagnostic documented without risk acceptance. IndependentQA NOT_RUN because intelligence remainsDEGRADED/stale. Root bounded source/runtime review is not independent certification.
+
+Remaining: real OAuth/MFA/AppCheck, secure verified OWNER/bootstrap/provider/configuration, authorized merchant and controlled live payment/signature acceptance, SMTP/modelI AM, seller/terms/prices/policies, production monitoring/backup/restore/rollout/rollback, actualAT/full-language-state acceptance. Prepared DEPLOYMENT_INVENTORY.json does not authorize deploying current mixed WIP. No deploy, real-money correction, customer email or secret read performed. Latest attempt to message legacyCRM chat failed lookup; earlier sync and internal specialist handoffs succeeded.
+
+Tokenusage/API-equivalent/actualbilledcostUnavailable; memorycandidatesNone. Full governed runtime report: .ai-agent-kit/runtime/outputs/RELEASE-INTEGRATION-021-REPORT.txt (ignored task ledger). No successful final handoff until newest required review/gates pass.

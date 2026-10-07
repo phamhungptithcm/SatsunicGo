@@ -1,3 +1,4 @@
+import { LoadingState } from "../../../shared/Loading";
 import { useEffect, useState, type ReactNode } from "react";
 import { auth } from "../../../shared/firebase";
 import {
@@ -43,9 +44,7 @@ function PrivateImage({ node }: { node: RichNode }) {
       height={node.attrs?.height as number | undefined}
     />
   ) : (
-    <p role="status">
-      {failed ? "Chưa mở được ảnh bản nháp." : "Đang mở ảnh…"}
-    </p>
+    <>{failed ? <p role="status">{"Chưa mở được ảnh bản nháp."}</p> : <LoadingState overlay={false}>{"Đang mở ảnh…"}</LoadingState>}</>
   );
 }
 function nodeText(n: RichNode): string {

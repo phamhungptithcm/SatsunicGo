@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-REFUNDS-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Concrete UI-only plan implemented in exclusive page file.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No backend/proof/auth changes; authoritative reserved amount preserved and unknown action rejected.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "7focused refund+7return tests and targeted ESLint pass; compiler deferred root.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Frozen exact retry/source guards present; native faults/recovery pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Definite/unknown and confirmed refresh outcomes distinguished; current native acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider/deploy/full acceptance.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Native grouped disclosure reused without new CSS; no unknown-operation discard shortcut.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/refunds/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "REF028-CONTEXT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/payments/Refunds.tsx",
+      "summary": "All pending forms expanded, unrelated bank field on cancel and generic save label.",
+      "resolution": "Grouped disclosed decision, conditional bank/evidence fields, exact action label;7focused tests pass.",
+      "evidence_refs": [
+        "tests/unit/refunds-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "REF028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md",
+      "summary": "Current native financial UI/retry/AT/responsive acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/refunds/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "refunds",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta applies established form layout to new wrappers; structural fieldsets retained.29current focused tests and scoped lint pass; native layout pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Memory-only pending metadata across full browser reload requires native verification."
+  ],
+  "limitations": [
+    "No shared CSS, backend, provider, runtime, build or native runner changes.",
+    "Tokens/cost Unavailable; memory candidates None."
+  ]
+}

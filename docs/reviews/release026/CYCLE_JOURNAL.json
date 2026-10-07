@@ -1,0 +1,1237 @@
+{
+  "scope": "Complete local validation receipts; these are test rounds, not formal review approvals. Incomplete runners retained as logs only.",
+  "cycles": [
+    {
+      "receipt": "output/playwright/release026/ask-finalize-before.json",
+      "kind": "vitest",
+      "passed": 5,
+      "failed": 1,
+      "total": 6,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/ask-finalize-corrected-before.json",
+      "kind": "vitest",
+      "passed": 5,
+      "failed": 1,
+      "total": 6,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/ask-guards-after.json",
+      "kind": "vitest",
+      "passed": 13,
+      "failed": 1,
+      "total": 14,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/ask-privacy-before.json",
+      "kind": "vitest",
+      "passed": 2,
+      "failed": 3,
+      "total": 5,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/ask-support-after1.json",
+      "kind": "native",
+      "stats": {
+        "expected": 5,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 19416.653
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ask-support-round2.json",
+      "kind": "native",
+      "stats": {
+        "expected": 6,
+        "unexpected": 3,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 80719.4
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/backend-after.json",
+      "kind": "vitest",
+      "passed": 41,
+      "failed": 0,
+      "total": 41,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/catalog-followup-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 15505.519
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/catalog-four-after.json",
+      "kind": "native",
+      "stats": {
+        "expected": 4,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 14012.464
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/catalog-reorder-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 16149.906000000003
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/catalog-retry-corrected-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 47150.634000000005
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/catalog-retry-invalid-fault.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 15879.397
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/change-english-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 22606.669
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/change-loading-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 19299.259000000002
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/change-offline-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 21973.365
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/citation-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 15743.806
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/conversation-authority-before.json",
+      "kind": "vitest",
+      "passed": 1,
+      "failed": 6,
+      "total": 7,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/conversation-biz-after.json",
+      "kind": "vitest",
+      "passed": 13,
+      "failed": 0,
+      "total": 13,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/english-restore-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 18022.544
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/full-integration.json",
+      "kind": "vitest",
+      "passed": 220,
+      "failed": 0,
+      "total": 220,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/full-unit.json",
+      "kind": "vitest",
+      "passed": 207,
+      "failed": 0,
+      "total": 207,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/mutation-authority-after.json",
+      "kind": "vitest",
+      "passed": 15,
+      "failed": 0,
+      "total": 15,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/mutation-authority-before.json",
+      "kind": "vitest",
+      "passed": 3,
+      "failed": 12,
+      "total": 15,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/private-authority-after.json",
+      "kind": "vitest",
+      "passed": 14,
+      "failed": 0,
+      "total": 14,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/private-authority-before.json",
+      "kind": "vitest",
+      "passed": 2,
+      "failed": 12,
+      "total": 14,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/remaining-authority-after.json",
+      "kind": "vitest",
+      "passed": 25,
+      "failed": 0,
+      "total": 25,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/remaining-authority-before.json",
+      "kind": "vitest",
+      "passed": 5,
+      "failed": 20,
+      "total": 25,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/staff-switch-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 11229.965
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-ui-focused-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 15033.534000000001
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/support-entry-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 47512.617
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/taskflow-round4.json",
+      "kind": "native",
+      "stats": {
+        "expected": 22,
+        "unexpected": 7,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 142903.078
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/taskflow-round5.json",
+      "kind": "native",
+      "stats": {
+        "expected": 27,
+        "unexpected": 3,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 85648.607
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ticket-authority-before.json",
+      "kind": "vitest",
+      "passed": 3,
+      "failed": 4,
+      "total": 7,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/ui-after-round1.json",
+      "kind": "native",
+      "stats": {
+        "expected": 5,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 59401.763
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ui-after-round2.json",
+      "kind": "native",
+      "stats": {
+        "expected": 6,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 14204.833999999999
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ui-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 6,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 91576.65599999999
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ui-taskflow-after.json",
+      "kind": "native",
+      "stats": {
+        "expected": 12,
+        "unexpected": 3,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 48651.367999999995
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/workspace-authority-before.json",
+      "kind": "vitest",
+      "passed": 2,
+      "failed": 18,
+      "total": 20,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/changequeue-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 5,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 76066.18800000001
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/changequeue-native-after.json",
+      "kind": "native",
+      "stats": {
+        "expected": 6,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 51283.681
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/changequeue-rules-after.json",
+      "kind": "vitest",
+      "passed": 11,
+      "failed": 0,
+      "total": 11,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/changequeue-rules-before.json",
+      "kind": "vitest",
+      "passed": 5,
+      "failed": 6,
+      "total": 11,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/changequeue-scroll-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 18859.837
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/cq-full-integration-final.json",
+      "kind": "vitest",
+      "passed": 252,
+      "failed": 0,
+      "total": 252,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/cq-full-unit-final.json",
+      "kind": "vitest",
+      "passed": 207,
+      "failed": 0,
+      "total": 207,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/full-browser-round1.json",
+      "kind": "native",
+      "stats": {
+        "expected": 82,
+        "unexpected": 4,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 823798.983
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/full-browser-round2.json",
+      "kind": "native",
+      "stats": {
+        "expected": 101,
+        "unexpected": 4,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 884902.205
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/full-browser-round3.json",
+      "kind": "native",
+      "stats": {
+        "expected": 102,
+        "unexpected": 3,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 253042.267
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/full-browser-round4.json",
+      "kind": "native",
+      "stats": {
+        "expected": 104,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 514796.737
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/full-integration-final.json",
+      "kind": "vitest",
+      "passed": 241,
+      "failed": 0,
+      "total": 241,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/full-unit-final.json",
+      "kind": "vitest",
+      "passed": 207,
+      "failed": 0,
+      "total": 207,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/native-after-recovery.json",
+      "kind": "native",
+      "stats": {
+        "expected": 6,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 12445.034
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/new-three-probe.json",
+      "kind": "native",
+      "stats": {
+        "expected": 3,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 14889.673
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-legacy-cas-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 19500.035
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-legacy-transport-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 17233.338
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-target-after.json",
+      "kind": "native",
+      "stats": {
+        "expected": 13,
+        "unexpected": 1,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 43696.361
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-target-after2.json",
+      "kind": "native",
+      "stats": {
+        "expected": 16,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 39385.131
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-target-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 0,
+        "unexpected": 2,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 32654.706000000002
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/staff-target-layout-before.json",
+      "kind": "native",
+      "stats": {
+        "expected": 1,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 4527.875
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/workspace-version-before.json",
+      "kind": "vitest",
+      "passed": 18,
+      "failed": 3,
+      "total": 21,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/crm-full-native-round1.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T22:27:29.328Z",
+        "duration": 1104805.342,
+        "expected": 157,
+        "skipped": 0,
+        "unexpected": 11,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-full-native-final.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:19:22.703Z",
+        "duration": 438119.267,
+        "expected": 168,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-membership-reach-before.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:31:05.379Z",
+        "duration": 31611.392,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-membership-reach-first-after.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:36:36.235Z",
+        "duration": 31866.578,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-membership-reach-after.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:51:49.260Z",
+        "duration": 9067.77,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-content-validation-before.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T22:52:45.380Z",
+        "duration": 16664.657,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-content-validation-after.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T22:58:45.115Z",
+        "duration": 15332.782,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-mixedroles-before.json",
+      "kind": "vitest",
+      "total": 27,
+      "passed": 1,
+      "failed": 26,
+      "pending": 0,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/crm-mixedroles-after.json",
+      "kind": "vitest",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-current-unit.json",
+      "kind": "vitest",
+      "total": 207,
+      "passed": 207,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-current-integration.json",
+      "kind": "vitest",
+      "total": 279,
+      "passed": 278,
+      "failed": 0,
+      "pending": 1,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-storage-integration.json",
+      "kind": "vitest",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-original-regressions-recovery.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:07:36.803Z",
+        "duration": 221868.648,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-timeout-focused.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:11:41.155Z",
+        "duration": 94421.54599999999,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-preserved-timeout-focused.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:15:21.373Z",
+        "duration": 48793.627,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-zoom-selector-after.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-05T23:16:47.060Z",
+        "duration": 11671.271,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-current-full-native.json",
+      "kind": "playwright",
+      "passed": 169,
+      "failed": 2,
+      "pending": 0,
+      "total": 171,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/crm-records-before.json",
+      "kind": "playwright",
+      "passed": 4,
+      "failed": 4,
+      "pending": 0,
+      "total": 8,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/crm-records-corrected-before.json",
+      "kind": "playwright",
+      "passed": 6,
+      "failed": 4,
+      "pending": 0,
+      "total": 10,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/crm-records-after.json",
+      "kind": "playwright",
+      "passed": 10,
+      "failed": 0,
+      "pending": 0,
+      "total": 10,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-outbox-label-before.json",
+      "kind": "playwright",
+      "passed": 0,
+      "failed": 2,
+      "pending": 0,
+      "total": 2,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/staff-role-family-before.json",
+      "kind": "vitest",
+      "passed": 25,
+      "failed": 67,
+      "pending": 0,
+      "total": 92,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/staff-role-family-corrected-before.json",
+      "kind": "vitest",
+      "passed": 26,
+      "failed": 66,
+      "pending": 0,
+      "total": 92,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/staff-role-family-after.json",
+      "kind": "vitest",
+      "passed": 92,
+      "failed": 0,
+      "pending": 0,
+      "total": 92,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/reminder-role-before.json",
+      "kind": "vitest",
+      "passed": 3,
+      "failed": 9,
+      "pending": 0,
+      "total": 12,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/reminder-role-after.json",
+      "kind": "vitest",
+      "passed": 12,
+      "failed": 0,
+      "pending": 0,
+      "total": 12,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/conversation-role-before.json",
+      "kind": "vitest",
+      "passed": 4,
+      "failed": 21,
+      "pending": 0,
+      "total": 25,
+      "success": false
+    },
+    {
+      "receipt": "output/playwright/release026/conversation-role-after.json",
+      "kind": "vitest",
+      "passed": 25,
+      "failed": 0,
+      "pending": 0,
+      "total": 25,
+      "success": true,
+      "note": "Current scoped candidate."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final179-unit-sandbox-denied.json",
+      "kind": "vitest",
+      "passed": 206,
+      "failed": 1,
+      "pending": 0,
+      "total": 207,
+      "success": false,
+      "note": "Sandbox loopback EPERM, not product defect; unchanged rerun authorized locally."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final179-unit.json",
+      "kind": "vitest",
+      "passed": 207,
+      "failed": 0,
+      "pending": 0,
+      "total": 207,
+      "success": true,
+      "note": "Current scoped candidate."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final179-integration.json",
+      "kind": "vitest",
+      "passed": 408,
+      "failed": 0,
+      "pending": 0,
+      "total": 408,
+      "success": true,
+      "note": "Current scoped candidate."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-outbox-label-after.json",
+      "kind": "playwright",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0,
+      "total": 2,
+      "success": true,
+      "note": "Current scoped candidate."
+    },
+    {
+      "receipt": "output/playwright/release026/http-timing-before.json",
+      "kind": "playwright",
+      "passed": 0,
+      "failed": 2,
+      "pending": 0,
+      "total": 2,
+      "success": false,
+      "note": "Opt-in sanitized timing; same45s and full business assertions. Afterlocalrecovery3canariesmatch; captureoverlappedfocusedstartup, verified beforewhole."
+    },
+    {
+      "receipt": "output/playwright/release026/http-timing-after.json",
+      "kind": "playwright",
+      "passed": 2,
+      "failed": 0,
+      "pending": 0,
+      "total": 2,
+      "success": true,
+      "note": "Opt-in sanitized timing; same45s and full business assertions. Afterlocalrecovery3canariesmatch; captureoverlappedfocusedstartup, verified beforewhole."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-recovered179-native.json",
+      "kind": "playwright",
+      "passed": 177,
+      "failed": 2,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 179,
+      "success": false,
+      "duration_ms": 612138.3509999999
+    },
+    {
+      "receipt": "output/playwright/release026/crm-populated-before.json",
+      "kind": "playwright",
+      "passed": 6,
+      "failed": 9,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 15,
+      "success": false,
+      "duration_ms": 51925.629
+    },
+    {
+      "receipt": "output/playwright/release026/crm-populated-corrected.json",
+      "kind": "playwright",
+      "passed": 14,
+      "failed": 1,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 15,
+      "success": false,
+      "duration_ms": 49860.367000000006
+    },
+    {
+      "receipt": "output/playwright/release026/crm-populated-after18.json",
+      "kind": "playwright",
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 18,
+      "success": true,
+      "duration_ms": 55483.324
+    },
+    {
+      "receipt": "output/playwright/release026/ask-hydration-before.json",
+      "kind": "playwright",
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 1,
+      "success": false,
+      "duration_ms": 17037.46
+    },
+    {
+      "receipt": "output/playwright/release026/ask-hydration-after3-first.json",
+      "kind": "playwright",
+      "passed": 1,
+      "failed": 2,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 3,
+      "success": false,
+      "duration_ms": 96975.204
+    },
+    {
+      "receipt": "output/playwright/release026/ask-hydration-after3-corrected.json",
+      "kind": "playwright",
+      "passed": 2,
+      "failed": 1,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 3,
+      "success": false,
+      "duration_ms": 83705.782
+    },
+    {
+      "receipt": "output/playwright/release026/ask-hydration-recovered3.json",
+      "kind": "playwright",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "total": 3,
+      "success": true,
+      "duration_ms": 21734.987
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final198-native-round1.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:21:21.144Z",
+        "duration": 625561.166,
+        "expected": 193,
+        "skipped": 0,
+        "unexpected": 5,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-repeat-fixtures-after6.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:35:16.196Z",
+        "duration": 17955.846999999998,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ask-restore-order-before.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:40:26.588Z",
+        "duration": 15839.847,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ask-restore-order-corrected-before.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:41:40.449Z",
+        "duration": 17346.127,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ask-restore-order-diagnostic-before.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:43:52.465Z",
+        "duration": 16421.615999999998,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/ask-restore-order-after3.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:46:04.180Z",
+        "duration": 8342.327,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-unit.json",
+      "kind": "vitest",
+      "passed": 207,
+      "failed": 0,
+      "total": 207,
+      "success": true
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-native-round1.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T01:53:07.164Z",
+        "duration": 698561.901,
+        "expected": 138,
+        "skipped": 54,
+        "unexpected": 7,
+        "flaky": 0
+      },
+      "limitation": "Dedicated Auth/Functions/Storage CLI ended EAGAIN;54 skipped, not acceptance.325inputs0drift."
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-recovery-focused3.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:06:42.003Z",
+        "duration": 228720.455,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-restored-focused3.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:12:31.345Z",
+        "duration": 21894.244,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-native-round2.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:13:39.808Z",
+        "duration": 863010.844,
+        "expected": 198,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-ready-state-focused5.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:29:29.102Z",
+        "duration": 17873.191,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-native-round3.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:30:38.418Z",
+        "duration": 990828.143,
+        "expected": 196,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-recovery-focused3b.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:53:50.279Z",
+        "duration": 20688.601000000002,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 3,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-recovery-focused3c.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:55:51.425Z",
+        "duration": 17952.429,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "receipt": "output/playwright/release026/crm-final199-native-round4.json",
+      "kind": "native",
+      "stats": {
+        "startTime": "2026-10-06T02:56:41.301Z",
+        "duration": 541883.666,
+        "expected": 199,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_inputs": 325,
+      "source_drift": 0
+    }
+  ],
+  "limitations": [
+    "Actual optional repository indexes remain DEGRADED; bounded source/test fallback used.",
+    "Invalid fixture rounds are retained as historical diagnostics, not product failures or successful acceptance.",
+    "Integration worker EPIPE attempt has no complete JSON; cq-full-integration-final.json exact retry passes 252 tests.",
+    "Live provider/auth/payment/audit/AT/load/deployed index and production acceptance remain unverified.",
+    "Current final whole199 PASS0skip/flaky and325input0drift; unit207/integration408 scoped local evidence."
+  ],
+  "incomplete_runs": [
+    {
+      "receipt": "output/playwright/release026/crm-final179-native-interrupted.json",
+      "status": "INTERRUPTED_NOT_COMPLETE",
+      "passed": 20,
+      "failed": 4,
+      "skipped_or_interrupted": 155,
+      "source_inputs": 322,
+      "source_drift": 0,
+      "reason": "Cross-flow recurring45s successfulwrite latency; preserve evidence, measure/recover then new whole179."
+    }
+  ]
+}

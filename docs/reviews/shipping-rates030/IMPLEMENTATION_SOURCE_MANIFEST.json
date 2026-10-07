@@ -1,0 +1,12 @@
+{
+  "baseline_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "scope": "local approved shipping change; shared WIP excluded",
+  "files": {
+    "src/features/shipping/ShippingRates.tsx": "c585beff7ce4d6eb89282c23e2c4d81fcf5c2c290b8eb5d1931dda11a289e8eb",
+    "src/features/shipping/shipping-rates.css": "5809faec0f73c9aead9e8c6b11d5e37d3c4959ab85185d0bf55d8586b415336b",
+    "tests/unit/shipping-rates027.test.ts": "3b582276f137d01ae5a6dd0ba08250dff8b4504e3c92ff6c1ef8eec2645ae6e1"
+  },
+  "isolated_candidate": "/tmp/shipping030-candidate",
+  "candidate_matches_scoped_source": true,
+  "candidate_generated_assets_sha256": "ab7448196c9aa58d53eba181651844be066b46965be5b3ccbd2904aba3a49faf"
+}

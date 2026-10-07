@@ -1,0 +1,168 @@
+{
+  "schema_version": 2,
+  "task_id": "SATSUNICGO-ACTIVITY-028",
+  "status": "BLOCKED",
+  "current_review": {
+    "source_alignment": "PASS",
+    "native_slice": "10 PASS, including three notification identity cases",
+    "evidence_refs": [
+      "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json",
+      "output/playwright/release027/finance-activity-current-round3/browser-results.json"
+    ],
+    "product_gate": "BLOCKED",
+    "production_readiness": "NOT_READY"
+  },
+  "review_cycles": [
+    {
+      "candidate": "974c9",
+      "result": "Historical initial native NOT_RUN."
+    },
+    {
+      "candidate": "d40eb",
+      "result": "Lifecycle source review PASS; actual 8 PASS / 2 FAIL reversal390/1440, remount cause unverified."
+    },
+    {
+      "candidate": "07eb",
+      "result": "Diagnostic source review PASS; focused two PASS; full current ten PASS, independent exact evidence verified."
+    }
+  ],
+  "findings": [
+    {
+      "id": "NEW031-LIFECYCLE",
+      "status": "FIXED",
+      "summary": "Captured-generation route chains, actual commit/drop gate before replay, retained navigation error with exact-owned cleanup, independent SDK aggregate cleanup."
+    },
+    {
+      "id": "NEW031-REMOUNT",
+      "status": "UNVERIFIED",
+      "summary": "Earlier saved-status failures with remount signal did not recur; extra pre-submit navigation also appears in passing runs, no causal or financial-source fix claim."
+    },
+    {
+      "id": "ACTIVITY-IDENTITY",
+      "status": "FIXED",
+      "summary": "Actual job IDs distinguish identical-looking notifications; current three widths assert intended-only reconciliation and untouched sibling/order/ledger."
+    },
+    {
+      "id": "PRODUCT-ACCEPTANCE",
+      "status": "OPEN",
+      "summary": "Complete visual, contrast, keyboard, assistive technology, zoom and uncovered states remain pending."
+    }
+  ],
+  "limitations": [
+    "Current evidence is local synthetic dedicated emulator/browser only, not payment/webhook signature/email/provider proof.",
+    "Exact known owned resource cleanup only; opaque partial sourceOrder products, unknown old orphans and late effects NOT_VERIFIED.",
+    "Zero hook errors support successful current hook execution, not a blanket cleanup certificate.",
+    "Tokens/cost unavailable; memory candidates None."
+  ],
+  "historical_review_superseded": {
+    "schema_version": 1,
+    "task_id": "SATSUNICGO-ACTIVITY-028",
+    "status": "BLOCKED",
+    "dimensions": {
+      "requirement_match": {
+        "status": "PASSED",
+        "summary": "Approved grouped scope, contextual reconciliation, cursor-preserving reads and exact retry implemented.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "security": {
+        "status": "PASSED",
+        "summary": "Server outbox roles/MFA/provider verification/attempt limits unchanged; failed reads clear private rows/pagination.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "code_quality": {
+        "status": "PASSED",
+        "summary": "5 focused Activity and3Support tests pass; scoped lint passes, compiler root-owned pending.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "failure_paths": {
+        "status": "NOT_RUN",
+        "summary": "Native unknown-result, version rejection, permission and route boundary cases pending.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "error_handling": {
+        "status": "NOT_RUN",
+        "summary": "Exact pending operation/version/evidence and separate acknowledged queue/reconciliation versus read failures source reviewed.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "production_readiness": {
+        "status": "NOT_RUN",
+        "summary": "No provider or production acceptance evidence.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      "trade_offs": {
+        "status": "PASSED",
+        "summary": "Native table/details and source labels retained; pending recovery memory-only across route unmount/reload.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      }
+    },
+    "findings": [
+      {
+        "id": "ACT028-RECOVERY",
+        "severity": "HIGH",
+        "status": "FIXED",
+        "category": "error_handling",
+        "location": "src/features/crm/Activity.tsx",
+        "summary": "Unknown outbox actions could change operation/evidence or lose context through scope/refresh.",
+        "resolution": "Immutable issued command, explicit retry, scope/field/read locks; focused tests pass, native acceptance pending.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      {
+        "id": "ACT028-PROJECTION",
+        "severity": "MEDIUM",
+        "status": "FIXED",
+        "category": "correctness",
+        "location": "src/features/crm/Activity.tsx",
+        "summary": "Inherited keys could project nonstring status/action; mutation used read-loading label.",
+        "resolution": "Own-property mappings and phase-specific loading copy; focused checks rerun pass.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      },
+      {
+        "id": "ACT028-NATIVE",
+        "severity": "HIGH",
+        "status": "OPEN",
+        "category": "validation",
+        "location": "docs/reviews/crm-ux028/activity",
+        "summary": "Native width/focus/AT, version/permission and actual replay acceptance pending.",
+        "evidence_refs": [
+          "docs/reviews/crm-ux028/activity/CONTENT_REVIEW.md",
+          "docs/reviews/crm-ux028/activity/SOURCE_MANIFEST.json"
+        ]
+      }
+    ],
+    "residual_risks": [
+      "Pending operation metadata lost on route unmount/full reload.",
+      "Full CRM acceptance remains incomplete."
+    ],
+    "limitations": [
+      "Compiler/native runners root-owned. No runtime writes authorized for Activity lease.",
+      "Token usage/cost unavailable; memory candidates None."
+    ]
+  }
+}

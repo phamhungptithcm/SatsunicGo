@@ -1,0 +1,209 @@
+{
+  "status": "SPECIALIST_TERMINAL_SAVE_REPORT_RECOVERY_FROZEN_NATIVE_PENDING",
+  "files": [
+    {
+      "file": "src/features/content/studio/MermaidDiagram.tsx",
+      "sha256": "e402121427a111dd6c66cb4f76d06c3eb3ff0064ba5fe59c66f37fca566f9d3e"
+    },
+    {
+      "file": "src/features/content/studio/RichPreview.tsx",
+      "sha256": "3a18a85da5264142cf79f21b7aab31d8e4c065b80d349706602554da0b43c432"
+    },
+    {
+      "file": "src/features/content/studio/SourceStudio.tsx",
+      "sha256": "148945e309f3196aa690195909831df19f9fcc92bc5baa03756ed16c73b4c5d6"
+    },
+    {
+      "file": "src/features/content/studio/Studio.tsx",
+      "sha256": "05ece19dd39af42370d4640cf39950953dda974c0f9731b799b46d2541d4b563"
+    },
+    {
+      "file": "src/features/content/studio/StudioEditor.tsx",
+      "sha256": "bf04b78a764d3a9bb04278af71bc3c2a49a88d64e135f195cbed40f3b4ca764c"
+    },
+    {
+      "file": "src/features/content/studio/api.ts",
+      "sha256": "70b0c7ef17a4c204e0b634931f5b5f81a626dae5f3f47b43b9a4d89d5a19dc78"
+    },
+    {
+      "file": "src/features/content/studio/blog-code-block.tsx",
+      "sha256": "7eb57d49447a014cb52e6bfae4f2e819cfc0c5dc862a52f39ed792352fe4b76d"
+    },
+    {
+      "file": "src/features/content/studio/blog-copy-button.tsx",
+      "sha256": "a8b9f11369c950e8f4041b878416e7ec57e7d3489100d767d12caa3459b04fb9"
+    },
+    {
+      "file": "src/features/content/studio/blog-heading.tsx",
+      "sha256": "85fec1db25b6aec663abe6f5f81b3cde7d13a4b1214bbea98b0d3d4eefb0cc56"
+    },
+    {
+      "file": "src/features/content/studio/blog-image-viewer.tsx",
+      "sha256": "d3ca6a7791e7ae29451361362a885aafcb8f2646d78d1f4a12ebde330b426a77"
+    },
+    {
+      "file": "src/features/content/studio/blog-reading-toc.tsx",
+      "sha256": "7e2dd588fb135a44dde9d5e5ec3e131d54eacdd3ad47b3692f612c7f8b3e0a8f"
+    },
+    {
+      "file": "src/features/content/studio/diagram-code-block.tsx",
+      "sha256": "b86f1cfd1e8e6b89138842733b0b4ac70a6ed82e9dd7b9b1b5a948a925a87053"
+    },
+    {
+      "file": "src/features/content/studio/dialog.tsx",
+      "sha256": "eee9557a8625b2f85c98051d9a9f646870effc0ced28e4176fa7e075c0f8e9a4"
+    },
+    {
+      "file": "src/features/content/studio/editor-actions.ts",
+      "sha256": "91a39d937de05ee37925b3d4264b9beaee962be614facbf746e167262ce3123c"
+    },
+    {
+      "file": "src/features/content/studio/editor-image.ts",
+      "sha256": "2749b5367d8b8cd4b7eb023a1a24efc8faf3c3e3d0b3bcb475f4bd197c0a3a74"
+    },
+    {
+      "file": "src/features/content/studio/media.ts",
+      "sha256": "8d9d51d0b532ecf9bf0f47aff10a898988b0511f062470be495966c3e6afa390"
+    },
+    {
+      "file": "src/features/content/studio/mermaid-source.ts",
+      "sha256": "49820b98b20d4bbea3035d2e52410473312f47b0d9e9cfffe61e915d8d2a14bf"
+    },
+    {
+      "file": "src/features/content/studio/open-preview.ts",
+      "sha256": "deae3dbca0c262d3cd7b5ee0b9c30d83b8e6f8381d7baaea64a360a874157477"
+    },
+    {
+      "file": "src/features/content/studio/reading-layout.ts",
+      "sha256": "b74149ac21fc7113459849be751d6ea789089f58edca5baf39c9f86f59967d4a"
+    },
+    {
+      "file": "src/features/content/studio/rich-editor.tsx",
+      "sha256": "f419412ae2f16d6dfcc01311849333c71c17f26879c3bda3e52228bcd6272c43"
+    },
+    {
+      "file": "src/features/content/studio/schedule-picker.tsx",
+      "sha256": "e568f0f0176f49a85bd653beb94ed1017f30a10542401a73027f0fc3e8103f06"
+    },
+    {
+      "file": "src/features/content/studio/schedule-time.ts",
+      "sha256": "5304ef8c7fab79f9b7c1a9a651359938aec8450b05cae0fb98bc9183142bc018"
+    },
+    {
+      "file": "src/features/content/studio/source-account.module.css",
+      "sha256": "a3173efb6f0fe1be32b8bbbec3bf3ed9e220072735707bf58ae7da1e10f7e488"
+    },
+    {
+      "file": "src/features/content/studio/source-account.tsx",
+      "sha256": "33c6dbc44e55e885f30408685177af16eed9809cc28948d2dcc224f41df09ef7"
+    },
+    {
+      "file": "src/features/content/studio/source-adapter.ts",
+      "sha256": "61cf20aba7791fb26a1766f4074a695eabd30604c60c156f28ed372fb8822928"
+    },
+    {
+      "file": "src/features/content/studio/source-dashboard.tsx",
+      "sha256": "6c3f4dec3ddf875a3af9fdfc7f9133afa23875dee82bd840a92f6d98b7d0bed3"
+    },
+    {
+      "file": "src/features/content/studio/source-design.css",
+      "sha256": "79a96f1ccbb232c3cef5275a54cf0c129ea25c4b95eb70090e7bd7647e26d834"
+    },
+    {
+      "file": "src/features/content/studio/source-dialog.tsx",
+      "sha256": "80e62b4c5e226033e5ef8536b512ea516ef4980cfa00c2bb3d73a9d2cb93d56e"
+    },
+    {
+      "file": "src/features/content/studio/source-editor.tsx",
+      "sha256": "d733c898916770c98cc33b296620f81899fdcba30c32a4f32f3eb2e523a1f351"
+    },
+    {
+      "file": "src/features/content/studio/source-external-link.ts",
+      "sha256": "236241f44f6ad4884de4a9d3641c3d43487d15f9b950f5e60b6df7271b63be2d"
+    },
+    {
+      "file": "src/features/content/studio/source-link.tsx",
+      "sha256": "6622f98739f85ea61e9260848fc1994acd458e1e55070994ea548d0ed782956b"
+    },
+    {
+      "file": "src/features/content/studio/source-mermaid.tsx",
+      "sha256": "d6399813a344bbbd059fa42a27416d0480ea178c7f2adb396da4a29b92db6be8"
+    },
+    {
+      "file": "src/features/content/studio/source-moderation.tsx",
+      "sha256": "0ceac919dc2c3f5429a2c7f78450615e523c21497dc098e53c20ae0ae1624d81"
+    },
+    {
+      "file": "src/features/content/studio/source-preview.tsx",
+      "sha256": "b0e2907fab6c1778d8bc5d31a1aa86aeeff7ba2cd14d11193abe17b9c78352c7"
+    },
+    {
+      "file": "src/features/content/studio/source-recovery.ts",
+      "sha256": "486e054b22f0015011c43cb9b2f755ad38e78b830ec073bd5665c32b0c862cb1"
+    },
+    {
+      "file": "src/features/content/studio/source-services.ts",
+      "sha256": "e6fa4350ecef2ecbcfcb15824cfdb6d5530095504041680d1804bf251df05510"
+    },
+    {
+      "file": "src/features/content/studio/source-settings.tsx",
+      "sha256": "c898ec4d34209fa8ad4ced276348537d6df65fc3be8b355f58530e764a6407cf"
+    },
+    {
+      "file": "src/features/content/studio/source-shell.tsx",
+      "sha256": "4f70a1935d5dd1a45af17f53f221bcfad634547fd1567ac2ba1ba2bb26dbccac"
+    },
+    {
+      "file": "src/features/content/studio/source-ui.tsx",
+      "sha256": "6a43f3927287d36c867c4cb0e9477c256d86d889a8756cac1837380cd9e44959"
+    },
+    {
+      "file": "src/features/content/studio/state.ts",
+      "sha256": "5a9c4ecdfb9645c99f5a5248b5ea738300a03ddfe571d1657ccaae4f546e5a60"
+    },
+    {
+      "file": "src/features/content/studio/studio.css",
+      "sha256": "e3b626bf3e522bb7e0f214fdc070b8d10cd71135c59d434594dbbb2c90b80351"
+    },
+    {
+      "file": "src/features/content/studio/svg-safety.ts",
+      "sha256": "0590a7648fc9132878b00f660d5423413b0d4a0e020e4079cbcca593fe5905a6"
+    },
+    {
+      "file": "src/features/content/studio/taxonomy-fields.tsx",
+      "sha256": "de50dd305abc45af5516e1b070c52cecfe9f5251a5f695f2f202c013a572f183"
+    },
+    {
+      "file": "src/features/content/studio/taxonomy-input.ts",
+      "sha256": "1b9261139434945f85b4252f326d91ec449b66f2a62044e57470980dcd7d37e4"
+    },
+    {
+      "file": "src/features/content/studio/toast-countdown.ts",
+      "sha256": "e07478e0fc2fd8b3b0beffa664414081b928fdc84789739f009daed9a1181d94"
+    },
+    {
+      "file": "src/features/content/studio/toast.tsx",
+      "sha256": "e88d3b1901d879aaf69a76bf58181931ed099f91e293570b51df89c600c5c35e"
+    },
+    {
+      "file": "src/features/content/studio/ui.tsx",
+      "sha256": "8a35a549cb1c178489be78511dac05bca01ebde2f29a34dfa12422edacd2034b"
+    },
+    {
+      "file": "tests/unit/studio-api027.test.ts",
+      "sha256": "4aff26d7f99d30527c794af30eb4a56cb00f6806fe6a111c45f1ddcb765856ca"
+    },
+    {
+      "file": "tests/unit/studio-editor027.test.ts",
+      "sha256": "5e774f1ba4ac592ae5465561de344549cc9b1fe32bbd51a00d0343113e87a967"
+    },
+    {
+      "file": "tests/unit/studio-source-port027.test.ts",
+      "sha256": "30b8d5640cfe0807e397e9651d7801a4fe0d7847cba64dcfee93498ddc7916bd"
+    },
+    {
+      "file": "tests/unit/studio-source-services027.test.ts",
+      "sha256": "086c1456c26b623188c3fdbdaaa0d24b14e8404901f3fbfcd47cb5773b000987"
+    }
+  ]
+}

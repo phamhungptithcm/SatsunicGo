@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-10-06T03:06:30.803482+00:00",
+  "scope": "round4 local receipt and bounded clean populated shipping evidence, full content gate blocked",
+  "files": {
+    "docs/reviews/release026/database/CRM_OPERATIONS_CONTENT_REVIEW.md": "6266931d2fef96a1d4abd304660be16bd5cc6c91fccfe060f425374c57fd15e8",
+    "output/playwright/release026/crm-final199-native-round4.json": "59c5b72354d867813e8ec371d95732a6f05b6c1a808a33035ce60146486eaf82",
+    "output/playwright/release026/crm-ready-state-focused5-images/crm-populated-shipping-390.png": "71221cd06b3d083a221fce888fdb1fd25d53446a8cb7fade4813261e3a970044",
+    "output/playwright/release026/crm-ready-state-focused5-images/crm-populated-shipping-768.png": "43ecbce120c208f06a003528f505d92944e9496282d3e815fa062992a936d86f",
+    "output/playwright/release026/crm-ready-state-focused5-images/crm-populated-shipping-1440.png": "52bf63e735bc24e063a1585f739d25308d0c0435700467e59c69bc8a2ee594dd"
+  }
+}

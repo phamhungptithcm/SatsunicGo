@@ -1,0 +1,12 @@
+{
+  "candidateHash": "0319d9ade0b4dce37dfb4cf4df1ee166ef4f367dceb3aecc54b225e41adc35c2",
+  "scope": "actual React + SDK fixture, canonical feedback counter",
+  "checks": [
+    "slow review read shows shared inline ring and overlay count0",
+    "slow review write shows shared inline ring and overlay count0",
+    "resolved operations remove spinner and retain overlay count0"
+  ],
+  "status": "PASS",
+  "realProvider": false,
+  "serverAndBrowserCleaned": true
+}

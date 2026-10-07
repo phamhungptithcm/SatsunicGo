@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "status": "PASSED",
+  "reviewed_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log",
+        "output/playwright/release023/browser-results.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Readiness limits reviewed: root compilation and integration completed successfully; no release/production acceptance claimed. Production remains NOT_READY due provider/AT and aggregate gates.",
+      "evidence_refs": [
+        "output/playwright/release023/typecheck.log",
+        "output/playwright/release023/integration-results.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped purchased replacement guard reviewed against approved local fix. Same schema/error preserved. Unit failing-before/passing-after; server no-write regression passed in actual root integration. Transaction role/version/idempotency boundaries and bounded O(30) work preserved.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json",
+        "output/playwright/release023/integration-results.json",
+        "output/playwright/release023/unit-results.json",
+        "output/playwright/release023/lint.log"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "BIZ-002",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "packages/domain/changes.ts:83",
+      "summary": "Purchased variant can be rewritten in multi-line substitution; either provided replacement field now triggers purchased guard. Failing-before/passing-after regression.",
+      "resolution": "Guard both replacement fields; purchased and empty variant rejection verified, unpurchased and untouched lines allowed. Server no-write regression verified passed in root71/71 integration.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/substitution-repro.log",
+        "docs/reviews/release023/biz/unit.log",
+        "output/playwright/release023/integration-results.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Provider/production/AT acceptance not established; production NOT_READY.",
+    "Full master native/browser and Product Language Gate remain aggregate root scope."
+  ],
+  "limitations": [
+    "Both indexes stale, native bounded evidence used.",
+    "Shared dirty checkout preserved; business frozen hashes all match.",
+    "Scope review is self-review; authenticated independent aggregate review remains root responsibility.",
+    "Complete native multi-line proposal accept/apply NOT_RUN; HTTP flow coverage cannot replace native journeys."
+  ],
+  "recorded_at": "2026-10-05T16:07:10.183Z",
+  "reviewed_worktree_signature": "01a2559f96e8a0ddce1070183f97b0cefc90e37f6c0331a3f7705880e6fc9868",
+  "assurance": {
+    "status": "LEGACY_UNVERIFIED",
+    "evidence_level": "DECLARED",
+    "limitations": [
+      "Legacy review references and reviewer identity are not authenticated."
+    ]
+  },
+  "previous_review_hash": "2dc92457a3466f8ef0e5792a41bb2067f3d66567f45b4cad680b6aab2b3dec7f",
+  "review_hash": "c47a158a95e657e3d9c0d280b68f6441618ff0d42eb3cd26e26db971c141705a"
+}

@@ -1,0 +1,19 @@
+{
+  "status": "PASSED",
+  "check": "QA_DOCUMENT_CONSISTENCY_ONLY",
+  "scenarios": 477,
+  "categories": {
+    "independent": 286,
+    "integration": 46,
+    "security": 33,
+    "ui-ux": 26,
+    "performance": 23,
+    "endpoint-contract": 63
+  },
+  "endpoints": 63,
+  "routes": 41,
+  "action_entries": 120,
+  "source_freshness": "NOT_CHECKED",
+  "runtime_scenarios": "NOT_RUN",
+  "exit_code": 0
+}

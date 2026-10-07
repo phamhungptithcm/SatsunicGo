@@ -1,0 +1,55 @@
+[
+  {
+    "check": "billing",
+    "errorCode": 403
+  },
+  {
+    "check": "auth",
+    "result": {
+      "authorizedDomains": [
+        "satsunicgo.firebaseapp.com",
+        "satsunicgo.web.app",
+        "localhost",
+        "127.0.0.1"
+      ],
+      "providerConfigPresent": true,
+      "googleClientPresent": true
+    }
+  },
+  {
+    "check": "google",
+    "result": {
+      "enabled": true,
+      "clientConfigured": true
+    }
+  },
+  {
+    "check": "firestore",
+    "result": {
+      "databases": [
+        {
+          "name": "projects/satsunicgo/databases/(default)",
+          "location": "asia-southeast1",
+          "type": "FIRESTORE_NATIVE"
+        }
+      ]
+    }
+  },
+  {
+    "check": "storage",
+    "result": {
+      "buckets": [
+        {
+          "name": "satsunicgo.firebasestorage.app",
+          "location": "ASIA-SOUTHEAST1"
+        }
+      ]
+    }
+  },
+  {
+    "check": "functions",
+    "result": {
+      "functions": []
+    }
+  }
+]

@@ -1,3 +1,4 @@
+import "./request-form.css";
 import { notify } from "../../shared/feedback";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
@@ -7,7 +8,6 @@ import {
   normalizeRequestInput,
   requestInputText,
 } from "../../../packages/domain/request-input";
-import { importItemsCsv } from "../../../packages/domain/csv";
 import { doc, getDoc } from "firebase/firestore";
 import {
   configured,
@@ -124,6 +124,8 @@ export function RequestForm({
     ),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const [step, setStep] = useState(() => (pendingFor(user?.uid) ? 2 : 0));
+  const stepHeading = useRef<HTMLHeadingElement>(null);
   const mounted = useRef(true),
     locked = useRef(false);
   const attemptRef = useRef(attempt);
@@ -243,9 +245,37 @@ export function RequestForm({
       JSON.stringify(next),
     );
   }
+  function moveStep(next: number) {
+    setStep(next);
+    setError("");
+    requestAnimationFrame(() => stepHeading.current?.focus());
+  }
+  function advanceStep() {
+    try {
+      const data = payload();
+      const candidate = requestSchema.safeParse(
+        step === 0 ? { market: data.market, items: data.items } : data,
+      );
+      if (!candidate.success) {
+        setError(
+          step === 0
+            ? "Nhập tên, link hoặc thêm ảnh; kiểm tra số lượng từng món."
+            : "Kiểm tra ngân sách và ngày mong muốn.",
+        );
+        return;
+      }
+      moveStep(step + 1);
+    } catch {
+      setError("Kiểm tra link sản phẩm.");
+    }
+  }
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (locked.current || imageReading || pendingUnreadable) return;
+    if (step < 2 && !attempt) {
+      advanceStep();
+      return;
+    }
     setError("");
     let next = attemptRef.current;
     if (!next) {
@@ -357,16 +387,98 @@ export function RequestForm({
   }
   return (
     <section className="page quickRequestPage">
-      <h1>Bạn muốn mua gì?</h1>
-      <p>
-        Dành cho sản phẩm chưa có trong danh mục. Nhân viên xem xét và báo giá;
-        bạn thanh toán hai đợt sau khi chấp nhận.
-      </p>
-      <p>
-        <a href="/products">Xem sản phẩm có giá niêm yết</a> để chọn mua và
-        thanh toán toàn bộ ngay.
-      </p>
-      <form onSubmit={(e) => void submit(e)} className="quickRequestForm">
+      <header className="requestHeading">
+        <div className="requestHeadingRow">
+          <h1>Bạn muốn mua gì?</h1>{" "}
+          <div
+            className="requestMarkets"
+            role="group"
+            aria-label="Quốc gia mua hàng"
+          >
+            {(["US", "JP", "KR"] as const).map((c) => (
+              <button
+                type="button"
+                key={c}
+                aria-pressed={market === c}
+                disabled={frozen || Boolean(attempt?.orderId)}
+                onClick={() => setMarket(c)}
+              >
+                {c === "US" ? "Mỹ" : c === "JP" ? "Nhật Bản" : "Hàn Quốc"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p>
+          Sản phẩm ngoài danh mục được nhân viên báo giá; thanh toán 2 đợt sau
+          khi chấp nhận.
+        </p>
+        <Link className="requestCatalogLink" to="/products">
+          Sản phẩm niêm yết: mua và thanh toán toàn bộ ngay →
+        </Link>
+      </header>
+      <form
+        noValidate
+        onSubmit={(e) => void submit(e)}
+        className="quickRequestForm"
+      >
+        <nav className="requestStepper" aria-label="Các bước tạo yêu cầu">
+          {(["Món hàng", "Thông tin thêm", "Kiểm tra"] as const).map(
+            (label, index) => (
+              <button
+                key={label}
+                type="button"
+                aria-current={step === index ? "step" : undefined}
+                className={
+                  index < step
+                    ? "isComplete"
+                    : index === step
+                      ? "isCurrent"
+                      : ""
+                }
+                disabled={index > step || frozen || Boolean(attempt)}
+                onClick={() => moveStep(index)}
+              >
+                <span aria-hidden="true">{index < step ? "✓" : index + 1}</span>
+                <span>
+                  {label}
+                  <small>
+                    {index < step
+                      ? "Đã hoàn thành"
+                      : index === step
+                        ? "Đang nhập"
+                        : ""}
+                  </small>
+                </span>
+              </button>
+            ),
+          )}
+        </nav>
+        <h2
+          ref={stepHeading}
+          tabIndex={-1}
+          className="requestStageTitle"
+          style={
+            step === 0
+              ? {
+                  position: "absolute",
+                  width: 1,
+                  height: 1,
+                  padding: 0,
+                  margin: -1,
+                  overflow: "hidden",
+                  clipPath: "inset(50%)",
+                  whiteSpace: "nowrap",
+                  border: 0,
+                }
+              : undefined
+          }
+        >
+          {step === 0
+            ? "Món hàng"
+            : step === 1
+              ? "Thông tin thêm"
+              : "Kiểm tra yêu cầu"}
+        </h2>
         {prefillOffered && (
           <button
             type="button"
@@ -377,25 +489,7 @@ export function RequestForm({
             Thay bản nháp bằng sản phẩm đang xem
           </button>
         )}
-        <div
-          className="requestMarkets"
-          role="group"
-          aria-label="Quốc gia mua hàng"
-        >
-          {(["US", "JP", "KR"] as const).map((c) => (
-            <button
-              type="button"
-              key={c}
-              aria-pressed={market === c}
-              disabled={frozen || Boolean(attempt?.orderId)}
-              onClick={() => setMarket(c)}
-            >
-              {c === "US" ? "Mỹ" : c === "JP" ? "Nhật Bản" : "Hàn Quốc"}
-            </button>
-          ))}
-        </div>
-        <div className="requestProducts">
-          <h2>Món hàng</h2>
+        <div className="requestProducts" hidden={step !== 0}>
           {items.map((item, index) => (
             <div className="requestItem" key={index}>
               {items.length > 1 && <h3>Món {index + 1}</h3>}
@@ -467,7 +561,7 @@ export function RequestForm({
                 </svg>
               </button>
               <p className="requestImageHint">
-                PNG, JPEG hoặc WebP · Tối đa 2 MB mỗi ảnh, 6 ảnh mỗi yêu cầu
+                PNG, JPEG, WebP · 2 MB/ảnh · 6 ảnh/yêu cầu
               </p>
               <div className="itemOptions">
                 <div className="twoCols">
@@ -530,53 +624,15 @@ export function RequestForm({
           >
             ＋ Thêm món
           </button>
-          {!configured && (
-            <p role="status">Chức năng gửi chưa được kích hoạt.</p>
-          )}
-          {attempt?.orderId && (
-            <p className="requestRecovery" role="status">
-              Yêu cầu đã lưu. {attempt.images.filter((x) => x.uploaded).length}/
-              {attempt.images.length} ảnh đã tải.{" "}
-              <Link to={`/account/orders/${attempt.orderId}`}>
-                Xem đơn để bổ sung ảnh sau
-              </Link>
-            </p>
-          )}
-          {pendingUnreadable && (
-            <p className="error" role="alert">
-              Chưa đọc được lần gửi trước.{" "}
-              <Link to="/account">Kiểm tra đơn của bạn</Link> trước khi tiếp
-              tục.
-            </p>
-          )}
-          {error && (
-            <p className="error" role="alert">
-              {error}
-            </p>
-          )}
-          <button
-            className="primary requestSubmit"
-            disabled={!configured || busy || imageReading || pendingUnreadable}
-          >
-            {busy
-              ? "Đang gửi…"
-              : attempt?.orderId
-                ? "Tiếp tục tải ảnh"
-                : attempt
-                  ? "Thử gửi lại"
-                  : user
-                    ? "Gửi yêu cầu →"
-                    : "Đăng nhập để gửi →"}
-          </button>
         </div>
         <aside
           className="requestInformation"
-          aria-labelledby="request-information-title"
+          hidden={step !== 1}
+          aria-labelledby="request-stage-title"
         >
-          <h2 id="request-information-title">Thông tin thêm</h2>
           <p className="requestOptional">Không bắt buộc</p>
           <div className="requestExtras">
-            <label>
+            <label className="requestNotes">
               Ghi chú
               <textarea
                 value={notes}
@@ -615,38 +671,151 @@ export function RequestForm({
               />
               <small>Cần nhân viên xác nhận.</small>
             </label>
-            <details className="requestCsv">
-              <summary>Nhập nhiều món bằng CSV</summary>
-              <label>
-                Nhập CSV
-                <input
-                  type="file"
-                  accept=".csv,text/csv"
-                  disabled={frozen || Boolean(attempt?.orderId)}
-                  onChange={async (e) => {
-                    const f = e.target.files?.[0];
-                    e.target.value = "";
-                    if (!f) return;
-                    try {
-                      if (f.size > 50000) throw Error();
-                      setItems(
-                        importItemsCsv(await f.text()).map((i) => ({
-                          ...i,
-                          content: requestInputText(i),
-                        })),
-                      );
-                      setError("");
-                    } catch {
-                      setError(
-                        "CSV tối đa 50 KB, 30 dòng; cần cột name,url,quantity,variant.",
-                      );
-                    }
-                  }}
-                />
-              </label>
-            </details>
           </div>
         </aside>
+        {step === 2 && (
+          <section className="requestReview" aria-label="Tóm tắt yêu cầu">
+            <div className="requestReviewHeading">
+              <h3>
+                {market === "US"
+                  ? "Mỹ"
+                  : market === "JP"
+                    ? "Nhật Bản"
+                    : "Hàn Quốc"}{" "}
+                · {items.length} món
+              </h3>
+              <button
+                type="button"
+                className="textbutton"
+                disabled={frozen || Boolean(attempt)}
+                onClick={() => moveStep(0)}
+              >
+                Chỉnh sửa
+              </button>
+            </div>
+            <ul>
+              {items.map((item, index) => (
+                <li key={index}>
+                  <strong>{item.content || "Sản phẩm từ ảnh"}</strong>
+                  <span>
+                    Số lượng: {item.quantity}
+                    {item.variant ? ` · ${item.variant}` : ""}
+                    {item.condition
+                      ? ` · ${item.condition === "new" ? "Hàng mới" : item.condition === "used" ? "Hàng đã qua sử dụng" : "Có thể xem cả hai"}`
+                      : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {images.length > 0 && <p>{images.length} ảnh sản phẩm</p>}
+            <div className="requestReviewHeading">
+              <h3>Thông tin thêm</h3>
+              <button
+                type="button"
+                className="textbutton"
+                disabled={frozen || Boolean(attempt)}
+                onClick={() => moveStep(1)}
+              >
+                Chỉnh sửa
+              </button>
+            </div>
+            <dl>
+              {notes && (
+                <>
+                  <dt>Ghi chú</dt>
+                  <dd>{notes}</dd>
+                </>
+              )}
+              {preferredStore && (
+                <>
+                  <dt>Cửa hàng</dt>
+                  <dd>{preferredStore}</dd>
+                </>
+              )}
+              {budget && (
+                <>
+                  <dt>Ngân sách dự kiến</dt>
+                  <dd>{Number(budget).toLocaleString("vi-VN")} ₫</dd>
+                </>
+              )}
+              {desiredBy && (
+                <>
+                  <dt>Ngày mong muốn</dt>
+                  <dd>
+                    {desiredBy.split("-").reverse().join("/")} · Cần nhân viên
+                    xác nhận.
+                  </dd>
+                </>
+              )}
+            </dl>
+            {!notes && !preferredStore && !budget && !desiredBy && (
+              <p>Không có thông tin thêm.</p>
+            )}
+          </section>
+        )}
+        <div className="requestFinalActions">
+          {" "}
+          {!configured && (
+            <p role="status">Chức năng gửi chưa được kích hoạt.</p>
+          )}
+          {attempt?.orderId && (
+            <p className="requestRecovery" role="status">
+              Yêu cầu đã lưu. {attempt.images.filter((x) => x.uploaded).length}/
+              {attempt.images.length} ảnh đã tải.{" "}
+              <Link to={`/account/orders/${attempt.orderId}`}>
+                Xem đơn để bổ sung ảnh sau
+              </Link>
+            </p>
+          )}
+          {pendingUnreadable && (
+            <p className="error" role="alert">
+              Chưa đọc được lần gửi trước.{" "}
+              <Link to="/account">Kiểm tra đơn của bạn</Link> trước khi tiếp
+              tục.
+            </p>
+          )}
+          {error && (
+            <p className="error" role="alert">
+              {error}
+            </p>
+          )}
+          {step > 0 && !attempt && (
+            <button
+              type="button"
+              className="requestBack"
+              disabled={frozen}
+              onClick={() => moveStep(step - 1)}
+            >
+              ← Quay lại
+            </button>
+          )}
+          {step < 2 && !attempt ? (
+            <button
+              type="submit"
+              className="primary requestSubmit"
+              disabled={frozen || pendingUnreadable}
+            >
+              Tiếp tục →
+            </button>
+          ) : (
+            <button
+              className="primary requestSubmit"
+              disabled={
+                !configured || busy || imageReading || pendingUnreadable
+              }
+            >
+              {busy
+                ? "Đang gửi…"
+                : attempt?.orderId
+                  ? "Tiếp tục tải ảnh"
+                  : attempt
+                    ? "Thử gửi lại"
+                    : user
+                      ? "Gửi yêu cầu →"
+                      : "Đăng nhập để gửi →"}
+            </button>
+          )}
+        </div>
       </form>
     </section>
   );

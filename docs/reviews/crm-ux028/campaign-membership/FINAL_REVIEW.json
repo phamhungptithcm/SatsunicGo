@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CAMPAIGN-MEMBERSHIP-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Browse-first campaign list, deliberate editors, separate gift mode and frozen retry.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Exact authorized identity fallback; existing server contracts unchanged.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "29 focused tests and scoped lint pass; root compiler pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Current source guards reviewed; native fault and navigation cases pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Unknown frozen retry implemented; native timing unverified.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider or full acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing controls/shared styles and bounded real staff identities.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CMP028-HIERARCHY",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/content/Campaigns.tsx, src/features/membership/PlanEditor.tsx",
+      "summary": "Full blank editors and grant forms obscured browsing.",
+      "resolution": "Deliberate contextual disclosures; unknown service/command retry frozen.",
+      "evidence_refs": [
+        "tests/unit/campaign-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "CMP028-URL",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/content/Campaigns.tsx",
+      "summary": "UTM copy replaced destination query including product variant.",
+      "resolution": "Set individual UTM parameters preserving other destination parameters and hash.",
+      "evidence_refs": [
+        "tests/unit/campaign-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "CMP028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md",
+      "summary": "Native responsive/AT/unknown-response and current compiler pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "campaign-membership",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta applies established form layout to new wrappers; structural fieldsets retained.29current focused tests and scoped lint pass; native layout pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    },
+    {
+      "id": "CRM028-NATIVE-FOLLOWUP",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "campaign-membership",
+      "summary": "Actual return mobile identity density/pagination and below-list selected editor focus required follow-up.",
+      "resolution": "Approved actual-product title/full-ID disclosure, current cursor refresh, or explicit reduced-motion-aware summary focus/viewport handoff.29focused tests and scoped lint pass; fresh native acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/campaign-membership/PLAN.md"
+      ]
+    },
+    {
+      "id": "CAMPAIGN-MEMBERSHIP-CAS-BADGE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/content/Campaigns.tsx, src/features/membership/PlanEditor.tsx",
+      "summary": "Campaigns workspaceCommand explicit aborted is precommit. PlanEditor releases aborted ONLY when immutable attempt.service is workspaceCommand; membershipCommand gift remains conservative. Existing failure strings retained.",
+      "resolution": "Approved source correction verified;13existing regression checks and scoped lint pass. Actual native affected-state acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CAS_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/campaign-membership/SOURCE_MANIFEST.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending commands memory-only across full reload.",
+    "Native gift/save/list refresh fault, grouped disclosure and keyboard cases pending."
+  ],
+  "limitations": [
+    "Compiler and browser runner root-owned, not run here.",
+    "Tokens/cost unavailable. Memory candidates None.",
+    "Current CAS/badge native and compiler acceptance pending; no runtime writes under source-only window."
+  ]
+}

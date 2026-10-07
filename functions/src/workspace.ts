@@ -1,3 +1,4 @@
+import { productInformationShape } from "../../packages/domain/product-information";
 import {
   catalogOptionsSchema,
   catalogProductSchema,
@@ -278,6 +279,7 @@ const contentSchema = z
     variants: z.string().max(500).optional(),
     featured: z.boolean().optional(),
     featuredOrder: z.number().int().min(0).max(9999).default(9999),
+    ...productInformationShape,
     origin: z.string().max(4000).optional(),
     functions: z.string().max(4000).optional(),
     usage: z.string().max(4000).optional(),

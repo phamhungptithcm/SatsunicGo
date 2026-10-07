@@ -1,0 +1,18 @@
+{
+  "packages/domain/blog-studio.ts": "4e0d81252deb0c11995c49aed2cc2fa2c6e8c39fd3b3e344687b4a5f78877473",
+  "packages/domain/blog-comments.ts": "f4d59647608dda08955a8e022465327372bda0fe9fb61153282ff5f1f5fc6a73",
+  "packages/domain/blog-studio-advanced.ts": "619bcc65018e5d192b0e5ac2406303ea47ff540997aab0c7cfdfe22039627005",
+  "functions/src/blog-studio.ts": "1afe42f66a5aa193dc9a3ec186f8112542f65408ac40bf80cfb97d89677fd2e7",
+  "functions/src/blog-comments.ts": "2accf89f6cdd7fc63f753ef6abb0e12178a2b551cfa5ff70fdfdc67bf23911e3",
+  "functions/src/blog-studio-access.ts": "5642364b2e1ce4df1d7e59b97664be094d41b90622dce05d841e19dff3313694",
+  "functions/src/blog-studio-advanced.ts": "797d1657ff9a92b4dede1d10e858814e135720ae95c5d331992bf9ee2efce2a3",
+  "tests/unit/blog-studio027.test.ts": "c96c5f2ffc4baaa0c94c6528cc3965facb20023cdc0f29d7e5e806f835c768a8",
+  "tests/unit/blog-studio-service027.test.ts": "985bbb4d569fd245e13b3b2b94ce022dedfeca784db7909d913a65ef4ce48751",
+  "tests/unit/blog-studio-media027.test.ts": "5d8a7751ba159cd32cea2f362138b1278dd1ac9e2a746326cf2dcf578405fdce",
+  "tests/unit/blog-comments027.test.ts": "1112331fa309e14c12673289c8bd1d1da947971e88d878756e78216533d3d2bb",
+  "tests/unit/blog-studio-advanced027.test.ts": "6adfd21598001de325f03fdf1e266bf2c44d0d2c564a03cc9311c07948a0ab11",
+  "tests/rules/blog-studio027.test.ts": "9a4db8b3416d2627bf3b7feb695d574f5b4dfa978b51292aab94ce136ca29e2f",
+  "tests/rules/blog-comments027.test.ts": "fa494d37d9d5f2049d503da6d1b4bf704e76adcbf9123ffbdd9cac1431f0ea56",
+  "tests/rules/blog-studio-advanced027.test.ts": "0f4c0ca26559fdbe42e98264d449a34e2d457fd73c04f3e3dea9866dfa78a6d1",
+  "tests/rules/blog-comment-commands027.test.ts": "ac92cf6a7d8d124e2b79fb8ad673dba9caffb2575bef92fc07194eecfaf121ce"
+}

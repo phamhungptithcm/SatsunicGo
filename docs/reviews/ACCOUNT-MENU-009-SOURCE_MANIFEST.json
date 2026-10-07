@@ -1,0 +1,14 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "sha256": {
+    "src/app/SiteChrome.tsx": "56585a20e54c291d0a5329b27aafc71fefc94c0bdd0652417162dc51fe34db8d",
+    "src/styles/global.css": "f0c08edd8c3d157758bedc37226e33f7559b63abf4243a6a5a5ca0624524f8e5",
+    "src/styles/public-ux.css": "23956c1c14aabce42a90ccce8a5aa15a2846ebc4cc6911b343abfd7794a998d2"
+  },
+  "owned_scope": [
+    "AccountProfile/helper and header slot",
+    "navbar/footer attribution",
+    "ACCOUNT-MENU-009 CSS block"
+  ],
+  "concurrent_scope": "public header logo/CTA/compact behavior and public-ux.css preserved; not authored here"
+}

@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 const REGION='asia-southeast1';
-const requiredRoutes={'/robots.txt':'publicDiscovery','/sitemap.xml':'publicDiscovery','/media/**':'publicImage','/products':'publicPage','/posts':'publicPage','/products/**':'publicPage','/posts/**':'publicPage','/how-it-works':'publicPage','/fees':'publicPage','/privacy':'publicPage','/terms':'publicPage','/restricted':'publicPage'};
+const requiredRoutes={'/campaign-banners':'campaignBannersPublic','/campaign-banners/**':'campaignBannersPublic','/robots.txt':'publicDiscovery','/sitemap.xml':'publicDiscovery','/media/**':'publicImage','/products':'publicPage','/posts':'publicPage','/products/**':'publicPage','/posts/**':'publicPage','/how-it-works':'publicPage','/fees':'publicPage','/privacy':'publicPage','/terms':'publicPage','/restricted':'publicPage'};
 export function preflight({root,project}) {
   const errors=[],hashes={},inventory=[],cache=new Map();
   const fail=code=>errors.push(code);

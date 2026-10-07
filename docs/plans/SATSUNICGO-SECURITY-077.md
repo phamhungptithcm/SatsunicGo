@@ -1,0 +1,7 @@
+# SECURITY077 — compact QR and visible manual key
+
+2026-10-06. Approved delta evidence: user explicitly requested “yes pls” to simplify wording, show QR, and show a small manual key underneath with a copy icon on the same row. This directly authorizes these concrete edits to SECURITY076, including the formerly collapsed key and explicit clipboard write.
+
+Intelligence DEGRADED; bounded current Security.tsx/security.css/browser fixture source, package tooling and existing approval reviewed. Scope: only security component, scoped CSS, related synthetic browser tests and review records. Plan: remove redundant headings/paragraphs/step captions; put QR centered above small labeled key with copy button; keep one short privacy line and labeled6digit field. Copy only on explicit click through clipboard.writeText, show success/failure without exposing key in message; epoch-guard late clipboard feedback; no automatic clipboard clearing. Existing Firebase flows, sidebar, cancel and refreshed status stay unchanged. No infrastructure, permission or dependency edits.
+
+Checks: TypeScript/scoped lint, current browser lifecycle/retry suite adapted to visible manual key, clipboard success/rejection/late feedback, responsive390/768/1440/200percent, rendered synthetic review, isolated build. Review Product Language Gate and final implementation review; no real-key screenshots. Rollback scoped source revert. Preview must preserve active prior build until safe new preview handoff; no production release claimed.

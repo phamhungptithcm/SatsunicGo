@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-UI",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Current rendered lifecycle/browser/provider acceptance pending root coordination.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Current rendered lifecycle/browser/provider acceptance pending root coordination.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped source review and frontend compiler/unit/lint evidence; see REPORT.md.",
+      "evidence_refs": [
+        "docs/reviews/release023/ui/REPORT.md",
+        "docs/reviews/release023/ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI-023-1",
+      "status": "FIXED_PENDING_BROWSER",
+      "summary": "Obsolete reply completion can reload an old ticket."
+    },
+    {
+      "id": "UI-023-2",
+      "status": "FIXED_PENDING_BROWSER",
+      "summary": "Old order image completion can stick busy/publish obsolete state."
+    }
+  ],
+  "residual_risks": [
+    "Already submitted server mutation is not cancelled by leaving screen."
+  ],
+  "limitations": [
+    "Product Language Gate BLOCKED until rendered proof",
+    "Actual AT NOT_TESTED",
+    "ai-agent-kit CLI unavailable on PATH; no review receipt",
+    "Unit tests verify lifecycle contract, not rendered component"
+  ]
+}

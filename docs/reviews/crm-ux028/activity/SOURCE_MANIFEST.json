@@ -1,0 +1,33 @@
+{
+  "schema_version": 2,
+  "task_id": "SATSUNICGO-ACTIVITY-028",
+  "files": {
+    "src/features/crm/Activity.tsx": "2735d6cf321fd94e7f38d34fb9329676b5e5b3dfdab338065919794a91e9efeb",
+    "tests/unit/activity-contextual.test.ts": "56a9cbf2387ffb56d1d9a03586388654cb1f9d304be934ecfa4335e6771b7036",
+    "tests/browser/release-finance-activity-positive031.spec.ts": "07eb230852546d8f1bc92206f78f38744b57d59e3d8452bb3b9e077c70852bae",
+    "src/features/payments/Finance.tsx": "be2dd84daf141133c9e0422e6f3a173e77075062a3cee3245edb26a4cec5973b",
+    "src/features/payments/FinancialReview.tsx": "6840c66f836e11a11be9d5b9d32cc23930db88f3d1c797173b97dfb740f3d4fc"
+  },
+  "content_review_sha256": "1e25ce32890f81925b9cae3caf0c900b9aceaad54f9067d96eff8f50f78de159",
+  "identity_review_sha256": "65536e4357cbc6884b05aedf43a577f12e6d4514726f73edc56abc9d608771c4",
+  "native": {
+    "archive": "output/playwright/release027/finance-activity-current-round3",
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "global_errors": 0,
+    "duration_ms": 134925.802,
+    "activity_identity_cases": 3,
+    "spec_sha256": "07eb230852546d8f1bc92206f78f38744b57d59e3d8452bb3b9e077c70852bae"
+  },
+  "historical_manifest_superseded": {
+    "task_id": "SATSUNICGO-ACTIVITY-028",
+    "files": {
+      "src/features/crm/Activity.tsx": "568a128b8e8f971e206388b53189a3e7fe585d5d19bad31441c1d15078ebdcde",
+      "tests/unit/activity-contextual.test.ts": "56a9cbf2387ffb56d1d9a03586388654cb1f9d304be934ecfa4335e6771b7036"
+    }
+  },
+  "overall_status": "BLOCKED",
+  "production": "NOT_READY"
+}

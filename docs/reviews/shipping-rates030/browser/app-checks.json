@@ -1,0 +1,22 @@
+{
+  "status": "PASSED",
+  "kind": "actual-fees-route-with-mocked-public-callable",
+  "checks": [
+    "VN non-bracket needs quote",
+    "zero invalid",
+    "US service hidden",
+    "US minimum kg/ USD",
+    "Oregon quote only",
+    "VN warehouse hidden",
+    "dialog focus contained",
+    "escape closes dialog",
+    "focus restored",
+    "viewport 390 no overflow",
+    "viewport 320 no overflow",
+    "reduced motion",
+    "tab transition defined",
+    "raw exception hidden",
+    "no fallback tariff",
+    "retry retains weight"
+  ]
+}

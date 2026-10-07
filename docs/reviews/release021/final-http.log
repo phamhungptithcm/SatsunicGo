@@ -1,0 +1,1 @@
+PASS: callable HTTP emulator authentication, invalid-token denial, persistence, idempotency, cross-customer denial; public HTML/SEO/client entry and private-draft denial. Hosting, App Check and real Google login NOT_TESTED.

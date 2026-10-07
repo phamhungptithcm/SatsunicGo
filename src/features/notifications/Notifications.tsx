@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useState, useRef } from "react";
 import {
   collection,
@@ -11,6 +12,7 @@ import { Link } from "react-router-dom";
 import { db, callService } from "../../shared/firebase";
 import { createRequestSequence } from "../content/editor-state";
 import { notificationTarget } from "../content/notification-target";
+import "./notifications.css";
 import { notificationLabels as labels } from "../../../packages/domain/notification-content";
 export function Notifications({
   uid,
@@ -91,37 +93,107 @@ export function Notifications({
       if (mutations.current.current(revision)) setReading(null);
     }
   }
-  return (
-    <details className="panel" open={expanded || undefined}>
-      <summary>Thông báo của bạn · 30 thông báo mới nhất</summary>
-      {loading && <p role="status">Đang tải thông báo…</p>}
-      {rows.map((n) => (
-        <article className="order" key={n.id}>
-          <p>
-            {labels[n.action] ?? "Bạn có cập nhật mới"} ·{" "}
-            {new Date(n.createdAt).toLocaleString("vi-VN")}
-          </p>
-          <Link to={notificationTarget(n.action, n.orderId).path}>
-            {notificationTarget(n.action, n.orderId).label}
-          </Link>
-          {!n.read && (
-            <button disabled={!!reading} onClick={() => void read(n.id)}>
-              Đánh dấu đã đọc
-            </button>
-          )}
-        </article>
-      ))}
+  const content = (
+    <div className="notificationInbox">
+      <header className="notificationInboxHeader">
+        <span className="notificationBell" aria-hidden="true">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+          </svg>
+        </span>
+        <h2>Hộp thư của bạn</h2>
+      </header>
+      {loading && (
+        <div className="notificationState">
+          <LoadingState>Đang tải thông báo…</LoadingState>
+        </div>
+      )}
+      {!loading &&
+        rows.map((n) => {
+          const target = notificationTarget(n.action, n.orderId);
+          const date = new Date(n.createdAt);
+          const validDate = Number.isFinite(date.getTime());
+          return (
+            <article
+              className={`notificationItem ${n.read ? "" : "isUnread"}`}
+              key={n.id}
+            >
+              <span
+                className="notificationDot"
+                aria-label={n.read ? "Đã đọc" : "Chưa đọc"}
+              />
+              <div className="notificationItemBody">
+                <h3>{labels[n.action] ?? "Bạn có cập nhật mới"}</h3>
+                <time dateTime={validDate ? date.toISOString() : undefined}>
+                  {validDate
+                    ? date.toLocaleString("vi-VN")
+                    : "Chưa có thời gian"}
+                </time>
+                <div className="notificationItemActions">
+                  <Link to={target.path}>
+                    {target.label}
+                    <span aria-hidden="true"> ↗</span>
+                  </Link>
+                  {!n.read && (
+                    <button
+                      disabled={!!reading}
+                      onClick={() => void read(n.id)}
+                    >
+                      {reading === n.id ? "Đang lưu…" : "Đánh dấu đã đọc"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })}
       {!loading && !error && !rows.length && (
-        <p>Chưa có thông báo được gửi vào hộp thư.</p>
+        <div className="notificationState">
+          <span className="notificationStateIcon" aria-hidden="true">
+            ✓
+          </span>
+          <h3>Chưa có thông báo</h3>
+          <p>Thông báo mới sẽ xuất hiện ở đây.</p>
+        </div>
       )}
       {error && (
-        <p role="alert">
-          {error}{" "}
-          <button onClick={() => setRetry((value) => value + 1)}>
-            Tải lại
+        <div className="notificationState isError" role="alert">
+          <span className="notificationStateIcon" aria-hidden="true">
+            !
+          </span>
+          <h3>
+            {rows.length ? "Chưa cập nhật được" : "Chưa tải được thông báo"}
+          </h3>
+          <p>{rows.length ? error : "Thử lại để xem cập nhật mới."}</p>
+          <button
+            className="notificationRetry"
+            onClick={() => setRetry((v) => v + 1)}
+          >
+            Thử lại
           </button>
-        </p>
+        </div>
       )}
+      {!loading && !error && rows.length > 0 && (
+        <p className="notificationScope">Tối đa 30 thông báo gần nhất</p>
+      )}
+    </div>
+  );
+  return expanded ? (
+    <section aria-label="Hộp thư thông báo">{content}</section>
+  ) : (
+    <details className="notificationDisclosure">
+      <summary>Thông báo của bạn</summary>
+      {content}
     </details>
   );
 }

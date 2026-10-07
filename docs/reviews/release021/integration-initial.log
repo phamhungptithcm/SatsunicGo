@@ -1,0 +1,138 @@
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+ ❯ tests/rules/server.test.ts (26 tests | 1 failed) 30721ms
+   × manual reversals append history and payment exceptions cannot allocate a duplicate or wrong-beneficiary receipt 368ms
+ ❯ tests/rules/ask-workflow.test.ts (6 tests | 6 failed) 7452ms
+   × authenticated draft starts without turns; conversation resumes by server pointer; saveTurn redacts 2746ms
+   × duplicate/concurrent submission creates exactly one order and rejects unsupported or anonymous actions 176ms
+   × recipient gates quote acceptance, is separate from model context, and stale quote is denied 89ms
+   × resume recovers a committed order after lost workflow finalization with no duplicate 74ms
+   × server guards locked user and Firestore denies cross-user conversations, operations and recipient writes 82ms
+   × server commerce rollout remains closed outside the dedicated demo exemption 189ms
+ ❯ tests/rules/membership.test.ts (5 tests | 5 skipped) 9ms
+ ❯ tests/rules/ask-payment.test.ts (2 tests | 2 skipped) 6795ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/rules/ask-payment.test.ts [ tests/rules/ask-payment.test.ts ]
+Error: 7 PERMISSION_DENIED: Cloud Firestore API has not been used in project satsunic-gsc-non-production before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=satsunic-gsc-non-production then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+ ❯ callErrorFromStatus node_modules/@grpc/grpc-js/src/call.ts:84:16
+ ❯ Object.onReceiveStatus node_modules/@grpc/grpc-js/src/client.ts:360:55
+ ❯ Object.onReceiveStatus node_modules/@grpc/grpc-js/src/client-interceptors.ts:466:33
+ ❯ Object.onReceiveStatus node_modules/@grpc/grpc-js/src/client-interceptors.ts:424:47
+ ❯ node_modules/@grpc/grpc-js/src/resolving-call.ts:184:23
+ ❯ ServiceClientImpl.makeUnaryRequest node_modules/@grpc/grpc-js/src/client.ts:325:41
+ ❯ ServiceClientImpl.<anonymous> node_modules/@grpc/grpc-js/src/make-client.ts:189:14
+ ❯ node_modules/@google-cloud/firestore-api/src/v1/firestore_client.ts:358:24
+ ❯ node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+ ❯ repeat node_modules/google-gax/build/src/normalCalls/retries.js:121:25
+ ❯ node_modules/google-gax/build/src/normalCalls/retries.js:163:13
+ ❯ OngoingCallPromise.call node_modules/google-gax/build/src/call.js:70:27
+ ❯ NormalApiCaller.call node_modules/google-gax/build/src/normalCalls/normalApiCaller.js:34:19
+ ❯ node_modules/google-gax/build/src/createApiCall.js:122:37
+ ❯ _firestore._traceUtil.startActiveSpan node_modules/@google-cloud/firestore/build/src/write-batch.js:442:35
+ ❯ node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30
+ ❯ NoopContextManager.with node_modules/@opentelemetry/api/src/context/NoopContextManager.ts:20:14
+ ❯ ContextAPI.with node_modules/@opentelemetry/api/src/api/context.ts:68:42
+ ❯ NoopTracer.startActiveSpan node_modules/@opentelemetry/api/src/trace/NoopTracer.ts:87:27
+ ❯ ProxyTracer.startActiveSpan node_modules/@opentelemetry/api/src/trace/ProxyTracer.ts:51:19
+ ❯ EnabledTraceUtil.startActiveSpan node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28
+ ❯ WriteBatch.commit node_modules/@google-cloud/firestore/build/src/write-batch.js:440:43
+ ❯ node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:353:31
+ ❯ node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/rules/membership.test.ts [ tests/rules/membership.test.ts ]
+Error: Membership tests require the isolated demo emulator launcher.
+ ❯ tests/rules/membership.test.ts:30:11
+     28|     process.env.GCLOUD_PROJECT !== "demo-satsunicgo"
+     29|   )
+     30|     throw new Error(
+       |           ^
+     31|       "Membership tests require the isolated demo emulator launcher.",
+     32|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/rules/ask-workflow.test.ts > authenticated draft starts without turns; conversation resumes by server pointer; saveTurn redacts
+ FAIL  tests/rules/ask-workflow.test.ts > duplicate/concurrent submission creates exactly one order and rejects unsupported or anonymous actions
+ FAIL  tests/rules/ask-workflow.test.ts > recipient gates quote acceptance, is separate from model context, and stale quote is denied
+ FAIL  tests/rules/ask-workflow.test.ts > resume recovers a committed order after lost workflow finalization with no duplicate
+ FAIL  tests/rules/ask-workflow.test.ts > server guards locked user and Firestore denies cross-user conversations, operations and recipient writes
+Error: 7 PERMISSION_DENIED: Cloud Firestore API has not been used in project satsunic-gsc-non-production before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=satsunic-gsc-non-production then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+ ❯ callErrorFromStatus node_modules/@grpc/grpc-js/src/call.ts:84:16
+ ❯ Object.onReceiveStatus node_modules/@grpc/grpc-js/src/client.ts:612:51
+ ❯ Object.onReceiveStatus node_modules/@grpc/grpc-js/src/client-interceptors.ts:424:47
+ ❯ node_modules/@grpc/grpc-js/src/resolving-call.ts:184:23
+ ❯ ServiceClientImpl.makeServerStreamRequest node_modules/@grpc/grpc-js/src/client.ts:595:41
+ ❯ ServiceClientImpl.<anonymous> node_modules/@grpc/grpc-js/src/make-client.ts:189:14
+ ❯ node_modules/@google-cloud/firestore-api/src/v1/firestore_client.ts:358:24
+ ❯ node_modules/google-gax/build/src/streamingCalls/streamingApiCaller.js:39:28
+ ❯ node_modules/google-gax/build/src/normalCalls/timeout.js:44:16
+ ❯ Object.request node_modules/google-gax/build/src/streamingCalls/streaming.js:259:40
+ ❯ makeRequest node_modules/retry-request/index.js:159:28
+ ❯ retryRequest node_modules/retry-request/index.js:119:5
+ ❯ StreamProxy.setStream node_modules/google-gax/build/src/streamingCalls/streaming.js:246:37
+ ❯ StreamingApiCaller.call node_modules/google-gax/build/src/streamingCalls/streamingApiCaller.js:55:16
+ ❯ node_modules/@google-cloud/firestore/build/src/index.js:1090:35
+ ❯ node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30
+ ❯ NoopContextManager.with node_modules/@opentelemetry/api/src/context/NoopContextManager.ts:20:14
+ ❯ ContextAPI.with node_modules/@opentelemetry/api/src/api/context.ts:68:42
+ ❯ NoopTracer.startActiveSpan node_modules/@opentelemetry/api/src/trace/NoopTracer.ts:87:27
+ ❯ ProxyTracer.startActiveSpan node_modules/@opentelemetry/api/src/trace/ProxyTracer.ts:51:19
+ ❯ EnabledTraceUtil.startActiveSpan node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:117:28
+ ❯ Firestore.getAll node_modules/@google-cloud/firestore/build/src/index.js:1081:32
+ ❯ node_modules/@google-cloud/firestore/build/src/reference/document-reference.js:185:36
+ ❯ node_modules/@google-cloud/firestore/build/src/telemetry/enabled-trace-util.js:125:30
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/rules/ask-workflow.test.ts > server commerce rollout remains closed outside the dedicated demo exemption
+AssertionError: expected Error: 7 PERMISSION_DENIED: Cloud Firesto… { …(7) } to match object { code: 'unavailable' }
+(14 matching properties omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "code": "unavailable",
++ Error {
++   "code": 7,
+  }
+
+ ❯ tests/rules/ask-workflow.test.ts:285:53
+    283|   process.env.FUNCTIONS_EMULATOR = "false";
+    284|   try {
+    285|     await expect(current.run(req(`${uid}-new`, {}))).rejects.toMatchOb…
+       |                                                     ^
+    286|     await expect(workflow.run(req(`${uid}-new`, input("saveDraft", dra…
+    287|   } finally { process.env.FUNCTIONS_EMULATOR = old; }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/rules/server.test.ts > manual reversals append history and payment exceptions cannot allocate a duplicate or wrong-beneficiary receipt
+Error: Giao dịch đã được phân bổ; đóng ngoại lệ sau khi đối soát.
+ ❯ functions/src/finance-review.ts:188:19
+    186|             bank = await tx.get(bankRef);
+    187|           if (bank.exists)
+    188|             throw new HttpsError(
+       |                   ^
+    189|               "already-exists",
+    190|               "Giao dịch đã được phân bổ; đóng ngoại lệ sau khi đối so…
+ ❯ Transaction.runTransactionOnce node_modules/@google-cloud/firestore/build/src/transaction.js:505:28
+ ❯ node_modules/@google-cloud/firestore/build/src/transaction.js:477:28
+ ❯ tests/rules/server.test.ts:1337:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+
+ Test Files  4 failed | 6 passed (10)
+      Tests  7 failed | 47 passed | 8 skipped (62)
+   Start at  21:41:13
+   Duration  72.37s (transform 625ms, setup 0ms, import 4.19s, tests 65.66s, environment 1ms)
+

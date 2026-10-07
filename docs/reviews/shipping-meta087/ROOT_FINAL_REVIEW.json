@@ -1,0 +1,26 @@
+{
+  "decision": "PASSED",
+  "scope": "087 compact shipping metadata only",
+  "dimensions": {
+    "requirement_match": "PASSED",
+    "security": "PASSED",
+    "code_quality": "PASSED",
+    "failure_paths": "PASSED",
+    "error_handling": "PASSED",
+    "production_readiness": "PASSED",
+    "trade_offs": "PASSED"
+  },
+  "evidence": [
+    "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+    "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+    "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+    "/private/tmp/shipping087-build.log",
+    "/private/tmp/shipping087-tsc.log"
+  ],
+  "cycles": 1,
+  "findings": [],
+  "production": "NOT_READY; no deployment",
+  "usage": "Unavailable",
+  "cost": "Unavailable",
+  "memory": "None"
+}

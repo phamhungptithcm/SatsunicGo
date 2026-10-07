@@ -1,0 +1,17 @@
+{
+  "base_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "scope": "Task modules and integration files; shared files include parallel WIP and are not wholly certified by this review",
+  "sha256": {
+    "packages/domain/order-conversation.ts": "7afda919d8b71d314c62ed8f37a7663d80f25e58be90cce97bffbd7523d808fb",
+    "functions/src/order-conversation.ts": "89ab576d9b88b21a0492ec95711a76cf55801d976afcf2b4442ba7c0d81c664c",
+    "src/features/support/OrderConversation.tsx": "aeb591486ba359ea32898e9dc60dcb6eeba967a87fc6c7afbd8c4f303becb5d6",
+    "src/features/support/OrderConversation.css": "f348b32b3479a3b5ef62a9eb41a7758939ad85d63f05b4ca07dec1fe770789b5",
+    "tests/unit/order-conversation.test.ts": "6e8b92093481f9ff7e2573baf50eb2ff03fe5faff0daba316b1c53d42edea3bb",
+    "tests/rules/order-conversation.test.ts": "9c0f5725678454433b4554feeb2ddcc3758c2f09c8a0ded5734c2d01b1cb6e22",
+    "functions/src/index.ts": "682d274f244926f0d918aeb7d01875ae95023d10e0a33e170de1e608204c2b41",
+    "src/app/App.tsx": "80a3f93a081f4f9c79823485bac562bb1822c2f4961163f33b9cdb52f11008dc",
+    "src/features/operations/Workbench.tsx": "08f38ca15bd19d7557e96438b9b0e91d19ccdefa042771e979bb822296730c24",
+    "packages/domain/notification-content.ts": "063b6b6ccd91b7f59f2bb3695e092a25699b29effaee0c3351fb3b9f33de39e3",
+    "src/features/content/notification-target.ts": "28409b4ccfa1eb72390a7f0cd14a6edb13488492e099bfb5ec7fe91aebf75301"
+  }
+}

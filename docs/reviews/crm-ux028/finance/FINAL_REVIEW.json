@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-FINANCE-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved contextual financial queues, fields, per-queue cursor/pagination and frozen retry implemented.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Server financial authority/MFA unchanged; read-only amount and verified inbound guards retained.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current7finance+4customer boundary tests and scoped lint pass. Prior common compiler/native evidence predates this endpoint-specific delta; root rerun pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Current source guards reviewed; native fault and navigation cases pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Unknown frozen retry implemented; native timing unverified.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider or full acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Queues remain mounted during scope changes; pending metadata is memory-only across route unmount/full browser reload. Explicit service context avoids broadening membership rejection classification.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/finance/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "FIN028-DENSITY",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/payments/Finance.tsx",
+      "summary": "Three long groups, detached pagination and full repeated forms hindered actual decision context.",
+      "resolution": "Pressed queue scopes, per-group pagination, mounted contextual grouped disclosures.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "FIN028-RECOVERY",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/payments/Finance.tsx, src/features/payments/FinancialReview.tsx",
+      "summary": "Retry could rotate operation/version or lose pending context through refresh/navigation.",
+      "resolution": "Immutable issued command, explicit same-operation retry, parent unresolved locks, single-flight and lifecycle guards; native acceptance pending.",
+      "evidence_refs": [
+        "tests/unit/finance-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "FIN028-MEANING",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/payments/Finance.tsx",
+      "summary": "Unknown invoice/exception state implied pending/completion.",
+      "resolution": "Explicit unknown fallback and source-backed labels.",
+      "evidence_refs": [
+        "tests/unit/finance-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "FIN028-NATIVE",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md",
+      "summary": "Current native financial actions/unknown-result/permission/version/keyboard/AT and compiler acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/finance/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "FIN028-UNKNOWN-KEY",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/payments/Finance.tsx",
+      "summary": "Unknown status mapping must not return inherited object properties.",
+      "resolution": "Own-property mapping and constructor/prototype regression assertions;35focused tests and scoped lint rerun pass.",
+      "evidence_refs": [
+        "tests/unit/finance-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "FIN028-CAS-REJECTION",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/payments/FinancialReview.tsx",
+      "summary": "Explicit version rejection remained locked as unknown.",
+      "resolution": "Mandatory service context terminal aborted only financeReview/verifyTransfer; membershipCommand unchanged;3consumer regression verifies transport failures remain unknown.11focused tests and scoped lint pass.",
+      "evidence_refs": [
+        "tests/unit/finance-contextual.test.ts",
+        "functions/src/finance-review.ts",
+        "functions/src/index.ts"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending command metadata remains memory-only across route unmount/full browser reload.",
+    "Native actual administrative/financial action recovery and full CRM acceptance pending."
+  ],
+  "limitations": [
+    "Compiler and browser runner root-owned, not run here.",
+    "Tokens/cost unavailable. Memory candidates None."
+  ]
+}

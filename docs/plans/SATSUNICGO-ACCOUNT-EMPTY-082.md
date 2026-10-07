@@ -1,0 +1,3 @@
+# ACCOUNT-EMPTY082 direct approved UI removal
+
+2026-10-06 user explicitly asks removing pictured large box icon in Notifications and remaining pages. Source identifies two shared Account empty/sign-in states in App.tsx used by account/orders/shipments/notifications. Plan: remove only their decorative Icon kind=box. Keep small sidebar navigation box, shared brand logo and functional homepage journey parcel unchanged. No strings, routes, auth, data or backend behavior changes. Preserve shared App WIP; exact targeted replacements only. Intelligence DEGRADED/bounded current source. Source type/lint/build and final scoped/product-content review; no new mirroring tests for low-impact removal. Direct user request authorizes scope; rollback restore two JSX lines.

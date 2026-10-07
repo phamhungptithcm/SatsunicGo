@@ -1,0 +1,19 @@
+# Business coverage audit and proposed bounded delta
+
+Candidate024 source/artifacts untouched. Gate rerun: DEGRADED, both indexes stale and CocoIndex health failed; bounded native source/test evidence. Root serial runner authority unchanged. No confirmed new defect established by this read-only audit.
+
+Existing coverage source: catalog-checkout integration concurrent same-operation checkout and conflicting payload reuse; partial verified collection blocks buying until full listed price; authoritative callbacks once/quarantine mismatch; catalog-payments rejects deposit/balance intent and unknown provider creation never collects money; catalog unit full available funds minus refunds/reservations, before-money cancel and after-partial-money cancel rejection; CAT-B02/ASK-B01 browser response-loss+reload identity recovery; FLOW-H01 custom2installments and explicit final approval; FLOW-H02 catalog once-only collection and quote/freight surcharge rejection; server customer-approved cancellation preserves immutable accepted deposit/collected history; refund reservation concurrency and confirmed proof-only ledger updates; current native substitution accept/apply/reject preserves purchased line and money. These are test source coverage and prior root executed evidence, not an exhaustive production acceptance claim.
+
+## Proposed regression delta BIZ025-CANCEL-RACE
+
+Owned integration catalog-checkout test only after root assigns window. Create catalog order via actual checkout. Race customer cancelRequest and authorized finance verifyTransfer using same expectedVersion1 and distinct operation IDs. Exactly one succeeds; loser must abort version, order must be either CANCELLED/collected0/no payment entry or QUOTE_ACCEPTED/collected amount/no cancellation. No outcome may be cancelled with newly allocated money. Then read current state and assert new paid-order cancel fails, or cancelled-order verifyTransfer/transferReview fails; collected/refunded and ledger unchanged. Repeat both race winners deterministically via sequenced cases plus one concurrency case. Replay exact checkout operation after cancel must return original order identity, not resurrect or create duplicate order; conflicting same-operation quantity remains rejected. Replay exact successful cancel operation idempotent, fresh stale-version cancel aborts. Existing server expectedVersion transaction plus evolve guard suggest correct behavior; execute before considering any fix.
+
+## Proposed callback delta BIZ025-LATE-CALLBACK
+
+Catalog integration cancellation followed by already-verified callback fixture with original matching payment request context: current payos mismatch explicitly includes stage CANCELLED. Assert exception receipt/paymentException once, order collected0/stageCANCELLED, no allocated financial entry; repeat callback reference remains exactly once. Synthetic provider fixture only, not live provider acceptance. Existing callback test uses direct authoritative-helper input; keep same distinction in report. Do not fake bank success in native UI.
+
+## Native cancellation scope
+
+Before asserting absent native cancel coverage is a product defect, verify actual customer control ownership and labels. Existing OrderTools history label cancelRequest is not evidence of a cancellation button. Root may choose HTTP/integration regression first; no new product action or commercial cancellation policy implied. Native custom deposit/balance response-loss and concurrent finance verification remain distinct from checkout identity tests; reuse verified transaction runner before expanding UI suites.
+
+Root decision requested: assign catalog integration test mutation window or new dedicated business test file and run serial in release025 namespace. No source/test changes yet; no024 artifact overwrite. No new commercial policy, dependency, production payment/email/datafix or deploy. Production NOT_READY; no readiness claim. Memory candidates None.

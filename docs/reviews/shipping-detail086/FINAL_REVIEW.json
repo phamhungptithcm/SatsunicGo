@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-DETAIL-086",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Current frozen local shipping-detail scope reviewed; production/provider evidence excluded.",
+      "evidence_refs": [
+        "docs/reviews/shipping-detail086/PLAN.md",
+        "docs/reviews/shipping-detail086/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-detail086-browser/VERIFICATION.md",
+        "/private/tmp/shipping086-root44-receipt.json"
+      ]
+    }
+  },
+  "findings": []
+}

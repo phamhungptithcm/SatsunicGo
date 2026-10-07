@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "status": "PASSED",
+  "reviewed_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Role union corrects two reproducible code-path inconsistencies within approved local ownership. No new commercial rule.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google, active current role, UID ownership, assignment, receipt restriction and account/staff lock checks preserved. No token/secret/public Storage grant.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped ESLint/Prettier pass; root full lint, declared Node22 Functions compile and current frontend noEmit pass. Root confirmed fresh frontend exit0 session85583 after final test update. Current owned hashes match source freeze.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "All16 owned emulator cases passed in71/71 aggregate: cross-owner denial, provider claims, nested lock/query isolation, mixed role union, revoked assignment/current staff locks, three concurrent identical uploads with one counter/audit, replay and changed-id denial,20quota bound, active content rejection, authorization revoked during download denies bytes.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing safe HttpsError responses and retries preserved; no new message or external I/O inside Firestore transaction.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "NOT_READY; no deploy/index/datafix. Real auth/provider/retention/query execution plans not verified.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Share role-kind union between list/read; keep writing grant checks and bounded indexed query. Existing pending reservations kept for operator review.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md",
+        "docs/reviews/release023/database/AUDIT.md",
+        "docs/reviews/release023/database/SOURCE_MANIFEST.json",
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "DB023-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/order-media.ts authorized/listOrderImages",
+      "summary": "Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration.",
+      "resolution": "Shared union of existing role-kind grants used by list/read. Mixed-role tests pass while receipt denial and current revocation remain enforced.",
+      "evidence_refs": [
+        "docs/reviews/release023/database/integration-evidence.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending upload failures retain quota until retry/operator review; no automated confidential-file cleanup.",
+    "Real auth/AppCheck/provider, production index plans, backup/retention/rollout acceptance unverified; production NOT_READY."
+  ],
+  "limitations": [
+    "DEGRADED indexes; bounded source audit only. Shared dirty checkout with immutable owner hashes.",
+    "During-I/O test uses mocked download and actual Firestore lock commit; concurrent upload uses demo Firestore/Storage. No real provider or customer data.",
+    "Runtime reviewer declaration is LEGACY_UNVERIFIED; no independent authenticated reviewer/provider evidence.",
+    "Token usage and actual billed cost Unavailable."
+  ],
+  "recorded_at": "2026-10-05T15:51:04.268Z",
+  "reviewed_worktree_signature": "ffb801232f06d8e433fb65069fb71898c9abeb746ef5ea0860d4622a37900e97",
+  "previous_review_hash": "d25fe4ffefa3f7cac835aa045de1c36903dfa0cc78af2cd480a31e44a4eb975f",
+  "review_hash": "3b89a03ab1fddb5b3544d03026cd6873ff10d3dc5926deec27dbb5439dc613a2"
+}

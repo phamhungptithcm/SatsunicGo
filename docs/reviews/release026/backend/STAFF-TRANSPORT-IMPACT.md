@@ -1,0 +1,5 @@
+# Staff legacy transport projection delta
+
+Observed current readStaffAccess projection explicitly includes version/active/locked with undefined values for legacy absent fields. Installed Firebase Functions common/providers/https.js encode(undefined) returns null. Root actual SDK/native staff-legacy-transport-before receipt reports one failure and typed legacy projection diagnostics null; strict StaffAccess UI correctly denies explicit malformed null, so legitimate absent-field legacy rows become unusable in transport. Root authorizes this bounded delta after actual failure.
+
+Minimal implementation: conditionally include version/active/locked only when stored value !== undefined. Preserve explicit null or other malformed values for UI rejection, roles unchanged, orderIds nullish fallback[] unchanged, caller authority/locks/MFA unchanged. No stored-data normalization, schema or datafix. Root owns client omission of undefined expectedVersion and actual SDK read-to-explicit-synthetic-grant regression. No production MFA/provider claim. Before-edit impact recorded here; only workspace.ts projection will change.

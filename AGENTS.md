@@ -87,3 +87,12 @@ Before completion, run relevant checks, complete `.ai/core/quality-gates.md` wit
 
 If a nested `AGENTS.md` or `AGENTS.override.md` exists closer to the working directory, follow it for that subtree only when it does not conflict with higher-precedence security, production, data-protection, or repository-wide rules.
 <!-- END @hunpeolabs/ai-agent-kit managed -->
+
+## Shared Local Development Server
+
+- Reuse the shared SatsunicGo frontend at `http://127.0.0.1:5207`.
+- Do not start additional Vite, preview, fixture, or duplicate emulator servers on other ports unless the user explicitly authorizes an isolated server.
+- Check the existing listener before starting anything. Use `--port 5207 --strictPort`; never fall back to another port.
+- The shared demo emulator configuration is `/private/tmp/satsunicgo-shared5207/firebase.json`: Auth 19207, Firestore 18207, Functions 15207, Storage 19208. These are backend service ports, not additional frontend instances.
+- Frontend emulator settings must use project `demo-satsunicgo`, `VITE_USE_EMULATORS=true`, and the corresponding `VITE_AUTH_EMULATOR_PORT`, `VITE_FIRESTORE_EMULATOR_PORT`, and `VITE_FUNCTIONS_EMULATOR_PORT` values above.
+- Preserve demo data before any restart. Coordinate changes to this shared runtime; temporary configuration paths may need recreation after system cleanup.

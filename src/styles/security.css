@@ -1,0 +1,245 @@
+.securityPage {
+  max-width: 680px;
+  min-width: 0;
+  color: #111c35;
+}
+.securityHeading {
+  margin-bottom: 28px;
+}
+.securityHeading h1 {
+  font-size: 32px;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  margin: 10px 0 12px;
+}
+.securityPage p {
+  color: #68758d;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 8px 0;
+}
+.securityPage h2 {
+  font-size: 17px;
+  margin: 0;
+  line-height: 1.4;
+}
+.securityOverview {
+  border: 1px solid #e0e5ef;
+  border-radius: 14px;
+  padding: 20px 22px;
+  background: #fff;
+  margin-bottom: 22px;
+}
+.securityOverviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.securityOverview .securityActions {
+  margin-top: 18px;
+}
+.securityBadge {
+  white-space: nowrap;
+  border-radius: 20px;
+  background: #e9edf4;
+  color: #57647a;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.securityBadge.isEnabled {
+  color: #163cff;
+  background: #e9edff;
+}
+.securityCard {
+  border: 1px solid #e0e5ef;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+}
+.securityIntro > p {
+  max-width: 490px;
+}
+.securityActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+.securityPage button {
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.securityPage .securityPrimary {
+  color: #fff;
+  background: #163cff;
+}
+.securityPage .securitySecondary {
+  color: #111c35;
+  background: #fff;
+  border-color: #dfe5ef;
+}
+.securityPage button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.securityPage button:focus-visible,
+.securityPage input:focus-visible,
+.securityPage select:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+.securitySetup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e6eaf2;
+  margin-bottom: 22px;
+}
+.securityQr {
+  width: 224px;
+  min-height: 224px;
+  display: grid;
+  place-items: center;
+  background: white;
+}
+.securityQr img {
+  display: block;
+  max-width: 100%;
+}
+.securityPage .securityPrivacy {
+  font-size: 12px;
+}
+.securityManual {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+.securityManualLabel {
+  font-size: 11px;
+  color: #68758d;
+}
+.securityKeyRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f6f8fc;
+  border: 1px solid #e6eaf2;
+  border-radius: 10px;
+  margin-top: 6px;
+  padding: 4px 6px 4px 12px;
+}
+.securityKey {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: left;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.securityPage .securityCopy {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  background: transparent;
+  color: #68758d;
+  border-radius: 8px;
+}
+.securityPage .securityCopy:hover {
+  background: #e9edff;
+  color: #163cff;
+}
+.securityPage .securityCopyFeedback {
+  font-size: 12px;
+  margin: 6px 0;
+}
+.securityForm {
+  max-width: 360px;
+  margin: auto;
+}
+.securityForm input {
+  max-width: none;
+}
+.securityForm label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 18px 0 8px;
+}
+.securityForm input,
+.securityForm select {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  min-height: 48px;
+  border: 1px solid #ccd4e3;
+  border-radius: 10px;
+  background: white;
+  color: #111c35;
+  padding: 12px;
+  font: inherit;
+}
+.securityForm input {
+  font-size: 22px;
+  letter-spacing: 0.24em;
+}
+.securityNotice {
+  border: 1px solid #dce3ff;
+  border-radius: 12px;
+  padding: 14px 18px;
+  background: #f4f6ff;
+}
+.securityPage .securityNotice.isError {
+  color: #9d2836;
+  background: #fff5f5;
+  border-color: #f0d3d6;
+}
+@media (max-width: 640px) {
+  .securityHeading h1 {
+    font-size: 28px;
+  }
+  .securityCard {
+    padding: 22px;
+  }
+  .securitySetup {
+    gap: 20px;
+  }
+  .securityQr {
+    margin: auto;
+  }
+  .securityOverview {
+    padding: 18px;
+  }
+  .securityOverviewRow {
+    gap: 12px;
+  }
+  .securityOverviewRow h2 {
+    font-size: 15px;
+  }
+  .securityActions {
+    flex-direction: column;
+  }
+  .securityWorkspace .customerRail nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .securityWorkspace .customerRail nav a.customerSecondary {
+    display: flex;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .securityWorkspace .accountPage {
+    animation: none;
+  }
+}

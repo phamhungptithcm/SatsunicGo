@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-E2E-005",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Approved local CRM and operational implementation present; full MASTER_PROMPT acceptance remains incomplete.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Role/isolation/verified-Google and private Storage regressions pass in coordinated suite; runtime dependency findings and live provider acceptance remain unresolved.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current typecheck and lint passed after identity and stale-read fixes.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Idempotency/version/concurrency/quantity/bank proof regressions pass; current browser/provider fault coverage is incomplete.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Source distinguishes loading/error/empty and freezes retry payloads; final rendered timing/recovery not yet accepted.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Local fixtures only; billing disabled and deployment/providers/real Google MFA/commercial data are not accepted.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Bounded cursor queues, append-only financial reversal, private media and local-only seed guards preserve existing authority.",
+      "evidence_refs": [
+        "docs/team/session-crm.md",
+        "docs/reviews/E2E-005-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "E2E005-CONTEXT",
+      "status": "FIXED",
+      "summary": "Prevent previous account/order/ticket state from surviving context switches.",
+      "severity": "MEDIUM",
+      "category": "privacy",
+      "location": "src/app/App.tsx, src/features/operations/Workbench.tsx, src/features/support/Thread.tsx",
+      "evidence_refs": [
+        "docs/team/session-crm.md"
+      ],
+      "resolution": "Use context keys and stale-read guards; typecheck and lint pass."
+    },
+    {
+      "id": "E2E005-SEED",
+      "status": "FIXED",
+      "summary": "Link existing demo identity instead of importing duplicate UID.",
+      "severity": "MEDIUM",
+      "category": "data-setup",
+      "location": "scripts/seed-demo.mjs",
+      "evidence_refs": [
+        "docs/team/session-crm.md"
+      ],
+      "resolution": "Use updateUser provider link; original startup, fixture check and emulator Google same-UID sign-in pass."
+    },
+    {
+      "id": "E2E005-ACCEPTANCE",
+      "status": "OPEN",
+      "summary": "Current rendered product-content and full master acceptance not passed.",
+      "severity": "HIGH",
+      "category": "acceptance",
+      "location": "MASTER_PROMPT.md",
+      "evidence_refs": [
+        "docs/team/session-crm.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Current source continues to change in coordinated root session; refresh evidence against final candidate.",
+    "Node25 local host is not production Node22 acceptance.",
+    "Pending media uploads consume quota until operator review."
+  ],
+  "limitations": [
+    "85 unit and43 emulator tests are coordinated-root evidence before latest UI/seed fixes.",
+    "No new browser automation by this session after policy block; resumed browser review owned by root.",
+    "Token usage and billed cost unavailable; memory candidates None.",
+    "Detailed cycles: docs/reviews/E2E-005-REVIEW_CYCLES.md"
+  ]
+}

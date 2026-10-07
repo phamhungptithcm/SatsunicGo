@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-PROFILE-076",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Second independent draft review found blank address prerequisite state; fixes required.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Initial review before fixes/browser verification.",
+      "evidence_refs": [
+        "docs/reviews/profile076/PLAN.md",
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "P076-1",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "security",
+      "location": "Profile.tsx",
+      "summary": "UID mismatch could render stale private data before effect reset.",
+      "resolution": "Pending derived visible read and verification.",
+      "evidence_refs": [
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    {
+      "id": "P076-2",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "failure_paths",
+      "location": "Profile.tsx",
+      "summary": "Missing DB returns perpetual loading.",
+      "resolution": "Pending deterministic errors and verification.",
+      "evidence_refs": [
+        "/private/tmp/profile076-pre-review.md"
+      ]
+    },
+    {
+      "id": "P076-3",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "security",
+      "location": "Profile.tsx save",
+      "summary": "Write and completion feedback need actual authenticated UID guards.",
+      "resolution": "Pending guard verification.",
+      "evidence_refs": [
+        "/private/tmp/profile076-review.md"
+      ]
+    },
+    {
+      "id": "P076-4",
+      "severity": "medium",
+      "status": "OPEN",
+      "category": "failure_paths",
+      "location": "Profile.tsx address card",
+      "summary": "Loaded addresses with failed profile prerequisite leave an unexplained blank card.",
+      "resolution": "Pending explicit prerequisite message.",
+      "evidence_refs": [
+        "/private/tmp/profile076-review.md"
+      ]
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "Local scope; no production/provider evidence."
+  ]
+}

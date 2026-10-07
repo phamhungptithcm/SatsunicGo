@@ -1,0 +1,18 @@
+{
+  "project": "satsunicgo",
+  "designatedIdentityExists": true,
+  "verified": true,
+  "googleLinked": true,
+  "mfaEnrolled": false,
+  "totpEnabled": true,
+  "deployedFunctionCount": 0,
+  "secretMetadataCount": 0,
+  "firestore": {
+    "deleteProtectionState": "DELETE_PROTECTION_DISABLED",
+    "locationId": "asia-southeast1",
+    "name": "projects/satsunicgo/databases/(default)",
+    "pointInTimeRecoveryEnablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+    "type": "FIRESTORE_NATIVE"
+  },
+  "scope": "metadata-only; no secret payloads/customer records"
+}

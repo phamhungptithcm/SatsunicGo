@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-STUDIO-RATES-027",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "Source mechanics and contract adapter implemented; complete native parity not observed.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "NOT_RUN",
+      "summary": "Private generations and exact unknown-retry identities inspected; auth-switch executable proof pending.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Scoped lint and3 pure tests pass; current complete candidate frontend compiler pending backend WIP.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Retry, terminal errors, pagination and cleanup implemented; native bad-case coverage pending.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Input retained and unknown writes fenced; native unknown-result verification pending.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Local scope only, no deployment/provider or production data changes.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "NOT_RUN",
+      "summary": "Manual review/public names deliberately preserve Go policy; approved avatar projection absent, no private profile fetched.",
+      "evidence_refs": [
+        "docs/reviews/release027/comments-ui/PRODUCT_CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Native in-context and full backend integration evidence required.",
+    "Source optional avatar image rendering is not implemented without safe approved backend projection."
+  ],
+  "limitations": [
+    "No native runner or runtime mutation by this worker.",
+    "Initial-auth callback reset race was found in self-review and corrected before scoped lint/unit checks; rendered regression still pending.",
+    "Current index source edits require refreshed root READY gate before final handoff.",
+    "Self-review found nested discussion selectors missing root matching; corrected scoped CSS before native handoff."
+  ]
+}

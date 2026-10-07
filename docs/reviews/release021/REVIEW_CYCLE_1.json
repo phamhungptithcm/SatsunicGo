@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RELEASE-INTEGRATION-021",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Local integration implemented; full master browser and real production acceptance incomplete. Product Language Gate BLOCKED: incomplete principle/state coverage.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json",
+        "docs/reviews/release021/CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "FAILED",
+      "summary": "Ownership, MFA/App Check source and emulator adversarial tests checked; residual six high dependency entries unresolved.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "FAILED",
+      "summary": "First review exposed constructor-vs-instance type in transaction fixture and browser HTML regex. Corrected; verification in cycle2.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Stale source, concurrent retry, quota/revocation, locks, ledger isolation, held/unfunded operations and uncertain delivery covered by executed tests/source.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe prerequisite/version errors and deterministic operation retries; late email outcome cannot overwrite reconciled job.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Production target selected; backend inventory empty; billing403 and actual auth/App Check/MFA/provider/restore/rollout acceptance unknown.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Internal statements only, browser print, no tax provider; minimal capability projection and frozen totals; no unsafe transitive override.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md",
+        "docs/reviews/release021/verified-integration.json",
+        "docs/reviews/release021/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "021-1",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "tests/helpers/demo-setup.ts",
+      "summary": "Firebase tests could route ambient cloud credentials before test hooks",
+      "resolution": "Pre-import fail-closed demo bootstrap; invalid environments rejected.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/rules/server.test.ts",
+      "summary": "Shared scheduled outbox fixtures could starve bounded queue and timeout",
+      "resolution": "Disposable demo namespaces;31focused and66full current tests passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-3",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "functions/src/email.ts",
+      "summary": "Late SMTP completion could overwrite manual reconciliation",
+      "resolution": "Claim/version CAS with auditable late outcome; delivery test passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-4",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "security",
+      "location": "functions/src/invoices.ts",
+      "summary": "Stale source/seller or retry could duplicate document/mutate issued history",
+      "resolution": "Source version guard, unique counter, actor/op idempotency; integration passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-5",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/invoices/Documents.tsx",
+      "summary": "Browser Unicode regex mode rejected literal hyphen in pattern",
+      "resolution": "Escaped hyphen in JSX; browser detected issue, current compile passed.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-6",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "security",
+      "location": "package-lock.json",
+      "summary": "Six residual high dependency entries remain without validated mitigation",
+      "resolution": "Sharp patched; Genkit direct upgrade has no simple fix; do not certify release.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-7",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "correctness",
+      "location": "docs/reviews/release021/CONTENT_REVIEW.md",
+      "summary": "Complete product-language acceptance still missing for some new states",
+      "resolution": "Keep gate blocked; existing screenshot/test evidence does not cover missing states.",
+      "evidence_refs": [
+        "docs/reviews/release021/READINESS.md"
+      ]
+    },
+    {
+      "id": "021-8",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "code_quality",
+      "location": "tests/rules/email-delivery.test.ts",
+      "summary": "Mock used Transaction/DocumentReference constructor type rather than instance",
+      "resolution": "Instance import types; current frontend and Functions typecheck passed",
+      "evidence_refs": [
+        "docs/reviews/release021/candidate-typecheck.log"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Production provider acceptance not established",
+    "Current source includes unrelated dirty shared WIP",
+    "Internal statements are not tax e-invoices"
+  ],
+  "limitations": [
+    "Intelligence indexes DEGRADED; bounded source/test fallback",
+    "Provider tokens and costs Unavailable",
+    "Memory candidates None"
+  ]
+}

@@ -1,0 +1,9 @@
+# Finance next UI phase — proposed, source not edited
+
+Common integrated native freeze currently held. Exclusive Finance.tsx/FinancialReview.tsx lease not assigned yet. Current source retains three queues with pagination detached at page bottom, repeated full transfer/invoice forms and unrelated order input for exception close.
+
+Proposed narrow UI phase after root releases freeze: visible queue scopes with per-scope pagination, browse summary before explicit selected disclosure, group one consequential action form at a time. Exception close excludes order field; allocation shows required order only when inboundVerified allows it; reversal retains original-entry/amount/bank/reason/evidence. Membership confirmations use actual invoice amount and explicit identity, no customer-order balance implication.
+
+Pending recovery source findings: Finance.confirm and TransferReviewForm.verify currently generate new operation each submission; FinancialReview can rotate frozen operation when input changes. Proposed immutable command/operation/version/evidence once sent, immediate in-flight guard, unknown freezes edits/target with explicit same-operation retry; read-before-command errors remain editable and confirmed mutation versus refresh error distinct. sendCommand already accepts operationId fifth argument, no shared helper/backend change required. Retain all MFA, server financial authorization, actual bank/proof and owner controls; no real provider/financial transactions.
+
+Required validation: pure conditional payload tests, current scoped lint/compiler, root serial synthetic native allocate/close/reverse/confirm plus loss-response/stale-version/permission and three widths/keyboard/AT. No successful finance acceptance from a browse-only screenshot or old026 assertions. This document is a proposal; no protected implementation begun.

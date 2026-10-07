@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { CrmIcon, CrmReference, CrmState } from "../crm/CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { callService } from "../../shared/firebase";
@@ -34,7 +35,13 @@ export function consolidationSelection(
     missingOrders: orderIds.some((id) => !orders.some((o) => o.id === id)),
   };
 }
-export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock; onAuthorityDenied: () => void }) {
+export function Consolidation({
+  lock,
+  onAuthorityDenied,
+}: {
+  lock: ShippingLock;
+  onAuthorityDenied: () => void;
+}) {
   const parcelQueue = useWorkQueue<Parcel>("packages"),
     batchQueue = useWorkQueue<Batch>("consolidationBatches");
   const parcels = parcelQueue.rows,
@@ -49,13 +56,19 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
   const [unavailable, setUnavailable] = useState(false);
   const [authorityDenied, setAuthorityDenied] = useState(false);
   function noteAuthority(cause: unknown) {
-    const code = String((cause as { code?: string })?.code ?? "").replace("functions/", "");
+    const code = String((cause as { code?: string })?.code ?? "").replace(
+      "functions/",
+      "",
+    );
     if (["permission-denied", "unauthenticated"].includes(code)) {
       setAuthorityDenied(true);
       onAuthorityDenied();
     }
   }
-  const [pendingChoice, setPendingChoice] = useState<{ id: string; checked: boolean } | null>(null);
+  const [pendingChoice, setPendingChoice] = useState<{
+    id: string;
+    checked: boolean;
+  } | null>(null);
   const [failedChoice, setFailedChoice] = useState("");
   const lockRef = useRef(lock);
   lockRef.current = lock;
@@ -180,9 +193,13 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
       setTray(next);
       setOrders(snapshots);
     } catch (cause) {
-      if (mounted.current && current === generation.current) noteAuthority(cause);
+      if (mounted.current && current === generation.current)
+        noteAuthority(cause);
       if (current === generation.current) {
-        const code = String((cause as { code?: string }).code ?? "").replace("functions/", "");
+        const code = String((cause as { code?: string }).code ?? "").replace(
+          "functions/",
+          "",
+        );
         if (["permission-denied", "unauthenticated"].includes(code)) {
           setOrders([]);
           setUnavailable(true);
@@ -214,7 +231,8 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
       setResult(row);
       return true;
     } catch (cause) {
-      if (mounted.current && current === generation.current) noteAuthority(cause);
+      if (mounted.current && current === generation.current)
+        noteAuthority(cause);
       if (current === generation.current) {
         setResult(null);
         setResultError(true);
@@ -259,7 +277,8 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
       setReconcile(false);
       setFailedChoice("");
       setUnavailable(false);
-      if (resultId && !(await readResult(resultId))) throw Error("RESULT_READ_FAILED");
+      if (resultId && !(await readResult(resultId)))
+        throw Error("RESULT_READ_FAILED");
       setAuthorityDenied(false);
     } catch (cause) {
       if (mounted.current) noteAuthority(cause);
@@ -456,12 +475,20 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
   const invalidSelection = tray.some(
     (p) => p.state !== "packed" || Boolean(p.batchId),
   );
-  if (authorityDenied) return (
-    <section ref={root} className="workbench">
-      <p role="alert">Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền.</p>
-      <button disabled={lock.blocked || loading || busy} onClick={() => void reconcileRecords()}>Đối chiếu dữ liệu lô</button>
-    </section>
-  );
+  if (authorityDenied)
+    return (
+      <section ref={root} className="workbench">
+        <p role="alert">
+          Không có quyền xem dữ liệu này. Đối chiếu lại sau khi được cấp quyền.
+        </p>
+        <button
+          disabled={lock.blocked || loading || busy}
+          onClick={() => void reconcileRecords()}
+        >
+          Đối chiếu dữ liệu lô
+        </button>
+      </section>
+    );
   return (
     <section ref={root} className="workbench">
       <h2 className="crmSectionHeading">
@@ -561,7 +588,11 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
                     type="checkbox"
                     name="parcel"
                     value={p.id}
-                    checked={pendingChoice?.id === p.id ? pendingChoice.checked : selected.includes(p.id)}
+                    checked={
+                      pendingChoice?.id === p.id
+                        ? pendingChoice.checked
+                        : selected.includes(p.id)
+                    }
                     onChange={(e) => void selectParcel(p, e.target.checked)}
                   />
                   <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>
@@ -573,8 +604,15 @@ export function Consolidation({ lock, onAuthorityDenied }: { lock: ShippingLock;
               Đã chọn {selected.length}/20 kiện · {selectedOrderIds.length}/10
               đơn
             </p>
-            {pendingChoice && <p role="status">Đang kiểm tra kiện…</p>}
-            {failedChoice && <p role="alert" style={{ overflowWrap: "anywhere" }}>Kiện {failedChoice} chưa được thêm. Các kiện đã chọn được giữ lại.</p>}
+            {pendingChoice && (
+              <LoadingState overlay={false}>Đang kiểm tra kiện…</LoadingState>
+            )}
+            {failedChoice && (
+              <p role="alert" style={{ overflowWrap: "anywhere" }}>
+                Kiện {failedChoice} chưa được thêm. Các kiện đã chọn được giữ
+                lại.
+              </p>
+            )}
             {tray.map((p) => (
               <div key={p.id}>
                 <CrmReference label="Kiện đã chọn" value={p.id} />

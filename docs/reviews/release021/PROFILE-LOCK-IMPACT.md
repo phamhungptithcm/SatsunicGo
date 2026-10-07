@@ -1,0 +1,9 @@
+# Approved local021 delta — known account lock clears profile projection
+
+Observed native PROFILE-B02: setting the synthetic user's authoritative locked flag did not clear already-rendered recipient addresses or disable save. The user's own profile listener can read that flag while locked; address rules continue to deny new reads/writes but cached content need not immediately generate a listener error. This is a UI privacy/readiness defect, not a relaxation of backend authorization.
+
+Approval: existing local021 approval plus direct human instruction to fix all proposed backend/UI/business-rule issues without reapproval. Scope: Profile.tsx, profile-state.ts, their unit regressions and current native PROFILE-B02. Root takes ownership after specialist read-only handoff; its higher intelligence prerequisite blocked edits, while root AGENTS permits bounded DEGRADED source/compiler/test fallback. Source rechecked before this plan.
+
+Implementation: add an explicit locked read state; known lock clears fields, consent/version and addresses, invalidates in-flight feedback, discards late listener callbacks and disables all saves. Clear uncontrolled recipient inputs on lock. Use truthful lock wording. Unlock alone does not replay or reopen private projection; explicit retry creates fresh listeners and restores only current owner's valid snapshots. Keep current epoch, UID, version and single-flight guards. No API, rules, ledger, provider, dependency or infrastructure change.
+
+Verification: reducer loaded→lock→late events→retry/current snapshots and wrong-UID lock; native load→lock→clear/disable→unlock→explicit retry→owner switch; current lint/frontend compiler and final combined suite. Exact copy: “Tài khoản đang bị khóa. Bạn chưa thể xem hoặc cập nhật hồ sơ và địa chỉ.” Existing recovery label remains “Tải lại thông tin”. No automatic write replay.

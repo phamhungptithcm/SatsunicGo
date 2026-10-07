@@ -1,0 +1,7 @@
+{
+  "commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "sha256": {
+    "src/app/ErrorBoundary.tsx": "b642c285b9b3b4b85a0f49bfd2b7b4c8593b62f3d2e92c287901bd8a3400dedc",
+    "src/app/ErrorBoundary.module.css": "c425a2039a92850bc773d37a1f060aece4b70295fd080ec42f4dd02b688e196d"
+  }
+}

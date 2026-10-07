@@ -1,0 +1,90 @@
+AI Agent Kit — Final Task Report
+Task: SATSUNICGO-HARDENING-023-DATABASE
+State: DISCOVER
+Commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+Generated: 2026-10-05T15:51:04.844Z
+
+Progress: 100% — 2/2 applicable criteria verified
+
+Usage & Cost
+  Tokens used: Unavailable — no_usage_evidence
+  Estimated cost: Unavailable
+
+Completed
+  - [VERIFIED] 1. Existing media grants compose without bank-receipt leakage
+  - [VERIFIED] 2. Current scoped privacy/concurrency/revocation regressions and compilation pass
+
+Remaining
+  - No applicable acceptance criterion remains.
+
+Quality
+  - build: NOT_RUN — No current evidence recorded.
+  - compilation: PASSED — Root confirmed current frontend noEmit exit0 after test update session85583
+  - final-implementation-review: STALE — Final implementation review is STALE.
+  - integration: PASSED — 16/16 owned cases in 71/71 root integration
+  - lint: NOT_RUN — No current evidence recorded.
+  - production-provider-retention: NOT_RUN — Production auth/AppCheck/index plans/backup/retention/rollout acceptance outside local scope; NOT_READY
+  - security: NOT_RUN — No current evidence recorded.
+  - static-analysis: PASSED
+  - tests: NOT_RUN — No current evidence recorded.
+  - typecheck: NOT_RUN — No current evidence recorded.
+
+Final Implementation Review
+Decision: STALE
+Review cycles: 2
+Reviewed:
+  - requirement_match: PASSED — Role union corrects two reproducible code-path inconsistencies within approved local ownership. No new commercial rule.
+  - security: PASSED — Verified Google, active current role, UID ownership, assignment, receipt restriction and account/staff lock checks preserved. No token/secret/public Storage grant.
+  - code_quality: PASSED — Scoped ESLint/Prettier pass; root full lint, declared Node22 Functions compile and current frontend noEmit pass. Root confirmed fresh frontend exit0 session85583 after final test update. Current owned hashes match source freeze.
+  - failure_paths: PASSED — All16 owned emulator cases passed in71/71 aggregate: cross-owner denial, provider claims, nested lock/query isolation, mixed role union, revoked assignment/current staff locks, three concurrent identical uploads with one counter/audit, replay and changed-id denial,20quota bound, active content rejection, authorization revoked during download denies bytes.
+  - error_handling: PASSED — Existing safe HttpsError responses and retries preserved; no new message or external I/O inside Firestore transaction.
+  - production_readiness: PASSED — NOT_READY; no deploy/index/datafix. Real auth/provider/retention/query execution plans not verified.
+  - trade_offs: PASSED — Share role-kind union between list/read; keep writing grant checks and bounded indexed query. Existing pending reservations kept for operator review.
+Findings and fixes:
+  - cycle 1 [MEDIUM/OPEN] DB023-1 at functions/src/order-media.ts authorized/listOrderImages: Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration.
+  - cycle 2 [MEDIUM/FIXED] DB023-1 at functions/src/order-media.ts authorized/listOrderImages: Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration. — Shared union of existing role-kind grants used by list/read. Mixed-role tests pass while receipt denial and current revocation remain enforced.
+Residual risks:
+  - Pending upload failures retain quota until retry/operator review; no automated confidential-file cleanup.
+  - Real auth/AppCheck/provider, production index plans, backup/retention/rollout acceptance unverified; production NOT_READY.
+Limitations:
+  - DEGRADED indexes; bounded source audit only. Shared dirty checkout with immutable owner hashes.
+  - During-I/O test uses mocked download and actual Firestore lock commit; concurrent upload uses demo Firestore/Storage. No real provider or customer data.
+  - Runtime reviewer declaration is LEGACY_UNVERIFIED; no independent authenticated reviewer/provider evidence.
+  - Token usage and actual billed cost Unavailable.
+
+Engineering Team
+  Type: BUG_WORKCELL
+  Execution: UNSELECTED
+  Status: NOT_READY
+  Review independence: VERIFIED
+  Shared context: READY
+  Handoffs: 0
+  Open conflicts: 0
+
+Architecture Pulse
+  Evidence: NOT_RUN
+  Outcome: Unavailable
+  Artifact: Unavailable
+  Coverage: Unavailable
+  Confidence: Unavailable
+
+Code Status
+  Git worktree: DIRTY — 0 staged, 68 modified, 1064 untracked, 0 conflicts
+  No known issues were found within the executed checks.
+
+Production Readiness: NOT_READY
+  Production readiness is fail-closed until every blocker has current evidence.
+
+Blockers
+  - Task state is DISCOVER; REVIEW_READY or RELEASED is required.
+  - Git worktree is DIRTY.
+  - Final implementation review is STALE.
+  - Skill routing is ABSTAIN (NO_MATCH).
+  - Agent workcell is NOT_READY; the latest independent review must complete cleanly.
+  - Required quality gate build is NOT_RUN.
+  - Required quality gate final-implementation-review is STALE.
+  - Required quality gate lint is NOT_RUN.
+  - Required quality gate production-provider-retention is NOT_RUN.
+  - Required quality gate security is NOT_RUN.
+  - Required quality gate tests is NOT_RUN.
+  - Required quality gate typecheck is NOT_RUN.

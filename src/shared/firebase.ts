@@ -153,6 +153,9 @@ const readServices = new Set([
   "studioAdvancedRead",
   "studioMediaRead",
   "blogCommentList",
+  "productReviewRead",
+  "productReviewEligibility",
+  "productReviewAdmin",
 ]);
 export async function callService<T>(name: string, data: unknown): Promise<T> {
   if (!functions || !navigator.onLine)
@@ -164,24 +167,27 @@ export async function callService<T>(name: string, data: unknown): Promise<T> {
   const timeout = readOnly ? 15_000 : 60_000;
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    return await withProgress(async () => {
-      const request = httpsCallable(functions!, name, { timeout })(data);
-      const deadline = new Promise<never>((_, reject) => {
-        timer = setTimeout(
-          () =>
-            reject(
-              Object.assign(
-                new Error(
-                  "Chưa nhận được kết quả. Kiểm tra kết nối và thử lại.",
+    return await withProgress(
+      async () => {
+        const request = httpsCallable(functions!, name, { timeout })(data);
+        const deadline = new Promise<never>((_, reject) => {
+          timer = setTimeout(
+            () =>
+              reject(
+                Object.assign(
+                  new Error(
+                    "Chưa nhận được kết quả. Kiểm tra kết nối và thử lại.",
+                  ),
+                  { code: "functions/deadline-exceeded" },
                 ),
-                { code: "functions/deadline-exceeded" },
               ),
-            ),
-          timeout,
-        );
-      });
-      return (await Promise.race([request, deadline])).data as T;
-    });
+            timeout,
+          );
+        });
+        return (await Promise.race([request, deadline])).data as T;
+      },
+      { overlay: !readOnly },
+    );
   } catch (e) {
     throw serviceError(e, "Chưa xử lý được. Thử lại sau.");
   } finally {

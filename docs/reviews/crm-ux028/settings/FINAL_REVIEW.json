@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SETTINGS-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Headings, actual policy summary and inspect-before-edit staff UX implemented.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Exact authorized identity fallback; existing server contracts unchanged.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "27 focused tests and scoped lint pass; root compiler pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Current source guards reviewed; native fault and navigation cases pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Unknown frozen retry implemented; native timing unverified.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No live provider or full acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing controls/shared styles and bounded real staff identities.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "SETTINGS028-HIERARCHY",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/settings/Settings.tsx, src/features/settings/StaffAccess.tsx",
+      "summary": "Pages lacked page headings and clear pending unknown administration recovery.",
+      "resolution": "Actual summary/headings plus frozen explicit same-command retry.",
+      "evidence_refs": [
+        "tests/unit/staff-access-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "SETTINGS028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md",
+      "summary": "Native responsive/AT/unknown-response and current compiler pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/settings/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "settings",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta applies established form layout to new wrappers; structural fieldsets retained.29current focused tests and scoped lint pass; native layout pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    },
+    {
+      "id": "SETTINGS-CAS-BADGE",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/settings/Settings.tsx, src/features/settings/StaffAccess.tsx",
+      "summary": "Settings/StaffAccess workspaceCommand explicit aborted is precommit: authorization and prior replay precede CAS592-601. Pending metadata releases with existing version/reload guidance; StaffAccess retains mandatory re-inspection.",
+      "resolution": "Approved source correction verified;13existing regression checks and scoped lint pass. Actual native affected-state acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/CAS_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/settings/SOURCE_MANIFEST.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending commands are memory-only across full reload.",
+    "No native consequential administrative action acceptance yet."
+  ],
+  "limitations": [
+    "Compiler and browser runner root-owned, not run here.",
+    "Tokens/cost unavailable. Memory candidates None.",
+    "Current CAS/badge native and compiler acceptance pending; no runtime writes under source-only window."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://satsunicgo.web.app/",
+  "htmlSha256": "69d74f1747f9ea3ef0ad3c783b37b24ce0344ddadeb272981fb5cdac272a1a45",
+  "assets": [
+    "/assets/index-DiMxNafc.js",
+    "/assets/index-CgY80cXe.css"
+  ],
+  "scope": "read-only homepage baseline; not Hosting rollback version or workflow acceptance"
+}

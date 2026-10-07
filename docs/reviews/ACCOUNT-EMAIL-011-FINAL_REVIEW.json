@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ACCOUNT-EMAIL-011",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved email below account name added; null omission and Google/User fallback verified rendered.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing authenticated identity only, escaped React text, no auth/network/storage/logging changes.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Three-line scoped addition; tsc, ESLint, Prettier, diff check and Vite build pass.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Missing and fallback fixture states verified; long address fits320px; no new asynchronous work.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new request/errors; missing omitted and existing disclosure cleanup retained.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "No migration/config/dependency impact; rollback limited to added lines. Local build only; production deployment/live OAuth NOT TESTED.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Retains provider label and adds secondary identity line; shared WIP preserved; fixture evidence distinguishes live providers.",
+      "evidence_refs": [
+        "docs/reviews/ACCOUNT-EMAIL-011-CONTENT_REVIEW.md",
+        "docs/reviews/ACCOUNT-EMAIL-011-task.diff",
+        "docs/reviews/ACCOUNT-EMAIL-011-SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Concurrent worktree edits preserved."
+  ],
+  "limitations": [
+    "Production readiness NOT_READY; not deployed.",
+    "Full cross-browser, screenreader and real Google credential exchange not tested.",
+    "Post-change optional intelligence refresh DEGRADED; bounded source/diff/compiler/browser evidence used."
+  ]
+}

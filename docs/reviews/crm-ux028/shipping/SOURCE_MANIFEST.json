@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "task_id": "SATSUNICGO-SHIPPING-028",
+  "scope": "local Shipping/Consolidation evidence only",
+  "files": {
+    "src/features/shipping/Shipping.tsx": "47b2664b22f0e79f6d0a55b209a19e05712689dcc92c26f4739bb1284389ff9c",
+    "src/features/shipping/Consolidation.tsx": "638f4372bbae430b938769622f353a4121bc4f8105a153b239fe4e313cb2da13",
+    "src/features/shipping/queue-state.ts": "cfddb8e3e3b3453622227bcb97931407a81cebfa7cfb3bb5b1dcfdc3d0eb484e",
+    "tests/unit/shipping-contextual.test.ts": "9432e1eec388f7432d80f8d6e5a5454480406593529a4f64beec2eaf3e7c0999",
+    "tests/browser/release-package-batch-positive028.spec.ts": "18d508e8af4267a22d3b9ad779306090353f68e05ab5330cd4dc76fff15f5647"
+  },
+  "content_review_sha256": "511d06860237f66de7108790726799705c2567ebde08b794bcad831d95e64ace",
+  "native": {
+    "archive": "output/playwright/release027/shipping-current-round4",
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "top_errors": 0,
+    "duration_ms": 374843.833,
+    "spec_sha256": "18d508e8af4267a22d3b9ad779306090353f68e05ab5330cd4dc76fff15f5647"
+  },
+  "historical_manifest_superseded": {
+    "src/features/shipping/Shipping.tsx": "5b710c855421fd82f235d5fcdef9410b5feab67aa417adaf46a02f84da895194",
+    "src/features/shipping/Consolidation.tsx": "b75997c64cfd1901af9e3d0e10340e5742dee3cca765df00c4941843d5ebd81c",
+    "tests/unit/shipping-contextual.test.ts": "9432e1eec388f7432d80f8d6e5a5454480406593529a4f64beec2eaf3e7c0999"
+  },
+  "overall_status": "BLOCKED",
+  "production": "NOT_READY"
+}

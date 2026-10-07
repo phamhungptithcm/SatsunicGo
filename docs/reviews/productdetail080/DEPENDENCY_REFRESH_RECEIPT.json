@@ -1,0 +1,24 @@
+{
+  "scope": "Current dependency refresh only; all22 product sources unchanged d511",
+  "independentSourceReview": "ROOT-INDEPENDENT-REVIEW-EMPTY-FINAL.md unchanged product source scope; no independent current082 certification",
+  "dependencies": {
+    "src/shared/Loading.tsx": "7b29a5ece948979fd14c1bbcafef1579c8f30bc746820b8168902532ccca9e33",
+    "src/shared/loading.css": "3dc19c06fe7e734da096c65e0ac2cffdcf2e383783ed848e105ce6925ca8e927",
+    "src/shared/feedback.ts": "520c6bce55ee93b3aba39b6c6eede10526c04c4bd8d081360bbe0ac6aa6acf94",
+    "src/shared/Toast.tsx": "0653b2be43905dd77a2dbc03285c80f8efaa9878c6eaecf1ddf1e0ff5e94e56c",
+    "src/features/crm/CrmPresentation.tsx": "9517b6d9552757131599bcd9b6becd3703f593cc59fc5bd8ee86fd19f64a524d"
+  },
+  "artifacts": {
+    "functions/generated/public-assets.json": "ae91357a0ad2e16e5c2cc966a432a6a12385c61967c53b4fde37769144b1d79a",
+    "dist/.vite/manifest.json": "08aa4606f9be496604812e72690064ee71607002ab183224e482eca57a2dc65f",
+    "functions/lib/functions/src/index.js": "38339a62416424a890934e84f3e0645bba4cf0445c62c85f8f63979561b96a32"
+  },
+  "checks": {
+    "current54": "/private/tmp/productdetail080/evidence/unit-current-loading-final.log",
+    "currentFrontendBuild": "/private/tmp/shipping087-build.log"
+  },
+  "native": "Existing5207 populated synthetic detail reload observed initial loading then settled metadata, body, empty reviews and enabled login button; no data writes",
+  "review": "LoadingState defaultfalse is compatible with explicit overlayfalse in review panels; effect now always owns total progress with explicit overlay option and cleanup. CSS removesblur, preserves semantics/ring/reducedmotion. Reviewed source and54tests PASS for product integration; full082 independent review not claimed",
+  "limits": "NativeIME/AT/200percent, authenticatedCRM, providers, deployment NOT_RUN; productionNOT_READY",
+  "prematureRecord": "Prior runtime PASS after failed shell assertion superseded by BLOCKED, now refreshed with exact current dependencies and observed tests/native evidence."
+}

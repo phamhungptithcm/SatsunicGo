@@ -1,0 +1,25 @@
+Repository Intelligence Gate
+
+CodeGraph:
+- Installation: Installed
+- Version: 1.5.0
+- Configuration: Project .codegraph present; MCP configured
+- Index status: Stale
+- Health check: Passed
+
+CocoIndex:
+- Installation: Installed
+- Version: Usage: ccc [OPTIONS] COMMAND [ARGS]...
+- Configuration: Project .cocoindex_code present; MCP configured
+- Index status: Stale
+- Health check: Failed
+
+Repository commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+Indexed commit: 3bd0d093255963a2cbf66ddd80d27456da7076e0
+
+Gate result:
+DEGRADED
+
+Optional recovery commands (work may continue with native repository evidence):
+- python .ai/scripts/index-repository.py
+- python .ai/scripts/check-repository-intelligence.py

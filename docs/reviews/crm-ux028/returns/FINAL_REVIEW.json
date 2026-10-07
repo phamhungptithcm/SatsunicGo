@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-RETURNS-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Contextual fields match approved per-file plan.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Frontend canClose affordance retained; backend authorization unmodified, no PII/log/provider changes.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "7 focused payload/render/progress tests and targeted lint passed; compiler/build deferred to root serial runner.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Single-flight frozen exact retry implemented; native timeout/reload/revocation evidence pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Definite/unknown/confirmed-refresh branches distinct; native validation pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Local only, full gate unavailable.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "No helper source lease needed; exports in owned Returns file; existing shared components/styles preserved.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/returns/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "RET028-FIELDS",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "usability",
+      "location": "src/features/operations/Returns.tsx",
+      "summary": "Close had irrelevant required quantity controls; receive showed ignored inspection condition.",
+      "resolution": "Contextual fields and payload projection;6 focused regressions pass.",
+      "evidence_refs": [
+        "tests/unit/returns-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "RET028-NATIVE",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md",
+      "summary": "Required native failure/accessibility/responsive acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "RET028-DENSITY",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/operations/Returns.tsx",
+      "summary": "Expanded quantity table and generic action label made every row heavy.",
+      "resolution": "Compact derived progress summary; disclosed table; grouped action disclosures and specific submit labels. Progress SSR regression passes; native layout acceptance pending.",
+      "evidence_refs": [
+        "tests/unit/returns-contextual.test.ts"
+      ]
+    },
+    {
+      "id": "CRM028-FIELDSET-GAP",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "design",
+      "location": "returns",
+      "summary": "Bare control-lock wrappers bypassed existing form grid spacing.",
+      "resolution": "Root-approved class-only delta applies established form layout to new wrappers; structural fieldsets retained.29current focused tests and scoped lint pass; native layout pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/design/FIELDSET_SPACING_DELTA.md"
+      ]
+    },
+    {
+      "id": "CRM028-NATIVE-FOLLOWUP",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "returns",
+      "summary": "Actual return mobile identity density/pagination and below-list selected editor focus required follow-up.",
+      "resolution": "Approved actual-product title/full-ID disclosure, current cursor refresh, or explicit reduced-motion-aware summary focus/viewport handoff.29focused tests and scoped lint pass; fresh native acceptance pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/returns/PLAN.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Unknown operation memory state is not durable across full browser reload; unchanged existing persistence scope."
+  ],
+  "limitations": [
+    "No build/runtime/emulator/native runner started.",
+    "Compiler/integration and serial native review remain root-owned.",
+    "Tokens/cost Unavailable; memory candidates None."
+  ]
+}

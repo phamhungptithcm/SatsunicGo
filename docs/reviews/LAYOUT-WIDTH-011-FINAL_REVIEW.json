@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-LAYOUT-WIDTH-011",
+  "status": "PASSED",
+  "cycle": 1,
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "css_sha256": "23956c1c14aabce42a90ccce8a5aa15a2846ebc4cc6911b343abfd7794a998d2",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Exact approved media rule; measured 1600px at 1920 and 1360px at 1440.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "CSS max-width only; no auth, secrets, dependencies or data changes.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Single scoped media rule; Prettier PASSED; existing cascade inspected.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Narrow widths exclude rule; 768/390 no overflow; no async code changes.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new error paths; rollback removes only new rule.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Scoped CSS suitable for review; production release NOT_TESTED and not performed.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Fluid width consumes half unused horizontal room; preserves padding and typography.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    },
+    "product_content": {
+      "status": "PASSED",
+      "summary": "Current in-context layout review passed; strings unchanged.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/approvals/SATSUNICGO-LAYOUT-WIDTH-011.md",
+        "docs/reviews/LAYOUT-WIDTH-011-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Header width change applies to all routes using shared navigation."
+  ],
+  "limitations": [
+    "Local development browser only; no production deployment.",
+    "CodeGraph/CocoIndex degraded; bounded source evidence.",
+    "Runtime CLI unavailable; report recorded directly."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "fixture": "PURCHASE-FLOW-018",
+  "restoredCheckoutOrderCount": 1,
+  "expectedCount": 1,
+  "orders": [
+    {
+      "id": "ac596390-219e-4175-8bde-72223ec76c85",
+      "kind": "catalog",
+      "total": 120000,
+      "collected": 0
+    }
+  ]
+}

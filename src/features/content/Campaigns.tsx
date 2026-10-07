@@ -1,3 +1,4 @@
+import { WebsiteBanners } from "./WebsiteBanners";
 import {
   CrmHeading,
   CrmIcon,
@@ -386,6 +387,7 @@ export function Campaigns() {
         </button>
       )}
       {message && <p role="status">{message}</p>}
+      <WebsiteBanners />
     </section>
   );
 }

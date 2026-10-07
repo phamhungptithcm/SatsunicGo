@@ -1,0 +1,7 @@
+{
+  "package.json": "e0dcf9e2fbba3afa6c6b3fe59d0f7308d3d51c18b0693a0a2e3d0dd346cf340c",
+  "functions/package.json": "66ab62e3367e0d813f08ad6e5d46994b753bc9fd7656c7621e815299eae10c90",
+  "package-lock.json": "48b67f4e8e4257d943fa0b35f6930812d226a081144af4089e50edc3dc015b18",
+  "tests/unit/telemetry-policy.test.ts": "343e3a2732ddd2b3542c38b6d0d80ab89bc0cf00365e8d9b45257a1c81c0b70a",
+  "tests/unit/telemetry-compatibility.test.ts": "535217672286e9c658eb513a5b917a16da891a24318e07441e15feaa981f1dbd"
+}

@@ -1,0 +1,6 @@
+{
+  "src/features/operations/Workbench.tsx": "266e1dbc830c2f817525e0e85697d5018143d689f2bde80d76435736ce3f47d4",
+  "src/features/crm/crm-ux028.css": "9423bd69e8599a789804afa611ee6699a7bf5ae56a055df90455453b4c10a19b",
+  "tests/unit/crm-ux028-eligibility.test.ts": "9aa22451dd6ab21dda58474facdeacba9b373c4a37f8b72d2d0e6de24ee9b93d",
+  "tests/browser/release-crm-ux028.spec.ts": "397eb3bbdc2f4184c9116e95bfd1212fae02e1aa6588195f2ebe2df810ab19e0"
+}

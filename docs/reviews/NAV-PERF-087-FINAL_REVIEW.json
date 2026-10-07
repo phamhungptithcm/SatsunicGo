@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-NAV-PERF-087",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved smaller safe local navigation/loading change matches source and rendered tests. Optional Ask persistence omitted under its safety condition; no before/after FPS claim. Product-content and eight-principle review passed in disclosed web proxy.",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-NAV-PERF-087.md",
+        "docs/reviews/NAV-PERF-087-SOURCE.json",
+        "docs/reviews/NAV-PERF-087-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No new data cache, authentication/authorization change, write path, dependency or secret handling. Intent loading is same-origin and bounded to offered code modules; identity/path resets remain.",
+      "evidence_refs": [
+        "src/app/route-modules.ts",
+        "src/app/App.tsx",
+        "tests/browser/navigation-performance087.spec.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current frontend TypeScript and scoped ESLint passed. Task-only delta preserves WIP; code cache deduplicates concurrent loads and releases rejected local requests. Native module-cache limitation documented.",
+      "evidence_refs": [
+        "docs/reviews/NAV-PERF-087-task.diff",
+        "docs/reviews/NAV-PERF-087-VALIDATION.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Seven unit and six browser tests passed. Held module navigation can be interrupted; default loading stays inline after elapsed threshold; failed preload has navigation/reload recovery; progress ownership failures/overlap remain tested.",
+      "evidence_refs": [
+        "tests/unit/navigation-performance087.test.ts",
+        "tests/unit/loading-progress081.test.ts",
+        "tests/browser/navigation-performance087.spec.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Optional preload rejections are owned; navigation errors retain ErrorBoundary reload recovery. Loading status and aria-busy remain. Explicit progress finally-cleanup is unchanged.",
+      "evidence_refs": [
+        "src/app/route-modules.ts",
+        "src/shared/Loading.tsx",
+        "src/shared/feedback.ts",
+        "src/app/ErrorBoundary.tsx"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Reviewed deployment boundary: no deploy, migration, dependencies or backend changes. Local bundle generation passed with size warnings. Actual production readiness remains NOT_READY; indexes stale and real device/provider tests absent.",
+      "evidence_refs": [
+        "docs/reviews/NAV-PERF-087-VALIDATION.md",
+        "docs/reviews/NAV-PERF-087-TASK_REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Decorative entrance motion removed while interaction feedback retained. No hidden-tab mounting/private-data retention. After-only local metrics observed zero long tasks with supported API, but no universal smoothness or quantified improvement claim.",
+      "evidence_refs": [
+        "docs/reviews/NAV-PERF-087-VALIDATION.md",
+        "docs/reviews/NAV-PERF-087-1440-metrics.json",
+        "docs/reviews/NAV-PERF-087-390-metrics.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "NAV087-THRESHOLD",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "test-evidence",
+      "location": "tests/browser/navigation-performance087.spec.ts",
+      "summary": "Slow-module observation previously used absolute document time and could miss the overlay threshold.",
+      "resolution": "Measure elapsed navigation time beyond 450ms; final full six-test browser suite passed (13.3s).",
+      "evidence_refs": [
+        "tests/browser/navigation-performance087.spec.ts",
+        "docs/reviews/NAV-PERF-087-inline-loading.png",
+        "docs/reviews/NAV-PERF-087-VALIDATION.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Production and physical-device behavior untested; no pre-change CPU/FPS trace. Existing large chunks remain.",
+    "Ask route/user reset retained to prevent stale route context; explicit Profile overlays remain without blur.",
+    "Native module cache may require reload following a failed fetch."
+  ],
+  "limitations": [
+    "Source-based DEGRADED repository intelligence; both index health queries passed but freshness stale.",
+    "Review scoped to task candidate, not all shared worktree changes.",
+    "Accessibility evidence uses current DOM/ARIA, keyboard, zoom and rendered screenshots; no native screen-reader speech test.",
+    "Provider token usage and cost unavailable."
+  ]
+}

@@ -1,3 +1,5 @@
+import { LoadingState } from "../../shared/Loading";
+import { ProductsCatalog } from "./ProductsCatalog";
 const BlogComments = lazy(() =>
   import("./BlogComments").then((m) => ({ default: m.BlogComments })),
 );
@@ -6,7 +8,7 @@ import { lazy, Suspense } from "react";
 const RichArticle = lazy(() =>
   import("./studio/RichPreview").then((m) => ({ default: m.RichArticle })),
 );
-import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
+import { ProductDetails } from "./ProductDetail";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -18,7 +20,6 @@ import {
 } from "firebase/firestore";
 import { betaRelease, db } from "../../shared/firebase";
 import {
-  useCatalogPages,
   usePublicContent,
   type ContentRow,
 } from "../../shared/public-content";
@@ -41,239 +42,6 @@ function authorImage(row: ContentRow) {
     /* An unavailable profile picture leaves the author name readable. */
   }
   return undefined;
-}
-function productRequest(row: ContentRow) {
-  return `/products/${row.slug}/checkout`;
-}
-function purchasable(row: ContentRow) {
-  return catalogProductSchema.safeParse(row).success;
-}
-function ProductsCatalog() {
-  const { rows, error, loading, stale, retry, loadMore, hasMore } =
-    useCatalogPages();
-  const [search, setSearch] = useState(""),
-    [market, setMarket] = useState("");
-  const normalized = (text: string) =>
-    text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[đĐ]/g, "d")
-      .toLowerCase();
-  const filtered = rows.filter(
-    (row) =>
-      (!market || row.market === market) &&
-      normalized(`${row.title} ${row.category ?? ""}`).includes(
-        normalized(search),
-      ),
-  );
-  return (
-    <section className="page productsPage">
-      <header className="productsHeading">
-        <h1>Sản phẩm</h1>
-        <p>
-          Chọn sản phẩm có giá niêm yết và thanh toán toàn bộ để SatsunicGo mua
-          hộ.
-        </p>
-      </header>
-      <div className="productFilters">
-        <input
-          className="productSearch"
-          aria-label="Tìm sản phẩm"
-          placeholder="Tìm sản phẩm…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <div
-          className="requestMarkets"
-          role="group"
-          aria-label="Lọc quốc gia mua hàng"
-        >
-          {[
-            ["", "Tất cả"],
-            ["US", "Mỹ"],
-            ["JP", "Nhật Bản"],
-            ["KR", "Hàn Quốc"],
-          ].map(([code, label]) => (
-            <button
-              type="button"
-              key={code}
-              aria-pressed={market === code}
-              onClick={() => setMarket(code)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-      {loading && <p role="status">Đang tải sản phẩm…</p>}
-      {error && (
-        <p role="alert" className="error">
-          {error}{" "}
-          <button type="button" className="textbutton" onClick={retry}>
-            Tải lại
-          </button>
-        </p>
-      )}
-      {stale && rows.length > 0 && (
-        <p className="smallNote" role="status">
-          Đang hiển thị nội dung lần tải trước.
-        </p>
-      )}
-      {rows.length > 0 && (
-        <div className="catalogGrid">
-          {filtered.map((row) => (
-            <article className="productCard" key={row.id}>
-              <Link
-                className="productImage"
-                to={`/products/${row.slug}`}
-                aria-label={`Xem ${row.title}`}
-              >
-                {row.mediaId ? (
-                  <img
-                    src={`/media/${row.mediaId}`}
-                    alt={row.mediaAlt ?? row.title}
-                    loading="lazy"
-                  />
-                ) : (
-                  <span className="productMonogram" aria-hidden="true">
-                    {row.market ?? "Go"}
-                  </span>
-                )}
-              </Link>
-              <div className="productBody">
-                <span className="productCategory">
-                  {[
-                    row.category,
-                    (
-                      { US: "Mỹ", JP: "Nhật Bản", KR: "Hàn Quốc" } as Record<
-                        string,
-                        string
-                      >
-                    )[row.market ?? ""],
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </span>
-                <h2>
-                  <Link to={`/products/${row.slug}`}>{row.title}</Link>
-                </h2>
-                {purchasable(row) ? (
-                  <p>{row.listedPrice!.toLocaleString("vi-VN")} ₫ · trọn gói</p>
-                ) : (
-                  <p>Chưa mở đặt mua</p>
-                )}
-                <div className="productAction">
-                  <Link to={`/products/${row.slug}`}>Xem chi tiết</Link>
-                  {purchasable(row) && (
-                    <Link to={productRequest(row)}>Chọn mua ↗</Link>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-      {!loading && !error && !filtered.length && (
-        <div className="empty">
-          <h2>
-            {rows.length
-              ? "Chưa tìm thấy món này"
-              : "Danh mục đang được cập nhật"}
-          </h2>
-          <Link className="primary" to="/request">
-            Gửi món bạn muốn mua ↗
-          </Link>
-        </div>
-      )}
-      {hasMore && (
-        <button disabled={loading} onClick={() => void loadMore()}>
-          {loading ? "Đang tải…" : "Xem thêm sản phẩm"}
-        </button>
-      )}
-      <p className="smallNote">
-        Tìm và lọc trong các sản phẩm đã tải. Bạn có thể xem thêm để duyệt toàn
-        bộ danh mục.
-      </p>
-      <p>
-        Chưa có món bạn cần? <Link to="/request">Gửi yêu cầu mua hộ</Link> để
-        được xem xét, báo giá và thanh toán hai đợt.
-      </p>
-    </section>
-  );
-}
-function ProductDetails({ row }: { row: ContentRow }) {
-  const source = (
-    { US: "Mỹ", JP: "Nhật Bản", KR: "Hàn Quốc" } as Record<string, string>
-  )[row.market ?? ""];
-  return (
-    <article>
-      <div className="productDetailImage">
-        {row.mediaId ? (
-          <img src={`/media/${row.mediaId}`} alt={row.mediaAlt ?? row.title} />
-        ) : (
-          <span aria-hidden="true">{row.market ?? "Go"}</span>
-        )}
-      </div>
-      <div className="productDetailCopy">
-        <h1>{row.title}</h1>
-        {source && <p className="productSource">Mua từ {source}</p>}
-        {String(row.body ?? "")
-          .split("\n\n")
-          .map((paragraph, index) => {
-            const heading = paragraph.match(
-              /^(?:#+\s*)?(Nguồn gốc|Chức năng|Công dụng|Cách dùng|Cách sử dụng)[:\n]\s*([\s\S]*)$/i,
-            );
-            return heading ? (
-              <section key={index}>
-                <h2>{heading[1]}</h2>
-                <p>{heading[2]}</p>
-              </section>
-            ) : (
-              <p key={index}>{paragraph}</p>
-            );
-          })}
-        {[
-          ["Nguồn gốc", row.origin],
-          ["Chức năng và công dụng", row.functions],
-          ["Cách dùng", row.usage],
-        ]
-          .filter(([, body]) => body)
-          .map(([title, body]) => (
-            <section key={title}>
-              <h2>{title}</h2>
-              <p>{body}</p>
-            </section>
-          ))}
-        {row.variants && <p>Mẫu lựa chọn: {row.variants}</p>}
-        {row.referenceUrl && /^https?:\/\//i.test(row.referenceUrl) && (
-          <a
-            className="productSource"
-            href={row.referenceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Xem nguồn sản phẩm ↗
-          </a>
-        )}
-        {purchasable(row) ? (
-          <>
-            <p>
-              Giá niêm yết trọn gói: {row.listedPrice!.toLocaleString("vi-VN")}{" "}
-              ₫ / sản phẩm.
-            </p>
-            <Link className="primary" to={productRequest(row)}>
-              Chọn mua và thanh toán →
-            </Link>
-          </>
-        ) : (
-          <p role="status">
-            Sản phẩm này chưa mở đặt mua. Bạn có thể chọn sản phẩm khác trong
-            danh mục.
-          </p>
-        )}
-      </div>
-    </article>
-  );
 }
 function PostsHeading() {
   return (
@@ -445,8 +213,8 @@ function ExistingCatalog({ kind }: { kind: "products" | "posts" }) {
         </p>
       )}
       {loading ? (
-        <div className="catalogLoading" role="status">
-          <span>Đang tải nội dung…</span>
+        <div className="catalogLoading">
+          <LoadingState>Đang tải nội dung…</LoadingState>
           <div className="catalogGrid" aria-hidden="true">
             {[0, 1, 2].map((n) => (
               <div className="catalogSkeleton" key={n}>
@@ -631,7 +399,7 @@ export function ContentDetail({ kind }: { kind: "products" | "posts" }) {
             />
           )}
           {row.richBody ? (
-            <Suspense fallback={<p role="status">Đang mở bài viết…</p>}>
+            <Suspense fallback={<LoadingState>Đang mở bài viết…</LoadingState>}>
               <RichArticle body={row.richBody} />
             </Suspense>
           ) : (
@@ -677,7 +445,7 @@ export function ContentDetail({ kind }: { kind: "products" | "posts" }) {
               </section>
             )}
           {row.richBody && (
-            <Suspense fallback={<p role="status">Đang mở bình luận…</p>}>
+            <Suspense fallback={<LoadingState overlay={false}>Đang mở bình luận…</LoadingState>}>
               <BlogComments key={row.id} postId={row.id} />
             </Suspense>
           )}
@@ -693,11 +461,13 @@ export function ContentDetail({ kind }: { kind: "products" | "posts" }) {
           <Link to="/request">Gửi yêu cầu mua hộ</Link>
         </article>
       ) : (
-        <p>
-          {loaded
-            ? "Không có nội dung đã xuất bản tại địa chỉ này."
-            : "Đang tải nội dung…"}
-        </p>
+        <>
+          {loaded ? (
+            <p>Không có nội dung đã xuất bản tại địa chỉ này.</p>
+          ) : (
+            <LoadingState>Đang tải nội dung…</LoadingState>
+          )}
+        </>
       )}
       {error && <p role="alert">{error}</p>}
     </section>

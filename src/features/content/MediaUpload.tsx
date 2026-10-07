@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useState } from "react";
 import { callService } from "../../shared/firebase";
 export function MediaUpload({
@@ -83,7 +84,7 @@ export function MediaUpload({
         Ảnh được lưu riêng; chỉ phục vụ công khai khi nội dung đã xuất bản.
         Không dùng ảnh có thông tin cá nhân hoặc bằng chứng giao dịch.
       </p>
-      {busy && <p role="status">Đang tải ảnh…</p>}
+      {busy && <LoadingState overlay={false}>Đang tải ảnh…</LoadingState>}
       {error && (
         <p role="alert" className="error">
           {error}

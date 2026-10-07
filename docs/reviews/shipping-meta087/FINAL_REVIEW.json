@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-META-087",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Current087 compact metadata local scope verified; release readiness excluded",
+      "evidence_refs": [
+        "docs/reviews/shipping-meta087/SOURCE_FREEZE.txt",
+        "docs/reviews/shipping-meta087/PRODUCT_CONTENT_REVIEW.md",
+        "/private/tmp/shipping-meta087-browser/VERIFICATION.md",
+        "/private/tmp/shipping087-build.log",
+        "/private/tmp/shipping087-tsc.log"
+      ]
+    }
+  },
+  "findings": []
+}

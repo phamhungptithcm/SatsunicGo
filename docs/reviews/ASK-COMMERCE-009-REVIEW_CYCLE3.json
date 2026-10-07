@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-COMMERCE-009-v1",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "PASSED local content scope: original shell retained, latest simple hierarchy. Full livecommerce criteria remain inprogress.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Owner/version gates retained; images sanitization afterquota; QR checked formerchant/amount/reference/expiry. No livefinancialaction.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Shared018 helpers, typecheck/lint22unit8integration/Vitebuild passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Conversationcleanup, attachmentsretry, QRexpiry/version/cache unknownoutcome andclaimedpayment noexecute inspected/tested.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Failures do not claim paid/purchase/attachment success. Existingidempotency/manualreconcile retained.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Assessment passed; readiness NOT_READY, liveAI/provider/training/allinchat catalog unverified.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Pre-orderphotos ephemeral, staff fulfillment, externalapproved018catalogcheckout, partialbrowsercoverage documented.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK009-1",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/ImageIntake.tsx",
+      "summary": "Conversationphoto scope and processing cleanup",
+      "resolution": "Applied scoped corrections, focused checks and independent cycle4 review passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "ASK009-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/ImageIntake.tsx",
+      "summary": "Pre-orderphoto staffhandoff via stable existingmedia command",
+      "resolution": "Applied scoped corrections, focused checks and independent cycle4 review passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "ASK009-3",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/payments/payos.ts",
+      "summary": "QR provider/cached/UI expiry",
+      "resolution": "Applied scoped corrections, focused checks and independent cycle4 review passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "ASK009-4",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/ai/product-images.ts",
+      "summary": "JPEG metadata removed through bounded Sharpdecode",
+      "resolution": "Applied scoped corrections, focused checks and independent cycle4 review passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "ASK009-5",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "product-content",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Catalog English packed stage aligns with fullpayment",
+      "resolution": "Applied scoped corrections, focused checks and independent cycle4 review passed.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-009-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-009-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-009-CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "ProductionNOT_READY liveAI/payments nottested",
+    "Fullinchatcatalogcheckout incomplete",
+    "Ephemeralpre-orderphotos lostonreload",
+    "Staffstoragehappybrowser notcertified",
+    "Screenreader/offline/zoom/crossbrowser incomplete"
+  ],
+  "limitations": [
+    "Independent /root/ask009_flow read-onlyreview; execution results attributed toroot",
+    "DEGRADED optional indexes; shared dirtyWIP",
+    "22unit8mockintegration; no actualfinancialactions/training/deployment"
+  ]
+}

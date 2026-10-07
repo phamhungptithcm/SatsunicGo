@@ -1,0 +1,27 @@
+{
+  "project": "satsunicgo",
+  "region": "asia-southeast1",
+  "read_only": true,
+  "describe_shippingRatesPublic": {
+    "exit_code": 1,
+    "http_status": 404,
+    "classification": "resource not found"
+  },
+  "list_v2_functions": {
+    "exit_code": 0,
+    "result": []
+  },
+  "local_config": {
+    "matches_project": true,
+    "matches_region": true,
+    "app_check_site_key_present": true
+  },
+  "conclusion": "No v2 function visible in this project/region; named callable absent. Source implementation is present. Cloud deployment is outside approved plan.",
+  "not_tested": [
+    "production Firestore records",
+    "live successful callable",
+    "live support ticket",
+    "Hosting revision"
+  ],
+  "writes": false
+}

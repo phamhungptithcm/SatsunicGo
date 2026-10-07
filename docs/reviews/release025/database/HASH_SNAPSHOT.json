@@ -1,0 +1,16 @@
+{
+  "scope": "Database025 read-only handoff point-in-time, no execution certification",
+  "files": {
+    "functions/src/order-media.ts": "50bb1d0e0a0c64a3ec33958ad4964b30c8a08a36cef46e3d08df91ecf7e79371",
+    "functions/src/returns.ts": "9678e56c1b64128ae431f5362075fb9741caea72a1b977c492d9c19faedfc8b6",
+    "functions/src/consolidation.ts": "535ca0a3eb1cecbd76dc49658aae152d9f1632432895eea27b576d292995dd4a",
+    "functions/src/crm.ts": "633113c4970746b3c759d81d121e501848ace77bef328206119c6ed8aacfcf49",
+    "functions/src/index.ts": "53c0873bfb27b9ff8c22ec5aac54b0621e1db644302672827fd345adfbf15164",
+    "tests/rules/order-media.test.ts": "76c090db0e20ba3367e193ad2dcc360e01207ce5b19ff435b79de70a9b05c06b",
+    "tests/rules/server.test.ts": "f4f9235ce5b86817503b7925bbd5c7c611596168c2e7eb0a73a846865b30c985",
+    "tests/rules/crm-hardening.test.ts": "84ff988c196c8885381705285381492772d7671716415bfb7fd708bf3aa6896b",
+    "firestore.rules": "fd67b3edbd95eaf4fe11e645806f312a0eec2f08a4f0dce5d6b5d19142b2159a",
+    "storage.rules": "4a043206e7ecbd14ffb97ce055cd22fe2a1f1300fb4f61d1a984f5b27b6889cf",
+    "firestore.indexes.json": "ca0c50f8b62f4b4e5a2acbe88bfe146858dba706c872f581f7d0971f729c18b8"
+  }
+}

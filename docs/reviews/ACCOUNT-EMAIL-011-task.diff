@@ -1,0 +1,28 @@
+--- before/src/app/SiteChrome.tsx
++++ after/src/app/SiteChrome.tsx
+@@ -45,6 +45,7 @@
+     user.displayName?.trim() ||
+     "Tài khoản của bạn";
+   const photo = google?.photoURL || user.photoURL;
++  const email = google?.email?.trim() || user.email?.trim();
+   const safePhoto = photo?.startsWith("https://") ? photo : null;
+   const initials =
+     name === "Tài khoản của bạn"
+@@ -138,6 +139,7 @@
+         <div className="accountDropdown">
+           <div className="accountIdentity">
+             <strong>{name}</strong>
++            {email && <span>{email}</span>}
+             {google && <span>Google</span>}
+           </div>
+           <nav
+--- before/src/styles/global.css
++++ after/src/styles/global.css
+@@ -2411,6 +2411,7 @@
+ }
+ .accountIdentity > span {
+   display: block;
++  overflow-wrap: anywhere;
+   margin-top: 2px;
+   color: #647087;
+   font-size: 12px;

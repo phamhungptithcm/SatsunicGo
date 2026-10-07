@@ -1,0 +1,2 @@
+# CATALOG086 approved decorative-copy removal
+Direct user screenshot identifies blue dot + Mua hộ Mỹ · Nhật · Hàn eyebrow. Verified ProductsCatalog.tsx CatalogHeading. Remove exact decorative span only; retain heading/copy/market controls. No behavior/data/style changes. DEGRADED bounded source fallback. User request authorizes scope. Validate current source absence/isolated build, product content/final review. No extra unit test for reversible markup deletion.

@@ -1,0 +1,26 @@
+{
+  "source": "src/features/notifications/Notifications.tsx",
+  "strings": [
+    "Thông báo chưa kết nối được. Thử lại sau.",
+    "Chưa tải được thông báo.",
+    "Chưa đánh dấu đã đọc được.",
+    "Đã đọc",
+    "Chưa đọc",
+    "Bạn có cập nhật mới",
+    "Chưa có thời gian",
+    "Đang lưu…",
+    "Đánh dấu đã đọc",
+    "Chưa cập nhật được",
+    "Chưa tải được thông báo",
+    "Thử lại để xem cập nhật mới.",
+    "Hộp thư thông báo",
+    "Hộp thư của bạn",
+    "Đang tải thông báo…",
+    "{labels[n.action] ?? \"Bạn có cập nhật mới\"}",
+    "Chưa có thông báo",
+    "Thông báo mới sẽ xuất hiện ở đây.",
+    "{rows.length ? error : \"Thử lại để xem cập nhật mới.\"}",
+    "Tối đa 30 thông báo gần nhất",
+    "Thông báo của bạn"
+  ]
+}

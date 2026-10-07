@@ -1,0 +1,19 @@
+{
+  "packages/domain/campaign-banners.ts": "9e0874e69d898b598c8a894947295d8b948d528921e9a9f7cc04d921b4ca30bb",
+  "functions/src/campaign-banners.ts": "4a3bc16b255df113d9d6185da44815c05d5cdb49f0e6c23249e36e6fffd52852",
+  "src/features/content/CampaignBanner.tsx": "7f9a44f26b6b328289d3cbb820a400539a534d8a91649c7be86600bb11b3119f",
+  "src/features/content/campaign-banner.css": "9c0b9d9f5b167169947a41916bf24c7d10d3dbdbbd7df640b431df8ce53dedbe",
+  "src/features/content/WebsiteBanners.tsx": "fd1f18b6e0e02ac0ff17471a73322506b57c6fd53dd5485a44ab98c3bc87da0c",
+  "src/features/content/website-banners.css": "237ee82aa8dfa25f84031e8137e31e6a781cd9438250361b4fc7894c55dabfe3",
+  "tests/unit/campaign-banners076.test.ts": "d812d735c5ed2024b9cf4e752791a17f37debb55f111111937b08d6d89504ce6",
+  "tests/unit/campaign-banners-service076.test.ts": "037acfdeead47ac80afea82b75917801447cbaed28726afc9c651c6fc09b9e7e",
+  "src/app/App.tsx": "9ef20886d255fc3ec116e3d4397d5fa50c37fd128d0b40a92b3a9afb216790f0",
+  "src/features/content/ProductsCatalog.tsx": "2c8e3e44d733e7feed0332b7765cf5a136e8a032b61076bd889da19c5dd647b1",
+  "src/features/content/Campaigns.tsx": "9d3a5949a623d3698374709141f4683821ecac57818e4e70babfe14ee3ea6909",
+  "functions/src/index.ts": "a706bdacc2dc7f8555cd43f1f54382535abce7bd0917022561637e07bcc5d03f",
+  "firebase.json": "8c3f8e1e73b8aee68c13c0348c8ef01bfdc721c760caf38ba8c44cbdd4330e53",
+  "scripts/release/preflight.mjs": "3e112ae1fab0dd2d142ef68626d28306b907c22a54038376c5f30889e6a9e943",
+  "tests/unit/release-preflight067.test.ts": "fecf8a975a15bc5f6c9f2817a5afc74639117c3247c675cb48d80786eab86327",
+  "functions/generated/public-assets.json": "1aba59548ac07fc6d345f7627f03f36b725598a7a4a48b260a61eac9590bc279",
+  "dist/.vite/manifest.json": "32044524c04408eea8a625e264bc606468174812b0aafeb2c989901ee1494775"
+}

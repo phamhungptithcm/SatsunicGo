@@ -1,0 +1,50 @@
+{
+  "head": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "scope": "UI only; App contains preserved shared WIP",
+  "files": [
+    {
+      "path": "src/app/App.tsx",
+      "sha256": "d3c6fb9d421678e6873c72f5bb09dba24e968a09494c0dd8dfb542df6c363b8e"
+    },
+    {
+      "path": "src/features/auth/Security.tsx",
+      "sha256": "830bcaa50b804903350d6f9a82ad4eefb12242098d53e450619375b6a7da9e30"
+    },
+    {
+      "path": "src/features/account/AccountRail.tsx",
+      "sha256": "fb51d4ef9a2194aed5e290e0b5638f28e975773c6020635132a082b2710949bd"
+    },
+    {
+      "path": "src/styles/security.css",
+      "sha256": "292acde82312d5e501725cee892b2ca10c364819d80b834a22c90af48e65ff27"
+    },
+    {
+      "path": "tests/browser/security-enrollment076.spec.ts",
+      "sha256": "b237a4cc2e35d214228f5edf938daad9d298578f3b1cf94c63a51919f905087a"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/index.html",
+      "sha256": "ccd48cabf6f29b53de6b98bd362d60d5ab78d751f7d01a79b86f1a9fea422a0f"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/main.tsx",
+      "sha256": "480e4866a42360b3f794c1ffe7be51bce3c123373bb7cb3aefb948bc50d5b450"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/mock.ts",
+      "sha256": "2773bec7009c877e89f498438ec7096b9d6b5da58465c305cbd750999a257f32"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/playwright.config.mjs",
+      "sha256": "454537b994ac9d9461bb5e1b372181c28e412002a051710d11f76535d1e1a1c3"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/qr.ts",
+      "sha256": "810ccc741ba60d61ecac41273b11b4d4b95797e9e15c638dca4fae79e22f4215"
+    },
+    {
+      "path": "tests/browser/fixtures/security076/vite.config.mjs",
+      "sha256": "cfa8326a5e37f66b3d09a81f4e5e37d280c2a680e6c240fd5f1aa1968b0805a2"
+    }
+  ]
+}

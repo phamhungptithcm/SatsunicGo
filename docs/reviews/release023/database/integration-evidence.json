@@ -1,0 +1,184 @@
+{
+  "source": "output/playwright/release023/integration-results.json",
+  "aggregate_passed": 71,
+  "own_results": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "owner reads own order; other customer and anonymous cannot",
+          "status": "passed",
+          "title": "owner reads own order; other customer and anonymous cannot",
+          "duration": 145.62608299999965,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "client cannot mark paid, grant rights or access operations",
+          "status": "passed",
+          "title": "client cannot mark paid, grant rights or access operations",
+          "duration": 40.56337499999972,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "locked account cannot read own order",
+          "status": "passed",
+          "title": "locked account cannot read own order",
+          "duration": 19.261749999999665,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 23.238917000000583,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 21.426790999999866,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 22.391750000000684,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 17.75183399999969,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 20.80345799999941,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private reads reject absent, unverified or non-Google claims",
+          "status": "passed",
+          "title": "private reads reject absent, unverified or non-Google claims",
+          "duration": 33.63270800000009,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "verified Google MFA claims preserve owner reads",
+          "status": "passed",
+          "title": "verified Google MFA claims preserve owner reads",
+          "duration": 15.72295800000029,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "public access is published-only and queries require filter",
+          "status": "passed",
+          "title": "public access is published-only and queries require filter",
+          "duration": 67.00183300000026,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "owner-filtered private queries and nested records stay isolated after lock",
+          "status": "passed",
+          "title": "owner-filtered private queries and nested records stay isolated after lock",
+          "duration": 866.3331669999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791214990935,
+      "endTime": 1791214992230.3333,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/tests/rules/firestore.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "private media refuses customer crossover, warehouse receipts and active content before storage I/O",
+          "status": "passed",
+          "title": "private media refuses customer crossover, warehouse receipts and active content before storage I/O",
+          "duration": 31.12866599999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private image upload is bounded and replay safe, and rechecks current access on every read",
+          "status": "passed",
+          "title": "private image upload is bounded and replay safe, and rechecks current access on every read",
+          "duration": 3629.966375,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "mixed media roles compose grants consistently without granting bank receipts",
+          "status": "passed",
+          "title": "mixed media roles compose grants consistently without granting bank receipts",
+          "duration": 738.1654159999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        },
+        {
+          "ancestorTitles": [],
+          "fullName": "private read refuses access revoked while image bytes are downloading",
+          "status": "passed",
+          "title": "private read refuses access revoked while image bytes are downloading",
+          "duration": 560.0715840000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": []
+        }
+      ],
+      "startTime": 1791214999925,
+      "endTime": 1791215004885.0715,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/tests/rules/order-media.test.ts"
+    }
+  ]
+}

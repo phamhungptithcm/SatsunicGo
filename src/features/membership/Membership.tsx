@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState } from "react";
 import type { User } from "firebase/auth";
 import {
@@ -250,7 +251,7 @@ export function Membership({
           {message}
         </p>
       )}
-      {loading && <p role="status">Đang tải các gói…</p>}
+      {loading && <LoadingState>Đang tải các gói…</LoadingState>}
       <div className="membershipPlans">
         {plans.map((p) => (
           <article

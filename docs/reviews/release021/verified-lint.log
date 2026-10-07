@@ -1,0 +1,4 @@
+
+> satsunicgo@0.1.0 lint
+> eslint src packages/domain functions/src tests
+

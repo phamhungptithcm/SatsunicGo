@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SYSTEM-SCENARIOS-083",
+  "status": "BLOCKED",
+  "scope": "Documentation design and read-only validator; application scenarios NOT_RUN",
+  "source_commit": "1d9c5824e5d0647948a1986dabc7480c4b7b8cb2",
+  "source_manifest_revision": 2,
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Source-snapshot agreement stale; see DOC-04.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Reviewed documentation scope: synthetic fixtures,explicit holds,failures,recovery,NOT_RUN and NOT_READY boundaries. No application runtime PASS claimed.",
+      "evidence_refs": [
+        "README.md",
+        "TRACEABILITY.md",
+        "VALIDATION.json",
+        "VALIDATION_SOURCE.json"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_APPLICABLE",
+      "summary": "Task changed no product UI text/displayed-data behavior; scenarios specify future in-context language/eight-principle evidence."
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 0,
+      "status": "BLOCKED",
+      "findings": [
+        {
+          "id": "DOC-01",
+          "severity": "medium",
+          "location": "SOURCE_MANIFEST.json / RequestForm.tsx",
+          "evidence": "Initial source validation returned STALE SOURCE RequestForm.tsx",
+          "fix": "Read current source/diff; manifest revision2; added SG-REQ-009 through016",
+          "status": "FIXED_FOR_REVISION2"
+        },
+        {
+          "id": "DOC-02",
+          "severity": "medium",
+          "location": "SG-SUP-005",
+          "evidence": "readOrderConversation limit51 / slice50; no older-page cursor",
+          "fix": "Updated oracle to bounded latest50 and explicit older-history NOT_IMPLEMENTED gap",
+          "status": "FIXED"
+        },
+        {
+          "id": "DOC-03",
+          "severity": "low",
+          "location": "RequestForm coverage",
+          "evidence": "Current source reorder/prefill/CSV/pending/image-recovery paths",
+          "fix": "Eight extra draft/reorder/image recovery scenarios with CSV/JSON/Markdown consistency",
+          "status": "FIXED"
+        }
+      ]
+    },
+    {
+      "cycle": 1,
+      "status": "PASSED",
+      "scope": "Documentation revision2 at the time checked",
+      "evidence": "validate.py --check-source returned PASSED:477 scenarios,63 handlers,41 routes,120 action entries; no runtime cases executed."
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "evidence": "VALIDATION.json and VALIDATION_SOURCE.json",
+      "findings": [
+        {
+          "id": "DOC-04",
+          "severity": "medium",
+          "location": "src/features/requests/RequestForm.tsx; src/features/requests/request-form.css",
+          "evidence": "Freshness check detects additional edits in shared worktree after manifest revision2. See VALIDATION_SOURCE.json.",
+          "impact": "Cannot certify current-source agreement of the scenario snapshot while referenced source changes.",
+          "status": "OPEN",
+          "required_action": "After source stabilizes, review delta, revise affected scenarios/manifest, rerun checks and fresh final review. No runtime change authorized by this documentation task."
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "DOC-04",
+      "severity": "medium",
+      "location": "src/features/requests/RequestForm.tsx; src/features/requests/request-form.css",
+      "evidence": "Freshness check detects additional edits in shared worktree after manifest revision2. See VALIDATION_SOURCE.json.",
+      "impact": "Cannot certify current-source agreement of the scenario snapshot while referenced source changes.",
+      "status": "OPEN",
+      "required_action": "After source stabilizes, review delta, revise affected scenarios/manifest, rerun checks and fresh final review. No runtime change authorized by this documentation task."
+    }
+  ],
+  "artifact_sha256": {
+    "06-ENDPOINT-CONTRACTS.md": "ca4c1143b4ebd9ebf4c0230fb805cb1b3d8ac5db30640a3f879adbdf4c3fe3d6",
+    "07-ACTION-MATRIX.md": "e44cc641e534daaf428e2d53abf1a28cd7bca8f40bc3da525e7ad9eeff7e057f",
+    "01-INDEPENDENT.md": "171ac575f74a242ab959a9936e870889af1c329433162ed25bc2f4bb87879961",
+    "SOURCE_MANIFEST.json": "40a556d7f6cf0571578cd5abd8675e525308271da14916dab6bfd4583dc97ac3",
+    "04-UI-UX.md": "9c9fb25d0b64f4551d7a33a58c638afee625c6a32699ca5c490aac607fc8415d",
+    "TRACEABILITY.md": "11afb42e03cfb58aa5c4bf884cb4767d3c17cc88ded0c30d59d8e55b36b15eb6",
+    "02-INTEGRATION.md": "64243ca1c401fe6fa00a6682f2b5954ab7de879aca16da1bbd2e8d19c60a4ca4",
+    "README.md": "3139fa1595431b4e3679be4465b2d14646d6a94b6f062c17e0fc31ac475b5b90",
+    "EXECUTION.csv": "41d9264331a38ebca3a5db72255db86b2fd9d8e08ea36ea227111229a9ddbef3",
+    "validate.py": "86c590f8136aa98d9386dc8590d09b0596eb2bfa0b68c0984d0b0e88d77806e8",
+    "VALIDATION_SOURCE.json": "215868e980c43cb3cdd32d868ae8e0bc9c1908274659894908beb0b94d63874a",
+    "03-SECURITY.md": "6d8893581c0e267aca1386898cca69423506389c59f52957330b2e9cde786e1f",
+    "VALIDATION.json": "c3898f32dcddb830bbb7624a932ac4e7dc46d99fcbef7e6b559006119c0b3d03",
+    "05-PERFORMANCE.md": "d59b1eaec47a34aeda83302a8ee73d45d68b06223634107b86c10411093c98af",
+    "SCENARIOS.json": "e615ec1e7dc2e0ebc80638ea726ccbac62581535865eccdf96e743418e5a90ad",
+    "ACTIONS.json": "03875773580f0c4e485149981254383f02fb154f48c8afc261cfd327a167d118"
+  },
+  "residual_risks": [
+    "All477 application scenarios NOT_RUN; no functional/security/UI/performance/provider acceptance proof.",
+    "Repository indexes DEGRADED after one refresh.",
+    "Lexical inventory/group references are not complete branch/assertion coverage.",
+    "Runtime CLI absent; no runtime receipt exists."
+  ],
+  "limitations": [
+    "No provider gates enabled, cloud access, deployment, PR, Jira change or messages performed.",
+    "Source continues changing outside this documentation task."
+  ]
+}

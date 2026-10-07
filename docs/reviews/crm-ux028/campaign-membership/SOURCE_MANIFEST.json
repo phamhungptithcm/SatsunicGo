@@ -1,0 +1,9 @@
+{
+  "task_id": "SATSUNICGO-CAMPAIGN-MEMBERSHIP-028",
+  "generated_at": "2026-10-06T04:32:56.686971+00:00",
+  "files": {
+    "src/features/content/Campaigns.tsx": "95fa39d46c6ac486cb658abad8e21d48f47ef6714c48bb518911f9838cf93d19",
+    "src/features/membership/PlanEditor.tsx": "28668a48baa0ebf346296e75f8b6b4b0eeef31f63f9c574e2098239b7e3e5fc6",
+    "tests/unit/campaign-contextual.test.ts": "0658855982f01779f38adc91532221274c99dd4fae396b67c675e5045db38a84"
+  }
+}

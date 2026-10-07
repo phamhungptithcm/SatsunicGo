@@ -1,0 +1,13 @@
+{
+  "scope": "Read-only point-in-time source evidence, not final release024 certification",
+  "files": {
+    "functions/src/crm.ts": "ee8664fd827d36891d774b04a02f7bc127d0f76e66b2e6244944a5bc429b329c",
+    "src/features/crm/Customer.tsx": "990a8183d4e0f47eaa52a26c729db375f51be4b0fcfe0e5d8400b295ea817842",
+    "src/features/crm/Workspace.tsx": "3c2989d28400f14b2807326e7e85b423a332d9521b72c108f70b9dc9c6f9ccc4",
+    "src/app/App.tsx": "df496f33fabd6785cd91c732d95a557c7fbee513aaf2052315abf8f69f60df12",
+    "packages/domain/crm.ts": "c7eeaeff7db179228e310edf9e395fb880ffe529ac04ab6a633521d65ff7dd70",
+    "firestore.indexes.json": "ca0c50f8b62f4b4e5a2acbe88bfe146858dba706c872f581f7d0971f729c18b8",
+    "functions/src/membership.ts": "ed7224fb8607b13ece3d9389f6726eb95754373f33904c865f2d115651baa789",
+    "functions/src/jobs.ts": "7cc175de486a87acc981d90d4451e19773bf75a731df3a1e693ebcef652f1e9e"
+  }
+}

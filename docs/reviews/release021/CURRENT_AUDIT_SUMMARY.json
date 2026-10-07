@@ -1,0 +1,22 @@
+{
+  "scope": "current installed workspace runtime audit; raw unchanged adjacent",
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 13,
+      "high": 0,
+      "critical": 0,
+      "total": 13
+    },
+    "dependencies": {
+      "prod": 495,
+      "dev": 611,
+      "optional": 333,
+      "peer": 8,
+      "peerOptional": 0,
+      "total": 1367
+    }
+  },
+  "production": "NOT_READY"
+}

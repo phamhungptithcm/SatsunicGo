@@ -1,0 +1,15 @@
+# CRM024 completion and release assessment
+
+Implemented: approved CRM visual simplification and confirmed backend/display fixes. Four specialist chats shared explicit file ownership; source was frozen during each serial test run. No new confirmed actionable defect remains in the executed local scope. Overall release acceptance remains incomplete and production is NOT_READY.
+
+Verification: 178/178 unit, 100/100 integration, 45/45 broad browser tests, followed by 4/4 affected browser tests after the last caption-color correction. All have zero skips. Final frontend typecheck, lint and build passed; Functions source compiled successfully and remained unchanged afterward. Scoped visual review covers desktop, tablet, mobile, keyboard/menu focus, empty recovery, membership meaning and native zoom geometry/contrast. It does not establish actual screen-reader, provider or load/frame performance acceptance.
+
+Review history is preserved in CYCLE_JOURNAL.json and specialist reports: reproduced CRM negative cases (14 failures before fixes); membership boundary/malformed cases (11 failures before projection correction); first responsive pass; screenshot fixes for blank header space, empty table headers and a stray zero; corrected nested-fieldset test selector; full regression caught a stale displayed-version expectation, replaced with authoritative semantic-stage assertions while retaining database version checks; checkbox row correction; module-entry correction before scenario execution; full 45-case pass; live contrast failure and final four-case delta pass. These are distinct from production evidence.
+
+Business match: published catalog uses fixed total and one full verified collection before buying. Unlisted requests require review/accepted quote, initial payment, final approval and remaining collection before dispatch. Tracking delivery is not customer receipt. Proposal changes preserve purchased lines and financial history. Internal statements remain internal documents, not tax invoices. Unknown email/financial outcomes retain reconciliation requirements.
+
+Acceptance ledger: catalog/custom and CRM/document criteria verified; broad product-content/actual-AT and production/provider/dependency/restore/deployment criteria remain pending. The inherited equal-weight ledger is 2/4 (50%); this is acceptance evidence progress, not the percentage of application implementation. Current aggregate review remains BLOCKED, and scoped specialist engineering reviews do not authorize release.
+
+Git HEAD: 3bd0d093255963a2cbf66ddd80d27456da7076e0. Worktree is dirty with pre-existing WIP. No commit/push/deployment performed. Intelligence gate DEGRADED. Current source/build manifest identifies the reviewed local candidate. Approval evidence: docs/approvals/SATSUNICGO-CRM-HARDENING-024.md; exact ownership and impact: TEAM_CONTEXT.md and ROOT_PLAN.md.
+
+Remaining work and limits are in READINESS.md. Provider token usage: Unavailable. API-equivalent estimated cost: Unavailable. Actual billed cost: Unavailable. Memory candidates: None.

@@ -1,0 +1,177 @@
+.notificationInbox {
+  border: 1px solid #e2e7f0;
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+  max-width: 840px;
+  color: #111c35;
+}
+.notificationInboxHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 24px;
+  border-bottom: 1px solid #e9edf4;
+  background: linear-gradient(110deg, #f4f6ff, #fff 70%);
+}
+.notificationInboxHeader h2 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
+}
+.notificationBell {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #163cff;
+  color: white;
+}
+.notificationItem {
+  display: flex;
+  gap: 14px;
+  padding: 22px 24px;
+  border-bottom: 1px solid #eef1f6;
+}
+.notificationItem.isUnread {
+  background: #f9faff;
+}
+.notificationDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d4dbe7;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.notificationItem.isUnread .notificationDot {
+  background: #163cff;
+  box-shadow: 0 0 0 4px #edf0ff;
+}
+.notificationItemBody {
+  min-width: 0;
+  flex: 1;
+}
+.notificationItem h3 {
+  font-size: 14px;
+  margin: 0 0 7px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.notificationItem time {
+  color: #77839a;
+  font-size: 12px;
+}
+.notificationItemActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  margin-top: 12px;
+}
+.notificationItemActions a {
+  color: #163cff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 0;
+}
+.notificationInbox button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 40px;
+  border-radius: 9px;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+.notificationItemActions button {
+  border: 1px solid #e0e6f0;
+  background: #fff;
+  color: #68758d;
+}
+.notificationInbox button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.notificationInbox button:focus-visible,
+.notificationInbox a:focus-visible,
+.notificationDisclosure summary:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+.notificationState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 270px;
+  padding: 36px 24px;
+}
+.notificationStateIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #edf0ff;
+  color: #163cff;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.notificationState h3 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.notificationState p {
+  color: #77839a;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.6;
+}
+.notificationInbox .notificationRetry {
+  background: #163cff;
+  color: white;
+  border: 0;
+  margin-top: 20px;
+  min-width: 110px;
+}
+.notificationScope {
+  font-size: 11px;
+  color: #77839a;
+  margin: 0;
+  padding: 16px 24px;
+}
+.notificationDisclosure > summary {
+  cursor: pointer;
+  padding: 14px 0;
+  font-size: 14px;
+}
+.notificationLoader {
+  height: 26px;
+  width: 26px;
+  border: 2px solid #e6ebff;
+  border-top-color: #163cff;
+  border-radius: 50%;
+  animation: notificationSpin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+@keyframes notificationSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 640px) {
+  .notificationInboxHeader,
+  .notificationItem {
+    padding: 18px;
+  }
+  .notificationState {
+    min-height: 240px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notificationLoader {
+    animation: none;
+  }
+}

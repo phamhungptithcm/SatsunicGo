@@ -1,0 +1,487 @@
+[
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 163,
+    "text": "Chưa lưu được bản nháp trên trình duyệt này."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 181,
+    "text": "Mã đặt lại không hợp lệ."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 202,
+    "text": "Chưa tải được đơn để đặt lại. Bạn có thể tạo yêu cầu mới."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 262,
+    "text": "Nhập tên, link hoặc thêm ảnh; kiểm tra số lượng từng món."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 263,
+    "text": "Kiểm tra ngân sách và ngày mong muốn."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 269,
+    "text": "Kiểm tra link sản phẩm."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 286,
+    "text": "Kiểm tra link sản phẩm."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 290,
+    "text": "Nhập tên, link hoặc thêm ảnh; kiểm tra số lượng từng món."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 338,
+    "text": "Yêu cầu đã lưu. Thêm lại ảnh đã chọn để tiếp tục tải ảnh lên, hoặc xem đơn để bổ sung sau."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 346,
+    "text": "Ảnh tham khảo sản phẩm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 360,
+    "text": "Đã gửi yêu cầu mua hộ."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 380,
+    "text": "Yêu cầu đã lưu, ảnh chưa tải đủ."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 381,
+    "text": "Chưa rõ kết quả gửi. Giữ nội dung và thử lại để tránh tạo trùng."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 392,
+    "text": "Bạn muốn mua gì?"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 396,
+    "text": "Quốc gia mua hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 406,
+    "text": "Mỹ"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 406,
+    "text": "Nhật Bản"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 406,
+    "text": "Hàn Quốc"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 412,
+    "text": "Sản phẩm ngoài danh mục được nhân viên báo giá; thanh toán 2 đợt sau\n          khi chấp nhận."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 416,
+    "text": "Sản phẩm niêm yết: mua và thanh toán toàn bộ ngay →"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 424,
+    "text": "Các bước tạo yêu cầu"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 425,
+    "text": "Món hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 425,
+    "text": "Thông tin thêm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 425,
+    "text": "Kiểm tra"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 446,
+    "text": "Đã hoàn thành"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 448,
+    "text": "Đang nhập"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 477,
+    "text": "Món hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 479,
+    "text": "Thông tin thêm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 480,
+    "text": "Kiểm tra yêu cầu"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 489,
+    "text": "Thay bản nháp bằng sản phẩm đang xem"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 495,
+    "text": "Món"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 496,
+    "text": "Tên hoặc link sản phẩm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 540,
+    "text": "Xóa nội dung món hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 541,
+    "text": "Bỏ món"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 545,
+    "text": "Xóa nội dung món hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 546,
+    "text": "Bỏ món"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 564,
+    "text": "PNG, JPEG, WebP · 2 MB/ảnh · 6 ảnh/yêu cầu"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 569,
+    "text": "Số lượng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 583,
+    "text": "Mẫu, màu, kích cỡ"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 592,
+    "text": "Tình trạng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 603,
+    "text": "Chưa xác định"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 604,
+    "text": "Hàng mới"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 605,
+    "text": "Hàng đã qua sử dụng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 606,
+    "text": "Có thể xem cả hai"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 625,
+    "text": "＋ Thêm món"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 633,
+    "text": "Không bắt buộc"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 636,
+    "text": "Ghi chú"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 645,
+    "text": "Cửa hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 654,
+    "text": "Ngân sách dự kiến (₫)"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 665,
+    "text": "Ngày mong muốn"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 672,
+    "text": "Cần nhân viên xác nhận."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 677,
+    "text": "Tóm tắt yêu cầu"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 681,
+    "text": "Mỹ"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 683,
+    "text": "Nhật Bản"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 684,
+    "text": "Hàn Quốc"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 685,
+    "text": "món"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 693,
+    "text": "Chỉnh sửa"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 699,
+    "text": "Sản phẩm từ ảnh"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 701,
+    "text": "Số lượng:"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 704,
+    "text": "Hàng mới"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 704,
+    "text": "Hàng đã qua sử dụng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 704,
+    "text": "Có thể xem cả hai"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 710,
+    "text": "ảnh sản phẩm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 712,
+    "text": "Thông tin thêm"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 719,
+    "text": "Chỉnh sửa"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 725,
+    "text": "Ghi chú"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 731,
+    "text": "Cửa hàng"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 737,
+    "text": "Ngân sách dự kiến"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 743,
+    "text": "Ngày mong muốn"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 745,
+    "text": "· Cần nhân viên\n                    xác nhận."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 752,
+    "text": "Không có thông tin thêm."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 759,
+    "text": "Chức năng gửi chưa được kích hoạt."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 763,
+    "text": "Yêu cầu đã lưu."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 764,
+    "text": "ảnh đã tải."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 766,
+    "text": "Xem đơn để bổ sung ảnh sau"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 772,
+    "text": "Chưa đọc được lần gửi trước."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 773,
+    "text": "Kiểm tra đơn của bạn"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 773,
+    "text": "trước khi tiếp\n              tục."
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 789,
+    "text": "← Quay lại"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 798,
+    "text": "Tiếp tục →"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 808,
+    "text": "Đang gửi…"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 810,
+    "text": "Tiếp tục tải ảnh"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 812,
+    "text": "Thử gửi lại"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 814,
+    "text": "Gửi yêu cầu →"
+  },
+  {
+    "file": "src/features/requests/RequestForm.tsx",
+    "line": 815,
+    "text": "Đăng nhập để gửi →"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 59,
+    "text": "Chọn PNG, JPEG hoặc WebP tối đa 2 MB mỗi ảnh."
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 61,
+    "text": "Mỗi yêu cầu nhận tối đa 6 ảnh ở bước này."
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 73,
+    "text": "Chưa đọc được ảnh. Thử chọn lại."
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 78,
+    "text": "Ảnh sản phẩm"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 118,
+    "text": "Tên, link hoặc ảnh sản phẩm"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 120,
+    "text": "Tên, link hoặc ảnh sản phẩm…"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 156,
+    "text": "Xóa"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 161,
+    "text": "×"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 171,
+    "text": "Thêm ảnh"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 172,
+    "text": "Thêm ảnh sản phẩm"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 188,
+    "text": "Đang đọc ảnh…"
+  },
+  {
+    "file": "src/features/requests/ProductComposer.tsx",
+    "line": 203,
+    "text": "Thả ảnh vào đây"
+  }
+]

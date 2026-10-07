@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-10-05T22:25:49.833259+00:00",
+  "files": {
+    "src/features/operations/Workbench.tsx": "6a98a2d5b86837804d2e37a9441b05529558828246173dc0acadaf8fe72a5d0c",
+    "src/features/operations/OperationsDetails.tsx": "1e9e4db5d927539ddec55bb9ea9c42a3fca53e6b65e5686fde51ce8f7e400d80",
+    "src/features/operations/Returns.tsx": "10c5743781f1f4c9675cd779e26795e3ba323b8400736e7bed4f5a9ee63b5a01",
+    "src/features/shipping/Shipping.tsx": "efe5537f473a79bceb6ce737cc75788fc7a7c5e8649319d3e2858a3d36240568",
+    "src/features/shipping/Consolidation.tsx": "eb927b49b869a11ead69fc821f6d08ba998166334b269eed9a12d0a4be4fd14e"
+  },
+  "revision": "outer-disclosure removed after root native9 finding"
+}

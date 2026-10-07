@@ -1,3 +1,4 @@
+import { LoadingState } from "../../../shared/Loading";
 import { TaxonomyFields } from "./taxonomy-fields";
 import { auth } from "../../../shared/firebase";
 import {
@@ -630,7 +631,7 @@ export function StudioEditor({
             )}{" "}
             phút đọc · Phiên bản {post.revision}
           </p>
-          <Suspense fallback={<p role="status">Đang mở trình soạn thảo…</p>}>
+          <Suspense fallback={<LoadingState overlay={false}>Đang mở trình soạn thảo…</LoadingState>}>
             <RichEditor
               key={editorKey}
               body={post.body}

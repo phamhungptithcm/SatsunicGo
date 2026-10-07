@@ -1,0 +1,151 @@
+# CRM026 filter task-flow content review — cycle 1
+
+Audience: authorized Vietnamese web CRM staff on Customers and Follow-ups. Changed strings: `Bộ lọc đã đổi. Bấm Xem danh sách để xem kết quả.` in pending edited-filter state; `Đang tải danh sách…` while current list read busy. Existing headings, filter/button names, list/empty/error/pagination/date semantics retained. No Apple-platform expression or new business promise.
+
+State behavior verified against source: change invalidates old read, clears page, sets dirty flag; explicit load clears dirty and starts busy; stale responses cannot replace current page/busy. No automatic read on typing. Native explicit submit and pagination remain. Failure clears page and displays existing recovery error; loading ends only for current request. Initial read has loading; filter edit shows pending guidance; successful zero-row read keeps existing empty state. Current error can coexist with edited guidance: error remains truthful last failure while guidance explains new unapplied choice. No financial/auth/server/payload/schema effects.
+
+| Principle | Current source evidence | Status |
+| --- | --- | --- |
+| Purpose | Distinguishes unapplied filter from loaded empty list | PASSED |
+| Agency | User applies with existing button/Enter; no auto-query | PASSED |
+| Responsibility | No fake result/count or implied successful read | PASSED |
+| Familiarity | Natural Vietnamese refers to exact visible button | PASSED |
+| Flexibility | Semantic live status/native keyboard controls unchanged; current native pending | NOT_RUN |
+| Simplicity | Brief instruction; no extra button/layout | PASSED |
+| Craft | All3width fail-before; scoped lint pass; current in-context pending | NOT_RUN |
+| Delight | Clear next action intended; current executed recovery pending | NOT_RUN |
+
+Current native postfix, screenshot, error/offline/unauthorized/stale and actualAT checks NOT_RUN; current baseline025 is historical, not delta certification. Eight-principle content gate BLOCKED pending current evidence. No stylesheet changed. Production NOT_READY, provider/performance NOT_RUN. Memory candidates None; token/cost unavailable.
+
+General-support pending inventory: Hỗ trợ trong chat / Support in chat; private question to staff sentence explicitly no buying order; loading support status, reload support button and pending-metadata read failure. Existing order support/returns labels and policy sentence retained. General subject distinct conversation identity. States cover unread/query-ready/error retry, busy durable-context preparation, explicit ticket submit, typed transport failure, restored matching ticket, owner/context remount. No AI-driven support action or claim refund/data export completed. Eight principles source reviewed; fresh native/screenshots and general-to-order continuity/unknown-body recovery evidence pending. Gate BLOCKED.
+
+Approved continuity/recovery inventory additions: Hỗ trợ hội thoại / Conversation support when order exists; general-conversation versus order-support explanatory sentence; Nhập lại đúng nội dung đã gửi để đối chiếu thao tác chưa rõ kết quả. / Reenter the original message to reconcile the uncertain action.; Yêu cầu đã được ghi nhận. / Your request has been recorded. The confirmation appears only when current matching ticket message proves earlier open exists; it does not imply resolution, refund or order completion. Changed-body unknown retry is blocked with original request identity retained, raw body never persisted. SHA digest is not anonymization; no claim of complete automatic recovery. Current five native cases and screenshots pending; eight-principle acceptance still BLOCKED.
+
+
+## CustomerChanges payment-obligation wording correction
+
+Review found that the English catalog sentence asserted a completed payment based only on purchaseKind. This field establishes the full-payment obligation, not verified receipt. Corrected EN to “This order requires full payment at the listed price.” and VI to “Đơn này cần thanh toán toàn bộ theo giá niêm yết.” Both appear in the customer proposal disclosure for catalog orders. No amount, payment receipt, proposal decision or server action changed. This addresses Responsibility and Purpose by accurately describing the obligation, Familiarity and Simplicity through direct wording, and Agency by retaining explicit acceptance/rejection. Flexibility, Craft and Delight require the pending current native-context evidence; this correction alone does not complete the eight-principle gate. Browser after-check and fresh final review remain pending; production NOT_READY.
+
+## CustomerChanges current candidate inventory and evidence boundary
+
+Audience: authenticated customer reading their own order proposal inside Ask; existing order routes retain Vietnamese by default. Host passes the restored conversation language. Changed string families: proposal-kind headings (replace, partial cancellation, cancellation, return); total payable and actual costs; catalog full-payment obligation/custom accepted-deposit obligation; collected-payment history and separate refund reconciliation; accepted terms; line/product/variant/quantity descriptions; pending/accepted/rejected/applied status; explicit accept/reject actions; no automatic transfer/refund explanation; write failure; loading; server-confirmed empty; read failure/offline explanation; explicit read retry. Business values and user/staff-authored reason are retained, not translated or invented.
+
+States: initial/loading, cached unverified result, server-confirmed empty/nonempty, offline, reconnected awaiting explicit retry, terminal query error, pending proposal, accepted/rejected/applied proposal, busy decision, uncertain decision error, owner/order cleanup, Vietnamese and English. Decision actions appear only after a server-confirmed read and remain explicit. Read retry resubscribes without a financial command. Cached empty never proves absence. Payment-obligation copy never proves receipt. Browser offline detection is browser connectivity evidence, not provider health.
+
+| Principle | Candidate evidence | Remaining current evidence |
+| --- | --- | --- |
+| Purpose | Loading, verified empty, retry and proposal decisions describe separate tasks | Native loading/empty capture pending |
+| Agency | Read retry and accept/reject are separate explicit actions | Native no-decision/no-order-mutation checks pending |
+| Responsibility | Server metadata governs readiness; obligation differs from payment receipt | Native metadata/offline recovery pending |
+| Familiarity | Natural Vietnamese; English uses ordinary order/payment terms | English restored-dialog capture pending |
+| Flexibility | Existing native disclosure/buttons; default Vietnamese and optional English | Keyboard, responsive context and actual AT pending |
+| Simplicity | Brief status/recovery instruction; amounts and obligations stay together | Current in-context inspection pending |
+| Craft | Scoped ESLint and TypeScript passed; owner/order cleanup guards reviewed | Full current browser result and fresh final review pending |
+| Delight | Recovery preserves an explicit next step without accidental decisions | Executed current recovery context pending |
+
+Focused before receipts directly read: change-loading-before.json, change-offline-before.json and change-english-before.json each have one unexpected failure and zero skips/flaky. They establish missing behavior before this change, not correctness after it. taskflow-round5.json is historical to the current proposal-state implementation: 27 expected, 3 unexpected, zero skips/flaky; support and CRM earlier scoped successes must not certify this later candidate. Full browser run is currently pending; browser-results.json still contains the earlier catalog-reorder before receipt and must not be reported as the new full result. Unit/integration 207/220 PASS are coordinator-reported pending independent report parsing. No live QA accounts/provider acceptance. Product Language Gate remains BLOCKED until current in-context evidence and fresh review are complete. Memory candidates None; token usage/cost unavailable.
+
+## Current rendered evidence inspected during full native run
+
+Directly viewed ask-changes-verified-empty.png, ask-changes-offline-retry.png and ask-changes-english.png under output/playwright/release026. The verified-empty screenshot shows the exact Vietnamese empty sentence beneath the expanded native order-change summary, alongside the existing shipping/payment flow. The recovered-offline screenshot shows the actual pending cancellation heading and reason after retry. The English screenshot shows the English disclosure summary, cancellation heading, reason and amount labels inside the restored Ask dialog. Synthetic fixture identifiers are test-only context.
+
+Visual limitation: the English and recovered screenshots show only the upper proposal card at the current scroll position; decision buttons, financial obligation/disclaimer and terms are below the visible dialog area. These images do not certify those strings' visual fit or keyboard reachability. Current console-reported STATE01/02/03 and accept/reject/foreign PASS remain provisional until the completed JSON is read. Need a current lower-card/decision-area capture or equivalent current trace inspection before concluding Craft/Flexibility/Delight for the entire proposal content. No runtime change follows from this incomplete screenshot coverage. Actual AT, live provider/QA and production remain NOT_RUN/NOT_READY. Product Language Gate remains BLOCKED at this evidence checkpoint.
+
+## Current round2 rendered-context review
+
+Directly parsed full-browser-round2.json: 101 expected, 4 unexpected, zero skipped/flaky; duration 884902.205 ms. Directly parsed full-integration-final.json: 241/241, zero failures, success true. These are completed receipts, not a claim that the remaining full regression passed.
+
+Directly viewed current ask-changes-english-decisions.png: the complete proposal card visibly includes cancellation heading, reason, zero-VND final payable/actual costs, corrected full-payment obligation, retained-payment/separate-refund sentence, terms, line quantity, pending state, no automatic transfer/refund disclaimer and both explicit decision buttons. Labels fit the desktop dialog; card and buttons are not covered by the composer at this captured scroll position. Directly viewed ask-changes-offline-alert.png: the expanded disclosure shows the Vietnamese read failure, actual offline explanation and visible retry button, with no proposal decision controls. This closes the prior partial-screenshot gap for these two specific contexts.
+
+| Principle | Scoped proposal-content result | Current evidence |
+| --- | --- | --- |
+| Purpose | PASSED | Verified-empty and offline context clearly distinguish no proposals from an unread result |
+| Agency | PASSED | Explicit accept/reject and independent retry visible; decision/no-mutation assertions passed in completed round2 |
+| Responsibility | PASSED | Payment obligation wording corrected; separate refund/no automatic transfer disclaimer visible; server-confirmed read gates actions |
+| Familiarity | PASSED | Vietnamese offline instruction and English ordinary order/payment wording viewed in context |
+| Flexibility | PASSED | Native disclosure and buttons retained; optional English/default Vietnamese; pending actions reachable through existing scroll container |
+| Simplicity | PASSED | One short recovery instruction and retry; financial explanation stays with decisions |
+| Craft | PASSED | Current complete decision card/alert inspected; scoped lint/TypeScript passed; new state cases passed in completed round2 |
+| Delight | PASSED | Executed offline recovery restores proposal without financial mutation; corrected labels make the next action clear |
+
+These results are bounded to the owned customer-proposal content and observed desktop/native states. Actual assistive technology, mobile proposal expansion, RTL and live provider acceptance remain NOT_RUN; no evidence is invented. General-support latest heading timeout still needs coordinator diagnosis/current verification. Overall UI026 Product Language/final aggregate gate remains BLOCKED pending current regression and complete remaining inventory evidence. No application/test changes made during this checkpoint.
+
+## CQ026 staff ChangeQueue content review
+
+Scope: ChangeQueue only; authenticated OWNER/OPERATIONS_MANAGER staff manually applying customer-approved proposals. Vietnamese web CRM, existing light neutral/royal-blue design and native buttons/status/alert; Apple-only conventions not applicable. Backend owns filtering accepted proposals before the bound, reviewedAt-descending order and cursor sentinel. This review does not certify production completeness for legacy accepted proposals missing reviewedAt.
+
+Inventory: existing heading “Thay đổi đã được khách duyệt” and kind/reason/order identity; existing “Tải lại đề xuất”; new “Xem thêm đề xuất” appends/deduplicates a server page, never applies it; new role-status “Đang tải đề xuất…” during a read; new “Chưa có thay đổi đã duyệt cần xử lý.” only after successful empty read; existing read-error “Chưa tải được đề xuất thay đổi.” with reload recovery; existing explicit “Áp dụng quyết định đã duyệt” and apply failure. Default/nonempty, initial/reload/pagination loading, verified empty, error/retry, busy apply, obsolete read/unmount are mapped to source. Unread/error is not empty. Read loading/error hides actions, read and apply are independently guarded. Server remains CAS/financial/authorization authority.
+
+Directly parsed changequeue-native-after.json: 6 expected, 0 unexpected/skipped/flaky, 51283.681 ms. Five queue cases and original customer-approval/staff-apply journey executed. Directly viewed changequeue-390.png, changequeue-768.png and changequeue-1440.png: current latest accepted proposals are visible, long synthetic identities wrap at mobile width, apply button fits and visible focus outline is present. Existing mobile header and desktop sidebar retain CRM context. Directly viewed changequeue-error.png and changequeue-empty.png: reload stays visible; error and true-empty text are distinct, no actionable proposal card shown. Empty response is deliberately mocked SDK fixture, not evidence of globally empty actual/production data. Pagination native checks verify server accepted filter/page behavior; absence of automatic financial commands is checked separately by the strengthened current fixture awaiting full run.
+
+| Principle | Status | Scoped evidence |
+| --- | --- | --- |
+| Purpose | PASSED | Heading and verified empty describe customer-approved work awaiting staff action |
+| Agency | PASSED | Native explicit reload/more/apply remain separate; no automatic apply |
+| Responsibility | PASSED | Accepted filter before bound, proper cursor, no false empty/error conflation; server CAS retained |
+| Familiarity | PASSED | Short natural Vietnamese names existing proposal/customer tasks |
+| Flexibility | PASSED | 390/768/1440 rendered controls fit; native keyboard focus visible |
+| Simplicity | PASSED | Single reload/more action and brief status, existing card hierarchy retained |
+| Craft | PASSED | Five new native cases plus original apply journey PASS; three widths and error/empty inspected |
+| Delight | PASSED | Previously hidden actionable proposal is now reachable; explicit retry/paging recover workflow |
+
+Target-platform fit, meaning/behavior, natural tone, concise copy, terminology and scoped rendered verification PASSED. Actual assistive-technology/live provider/production and legacy missing-date audit NOT_RUN. Scoped CQ product-language result PASSED; final UI026 aggregate review remains BLOCKED until full current pipeline and coordinator ledger complete. No app/test edits from this documentation checkpoint.
+
+## CQ026 append-continuity review delta
+
+A strengthened held-second-page native before receipt changequeue-scroll-before.json directly parsed as 0 expected / 1 unexpected / 0 skipped/flaky. Source review identified that unconditional ready=false hid verified rows while appending, shrinking the page and losing reading position. Approved one-line fix sets ready=false only for initial/reload reads. Append keeps prior verified rows; existing reading/busy disabling and synchronous read lock prevent applying or duplicate reads during transport. Error retains old rows and the same next cursor; existing Xem thêm đề xuất retries that page explicitly. Tải lại đề xuất still clears old rows and starts from the first page. No changed string or API/schema/money action.
+
+Purpose: more reads additional proposals without replacing existing work. Agency: explicit more/retry/reload/apply retained. Responsibility: retained rows are prior verified data, not falsely new/fresh; loading and errors remain explicit, apply disabled during read. Familiarity: same visible Vietnamese controls. Flexibility: intended reading position preserved during append; strengthened viewport/scroll test after pending. Simplicity: no new control or terminology. Craft: minimal source correction, ESLint/TypeScript PASS; current native continuity after pending. Delight: removes disruptive disappearance while waiting; executable after pending. Prior eight-principle scoped PASS is not certification of this new candidate: current continuity gate BLOCKED until strengthened native after verifies Craft/Flexibility/Delight. No false empty on append error; actual AT/live provider NOT_RUN. Production NOT_READY.
+
+## Comprehensive CRM presentation — owned initial candidate
+
+Owned paths: crm/Customers.tsx, Customer.tsx, Activity.tsx, Dashboard.tsx and ChangeQueue presentation within orders/Changes.tsx. Shared CrmPresentation/Workspace CSS/navigation root-owned. Presentation-only candidate; request/filter/version/opid/privacy/money workflows retained. CustomerChanges and ProposeChange remain outside this redesign delta.
+
+Changed visible inventory: ChangeQueue heading “Thay đổi chờ áp dụng”; badge “Khách đã duyệt”; facts “Tổng phải trả sau thay đổi”, “Chi phí thực tế”; linked action “Mở đơn mua hộ”; “Mã đơn”, disclosure “Chi tiết thay đổi”, “Mã đề xuất”, “Điều khoản đã chấp nhận”, “Dòng”, replacement/variant/return/cancellation line descriptions. Values come from current approved proposal; no approval/payment is inferred by AI or decorative status. Full IDs remain visible/selectable via CrmReference; no invented short order number. Proposal reason is now primary title, type secondary; payable/cost facts precede apply. Existing apply/reload/more/loading/empty/error strings retained.
+
+Customers/follow-ups: existing heading/descriptions/filter/loading/error/empty/action strings retained; native links supplemented decorative arrow, reload icon. Customer profile: existing name/business/identifier and internal-consent/membership/follow-up semantics retained; order/support section icons are decorative. Activity: existing audit/outbox/email-unknown reconciliation copy and actions unchanged; shared heading/loading/error presentation. Dashboard: existing scope/UTC/truncation/read-time semantics retained; existing initial guidance becomes structured empty state; busy status uses existing “Đang tải…” wording and decorative clock.
+
+States covered in source: loading/error/verified empty, dirty filter, pagination, queue append keeping rows, synchronous read/apply locks, explicit monetary action, internal-only profile save, uncertain email evidence-only reconciliation, snapshot-not-realtime explanation. No new global empty is invented for Activity. Accessible role/status/alert preserved by primitive; visible text supplies icon meaning. Default cards/tables/forms retain native controls and actual business labels.
+
+Eight-principle checkpoint: Purpose task-oriented heading/reason/facts; Agency separate explicit navigation/read/apply; Responsibility accurate accepted status, full identities, financial explanation; Familiarity natural existing Vietnamese; Flexibility native controls and shared responsive layout await actual render; Simplicity restrained shared states/header and compact facts; Craft scoped ESLint/TypeScript PASS but actual redesigned screens pending; Delight easier scan/reading intended, executed visual context pending. Product Language Gate BLOCKED until current 390/768/1440 and task/state/keyboard evidence. No broad redesign acceptance claimed from prior narrower receipts. Actual AT/live provider/production NOT_RUN/NOT_READY.
+
+## CQ hierarchy/density follow-up after redesign full168 round1
+
+Approved presentation-only delta: meaningful change kind becomes h2 primary title beside customer-approved badge; the full proposal reason is now a readable secondary paragraph. No string/value is removed or truncated. Payable/actual costs, order link/full reference, line/terms disclosure and exact explicit apply button/tab order remain unchanged. Other four owned CRM screens untouched in this delta; root owns shared CSS specificity/density adjustment.
+
+Purpose/Familiarity: human change type anchors scan instead of arbitrary reason text. Agency/Responsibility: approved status and financial facts precede explicit apply, full reason remains visible, no backend/money change. Simplicity: one title hierarchy, no duplicated type row. Flexibility/Craft/Delight: current candidate requires new responsive screenshots/keyboard/native evidence; scoped ESLint PASS only. Prior redesign full168 result157PASS11FAIL is coordinator-reported and does not certify current candidate. Product/final gate remains BLOCKED pending current review; production NOT_READY. All owned source/private docs frozen after this note.
+
+## Current comprehensive CRM viewport inspection checkpoint
+
+Verified all15 owned route viewport files have modification time later than crm-final-native-before.json; directly viewed crm-screen-{overview,customers,follow-ups,activity,changes}-{390,768,1440}.png. Overview shows initial unread guidance, date-range form and explicit Xem số liệu with UTC/bounded/not-system-total scope; these images do not certify loaded metrics. Customers/follow-ups show actual emulator rows, clear filters and exact profile links on desktop/tablet; at390 the horizontally scrollable table initially conceals follow-up/action columns. This is a remaining mobile task-usability limitation, not page-wide overflow or proof of missing rows. Synthetic epoch appointment dates shown are fixture values, not fabricated business dates. Activity audit table is readable at all3 widths, but these images do not cover outbox/unknown-email recovery. Changes shows meaningful type title/badge, full reason, monetary facts, full order identity/details and explicit action; title currently inherits gray while reason is black, weakening intended hierarchy. Root owns forthcoming navy-title shared-CSS fix; after screenshots NOT_RUN. Customer detail is not represented in these15 viewport files.
+
+Consequent review limits: Flexibility/Craft/Delight for full owned redesign remain BLOCKED pending mobile customer/follow-up task presentation, corrected title contrast/current capture, customer-detail and applicable negative-state evidence. Do not mark broad all-eight PASS merely from57 route screenshots or native no-overflow assertions. Purpose/Agency/Responsibility source mapping remains valid but scoped runtime evidence matters. Root reports whole169168PASS1Dashboard390 metrics loading failure; independent complete JSON parsing and focused diagnosis pending. No app/test changes in this checkpoint; production NOT_READY, actual AT/provider NOT_RUN.
+
+## Mobile record-table markup delta
+
+Approved ownership only Customers.tsx and Activity.tsx; root owns responsive Workspace CSS. Before coordinator reports corrected native10:6PASS4FAIL, with confirmed Customers/follow-ups390 horizontal reachability and outbox390 control overflow;768 record controls passed. Exact source delta adds crmRecordTable/crmCustomersTable/crmActivityTable classes, explicit table/rowgroup/row/columnheader/cell roles, scope=col and data-label from existing headers to the SAME table/cell/control subtree. Customers formerly blank action column now says “Thao tác”. Activity outcome label remains kind-aware “Đối tượng” versus “Kết quả”. No filter/query/handler/data/state/action changes, duplicated forms or truncated IDs.
+
+States retained: actual customer/follow-up identity/tags/assignee/date/profile action; audit timestamp/action/resource; outbox state/email-state/retry and unknown-result reconciliation with required outcome/evidence and explicit save-not-resend. Root CSS planned <=1000 two-column facts with identity/outcome/form spanning the row. Native headers stay in accessibility tree; labels supplement visual layout. Purpose: facts/actions visible together; Agency: same explicit controls; Responsibility: single handler/form, no automatic email or hidden evidence; Familiarity: existing header wording plus ordinary Thao tác; Simplicity: same records, no alternate mode or duplicate nodes. Flexibility/Craft/Delight current native/viewport/roles after remain NOT_RUN; this candidate cannot inherit broad PASS from former desktop screenshots. Product/final gate BLOCKED pending current checks. Format completed; no test/build/lint runner invoked during parallel source window. Production NOT_READY; actual AT/provider NOT_RUN. Owned source/private docs frozen after this entry.
+
+## Fresh scoped mobile/content review — immutable199 checkpoint
+
+This entry supersedes the earlier mobile/record candidate NOT_RUN entries only for the observed/tested states below; historical entries remain review history. Direct receipts read: crm-records-after.json10/10 PASS; crm-outbox-label-after.json2/2 PASS; crm-recovered179-native.json177PASS2FAIL0skip/flaky; crm-final198-native-round1.json193PASS5FAIL0skip/flaky; crm-final199-native-round1.json138PASS7FAIL54SKIPPED0flaky. Latest whole199 was interrupted by dedicated emulator CLI EAGAIN (coordinator evidence); failures/skips are not product acceptance and whole199 is not certified. No changed budgets/controls.
+
+Source binding checked: Customers c382b69446047784ddb7a29d988cde88bbda09f87bf40243c23e3143d4ddace6; Customer89ba0b27d94da49eef9a1f0f32ea9200a35f6753a1d7288c62350ab9e5e9060b; Activityfb26a833747890e590596801e637c0fa1807fe17c8a1f00fa01b0b0303a4a8e4; Dashboard4ccd253bcb7a29296882ea498b486c396e4fb5ae2fa139171c607ca233089964; Changes03a6c35b1744b1d2d0c48ce15802f4d9656bd46e5d57c83e6cb047c902ccea14. Shared CSS/root Ask changes have separate coordinator binding.
+
+Directly inspected all18 current default viewport images for overview/customers/follow-ups/activity/support/changes390/768/1440 during recovered179, plus records/outbox/profile pictures. Then directly inspected immutable copies in output/playwright/release026/crm-final199-native-round1-images: crm-record-customers-390.png (SHA2568117333a792972afa89001faf67652c80f8b0b1b174a725fb331e2fb667b674d), crm-record-outbox-390.png (a88db66e30f6e480b531e0a83b48a8bc0823ad0dee74ebac2a860110ca3b3824), crm-record-profile-customers-768.png (4c30f7592d770e7bb80029c79df2876fb8ed2b42421a415a74c72cdf94370ba0), crm-screen-changes-1440.png (1c9a9adcc757b2a3e17103130873ccfe0d6f603fe653e54332e81e3c424fa941). Outbox768 immutable copy exists hash42e750cc61cdb040f15b431b8881502b7242bc805fa7782e3c840743c7644836; direct prior current768 inspection verified vertical labels/controls. After10-results and after2-results directories previously requested do not exist; do not cite them as images. Actual PNG locations above and actual JSON receipts do exist.
+
+Inventory meaning: customer/follow-up same-table labels identity/tags/assignee/calendar/action, full reference and explicit profile link; profile consent/membership/follow-up/internal note/current assignee/related history; audit time/action/resource; outbox notification/email states, required provider outcome/evidence, explicit save-not-resend and separately allowed retry; CQ accepted-type/reason/facts/full reference/details/apply; Dashboard UTC/bounded-read/initial guidance; support closed subject/status list. New column label Thao tác matches its actual profile action. No money/provider status is invented. Synthetic epoch dates/zero monetary amounts remain fixture values, not global facts.
+
+| Principle | Scoped current result | Actual context evidence |
+| --- | --- | --- |
+| Purpose | PASSED | Calendar/profile action in same mobile row; CQ task heading/accepted status/facts visible |
+| Agency | PASSED | Explicit filter/reload/profile/apply/reconciliation controls retained; no automatic email or apply |
+| Responsibility | PASSED | Full identities, accurate accepted/payment-obligation semantics and separate provider evidence required |
+| Familiarity | PASSED | Existing natural Vietnamese headers/labels; icon accompanies readable text |
+| Flexibility | PASSED | 390/768 stacked facts with native table/row/cell roles and one mounted form; keyboard/focus checks in scoped receipts |
+| Simplicity | PASSED | No duplicate mobile controls or modes; orderly two-column facts and simple disclosure |
+| Craft | PASSED | Label-above-control spacing genuine before2FAIL→after2PASS; current pixels show navy CQ title and clean form/action separation |
+| Delight | PASSED | Calendar/action reachable without horizontal swipe; retry/pagination preserve explicit recovery and reading context |
+
+Scoped observed-state Product Language result PASSED. Limits remain: default Overview pictures are unread state, not loaded metrics evidence; support pictures are closed lists, not every thread/error; profile contains empty related history and390 previously captured pending-load toast; fixture zero amounts do not test huge values; every nested/negative state, mobile real device, actual AT/RTL, live provider/production/legacy missing-reviewedAt audit NOT_TESTED/NOT_RUN. No new actionable layout defect found within inspected evidence. Broad UI026/final implementation gate remains BLOCKED while required aggregate evidence is incomplete; production NOT_READY. Tokens/cost Unavailable; memory candidates None. Private docs only changed, runtime/tests untouched.

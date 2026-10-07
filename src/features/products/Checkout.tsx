@@ -1,3 +1,4 @@
+import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
@@ -177,7 +178,7 @@ export function ProductCheckout({
       <Link to="/products">← Sản phẩm</Link>
       <h1>Đặt mua sản phẩm</h1>
       {loading ? (
-        <p role="status">Đang tải sản phẩm…</p>
+        <LoadingState>Đang tải sản phẩm…</LoadingState>
       ) : parsed.success && displayedProduct ? (
         <form className="form" onSubmit={(e) => void submit(e)}>
           <h2>{displayedProduct.title}</h2>

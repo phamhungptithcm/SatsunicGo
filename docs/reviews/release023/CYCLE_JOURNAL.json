@@ -1,0 +1,30 @@
+[
+  {
+    "cycle": 1,
+    "result": "37 browser pass,1 fixture setup timeout",
+    "fix": "Batch51 synthetic order snapshots; preserve own-after-first50 and foreign denial assertions"
+  },
+  {
+    "cycle": 2,
+    "result": "5 focused browser pass",
+    "fix": "Native200 visual review confirmed support toolbar spacing; scoped flex gap fix"
+  },
+  {
+    "cycle": 3,
+    "result": "7 pass,4 failed,27 not run",
+    "cause": "Owned emulator CLI exited2; functions/auth/storage lost sockets",
+    "fix": "Recover only owned functions/auth/storage; preserve surviving Firestore"
+  },
+  {
+    "cycle": 4,
+    "result": "38 browser pass,zero skips",
+    "evidence": "output/playwright/release023/browser-final-recovered.log",
+    "remaining": "UI200 capture visual review; broad external gates"
+  },
+  {
+    "cycle": 5,
+    "result": "38 browser passed;0 failed/skipped/flaky",
+    "fix": "Workbench link spacing confirmed in native200 capture; geometry assertions and viewport capture metadata added",
+    "evidence": "output/playwright/release023/browser-cycle5-final.log"
+  }
+]

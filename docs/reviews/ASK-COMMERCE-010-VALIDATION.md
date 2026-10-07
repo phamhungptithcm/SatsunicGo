@@ -1,0 +1,9 @@
+#010 Validation
+
+Approval010v1 currenthuman `apporved`. OptionalindexesDEGRADED; boundedsource/compiler/browser. Fourfrontendfilesonly; no backend/contracts/dependency edits. ShareddirtyWIPpreserved. Typecheck frontend/backendPASS,lintPASS,16existingfocusedtests3filesPASS,VitebuildPASS. Existingbundlewarnings retained. No newgeneratedsource edits.
+
+Actualbrowser5178: nativepluschooser onidleandexpanded, thumbnail/remove, imageonly defaultquestion createspendingturn, AIoff error keepsphoto/text, centralretry includesphotos; manualfallbackopened thenmodalclosed/reopened withformstillopen; clipboardPNGpasteaddssecondthumb thenremove; reloadclearsephemeralphotos;390x844image+text. PhysicalOSfiledrag notexecuted; source drop/paste shared boundeddecoder inspected. SuccessliveAI/storage andnewowner/authswitch browserNOT_TESTED; scopedrefs inspected independent. Existingworkflowunit replay/ownership tests retained. No actualpurchase/pay/refund/training/activation/deploy.
+
+Cycle1P2: incorrectfirstformanimationtarget + hiddensentphotos3cap; fixesexplicitcomposerselection andunsent3/retained20/cleanup. Cycle2reviewfound no newactionableblocker; cycle3 freshindependentreview PASSED localfrontendscope. Browser unsentphoto limit1existing+3new rejects withclearmessage whilepreservingoriginalthumbnail. Imageonlyretry correctiontestedsource+browsererrorretention. Emptychat readinessuses serverresolvedconversationId; allcommand mutationsstill require hydratedsnapshot/version/owner viaexistingmutate, no bypass.
+
+ProductionNOT_READY: upstreamliveAI/provider/fullcatalogsolelychat remainsunverified. Photospre-orderqueueephemeral. NativefallbackenabledforAIoff; recipientprivatecontrols/paymentconfirmationstillnecessary. MemorycandidatesNone;tokens/costUnavailable.

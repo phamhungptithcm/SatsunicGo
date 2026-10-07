@@ -1,0 +1,72 @@
+[
+  {
+    "cycle": 1,
+    "scope": "backend CAS/role shape",
+    "result": "before2pass14fail;after16pass0fail",
+    "evidence": "output/playwright/release024/crm-before.json;crm-after.json"
+  },
+  {
+    "cycle": 2,
+    "scope": "CRM layout",
+    "result": "native3/3pass;visualreviewfoundtopgap/emptyheaders",
+    "fix": "CRM-onlybodypadding,emptytablehide,authorizedoverviewlanding"
+  },
+  {
+    "cycle": 3,
+    "scope": "membership display",
+    "result": "before18pass11fail;after29pass0fail",
+    "fix": "read-onlyserverexpiry/unknown projection,storedsubscriptionsunchanged"
+  },
+  {
+    "cycle": 4,
+    "scope": "nativeCRM/proposal",
+    "result": "4pass1fail",
+    "cause": "proposaltestnestedfieldsetselectorstrict2matches",
+    "fix": "exactnativegroupselectors;noappfix"
+  },
+  {
+    "cycle": 5,
+    "scope": "visualCRMmembership",
+    "result": "stray0confirmedinactualscreenshot",
+    "fix": "Boolean positive finite expiry display; native no-bare0 assertion passed",
+    "evidence": "output/playwright/release024/crm-membership-unknown.png"
+  },
+  {
+    "cycle": 6,
+    "scope": "full regression",
+    "result": "178unit100integration PASS;44browserPASS1failed",
+    "cause": "Stale visible implementation version assertion after approved UX cleanup",
+    "evidence": "output/playwright/release024/browser-round4-stale-version.json"
+  },
+  {
+    "cycle": 7,
+    "scope": "confirmed checkbox layout",
+    "fix": "CRM-only checkbox label flex-direction row; native text/input geometry assertion"
+  },
+  {
+    "cycle": 8,
+    "scope": "final frozen candidate",
+    "result": "Runner import failed before scenario execution",
+    "evidence": "output/playwright/release024/browser-round5-final.log",
+    "fix": "Explicit domain/index module entry instead of directory import; preserve assertions"
+  },
+  {
+    "cycle": 9,
+    "scope": "complete semantic regression",
+    "result": "45browserPASS0fail0skip",
+    "evidence": "output/playwright/release024/browser-full-results.json"
+  },
+  {
+    "cycle": 10,
+    "scope": "caption contrast",
+    "result": "nativebefore3.9798FAIL; finalpostcontrast4browserPASS0skip,all5groupsat3widths4.98885",
+    "fix": "singleCRMcaptioncolourproperty",
+    "evidence": "output/playwright/release024/browser-post-contrast-results.json"
+  },
+  {
+    "cycle": 11,
+    "scope": "final compile/lint/build/source review",
+    "result": "frontendtypecheck/lint/buildPASS;globalreviewpendingexternalacceptance",
+    "evidence": "output/playwright/release024/build.log"
+  }
+]

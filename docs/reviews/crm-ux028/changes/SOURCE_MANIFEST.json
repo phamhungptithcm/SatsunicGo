@@ -1,0 +1,7 @@
+{
+  "task_id": "SATSUNICGO-CHANGES-028",
+  "files": {
+    "src/features/orders/Changes.tsx": "da15be35ebc783b9e1eda73ac5629ff14ca2ac8a5ae2b84c43693e2b79eee9e5",
+    "tests/unit/changes-contextual.test.ts": "040f09f05e8015c5447d77fa85cb370502889f86294c2527d857f28c6c663854"
+  }
+}

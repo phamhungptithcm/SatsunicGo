@@ -1,0 +1,9 @@
+{
+  "status": "FAILED",
+  "errors": [
+    "STALE SOURCE src/features/requests/RequestForm.tsx",
+    "STALE SOURCE src/features/requests/request-form.css",
+    "STALE SOURCE tests/browser/request083.spec.ts"
+  ],
+  "exit_code": 1
+}

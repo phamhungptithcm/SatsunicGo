@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import type { User } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../shared/firebase";
+import { preloadNavigation } from "./route-modules";
 const navigation = [
   ["Sản phẩm", "/products"],
   ["Mua hộ", "/request"],
@@ -137,7 +138,11 @@ function AccountProfile({
         </svg>
       </button>
       {open && (
-        <div className="accountDropdown">
+        <div
+          className="accountDropdown"
+          onPointerOver={preloadNavigation}
+          onFocusCapture={preloadNavigation}
+        >
           <div className="accountIdentity">
             <strong>{name}</strong>
             {email && <span>{email}</span>}
@@ -270,6 +275,8 @@ export function SiteHeader({
           id="primary-navigation"
           aria-label="Điều hướng chính"
           data-open={open}
+          onPointerOver={preloadNavigation}
+          onFocusCapture={preloadNavigation}
         >
           {navigation.map(([label, path]) => (
             <NavLink key={path} to={path} onClick={() => setOpen(false)}>
@@ -283,7 +290,12 @@ export function SiteHeader({
           )}
         </nav>
         <div className="headerActions">
-          <Link className="headerRequest" to="/request">
+          <Link
+            className="headerRequest"
+            to="/request"
+            onPointerEnter={preloadNavigation}
+            onFocus={preloadNavigation}
+          >
             Mua hộ <span aria-hidden="true">↗</span>
           </Link>
           {user && (
@@ -317,12 +329,11 @@ export function SiteFooter() {
   return (
     <footer className="siteFooter compactFooter">
       <div className="compactFooterInner">
-        <div>
+        <div className="footerBrandBlock">
           <Link className="brand" to="/">
             Satsunic<span>Go</span>
           </Link>
           <span className="footerAttribution">by HunpeoLabs</span>
-          <p>© {new Date().getFullYear()} HunpeoLabs.</p>
         </div>
         <nav aria-label="Thông tin và hỗ trợ">
           <Link to="/support">Hỗ trợ</Link>
@@ -330,6 +341,9 @@ export function SiteFooter() {
           <Link to="/terms">Điều khoản & hoàn tiền</Link>
           <Link to="/restricted">Hàng hạn chế</Link>
         </nav>
+      </div>
+      <div className="footerLegalRow">
+        <p>© {new Date().getFullYear()} HunpeoLabs.</p>
       </div>
     </footer>
   );

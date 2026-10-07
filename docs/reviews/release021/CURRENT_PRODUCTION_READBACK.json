@@ -1,0 +1,61 @@
+{
+  "checkedAtUtc": "2026-10-05T14:57:56.000346+00:00",
+  "readOnly": true,
+  "project": "satsunicgo",
+  "metadata": [
+    {
+      "check": "billing",
+      "errorCode": 403
+    },
+    {
+      "check": "auth",
+      "result": {
+        "authorizedDomains": [
+          "satsunicgo.firebaseapp.com",
+          "satsunicgo.web.app",
+          "localhost",
+          "127.0.0.1"
+        ],
+        "providerConfigPresent": true,
+        "googleClientPresent": true
+      }
+    },
+    {
+      "check": "google",
+      "result": {
+        "enabled": true,
+        "clientConfigured": true
+      }
+    },
+    {
+      "check": "firestore",
+      "result": {
+        "databases": [
+          {
+            "name": "projects/satsunicgo/databases/(default)",
+            "location": "asia-southeast1",
+            "type": "FIRESTORE_NATIVE"
+          }
+        ]
+      }
+    },
+    {
+      "check": "storage",
+      "result": {
+        "buckets": [
+          {
+            "name": "satsunicgo.firebasestorage.app",
+            "location": "ASIA-SOUTHEAST1"
+          }
+        ]
+      }
+    },
+    {
+      "check": "functions",
+      "result": {
+        "functions": []
+      }
+    }
+  ],
+  "scope": "Filtered GET metadata only; no secret/customer reads or cloud mutations"
+}

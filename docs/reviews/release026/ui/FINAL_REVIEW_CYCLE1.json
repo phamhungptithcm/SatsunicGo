@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "task_id": "CRM026",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Current native/content/full evidence pending; production NOT_READY.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Bounded source/lint review; current executed checks pending.",
+      "evidence_refs": [
+        "REPORT.md",
+        "PRODUCT_CONTENT_REVIEW.md",
+        "INVENTORY.md"
+      ]
+    }
+  },
+  "findings": [],
+  "limitations": [
+    "Currentnative/content evidence pending",
+    "Repository intelligence DEGRADED",
+    "ActualAT/provider/performance NOT_RUN",
+    "Tokenusage/cost unavailable"
+  ],
+  "residual_risks": [
+    "Production NOT_READY; comprehensiveevery-screenacceptance NOT_RUN"
+  ]
+}

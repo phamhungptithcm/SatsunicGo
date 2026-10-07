@@ -1,0 +1,114 @@
+.loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(244, 247, 253, 0.38);
+  pointer-events: none;
+}
+.loadingOverlayCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(280px, 100%);
+  padding: 24px 22px;
+  border: 1px solid rgba(220, 226, 237, 0.9);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 12px 40px #111c3510,
+    0 2px 8px #111c3505;
+  text-align: center;
+  color: #111c35;
+}
+.loadingOverlayCard strong {
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.loadingOverlayCard p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #647087;
+  margin: 0;
+}
+.loadingRing {
+  display: block;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border: 3px solid #e4eaff;
+  border-top-color: #163cff;
+  border-radius: 50%;
+  animation: loading081-spin 0.85s linear infinite;
+}
+.loadingState {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #647087;
+  line-height: 1.6;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.loadingState > :last-child {
+  min-width: 0;
+}
+.loadingRing--inline {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+@keyframes loading081-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loadingRing {
+    animation: none;
+    border-right-color: #163cff;
+  }
+}
+
+.siteToast[data-kind] {
+  z-index: 1001;
+}
+
+/* Indeterminate waiting indicator: never represents a measured percentage. */
+.loadingBeam {
+  display: block;
+  width: 128px;
+  height: 6px;
+  margin: 3px 0 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7edff;
+}
+.loadingBeam > span {
+  display: block;
+  width: 52px;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #b2c2ff, #163cff 50%, #829cff);
+  animation: loading082-glide 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes loading082-glide {
+  0%,
+  100% {
+    transform: translateX(-42px);
+  }
+  50% {
+    transform: translateX(118px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loadingBeam > span {
+    animation: none;
+    transform: translateX(38px);
+  }
+}

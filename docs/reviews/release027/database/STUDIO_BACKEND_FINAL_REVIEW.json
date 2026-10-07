@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-STUDIO-RATES-027-DATABASE",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "security": {
+      "status": "BLOCKED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "BLOCKED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "BLOCKED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "See scoped current evidence and limitations in STUDIO_BACKEND_REVIEW.md.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_REVIEW.md",
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "M1",
+      "severity": "medium",
+      "status": "fixed",
+      "summary": "Permanent failed schedules could starve later due jobs; guarded blocked-job metadata now removes dueAt.",
+      "evidence_refs": [
+        "functions/src/blog-studio.ts"
+      ]
+    },
+    {
+      "id": "M2",
+      "severity": "medium",
+      "status": "fixed",
+      "summary": "Private media metadata validation now checks exact path/size/mime/rights/status and rechecks after download.",
+      "evidence_refs": [
+        "functions/src/blog-studio.ts"
+      ]
+    },
+    {
+      "id": "M3",
+      "severity": "medium",
+      "status": "fixed",
+      "summary": "Create collision includes orphan published snapshots and legacy posts.",
+      "evidence_refs": [
+        "functions/src/blog-studio.ts"
+      ]
+    },
+    {
+      "id": "M4",
+      "severity": "medium",
+      "status": "fixed",
+      "summary": "Root-owned public GIF/media integration and real Storage evidence required; validateStudioImage helper and six real decoder tests delivered.",
+      "evidence_refs": [
+        "tests/unit/blog-studio-media027.test.ts"
+      ]
+    },
+    {
+      "id": "M5",
+      "severity": "medium",
+      "status": "fixed",
+      "summary": "Exact source parity required category/source/30inline/20MP/WebP2400 metadata stripping; corrected by explicit root approval and59unit/staticPASS current candidate.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json",
+        "tests/unit/blog-studio027.test.ts",
+        "tests/unit/blog-studio-media027.test.ts"
+      ]
+    },
+    {
+      "id": "M6",
+      "severity": "high",
+      "status": "fixed",
+      "summary": "SchedulerAuthdisabled/permanentdomainabort, privatejob/moderationprojection, isolatededitorialgrantandapprovepost/parentguards fixed;69unit/staticPASS current, actualemulator/Storage pending.",
+      "evidence_refs": [
+        "docs/reviews/release027/database/STUDIO_EXACT_SERVICE_CURRENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "No production/deploy/retention/backup/restore authority or evidence",
+    "Original automaticcommentapproval replaced by explicitlyapproved Go manualreview safety policy",
+    "Go existingstaffeligibility/OWNERadministration prerequisite preserved; noCRMgrants or company bootstrap copied"
+  ],
+  "limitations": [
+    "Current candidate16files; core13+comments5+advanced7+commands5 emulator scenarios prepared, pending rootserialrunner",
+    "RealStorage/native/in-context eightprinciples evidence missing",
+    "RuntimeCLI unavailable"
+  ],
+  "current_candidate_sha256": "ece89f570232fb69f9227a4237eee67845d0868b20d42e3a705a4a9f430cde1f",
+  "latest_cycle": {
+    "cycle": 7,
+    "status": "BLOCKED",
+    "summary": "Canonical moderation docid;19serviceunitsPASS676ms,functions/rootnoEmitPASS,scopedESLintPASS;freshrootintegration/nativepending.",
+    "candidate_manifest": "docs/reviews/release027/database/STUDIO_BACKEND_CANDIDATE.json",
+    "runtime_receipt": "NOT_RECORDED: CLI unavailable"
+  }
+}

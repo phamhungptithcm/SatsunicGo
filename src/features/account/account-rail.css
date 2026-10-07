@@ -1,0 +1,13 @@
+.customerRail nav svg {
+  flex-shrink: 0;
+}
+.customerHelpLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.customerRail .customerHelpLabel svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}

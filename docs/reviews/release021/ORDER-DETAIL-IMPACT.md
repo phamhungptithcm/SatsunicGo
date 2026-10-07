@@ -1,0 +1,7 @@
+# Approved local021 delta — read deep-linked order independently of bounded list
+
+Native FLOW-UI01 completed all staff transitions but customer detail incorrectly showed “Chưa tìm thấy đơn trong danh sách”. Account reads at most50 unordered own orders, then filters that page for selectedId; a valid own order outside that page cannot be opened, confirmed or tracked from its deep link. This is a product defect, not an insufficient wait or fixture defect.
+
+Approval: existing local021 plus direct all-proposed-fixes authorization. Scope root App useOrders/Account and root browser fixture/scenarios. Before edit: selected order routes use an exact document snapshot with existing Firestore owner/lock rules; the client checks current owner as additional defense. List remains explicitly bounded50 with unchanged query, no new index/API. Clear cached orders on read failure and suppress callbacks after cleanup/route or UID change. Empty detail copy refers to opening the order, not absence from a list; never reveal a foreign document's existence. No money/role/provider/data mutation.
+
+Verification: unique own order deliberately lexically beyond the first50 fixture IDs opens directly; cross-customer route cannot display its title/details; complete native funded catalog receipt lifecycle reruns with >50 own fixtures. Missing/loading/read error states remain safe and recover through normal navigation. Source key/UID and backend ownership/version checks preserved. New copy: “Chưa mở được đơn này”; “Kiểm tra liên kết hoặc quay lại danh sách đơn của bạn.”

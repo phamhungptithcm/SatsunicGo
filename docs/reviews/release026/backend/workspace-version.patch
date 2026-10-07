@@ -1,0 +1,14 @@
+*** Begin Patch
+*** Update File: functions/src/workspace.ts
+@@
+     if (old.exists && old.data()?.version !== d.expectedVersion)
+       throw new HttpsError("aborted", "Dữ liệu đã thay đổi. Tải lại.");
++    const storedVersion = old.data()?.version;
++    if (
++      storedVersion !== undefined &&
++      (!Number.isSafeInteger(storedVersion) ||
++        storedVersion < 0 ||
++        storedVersion >= Number.MAX_SAFE_INTEGER)
++    )
++      throw new HttpsError("aborted", "Dữ liệu đã thay đổi. Tải lại.");
+*** End Patch

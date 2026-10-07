@@ -1,0 +1,9 @@
+{
+  "task_id": "SATSUNICGO-FINANCE-028",
+  "generated_at": "2026-10-06T04:56:41.573153+00:00",
+  "files": {
+    "src/features/payments/Finance.tsx": "b272e5eb2b8816578746e019dcd9eeb2ed38df1d9afab9cc7db6b764e287e742",
+    "src/features/payments/FinancialReview.tsx": "6b577c926dd993d302c8da9280424c7083129d380a2a0e21deb310e6d5b050ef",
+    "tests/unit/finance-contextual.test.ts": "1e7c39a588aac4207caf8758bf5ad3270736456071fc0877241363d3baabc18d"
+  }
+}

@@ -1,0 +1,262 @@
+[
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 54,
+    "text": "Chưa tải được trạng thái bảo mật. Tải lại trang để thử lại."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 106,
+    "text": "Đã xác thực lại với Google. Bạn có thể tiếp tục thiết lập."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 112,
+    "text": "Chưa xác thực lại được. Thử đăng nhập lại với Google."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 143,
+    "text": "Chưa tạo được thiết lập. Xác thực lại với Google rồi thử thêm ứng dụng lần nữa."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 187,
+    "text": "Chưa xác nhận được trạng thái bảo mật. Tải lại trang để kiểm tra."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 193,
+    "text": "Đã bật xác thực hai bước."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 193,
+    "text": "Đã xác nhận mã xác thực."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 201,
+    "text": "Ứng dụng đã được đăng ký nhưng chưa tải được trạng thái mới. Tải lại trang để kiểm tra."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 202,
+    "text": "Mã chưa được xác nhận. Nhập mã mới nhất trong ứng dụng và kiểm tra thời gian trên thiết bị rồi thử lại."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 214,
+    "text": "Bảo mật tài khoản"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 219,
+    "text": "Xác thực hai bước"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 226,
+    "text": "Chưa xác định"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 227,
+    "text": "Đang kiểm tra"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 229,
+    "text": "Đã bật"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 230,
+    "text": "Chưa bật"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 240,
+    "text": "Đang xử lý…"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 240,
+    "text": "Thêm ứng dụng xác thực"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 247,
+    "text": "Xác thực lại với Google"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 251,
+    "text": "Hủy thiết lập"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 263,
+    "text": "Xác thực lại với Google"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 271,
+    "text": "Đăng nhập với Google để quản lý bảo mật tài khoản."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 284,
+    "text": "Mã QR để thêm tài khoản vào ứng dụng xác thực"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 289,
+    "text": "Không tạo được mã QR. Bạn có thể nhập khóa bên dưới."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 290,
+    "text": "Đang tạo mã QR…"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 295,
+    "text": "Khóa nhập thủ công"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 303,
+    "text": "Sao chép khóa thiết lập"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 304,
+    "text": "Sao chép khóa"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 328,
+    "text": "Đã sao chép"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 330,
+    "text": "Không sao chép được. Chọn khóa để sao chép thủ công."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 331,
+    "text": "Đang sao chép…"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 335,
+    "text": "Không chia sẻ mã QR hoặc khóa này."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 343,
+    "text": "Nhập mã từ ứng dụng xác thực."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 344,
+    "text": "Quét QR hoặc nhập khóa vào ứng dụng xác thực."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 348,
+    "text": "Tài khoản cần phương thức xác thực khác. Quay lại trang đăng\n                nhập để tiếp tục."
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 354,
+    "text": "Ứng dụng xác thực"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 362,
+    "text": "Ứng dụng xác thực"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 368,
+    "text": "Mã xác thực 6 chữ số"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 381,
+    "text": "000000"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 396,
+    "text": "Đang xác nhận…"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 398,
+    "text": "Xác nhận mã"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 399,
+    "text": "Bật xác thực hai bước"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 408,
+    "text": "Hủy thiết lập"
+  },
+  {
+    "file": "src/features/auth/Security.tsx",
+    "line": 420,
+    "text": "Đã bật xác thực hai bước."
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 9,
+    "text": "TÀI KHOẢN"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 10,
+    "text": "Không gian khách hàng"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 29,
+    "text": "Đơn của tôi"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 35,
+    "text": "Vận chuyển"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 41,
+    "text": "Thông báo"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 45,
+    "text": "Chứng từ của tôi"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 52,
+    "text": "Hồ sơ và địa chỉ"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 59,
+    "text": "Bảo mật tài khoản"
+  },
+  {
+    "file": "src/features/account/AccountRail.tsx",
+    "line": 63,
+    "text": "Cần hỗ trợ?"
+  }
+]

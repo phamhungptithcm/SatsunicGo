@@ -1,0 +1,21 @@
+{
+  "scope": "Studio original integration current candidate; not whole product release",
+  "files": {
+    "src/features/content/studio/SourceStudio.tsx": "1239bb5d0de6d81381bd43a73f17a00b627a2b1bb6aaebe6eeba761758002164",
+    "src/features/content/studio/source-host-compat.css": "22bda977092aa46e63cee0c35f36f5d4cdf704e5fc27d6974c09c7c4a38124ce",
+    "src/features/content/studio/state.ts": "8ae75e0d27e8948c840f5eee877035203f6d7f12bf88f455d7fd49154abf8d54",
+    "src/features/content/studio/rich-editor.tsx": "4983717a01a79a63f0203a6cb5d21a8541a959015f7f0aed621acbe9739641ec",
+    "tests/browser/release-studio-complete027.spec.ts": "d5d42721196a407a57e9f9df9ace1732a9dbb414a8eff0aea9b35545f7796ccc",
+    "tests/browser/release-studio-mechanics027.spec.ts": "e1c5ccbf61fcd1284728c51b626d5d16eb590993de39b61836b13ff6befac226",
+    "tests/browser/release-studio-reference-parity027.spec.ts": "f4fcca35b6bf9d00ecaf66245cd5181442fa887889d9187b2bf3d6a547d4e4ee",
+    "tests/unit/studio-publication-parity027.test.ts": "da6b566a34a533e1e3525dd937c5da7a2527f83baeae28dc9ab8a9c820eb948c",
+    "tests/unit/studio-editor027.test.ts": "1d7b586141f69eae77b7603306a14aa7c13a6bbdb113491aa6c41fd4d5179e82",
+    "tests/browser/release-studio-component-reference032.spec.ts": "2ded3e87b1ac1ae7ff88b573b124a7759729dd1ffa847822720237944a79cc6d",
+    "src/features/content/studio/source-shell.tsx": "343801c2777312e22580aef8ab29284a3734424e98dedd560298458855f0bb18",
+    "src/features/content/studio/source-preview.tsx": "2c39144715db9e99391c06c35490b89e5f36bd0a18b41294fd9b3571b42a6df4",
+    "src/features/content/studio/moderation-pagination.ts": "9615e5b13701d22ea52c5d7cb9c89952286efa27ab023d2b2f36753b348c91e5",
+    "src/features/content/studio/source-moderation.tsx": "0162098f344f522dcd4c2f9f536c3e15832cc21993144c58ecda0dc6f084f964",
+    "tests/unit/studio-moderation-pagination027.test.ts": "ad36d21b053ea9e3a6069a6e11f70e2b052c88c09ddf1ccc79a98c4db5819c8b"
+  },
+  "verification": "Current Studio72 round9:66PASS0FAIL6SKIP0FLAKY225141.49ms, archive studio-current-round9. Core35+mechanics10+reference21+isolatedcomponent6 exact counts; six shared foreign-record full-route comparisons remain SKIP/NOT_RUN. Proven no-edit trailing-node autosave fixed by primary transaction guard; corrected no-edit focus3 zero commands/body+revision unchanged. Original44 immutable and raw BrandMark comparisons passed. Moderation100 adapter unit59 PASS; real native101 cold-cursor/full-route private033 pending. Source-only scoped checks do not certify full visual100, AT/zoom, provider, or production readiness; overall final BLOCKED/NOT_READY."
+}

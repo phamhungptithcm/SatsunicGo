@@ -1,0 +1,85 @@
+{
+  "recordedAt": "2026-10-05T14:52:28.773895+00:00",
+  "scope": "Local021/022; production not certified",
+  "cycles": [
+    {
+      "id": "browser-1",
+      "result": "12PASS_5FAIL",
+      "source": "output/playwright/release021/browser-cycle-1.json",
+      "defect": "Same-fragment public link reopening retained stale projection after revocation; actual product bug",
+      "harness": "Four Ask entry/responsive assumptions wrong; no product success claimed"
+    },
+    {
+      "id": "browser-2-focused",
+      "result": "2PASS_3FAIL",
+      "source": "output/playwright/release021/browser-cycle-2.json",
+      "fix": "Hash revalidation and native Ask lost-response recovery proved; responsive harness still corrected afterward"
+    },
+    {
+      "id": "browser-3",
+      "result": "21PASS_0FAIL_0SKIP",
+      "source": "output/playwright/release021/browser-cycle-3.json",
+      "limitation": "Historical baseline before new CRM/Profile/Invoice022 telemetry and standalone receipt corrections"
+    },
+    {
+      "id": "native-flow-4",
+      "result": "FAILED",
+      "toolSessions": [
+        53632,
+        63625
+      ],
+      "finding": "Role-switch harness and stale UI-version timing during concurrent Functions rebuilds; candidate not accepted",
+      "fix": "Wait restored auth identity; explicit latest rendered order version before next operation; compile/test windows separated; new verification pending"
+    },
+    {
+      "id": "security022-prototype",
+      "result": "REJECTED_CANDIDATES",
+      "finding": "Global core2 override broke getEnv; stale npm lock retained unpatched SDK; unrelated version churn rejected",
+      "fix": "Scoped2 peer hosts preserve nested Genkit1, mirror Functions overrides, preserve unrelated baseline dependencies; actual runtime proof repeated"
+    },
+    {
+      "id": "candidate-5",
+      "result": "PENDING",
+      "scope": "Frozen specialist source + patched runtime + new native failure/receipt/mobile/zoom cases; full fresh review required"
+    },
+    {
+      "id": "native-corrections-5",
+      "result": "FOCUSED_FAIL_FIX_VERIFY",
+      "findings": [
+        "Known profile lock retained private addresses",
+        "CRM duplicate sibling keys duplicated action forms",
+        "Order deep link outside first50 did not open"
+      ],
+      "fixes": [
+        "Clear lock state and late callbacks; explicit retry",
+        "Unique component keys",
+        "Exact owner-guarded document subscription"
+      ],
+      "evidence": "Current full34browser and165unit"
+    },
+    {
+      "id": "browser-6",
+      "result": "33PASS_1FAIL_0SKIP",
+      "source": "output/playwright/release021/browser-cycle-6.json",
+      "finding": "Generated Playwright artifacts triggered actual Vite page reload; diagnostic trace amplified reload loop",
+      "fix": "Ignore output/playwright-report in dev watcher; trace-enabled originalDOC-B05 nowPASS"
+    },
+    {
+      "id": "browser-7",
+      "result": "34PASS_0FAIL_0SKIP",
+      "source": "output/playwright/release021/browser-results.json",
+      "review": "Current local checks passed; production/content/independent QA gates remainBLOCKED"
+    },
+    {
+      "id": "browser-8",
+      "result": "35PASS_0FAIL_0SKIP",
+      "source": "output/playwright/release021/browser-cycle-8.json",
+      "addition": "Native staff/customer logout privacy and deep-link denial",
+      "external": "Freshread-onlyFunctions0/billingUNKNOWN; Hostingentrynotlocalcandidate; liveaccountsquestionpending"
+    }
+  ],
+  "production": "NOT_READY",
+  "independentReview": "No claimed independent production acceptance; QA prerequisites recorded separately",
+  "usage": "Unavailable",
+  "memoryCandidates": "None"
+}

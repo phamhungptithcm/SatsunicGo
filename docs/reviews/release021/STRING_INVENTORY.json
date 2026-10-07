@@ -1,0 +1,5101 @@
+{
+  "note": "Current conservative AST inventory across candidate source including preexisting WIP and some non-visible literals; state/rendered meaning review remains separate. No runtime customer values or secrets are read.",
+  "recordedAt": "2026-10-05T15:01:21.586Z",
+  "rows": [
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 32,
+      "text": "Mua hộ trong chat chưa được kích hoạt. Bạn vẫn có thể dùng trang yêu cầu."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 64,
+      "text": "Thông tin đối chiếu chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 80,
+      "text": "Không thể mở hội thoại này."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 100,
+      "text": "Cần hỗ trợ đối chiếu thao tác đang chờ."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 110,
+      "text": "Thông tin chưa hợp lệ. Kiểm tra và thử lại."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 128,
+      "text": "Không thể tiếp tục với tài khoản này."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 139,
+      "text": "Không thể mở hội thoại này."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 145,
+      "text": "Thao tác đã thay đổi. Tải lại hội thoại."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 156,
+      "text": "Hội thoại đã thay đổi. Tải lại rồi thử lại."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 161,
+      "text": "Hội thoại này đã có đơn hàng."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 166,
+      "text": "Yêu cầu đã gửi. Liên hệ hỗ trợ để thay đổi."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 177,
+      "text": "Gửi yêu cầu trước khi tiếp tục."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 182,
+      "text": "Không thể truy cập đơn."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 186,
+      "text": "Đơn đã thay đổi. Kiểm tra thông tin mới."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 200,
+      "text": "Địa chỉ đã chốt. Liên hệ hỗ trợ để thay đổi."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 206,
+      "text": "Lưu thông tin nhận hàng trước khi duyệt báo giá."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 256,
+      "text": "Một thao tác đang chờ kết quả. Thử lại thao tác đó trước."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 327,
+      "text": "Đang đối chiếu kết quả thao tác."
+    },
+    {
+      "file": "functions/src/ai/ask-workflow.ts",
+      "line": 356,
+      "text": "Không thể mở hội thoại với tài khoản này."
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 4,
+      "text": "SatsunicGo · Chứng từ đơn hàng"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 5,
+      "text": "`Chứng từ nội bộ ${documentNumber} đã được xuất. Đăng nhập SatsunicGo, mở Tài khoản → Chứng từ để xem hoặc in/lưu PDF. Đây không phải hóa đơn điện tử thuế. Số tiền phản ánh thời điểm xuất chứng từ.`"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 9,
+      "text": "SatsunicGo · Membership sắp hết hạn"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 10,
+      "text": "Membership của bạn sắp hết hạn. Mở SatsunicGo để xem thời hạn và chọn gia hạn. Hệ thống không tự trừ tiền."
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 14,
+      "text": "SatsunicGo · Membership đã được kích hoạt"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 15,
+      "text": "Membership của bạn đã được kích hoạt. Mở SatsunicGo để xem gói và thời hạn sử dụng."
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 19,
+      "text": "SatsunicGo · Membership đã hết hạn"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 20,
+      "text": "Membership của bạn đã hết hạn. Mở SatsunicGo để xem thông tin gói và chọn gia hạn."
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 25,
+      "text": "Mở SatsunicGo để xem chi tiết thông báo trong tài khoản của bạn."
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 28,
+      "text": "SatsunicGo · Có cập nhật mới"
+    },
+    {
+      "file": "functions/src/email-content.ts",
+      "line": 29,
+      "text": "Bạn có thông báo mới. Mở SatsunicGo để xem chi tiết."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 44,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 47,
+      "text": "Thông tin không hợp lệ."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 65,
+      "text": "Không thể thực hiện thao tác này."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 69,
+      "text": "Mã thao tác đã được sử dụng."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 84,
+      "text": "Không thể truy cập yêu cầu."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 98,
+      "text": "Không thể truy cập yêu cầu."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 106,
+      "text": "Bạn không có quyền thực hiện thao tác này."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 116,
+      "text": "Đơn chưa được phân công."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 124,
+      "text": "Đơn có kiện riêng. Cập nhật bằng luồng kiện để kiểm tra đủ số lượng."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 130,
+      "text": "Dữ liệu đã thay đổi. Tải lại để tiếp tục."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 138,
+      "text": "Yêu cầu đã tồn tại."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 158,
+      "text": "Cần đăng nhập lại và xác thực hai lớp."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 191,
+      "text": "Giao dịch đã được phân bổ."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 264,
+      "text": "Tiền nguồn không khớp thị trường."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 279,
+      "text": "Tỷ giá hoặc điều khoản chưa được duyệt, đã hết hạn hoặc không khớp."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 294,
+      "text": "Giảm phí phải khớp quyền lợi hiện hành."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 307,
+      "text": "Chưa có quyền lợi giảm phí được duyệt."
+    },
+    {
+      "file": "functions/src/index.ts",
+      "line": 342,
+      "text": "Kiểm tra thông tin, quyền và trạng thái hiện tại."
+    },
+    {
+      "file": "functions/src/invoice-share.ts",
+      "line": 19,
+      "text": "noindex, nofollow"
+    },
+    {
+      "file": "functions/src/invoice-share.ts",
+      "line": 27,
+      "text": "Liên kết không còn sử dụng được."
+    },
+    {
+      "file": "functions/src/invoice-share.ts",
+      "line": 41,
+      "text": "Thử lại sau một phút."
+    },
+    {
+      "file": "functions/src/invoice-share.ts",
+      "line": 68,
+      "text": "Liên kết đã hết hạn hoặc bị thu hồi."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 44,
+      "text": "Thông tin chứng từ chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 71,
+      "text": "Cần quyền chủ doanh nghiệp hoặc tài chính."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 82,
+      "text": "Xác thực hai bước gần đây để xử lý chứng từ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 86,
+      "text": "Mã thao tác đã dùng."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 96,
+      "text": "Chủ doanh nghiệp cấu hình thông tin người bán."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 99,
+      "text": "Thông tin người bán đã thay đổi."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 111,
+      "text": "Chọn đơn để tạo chứng từ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 119,
+      "text": "Bản nháp đã thay đổi hoặc đã xuất."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 124,
+      "text": "Không tìm thấy đơn."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 138,
+      "text": "Bản thay thế phải cùng đơn và chủ đơn với chứng từ đã xuất."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 146,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 151,
+      "text": "Cần thông tin người bán và tổng cuối đã được khách duyệt trước khi tạo chứng từ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 174,
+      "text": "Chứng từ đã thay đổi. Tải lại."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 177,
+      "text": "Chỉ xuất bản nháp."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 188,
+      "text": "Nguồn đơn hoặc người bán thay đổi. Cập nhật bản nháp trước khi xuất."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 194,
+      "text": "Chưa cấp được số chứng từ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 208,
+      "text": "Cần chứng từ đã xuất và lý do hủy."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 228,
+      "text": "Chỉ chia sẻ/gửi chứng từ đã xuất."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 234,
+      "text": "Tài khoản khách đang bị khóa."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 256,
+      "text": "Email chưa được cấu hình. Chưa xếp lịch gửi."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 294,
+      "text": "Bộ lọc chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 303,
+      "text": "Tài khoản đang bị khóa."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 336,
+      "text": "Mã chứng từ chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/invoices.ts",
+      "line": 359,
+      "text": "Không có quyền xem chứng từ."
+    },
+    {
+      "file": "functions/src/jobs.ts",
+      "line": 6,
+      "text": "every 30 minutes"
+    },
+    {
+      "file": "functions/src/jobs.ts",
+      "line": 259,
+      "text": "Thông tin không hợp lệ."
+    },
+    {
+      "file": "functions/src/jobs.ts",
+      "line": 268,
+      "text": "Không thể truy cập thông báo."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 28,
+      "text": "Thông tin xử lý email chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 56,
+      "text": "Cần quyền quản lý vận hành."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 64,
+      "text": "Xác thực hai bước trước khi xử lý email."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 68,
+      "text": "Mã thao tác đã dùng."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 73,
+      "text": "Bản ghi đã thay đổi. Tải lại."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 76,
+      "text": "Khách đang bị khóa."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 82,
+      "text": "Cần kết quả đối soát và bằng chứng cho email chưa rõ kết quả."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 94,
+      "text": "Email cần đối soát hoặc đã hết số lần thử. Không tự gửi lại."
+    },
+    {
+      "file": "functions/src/outbox-command.ts",
+      "line": 106,
+      "text": "Cần cấu hình email trước khi thử lại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 21,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 31,
+      "text": "Cần quyền nhân viên."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 73,
+      "text": "Không hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 79,
+      "text": "Bộ lọc không hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 104,
+      "text": "Không có quyền xem hàng đợi."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 137,
+      "text": "Đơn chưa được phân công."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 159,
+      "text": "Trang đã thay đổi. Tải lại danh sách."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 258,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 286,
+      "text": "Thông tin không hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 300,
+      "text": "Không thể thực hiện thao tác."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 309,
+      "text": "Không có quyền thực hiện thao tác."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 327,
+      "text": "Không thể truy cập hội thoại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 339,
+      "text": "Cần xác thực gần đây và hai lớp."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 343,
+      "text": "Mã thao tác đã được dùng."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 421,
+      "text": "Cần giờ xuất bản trong tương lai."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 504,
+      "text": "Cần xác thực gần đây và hai lớp."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 518,
+      "text": "Không thể tự khóa hoặc gỡ quyền chủ doanh nghiệp của mình."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 537,
+      "text": "Kiểm tra thông tin đã nhập."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 545,
+      "text": "Giờ hết hạn phải sau giờ áp dụng."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 554,
+      "text": "Cần định danh nhân viên."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 558,
+      "text": "Hội thoại đã tồn tại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 560,
+      "text": "Dữ liệu đã thay đổi. Tải lại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 566,
+      "text": "Không thể truy cập dữ liệu."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 578,
+      "text": "Ảnh không tồn tại hoặc đã gắn với nội dung khác."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 586,
+      "text": "Slug đã được sử dụng."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 607,
+      "text": "Không thể truy cập hội thoại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 637,
+      "text": "Nhận nội dung quảng bá qua kênh đã cấu hình"
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 675,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 688,
+      "text": "Cần quyền chủ doanh nghiệp."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 706,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 712,
+      "text": "Thông tin không hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 733,
+      "text": "Không thể truy cập hội thoại."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 753,
+      "text": "Đăng nhập để tiếp tục."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 759,
+      "text": "Định danh không hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 773,
+      "text": "Cần quyền chủ doanh nghiệp."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 795,
+      "text": "Mã đơn chưa hợp lệ."
+    },
+    {
+      "file": "functions/src/workspace.ts",
+      "line": 818,
+      "text": "Không có quyền xem dữ liệu nhận kho của đơn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 118,
+      "text": "Chưa tải được đơn hàng. Thử lại sau."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 155,
+      "text": "0 0 24 24"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 165,
+      "text": "m12 3 9 5-9 5-9-5 9-5Z"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 166,
+      "text": "M3 8v9l9 5 9-5V8M12 13v9M7 5l9 5"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 169,
+      "text": "M12 5v14M5 12h14"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 171,
+      "text": "M5 12h14m-6-6 6 6-6 6"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 199,
+      "text": "Đã đăng nhập."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 212,
+      "text": "Đã đăng xuất."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 214,
+      "text": "Chưa đăng xuất được. Thử lại."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 215,
+      "text": "Chưa đăng xuất được. Thử lại."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 224,
+      "text": "Đến nội dung chính"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 231,
+      "text": "Mở tài khoản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 232,
+      "text": "·"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 233,
+      "text": "Bảo mật tài khoản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 243,
+      "text": "page routeLoading"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 244,
+      "text": "Đang mở trang…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 251,
+      "text": "Đang khôi phục tài khoản…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 333,
+      "text": "Đang mở không gian vận hành…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 351,
+      "text": "Không tìm thấy trang"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 352,
+      "text": "Về trang chủ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 382,
+      "text": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 397,
+      "text": "li > span"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 479,
+      "text": "journey journeyTimeline"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 480,
+      "text": "Quy trình mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 481,
+      "text": "Minh họa tự động. Đặt con trỏ hoặc focus vào khung để tạm ngưng chuyển động."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 487,
+      "text": "Từ món hàng bạn muốn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 489,
+      "text": "đến tận tay bạn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 500,
+      "text": "Bạn gửi yêu cầu"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 501,
+      "text": "Tên sản phẩm hoặc link, số lượng, biến thể."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 505,
+      "text": "Xem và duyệt báo giá"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 506,
+      "text": "Chi phí dự kiến và điều khoản trước khi cọc."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 510,
+      "text": "Mua và kiểm hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 511,
+      "text": "Nhân viên mua hộ, nhận kho và đóng gói."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 515,
+      "text": "Thanh toán số dư, nhận hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 516,
+      "text": "Tổng cuối đã duyệt, trả đủ trước xuất gửi."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 531,
+      "text": "Cọc"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 531,
+      "text": "50%"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 534,
+      "text": "Theo báo giá bạn đã chấp nhận."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 536,
+      "text": "Số dư tính theo chi phí cuối đã duyệt."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 539,
+      "text": "Minh họa quy trình mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 550,
+      "text": "Mua hộ Mỹ · Nhật · Hàn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 553,
+      "text": "Bạn chọn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 555,
+      "text": "Chúng mình lo"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 557,
+      "text": "phần còn lại."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 560,
+      "text": "Gửi tên hoặc link món hàng bạn muốn mua tại Mỹ, Nhật, Hàn. Nhận báo giá rõ ràng trước khi quyết định."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 564,
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 567,
+      "text": "Xem cách hoạt động"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 571,
+      "text": "Mỹ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 571,
+      "text": "US"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 574,
+      "text": "Nhật Bản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 574,
+      "text": "JP"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 577,
+      "text": "Hàn Quốc"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 577,
+      "text": "KR"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 586,
+      "text": "Món hàng, không khoảng cách"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 587,
+      "text": "Bạn muốn mua từ đâu?"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 590,
+      "text": "Khám phá sản phẩm"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 595,
+      "text": "Mỹ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 595,
+      "text": "Món bạn tìm, từ thương hiệu bạn thích."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 596,
+      "text": "Nhật Bản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 596,
+      "text": "Từ đồ dùng hằng ngày đến món sưu tầm."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 597,
+      "text": "Hàn Quốc"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 597,
+      "text": "Khám phá phong cách và món đồ mới."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 622,
+      "text": "Rõ ràng trước mỗi quyết định."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 625,
+      "text": "Chưa có link? Vẫn gửi được."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 627,
+      "text": "Mô tả món hàng, mẫu mã và ngân sách. Nhân viên sẽ làm rõ trước khi báo giá."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 632,
+      "text": "Biết tiền đi đâu."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 634,
+      "text": "Giá hàng, phí mua hộ và vận chuyển được tách riêng. Khoản chưa xác định được ghi là ước tính."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 639,
+      "text": "Theo dõi một nơi."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 641,
+      "text": "Báo giá, thanh toán, tình trạng kiểm hàng và vận đơn nằm trong đơn của bạn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 670,
+      "text": "Vận chuyển"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 672,
+      "text": "Thông báo"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 674,
+      "text": "Chi tiết đơn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 675,
+      "text": "Đơn của tôi"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 679,
+      "text": "TÀI KHOẢN"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 680,
+      "text": "Không gian khách hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 685,
+      "text": "Đơn của tôi"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 691,
+      "text": "Vận chuyển"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 697,
+      "text": "Thông báo"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 701,
+      "text": "Chứng từ của tôi"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 704,
+      "text": "Hồ sơ và địa chỉ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 707,
+      "text": "Bảo mật tài khoản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 711,
+      "text": "Cần hỗ trợ?"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 717,
+      "text": "← Tất cả đơn của tôi"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 727,
+      "text": "Mọi thông tin của đơn, trong một nơi."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 728,
+      "text": "Theo dõi món hàng bạn đang chờ."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 730,
+      "text": "Các kiện hàng và vận đơn của bạn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 731,
+      "text": "Cập nhật mới từ SatsunicGo."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 736,
+      "text": "Yêu cầu mới"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 744,
+      "text": "Đang mở mục này…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 752,
+      "text": "Đăng nhập để xem đơn của bạn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 758,
+      "text": "Đăng nhập với Google"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 767,
+      "text": "Đang tải đơn của bạn…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 789,
+      "text": "Yêu cầu mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 795,
+      "text": "·"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 795,
+      "text": "sản phẩm"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 804,
+      "text": "Hiển thị tối đa 50 đơn trong tài khoản."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 814,
+      "text": "Chưa tải được đơn hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 816,
+      "text": "Chưa mở được đơn này"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 817,
+      "text": "Chưa có yêu cầu nào"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 822,
+      "text": "Kiểm tra liên kết hoặc quay lại danh sách đơn của bạn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 823,
+      "text": "Bắt đầu bằng món hàng bạn muốn mua."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 826,
+      "text": "Về danh sách đơn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 826,
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 860,
+      "text": "order orderDetail"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 866,
+      "text": "·"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 867,
+      "text": "sản phẩm"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 871,
+      "text": "Tạm giữ:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 874,
+      "text": "Thông tin đơn hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 877,
+      "text": "Tổng quan"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 878,
+      "text": "Ảnh & chứng từ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 879,
+      "text": "Lịch sử & tiền"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 905,
+      "text": "Đã nhận yêu cầu của bạn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 907,
+      "text": "Nhân viên sẽ làm rõ sản phẩm và gửi báo giá. Bạn chưa cần thanh toán ở bước này."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 914,
+      "text": "Sản phẩm"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 921,
+      "text": "×"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 926,
+      "text": "Thanh toán sản phẩm niêm yết"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 927,
+      "text": "Đặt mua theo giá niêm yết"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 929,
+      "text": "Tổng trọn gói:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 929,
+      "text": ". Thanh toán toàn bộ để SatsunicGo tiến hành mua hộ."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 933,
+      "text": "Điều khoản:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 933,
+      "text": ". Không cần báo giá và không thu thêm đợt hai."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 939,
+      "text": "Đã xác nhận thanh toán. Nhân viên sẽ tiến hành mua hộ."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 947,
+      "text": "Hủy đơn chưa thanh toán"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 955,
+      "text": "Báo giá đã chấp nhận"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 955,
+      "text": "Báo giá để bạn duyệt"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 960,
+      "text": "Giá hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 961,
+      "text": "Phí mua hộ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 962,
+      "text": "Phí/thuế nội địa nguồn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 963,
+      "text": "Cước quốc tế dự kiến"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 964,
+      "text": "Giao nội địa dự kiến"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 965,
+      "text": "Giảm phí"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 966,
+      "text": "Tổng dự kiến"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 975,
+      "text": "Điều khoản:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 975,
+      "text": "· Báo giá v"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 975,
+      "text": "· Hết hạn"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 988,
+      "text": "Chấp nhận báo giá và điều khoản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 993,
+      "text": "Cọc cần xác nhận:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 993,
+      "text": "· Đã thu ròng:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 999,
+      "text": "Cước quốc tế phân bổ từ lô gom:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1000,
+      "text": ". Tổng cuối cần được duyệt trước khi xuất gửi."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1006,
+      "text": "Tổng trọn gói"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1006,
+      "text": "Tổng cuối"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1006,
+      "text": ":"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1007,
+      "text": "· Còn thu:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1018,
+      "text": "Duyệt tổng phí cuối"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1021,
+      "text": "Đang mở thao tác của đơn…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1027,
+      "text": "Vận đơn:"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1027,
+      "text": "· Cập nhật bởi nhân viên"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1031,
+      "text": "Xác nhận nhận hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1033,
+      "text": "Chỉ xác nhận sau khi bạn đã nhận và kiểm tra đủ sản phẩm trong đơn."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1041,
+      "text": "Xác nhận đã nhận đủ hàng"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1056,
+      "text": "Đang mở thông tin của đơn…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1106,
+      "text": "Không thể kiểm tra quyền nhân viên. Tải lại trang để thử lại."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1114,
+      "text": "Đang kiểm tra quyền vận hành…"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1120,
+      "text": "SatsunicGo CRM"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1122,
+      "text": "Cần tài khoản nhân viên được cấp quyền"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1125,
+      "text": "Quyền vận hành do chủ doanh nghiệp cấp. Tài khoản khách hàng không có quyền nhân viên."
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1129,
+      "text": "Đăng nhập CRM"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1132,
+      "text": "Mở tài khoản"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1141,
+      "text": "Nhân viên"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1154,
+      "text": "Không tìm thấy trang"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1155,
+      "text": "Trang chủ"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1159,
+      "text": "page editorial"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "line": 1163,
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 7,
+      "text": "Sản phẩm"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 8,
+      "text": "Mua hộ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 9,
+      "text": "Biểu phí"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 11,
+      "text": "Bài viết"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 12,
+      "text": "Hỗ trợ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 15,
+      "text": "Hồ sơ và địa chỉ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 16,
+      "text": "Đơn của tôi"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 17,
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 19,
+      "text": "Hỗ trợ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 20,
+      "text": "Bảo mật tài khoản"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 46,
+      "text": "Tài khoản của bạn"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 51,
+      "text": "Tài khoản của bạn"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 99,
+      "text": "Tài khoản của bạn"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 99,
+      "text": "`Tài khoản của ${name}`"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 125,
+      "text": "0 0 16 16"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 130,
+      "text": "m4 6 4 4 4-4"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 143,
+      "text": "Google"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 147,
+      "text": "Chức năng tài khoản"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 152,
+      "text": "↗"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 165,
+      "text": "Đang đăng xuất…"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 165,
+      "text": "Đăng xuất"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 218,
+      "text": "(min-width: 1201px)"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 249,
+      "text": "SatsunicGo — Trang chủ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 254,
+      "text": "0 0 32 32"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 261,
+      "text": "m16 3 12 7-12 7-12-7 12-7Z"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 262,
+      "text": "M4 10v13l12 7 12-7V10M16 17v13M10 6l12 7"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 265,
+      "text": "Satsunic"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 265,
+      "text": "Go"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 270,
+      "text": "Điều hướng chính"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 280,
+      "text": "CRM"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 286,
+      "text": "Mua hộ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 286,
+      "text": "↗"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 304,
+      "text": "Đóng menu"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 304,
+      "text": "Mở menu"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 317,
+      "text": "siteFooter compactFooter"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 321,
+      "text": "Satsunic"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 321,
+      "text": "Go"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 323,
+      "text": "by HunpeoLabs"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 324,
+      "text": "©"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 324,
+      "text": "HunpeoLabs."
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 326,
+      "text": "Thông tin và hỗ trợ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 327,
+      "text": "Hỗ trợ"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 328,
+      "text": "Quyền riêng tư"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 329,
+      "text": "Điều khoản & hoàn tiền"
+    },
+    {
+      "file": "src/app/SiteChrome.tsx",
+      "line": 330,
+      "text": "Hàng hạn chế"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 55,
+      "text": "Chưa kiểm tra được giá niêm yết. Thử lại khi có kết nối."
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 56,
+      "text": "Listed prices could not be verified. Retry when connected."
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 86,
+      "text": "Chọn mua sản phẩm niêm yết"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 86,
+      "text": "Buy a listed product"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 88,
+      "text": "Sản phẩm"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 98,
+      "text": "Chọn sản phẩm"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 98,
+      "text": "Choose product"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 109,
+      "text": "Giá trọn gói"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 109,
+      "text": "All-inclusive price"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 109,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 110,
+      "text": "₫"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 114,
+      "text": "Mẫu"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 121,
+      "text": "Chọn mẫu"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 121,
+      "text": "Choose variant"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 129,
+      "text": "Số lượng"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 142,
+      "text": "Tổng thanh toán"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 142,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 144,
+      "text": "`${total!.toLocaleString(vi ? \"vi-VN\" : \"en-US\")} ₫`"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 146,
+      "text": "Chưa xác định"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 151,
+      "text": "Thanh toán toàn bộ một lần, không chờ báo giá. Sau khi tạo đơn, nhập người nhận rồi thanh toán; nhân viên mua khi tiền được xác nhận."
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 155,
+      "text": "Điều khoản"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 155,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 174,
+      "text": "Xác nhận lựa chọn và tạo đơn"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 175,
+      "text": "Confirm selection and create order"
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 180,
+      "text": "Đăng nhập để đặt mua ngay trong chat."
+    },
+    {
+      "file": "src/features/ask/CatalogPurchase.tsx",
+      "line": 181,
+      "text": "Sign in to order within this chat."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 110,
+      "text": "Chưa tải được hội thoại. Đăng nhập lại hoặc kiểm tra kết nối."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 130,
+      "text": "Chưa đọc được thao tác đang chờ. Liên hệ hỗ trợ để đối chiếu."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 154,
+      "text": "Chưa tải được hội thoại. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 165,
+      "text": "Chưa cập nhật được đơn. Thông tin đang hiển thị có thể đã cũ."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 172,
+      "text": "Đăng nhập để lưu và tiếp tục yêu cầu."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 183,
+      "text": "Đang tải hội thoại. Thử lại sau."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 199,
+      "text": "Cần thử lại thao tác đang chờ trước khi tiếp tục."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 295,
+      "text": "Câu trả lời chưa được lưu vào hội thoại. Thử lại khi có kết nối."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 346,
+      "text": "Chưa mở được yêu cầu mới. Thử lại khi có kết nối."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 373,
+      "text": "Chưa ghi nhận thao tác trước. Kiểm tra lựa chọn rồi gửi lại."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 377,
+      "text": "Chưa đối chiếu được thao tác. Thử lại; không gửi yêu cầu mới."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 484,
+      "text": "Chưa tải được thông tin nhận hàng. Thử lại khi có kết nối."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 491,
+      "text": "Lưu thông tin nhận hàng trước khi thanh toán."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 536,
+      "text": "Chưa tạo được trang thanh toán. Thử lại; đơn chưa được ghi nhận thêm tiền."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 572,
+      "text": "Kiểm tra thị trường, tên sản phẩm, số lượng và link."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 573,
+      "text": "Check the market, product names, quantities and links."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 594,
+      "text": "Yêu cầu mua hộ trong chat"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 594,
+      "text": "Buying request in chat"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 604,
+      "text": "Điền thông tin nếu cần"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 604,
+      "text": "Enter details if needed"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 609,
+      "text": "Mua từ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 609,
+      "text": "Source market"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 616,
+      "text": "Chọn thị trường"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 616,
+      "text": "Choose market"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 618,
+      "text": "US"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 619,
+      "text": "JP"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 620,
+      "text": "KR"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 628,
+      "text": "`Sản phẩm ${i + 1}`"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 630,
+      "text": "Tên sản phẩm"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 630,
+      "text": "Product name"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 640,
+      "text": "Link · nếu có"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 640,
+      "text": "Link · optional"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 649,
+      "text": "Màu / size / phiên bản"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 649,
+      "text": "Color / size / variant"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 657,
+      "text": "Số lượng"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 670,
+      "text": "Ghi chú · không bắt buộc"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 670,
+      "text": "Notes · optional"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 678,
+      "text": "Lưu bản nháp"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 678,
+      "text": "Save draft"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 686,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 687,
+      "text": "Chưa chọn phiên bản"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 687,
+      "text": "Variant unspecified"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 687,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 693,
+      "text": "Thị trường"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 693,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 698,
+      "text": "Ngân sách"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 698,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 705,
+      "text": "Kiểm tra sản phẩm trước khi gửi. Đây là yêu cầu báo giá, chưa mua hoặc thanh toán."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 721,
+      "text": "Gửi yêu cầu mua hộ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 721,
+      "text": "Send buying request"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 733,
+      "text": "Chưa đăng nhập được. Thử lại."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 734,
+      "text": "Sign-in failed. Try again."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 740,
+      "text": "Đăng nhập để lưu và gửi yêu cầu"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 740,
+      "text": "Sign in to save and send"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 746,
+      "text": "Đơn mua hộ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 746,
+      "text": "Buying order"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 751,
+      "text": "Request sent"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 752,
+      "text": "Review quote"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 756,
+      "text": "Awaiting full payment"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 757,
+      "text": "Paid · awaiting purchase"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 758,
+      "text": "Awaiting deposit"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 761,
+      "text": "Received at source warehouse"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 765,
+      "text": "Awaiting remaining payment"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 766,
+      "text": "Ready to ship"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 767,
+      "text": "In transit"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 777,
+      "text": "Đơn đang tạm giữ. Nhân viên sẽ xử lý bước tiếp theo."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 778,
+      "text": "Order on hold. Staff will handle the next step."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 787,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 787,
+      "text": "Số lượng"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 811,
+      "text": "Thông tin nhận hàng"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 811,
+      "text": "Delivery details"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 814,
+      "text": "Dùng địa chỉ đã lưu"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 814,
+      "text": "Use saved address"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 830,
+      "text": "Chọn địa chỉ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 830,
+      "text": "Choose address"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 834,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 841,
+      "text": "Người nhận"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 854,
+      "text": "Số điện thoại"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 868,
+      "text": "Địa chỉ nhận"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 868,
+      "text": "Delivery address"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 883,
+      "text": "Thông tin này dùng để giao hàng, không gửi cho AI. Kiểm tra trước khi thanh toán."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 884,
+      "text": "Thông tin này dùng để giao hàng, không gửi cho AI. Kiểm tra trước khi chốt báo giá."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 886,
+      "text": "These details are used for delivery, not sent to AI. Review before payment."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 887,
+      "text": "These details are used for delivery, not sent to AI. Review before accepting the quote."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 891,
+      "text": "Lưu thông tin nhận hàng"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 891,
+      "text": "Save delivery details"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 898,
+      "text": "Giao đến"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 898,
+      "text": "Delivery address"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 898,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 901,
+      "text": "Thông tin nhận hàng đã lưu"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 901,
+      "text": "Saved delivery details"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 901,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 902,
+      "text": "·"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 915,
+      "text": "Kiểm tra / sửa địa chỉ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 915,
+      "text": "Review / edit address"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 938,
+      "text": "Chấp nhận báo giá và mức cọc"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 938,
+      "text": "Accept quote and deposit"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 946,
+      "text": "Báo giá đã hết hạn. Cần báo giá mới từ nhân viên."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 947,
+      "text": "Quote expired. Staff must provide a new quote."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 964,
+      "text": "Duyệt tổng phí cuối"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 964,
+      "text": "Approve final total"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 970,
+      "text": "Còn cần thanh toán"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 970,
+      "text": "Amount due"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 970,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 985,
+      "text": "Mở bước thanh toán"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 985,
+      "text": "Prepare payment"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 997,
+      "text": "QR thanh toán cho khoản đang cần thanh toán"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 998,
+      "text": "QR for the current amount due"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1005,
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1007,
+      "text": "Kiểm tra và thanh toán tại payOS"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1008,
+      "text": "Review and pay at payOS"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1013,
+      "text": "Quay lại chat để theo dõi. Tiền chỉ được xác nhận sau khi hệ thống đối chiếu."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1014,
+      "text": "Return to chat to track progress. Payment is confirmed only after verification."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1024,
+      "text": "QR đã hết hạn. Gửi yêu cầu hỗ trợ để nhân viên đối chiếu trước khi thanh toán lại."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1025,
+      "text": "QR expired. Ask staff to reconcile before paying again."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1032,
+      "text": "Đang chờ nhân viên hoặc đơn vị vận chuyển xử lý. Tiến độ sẽ cập nhật tại đây."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1033,
+      "text": "Waiting for staff or the carrier. Progress will update here."
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1050,
+      "text": "Xác nhận đã nhận đủ hàng"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1050,
+      "text": "Confirm all items received"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1055,
+      "text": "Mã vận chuyển"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1055,
+      "text": "Tracking reference"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1055,
+      "text": ":"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1063,
+      "text": "Đối chiếu thao tác đang chờ"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1063,
+      "text": "Recover pending action"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1076,
+      "text": "Bắt đầu yêu cầu khác"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1076,
+      "text": "Start another request"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1080,
+      "text": "Đang xử lý…"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "line": 1086,
+      "text": "This step could not finish. Check your connection and retry."
+    },
+    {
+      "file": "src/features/content/notification-target.ts",
+      "line": 9,
+      "text": "Mở cuộc trao đổi của đơn"
+    },
+    {
+      "file": "src/features/content/notification-target.ts",
+      "line": 12,
+      "text": "Xem phản hồi"
+    },
+    {
+      "file": "src/features/content/notification-target.ts",
+      "line": 18,
+      "text": "Xem membership"
+    },
+    {
+      "file": "src/features/content/notification-target.ts",
+      "line": 20,
+      "text": "Xem đơn"
+    },
+    {
+      "file": "src/features/content/notification-target.ts",
+      "line": 21,
+      "text": "Xem tài khoản"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 4,
+      "text": "Gửi yêu cầu"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 5,
+      "text": "Gửi báo giá"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 6,
+      "text": "Duyệt báo giá"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 7,
+      "text": "Xác nhận tiền"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 8,
+      "text": "Hoàn tiền"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 9,
+      "text": "Ghi nhận mua hàng"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 10,
+      "text": "Lưu hồ sơ nội bộ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 11,
+      "text": "Cập nhật hồ sơ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 12,
+      "text": "Phản hồi hỗ trợ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 13,
+      "text": "Đóng kiện"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 14,
+      "text": "Xuất gửi"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 15,
+      "text": "Cập nhật vận chuyển"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 16,
+      "text": "Lưu nội dung"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 17,
+      "text": "Cập nhật quyền"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 18,
+      "text": "Xuất bản theo lịch"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 19,
+      "text": "Email chứng từ đơn hàng"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 20,
+      "text": "Tạo nháp chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 21,
+      "text": "Cập nhật nháp chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 22,
+      "text": "Xuất chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 23,
+      "text": "Hủy chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 24,
+      "text": "Tạo link chia sẻ chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 25,
+      "text": "Thu hồi link chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 26,
+      "text": "Xếp lịch email chứng từ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 27,
+      "text": "Cập nhật người bán"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 30,
+      "text": "Chờ xử lý"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 31,
+      "text": "Đã tạo thông báo"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 32,
+      "text": "Đã gửi email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 33,
+      "text": "Đang gửi email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 34,
+      "text": "Chưa rõ kết quả gửi · cần đối soát"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 35,
+      "text": "Gửi thất bại"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 36,
+      "text": "Email chưa được cấu hình"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 37,
+      "text": "Chưa đủ điều kiện nhận email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 38,
+      "text": "Chứng từ không còn đủ điều kiện gửi"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 39,
+      "text": "Chưa xếp email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 73,
+      "text": "Chưa tải được nhật ký. Kiểm tra kết nối và tải lại."
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 105,
+      "text": "Nhật ký & thông báo"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 107,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 111,
+      "text": "Xem dữ liệu"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 121,
+      "text": "Nhật ký thao tác"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 122,
+      "text": "Thông báo chờ / đã xử lý"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 126,
+      "text": "Nhật ký thao tác chỉ đọc. Email chưa rõ kết quả cần quản lý vận hành đối soát trước khi xếp lịch lại."
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 129,
+      "text": "Đang tải nhật ký…"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 139,
+      "text": "Thời gian"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 140,
+      "text": "Thao tác"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 141,
+      "text": "Đối tượng"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 141,
+      "text": "Kết quả"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 148,
+      "text": "Cập nhật nghiệp vụ"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 154,
+      "text": "Chưa xác định"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 157,
+      "text": "Chưa xác định email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 163,
+      "text": "Xếp lịch thử lại"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 168,
+      "text": "Ghi nhận đối soát"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 170,
+      "text": "Đối chiếu với nhà cung cấp trước. Không xác nhận theo suy đoán; gửi lại khi chưa rõ có thể gửi trùng."
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 185,
+      "text": "Kết quả"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 187,
+      "text": "Chọn kết quả"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 189,
+      "text": "Nhà cung cấp xác nhận đã nhận email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 192,
+      "text": "Nhà cung cấp xác nhận chưa nhận email"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 197,
+      "text": "Bằng chứng đối soát"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 206,
+      "text": "Lưu đối soát, chưa gửi lại"
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 220,
+      "text": "Chưa có bản ghi trong trang này."
+    },
+    {
+      "file": "src/features/crm/Activity.tsx",
+      "line": 224,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 77,
+      "text": "Chưa tải được hồ sơ. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 92,
+      "text": "Chưa tải được người phụ trách. Thử tải lại danh sách nhân viên."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 133,
+      "text": "Đã lưu hồ sơ nội bộ."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 139,
+      "text": "Đã lưu, nhưng chưa tải được phiên bản mới. Tải lại hồ sơ trước khi sửa tiếp."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 145,
+      "text": "Chưa xác nhận được kết quả lưu. Thử lưu lại với cùng nội dung; nếu hồ sơ đã đổi, tải lại trước khi sửa."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 153,
+      "text": "← Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 156,
+      "text": "Hồ sơ khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 157,
+      "text": "Hồ sơ khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 161,
+      "text": "Tải lại hồ sơ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 164,
+      "text": "Đang xử lý hồ sơ…"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 177,
+      "text": "crmProfileSummary panel"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 179,
+      "text": "Nội dung quảng bá"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 182,
+      "text": "Đã đồng ý nhận"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 183,
+      "text": "Chưa đồng ý nhận"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 187,
+      "text": "Thành viên"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 191,
+      "text": "Đang có hiệu lực"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 192,
+      "text": "Đã hết hạn"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 193,
+      "text": "Đã hủy"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 194,
+      "text": "Chưa xác định hiệu lực"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 195,
+      "text": "Chưa có gói trả phí"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 199,
+      "text": "Đến"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 205,
+      "text": "Lịch chăm sóc"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 209,
+      "text": "Chưa có lịch hẹn"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 216,
+      "text": "form panel"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 219,
+      "text": "Chăm sóc khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 221,
+      "text": "Ghi chú này chỉ dành cho nhân viên, không gửi cho khách."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 224,
+      "text": "Phân loại, cách nhau bằng dấu phẩy"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 227,
+      "text": ","
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 232,
+      "text": "Ghi chú nội bộ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 241,
+      "text": "Người phụ trách"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 247,
+      "text": "Chưa phân công"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 251,
+      "text": "· cần kiểm tra quyền"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 265,
+      "text": "Xem thêm nhân viên"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 265,
+      "text": "Tải lại nhân viên"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 268,
+      "text": "Lịch hẹn theo giờ thiết bị"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 276,
+      "text": "Xóa lịch hẹn để đánh dấu không còn việc cần theo dõi."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 279,
+      "text": "Đang lưu…"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 279,
+      "text": "Lưu hồ sơ nội bộ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 284,
+      "text": "Đơn mua hộ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 290,
+      "text": "· Đang tạm giữ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 294,
+      "text": "Chưa chốt tổng cuối"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 295,
+      "text": "`Còn thu ${o.remaining.toLocaleString(\"vi-VN\")} ₫`"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 299,
+      "text": "Chưa có đơn trong trang này."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 305,
+      "text": "Đơn cũ hơn"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 310,
+      "text": "Hội thoại hỗ trợ"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 317,
+      "text": "Đã giải quyết"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 317,
+      "text": "Đang mở"
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 322,
+      "text": "Chưa có hội thoại trong trang này."
+    },
+    {
+      "file": "src/features/crm/Customer.tsx",
+      "line": 331,
+      "text": "Hội thoại cũ hơn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 48,
+      "text": "Chưa tải được danh sách. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 74,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 75,
+      "text": "Lịch chăm sóc"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 75,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 78,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 83,
+      "text": "Theo dõi lịch hẹn đã lưu trong hồ sơ. Mốc sắp đến hạn là 7 ngày tới."
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 84,
+      "text": "Tìm theo phần đầu tên, có hoặc không dấu; hoặc tìm chính xác bằng mã khách hàng."
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 90,
+      "text": "Lịch hẹn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 95,
+      "text": "Đã đến hạn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 96,
+      "text": "7 ngày tới"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 97,
+      "text": "Tất cả lịch hẹn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 106,
+      "text": "Việc của tôi"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 112,
+      "text": "Tìm theo"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 117,
+      "text": "Tên khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 118,
+      "text": "Mã khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 122,
+      "text": "Từ khóa"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 132,
+      "text": "Đang tải…"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 132,
+      "text": "Xem danh sách"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 142,
+      "text": "tableWrap crmTable"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 146,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 147,
+      "text": "Phân loại"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 148,
+      "text": "Người phụ trách"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 149,
+      "text": "Lịch hẹn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 161,
+      "text": "Chưa cập nhật tên"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 172,
+      "text": "Chưa phân loại"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 174,
+      "text": "Chưa phân công"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 181,
+      "text": "Chưa có lịch hẹn"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 187,
+      "text": "`Mở hồ sơ ${row.displayName || row.id}`"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 189,
+      "text": "Mở hồ sơ →"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 201,
+      "text": "Chưa có lịch hẹn phù hợp"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 202,
+      "text": "Chưa có khách hàng phù hợp"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 204,
+      "text": "Thử thay đổi bộ lọc hoặc tải lại danh sách."
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 208,
+      "text": "Tối đa 30 khách mỗi trang · giờ hiển thị trên thiết bị"
+    },
+    {
+      "file": "src/features/crm/Customers.tsx",
+      "line": 211,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 16,
+      "text": "Yêu cầu mới"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 17,
+      "text": "Báo giá chờ khách duyệt"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 18,
+      "text": "Đủ tiền theo loại đơn, cần mua"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 19,
+      "text": "Đơn đang tạm giữ"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 20,
+      "text": "Đơn còn tiền cần thanh toán"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 21,
+      "text": "Sẵn sàng xuất gửi"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 22,
+      "text": "Hội thoại đang mở"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 23,
+      "text": "Chuyển khoản chờ xác minh"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 24,
+      "text": "Ngoại lệ tài chính"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 54,
+      "text": "Chưa tải được số liệu. Chọn khoảng tối đa 31 ngày và kiểm tra quyền vận hành."
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 62,
+      "text": "Tổng quan vận hành"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 64,
+      "text": "Lịch chăm sóc →"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 65,
+      "text": "Khách hàng →"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 68,
+      "text": "Đếm trạng thái hiện tại của bản ghi tạo trong khoảng đã chọn (UTC), tối đa 100 bản ghi mỗi loại. Không phải tổng toàn hệ thống. Chưa có ETA được xác nhận để tính đơn giao trễ."
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 74,
+      "text": "Từ ngày (UTC)"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 85,
+      "text": "Đến ngày (UTC)"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 93,
+      "text": "Đang tải…"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 93,
+      "text": "Xem số liệu"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 98,
+      "text": "Đọc lúc"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 98,
+      "text": "· snapshot, chưa cập nhật trực tiếp"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 103,
+      "text": "Một số hàng đợi đạt giới hạn 100; cần thu hẹp khoảng để kiểm tra đầy đủ."
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 74,
+      "text": "Chứng từ"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 75,
+      "text": "Tài chính"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 80,
+      "text": "Tổng quan"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 81,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 86,
+      "text": "Yêu cầu & báo giá"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 87,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 92,
+      "text": "Mua hàng"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 93,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 98,
+      "text": "Nhận kho & đóng gói"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 99,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 104,
+      "text": "Nhận & kiểm tra hàng trả"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 105,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 110,
+      "text": "Kiện & vận chuyển"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 111,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 116,
+      "text": "Thay đổi cần duyệt"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 117,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 122,
+      "text": "Yêu cầu hoàn tiền"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 123,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 128,
+      "text": "Thanh toán & đối soát"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 129,
+      "text": "Vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 132,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 135,
+      "text": "Lịch chăm sóc"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 136,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 141,
+      "text": "Hội thoại hỗ trợ"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 142,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 147,
+      "text": "Sản phẩm & bài viết"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 148,
+      "text": "Nội dung"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 153,
+      "text": "Chiến dịch"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 154,
+      "text": "Nội dung"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 159,
+      "text": "Gói thành viên"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 160,
+      "text": "Quản trị"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 165,
+      "text": "Nhân viên & quyền"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 166,
+      "text": "Quản trị"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 171,
+      "text": "Nhật ký & thông báo"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 172,
+      "text": "Quản trị"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 175,
+      "text": "Cấu hình"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 175,
+      "text": "Quản trị"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 205,
+      "text": "Không gian vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 273,
+      "text": "Satsunic"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 273,
+      "text": "Go"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 274,
+      "text": "CRM"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 278,
+      "text": "Bảo mật tài khoản"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 279,
+      "text": "Xem website ↗"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 287,
+      "text": "Mở menu vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 291,
+      "text": "☰"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 294,
+      "text": "CRM"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 294,
+      "text": "/"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 295,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 300,
+      "text": "Đăng xuất"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 305,
+      "text": "Đang mở công việc…"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 313,
+      "text": "Chưa có công việc trong phạm vi được cấp."
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 334,
+      "text": "Không thể mở công việc này"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 336,
+      "text": "Kiểm tra quyền hiện hành hoặc chọn công việc trong menu."
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 338,
+      "text": "Về không gian vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 353,
+      "text": "Menu vận hành"
+    },
+    {
+      "file": "src/features/crm/Workspace.tsx",
+      "line": 355,
+      "text": "Đóng menu"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 34,
+      "text": "`${n.toLocaleString(\"vi-VN\")} ₫`"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 38,
+      "text": "Chứng từ đơn hàng nội bộ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 40,
+      "text": "Không phải hóa đơn điện tử thuế."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 42,
+      "text": "Số tiền được ghi nhận khi lập hoặc cập nhật bản nháp."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 43,
+      "text": "Số tiền được ghi nhận tại thời điểm xuất."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 53,
+      "text": "Số chứng từ:"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 53,
+      "text": "Bản nháp"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 56,
+      "text": "`Xuất: ${new Date(d.issuedAt).toLocaleString(\"vi-VN\")}`"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 57,
+      "text": "Chưa xuất"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 59,
+      "text": "Khách hàng:"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 62,
+      "text": "Đã hủy ·"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 69,
+      "text": "Sản phẩm trong đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 70,
+      "text": "Mẫu"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 71,
+      "text": "Số lượng theo đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 86,
+      "text": "Tổng chi phí đã duyệt"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 88,
+      "text": "Tiền đã xác nhận sau hoàn tiền"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 92,
+      "text": "Còn phải thanh toán trong bản nháp"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 93,
+      "text": "Còn phải thanh toán tại thời điểm xuất"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 100,
+      "text": "Tiền trả thừa trong bản nháp"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 101,
+      "text": "Tiền trả thừa tại thời điểm xuất"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 109,
+      "text": "Đơn niêm yết thanh toán toàn bộ một lần; chứng từ không tạo khoản thu thứ hai."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 110,
+      "text": "Đơn mua hộ tùy chỉnh thanh toán hai đợt; xem đơn để kiểm tra số dư hiện tại."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 113,
+      "text": "Điều khoản:"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 113,
+      "text": ". Chứng từ không xác nhận ngân hàng đã chuyển tiền ngoài các khoản hệ thống ghi nhận."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 121,
+      "text": "In / Lưu PDF"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 158,
+      "text": "Chưa tải được chứng từ. Đăng nhập và thử lại."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 208,
+      "text": "Kiểm tra lại thao tác đang chờ trước khi tạo thao tác khác."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 231,
+      "text": "Thao tác chia sẻ đã hoàn tất nhưng chưa lấy được link. Thu hồi link rồi tạo link mới."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 237,
+      "text": "Đã xếp lịch gửi email (kiểm tra mỗi 30 phút); chưa xác nhận khách đã nhận."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 238,
+      "text": "Đã lưu thao tác chứng từ."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 255,
+      "text": "Thao tác đã lưu nhưng chưa tải được chứng từ. Tải lại rồi mở chứng từ."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 279,
+      "text": "Chưa rõ kết quả. Kiểm tra lại cùng thao tác."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 302,
+      "text": "Không thể mở chứng từ này. Thử mở lại."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 336,
+      "text": "Chứng từ đơn hàng"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 338,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 342,
+      "text": "Chứng từ nội bộ tách khỏi báo giá và sổ tiền. Khách xem bản đã xuất; không sửa bản đã xuất."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 353,
+      "text": "Có thao tác chưa rõ kết quả."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 355,
+      "text": "Kiểm tra lại cùng thao tác"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 359,
+      "text": "Đang tải chứng từ…"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 362,
+      "text": "Thông tin người bán"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 369,
+      "text": "Tên doanh nghiệp/người bán"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 379,
+      "text": "Địa chỉ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 389,
+      "text": "Thông tin liên hệ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 398,
+      "text": "Lưu thông tin người bán"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 403,
+      "text": "form noPrint"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 405,
+      "text": "Mã đơn đã chốt tổng cuối"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 415,
+      "text": "Tạo bản nháp từ đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 421,
+      "text": "Bản nháp"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 421,
+      "text": "·"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 423,
+      "text": "Đã xuất"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 425,
+      "text": "Đã hủy"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 426,
+      "text": "Chưa xuất"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 427,
+      "text": "·"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 430,
+      "text": "Chưa có chứng từ trong trang này."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 433,
+      "text": "Trang tiếp"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 437,
+      "text": "Đang mở chứng từ…"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 446,
+      "text": "Mở chứng từ được thay thế"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 458,
+      "text": "Mở đơn và số dư hiện tại"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 462,
+      "text": "statementActions noPrint"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 474,
+      "text": "Tạo bản nháp thay thế cho cùng đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 483,
+      "text": "Cập nhật bản nháp từ đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 489,
+      "text": "Xuất và đóng băng chứng từ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 499,
+      "text": "Xếp lịch gửi email cho chủ đơn"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 502,
+      "text": "Chia sẻ link trong 24 giờ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 504,
+      "text": "Ai có link xem được người bán, sản phẩm và số tiền; không hiển thị tên khách hay địa chỉ nhận hàng. Tạo link mới sẽ thu hồi link trước."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 512,
+      "text": "Tạo link để chia sẻ thủ công"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 517,
+      "text": "Link chia sẻ chứng từ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 526,
+      "text": "Đã sao chép link. Mở ứng dụng để gửi; hệ thống chưa gửi tin."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 530,
+      "text": "Chưa sao chép được. Chọn và sao chép link."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 535,
+      "text": "Sao chép link"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 544,
+      "text": "Thu hồi toàn bộ link chia sẻ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 557,
+      "text": "Lý do hủy chứng từ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 566,
+      "text": "Hủy chứng từ giữ lịch sử và thu hồi link; không hủy đơn hay hoàn tiền."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 569,
+      "text": "Hủy chứng từ này"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 618,
+      "text": "Liên kết đã hết hạn, bị thu hồi hoặc chưa thể xác minh. Nhờ người gửi tạo link mới."
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 630,
+      "text": "Chứng từ được chia sẻ"
+    },
+    {
+      "file": "src/features/invoices/Documents.tsx",
+      "line": 636,
+      "text": "Đang kiểm tra liên kết…"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 19,
+      "text": "Đã duyệt trả"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 20,
+      "text": "Đang nhận trả"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 21,
+      "text": "Đang kiểm tra"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 22,
+      "text": "Đã hoàn tất kiểm tra"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 45,
+      "text": "Chưa tải được hàng trả. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 60,
+      "text": "Nhận & kiểm tra hàng trả"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 62,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 66,
+      "text": "Chỉ nhận hàng theo đề xuất khách đã duyệt. Hoàn tất kiểm tra không tự hoàn tiền hoặc gỡ giữ đơn; tài chính cần đối soát riêng."
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 69,
+      "text": "Đang tải hàng trả…"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 72,
+      "text": "Chưa có hàng trả trong trang này."
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 86,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 136,
+      "text": "Chưa xác nhận được. Tải lại hồ sơ để kiểm tra số lượng và phiên bản trước khi thử lại."
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 143,
+      "text": "panel order"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 146,
+      "text": "Đơn"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 149,
+      "text": "Cần kiểm tra trạng thái"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 154,
+      "text": "Hàng"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 155,
+      "text": "Được trả"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 156,
+      "text": "Đã nhận"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 157,
+      "text": "Đạt"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 158,
+      "text": "Hỏng"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 177,
+      "text": "Thao tác"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 179,
+      "text": "Ghi nhận hàng đã nhận"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 180,
+      "text": "Ghi kết quả kiểm tra"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 182,
+      "text": "Hoàn tất kiểm tra toàn bộ"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 187,
+      "text": "Dòng hàng"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 197,
+      "text": "Số lượng"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 208,
+      "text": "Kết quả khi kiểm tra"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 210,
+      "text": "Hàng đạt"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 211,
+      "text": "Hàng hỏng"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 215,
+      "text": "Bằng chứng nội bộ"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 219,
+      "text": "Đang lưu…"
+    },
+    {
+      "file": "src/features/operations/Returns.tsx",
+      "line": 219,
+      "text": "Lưu xử lý hàng trả"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 75,
+      "text": "Mua hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 77,
+      "text": "Nhận kho & đóng gói"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 78,
+      "text": "Yêu cầu & báo giá"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 81,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 86,
+      "text": "Hàng đợi"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 93,
+      "text": "Tất cả đơn"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 94,
+      "text": "Yêu cầu mới"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 95,
+      "text": "Chờ duyệt báo giá"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 96,
+      "text": "Chờ thanh toán / cần mua"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 97,
+      "text": "Nhận kho & đóng gói"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 98,
+      "text": "Đã đóng gói"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 99,
+      "text": "Sẵn sàng xuất gửi"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 100,
+      "text": "Đang tạm giữ"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 106,
+      "text": "← Tất cả đơn"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 108,
+      "text": "Chứng từ của đơn"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 112,
+      "text": "Đang tải hàng đợi…"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 123,
+      "text": "Sản phẩm"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 124,
+      "text": "Thị trường"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 125,
+      "text": "Trạng thái"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 126,
+      "text": "Đã thu ròng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 145,
+      "text": "₫"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 153,
+      "text": "Chưa có đơn trong phạm vi được phân công."
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 157,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 165,
+      "text": "· phiên bản"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 171,
+      "text": "`${i.name} · ${i.variant || \"Cần làm rõ biến thể\"} · ${i.quantity}`"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 171,
+      "text": "Cần làm rõ biến thể"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 176,
+      "text": "Cửa hàng mong muốn:"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 180,
+      "text": "Ngân sách khách dự kiến:"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 181,
+      "text": "₫"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 186,
+      "text": "Ngày khách mong muốn:"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 187,
+      "text": "· chưa phải cam kết giao"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 193,
+      "text": "Sản phẩm niêm yết · tổng trọn gói:"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 194,
+      "text": "₫ · thanh toán toàn bộ trước khi mua hộ."
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 200,
+      "text": "Tổng dự kiến:"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 201,
+      "text": "₫"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 279,
+      "text": "Gửi báo giá"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 280,
+      "text": "Nhận việc mua hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 281,
+      "text": "Ghi nhận đã mua"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 282,
+      "text": "Nhận và kiểm hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 283,
+      "text": "Xác nhận đóng gói"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 284,
+      "text": "Gửi tổng phí cuối"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 285,
+      "text": "Xác minh chuyển khoản"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 286,
+      "text": "Xác nhận hoàn tiền"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 287,
+      "text": "Bàn giao xuất gửi"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 288,
+      "text": "Cập nhật vận đơn"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 289,
+      "text": "Cập nhật tạm giữ"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 404,
+      "text": "Thao tác"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 416,
+      "text": "Sản phẩm, biến thể đã xác minh"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 425,
+      "text": "Giá hàng quy đổi (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 426,
+      "text": "Phí mua hộ (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 427,
+      "text": "Phí/thuế nội địa nguồn (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 428,
+      "text": "Cước quốc tế dự kiến (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 429,
+      "text": "Giao nội địa dự kiến (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 430,
+      "text": "Giảm phí (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 431,
+      "text": "Giá gốc · đơn vị tiền tệ nhỏ nhất"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 432,
+      "text": "Tỷ giá · tử số"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 433,
+      "text": "Tỷ giá · mẫu số"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 441,
+      "text": "Version điều khoản"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 445,
+      "text": "Hạn báo giá"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 454,
+      "text": "·"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 454,
+      "text": "· số lượng xử lý lần này"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 468,
+      "text": "Số lượng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 481,
+      "text": "Mã đơn cửa hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 485,
+      "text": "Giá mua thực tế · đơn vị tiền nguồn nhỏ nhất"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 498,
+      "text": "Tham chiếu bằng chứng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 505,
+      "text": "Cân nặng đã xác nhận (gram)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 515,
+      "text": "Dài"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 516,
+      "text": "Rộng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 520,
+      "text": "(cm)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 532,
+      "text": "Đã kiểm tra đủ hàng và đóng gói"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 541,
+      "text": "Vị trí kệ · không bắt buộc"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 545,
+      "text": "Tình trạng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 547,
+      "text": "Đạt kiểm tra"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 548,
+      "text": "Hỏng · tạm giữ để xử lý"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 555,
+      "text": "Lý do tổng phí cuối"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 561,
+      "text": "Tổng cuối đã bao gồm phân bổ cước lô gom (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 568,
+      "text": "Chỉ xác nhận sau khi kiểm tra giao dịch ngân hàng thực tế. Ảnh khách gửi chưa chứng minh tiền đã về."
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 572,
+      "text": "Số tiền (VND)"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 576,
+      "text": "Mã giao dịch ngân hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 580,
+      "text": "Tham chiếu bằng chứng đối soát"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 584,
+      "text": "Lý do"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 592,
+      "text": "Mã vận đơn"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 597,
+      "text": "Đã giao đủ hàng"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 604,
+      "text": "Lý do tạm giữ · để trống khi bỏ giữ"
+    },
+    {
+      "file": "src/features/operations/Workbench.tsx",
+      "line": 609,
+      "text": "Đang lưu…"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 16,
+      "text": "Đặt mua sản phẩm niêm yết"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 17,
+      "text": "Gửi yêu cầu"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 18,
+      "text": "Gửi báo giá"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 19,
+      "text": "Chấp nhận báo giá"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 20,
+      "text": "Xác nhận tiền vào"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 21,
+      "text": "Ghi nhận hoàn tiền"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 22,
+      "text": "Nhận việc mua hàng"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 23,
+      "text": "Ghi nhận đã mua"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 24,
+      "text": "Kiểm hàng tại kho"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 25,
+      "text": "Hoàn tất đóng gói"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 26,
+      "text": "Chốt chi phí cuối"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 27,
+      "text": "Duyệt chi phí cuối"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 28,
+      "text": "Bàn giao xuất gửi"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 29,
+      "text": "Cập nhật vận chuyển"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 30,
+      "text": "Cập nhật tạm giữ"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 31,
+      "text": "Hủy yêu cầu"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 32,
+      "text": "Gửi thông báo chuyển khoản"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 57,
+      "text": "Chưa tải được lịch sử đơn."
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 64,
+      "text": "name,url,quantity,variant"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 98,
+      "text": "Chưa tạo được link payOS. Kênh này cần được cấu hình và xác minh; đơn chưa được ghi nhận thêm tiền."
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 123,
+      "text": "Đặt lại sản phẩm"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 124,
+      "text": "Đặt lại trong yêu cầu mới"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 126,
+      "text": "Xuất dòng hàng CSV"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 136,
+      "text": "Lịch sử và bảng đối chiếu tiền"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 138,
+      "text": "Bảng đối chiếu nội bộ, không phải hóa đơn thuế. Chỉ các khoản đã xác nhận mới xuất hiện ở đây."
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 141,
+      "text": "Đang tải lịch sử…"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 145,
+      "text": "Hoàn tiền"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 147,
+      "text": "Tiền vào bị đảo"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 148,
+      "text": "Tiền đã xác nhận"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 149,
+      "text": ":"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 149,
+      "text": "₫ · mã khoản"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 149,
+      "text": "·"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 155,
+      "text": "Cập nhật đơn"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 155,
+      "text": "·"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 160,
+      "text": "Chưa có khoản tiền được xác nhận."
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 166,
+      "text": "In bảng đối chiếu"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 169,
+      "text": "Chứng từ đơn hàng"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 173,
+      "text": "Thử tải lại"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 183,
+      "text": "Tạo link thanh toán payOS"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 188,
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 189,
+      "text": "Mở trang payOS để kiểm tra và thanh toán"
+    },
+    {
+      "file": "src/features/orders/OrderTools.tsx",
+      "line": 191,
+      "text": "· Đóng trang hoặc quay lại không xác nhận tiền đã thanh toán."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 33,
+      "text": "Chưa tải được yêu cầu hoàn tiền. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 71,
+      "text": "Chưa tạo được yêu cầu. Kiểm tra đơn, phần tiền chưa dành để hoàn và xác thực hai lớp."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 80,
+      "text": "Yêu cầu & xác nhận hoàn tiền"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 82,
+      "text": "Tải lại"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 86,
+      "text": "Yêu cầu chỉ dành trước số tiền có thể hoàn. Chỉ xác nhận sau khi đã đối chiếu giao dịch tiền ra thực tế; không tự chuyển tiền."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 90,
+      "text": "Tạo yêu cầu hoàn tiền"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 93,
+      "text": "Mã đơn"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 97,
+      "text": "Số tiền (₫)"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 107,
+      "text": "Lý do"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 110,
+      "text": "Tạo yêu cầu, chưa xác nhận tiền ra"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 113,
+      "text": "Đang tải / lưu…"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 119,
+      "text": "Chưa có yêu cầu trong trang này."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 123,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 187,
+      "text": "Chưa xác nhận được. Kiểm tra giao dịch thực tế và tải lại hồ sơ; giữ nguyên thao tác để thử lại an toàn."
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 194,
+      "text": "panel order"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 197,
+      "text": "Đơn"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 201,
+      "text": "₫ ·"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 203,
+      "text": "Chờ hoàn · tiền chưa được xác nhận ra"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 205,
+      "text": "Đã xác nhận tiền ra"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 206,
+      "text": "Đã hủy yêu cầu"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 212,
+      "text": "Thao tác"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 214,
+      "text": "Xác nhận giao dịch tiền ra"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 216,
+      "text": "Hủy yêu cầu, giải phóng tiền đã dành"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 221,
+      "text": "Mã giao dịch ngân hàng · chỉ khi xác nhận"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 225,
+      "text": "Bằng chứng đối soát / lý do hủy"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 229,
+      "text": "Đang xử lý…"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 229,
+      "text": "Lưu quyết định"
+    },
+    {
+      "file": "src/features/payments/Refunds.tsx",
+      "line": 239,
+      "text": "Tạo thao tác mới sau khi kiểm tra"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 33,
+      "text": "Chưa tải được phản hồi."
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 73,
+      "text": "Chưa gửi được. Tải lại hội thoại để kiểm tra phiên bản rồi thử lại."
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 83,
+      "text": "Khách hàng"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 83,
+      "text": "Nhân viên hỗ trợ"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 90,
+      "text": "Phản hồi"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 94,
+      "text": "Đánh dấu đã giải quyết"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 96,
+      "text": "Đang gửi…"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 96,
+      "text": "Gửi phản hồi"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 141,
+      "text": "Chưa tải được hàng đợi hỗ trợ."
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 154,
+      "text": "Hội thoại hỗ trợ"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 155,
+      "text": "← Tất cả hội thoại"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 156,
+      "text": "Đang tải hội thoại…"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 157,
+      "text": "Tải lại hội thoại"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 161,
+      "text": "·"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 162,
+      "text": "Đã giải quyết"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 162,
+      "text": "Đang mở"
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 169,
+      "text": "Chưa có hội thoại trong trang hiện tại."
+    },
+    {
+      "file": "src/features/support/Thread.tsx",
+      "line": 173,
+      "text": "Trang tiếp theo"
+    },
+    {
+      "file": "src/features/profile/profile-state.ts",
+      "line": 53,
+      "text": "Tài khoản đang bị khóa. Bạn chưa thể xem hoặc cập nhật hồ sơ và địa chỉ."
+    },
+    {
+      "file": "src/features/profile/profile-state.ts",
+      "line": 78,
+      "text": "Chưa tải được hồ sơ. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/profile/profile-state.ts",
+      "line": 85,
+      "text": "Chưa tải được địa chỉ. Kiểm tra kết nối và thử lại."
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 133,
+      "text": "Đã lưu thông tin."
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 145,
+      "text": "Yêu cầu xuất dữ liệu cá nhân"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 147,
+      "text": "·"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 149,
+      "text": "Yêu cầu xóa dữ liệu cá nhân"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 152,
+      "text": "Hồ sơ và địa chỉ"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 154,
+      "text": "Đăng nhập để quản lý thông tin của bạn."
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 158,
+      "text": "form panel"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 161,
+      "text": "Hồ sơ"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 166,
+      "text": "Tên hiển thị"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 178,
+      "text": "Tên hộ kinh doanh · không bắt buộc"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 201,
+      "text": "Nhận nội dung quảng bá qua kênh đã cấu hình"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 205,
+      "text": "Lưu hồ sơ"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 212,
+      "text": "form panel"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 215,
+      "text": "Địa chỉ nhận hàng mới"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 225,
+      "text": "Người nhận"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 234,
+      "text": "Số điện thoại"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 244,
+      "text": "Địa chỉ"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 253,
+      "text": "Lưu địa chỉ"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 259,
+      "text": "panel order"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 275,
+      "text": "Tải lại thông tin"
+    },
+    {
+      "file": "src/features/profile/Profile.tsx",
+      "line": 280,
+      "text": "Đang tải hồ sơ…"
+    }
+  ]
+}

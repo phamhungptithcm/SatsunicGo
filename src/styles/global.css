@@ -279,9 +279,9 @@ a:focus-visible {
   line-height: 1.8;
 }
 .page {
-  max-width: 1200px;
+  max-width: 1180px;
   margin: auto;
-  padding: 56px 32px 80px;
+  padding: 56px 28px 80px;
   min-height: 55vh;
 }
 .page h1 {
@@ -812,14 +812,10 @@ body {
   font-size: clamp(45px, 5vw, 70px);
   letter-spacing: -2.8px;
 }
-.heroCopy {
-  animation: content-enter 420ms var(--ease-out) both;
-}
 .journey {
   background: #f6f8fc;
   border-radius: 24px;
   box-shadow: 0 12px 36px #111c3505;
-  animation: content-enter 480ms var(--ease-out) both;
 }
 .marketSection {
   max-width: 1280px;
@@ -1208,16 +1204,6 @@ body {
   from {
     opacity: 0;
     transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes content-enter {
-  from {
-    opacity: 0.7;
-    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -2533,16 +2519,26 @@ body {
 .crmIdentity button { padding: 6px 10px; white-space: nowrap; }
 @media(max-width: 600px) { .crmIdentity span { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
 
-.orderTracking { border: 1px solid #e2e6ef; border-radius: 14px; padding: 16px; margin-top: 12px; min-width: 0; }
+/* Connected numbered milestones respond to the actual Ask/account panel width. */
+.orderTracking { container-type: inline-size; border: 1px solid #e2e6ef; border-radius: 14px; padding: 16px; margin-top: 12px; min-width: 0; background: #fff; color: #111c35; }
 .orderTracking h2 { font-size: 18px; margin: 0 0 8px; }
-.orderTrackingReference { overflow-wrap: anywhere; font-size: 13px; }
-.orderTrackingSteps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 8px; list-style: none; padding: 0; }
-.orderTrackingSteps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 8px; padding: 10px; border: 1px solid transparent; border-radius: 8px; background: #f5f6fa; color: #111c35; font-size: 13px; line-height: 1.4; }
-.orderTrackingStepIcon { display: grid; place-items: center; width: 20px; height: 20px; line-height: 1; }
+.orderTrackingReference { overflow-wrap: anywhere; font-size: 13px; color: #526078; }
+.orderTrackingSteps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; list-style: none; padding: 0; margin: 16px 0; }
+.orderTrackingSteps li { position: relative; isolation: isolate; display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: start; gap: 10px; padding: 8px 0; color: #111c35; font-size: 12px; line-height: 1.4; }
+.orderTrackingSteps li:not(:last-child)::after { content: ""; position: absolute; z-index: -1; inset-inline-start: 13px; top: 36px; bottom: -8px; width: 2px; background: #dce2ee; }
+.orderTrackingSteps li[data-state="completed"]::after { background: #163cff; }
+.orderTrackingStepIcon { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #dce2ee; border-radius: 50%; background: #fff; color: #526078; font-size: 12px; font-weight: 600; line-height: 1; }
+.orderTrackingSteps li[data-state="completed"] .orderTrackingStepIcon { background: #163cff; border-color: #163cff; color: #fff; }
 .orderTrackingStepContent { display: grid; min-width: 0; gap: 4px; }
 .orderTrackingStepLabel { font-weight: 600; overflow-wrap: anywhere; }
 .orderTrackingStepStatus { display: block; color: #526078; font-size: 12px; font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; }
-.orderTrackingSteps li[aria-current="step"] { color: #163cff; background: #edf0ff; border-color: #163cff; }
+.orderTrackingSteps li[aria-current="step"] { color: #163cff; }
+.orderTrackingSteps li[aria-current="step"] .orderTrackingStepIcon { background: #edf0ff; border-color: #163cff; color: #163cff; box-shadow: 0 0 0 3px #edf0ff; }
 .orderTrackingSteps li[aria-current="step"] .orderTrackingStepStatus { color: #163cff; }
+@container (min-width: 640px) {
+  .orderTrackingSteps { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 12px; }
+  .orderTrackingSteps li { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .orderTrackingSteps li:not(:last-child)::after { inset-inline-start: 28px; inset-inline-end: -12px; top: 21px; bottom: auto; width: auto; height: 2px; }
+}
 .orderTrackingParcels { display: grid; gap: 8px; }
 .orderTrackingParcels article { padding: 12px; border: 1px solid #e2e6ef; border-radius: 8px; overflow-wrap: anywhere; }

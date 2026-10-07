@@ -1,0 +1,6 @@
+{
+  "functions/src/ai/ask.ts": "8493e17611db89d1752287492cc93788d94b554d88267c33c7afc7bb92956343",
+  "functions/src/ai/knowledge-retrieval.ts": "ccfef1439ba6d756b0c3c7204bba23b10f139f639559b4c8350f14fd12c2c18b",
+  "tests/unit/ask-knowledge.test.ts": "3d8fa2c00dc7b686b65395a303dbfb0177805dd6029731159c3565e7ab6e0ce1",
+  "docs/ASK_KNOWLEDGE.md": "54f0d40bc828ebc9ac4b6b49cc5056549684ca29d67723b392c16adc52586511"
+}

@@ -1,0 +1,11 @@
+{
+  "commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "task": "SATSUNICGO-PAGES-007",
+  "source_sha256": {
+    "src/features/content/Content.tsx": "4c860887f23275910731219fed1f0f109400d5e4de70a76fd36b4f102d90e82a",
+    "src/features/support/Support.tsx": "173dcf06310e726ee509df203d2c47e7d542d3ba9373986ee5512dfdebd389ba",
+    "src/styles/global.css": "5140372daca8e9d3c4babd60a51c445a6b662696142a68bc08c057a24a0f2ee4"
+  },
+  "baseline": "Task-start copies in /tmp/satsunicgo-pages007; checkout already contains unrelated WIP",
+  "release_readiness": "NOT_READY; local presentation evidence only"
+}

@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-10-05T21:51:20.351332+00:00",
+  "scope": "CQ026 source-query/index crosscheck; runtime not run",
+  "files": {
+    "functions/src/workspace.ts": "45257ae426d66c4035516ee808192393e11a416ec661fb04b5fe0f6c99e135ff",
+    "functions/src/changes.ts": "be9b3c7e7e7205ab457cffa20eb83c2dbdc940acb27948c27e1cea93c05939cc",
+    "firestore.indexes.json": "806a5fbbb9627c2492a01d7b744f0e76fcad486c9ea3ba3b1148f7024f677c3b",
+    "docs/reviews/release026/database/ACCEPTED_CHANGE_INDEX_PLAN.md": "8334a02d0f94f55ecb7fc157ade437126d485493fd1703183d80e88edccd49b2",
+    "docs/reviews/release026/database/ACCEPTED_CHANGE_INDEX_IMPLEMENTATION.md": "b604294d4db658d0e9d1d730687fd245044b95c6f6920f2878b2feb79f0a38fa"
+  }
+}

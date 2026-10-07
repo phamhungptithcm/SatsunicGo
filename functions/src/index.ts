@@ -509,3 +509,13 @@ export {
   studioAdvancedRead,
   studioAdvancedCommand,
 } from "./blog-studio-advanced";
+
+export { websiteBannerCommand, websiteBannerAdmin, websiteBannerPreview, campaignBannersPublic } from "./campaign-banners";
+
+export {
+  productReviewRead,
+  productReviewEligibility,
+  productReviewWrite,
+  productReviewModerate,
+  productReviewAdmin,
+} from "./product-reviews";

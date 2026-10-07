@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CHANGES-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved conditional staff fields and immutable propose/customer decision/apply recovery implemented.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Server customer ownership/domain/financial hold/terms/roles unchanged; no money/provider action.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current19focused domain/version-boundary regressions and scoped lint pass; root current compiler/native regression pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Native proposal/approve/reject/apply unknown result, version/denied/pre-read timing checks pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "NOT_RUN",
+      "summary": "Immediate singleflight, exact issued operation/version/payload, preparation versus issued uncertainty and confirmed-refresh distinction source reviewed.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No provider or whole-product acceptance evidence.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Small shared mutation hook inside leased file; bilingual public correction retained. Pending metadata memory-only across route unmount/reload.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CH028-CONTEXT",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "design",
+      "location": "src/features/orders/Changes.tsx",
+      "summary": "Proposal displayed domain-incompatible cancellation and replacement fields together.",
+      "resolution": "Conditional fields/payload matching actual proposalSchema/checkProposal; focused domain regressions pass.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "CH028-RECOVERY",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/orders/Changes.tsx",
+      "summary": "Mutation retries could rotate identity/version or report acknowledged action as failed refresh.",
+      "resolution": "Shared local immutable issued command, field/action locks, explicit retry, lifecycle and preparatory read epoch guard. Native replay pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "CH028-NATIVE",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "validation",
+      "location": "docs/reviews/crm-ux028/changes",
+      "summary": "Current compiler and native all four actions, mobile, VI/EN keyboard/AT and faults pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/changes/CONTENT_REVIEW.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "CHANGES-INDEPENDENT-P2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "src/features/orders/Changes.tsx",
+      "summary": "Independent-review cycle: variant-only additional substitution lines now retained, including explicit empty clear. Variant field starts with actual original value, unchanged variants omitted; domain\u22651replacementName retained. Multi-line named+variant-only+clear and unchanged-line tests validate actual checkProposal. No new visible copy. ",
+      "resolution": "Approved bounded source correction,19focused domain/version-boundary regressions and scoped lint pass. Actual rendered behavior and independent fresh review remain pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/support/REVIEW_RECOVERY_DELTA_PLAN.md",
+        "docs/reviews/crm-ux028/changes/SOURCE_MANIFEST.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending operation metadata lost on route unmount/full reload.",
+    "Full CRM acceptance remains incomplete."
+  ],
+  "limitations": [
+    "Root owns compiler/native integration. No runtime writes under current source-only window.",
+    "Tokens/cost unavailable. Memory candidates None."
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "task_id": "ACCOUNT-RAIL081",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Approved scoped current evidence passed; full production readiness not certified.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Fresh scoped source/rendered/check evidence passed.",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-TASK_REPORT.md",
+        "ACCOUNT-RAIL-081-SOURCE.json"
+      ]
+    },
+    "product_language": {
+      "status": "PASSED",
+      "evidence_refs": [
+        "ACCOUNT-RAIL-081-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "cycle": 1,
+      "status": "FIXED",
+      "summary": "Wrong prior scope reverted; inherited support width corrected."
+    }
+  ],
+  "residual_risks": [
+    "Existing unrelated shared WIP/type/provider gates."
+  ],
+  "limitations": [
+    "DEGRADED native fallback/manual runtime.",
+    "No production or full repository certification."
+  ],
+  "scope": "explicit rollback080 and sidebar icons",
+  "cycle": 2
+}

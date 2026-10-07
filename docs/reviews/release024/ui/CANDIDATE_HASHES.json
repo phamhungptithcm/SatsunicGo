@@ -1,0 +1,11 @@
+{
+  "scope": "CRM024 UI frozen local source",
+  "files": {
+    "src/features/crm/Workspace.tsx": "8f218c05c0954b5aa7cf4e90fc43dc7dfadf7e45e13381b4cefc50d55a14a01f",
+    "src/features/crm/Workspace.css": "82dfd1eb76cbf121a023d7ad8dec5cf5be3ddcb8db0bdf6f1c58f77a85861104",
+    "src/features/crm/Customers.tsx": "126e0bf3ef6ba0c918b9af5e9d6235fbaa0f0a5948ad26bf0145095a96fb5ddc",
+    "src/features/crm/Customer.tsx": "60d3fd9fc892ff8112a04a2d0adef2e625197cb5a0cfd4b984fd69549176d004",
+    "src/features/crm/Dashboard.tsx": "e98dc253a22383f4b1c76c83fa95e18d2c9909acf35504dcebd1991d6317a738",
+    "src/features/orders/Changes.tsx": "53446e906d75084fcca7004d3ad9303db94ee82ef6926ae207bad0a6716acb7b"
+  }
+}

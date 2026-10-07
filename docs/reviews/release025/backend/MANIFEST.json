@@ -1,0 +1,34 @@
+{
+  "scope": "backend025only",
+  "freeze": true,
+  "files": [
+    {
+      "path": "functions/src/crm.ts",
+      "sha256": "4f840d779241ec2b1c9b5c45d21c2c317be914794b3efb07c9e5be156c6002d7"
+    },
+    {
+      "path": "functions/src/returns.ts",
+      "sha256": "4dae664852283ed2fe23afcb811db5f69a5122d7ff3c1e4734f36f14d31bfa21"
+    },
+    {
+      "path": "functions/src/consolidation.ts",
+      "sha256": "b162a7107e6fef2e26625875041cba79a7adca6302c0af2f11a509b0c031897a"
+    },
+    {
+      "path": "functions/src/index.ts",
+      "sha256": "9e3e3319a3bc68c24d9d225e4e3d24f5ea3a3d5c9684e5c3f23cd0025f8fee4f"
+    },
+    {
+      "path": "tests/rules/crm-hardening.test.ts",
+      "sha256": "431df24a731e5c059f67b329d7e640daa5cd53f4b9f6aec0f50ebc8b1534b84c"
+    },
+    {
+      "path": "tests/rules/backend-authority-hardening.test.ts",
+      "sha256": "5f43d134550c56c3d4019cb05b38bd1dbe17d1865877c8de17d66d11018a5ae2"
+    },
+    {
+      "path": "tests/rules/command-authority-hardening.test.ts",
+      "sha256": "7d880627b5a74e2a7ba712046ced2f9b66b0d9d94c04226babafc443a2fab1aa"
+    }
+  ]
+}

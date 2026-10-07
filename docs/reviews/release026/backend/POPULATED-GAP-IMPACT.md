@@ -1,0 +1,3 @@
+# Populated refund/finance exception list spacing delta
+
+Root explicitly authorized narrow presentation fix under existing human all-fix approval after actual populated before15=6 PASS/9 FAIL. Root reports exact adjacent-card gap0px for Refunds and Finance exceptions at390/768/1440; native invalid submission controls0commands PASS. Source mapped lists lack crmList wrapper, while paid membership already has wrapper. Scope ONLY Refunds.tsx rows.map and Finance.tsx exceptions.map wrapper existingcrmList; shared CSS root owns8px gap. No copy, form, handler, hooks, money, version, replay, authority, query or payload changes. Existing ancestor roles/status/labels stay. Record plan before edit, validate exactpaths. Root owns after/check/screenshots; no runner.

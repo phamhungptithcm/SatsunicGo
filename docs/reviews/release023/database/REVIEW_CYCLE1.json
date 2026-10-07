@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING-023-DATABASE",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Role union corrects two reproducible code-path inconsistencies within approved local ownership. No new commercial rule.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google, active current role, UID ownership, assignment, receipt restriction and account/staff lock checks preserved. No token/secret/public Storage grant.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Scoped ESLint and Prettier pass. Root compile and executable integration pending.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Source reviewed denial, concurrent reservation, replay, upload retry and second auth check. Executable regressions await serial root window.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing safe HttpsError responses and retries preserved; no new message or external I/O inside Firestore transaction.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "NOT_READY; no deploy/index/datafix. Real auth/provider/retention/query execution plans not verified.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Share role-kind union between list/read; keep writing grant checks and bounded indexed query. Existing pending reservations kept for operator review.",
+      "evidence_refs": [
+        "IMPACT.md",
+        "AUDIT.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "DB023-1",
+      "severity": "medium",
+      "status": "OPEN",
+      "location": "functions/src/order-media.ts authorized/listOrderImages",
+      "summary": "Overlapping role checks incorrectly subtract existing grants; fixed union awaits actual integration.",
+      "category": "correctness",
+      "evidence_refs": [
+        "docs/reviews/release023/database/IMPACT.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Pending upload failures retain quota until retry/operator review.",
+    "During-I/O revocation and concurrent identical upload regression gap reported to root; no source mutation during freeze."
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED.",
+    "Root full candidate compile/tests in progress.",
+    "Governed CLI absent PATH initially; later located existing cached1.4.1 CLI. Cycle1 was initially blocked pending root evidence."
+  ]
+}

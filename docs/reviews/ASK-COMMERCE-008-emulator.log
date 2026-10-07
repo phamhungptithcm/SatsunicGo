@@ -1,0 +1,9 @@
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  20:06:26
+   Duration  7.01s (transform 311ms, setup 0ms, import 761ms, tests 5.97s, environment 0ms)
+

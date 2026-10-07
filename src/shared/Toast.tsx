@@ -1,3 +1,4 @@
+import { LoadingOverlay } from "./Loading";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -5,6 +6,7 @@ import {
   dismissNotice,
   noticeSnapshot,
   progressSnapshot,
+  overlayProgressSnapshot,
   subscribeNotice,
   subscribeProgress,
 } from "./feedback";
@@ -20,6 +22,12 @@ export function ToastHost() {
       progressSnapshot,
       progressSnapshot,
     ) > 0;
+  const overlayPending =
+    useSyncExternalStore(
+      subscribeProgress,
+      overlayProgressSnapshot,
+      overlayProgressSnapshot,
+    ) > 0;
   const [showPending, setShowPending] = useState(false),
     [remaining, setRemaining] = useState(5000);
   const [host, setHost] = useState<Element>(document.body);
@@ -27,13 +35,13 @@ export function ToastHost() {
   const element = useRef<HTMLDivElement>(null),
     hovered = useRef(false);
   useEffect(() => {
-    if (!pending) {
+    if (!overlayPending) {
       setShowPending(false);
       return;
     }
     const timeout = setTimeout(() => setShowPending(true), 400);
     return () => clearTimeout(timeout);
-  }, [pending]);
+  }, [overlayPending]);
   useEffect(() => {
     const update = () =>
       setHost(document.querySelector("dialog[open]") ?? document.body);
@@ -79,65 +87,65 @@ export function ToastHost() {
       !!element.current?.contains(document.activeElement),
     );
   }, [host, notice?.id, showPending]);
-  const text = notice?.text ?? (showPending ? "Đang xử lý…" : "");
-  if (!text) return null;
+  const text = notice?.text ?? "";
+  if (!text)
+    return overlayPending && showPending
+      ? createPortal(<LoadingOverlay />, host)
+      : null;
   return createPortal(
-    <div
-      ref={element}
-      className="siteToast"
-      data-kind={notice?.kind ?? "info"}
-      aria-busy={pending}
-      onMouseEnter={() => {
-        hovered.current = true;
-        timer.current?.hold("hover", true);
-      }}
-      onMouseLeave={() => {
-        hovered.current = false;
-        timer.current?.hold("hover", false);
-      }}
-      onFocusCapture={() => timer.current?.hold("focus", true)}
-      onBlurCapture={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget))
-          timer.current?.hold("focus", false);
-      }}
-    >
-      <span
-        className={pending ? "toastSpinner" : "toastSymbol"}
-        aria-hidden="true"
+    <>
+      {overlayPending && showPending && <LoadingOverlay />}
+      <div
+        ref={element}
+        className="siteToast"
+        data-kind={notice?.kind ?? "info"}
+        onMouseEnter={() => {
+          hovered.current = true;
+          timer.current?.hold("hover", true);
+        }}
+        onMouseLeave={() => {
+          hovered.current = false;
+          timer.current?.hold("hover", false);
+        }}
+        onFocusCapture={() => timer.current?.hold("focus", true)}
+        onBlurCapture={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget))
+            timer.current?.hold("focus", false);
+        }}
       >
-        {pending
-          ? ""
-          : notice?.kind === "success"
+        <span className="toastSymbol" aria-hidden="true">
+          {notice?.kind === "success"
             ? "✓"
             : notice?.kind === "error"
               ? "!"
               : "i"}
-      </span>
-      <p
-        role={notice?.kind === "error" ? "alert" : "status"}
-        aria-atomic="true"
-      >
-        {text}
-      </p>
-      {notice && !pending && (
-        <>
-          <span className="toastSeconds" aria-hidden="true">
-            {Math.ceil(remaining / 1000)}s
-          </span>
-          <button
-            type="button"
-            title="Ẩn thông báo"
-            aria-label="Ẩn thông báo"
-            onClick={() => dismissNotice(notice.id)}
-          >
-            ×
-          </button>
-          <span className="toastTrack">
-            <span style={{ transform: `scaleX(${remaining / 5000})` }} />
-          </span>
-        </>
-      )}
-    </div>,
+        </span>
+        <p
+          role={notice?.kind === "error" ? "alert" : "status"}
+          aria-atomic="true"
+        >
+          {text}
+        </p>
+        {notice && (
+          <>
+            <span className="toastSeconds" aria-hidden="true">
+              {Math.ceil(remaining / 1000)}s
+            </span>
+            <button
+              type="button"
+              title="Ẩn thông báo"
+              aria-label="Ẩn thông báo"
+              onClick={() => dismissNotice(notice.id)}
+            >
+              ×
+            </button>
+            <span className="toastTrack">
+              <span style={{ transform: `scaleX(${remaining / 5000})` }} />
+            </span>
+          </>
+        )}
+      </div>
+    </>,
     host,
   );
 }

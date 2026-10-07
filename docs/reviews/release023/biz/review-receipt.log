@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-HARDENING023-BIZ",
+  "status": "BLOCKED",
+  "reviewed_commit": "3bd0d093255963a2cbf66ddd80d27456da7076e0",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Root serialized compilation, server integration and native/browser journey not run here; production NOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/release023/TEAM_CONTEXT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped guard and regression reviewed; no policy/schema/auth changes. checkProposal validates both propose and apply within server transaction. Existing ALREADY_PURCHASED error retained. O(30) bound unchanged. Focused 64 tests and scoped ESLint passed. Server no-write test remains pending root runtime.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/IMPACT.md",
+        "docs/reviews/release023/biz/unit.log",
+        "docs/reviews/release023/biz/lint.log",
+        "docs/reviews/release023/biz/SOURCE_MANIFEST.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "BIZ-002",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "packages/domain/changes.ts:83",
+      "summary": "Purchased variant can be rewritten in multi-line substitution; either provided replacement field now triggers purchased guard. Failing-before/passing-after regression.",
+      "resolution": "Guard both replacement fields; purchased and empty variant rejection verified, unpurchased and untouched lines allowed.",
+      "evidence_refs": [
+        "docs/reviews/release023/biz/substitution-repro.log",
+        "docs/reviews/release023/biz/unit.log"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Server-level no-write regression not executed; compile pending root window.",
+    "Global Product Language Gate and master native journeys remain root-owned; no UI strings or displayed-data mapping edited."
+  ],
+  "limitations": [
+    "DEGRADED stale indexes; bounded source fallback. Dirty shared checkout: only new lines in this owner scope reviewed. Runtime/production not certified."
+  ],
+  "recorded_at": "2026-10-05T15:40:32.784Z",
+  "reviewed_worktree_signature": "c0f60c5066499fc0c0fcd4a1bf71ec1aa9648b8322158e3dc8830d58caf7a04d",
+  "assurance": {
+    "status": "LEGACY_UNVERIFIED",
+    "evidence_level": "DECLARED",
+    "limitations": [
+      "Legacy review references and reviewer identity are not authenticated."
+    ]
+  },
+  "previous_review_hash": null,
+  "review_hash": "3f08ffc438bf41a4f2c070f4e08fbab11b59f8e17ee30780711ee1d28d4ce455"
+}

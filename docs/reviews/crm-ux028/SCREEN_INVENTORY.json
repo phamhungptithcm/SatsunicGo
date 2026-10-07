@@ -1,0 +1,135 @@
+[
+  {
+    "route": "/crm/overview",
+    "title": "Tổng quan",
+    "contentPreview": "Tổng quan vận hành\nLịch chăm sóc →\nKhách hàng →\nTừ ngày (UTC)\nĐến ngày (UTC)\nXem số liệu\n\nTrạng thái hiện tại của bản ghi tạo trong khoảng đã chọn (UTC), tối đa 100 bản ghi mỗi loại. Không phải tổng toàn hệ thống. Chưa có thời gian giao dự kiến được xác nhận để tính đơn giao trễ.\n\nChọn khoảng ngày để xem công việc\nChọn tối đa 31 ngày, rồi bấm Xem số liệu.",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/orders",
+    "title": "Yêu cầu & báo giá",
+    "contentPreview": "Yêu cầu & báo giá\n\nChọn đơn để xem thông tin và thực hiện thao tác phù hợp.\n\nTải lại\nHàng đợi\nTất cả đơn\nYêu cầu mới\nChờ duyệt báo giá\nChờ thanh toán / cần mua\nNhận kho & đóng gói\nĐã đóng gói\nSẵn sàng xuất gửi\nĐang tạm giữ\nSynthetic sanity-10d319f0-da05-4dd0-89e2-1ef6379e5046\nUS\nChờ thanh toán toàn bộ\n\nĐã thu ròng: 0 ₫\n\nĐơn\n000-sanity-order-00015077-7dc3-4785-b94c-c0effc36538f\nSynthetic sanity-ab571c82-95ca-42a4-8760-5366fe10b8db\nUS\nChờ thanh toán toàn bộ\n\nĐã thu ròng: 0 ₫\n\nĐơn\n000-sanity-order-00593fd6-1051-482e-ad04-c4897c3c4e94\nSynthetic sanity-0bcb9e7c-871e-4a63-9e0f-8388438f7450\nUS\nChờ th",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/purchasing",
+    "title": "Mua hàng",
+    "contentPreview": "Mua hàng\n\nChọn đơn để xem thông tin và thực hiện thao tác phù hợp.\n\nTải lại\nSynthetic sanity-10d319f0-da05-4dd0-89e2-1ef6379e5046\nUS\nChờ thanh toán toàn bộ\n\nĐã thu ròng: 0 ₫\n\nĐơn\n000-sanity-order-00015077-7dc3-4785-b94c-c0effc36538f\nSynthetic sanity-ab571c82-95ca-42a4-8760-5366fe10b8db\nUS\nChờ thanh toán toàn bộ\n\nĐã thu ròng: 0 ₫\n\nĐơn\n000-sanity-order-00593fd6-1051-482e-ad04-c4897c3c4e94\nSynthetic sanity-0bcb9e7c-871e-4a63-9e0f-8388438f7450\nUS\nChờ thanh toán toàn bộ\n\nĐã thu ròng: 0 ₫\n\nĐơn\n000-sanity-order-00b15c37-181a-4390-ad54-3e77a027c505\nSynthetic sanity-d0bc1c4c-cc10-461a-b544-4bfd7dab54fa",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/warehouse",
+    "title": "Nhận kho & đóng gói",
+    "contentPreview": "Nhận kho & đóng gói\n\nChọn đơn để xem thông tin và thực hiện thao tác phù hợp.\n\nTải lại\nSynthetic full custom lifecycle\nUS\nChờ thanh toán số dư\n\nĐã thu ròng: 1.000.000 ₫\n\nĐơn\n35bee114-6bca-42ae-80da-0a51e5b92490\nSynthetic full custom lifecycle\nUS\nChờ thanh toán số dư\n\nĐã thu ròng: 1.000.000 ₫\n\nĐơn\n6e3b9d4c-5194-44dd-9eac-be829b55a0ca\nSynthetic full custom lifecycle\nUS\nChờ thanh toán số dư\n\nĐã thu ròng: 1.000.000 ₫\n\nĐơn\n75ab5823-fb0d-47fd-9c9b-325503b08ec3\nSynthetic full custom lifecycle\nUS\nĐã nhận tại kho nguồn\n\nĐã thu ròng: 1.000.000 ₫\n\nĐơn\nc4d11d18-61f7-426a-a0fb-9672b3869017\nSynthetic full c",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/returns",
+    "title": "Nhận & kiểm tra hàng trả",
+    "contentPreview": "Nhận & kiểm tra hàng trả\nTải lại\n\nChỉ nhận hàng theo đề xuất khách đã duyệt. Hoàn tất kiểm tra không tự hoàn tiền hoặc gỡ giữ đơn; tài chính cần đối soát riêng.\n\nHàng trả\n Mở đơn\nĐơn\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-order-0\nĐang nhận trả\nHồ sơ trả\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-returns-0\nHàng\tĐược trả\tĐã nhận\tĐạt\tHỏng\nSản phẩm thử nghiệm local có tên dài để kiểm tra bố cục\t4\t3\t2\t1\n Xử lý hàng trả\nHàng trả\n Mở đơn\nĐơn\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-order-1\nĐang nhận trả\nHồ sơ trả\n!!026-popu",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/shipping",
+    "title": "Kiện & vận chuyển",
+    "contentPreview": "Kiện hàng và xuất gửi\n\nTạo kiện, bàn giao và ghi nhận hành trình vận chuyển.\n\nTải lại kiện\n\nKiện nội bộ không phải shipping label của hãng vận chuyển. Danh sách hiện tối đa 30 đơn và 30 kiện.\n\n Đóng kiện từ hàng đã kiểm và đóng gói\nGom kiện và phân bổ cước\n\nHiện tối đa 30 bản ghi mỗi loại. Mỗi lô phải gồm toàn bộ kiện của các đơn tham gia, cùng kho và tuyến. Chốt lô chưa ghi nhận thu tiền.\n\nTải lại lô gom\n Tạo lô gom\nLô gom\nLô\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-batches-0\n\nChờ bàn giao · US-VN · Hub thử nghiệm · Dịch vụ local\n\nHạn bàn giao: 19:00:00 5/10/2026\n\nTổ",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/changes",
+    "title": "Thay đổi chờ áp dụng",
+    "contentPreview": "Thay đổi chờ áp dụng\nTải lại đề xuất\nHủy đơn và đối soát chi phí\nKhách đã duyệt\n\nSynthetic accepted queue acf85354-ad4e-4d81-8925-f0e9dc1504d1-0\n\nTổng phải trả sau thay đổi\n0 ₫\nChi phí thực tế\n0 ₫\nMở đơn mua hộ\nMã đơn\nqueue026-acf85354-ad4e-4d81-8925-f0e9dc1504d1\nChi tiết thay đổi\nÁp dụng quyết định đã duyệt\nHủy đơn và đối soát chi phí\nKhách đã duyệt\n\nSynthetic accepted queue 8e372557-f81a-4b57-ba05-fdddae7d9a9b-32\n\nTổng phải trả sau thay đổi\n0 ₫\nChi phí thực tế\n0 ₫\nMở đơn mua hộ\nMã đơn\nqueue026-8e372557-f81a-4b57-ba05-fdddae7d9a9b\nChi tiết thay đổi\nÁp dụng quyết định đã duyệt\nHủy đơn và đối s",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/customers",
+    "title": "Khách hàng",
+    "contentPreview": "Khách hàng\n\nTìm theo phần đầu tên, có hoặc không dấu; hoặc tìm chính xác bằng mã khách hàng.\n\nTải lại\nTìm theo\nTên khách hàng\nMã khách hàng\nTừ khóa\nXem danh sách\nKhách hàng\tPhân loại\tNgười phụ trách\tLịch hẹn\tThao tác\nChưa cập nhật tên\ne2e005-customer-00e923d0-484a-45fd-81cf-600927b4801c\n\tChưa phân loại\tChưa phân công\tChưa có lịch hẹn\tMở hồ sơ \nSynthetic due 4570555e-5802-418d-b333-fda63f8f48bf\ne2e005-customer-0169ba3f-4c9b-4136-96bd-c1aea0c565e7\n\tChưa phân loại\tChưa phân công\t18:00:00 31/12/1969\tMở hồ sơ \nSynthetic consent customer\ne2e005-customer-04a250f4-d325-483f-8f3f-ec89559e284a\n\tChưa phâ",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/follow-ups",
+    "title": "Lịch chăm sóc",
+    "contentPreview": "Lịch chăm sóc\n\nTheo dõi lịch hẹn đã lưu trong hồ sơ. Mốc sắp đến hạn là 7 ngày tới.\n\nTải lại\nLịch hẹn\nĐã đến hạn\n7 ngày tới\nTất cả lịch hẹn\nViệc của tôi\nXem danh sách\nKhách hàng\tPhân loại\tNgười phụ trách\tLịch hẹn\tThao tác\nSynthetic due 4570555e-5802-418d-b333-fda63f8f48bf\ne2e005-customer-0169ba3f-4c9b-4136-96bd-c1aea0c565e7\n\tChưa phân loại\tChưa phân công\t18:00:00 31/12/1969\tMở hồ sơ \nCRM record 2e04368d-4d67-4a56-bf0b-630c1f312b6c\nCông việc local thử nghiệm\n\tCần chăm sócKhách thử\te2e005-owner\t18:00:00 31/12/1969\tMở hồ sơ \nCRM record 0b8be12b-65b0-4099-bbe6-06f11bd36ae0\nCông việc local thử nghi",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/support",
+    "title": "Hội thoại hỗ trợ",
+    "contentPreview": "Hội thoại hỗ trợ\nTải lại hội thoại\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 0\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 1\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 2\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 3\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 4\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 5\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 6\nĐang mở\nSynthetic older support 02f006b6-cb6c-4d1f-8488-cd041e6e2c93 7\nĐang ",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/documents",
+    "title": "Chứng từ",
+    "contentPreview": "Chứng từ đơn hàng\nTải lại\n\nChứng từ nội bộ tách khỏi báo giá và sổ tiền. Khách xem bản đã xuất; không sửa bản đã xuất.\n\nĐang tải chứng từ…",
+    "viewport": "1280x720",
+    "states": "loading captured; settled state requires follow-up"
+  },
+  {
+    "route": "/crm/refunds",
+    "title": "Yêu cầu hoàn tiền",
+    "contentPreview": "Yêu cầu & xác nhận hoàn tiền\nTải lại\n\nYêu cầu chỉ dành trước số tiền có thể hoàn. Chỉ xác nhận sau khi đã đối chiếu giao dịch tiền ra thực tế; không tự chuyển tiền.\n\nTạo yêu cầu hoàn tiền\nYêu cầu hoàn tiền\n Mở đơn\nMã đơn\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-order-0\nMã yêu cầu\n!!026-populated-8208744496555-7e4dc166-1feb-43f8-a1a7-d2385107ec2f-refunds-0\nSố tiền yêu cầu\n240.000 ₫\nTrạng thái\nChờ hoàn · tiền chưa được xác nhận ra\nLý do\nYêu cầu thử nghiệm local; chưa xác nhận tiền ra\nThao tác\nXác nhận giao dịch tiền ra\nHủy yêu cầu, giải phóng tiền đã dành\nMã giao dịch n",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/finance",
+    "title": "Thanh toán & đối soát",
+    "contentPreview": "Đối soát thanh toán\n\nTiền membership được phân bổ cho hóa đơn gói riêng, không thanh toán số dư đơn mua hộ. Chỉ xác nhận khi đã đối chiếu tiền vào tài khoản doanh nghiệp.\n\nGhi nhận tiền vào bị ngân hàng đảo\n\nMỗi nhóm hiển thị tối đa 30 bản ghi đã tải; không phải tổng toàn hệ thống.\n\nTải lại tài chính\nThông báo chuyển khoản\nChưa có thông báo chờ đối soát trong trang này.\nHóa đơn membership\nPLUS\nSố tiền\n100.000 ₫\nTrạng thái\nĐã xác nhận tiền\nMã hóa đơn\n020b847d-a178-48ae-91c7-299f624834d4\nPLUS\nSố tiền\n100.000 ₫\nTrạng thái\nĐã xác nhận tiền\nMã hóa đơn\n0bfa1330-4bd8-4731-b720-8d5f62e5e08e\nPLUS\nSố ti",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/content",
+    "title": "Sản phẩm & bài viết",
+    "contentPreview": "Nội dung website\n\nBiên tập sản phẩm, bài viết và trạng thái xuất bản.\n\nSản phẩm\nBài viết\nTải lại danh sách\nNội dung mới\nSynthetic sanity-00015774-8727-4f22-a770-ca7b13d14f37\nĐã xuất bản\nSynthetic sanity-0037f366-7e1b-4851-a2bf-6951b9ec3d41\nĐã xuất bản\nSynthetic sanity-003c5a74-c4c2-42fc-88f1-c03b5bfd6329\nĐã xuất bản\nSynthetic sanity-0055601e-0acf-4382-918b-4ee3892705c7\nĐã xuất bản\nSynthetic sanity-00822669-1f23-4b51-9ac4-db99a750f32e\nĐã xuất bản\nSynthetic sanity-0086543b-0f9c-44c8-b85c-e67a07cadaa7\nĐã xuất bản\nSynthetic sanity-008813a7-4631-4a23-95f8-4c9b8b152e43\nĐã xuất bản\nSynthetic sanity-0",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/campaigns",
+    "title": "Chiến dịch",
+    "contentPreview": "Chiến dịch và lịch nội dung\nTải lại danh sách\n\nLưu caption để người biên tập duyệt. Lịch là kế hoạch nội dung; đăng tự động lên mạng xã hội đang tắt.\n\nTạo bản nháp mới\nChiến dịch mới\nTên chiến dịch\nCaption\nĐường dẫn bài viết hoặc sản phẩm\nTheo dõi lượt truy cập\nUTM source\nUTM medium\nUTM campaign\nLịch dự kiến theo giờ địa phương\nTrạng thái biên tập\nBản nháp\nĐã duyệt caption\nLưu trữ\nLưu chiến dịch\nChiến dịch thử nghiệm local\nBản nháp\n\nCaption thử nghiệm; không đăng lên mạng xã hội\n\nĐường dẫn và thông tin theo dõi\nChỉnh sửa\nSao chép caption và link\nChiến dịch thử nghiệm local\nBản nháp\n\nCaption th",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/membership",
+    "title": "Gói thành viên",
+    "contentPreview": "Cấu hình và cấp tặng membership\n\nQuản lý giá, kỳ hạn và quyền lợi của từng gói.\n\nGói mới\nPLUS\nĐang mở bán\n\nGiá trả trước: 100.000 ₫ · Kỳ hạn: 30 ngày\n\nGiảm phí mua hộ: 10% · Tối đa: 50.000 ₫\n\nThông tin gói\nChỉnh sửa gói\nPLUS\nĐang mở bán\n\nGiá trả trước: 100.000 ₫ · Kỳ hạn: 30 ngày\n\nGiảm phí mua hộ: 10% · Tối đa: 50.000 ₫\n\nThông tin gói\nChỉnh sửa gói\nPLUS\nĐang mở bán\n\nGiá trả trước: 100.000 ₫ · Kỳ hạn: 30 ngày\n\nGiảm phí mua hộ: 10% · Tối đa: 50.000 ₫\n\nThông tin gói\nChỉnh sửa gói\nPLUS\nĐang mở bán\n\nGiá trả trước: 100.000 ₫ · Kỳ hạn: 30 ngày\n\nGiảm phí mua hộ: 10% · Tối đa: 50.000 ₫\n\nThông tin gói\nC",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/staff",
+    "title": "Nhân viên & quyền",
+    "contentPreview": "Nhân viên và phân quyền",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/activity",
+    "title": "Nhật ký & thông báo",
+    "contentPreview": "Nhật ký & thông báo\nTải lại\nXem dữ liệu\nNhật ký thao tác\nThông báo chờ / đã xử lý\n\nNhật ký thao tác chỉ đọc. Email chưa rõ kết quả cần quản lý vận hành đối soát trước khi xếp lịch lại.\n\nThời gian\tThao tác\tĐối tượng\n22:05:40 5/10/2026\tCập nhật nghiệp vụ\t7172ec20-d608-45e5-9416-7a1bc81b0a43\n22:05:32 5/10/2026\tCập nhật quyền\tstaff026-6a424e9c-200f-44ae-bc5b-f7fd9199070f\n22:04:43 5/10/2026\tCập nhật nghiệp vụ\tsanity-job-0419280a-6d88-4546-8a73-cedb489db299\n22:04:39 5/10/2026\tThu hồi link chứng từ\t9bde1d02-712a-419f-82c4-67a59d24490a\n22:04:36 5/10/2026\tTạo link chia sẻ chứng từ\t9bde1d02-712a-419f-82",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  },
+  {
+    "route": "/crm/settings",
+    "title": "Cấu hình",
+    "contentPreview": "Chính sách tỷ giá và điều khoản",
+    "viewport": "1280x720",
+    "states": "observed rendered default/list"
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ASK-COMMERCE-010-v1",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Independentcurrentfrontend-onlyassessment; existingmanualbackendretained; localproof documented; productionNOT_READY.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK010-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/Ask.tsx",
+      "summary": "Wrongfirstformanimationtarget",
+      "resolution": "Explicitcomposer selector; unsent3/bounded20/cleanup; browsermanualexpandedclose/reopen andphotoselectionfailure verified.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    },
+    {
+      "id": "ASK010-2",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/ImageIntake.tsx",
+      "summary": "Hiddensentphoto capexhaustion",
+      "resolution": "Explicitcomposer selector; unsent3/bounded20/cleanup; browsermanualexpandedclose/reopen andphotoselectionfailure verified.",
+      "evidence_refs": [
+        "docs/reviews/ASK-COMMERCE-010-SOURCE.json",
+        "docs/reviews/ASK-COMMERCE-010-VALIDATION.md",
+        "docs/reviews/ASK-COMMERCE-010-CONTENT_REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "LiveAI/storage/OSdrag/accountswitch/fullaccessibility NOT_TESTED",
+    "Ephemeralphotoqueue",
+    "ProductionNOT_READY"
+  ],
+  "limitations": [
+    "Independentread-only /root/ask009_flow; rootexecutionattribution",
+    "DEGRADED indexes; sharedWIP",
+    "No backend/provider/deploymentactions"
+  ]
+}

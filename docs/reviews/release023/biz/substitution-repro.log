@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+ ❯ tests/unit/changes.test.ts (3 tests | 1 failed) 6ms
+   × multi-line substitution cannot rewrite a purchased variant 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/changes.test.ts > multi-line substitution cannot rewrite a purchased variant
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/unit/changes.test.ts:101:52
+     99|     ],
+    100|   };
+    101|   expect(() => checkProposal(multi, substitution)).toThrow("ALREADY_PU…
+       |                                                    ^
+    102|   expect(() => checkProposal(multi, { ...substitution, lines: [
+    103|     { line: 0, cancelQuantity: 0, replacementVariant: "" }, substituti…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  10:35:16
+   Duration  208ms (transform 39ms, setup 0ms, import 105ms, tests 6ms, environment 0ms)
+

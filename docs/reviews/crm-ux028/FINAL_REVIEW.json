@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CRM-UX-028",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "NOT_RUN",
+      "summary": "19-screen audit and bounded two-priority fix implemented; wholeCRM goal incomplete.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Only client presentation/focus/disabled purchase; domain command remains authoritative. No data/provider changes.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Frontend tsc and targeted eslint passed;11focused tests passed. No dependencies.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Scoped native three-width first/last selection, heading focus, Back, draft preservation, reduced-motion and overflow PASS; full failure/recovery paths NOT_RUN.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts",
+        "docs/reviews/crm-ux028/BROWSER_ROUND1.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing command errors/retry retained; Back disabled pending; missing payment projection failsclosed local prerequisite.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "NOT_READY: wholeCRM findings, serial native acceptance, current allstateproductcontent and rootfinalrelease pending.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Mobile hides list whiledetail; Back keeps form mounted to preserve draft. Full server authorization unchanged. Existing150-200ms design target no mandated Apple number.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json",
+        "tests/unit/crm-ux028-eligibility.test.ts"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UX028-01",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "location": "src/features/operations/Workbench.tsx",
+      "summary": "Mobile detail under30rows",
+      "resolution": "Mobile list/detail selection, focus/back and positionrestoration; root native3widths PASS.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json"
+      ],
+      "category": "usability"
+    },
+    {
+      "id": "UX028-02",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "location": "src/features/operations/Workbench.tsx",
+      "summary": "Unpaid purchase action lookedavailable",
+      "resolution": "Domain-bound prerequisite disablesanddescribesclaimaction;4newtestsPASS.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json"
+      ],
+      "category": "usability"
+    },
+    {
+      "id": "UX028-11",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "location": "Workbench selection effect",
+      "summary": "Oversizeddetail nearestscroll couldnotrevealheading fromlastrow; repeatedselectedcard didnotfocus",
+      "resolution": "Mobile blockstart+selectionrevision; native first/last keyboard checks PASS.",
+      "evidence_refs": [
+        "docs/reviews/crm-ux028/FROZEN_SOURCE.json"
+      ],
+      "category": "usability"
+    }
+  ],
+  "residual_risks": [
+    "CRM028 three-width browser PASS with mocked list projection; actual queue/data and broad state coverage not certified.",
+    "Fullscreenreader/zoom/fault/recovery/allpageworkflowsnotcertified",
+    "OtherCRM UX028-03..10 findings handed to owner; notfixedbythisslice"
+  ],
+  "limitations": [
+    "Sharedworktree integration live; frozenownedfilehashes verifiedonly",
+    "Independentagent couldnotissuecurrentREADYfinalreviewbecauseindexesdrifted; ownsourcefinalreview performed underrepoDEGRADEDfallback",
+    "ProductLanguageGateBLOCKED pendingcurrentrendered8principles; no successfulhandoff"
+  ]
+}

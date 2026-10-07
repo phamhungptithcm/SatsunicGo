@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-SHIPPING-RATES-030",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved compact calculator, safe recovery and existing support contract implemented; public prices never fabricated",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Existing backend guards and schema retained; 47 emulator security/transaction tests and UID fencing checks passed",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped TypeScript and backend compile in isolated candidate; ESLint, format, diff check passed",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Disabled invalid read error retry unknown response and account-switch branches exercised; 43 unit and browser30/app16 evidence",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Customer safe messages, immutable uncertain request replay and native dialog cleanup verified",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "FAILED",
+      "summary": "Cloud callable absent: describe404/list empty. Live restoration requires explicit release approval; no deployment occurred",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Existing schema/calculator retained; no dependency or tariff change; separate public view preserves owner editor",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UID-CALLBACK",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/shipping/ShippingRates.tsx",
+      "summary": "Auth observer compared against captured initial UID and could reset pending requests",
+      "resolution": "Mutable previous UID in subscription; same UID and switched UID browser checks passed",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    {
+      "id": "KG-PRECISION",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/shipping/ShippingRates.tsx",
+      "summary": "Three-decimal kg could fail due binary floating-point multiplication",
+      "resolution": "Integral gram noise tolerance preserves source calculator rules; 1.001kg browser case passed",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    {
+      "id": "ACCESSIBLE-FEEDBACK",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/shipping/ShippingRates.tsx",
+      "summary": "Kg unit not in accessible name; changing live container could miss notifications",
+      "resolution": "Added kg accessible name and stable live container; browser tree and stable region verified",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    {
+      "id": "LINT-SUPPRESSION",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/shipping/ShippingRates.tsx",
+      "summary": "Suppression referred to a rule absent from repository lint config",
+      "resolution": "Removed suppression and eliminated captured state dependency; targeted lint passed",
+      "evidence_refs": [
+        "docs/approvals/SATSUNICGO-SHIPPING-RATES-030.md",
+        "docs/reviews/shipping-rates030/IMPLEMENTATION_SOURCE_MANIFEST.json",
+        "docs/reviews/shipping-rates030/TEST_EVIDENCE.md",
+        "docs/reviews/shipping-rates030/CONTENT_REVIEW.md",
+        "docs/reviews/shipping-rates030/QUALITY_GATES.md",
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json"
+      ]
+    },
+    {
+      "id": "MISSING-CLOUD-CALLABLE",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "category": "production",
+      "location": "satsunicgo/asia-southeast1/shippingRatesPublic",
+      "summary": "Required deployed callable absent; source changes cannot restore current cloud endpoint",
+      "resolution": "Release plan prepared; requires production deployment approval and provider readback",
+      "evidence_refs": [
+        "docs/reviews/shipping-rates030/PROVIDER_READBACK.json",
+        "docs/reviews/shipping-rates030/RELEASE_PLAN.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Live successful callable, App Check enforcement and private support ticket delivery remain untested",
+    "Commercial rate freshness not independently reverified",
+    "Physical device and screen-reader speech are not certified",
+    "Shared checkout contains unrelated WIP and an unrelated full-build error; isolated candidate excludes those edits"
+  ],
+  "limitations": [
+    "Production deployment is excluded from approved plan v1",
+    "Repository intelligence DEGRADED; conclusions bounded and verified from source",
+    "Recorded cycle 3 is blocked only for the unavailable cloud deployment; no claim of online repair"
+  ]
+}

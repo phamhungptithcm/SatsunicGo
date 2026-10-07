@@ -1,0 +1,9 @@
+{
+  "task_id": "SATSUNICGO-CUSTOMERS-028",
+  "generated_at": "2026-10-06T04:32:49.152564+00:00",
+  "files": {
+    "src/features/crm/Customers.tsx": "13f91620cc2fa912fccf39b80b33c2c7bdb9032c43488a207e2fd9615ed186fb",
+    "src/features/crm/Customer.tsx": "8ed1d23fbf875f18c2ccf2ea724db5ae54684416d1cae4927d89f1784dbae565",
+    "tests/unit/customers-contextual.test.ts": "35d0fcd6e9247a780fc2e57a80a20ed1c281823ee4509eec32a2a0e36ee854f6"
+  }
+}
