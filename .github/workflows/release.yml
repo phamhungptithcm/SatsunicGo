@@ -1,0 +1,189 @@
+name: Production release
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: satsunicgo-production-release
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  quality:
+    uses: ./.github/workflows/ci.yml
+    with:
+      build: false
+    permissions:
+      contents: read
+
+  build:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Push access is required to list/download existing draft releases for idempotent reruns.
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      published: ${{ steps.version.outputs.published }}
+      artifact-id: ${{ steps.artifact.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+      - id: version
+        name: Select version and complete release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release/release.mjs prepare
+      - if: steps.version.outputs.published != 'true'
+        run: npm ci
+      - if: steps.version.outputs.recovery-artifact-id != ''
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          artifact-ids: ${{ steps.version.outputs.recovery-artifact-id }}
+          run-id: ${{ steps.version.outputs.recovery-run-id }}
+          merge-multiple: true
+          github-token: ${{ github.token }}
+      - if: steps.version.outputs.existing == 'true' && steps.version.outputs.published != 'true'
+        name: Reuse original draft artifact without rebuilding
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RECOVERY_ARTIFACT_ID: ${{ steps.version.outputs.recovery-artifact-id }}
+        run: |
+          if [[ -z "$RECOVERY_ARTIFACT_ID" ]]; then
+            gh release download "$RELEASE_TAG" --pattern "release-$RELEASE_TAG.tar.gz" --pattern bundle.sha256
+          fi
+          sha256sum --check bundle.sha256
+          python3 scripts/release/unpack.py "release-$RELEASE_TAG.tar.gz" release-stage
+          node scripts/release/artifact.mjs verify
+      - if: steps.version.outputs.existing != 'true'
+        name: Build versioned production artifact once
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          VITE_RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          VITE_RELEASE_SHA: ${{ github.sha }}
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_PROJECT_ID: satsunicgo
+          VITE_FIREBASE_APP_ID: '1:278913913091:web:e40355cd8ad5abe00f9936'
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_REGION: asia-southeast1
+          VITE_RECAPTCHA_ENTERPRISE_SITE_KEY: ${{ vars.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY }}
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_USE_EMULATORS: 'false'
+          VITE_BETA_RELEASE: 'false'
+        run: |
+          npm run release:build
+          node scripts/release/artifact.mjs create
+          npm audit --omit=dev --audit-level=high --prefix release-stage/deployment/functions
+          tar -czf "release-$RELEASE_TAG.tar.gz" -C release-stage deployment candidate.json manifest.json release-notes.md
+          sha256sum "release-$RELEASE_TAG.tar.gz" > bundle.sha256
+      - if: steps.version.outputs.published != 'true'
+        id: artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-${{ steps.version.outputs.tag }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            release-${{ steps.version.outputs.tag }}.tar.gz
+            bundle.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.published != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment:
+      name: production
+      url: https://satsunicgo.web.app
+    permissions:
+      contents: write
+      actions: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ needs.build.outputs.tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Validate production authentication configuration
+        env:
+          WIF_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          DEPLOY_SERVICE_ACCOUNT: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+        run: |
+          node scripts/release/release.mjs check-auth
+      - run: npm ci
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+          merge-multiple: true
+      - name: Verify immutable artifact and reject superseded source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha256sum --check bundle.sha256
+          python3 scripts/release/unpack.py "release-$RELEASE_TAG.tar.gz" release-stage
+          node scripts/release/artifact.mjs verify
+          cp release-stage/candidate.json candidate.json
+          cp release-stage/release-notes.md release-notes.md
+          node scripts/release/release.mjs assert-head
+          node scripts/release/release.mjs reserve
+      - name: Preserve candidate for retries and rollback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/release/assets.mjs candidate
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+          project_id: satsunicgo
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3
+      - name: Prevent implicit Function deletion
+        run: node scripts/release/verify-production.mjs before
+      - name: Promote precompiled artifact to production
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/release/release.mjs assert-head
+          cd release-stage/deployment
+          node ../../node_modules/firebase-tools/lib/bin/firebase.js deploy --project satsunicgo --config firebase.json --only functions:satsunicgo,hosting --non-interactive --message "$RELEASE_TAG / $GITHUB_SHA"
+      - name: Verify Hosting hashes and Functions source/revisions
+        run: node scripts/release/verify-production.mjs after
+      - name: Publish release only with verified production evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/release/assets.mjs receipt
+          node scripts/release/release.mjs publish
+      - if: always()
+        name: Record deployment outcome
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          printf '### Production release %s\n\nSource: %s\n\nJob status: **%s**\n\nA release is published only after provider verification. A failed deployment may have changed part of production; inspect provider state before retry or rollback.\n' "$RELEASE_TAG" "$GITHUB_SHA" "$JOB_STATUS" >> "$GITHUB_STEP_SUMMARY"
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: deployment-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: deployment.json
+          if-no-files-found: ignore
+          retention-days: 90

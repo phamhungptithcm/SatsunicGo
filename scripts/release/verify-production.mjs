@@ -1,0 +1,114 @@
+import { execFileSync } from 'node:child_process';
+import process from 'node:process';
+import console from 'node:console';
+import { Buffer } from 'node:buffer';
+import { setTimeout } from 'node:timers';
+/* global fetch, AbortSignal */
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { digest, verify } from './artifact.mjs';
+
+const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,labels)';
+function inventory() {
+  return JSON.parse(execFileSync('gcloud', ['functions', 'list', '--v2', '--project=satsunicgo', '--regions=asia-southeast1', `--format=${projection}`], {
+    encoding: 'utf8', timeout: 120_000,
+  })).filter(f => f.labels?.['firebase-functions-codebase'] === 'satsunicgo');
+}
+export function checkInventory(manifest, deployed, allowMissing) {
+  const names = new Set(manifest.inventory.map(f => f.name));
+  if (!names.size || manifest.inventory.some(f => f.region !== 'asia-southeast1' || !/^[a-zA-Z][a-zA-Z0-9]*$/.test(f.name))) throw Error('UNSAFE_FUNCTION_INVENTORY');
+  const actual = new Set();
+  for (const fn of deployed) {
+    const id = fn.name.split('/').at(-1);
+    if (!names.has(id) || actual.has(id)) throw Error('FUNCTION_REMOVAL_OR_DUPLICATE_BLOCKED');
+    actual.add(id);
+    if (!allowMissing && (fn.state !== 'ACTIVE' || !fn.serviceConfig?.revision || !fn.buildConfig?.source?.storageSource)) throw Error('FUNCTION_NOT_ACTIVE_OR_SOURCE_UNAVAILABLE');
+  }
+  if (!allowMissing && actual.size !== names.size) throw Error('MISSING_DEPLOYED_FUNCTION');
+}
+async function fetchBytes(url, headers = {}) {
+  const response = await fetch(url, { headers, redirect: 'error', signal: AbortSignal.timeout(30_000) });
+  if (!response.ok) throw Error('PROVIDER_HTTP_FAILURE');
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of response.body) {
+    size += chunk.length;
+    if (size > 32 * 1024 * 1024) throw Error('PROVIDER_RESPONSE_BUDGET_EXCEEDED');
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+export async function verifyHosting(manifest, read = fetchBytes) {
+  const origin = 'https://satsunicgo.web.app';
+  const metadata = JSON.parse((await read(`${origin}/release-version.json?sha=${manifest.sha}`, { 'Cache-Control': 'no-cache' })).toString());
+  if (metadata.tag !== manifest.tag || metadata.sha !== manifest.sha || metadata.project !== 'satsunicgo') throw Error('DEPLOYED_HOSTING_VERSION_MISMATCH');
+  const prefix = 'deployment/dist/';
+  const entries = Object.entries(manifest.files).filter(([name]) => name.startsWith(prefix) && !name.slice(prefix.length).split('/').some(p => p.startsWith('.')));
+  if (!entries.some(([name]) => name === `${prefix}index.html`)) throw Error('MISSING_HOSTING_INDEX');
+  for (let i = 0; i < entries.length; i += 4) {
+    await Promise.all(entries.slice(i, i + 4).map(async ([name, hash]) => {
+      const bytes = await read(`${origin}/${name.slice(prefix.length)}?sha=${manifest.sha}`, { 'Cache-Control': 'no-cache' });
+      if (digest(bytes) !== hash) throw Error('DEPLOYED_HOSTING_FILE_MISMATCH');
+    }));
+  }
+  return { origin, verifiedFiles: entries.length };
+}
+export async function verifyProduction() {
+  const manifest = verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);
+  const bundleSha256 = readFileSync('bundle.sha256', 'utf8').split(/\s/)[0];
+  if (!/^[a-f0-9]{64}$/.test(bundleSha256) || digest(readFileSync(`release-${manifest.tag}.tar.gz`)) !== bundleSha256) throw Error('BUNDLE_CHECKSUM_MISMATCH');
+  // Static edge propagation is bounded; content mismatch never becomes success by ignoring it.
+  let hosting;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try { hosting = await verifyHosting(manifest); break; }
+    catch (error) {
+      if (attempt === 5) throw error;
+      await new Promise(resolveWait => setTimeout(resolveWait, 10_000));
+    }
+  }
+  const deployed = inventory();
+  checkInventory(manifest, deployed, false);
+  const directory = mkdtempSync(join(tmpdir(), 'release-source-'));
+  const sources = new Set(), functions = [];
+  try {
+    for (const fn of deployed) {
+      const source = fn.buildConfig.source.storageSource;
+      if (!/^[a-z0-9._-]+$/.test(source.bucket) || !/^[\w./-]+$/.test(source.object) || source.object.split('/').includes('..') || !/^\d+$/.test(source.generation ?? '')) throw Error('INVALID_PROVIDER_SOURCE_REFERENCE');
+      const uri = `gs://${source.bucket}/${source.object}#${source.generation}`;
+      if (!sources.has(uri)) {
+        const file = join(directory, `source-${sources.size}.zip`);
+        execFileSync('gcloud', ['storage', 'cp', uri, file, '--quiet'], { timeout: 120_000, stdio: 'pipe' });
+        execFileSync('python3', ['scripts/release/verify-source.py', file, 'release-stage/manifest.json'], { timeout: 60_000, stdio: 'pipe' });
+        sources.add(uri);
+      }
+      functions.push({ name: fn.name, revision: fn.serviceConfig.revision, sourceGeneration: source.generation });
+    }
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+  const after = inventory();
+  checkInventory(manifest, after, false);
+  if (deployed.some(fn => {
+    const current = after.find(f => f.name === fn.name);
+    return current.serviceConfig.revision !== fn.serviceConfig.revision || JSON.stringify(current.buildConfig.source) !== JSON.stringify(fn.buildConfig.source);
+  })) throw Error('FUNCTION_CHANGED_DURING_VERIFICATION');
+  // Token is retained only in process memory and never logged or written to an artifact.
+  const token = execFileSync('gcloud', ['auth', 'print-access-token'], { encoding: 'utf8', timeout: 30_000 }).trim();
+  const releases = JSON.parse((await fetchBytes('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}` })).toString());
+  const latest = releases.releases?.[0];
+  if (latest?.type !== 'DEPLOY' || !latest.version?.name || latest.version.status !== 'FINALIZED') throw Error('HOSTING_RELEASE_NOT_FINALIZED');
+  writeFileSync('deployment.json', JSON.stringify({ schemaVersion: 1, status: 'VERIFIED', project: 'satsunicgo',
+    tag: manifest.tag, sha: manifest.sha, bundleSha256, verifiedAt: new Date().toISOString(),
+    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions }, null, 2) + '\n');
+}
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    if (process.argv[2] === 'before') checkInventory(verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG), inventory(), true);
+    else if (process.argv[2] === 'after') await verifyProduction();
+    else throw Error('INVALID_VERIFICATION_OPERATION');
+  } catch {
+    // External commands may contain provider details. Keep this log free of opaque responses.
+    console.error('PRODUCTION_VERIFICATION_FAILED: inspect workflow step and provider state; release remains a draft.');
+    process.exitCode = 1;
+  }
+}

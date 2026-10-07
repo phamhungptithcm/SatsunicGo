@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CICD-108",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {"status":"PASSED","summary":"Implementation stays within the approved workflow/helper/test/document scope.","evidence_refs":["docs/plans/SATSUNICGO-CICD-108-APPROVAL.md"]},
+    "security": {"status":"PASSED","summary":"No production mutation, credentials in archives, force flags or dotenv overrides introduced.","evidence_refs":["scripts/release/artifact.mjs",".github/workflows/release.yml"]},
+    "code_quality": {"status":"FAILED","summary":"Initial review found deployment-lock parity and lint issues requiring fixes.","evidence_refs":["docs/reviews/SATSUNICGO-CICD-108/COMPLETION.md"]},
+    "failure_paths": {"status":"FAILED","summary":"Initial orphan-tag and archive portability gaps required correction.","evidence_refs":["tests/unit/release108.test.mjs"]},
+    "error_handling": {"status":"PASSED","summary":"Deployment errors do not publish success; retries cannot move tags or overwrite conflicting artifacts.","evidence_refs":["scripts/release/release.mjs","scripts/release/assets.mjs"]},
+    "production_readiness": {"status":"NOT_RUN","summary":"OIDC and environment absent; no provider run or emulator integration evidence.","evidence_refs":["docs/plans/SATSUNICGO-CICD-108-WIF-SETUP.md"]},
+    "trade_offs": {"status":"PASSED","summary":"Source-only automation and non-atomic deployment boundaries are disclosed.","evidence_refs":["docs/releases/CICD-108.md"]}
+  },
+  "findings": [
+    {"id":"DEP-01","severity":"HIGH","status":"FIXED","category":"artifact-parity","location":"scripts/release/artifact.mjs","summary":"Separate Functions lock differed from the workspace graph used by tests.","resolution":"Derived deploy lock offline from tested root resolutions and overrides; reject version/integrity drift.","evidence_refs":["tests/unit/release108.test.mjs","docs/reviews/SATSUNICGO-CICD-108/QUALITY-GATES.md"]},
+    {"id":"RETRY-01","severity":"MEDIUM","status":"FIXED","category":"recovery","location":"scripts/release/release.mjs","summary":"A tag created before draft/asset upload could make a rerun unrecoverable.","resolution":"Recover retained artifacts from the exact original SHA/main release workflow and create only missing metadata.","evidence_refs":["tests/unit/release108.test.mjs"]},
+    {"id":"STATIC-01","severity":"LOW","status":"FIXED","category":"static-analysis","location":"tests/unit/release108.test.mjs","summary":"New Node globals/text sanitizer regex and macOS tar fixture needed portability/lint fixes.","resolution":"Use Node imports and safe character handling; suppress macOS archive metadata only for fixtures; rerun ESLint/actionlint/tests.","evidence_refs":["docs/reviews/SATSUNICGO-CICD-108/QUALITY-GATES.md"]}
+  ],
+  "residual_risks": ["Provider setup and execution evidence missing."],
+  "limitations": ["Review is a self-review, not a separate reviewer or production certification."]
+}
