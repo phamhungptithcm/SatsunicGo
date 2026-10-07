@@ -1,0 +1,799 @@
+{
+  "applicationCommit": "700317e226f2a14c163fbbdd176a8d9c654e19f1",
+  "project": "satsunicgo",
+  "url": "https://satsunicgo.web.app/",
+  "assetTotal": 176,
+  "assetMatching": 176,
+  "assets": {
+    ".vite/manifest.json": {
+      "status": 200,
+      "match": true
+    },
+    "assets/AccountTracking-IPbT3mc3.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Activity-rftlViCy.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/BlogComments-CJ2HPyd8.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/BlogComments-DYrqiIX_.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Campaigns-CUUosifE.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Campaigns-ZHRTPzjF.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Checkout-BaniQfE0.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Content-B6D3_UVF.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Content-D6NlmfKi.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ContentEditor-BGxFRsq3.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ContentEditor-C5Ps8I6P.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/CrmPresentation--AcU3ycW.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Customer-B-Up8uuG.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/CustomerShipments-tfRP6rj2.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Customers-CBqNQ_CQ.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Dashboard-DOHmVWsX.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Dashboard-uaXn5yK2.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Documents-B0uoYBjq.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Documents-BBBwNwCA.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Finance-Cl0iFKKo.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Loading-DaVxGKnt.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Loading-gx_DPA10.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/MediaUpload-CIrn4k7P.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Membership-BLOcp2tD.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/MermaidDiagram-qFgSN213.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Notifications-Bnj8XeE0.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Notifications-CiOL6CTE.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/OrderConversation-BZ5x3swq.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/OrderConversation-eBXvgUkZ.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/OrderTools-DZc3YUJy.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/PageTabs-CfjWD-M1.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/PageTabs-p3uiqO2r.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/PlanEditor-DZ-fiW4A.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Profile-D6WOmi-v.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Profile-IJ9vbDCX.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Refunds-Z4xUOKbF.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/RequestForm-D4XYndRM.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/RequestForm-DdhIRhG1.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Returns-BhE2j9pa.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/RichPreview-CCzdY98o.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Security-DXHgUQly.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Settings-Bm0Y8o4k.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Shipping-CprUrgrz.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Shipping-Df4GYiHB.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ShippingRates-CeRnwZvr.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ShippingRates-D3EgATc2.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/StaffAccess-CQLJux1t.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Studio-9wpcVteE.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Studio-CuKXZDPf.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Support-BE1bETZg.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Thread-F0MJwwEe.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/TransferNotice-DZs2P5Mn.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Workbench-CjmqgtLh.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Workspace--dzoSnge.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/Workspace-qCVQ9RED.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/_basePickBy-QJXUw_pr.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/_baseUniq-DR4vVjyC.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/abnfDiagram-O67JEVCF-CI0DhEjp.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/admin-workbench096-Bg7hkc6Q.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/arc-DgcGdgmL.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/architecture-WOLXFQ4H-Bhv53Shi.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/architectureDiagram-NJMV4G6O-Bb6Rt_Sy.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/array-BifhSqXX.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/blockDiagram-BEXU5L5S-CSmZprUr.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/blog-studio-BI1v6FmQ.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/c4Diagram-YGBWAQC7-C5Wosk4f.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/channel-sK6eEReD.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-2Q5K7J3B-C1jixKkw.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-3FUC2YCW-BrGMv6Np.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-5DYCD2WN-D0VwjKdD.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-5VM5RSS4-ZNzvKenW.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-742MDFTN-Q1YB1_YQ.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-7INBJB4K-Be5J__af.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-7M6MHVWA-BhuBExSh.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-7PRAP22T-DAQaIW7s.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-DUW6YSOI-Dgx8z5s3.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-GTNCS2PH-BgszXV18.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-GWA4HPMP-CYv3T_td.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-J5ZVWO5B-oDCd-gWO.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-JWPE2WC7-DVXcaiue.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-MBY4JIJT-b-4VGNQq.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-NETBCI7D-GaxHVeUG.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-NGNAAXSQ-DqoPQk1a.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-O7XYJQB3-IL8vVqv5.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-UA2S7LBM-Cv0rcnAU.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-WEXAMYUT-BTnKJA-7.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-XXDRQBXY-BvKO0v-W.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-Y2CYZVJY-DsF7k-Jl.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-Z7XXMR3K-DxfkYFQN.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/chunk-ZIGJFQKS-BqFUSTwU.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/classDiagram-v2-NBCMYWYE-Stwvvzni.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/cose-bilkent-JH36ORCC-COXSdE6a.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/customer-workspace095-Bxz8Fetr.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/cynefin-EF2NZ3EQ-BtnrPWfh.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/cynefinDiagram-VND7K2PF-CxO2Sg5e.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/cytoscape.esm-Yq6u8L66.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/dagre-6A5THRUB-CUjJVkUp.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/defaultLocale-BFoDCU3G.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-22UHCM2B-Bn2vWXTU.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-3UASUU5V-DydRERLd.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-ATOU4E4O-DykcVM6f.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-CDSNMT55-Dl2iqHyl.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-MLGK6HIB-RlPiKObs.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/diagram-MPIPVDR6-C-DCG7gR.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/dist-B_J_HbC0.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ebnfDiagram-ZINNZB2B-Dv1Tbn_D.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/elk-276RUBZZ-DgTpXhDb.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/erDiagram-OPXOYQCR-D5lRl6dn.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/eventmodeling-K75KTNOO-CHXZjM1e.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/exceljs.min-DgbhWywh.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/finance-content095-DRNgWW4f.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/firebase-DmwURCy4.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/firebase-u8DDmQcB.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/flowDiagram-KWPJA3E3-Cz29Biyb.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ganttDiagram-FUAMR5RP-DCM9JUfV.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/gitGraph-VSP46ZUC-oc90_K2O.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/gitGraphDiagram-X574FWY7-CN9kNKyK.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/graphlib-C9Tl7QrK.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/index-BU0lknZY.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/index-BWmnRjeo.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/info-OHQRW6UA-DXpVf_yU.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/infoDiagram-VRGFBTTK-CDlby2fw.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/init-C-OQMol4.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ishikawaDiagram-OU5B5YK6-TzIlNBki.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/journeyDiagram-ZHPQQLJL-G0Ed6-UT.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/kanban-definition-PNTS6WVX-CjPBtU_L.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/katex-ZlcWpGUi.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/line-BdgrbIk5.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/linear-BUnzfXgk.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/media-DoHQYgEY.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/mermaid-parser.core-BfnlY58n.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/mermaid.core-BYMSci_S.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/mindmap-definition-NLK3R4M7-CSciPvg_.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ordinal-BDEzSJ7C.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/packet-JDAUHWVQ-CeVD_oR6.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/path-fybaL0A-.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/pegDiagram-GJSIUBJH-d2cpLqJB.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/pie-XZMESJXO-8OcldhqV.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/pieDiagram-5QR66LMP-DE-02aQ1.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/product-detail080-CWKrOlnr.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/product-detail080-UKD4YNjp.css": {
+      "status": 200,
+      "match": true
+    },
+    "assets/quadrantDiagram-O4NWA36T-BBooxuYb.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/radar-ABXABTNO-CDXml_iB.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/railroad-I3PHUGI6-DB5zPYsb.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/railroad-abnf-LNEFI6M7-wcHrJp0K.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/railroad-ebnf-DWYD2UWJ-Bfw2MGN1.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/railroad-peg-JR7BVNR7-C3C1-cph.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/railroadDiagram-XR7U4H2S-BPdEHfDy.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/react-C0PBjpjw.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/requirementDiagram-PLB6GJNP-VFiW6W4F.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/rolldown-runtime-Dd_uD5pT.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/rough.esm-Dy-Kn_BL.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/sankeyDiagram-IPEJSGJF-4r8PvVWz.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/schemas-CTHe0jFM.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/sequenceDiagram-PO4LG4MO-CouXJaJA.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/sizeCapture-INFHLROL-3uHXrFqA.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/src-oBChb5qS.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/stateDiagram-v2-GCMORJYK-Bj9Ir9Aq.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/swimlanes-2SLR337P-pjbtHogY.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/swimlanesDiagram-TC7HE7FX-D351N1Uu.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/timeline-definition-EJHVYXUP-DSzAShob.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/treeView-D4JQ5SDB-D3RehXnb.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/treemap-SAJKECNS-uFdPM9Ks.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/ui-pXTw6HD3.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/usecaseDiagram-POWQR4AR-De5on11K.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/vennDiagram-UO4OBE2U-DXkjqr8K.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/wardley-7MLQ67FV-7B0qjwHe.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/wardleyDiagram-VNRHLVJA-l44pE5J3.js": {
+      "status": 200,
+      "match": true
+    },
+    "assets/xychartDiagram-PMCCYNJV-Bz6GLQgl.js": {
+      "status": 200,
+      "match": true
+    },
+    "favicon.svg": {
+      "status": 200,
+      "match": true
+    },
+    "images/markets/jp-v2.webp": {
+      "status": 200,
+      "match": true
+    },
+    "images/markets/kr-v2.webp": {
+      "status": 200,
+      "match": true
+    },
+    "images/markets/us-v2.webp": {
+      "status": 200,
+      "match": true
+    },
+    "index.html": {
+      "status": 200,
+      "match": true
+    },
+    "robots.txt": {
+      "status": 200,
+      "match": true
+    }
+  },
+  "routes": {
+    "/products": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/posts": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/how-it-works": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/fees": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/crm/content": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/account/security": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/request": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    }
+  },
+  "unauthenticatedWorkspaceCommand": 401,
+  "hosting": "DEPLOYED; separate Hosting CLI exit0",
+  "publicPage": {
+    "buildConfig": {
+      "entryPoint": "publicPage",
+      "runtime": "nodejs22"
+    },
+    "serviceConfig": {
+      "revision": "publicpage-00004-bej"
+    },
+    "state": "ACTIVE",
+    "updateTime": "2026-10-07T14:17:30.623386710Z"
+  },
+  "cloudBuild": [
+    {
+      "createTime": "2026-10-07T14:15:31.899638584Z",
+      "finishTime": "2026-10-07T14:16:58.551108Z",
+      "id": "7a191cee-5439-47db-a2e1-b1ba2b9313bf",
+      "startTime": "2026-10-07T14:15:33.520910238Z",
+      "status": "SUCCESS"
+    }
+  ],
+  "nativeBrowser": "Production homepage reloaded and new copy/render observed; no authenticated provider journey claimed",
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "BLOCKED_BEFORE_UPLOAD",
+      "reason": "Whole codebase secret-param discovery requested held PayOS secret; no fake secret supplied"
+    },
+    {
+      "attempt": 2,
+      "status": "CLOUD_BUILD_FAILED",
+      "reason": "Auto-generated dependency lock missing nested OTel entries; isolated generated lock corrected and npm ci dry-run passed"
+    },
+    {
+      "attempt": 3,
+      "status": "FUNCTION_DEPLOYED",
+      "reason": "Cloud Build SUCCESS and publicPage ACTIVE revision publicpage-00004-bej; CLI exits1 on existing cleanup-policy setup warning"
+    },
+    {
+      "attempt": 4,
+      "status": "HOSTING_DEPLOYED",
+      "reason": "Separate Hosting CLI exit0;176assets and7routes read back current"
+    }
+  ],
+  "providerHolds": "No AI/payment/email/provider configuration changes or activations",
+  "cleanupPolicy": "Existing unconfigured artifact cleanup policy retained; no force/retention mutation",
+  "productionDataWrites": "None",
+  "launchReadiness": "NOT_READY_FOR_LAUNCH: full business/provider acceptance remains incomplete"
+}

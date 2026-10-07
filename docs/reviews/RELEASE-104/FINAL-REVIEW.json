@@ -19,6 +19,25 @@
         "Preserved shared runtime and failed legacy evidence; no reset/bypass",
         "Fixture mounts real Workspace under /crm/*; scoped menu selector; correct mock API fields; actual page contents/error boundary/no-overflow assertions"
       ]
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "findings": [
+        "Function discovery blocked by unrelated held provider secret",
+        "Cloud auto-lock inconsistent; isolated package/npm ci fixed",
+        "Artifact cleanup warning prevented combined Hosting finalize"
+      ]
+    },
+    {
+      "cycle": 4,
+      "status": "PASSED",
+      "fixes": [
+        "Only unchanged publicPage exported, no secret module imports",
+        "Generated isolated lock retained with package hash and validated install",
+        "Cloud Build SUCCESS; function ACTIVE; Hosting separate exit0;176/176files and7routes match;unauth401",
+        "Source hashes unchanged from pushed application commit; production homepage observed"
+      ]
     }
   ],
   "dimensions": {
@@ -28,7 +47,7 @@
     "failure_paths": "PASSED toast/dashboard/header/filter tests and synthetic19-route empty/error matrix; full real-provider acceptance NOT_TESTED",
     "error_handling": "PASSED stale-context guards, drafts/retry state preserved",
     "product_content": "PASSED bounded changed presentation; current in-context screenshots and prior scoped records; complete business-state certification excluded",
-    "production_readiness": "READY_WITH_RISK for approved testing deployment; NOT_READY_FOR_LAUNCH",
+    "production_readiness": "PASSED approved production-testing deployment and readback; NOT_READY_FOR_LAUNCH",
     "trade_offs": "PASSED provider holds retained; incomplete legacy/real-provider evidence disclosed"
   },
   "unresolved": [
@@ -36,9 +55,17 @@
     "Historical full Admin/Finance and cross-page business acceptance remain incomplete; do not rewrite their BLOCKED records",
     "DEGRADED repository intelligence",
     "Existing bundle-size/dynamic-import warnings",
-    "No manual assistive-technology/device/real Google-MFA test"
+    "No manual assistive-technology/device/real Google-MFA test",
+    "Artifact cleanup policy remains unconfigured; no retention-policy change made"
   ],
   "runtimeReceipt": "Manual task-local record; ai-agent-kit runtime unavailable; no fabricated receipt",
   "tokenUsage": "Unavailable",
-  "cost": "Unavailable"
+  "cost": "Unavailable",
+  "applicationCommit": "700317e226f2a14c163fbbdd176a8d9c654e19f1",
+  "evidence": [
+    "DEPLOYMENT-RECEIPT.json",
+    "DEPLOYMENT-PACKAGE.json",
+    "CANDIDATE.json",
+    "PRODUCT-CONTENT.md"
+  ]
 }
