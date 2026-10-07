@@ -184,7 +184,7 @@ dist/assets/chunk-NGNAAXSQ-DqoPQk1a.js                  629.05 kB │ gzip: 127.
 dist/assets/exceljs.min-DgbhWywh.js                     929.56 kB │ gzip: 256.44 kB
 dist/assets/elk-276RUBZZ-DgTpXhDb.js                  1,456.41 kB │ gzip: 453.23 kB
 
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
