@@ -7,7 +7,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSyn
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
-import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions } from '../../scripts/release/artifact.mjs';
+import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS } from '../../scripts/release/artifact.mjs';
 import { checkInventory, verifyHosting } from '../../scripts/release/verify-production.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
@@ -312,4 +312,17 @@ test('mismatched receipt checksum or source cannot publish success', t => {
     put(root, 'deployment.json', receipt);
     assert.notEqual(run('publish').status, 0);
   }
+});
+
+test('production holds remove only held bindings/imports and reject compiler/inventory drift', () => {
+  const inventory = [...HELD_EXPORTS.map(name => ({name})), {name:'readNotification'}];
+  const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...HELD_EXPORTS.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`), 'Object.defineProperty(exports, "readNotification", {get: function(){return jobs.readNotification;}});'].join('\n');
+  const result = applyProductionHolds(compiled, inventory);
+  assert.deepEqual(result.inventory, [{name:'readNotification'}]);
+  assert.equal(result.heldExports.length, 7);
+  assert.match(result.compiled, /require\(".\/jobs"\)/);
+  assert.match(result.compiled, /"readNotification"/);
+  assert.equal(result.compiled.includes('payments/payos'), false);
+  assert.throws(() => applyProductionHolds(compiled.replace('"deliverEmail"','"wrong"'), inventory), /COMPILED_SHAPE/);
+  assert.throws(() => applyProductionHolds(compiled, inventory.slice(1)), /INVENTORY_DRIFT/);
 });

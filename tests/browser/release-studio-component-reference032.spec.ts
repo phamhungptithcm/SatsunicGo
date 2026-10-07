@@ -4,8 +4,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import {
   fixture,
   parseReferenceFixture,
-} from "/private/tmp/release027-original-studio-reference/fixture";
-import { draftSchema as originalDraftSchema } from "/private/tmp/release027-original-studio-reference/lib/blog/schema";
+} from "../fixtures/studio-reference/fixture";
+import { draftSchema as originalDraftSchema } from "../fixtures/studio-reference/lib/blog/schema";
 import {
   studioDraftSchema,
   studioSettingsSchema,

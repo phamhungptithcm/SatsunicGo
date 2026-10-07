@@ -64,3 +64,7 @@ Automatic deployment covers Hosting and Functions only. Firestore/Storage rules 
 Provider package/revision evidence does not establish live payment, authentication/MFA, App Check provider configuration, restore acceptance or other business-flow readiness. Maintain those acceptance gates separately.
 
 Official references: [GitHub concurrency](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency), [GitHub releases API](https://docs.github.com/en/rest/releases/releases), [Google auth action/WIF](https://github.com/google-github-actions/auth), [Firebase Functions management](https://firebase.google.com/docs/functions/manage-functions), [Firebase IAM](https://firebase.google.com/docs/projects/iam/permissions).
+
+## Existing production holds
+
+The artifact preserves the reviewed 62-Function production boundary from RELEASE-ALL-LATEST-20261007. Seven held exports (Ask workflow/conversation, maintenance, payment link/webhook/reconciliation and email delivery) remain omitted from the compiled deployment entry only. Application source is unchanged. Their names are recorded in the artifact manifest. Exact AST binding/import checks reject compiler or inventory drift. Missing provider credentials are not created or bypassed. Activating held Functions requires a separate reviewed provider release.

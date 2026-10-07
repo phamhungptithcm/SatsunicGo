@@ -6,6 +6,7 @@ import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SEMVER, SHA } from './release.mjs';
 import { preflight } from './preflight.mjs';
+import ts from 'typescript';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
 export function files(root, prefix = '') {
@@ -67,6 +68,38 @@ export function verify(root, expectedSha, expectedTag) {
   }
   return manifest;
 }
+// Preserve the explicitly held deployment boundary from the latest production release.
+export const HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail']);
+export function applyProductionHolds(compiled, inventory) {
+  const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name)).map(item => item.name));
+  if (!held.size) return { compiled, inventory, heldExports: [] };
+  if (held.size !== HELD_EXPORTS.length) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
+  const ast = ts.createSourceFile('index.js', compiled, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const removed = new Set(), imports = new Set();
+  const blockedModules = new Set(['./ai/ask-workflow', './payments/payos', './email']);
+  const spans = [];
+  for (const node of ast.statements) {
+    if (ts.isVariableStatement(node)) {
+      for (const declaration of node.declarationList.declarations) {
+        const call = declaration.initializer;
+        if (call && ts.isCallExpression(call) && call.expression.getText(ast) === 'require' && call.arguments.length === 1 && ts.isStringLiteral(call.arguments[0]) && blockedModules.has(call.arguments[0].text)) {
+          if (node.declarationList.declarations.length !== 1) throw Error('PRODUCTION_HOLD_IMPORT_SHAPE');
+          imports.add(call.arguments[0].text); spans.push([node.getStart(ast), node.end]);
+        }
+      }
+    }
+    if (ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)) {
+      const call = node.expression;
+      if (call.expression.getText(ast) === 'Object.defineProperty' && call.arguments[0]?.getText(ast) === 'exports' && ts.isStringLiteral(call.arguments[1]) && held.has(call.arguments[1].text)) {
+        if (removed.has(call.arguments[1].text)) throw Error('PRODUCTION_HOLD_DUPLICATE');
+        removed.add(call.arguments[1].text); spans.push([node.getStart(ast), node.end]);
+      }
+    }
+  }
+  if (removed.size !== held.size || imports.size !== blockedModules.size) throw Error('PRODUCTION_HOLD_COMPILED_SHAPE');
+  for (const [start, end] of spans.sort((a,b) => b[0]-a[0])) compiled = compiled.slice(0,start) + compiled.slice(end);
+  return { compiled, inventory: inventory.filter(item => !held.has(item.name)), heldExports: [...held].sort() };
+}
 export function create(root, stage, candidatePath, notesPath = join(root, 'release-notes.md')) {
   if (existsSync(stage)) throw Error('ARTIFACT_STAGE_ALREADY_EXISTS');
   const candidate = JSON.parse(readFileSync(candidatePath, 'utf8'));
@@ -82,6 +115,10 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   }
   const packagePath = join(stage, 'deployment/functions/package.json');
   const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
+  const entryPath = join(stage, 'deployment/functions', pkg.main);
+  if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
+  const promotion = applyProductionHolds(readFileSync(entryPath, 'utf8'), check.inventory);
+  writeFileSync(entryPath, promotion.compiled);
   pkg.version = candidate.tag.slice(1);
   // Deployment package contains precompiled JavaScript; managed Node build must not invoke tsc.
   delete pkg.scripts;
@@ -105,7 +142,7 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   writeFileSync(join(stage, 'deployment/firebase.json'), JSON.stringify(config, null, 2) + '\n');
   cpSync(candidatePath, join(stage, 'candidate.json'));
   cpSync(notesPath, join(stage, 'release-notes.md'));
-  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: check.inventory,
+  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports,
     files: files(stage), sourcePolicy: 'precompiled-package-no-dotenv-no-rebuild' };
   writeFileSync(join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return verify(stage, candidate.sha, candidate.tag);
