@@ -2,6 +2,7 @@ import { getApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { randomUUID } from "node:crypto";
+import { warn } from "firebase-functions/logger";
 import { z } from "zod";
 
 // Reviewed text-only price envelope. No rate or endpoint is client-configurable.
@@ -9,7 +10,7 @@ import { z } from "zod";
 // Reserve 1,000 VND per attempt, never release uncertain/failed reservations.
 export const pilotLimits = {
   model: "gemini-2.5-flash-lite",
-  location: "asia-southeast1",
+  location: "us-central1",
   maxInputTokens: 10000,
   maxOutputTokens: 800,
   reserveVnd: 1000,
@@ -91,6 +92,7 @@ export async function verifyPilotProvider() {
         }),
       },
     );
+    if (!response.ok) warn("ask106-provider-readiness", { httpStatus: response.status });
     return (
       response.ok &&
       z
@@ -98,6 +100,7 @@ export async function verifyPilotProvider() {
         .safeParse(await response.json()).success
     );
   } catch {
+    warn("ask106-provider-readiness", { phase: "transport-or-credential" });
     return false;
   }
 }

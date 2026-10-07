@@ -8,6 +8,7 @@ import {
 import { TotpMultiFactorGenerator } from "firebase/auth";
 import { clearMfa, pendingMfa, subscribeMfa, verifyMfa } from "./mfa";
 import "./login-challenge.css";
+import { notify } from "../../shared/feedback";
 
 export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
   const challenge = useSyncExternalStore(subscribeMfa, pendingMfa, () => null);
@@ -87,6 +88,12 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
               "auth/network-request-failed"
             ? "Chưa kết nối được. Kiểm tra mạng rồi thử lại."
             : "Mã chưa đúng hoặc đã hết hạn. Nhập mã mới để thử lại.",
+      );
+      notify(
+        expired
+          ? "Phiên xác thực đã hết hạn. Hủy rồi thử lại."
+          : "Mã chưa đúng hoặc chưa kết nối được. Thử lại.",
+        "error",
       );
       setCode("");
     } finally {

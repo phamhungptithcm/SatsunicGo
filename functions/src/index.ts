@@ -167,6 +167,7 @@ export const command = onCall(config, async (req) => {
           throw new HttpsError(
             "failed-precondition",
             "Cần đăng nhập lại và xác thực hai lớp.",
+            { reason: "RECENT_MFA_REQUIRED" },
           );
         const p = z
           .object({
@@ -511,7 +512,12 @@ export {
   studioAdvancedCommand,
 } from "./blog-studio-advanced";
 
-export { websiteBannerCommand, websiteBannerAdmin, websiteBannerPreview, campaignBannersPublic } from "./campaign-banners";
+export {
+  websiteBannerCommand,
+  websiteBannerAdmin,
+  websiteBannerPreview,
+  campaignBannersPublic,
+} from "./campaign-banners";
 
 export {
   productReviewRead,

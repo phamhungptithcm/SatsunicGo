@@ -3,10 +3,11 @@
 export function serviceError(
   error: unknown,
   fallback: string,
-): Error & { code?: string } {
-  const { message, code } = (error ?? {}) as {
+): Error & { code?: string; details?: unknown } {
+  const { message, code, details } = (error ?? {}) as {
     message?: string;
     code?: string;
+    details?: unknown;
   };
   const text = typeof message === "string" ? message : fallback;
   const display =
@@ -16,5 +17,5 @@ export function serviceError(
           "",
         )
       : text;
-  return Object.assign(new Error(display), { code });
+  return Object.assign(new Error(display), { code, details });
 }

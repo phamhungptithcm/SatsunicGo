@@ -85,6 +85,7 @@ export const invoiceCommand = onCall(opts, async (req) => {
       throw new HttpsError(
         "permission-denied",
         "Xác thực hai bước gần đây để xử lý chứng từ.",
+        { reason: "RECENT_MFA_REQUIRED" },
       );
     if (prior.exists) {
       if (prior.data()?.hash !== hash)

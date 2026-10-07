@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { callService } from "../../shared/firebase";
 import "./ask-pilot106.css";
+import { notify } from "../../shared/feedback";
 type Pilot = {
   enabled: boolean;
   version: number | null;
@@ -17,7 +18,11 @@ export function AskPilot() {
   const [pilot, setPilot] = useState<Pilot | null>(null),
     [busy, setBusy] = useState(false),
     [confirm, setConfirm] = useState(false),
-    [message, setMessage] = useState("");
+    [, setMessage] = useState("");
+  function publish(text: string) {
+    setMessage(text);
+    if (text) notify(text, text.startsWith("Đã ") ? "success" : "error");
+  }
   const mounted = useRef(false),
     running = useRef(false),
     sequence = useRef(0),
@@ -38,7 +43,7 @@ export function AskPilot() {
     } catch {
       if (mounted.current && request === sequence.current) {
         setPilot(null);
-        setMessage("Chưa tải được cấu hình thử Ask. Tải lại để kiểm tra.");
+        publish("Chưa tải được cấu hình thử Ask. Tải lại để kiểm tra.");
       }
     } finally {
       if (mounted.current && request === sequence.current) setBusy(false);
@@ -64,7 +69,7 @@ export function AskPilot() {
     running.current = true;
     setBusy(true);
     setConfirm(false);
-    setMessage("");
+    publish("");
     const command = pending.current ?? {
       action: "saveAskPilotPolicy",
       operationId: crypto.randomUUID(),
@@ -83,7 +88,7 @@ export function AskPilot() {
       );
       if (!mounted.current) return;
       setPilot(result.askPilot);
-      setMessage(
+      publish(
         result.askPilot.enabled ===
           (command.payload as { enabled: boolean }).enabled
           ? result.askPilot.enabled
@@ -108,12 +113,15 @@ export function AskPilot() {
       )
         pending.current = null;
       if (mounted.current)
-        setMessage(
-          acknowledged
-            ? "Thao tác đã trả kết quả, nhưng chưa đọc được trạng thái. Tải lại cấu hình để kiểm tra."
-            : pending.current
-              ? "Chưa xác nhận được kết quả. Thử lại thao tác đang chờ để đối chiếu."
-              : "Chưa lưu được. Kiểm tra quyền chủ tài khoản và xác thực hai lớp gần đây, rồi tải lại.",
+        publish(
+          (error as { details?: { reason?: string } }).details?.reason ===
+            "ACTION_NOT_RESUMED"
+            ? "Chưa xác thực xong. Cấu hình chưa được thay đổi."
+            : acknowledged
+              ? "Thao tác đã trả kết quả, nhưng chưa đọc được trạng thái. Tải lại cấu hình để kiểm tra."
+              : pending.current
+                ? "Chưa xác nhận được kết quả. Thử lại thao tác đang chờ để đối chiếu."
+                : "Chưa lưu được cấu hình Ask. Bạn có thể thử lại.",
         );
     } finally {
       running.current = false;
@@ -139,19 +147,28 @@ export function AskPilot() {
       {busy && <p role="status">Đang xử lý cấu hình thử Ask…</p>}
       {pilot && (
         <>
-          <p>Ngân sách thử tối đa: {money(pilot.maxBudgetVnd)}</p>
-          <p>
-            Đã giữ cho các lượt thử:{" "}
-            {pilot.reservedVnd === null
-              ? "Chưa xác minh"
-              : money(pilot.reservedVnd)}
-          </p>
-          <p>
-            Còn lại:{" "}
-            {pilot.reservedVnd === null
-              ? "Chưa xác minh"
-              : money(Math.max(0, pilot.maxBudgetVnd - pilot.reservedVnd))}
-          </p>
+          <dl className="pilotBudget">
+            <div>
+              <dt>Giới hạn thử</dt>
+              <dd>{money(pilot.maxBudgetVnd)}</dd>
+            </div>
+            <div>
+              <dt>Đã giữ cho lượt thử</dt>
+              <dd>
+                {pilot.reservedVnd === null
+                  ? "Chưa xác minh"
+                  : money(pilot.reservedVnd)}
+              </dd>
+            </div>
+            <div>
+              <dt>Còn lại</dt>
+              <dd>
+                {pilot.reservedVnd === null
+                  ? "Chưa xác minh"
+                  : money(Math.max(0, pilot.maxBudgetVnd - pilot.reservedVnd))}
+              </dd>
+            </div>
+          </dl>
           <p>
             Mỗi lượt giữ 1.000 ₫, kể cả khi lỗi hoặc dừng. Không tự tăng hoặc
             đặt lại ngân sách. Đây là giới hạn thử AI, chưa phải tổng hóa đơn
@@ -159,38 +176,38 @@ export function AskPilot() {
           </p>
           <p>
             {pilot.enabled ? "Đang bật thử" : "Chưa bật thử"} ·{" "}
-            {pilot.ready
-              ? "Đã kiểm tra kết nối provider"
-              : "Chưa xác minh provider"}
+            {pilot.ready ? "Kết nối AI sẵn sàng" : "Chưa kết nối được AI"}
           </p>
           {pilot.expiresAt && (
             <p>Hết hạn: {new Date(pilot.expiresAt).toLocaleString("vi-VN")}</p>
           )}
-          <button
-            ref={button}
-            type="button"
-            className="primary"
-            disabled={
-              busy ||
-              !!pending.current ||
-              !pilot.ready ||
-              pilot.reservedVnd === null ||
-              pilot.reservedVnd >= pilot.maxBudgetVnd ||
-              pilot.enabled
-            }
-            onClick={() => setConfirm(true)}
-          >
-            Bật thử cho tài khoản của tôi
-          </button>
-          <button
-            type="button"
-            disabled={busy || !!pending.current}
-            onClick={() => void save(false)}
-          >
-            Dừng thử
-          </button>
+          <div className="pilotActions">
+            <button
+              ref={button}
+              type="button"
+              className="primary"
+              disabled={
+                busy ||
+                !!pending.current ||
+                !pilot.ready ||
+                pilot.reservedVnd === null ||
+                pilot.reservedVnd >= pilot.maxBudgetVnd ||
+                pilot.enabled
+              }
+              onClick={() => setConfirm(true)}
+            >
+              Bật thử Ask
+            </button>
+            <button
+              type="button"
+              disabled={busy || !!pending.current || !pilot.enabled}
+              onClick={() => void save(false)}
+            >
+              Dừng thử
+            </button>
+          </div>
           {confirm && (
-            <section aria-labelledby="askPilotConfirm">
+            <section className="pilotConfirm" aria-labelledby="askPilotConfirm">
               <h3 id="askPilotConfirm" tabIndex={-1} ref={title}>
                 Xác nhận bật thử Ask
               </h3>
@@ -203,6 +220,7 @@ export function AskPilot() {
               </button>
               <button
                 type="button"
+                className="primary"
                 disabled={busy}
                 onClick={() => void save(true)}
               >
@@ -212,7 +230,7 @@ export function AskPilot() {
           )}
         </>
       )}
-      {message && <p role="status">{message}</p>}
+
       {pending.current ? (
         <button type="button" disabled={busy} onClick={() => void save(false)}>
           Thử lại thao tác đang chờ

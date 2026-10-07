@@ -89,6 +89,7 @@ export const financeReview = onCall(
         throw new HttpsError(
           "failed-precondition",
           "Cần xác thực hai lớp gần đây.",
+          { reason: "RECENT_MFA_REQUIRED" },
         );
       if (previous.exists) {
         if (previous.data()?.hash !== hash)

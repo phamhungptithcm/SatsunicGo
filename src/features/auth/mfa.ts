@@ -48,8 +48,29 @@ export async function verifyMfa(enrollmentId: string, code: string) {
   await current.resolveSignIn(
     TotpMultiFactorGenerator.assertionForSignIn(enrollmentId, code),
   );
-  if (resolver === current) update(null);
+  if (resolver === current) {
+    update(null);
+    completions.forEach((receive) => receive(true));
+  }
 }
 export function clearMfa() {
   update(null);
+  completions.forEach((receive) => receive(false));
+}
+
+const completions = new Set<(completed: boolean) => void>();
+export function waitForMfaResult() {
+  return new Promise<void>((resolve, reject) => {
+    const receive = (completed: boolean) => {
+      completions.delete(receive);
+      if (completed) resolve();
+      else
+        reject(
+          Object.assign(new Error("Đã hủy xác thực."), {
+            code: "auth/cancelled",
+          }),
+        );
+    };
+    completions.add(receive);
+  });
 }

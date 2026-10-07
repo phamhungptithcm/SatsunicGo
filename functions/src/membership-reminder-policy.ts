@@ -86,6 +86,7 @@ export const membershipReminderPolicy = onCall(
         throw new HttpsError(
           "failed-precondition",
           "Xác thực hai lớp gần đây để lưu cấu hình.",
+          { reason: "RECENT_MFA_REQUIRED" },
         );
       const op = db.doc(`idempotencyKeys/${uid}-${p.operationId}`),
         previous = await tx.get(op);

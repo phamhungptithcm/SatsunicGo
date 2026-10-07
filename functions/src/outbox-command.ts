@@ -67,6 +67,7 @@ export const outboxCommand = onCall(
         throw new HttpsError(
           "permission-denied",
           "Xác thực hai bước trước khi xử lý email.",
+          { reason: "RECENT_MFA_REQUIRED" },
         );
       if (prior.exists) {
         if (prior.data()?.hash !== hash)

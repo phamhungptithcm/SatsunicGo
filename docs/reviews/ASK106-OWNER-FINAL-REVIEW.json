@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK106-OWNER-PILOT",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Real catalog and homepage captured; paid draft still unavailable.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped evidence reviewed; no additional approved-scope finding.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped evidence reviewed; no additional approved-scope finding.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped evidence reviewed; no additional approved-scope finding.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped evidence reviewed; no additional approved-scope finding.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Providerreadiness nowtrue; owner activation denied due recentMFA gate.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped evidence reviewed; no additional approved-scope finding.",
+      "evidence_refs": [
+        "docs/reviews/ASK106-OWNER-IMPLEMENTATION-REVIEW.md",
+        "docs/reviews/ASK106-OWNER-PRODUCT-CONTENT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK106-REGION404",
+      "status": "FIXED",
+      "summary": "Owner-approved us-central1 endpoint deployed; live readinesstrue."
+    },
+    {
+      "id": "ASK106-MFA",
+      "status": "BLOCKED",
+      "summary": "Owner must authenticate2FA recently and enable through normalSettingsUI. No bypass permitted."
+    }
+  ],
+  "residual_risks": [
+    "Paidgeneration and draft screenshot NOT_RUN; waitingowneractivation.",
+    "Artifactcleanup policy absent."
+  ],
+  "limitations": [
+    "Actual AI token use and billed cost Unavailable.",
+    "Repository intelligence DEGRADED.",
+    "Runtime review recorder unavailable in this environment; file evidence retained."
+  ]
+}

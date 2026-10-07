@@ -129,6 +129,7 @@ export const membershipCommand = onCall(
         throw new HttpsError(
           "failed-precondition",
           "Cần xác thực gần đây và hai lớp.",
+          { reason: "RECENT_MFA_REQUIRED" },
         );
       if (previous.exists) {
         if (previous.data()?.hash !== hash)

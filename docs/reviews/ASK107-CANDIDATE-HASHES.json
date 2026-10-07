@@ -1,0 +1,23 @@
+{
+  "src/app/App.tsx": "e263bfdd4628932193c2305a968302dfb87448b5d61abd83933fcf36665c0204",
+  "src/features/auth/ActionMfa.tsx": "6e5908493a22f84746927bf3b61593b0001fb4c9b0e771260685532c1570cc76",
+  "src/features/auth/LoginChallenge.tsx": "b6cfc1c16a93669e14599aa976c08e951421aceac91deda2f2a44c6ba5cebc7a",
+  "src/features/auth/mfa.ts": "b9b07d66a1c01e36a9dfa911bcd42f0c498185e6c02f8663e74656a74f3367b9",
+  "src/features/settings/Settings.tsx": "31032f4f2ddfe62846d9d70f33abf5883983c822e45009dccfef7626dfb12f9b",
+  "src/features/settings/AskPilot.tsx": "b1d145bf3268871099a421ba11c4b9d738a38fd272588a1a64c85eaee0d53036",
+  "src/features/settings/settings107.css": "24836ce1dca84542a4b4d189b5d7fb9c328535b46fc7b8f15c9e5b17d3994796",
+  "src/shared/firebase.ts": "8021dc74fbcca3a1fa80dee9b87cf4170b43b5844b5e4d23276dc98432ca66fa",
+  "src/shared/service-error.ts": "db1c92d3a252a0947548006c89fd4a09386ff17ffcc8d69eb2e1544460a6185c",
+  "src/shared/mfa-recovery.ts": "551a2263e8201387bb3a4fe91d8f8126d39a83bee72e002330e1dbbe156b255d",
+  "functions/src/index.ts": "747200c64be545f6d052103f32f48e520a4f064e41d5fa36132460af9b183c39",
+  "functions/src/workspace.ts": "b9e4f5ab268c30a091389317acd95e0c21421f4092e74cd247eff651fa5c848d",
+  "functions/src/refunds.ts": "8f0701aafee7d02163fb8a5cbfc707f12c2506c9e9be2ecc5d8a6f79f19c1b37",
+  "functions/src/membership.ts": "3a1d4abe85967f89fc27086ab8d01944e886e1bc6f3c5d6ab3a266d6dd8d8227",
+  "functions/src/finance-review.ts": "28aaeae791251ac6e86dbd7c56c95c88fa440155e66e8b5a118745b6eabca4bf",
+  "functions/src/invoices.ts": "68eaaaa1db5082e0a509e4ee96cc1d884f9ac02e1dd38bcd4372b1e1dd6a7b6b",
+  "functions/src/outbox-command.ts": "fedc2fadc4def52323d49b8c1a88d137acdb37514f6e42b80016ca1be5e3d4cf",
+  "functions/src/membership-reminder-policy.ts": "b6c18b530a8d6cf69e1ef4ec14c258c36c1f3917b7a8bbd2d600dc82ccf054c3",
+  "functions/src/shipping-rates.ts": "60e6dfef535552fd6fdefab3365a6141af64165870d1369236a376897dcd87b3",
+  "functions/package-lock.json": "948c233785bd5d0b0ed0ead35d1be2ab7efc4bc07a45a00b76ed060c65eba32f",
+  "dist/index.html": "9bfb41bf523a75f19003895ff5538c0d755a8dd90b02ff385aa4ff7fdb588ac9"
+}

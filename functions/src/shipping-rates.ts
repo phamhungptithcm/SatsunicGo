@@ -132,6 +132,7 @@ export const shippingRatesAdmin = onCall(options, async (req) => {
       throw new HttpsError(
         "failed-precondition",
         "Xác thực hai lớp gần đây để thay đổi bảng giá.",
+        { reason: "RECENT_MFA_REQUIRED" },
       );
     const op = db.doc(`idempotencyKeys/${uid}-${p.operationId}`),
       previous = await tx.get(op);

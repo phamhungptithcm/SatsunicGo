@@ -136,6 +136,7 @@ test("concurrent attempts reserve at most lifetime ceiling and dispatch once eac
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string, options: RequestInit) => {
+      expect(url).toMatch(/^https:\/\/us-central1-aiplatform\.googleapis\.com\/v1\/projects\/satsunicgo\/locations\/us-central1\/publishers\/google\/models\/gemini-2\.5-flash-lite:/);
       if (url.endsWith(":countTokens")) {
         const counted = JSON.parse(String(options.body));
         expect(counted).toEqual(JSON.parse(body));

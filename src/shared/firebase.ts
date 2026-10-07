@@ -2,7 +2,9 @@ import {
   loginFeedback,
   publishAuthFailure,
 } from "../features/auth/auth-feedback";
-import { withProgress } from "./feedback";
+import { requestActionMfa } from "../features/auth/ActionMfa";
+import { runWithMfaRecovery } from "./mfa-recovery";
+import { notify, withProgress } from "./feedback";
 import { serviceError } from "./service-error";
 import { initializeApp } from "firebase/app";
 import {
@@ -124,14 +126,14 @@ export async function sendCommand(
     ...(orderId ? { orderId, expectedVersion } : {}),
   };
   try {
-    return (
-      await withProgress(() => httpsCallable(functions!, "command")(data))
-    ).data as {
+    return (await recoverCallable("command", data)).data as {
       id: string;
       version: number;
     };
   } catch (e) {
-    throw serviceError(e, "Chưa lưu được. Thử lại sau.");
+    const error = serviceError(e, "Chưa lưu được. Thử lại sau.");
+    notify(error.message, "error");
+    throw error;
   }
 }
 const readServices = new Set([
@@ -172,33 +174,33 @@ export async function callService<T>(name: string, data: unknown): Promise<T> {
     readServices.has(name) ||
     (name === "shippingRatesAdmin" &&
       (data as { action?: string })?.action === "read");
-  const timeout = readOnly ? 15_000 : 60_000;
-  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    return await withProgress(
-      async () => {
-        const request = httpsCallable(functions!, name, { timeout })(data);
-        const deadline = new Promise<never>((_, reject) => {
-          timer = setTimeout(
-            () =>
-              reject(
-                Object.assign(
-                  new Error(
-                    "Chưa nhận được kết quả. Kiểm tra kết nối và thử lại.",
-                  ),
-                  { code: "functions/deadline-exceeded" },
-                ),
-              ),
-            timeout,
-          );
-        });
-        return (await Promise.race([request, deadline])).data as T;
-      },
+    return (await recoverCallable(name, data, readOnly)).data as T;
+  } catch (e) {
+    const error = serviceError(e, "Chưa xử lý được. Thử lại sau.");
+    notify(error.message, "error");
+    throw error;
+  }
+}
+async function recoverCallable(name: string, data: unknown, readOnly = false) {
+  const uid = auth?.currentUser?.uid;
+  const path = window.location.pathname;
+  const payload = structuredClone(data);
+  const execute = () =>
+    withProgress(
+      () =>
+        httpsCallable(functions!, name, { timeout: readOnly ? 15000 : 60000 })(
+          payload,
+        ),
       { overlay: !readOnly },
     );
-  } catch (e) {
-    throw serviceError(e, "Chưa xử lý được. Thử lại sau.");
-  } finally {
-    if (timer) clearTimeout(timer);
-  }
+  return runWithMfaRecovery(
+    execute,
+    async () => {
+      if (!auth || !uid || auth.currentUser?.uid !== uid)
+        throw Error("Đăng nhập lại để tiếp tục.");
+      await requestActionMfa(auth);
+    },
+    () => auth?.currentUser?.uid === uid && window.location.pathname === path,
+  );
 }

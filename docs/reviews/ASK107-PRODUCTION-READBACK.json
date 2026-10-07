@@ -1,0 +1,81 @@
+{
+  "htmlSha256": "9bfb41bf523a75f19003895ff5538c0d755a8dd90b02ff385aa4ff7fdb588ac9",
+  "functions": [
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/workspaceCommand",
+      "serviceConfig": {
+        "revision": "workspacecommand-00004-rux"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:52.654661103Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingRatesAdmin",
+      "serviceConfig": {
+        "revision": "shippingratesadmin-00002-xoy"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:51.783596636Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipReminderPolicy",
+      "serviceConfig": {
+        "revision": "membershipreminderpolicy-00002-gaq"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:52.309774435Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/outboxCommand",
+      "serviceConfig": {
+        "revision": "outboxcommand-00002-zev"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:52.074659837Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipCommand",
+      "serviceConfig": {
+        "revision": "membershipcommand-00002-cud"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:51.627368828Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/refundCommand",
+      "serviceConfig": {
+        "revision": "refundcommand-00002-luy"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:52.020301498Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/command",
+      "serviceConfig": {
+        "revision": "command-00002-hub"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:52.328884557Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/financeReview",
+      "serviceConfig": {
+        "revision": "financereview-00002-hey"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:50.403522167Z"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceCommand",
+      "serviceConfig": {
+        "revision": "invoicecommand-00002-yij"
+      },
+      "state": "ACTIVE",
+      "updateTime": "2026-10-07T21:00:53.518988311Z"
+    }
+  ],
+  "hostingDeploy": "PASSED",
+  "functionsDeploy": "9 successful updates; CLI exit1 solely missing artifact cleanup policy; no forced policy change",
+  "ui": "Settings tabs/form and automatic MFA recovery dialog observed production",
+  "realAuthentication": "BLOCKED: Google popup auth/internal-error even after user gesture in remote Chrome; pending action canceled; no write or paid Ask attempt"
+}

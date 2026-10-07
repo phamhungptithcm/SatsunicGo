@@ -8,6 +8,7 @@ import {
   clearAuthFeedback,
 } from "../features/auth/auth-feedback";
 import { pendingMfa, subscribeMfa } from "../features/auth/mfa";
+import { ActionMfa } from "../features/auth/ActionMfa";
 import { LoginChallenge } from "../features/auth/LoginChallenge";
 import {
   StaffMfaSetup,
@@ -307,6 +308,7 @@ export function App() {
         message={authError || redirectError}
         staff={isCrmPath(location.pathname)}
       />
+      <ActionMfa pageKey={location.key} />
       <LoginChallenge
         onOpen={() => {
           setAuthError("");

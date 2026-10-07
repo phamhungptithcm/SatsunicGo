@@ -358,12 +358,17 @@ export const workspaceCommand = onCall(opts, async (req) => {
       access.data()?.locked ||
       profile.data()?.locked ||
       !isStringRoleArray(access.data()?.roles) ||
-      !access.data()!.roles.includes("OWNER") ||
-      !recentMfa(req.auth!.token, now)
+      !access.data()!.roles.includes("OWNER")
     )
       throw new HttpsError(
         "permission-denied",
         "Cần quyền chủ doanh nghiệp và xác thực hai lớp gần đây.",
+      );
+    if (!recentMfa(req.auth!.token, now))
+      throw new HttpsError(
+        "failed-precondition",
+        "Cần xác thực hai lớp gần đây.",
+        { reason: "RECENT_MFA_REQUIRED" },
       );
     providerReady = await verifyPilotProvider();
   }
@@ -412,6 +417,8 @@ export const workspaceCommand = onCall(opts, async (req) => {
       if (ticket.data()?.ownerId !== uid)
         require(["OWNER", "SUPPORT", "OPERATIONS_MANAGER"]);
     }
+    if (["saveStaffAccess", "saveAskPilotPolicy"].includes(d.action))
+      require(["OWNER"]);
     if (
       ["saveStaffAccess", "saveAskPilotPolicy"].includes(d.action) &&
       process.env.FUNCTIONS_EMULATOR !== "true" &&
@@ -420,6 +427,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
       throw new HttpsError(
         "failed-precondition",
         "Cần xác thực gần đây và hai lớp.",
+        { reason: "RECENT_MFA_REQUIRED" },
       );
     if (oldOp.exists) {
       if (oldOp.data()?.hash !== hash)
@@ -610,6 +618,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
             throw new HttpsError(
               "failed-precondition",
               "Cần xác thực gần đây và hai lớp.",
+              { reason: "RECENT_MFA_REQUIRED" },
             );
           if (d.id === uid) {
             const own = z

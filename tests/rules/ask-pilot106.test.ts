@@ -51,7 +51,10 @@ test("real transaction rejects nonowner and client-controlled pilot UID or budge
 test("enabling cannot skip recent MFA or provider verification", async () => {
   await expect(
     workspaceCommand.run(req(owner, command({ enabled: true }))),
-  ).rejects.toMatchObject({ code: "permission-denied" });
+  ).rejects.toMatchObject({
+    code: "failed-precondition",
+    details: { reason: "RECENT_MFA_REQUIRED" },
+  });
 });
 test("disable is owner-only, versioned and idempotent; does not reset lifetime budget", async () => {
   await db.doc("aiPilotBudget/lifetime").set({ reservedVnd: 7000 });

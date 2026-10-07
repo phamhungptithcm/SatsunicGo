@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK107",
+  "status": "BLOCKED",
+  "cycle": 4,
+  "scope": "approved scoped implementation and deploy candidate; authenticated production acceptance not claimed",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Deployed UI verified; authenticated Google/TOTP replay and original paid Ask demo still unverified.",
+      "evidence_refs": [
+        "docs/reviews/ASK107-PRODUCTION-READBACK.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Reviewed scoped implementation and executed evidence; no unresolved finding in this scope.",
+      "evidence_refs": [
+        "docs/plans/ASK107-AUTO-MFA-SETTINGS.md",
+        "docs/reviews/ASK107-PRODUCT-CONTENT.md",
+        "tests/unit/mfa-recovery107.test.ts",
+        "tests/browser/ask107.spec.ts"
+      ]
+    }
+  },
+  "findings": [],
+  "cycles": [
+    {
+      "cycle": 1,
+      "findings": [
+        "MFA cancellation could be classified as unknown write",
+        "Owner check must precede typed MFA denial"
+      ],
+      "fixes": [
+        "Controlled failed-precondition ACTION_NOT_RESUMED",
+        "Owner check before MFA marker"
+      ]
+    },
+    {
+      "cycle": 2,
+      "findings": [
+        "Pending authentication needed route/sign-out cancellation"
+      ],
+      "fixes": [
+        "pageKey cleanup and auth subscription; lifecycle browser cases"
+      ]
+    },
+    {
+      "cycle": 3,
+      "findings": [],
+      "checks": [
+        "35 focused unit tests passed",
+        "3 emulator pilot tests passed",
+        "6 browser component cases passed",
+        "TypeScript and scoped lint passed",
+        "isolated frontend and Functions builds passed"
+      ]
+    },
+    {
+      "cycle": 4,
+      "findings": [
+        "Real Google popup returns auth/internal-error in remote browser"
+      ],
+      "fixes": [
+        "Recoverable in-page Google button for popup-blocked/internal-error; temporary diagnostic logs removed"
+      ],
+      "checks": [
+        "7 browser component cases passed",
+        "scoped lint passed",
+        "final isolated frontend build passed",
+        "9 Functions ACTIVE revisions read back",
+        "Hosting exact HTML verified",
+        "production dialog and cancellation observed"
+      ],
+      "remaining": [
+        "Provider Google/TOTP completion not verified; human authentication needed"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Remote Chrome cannot open Google popup; real MFA/replay acceptance incomplete",
+    "Existing large bundle warnings"
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED",
+    "Runtime ledger CLI unavailable; file-based review/report fallback",
+    "Tokens and actual billed cost unavailable"
+  ]
+}
