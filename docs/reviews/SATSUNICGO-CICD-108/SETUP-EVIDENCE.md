@@ -15,3 +15,10 @@ Setup review findings and corrections:
 - Remote Node22 typecheck found two browser reference specs depended on machine-local `/private/tmp` fixture imports. Three unchanged fixture files are now checked in with SHA-256 provenance and relative imports; no test exclusions or relaxed compiler options.
 - Current production evidence explicitly holds seven Functions. Artifact packaging now preserves that exact entry boundary with bounded AST checks, without compiling again or changing application source. Secret Manager list is empty; no provider secret payload was accessed/created.
 - Existing Functions image repository lacked a policy, which makes Firebase noninteractive deploy exit nonzero after successful updates. Configured a KEEP-only policy, dry-run enabled; no DELETE action or artifact deletion. Readback confirmed KEEP and dry-run. Deployment account has no repository-update permission.
+
+Remote integration correction scope (same approved CI setup):
+- Run 37701345937 passed compilation/lint/unit/helpers/config, then failed rules: 31 suites/499 cases passed; 9 suites failed (8 assertions and 5 suite setup failures), 32 cases skipped by existing hooks. No deployment occurred.
+- Dedicated cart/pilot/delivery suites keep their exact local isolation guards. A GitHub-only launcher starts fresh loopback Auth/Firestore/Storage instances per group, with exact demo identities/ports and no shared local runtime. All original rule files remain included across groups.
+- Auth emulator is included to prevent Admin Auth from looking for real credentials.
+- Scheduled-maintenance fixtures now use its actual authorized canonical demo database, retaining unique synthetic document IDs.
+- Payment/SMTP transaction-core suites retain their existing fake SDKs and assertions, with a narrowly scoped test-only capability mock that rejects real identities, nonloopback stores and injected cloud credentials. Real provider-hold tests remain unmocked. Paid-AI assertions now verify the actual unconditional release hold before provider invocation and preserve the quota counter; application gates are unchanged.

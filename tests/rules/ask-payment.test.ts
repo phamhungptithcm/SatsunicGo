@@ -1,3 +1,4 @@
+import { syntheticProviderAllowed } from "../helpers/synthetic-provider-gate";
 import { beforeAll, afterAll, expect, test, vi } from "vitest";
 import { getFirestore } from "firebase-admin/firestore";
 import { randomUUID } from "node:crypto";
@@ -126,4 +127,10 @@ test("image API rejects anonymous photos and malformed input without model invoc
   await expect(
     ask.run(req({ ...data, images: Array(4).fill(data.images[0]) })),
   ).rejects.toMatchObject({ code: "invalid-argument" });
+});
+
+// Exercise only synthetic provider transaction cores; real release-gate tests remain unmocked.
+vi.mock("../../functions/src/provider-release-gate", async (actual) => {
+  const original = await actual<typeof import("../../functions/src/provider-release-gate")>();
+  return { ...original, releaseCapabilityAllowed: syntheticProviderAllowed };
 });

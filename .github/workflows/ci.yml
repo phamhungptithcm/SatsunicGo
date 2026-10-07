@@ -35,7 +35,7 @@ jobs:
       - run: npm test
       - run: node --test tests/unit/release108.test.mjs
       - run: npm run test:release-config
-      - run: npm run test:rules
+      - run: node scripts/release/test-integrations.mjs rules
       - run: npm run test:http
       - run: npm run test:restore
       - run: npm audit --omit=dev --audit-level=high
