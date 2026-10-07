@@ -1,6 +1,6 @@
 {
-  "status": "BLOCKED_RELEASE",
-  "production": "NOT_DEPLOYED",
+  "status": "DEPLOYED_REVIEW_INCOMPLETE",
+  "production": "DEPLOYED_WITH_VERIFICATION_LIMITATIONS",
   "commit": "93ed382daa48b2f02e1c9a7c45726b7b2c1c5771",
   "push": "VERIFIED origin main 93ed382daa48b2f02e1c9a7c45726b7b2c1c5771",
   "unit": "894/894 passed104files Node22",
@@ -8,8 +8,8 @@
   "releaseBuild": "PASSED after metadata correction",
   "excelNative": "Create draft + version1 readback + downloaded31column workbook + valid update roundtrip PASSED",
   "remaining": [
-    "Admin/Finance current in-context product language and failure-state acceptance; final review currently BLOCKED",
-    "Production deploy and readback NOT_RUN"
+    "Admin/Finance full UI and failure-state acceptance remains BLOCKED",
+    "Artifact cleanup policy remains unconfigured"
   ],
   "providerHolds": "preserved",
   "intelligence": "DEGRADED",

@@ -1,0 +1,40 @@
+{
+  "applicationCommit": "3979a0cf4ebb4f07dc0530f14be135b1f60c1dce",
+  "project": "satsunicgo",
+  "url": "https://satsunicgo.web.app",
+  "hosting": "DEPLOYED",
+  "publicPage": "Successful update operation",
+  "functionsCliExit": 1,
+  "functionsCliWarning": "Post-deploy artifact cleanup policy absent; policy setup failed. No force or policy mutation performed.",
+  "assetHashReadback": {
+    "total": 170,
+    "matching": 170
+  },
+  "routes": {
+    "/products": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/how-it-works": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "/crm/content": {
+      "status": 200,
+      "currentEntry": true,
+      "currentCss": true
+    },
+    "unauthenticatedWorkspaceCommand": {
+      "status": 401
+    }
+  },
+  "nativeBrowser": "Homepage rendered; CRM content requires employee Google login",
+  "review": "BLOCKED: Admin/Finance full state acceptance remains incomplete",
+  "authorization": "Explicit human deployment approval after disclosure",
+  "providerHolds": "Preserved; no production datafix",
+  "tokenUsage": "Unavailable",
+  "cost": "Unavailable",
+  "memoryCandidates": "None"
+}

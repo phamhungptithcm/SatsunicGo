@@ -8,3 +8,6 @@ Human authorization to commit/push main and deploy is present. Candidate 263 fil
 
 ## Git delivery
 Human confirmed origin repository receiving source and review documentation. Commits 7c603a5 and93ed382 pushed to origin/main. Remote readback:93ed382daa48b2f02e1c9a7c45726b7b2c1c5771. Push succeeded; production deploy remains NOT_RUN because required current Admin/Finance final acceptance remains BLOCKED. No authorization missing for deployment; missing verification evidence remains the gate.
+
+## Production deployment
+Explicit human approval after disclosure. Hosting deployed and publicPage updated successfully. CLI exit1 is post-deploy artifact cleanup setup failure; policy retained. Readback170/170 HTML/assets SHA256 matched; products/how-it-works/CRM200 reference current JS/CSS; unauthenticated workspaceCommand401. Native homepage rendered and CRM requires employee login. Full Admin/Finance review remains BLOCKED; deployment is not business acceptance certification. Receipt: DEPLOYMENT-RECEIPT.json. Unchanged backend functions retained; no provider activation or datafix.
