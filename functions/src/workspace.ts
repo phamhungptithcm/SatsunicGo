@@ -14,6 +14,7 @@ import { z } from "zod";
 import { randomUUID, createHash } from "node:crypto";
 import { roles, money, type Role } from "../../packages/domain";
 import { normalizeCustomerName } from "../../packages/domain/crm";
+import { pilotReady, pilotLimits, verifyPilotProvider } from "./ai/ask-pilot";
 const opts = {
   region: "asia-southeast1",
   maxInstances: 4,
@@ -94,9 +95,12 @@ export const listWork = onCall(opts, async (req) => {
       (changeState && kind !== "orderChanges") ||
       (queue && kind !== "orders") ||
       (id &&
-        !["orders", "supportTickets", "packages", "consolidationBatches"].includes(
-          kind,
-        )) ||
+        ![
+          "orders",
+          "supportTickets",
+          "packages",
+          "consolidationBatches",
+        ].includes(kind)) ||
       (id && after && ["packages", "consolidationBatches"].includes(kind))
     )
       throw new HttpsError("invalid-argument", "Bộ lọc không hợp lệ.");
@@ -316,6 +320,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "saveMembershipPlan",
         "saveStaffAccess",
         "savePricingPolicy",
+        "saveAskPilotPolicy",
       ]),
       operationId: z.string().uuid(),
       id: z
@@ -339,6 +344,29 @@ export const workspaceCommand = onCall(opts, async (req) => {
     id = d.id ?? randomUUID(),
     hash = createHash("sha256").update(JSON.stringify(d)).digest("hex"),
     op = db.doc(`idempotencyKeys/${uid}-${d.operationId}`);
+  let providerReady = false;
+  if (
+    d.action === "saveAskPilotPolicy" &&
+    (d.payload as { enabled?: unknown })?.enabled === true
+  ) {
+    const [access, profile] = await Promise.all([
+      db.doc(`staffAccess/${uid}`).get(),
+      db.doc(`users/${uid}`).get(),
+    ]);
+    if (
+      access.data()?.active !== true ||
+      access.data()?.locked ||
+      profile.data()?.locked ||
+      !isStringRoleArray(access.data()?.roles) ||
+      !access.data()!.roles.includes("OWNER") ||
+      !recentMfa(req.auth!.token, now)
+    )
+      throw new HttpsError(
+        "permission-denied",
+        "Cần quyền chủ doanh nghiệp và xác thực hai lớp gần đây.",
+      );
+    providerReady = await verifyPilotProvider();
+  }
   return db.runTransaction(async (tx) => {
     const [access, profile, oldOp] = await Promise.all([
       tx.get(db.doc(`staffAccess/${uid}`)),
@@ -366,9 +394,12 @@ export const workspaceCommand = onCall(opts, async (req) => {
     if (["saveContent", "saveCampaign"].includes(d.action))
       require(["OWNER", "CONTENT_EDITOR"]);
     if (
-      ["saveMembershipPlan", "savePricingPolicy", "saveStaffAccess"].includes(
-        d.action,
-      )
+      [
+        "saveMembershipPlan",
+        "savePricingPolicy",
+        "saveStaffAccess",
+        "saveAskPilotPolicy",
+      ].includes(d.action)
     )
       require(["OWNER"]);
     if (d.action === "replyTicket") {
@@ -382,7 +413,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
         require(["OWNER", "SUPPORT", "OPERATIONS_MANAGER"]);
     }
     if (
-      d.action === "saveStaffAccess" &&
+      ["saveStaffAccess", "saveAskPilotPolicy"].includes(d.action) &&
       process.env.FUNCTIONS_EMULATOR !== "true" &&
       !recentMfa(req.auth!.token, now)
     )
@@ -399,6 +430,31 @@ export const workspaceCommand = onCall(opts, async (req) => {
       data: Record<string, unknown> = {};
     try {
       switch (d.action) {
+        case "saveAskPilotPolicy": {
+          require(["OWNER"]);
+          if (d.id)
+            throw new HttpsError(
+              "invalid-argument",
+              "Không chọn tài khoản thử khác.",
+            );
+          const payload = z
+            .object({ enabled: z.boolean() })
+            .strict()
+            .parse(d.payload);
+          if (payload.enabled && (!providerReady || !pilotReady(now)))
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa xác minh provider cho đợt thử.",
+            );
+          collection = "settings";
+          data = {
+            enabled: payload.enabled,
+            pilotUid: uid,
+            maxBudgetVnd: 10000,
+            expiresAt: Math.min(now + 86400000, pilotLimits.pricingExpiresAt),
+          };
+          break;
+        }
         case "saveCampaign":
           require(["OWNER", "CONTENT_EDITOR"]);
           collection = "campaigns";
@@ -599,9 +655,11 @@ export const workspaceCommand = onCall(opts, async (req) => {
     const entityId =
       d.action === "saveProfile"
         ? uid
-        : d.action === "savePricingPolicy"
-          ? "pricing"
-          : id;
+        : d.action === "saveAskPilotPolicy"
+          ? "askPaidPilot"
+          : d.action === "savePricingPolicy"
+            ? "pricing"
+            : id;
     if (d.action === "saveStaffAccess" && !d.id)
       throw new HttpsError("invalid-argument", "Cần định danh nhân viên.");
     const ref = db.doc(`${collection}/${entityId}`),
@@ -734,10 +792,12 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const db = getFirestore(),
-    [access, user, policy] = await Promise.all([
+    [access, user, policy, pilot, budget] = await Promise.all([
       db.doc(`staffAccess/${req.auth.uid}`).get(),
       db.doc(`users/${req.auth.uid}`).get(),
       db.doc("settings/pricing").get(),
+      db.doc("settings/askPaidPilot").get(),
+      db.doc("aiPilotBudget/lifetime").get(),
     ]);
   if (
     access.data()?.active !== true ||
@@ -749,6 +809,23 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
     throw new HttpsError("permission-denied", "Cần quyền chủ doanh nghiệp.");
   const data = policy.data();
   return {
+    askPilot: {
+      enabled:
+        pilot.data()?.enabled === true &&
+        pilot.data()?.pilotUid === req.auth.uid &&
+        Number(pilot.data()?.expiresAt) > Date.now(),
+      version: pilot.data()?.version ?? null,
+      ready: await verifyPilotProvider(),
+      maxBudgetVnd: 10000,
+      reservedVnd: !budget.exists
+        ? 0
+        : Number.isSafeInteger(budget.data()?.reservedVnd) &&
+            budget.data()!.reservedVnd >= 0 &&
+            budget.data()!.reservedVnd <= 10000
+          ? budget.data()!.reservedVnd
+          : null,
+      expiresAt: pilot.data()?.expiresAt ?? null,
+    },
     pricing: data
       ? {
           version: data.version,

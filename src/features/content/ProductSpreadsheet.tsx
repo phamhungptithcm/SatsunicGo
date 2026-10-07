@@ -26,18 +26,30 @@ export function ProductSpreadsheet({
 }) {
   const dialog = useRef<HTMLDialogElement>(null),
     cancel = useRef(false),
-    mounted = useRef(true);
+    mounted = useRef(true),
+    running = useRef(false),
+    saveButton = useRef<HTMLButtonElement>(null),
+    confirmationTitle = useRef<HTMLHeadingElement>(null);
   const [sheets, setSheets] = useState<{ name: string; rows: string[][] }[]>(
       [],
     ),
     [sheet, setSheet] = useState(0),
     [mapping, setMapping] = useState<string[]>([]),
     [preview, setPreview] = useState<ImportRow[]>([]),
+    [confirmation, setConfirmation] = useState<ImportRow[] | null>(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [phase, setPhase] = useState(""),
     [scope, setScope] = useState("filtered"),
     [format, setFormat] = useState<"xlsx" | "csv">("xlsx");
+  useEffect(() => {
+    if (confirmation && confirmation !== preview) setConfirmation(null);
+    else if (confirmation) confirmationTitle.current?.focus();
+  }, [confirmation, preview]);
+  function cancelConfirmation() {
+    setConfirmation(null);
+    saveButton.current?.focus();
+  }
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -69,7 +81,8 @@ export function ProductSpreadsheet({
     return all;
   }
   async function task(work: () => Promise<void>) {
-    if (busy) return;
+    if (running.current) return;
+    running.current = true;
     cancel.current = false;
     setBusy(true);
     setError("");
@@ -78,6 +91,7 @@ export function ProductSpreadsheet({
     } catch (e) {
       if (mounted.current) setError((e as Error).message);
     } finally {
+      running.current = false;
       if (mounted.current) {
         setBusy(false);
         setPhase("");
@@ -93,22 +107,24 @@ export function ProductSpreadsheet({
       ),
     );
   }
-  async function save() {
+  async function save(confirmed?: ImportRow[]) {
+    if (running.current) return;
+    if (!preview.length || preview.some((r) => r.error)) return;
+    const requiresConfirmation = preview.some(
+      (r) =>
+        r.result !== "saved" &&
+        (r.content.status === "published" ||
+          r.content.status === "scheduled" ||
+          r.content.status === "archived"),
+    );
+    if (requiresConfirmation && confirmed !== preview) {
+      setConfirmation(preview);
+      return;
+    }
+    setConfirmation(null);
     await task(async () => {
       if (!preview.length || preview.some((r) => r.error))
         throw Error("Sửa các dòng lỗi trước khi nhập.");
-      if (
-        preview.some(
-          (r) =>
-            r.content.status === "published" ||
-            r.content.status === "scheduled" ||
-            r.content.status === "archived",
-        ) &&
-        !window.confirm(
-          "Tệp có thay đổi xuất bản, lên lịch hoặc lưu trữ. Bạn đã kiểm tra từng dòng và muốn tiếp tục?",
-        )
-      )
-        return;
       await executeImportRows(preview, {
         stopped: () => cancel.current || !mounted.current,
         commit: (row) =>
@@ -207,8 +223,10 @@ export function ProductSpreadsheet({
         className="ceImport"
         ref={dialog}
         onCancel={(e) => {
-          if (busy) e.preventDefault();
+          if (busy || confirmation) e.preventDefault();
+          if (confirmation && !busy) cancelConfirmation();
         }}
+        onClose={() => setConfirmation(null)}
       >
         <header>
           <h2 id="ceImportTitle">Nhập sản phẩm</h2>
@@ -393,6 +411,7 @@ export function ProductSpreadsheet({
                 chỉ chặn dòng chưa gửi.
               </p>
               <button
+                ref={saveButton}
                 className="primary"
                 disabled={
                   busy ||
@@ -404,6 +423,63 @@ export function ProductSpreadsheet({
                 Xác nhận lưu{" "}
                 {preview.filter((r) => r.result !== "saved").length} dòng
               </button>
+              {confirmation === preview && (
+                <section
+                  aria-labelledby="cePublishConfirmation"
+                  className="cePublishConfirmation"
+                >
+                  <h3
+                    id="cePublishConfirmation"
+                    tabIndex={-1}
+                    ref={confirmationTitle}
+                  >
+                    Xác nhận thay đổi trạng thái sản phẩm
+                  </h3>
+                  <p>
+                    Tệp có thay đổi xuất bản, lên lịch hoặc lưu trữ. Bạn đã kiểm
+                    tra từng dòng và muốn tiếp tục?
+                  </p>
+                  <p>
+                    Xuất bản:{" "}
+                    {
+                      preview.filter(
+                        (r) =>
+                          r.result !== "saved" &&
+                          r.content.status === "published",
+                      ).length
+                    }{" "}
+                    dòng · Lên lịch:{" "}
+                    {
+                      preview.filter(
+                        (r) =>
+                          r.result !== "saved" &&
+                          r.content.status === "scheduled",
+                      ).length
+                    }{" "}
+                    dòng · Lưu trữ:{" "}
+                    {
+                      preview.filter(
+                        (r) =>
+                          r.result !== "saved" &&
+                          r.content.status === "archived",
+                      ).length
+                    }{" "}
+                    dòng
+                  </p>
+                  <button disabled={busy} onClick={cancelConfirmation}>
+                    Hủy xác nhận
+                  </button>
+                  <button
+                    className="primary"
+                    disabled={busy}
+                    onClick={() => {
+                      if (confirmation === preview) void save(confirmation);
+                    }}
+                  >
+                    Xác nhận thay đổi và lưu
+                  </button>
+                </section>
+              )}
               <button
                 disabled={busy}
                 onClick={() =>

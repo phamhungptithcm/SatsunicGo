@@ -101,7 +101,7 @@ export function contentHtml(
           .split("\n\n")
           .map((p) => `<p>${escapeHtml(p)}</p>`)
           .join("")
-  }<a href="/request">Gửi yêu cầu mua hộ</a></main><footer><a href="/privacy">Quyền riêng tư</a></footer></div></body></html>`;
+  }<a href="/request">${path === "/restricted" ? "Nhờ kiểm tra sản phẩm" : "Gửi yêu cầu mua hộ"}</a></main><footer><a href="/privacy">Quyền riêng tư</a></footer></div></body></html>`;
 }
 export const publicPage = onRequest(
   { region: "asia-southeast1", maxInstances: 3, concurrency: 30 },

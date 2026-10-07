@@ -39,6 +39,7 @@ export function ProductReviews({ productId }: { productId: string }) {
     [page, setPage] = useState<ReviewPage | null>(null),
     [loading, setLoading] = useState(false),
     [error, setError] = useState(""),
+    [readError, setReadError] = useState(""),
     [open, setOpen] = useState(false),
     [busy, setBusy] = useState(false),
     [eligibility, setEligibility] = useState<EligibilityPage | null>(null),
@@ -83,6 +84,7 @@ export function ProductReviews({ productId }: { productId: string }) {
             setWithdraw(false);
 
             setError("");
+            setReadError("");
           })
         : undefined,
     [],
@@ -94,6 +96,7 @@ export function ProductReviews({ productId }: { productId: string }) {
         seq = ++sequence.current;
       setLoading(true);
       setError("");
+      setReadError("");
       try {
         const r = await callService<ReviewPage>("productReviewRead", {
           productId,
@@ -124,7 +127,7 @@ export function ProductReviews({ productId }: { productId: string }) {
           setRating(0);
           setWithdraw(false);
 
-          setError("Chưa tải được đánh giá. Anh/chị thử tải lại nhé.");
+          setReadError("Chưa tải được đánh giá. Bạn có thể thử lại.");
         }
       } finally {
         if (valid(generation, owner) && seq === sequence.current)
@@ -296,7 +299,30 @@ export function ProductReviews({ productId }: { productId: string }) {
     <section className="sgProductReviews" aria-label="Đánh giá sản phẩm">
       <div className="sgReviewHeader">
         <div>
-          <h2>Đánh giá</h2>
+          <div className="sgReviewTitle">
+            <h2>Đánh giá</h2>
+            <button
+              type="button"
+              className="sgReviewReload"
+              aria-label="Tải lại đánh giá"
+              title="Tải lại đánh giá"
+              disabled={loading || busy || !!pending}
+              onClick={() => void load()}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 7v5h-5M4 17v-5h5" />
+                <path d="M5 8a7 7 0 0 1 12-3l3 3M4 16l3 3a7 7 0 0 0 12-3" />
+              </svg>
+            </button>
+          </div>
           {page?.summary ? (
             page.summary.count ? (
               <p className="sgReviewScore">
@@ -308,9 +334,7 @@ export function ProductReviews({ productId }: { productId: string }) {
                   / 5 · {page.summary.count.toLocaleString("vi-VN")} đánh giá
                 </span>
               </p>
-            ) : (
-              <p className="sgReviewNotice">Chưa có đánh giá.</p>
-            )
+            ) : null
           ) : (
             page && (
               <p className="sgReviewNotice">Chưa tải được điểm tổng hợp.</p>
@@ -344,17 +368,19 @@ export function ProductReviews({ productId }: { productId: string }) {
           Đang xử lý…
         </LoadingState>
       )}
+      {readError && (
+        <div className="sgReviewReadFailure">
+          <p className="sgReviewNotice" role="status">
+            {readError}
+          </p>
+        </div>
+      )}
       {error && (
         <p className="sgReviewNotice" role="alert">
           {error}
         </p>
       )}
 
-      {error && !pending && (
-        <button disabled={loading || busy} onClick={() => void load()}>
-          Tải lại
-        </button>
-      )}
       {pending && (
         <button disabled={busy} onClick={() => void write(pending)}>
           Thử lại thao tác

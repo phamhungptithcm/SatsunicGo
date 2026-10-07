@@ -1,0 +1,184 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><title>SatsunicGo architecture</title><style>body{margin:0;background:#e8edf6}svg{display:block;width:100%;height:auto;min-width:1000px}main{max-width:1680px;margin:auto;background:white}</style><main><svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1570" viewBox="0 0 1680 1570" role="img" aria-labelledby="title desc"><title id="title">SatsunicGo — Ask and Customer Intelligence</title><desc id="desc">Thiết kế mục tiêu gồm hỏi đáp, công cụ kiểm quyền, giao dịch có xác nhận, state và analytics bất đồng bộ. Có source khác với đã chạy production.</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#163cff"/></marker></defs><g font-family="Arial, sans-serif"><rect width="1680" height="1570" fill="#fff"/>
+<text x="40" y="53" font-size="18" fill="#163cff" font-weight="700">SATSUNICGO</text>
+<text x="40" y="99" font-size="38" fill="#111c35" font-weight="700">Ask &amp; Customer Intelligence</text>
+<text x="40" y="130" font-size="17" fill="#42516c" font-weight="400">THIẾT KẾ MỤC TIÊU • 07.10.2026 • Firebase / Firestore • AI đề xuất, domain quyết định</text>
+<text x="1090" y="55" font-size="14" fill="#163cff" font-weight="600">Nét liền: có nền tảng trong source</text>
+<text x="1090" y="79" font-size="14" fill="#69758c" font-weight="600">Nét đứt: cần xây thêm  •  Cam: paid AI bị chặn</text>
+<text x="1090" y="103" font-size="14" fill="#ad552d" font-weight="600">Có source ≠ đã kiểm chứng production</text>
+<rect x="30" y="164" width="300" height="826" rx="20" fill="#f1f4fa" stroke="#d6ddeb"/>
+<text x="54" y="198" font-size="20" fill="#111c35" font-weight="700">01  KÊNH VÀ CON NGƯỜI</text>
+<text x="54" y="222" font-size="14" fill="#42516c" font-weight="400">Phân quyền khách / nhân viên</text>
+<rect x="355" y="164" width="910" height="826" rx="20" fill="#f1f4fa" stroke="#d6ddeb"/>
+<text x="379" y="198" font-size="20" fill="#111c35" font-weight="700">02  ASK ORCHESTRATION</text>
+<text x="379" y="222" font-size="14" fill="#42516c" font-weight="400">Router và context chuẩn hóa tại server là phần mở rộng</text>
+<rect x="1290" y="164" width="360" height="826" rx="20" fill="#f1f4fa" stroke="#d6ddeb"/>
+<text x="1314" y="198" font-size="20" fill="#111c35" font-weight="700">03  PROVIDER / NGHIỆP VỤ</text>
+<text x="1314" y="222" font-size="14" fill="#42516c" font-weight="400">Không để model giữ quyền giao dịch</text>
+<rect x="50" y="254" width="260" height="170" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="67" y="278" font-size="11" fill="#163cff" font-weight="700">CÓ SOURCE</text>
+<text x="67" y="305" font-size="19" fill="#111c35" font-weight="700">Ask UI / CRM</text>
+<text x="67" y="332" font-size="15" fill="#42516c" font-weight="400">Câu hỏi • ảnh • ngôn ngữ</text>
+<text x="67" y="355" font-size="15" fill="#42516c" font-weight="400">Hiển thị nguồn và trạng thái</text>
+<text x="67" y="378" font-size="15" fill="#42516c" font-weight="400">Đổi UID → hủy kết quả cũ</text>
+<text x="67" y="401" font-size="15" fill="#42516c" font-weight="400">CRM chỉ hiện dữ liệu đúng quyền</text>
+<rect x="380" y="254" width="390" height="170" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="397" y="278" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="397" y="305" font-size="19" fill="#111c35" font-weight="700">Gateway &amp; router</text>
+<text x="397" y="332" font-size="15" fill="#42516c" font-weight="400">Auth / App Check / schema / quota</text>
+<text x="397" y="355" font-size="15" fill="#42516c" font-weight="400">Public, private, draft, action, support</text>
+<text x="397" y="378" font-size="15" fill="#42516c" font-weight="400">Đủ dữ kiện → dùng tool/domain</text>
+<text x="397" y="401" font-size="15" fill="#42516c" font-weight="400">Thiếu thông tin → hỏi lại</text>
+<rect x="840" y="254" width="400" height="170" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="857" y="278" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="857" y="305" font-size="19" fill="#111c35" font-weight="700">Context builder</text>
+<text x="857" y="332" font-size="15" fill="#42516c" font-weight="400">Public knowledge + owner projection</text>
+<text x="857" y="355" font-size="15" fill="#42516c" font-weight="400">Nguồn • observedAt • version • coverage</text>
+<text x="857" y="378" font-size="15" fill="#42516c" font-weight="400">History cần thiết + structured draft</text>
+<text x="857" y="401" font-size="15" fill="#42516c" font-weight="400">Không đưa toàn bộ CRM vào model</text>
+<rect x="1310" y="254" width="320" height="170" rx="12" fill="white" stroke="#ad552d" stroke-width="1.5"/>
+<text x="1327" y="278" font-size="11" fill="#ad552d" font-weight="700">PAID BỊ CHẶN</text>
+<text x="1327" y="305" font-size="19" fill="#111c35" font-weight="700">Provider adapter</text>
+<text x="1327" y="332" font-size="15" fill="#42516c" font-weight="400">Genkit / Vertex trong code</text>
+<text x="1327" y="355" font-size="15" fill="#42516c" font-weight="400">Paid readiness đang luôn từ chối</text>
+<text x="1327" y="378" font-size="15" fill="#42516c" font-weight="400">Mở sau kiểm chứng cost + IAM</text>
+<text x="1327" y="401" font-size="15" fill="#42516c" font-weight="400">Provider khác: mở rộng sau</text>
+<polyline points="310,320 380,320" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="320" y="308" font-size="13" fill="#163cff" font-weight="600">request</text>
+<polyline points="770,320 840,320" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="777" y="308" font-size="13" fill="#163cff" font-weight="600">context</text>
+<polyline points="575,424 575,490" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="588" y="461" font-size="13" fill="#163cff" font-weight="600">read / explain</text>
+<polyline points="1040,424 1040,455 730,455 730,490" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="833" y="443" font-size="13" fill="#163cff" font-weight="600">evidence</text>
+<rect x="380" y="490" width="390" height="185" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="397" y="514" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="397" y="541" font-size="19" fill="#111c35" font-weight="700">Runner có giới hạn</text>
+<text x="397" y="568" font-size="15" fill="#42516c" font-weight="400">Run state • timeout • cancellation</text>
+<text x="397" y="591" font-size="15" fill="#42516c" font-weight="400">Read độc lập: parallel có giới hạn</text>
+<text x="397" y="614" font-size="15" fill="#42516c" font-weight="400">Tool result → cập nhật context</text>
+<text x="397" y="637" font-size="15" fill="#42516c" font-weight="400">Không model: fallback / hỗ trợ</text>
+<rect x="840" y="490" width="400" height="185" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="857" y="514" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="857" y="541" font-size="19" fill="#111c35" font-weight="700">Tool policy &amp; registry</text>
+<text x="857" y="568" font-size="15" fill="#42516c" font-weight="400">Schema + capability + field projection</text>
+<text x="857" y="591" font-size="15" fill="#42516c" font-weight="400">Kiểm quyền tại từng backend tool</text>
+<text x="857" y="614" font-size="15" fill="#42516c" font-weight="400">Read / draft / write / external</text>
+<text x="857" y="637" font-size="15" fill="#42516c" font-weight="400">Write cần confirmation đúng phiên bản</text>
+<rect x="1310" y="490" width="320" height="185" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="1327" y="514" font-size="11" fill="#163cff" font-weight="700">CÓ SOURCE</text>
+<text x="1327" y="541" font-size="19" fill="#111c35" font-weight="700">Tools đọc và nháp</text>
+<text x="1327" y="568" font-size="15" fill="#42516c" font-weight="400">Published catalog / phí / plans</text>
+<text x="1327" y="591" font-size="15" fill="#42516c" font-weight="400">Đơn của khách: kiểm owner</text>
+<text x="1327" y="614" font-size="15" fill="#42516c" font-weight="400">Ảnh và nội dung là untrusted</text>
+<text x="1327" y="637" font-size="15" fill="#42516c" font-weight="400">Draft không phải đơn đã gửi</text>
+<polyline points="770,560 840,560" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="777" y="548" font-size="13" fill="#163cff" font-weight="600">tool call</text>
+<polyline points="1240,560 1310,560" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1248" y="548" font-size="13" fill="#163cff" font-weight="600">allowed</text>
+<polyline points="1310,650 1280,650 1280,704 575,704 575,675" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="853" y="697" font-size="13" fill="#163cff" font-weight="600">tool result / partial unavailable</text>
+<polyline points="1470,424 1470,458 790,458 790,515 770,515" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="1095" y="478" font-size="13" fill="#163cff" font-weight="600">reply / tool proposal</text>
+<polyline points="730,490 730,440 1275,440 1275,338 1310,338" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="1090" y="437" font-size="13" fill="#163cff" font-weight="600">model request</text>
+<rect x="50" y="754" width="260" height="190" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="67" y="778" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="67" y="805" font-size="19" fill="#111c35" font-weight="700">Review &amp; xác nhận</text>
+<text x="67" y="832" font-size="15" fill="#42516c" font-weight="400">Khách: bản nháp / đúng đơn</text>
+<text x="67" y="855" font-size="15" fill="#42516c" font-weight="400">Staff: quyết định đúng vai trò</text>
+<text x="67" y="878" font-size="15" fill="#42516c" font-weight="400">Payload • version • expiry</text>
+<text x="67" y="901" font-size="15" fill="#42516c" font-weight="400">Không dùng “đồng ý” mơ hồ</text>
+<text x="67" y="924" font-size="15" fill="#42516c" font-weight="400">Status theo sự kiện thật</text>
+<polyline points="380,610 345,610 345,700 180,700 180,754" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="192" y="719" font-size="13" fill="#163cff" font-weight="600">trả lời / nháp</text>
+<rect x="380" y="754" width="390" height="190" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="397" y="778" font-size="11" fill="#163cff" font-weight="700">CÓ SOURCE</text>
+<text x="397" y="805" font-size="19" fill="#111c35" font-weight="700">Workflow / command bus</text>
+<text x="397" y="832" font-size="15" fill="#42516c" font-weight="400">operationId + hash + expectedVersion</text>
+<text x="397" y="855" font-size="15" fill="#42516c" font-weight="400">Recheck owner / role / trạng thái</text>
+<text x="397" y="878" font-size="15" fill="#42516c" font-weight="400">Pending → resume / đối chiếu kết quả</text>
+<text x="397" y="901" font-size="15" fill="#42516c" font-weight="400">Ghi tuần tự trong một đơn</text>
+<text x="397" y="924" font-size="15" fill="#42516c" font-weight="400">Domain kiểm catalog / custom</text>
+<rect x="840" y="754" width="400" height="190" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="857" y="778" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="857" y="805" font-size="19" fill="#111c35" font-weight="700">Firestore — nguồn sự thật</text>
+<text x="857" y="832" font-size="15" fill="#42516c" font-weight="400">Orders / catalog / membership / support</text>
+<text x="857" y="855" font-size="15" fill="#42516c" font-weight="400">Conversation + operations + timeline</text>
+<text x="857" y="878" font-size="15" fill="#42516c" font-weight="400">Transaction / audit / outbox có nền tảng</text>
+<text x="857" y="901" font-size="15" fill="#42516c" font-weight="400">Event analytics riêng: cần xây thêm</text>
+<text x="857" y="924" font-size="15" fill="#42516c" font-weight="400">Không coi mọi write là “revert được”</text>
+<rect x="1310" y="754" width="320" height="190" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="1327" y="778" font-size="11" fill="#163cff" font-weight="700">CÓ SOURCE</text>
+<text x="1327" y="805" font-size="19" fill="#111c35" font-weight="700">Staff &amp; external provider</text>
+<text x="1327" y="832" font-size="15" fill="#42516c" font-weight="400">Báo giá: staff có thẩm quyền</text>
+<text x="1327" y="855" font-size="15" fill="#42516c" font-weight="400">Thanh toán: PayOS workflow</text>
+<text x="1327" y="878" font-size="15" fill="#42516c" font-weight="400">Webhook verify + receipt dedup</text>
+<text x="1327" y="901" font-size="15" fill="#42516c" font-weight="400">Delivery: carrier / staff events</text>
+<text x="1327" y="924" font-size="15" fill="#42516c" font-weight="400">Chat không chứng nhận paid</text>
+<polyline points="310,830 380,830" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="315" y="818" font-size="13" fill="#163cff" font-weight="600">confirm</text>
+<polyline points="770,830 840,830" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="777" y="818" font-size="13" fill="#163cff" font-weight="600">validated</text>
+<polyline points="1240,830 1310,830" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1249" y="818" font-size="13" fill="#163cff" font-weight="600">outbox</text>
+<polyline points="1310,911 1240,911" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1235" y="965" font-size="13" fill="#163cff" font-weight="600">verified event</text>
+<polyline points="1040,675 1040,754" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1053" y="718" font-size="13" fill="#163cff" font-weight="600">read đúng scope</text>
+<rect x="30" y="1010" width="1620" height="220" rx="20" fill="#f1f4fa" stroke="#d6ddeb"/>
+<text x="54" y="1044" font-size="20" fill="#111c35" font-weight="700">04  STATE, MEMORY VÀ AUDIT</text>
+<text x="54" y="1068" font-size="14" fill="#42516c" font-weight="400">State thật giữ ngoài prompt; summary không cấp quyền và không chứng minh thanh toán</text>
+<rect x="50" y="1085" width="485" height="120" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="67" y="1109" font-size="11" fill="#163cff" font-weight="700">CÓ SOURCE</text>
+<text x="67" y="1136" font-size="19" fill="#111c35" font-weight="700">Conversation &amp; operation ledger</text>
+<text x="67" y="1163" font-size="15" fill="#42516c" font-weight="400">Có owner / version / pending operation</text>
+<text x="67" y="1186" font-size="15" fill="#42516c" font-weight="400">Lưu draft và tiến trình để resume đúng thao tác</text>
+<rect x="585" y="1085" width="485" height="120" rx="12" fill="white" stroke="#69758c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="602" y="1109" font-size="11" fill="#69758c" font-weight="700">ĐỀ XUẤT</text>
+<text x="602" y="1136" font-size="19" fill="#111c35" font-weight="700">Context budget &amp; memory</text>
+<text x="602" y="1163" font-size="15" fill="#42516c" font-weight="400">Compaction theo token; giữ nguồn + state mở</text>
+<text x="602" y="1186" font-size="15" fill="#42516c" font-weight="400">Preference opt-in / TTL / sửa-xóa: cần xây</text>
+<rect x="1120" y="1085" width="510" height="120" rx="12" fill="white" stroke="#163cff" stroke-width="1.5"/>
+<text x="1137" y="1109" font-size="11" fill="#163cff" font-weight="700">CÓ + MỞ RỘNG</text>
+<text x="1137" y="1136" font-size="19" fill="#111c35" font-weight="700">Audit &amp; observability</text>
+<text x="1137" y="1163" font-size="15" fill="#42516c" font-weight="400">TraceId / action / outcome / usage / latency</text>
+<text x="1137" y="1186" font-size="15" fill="#42516c" font-weight="400">Metadata tối thiểu; không log raw PII / prompt</text>
+<polyline points="1030,944 1030,1000 40,1000 40,1070 300,1070 300,1085" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="30" y="1250" width="1620" height="270" rx="20" fill="#f1f4fa" stroke="#d6ddeb"/>
+<text x="54" y="1284" font-size="20" fill="#111c35" font-weight="700">05  CUSTOMER INTELLIGENCE — BẤT ĐỒNG BỘ / ĐỀ XUẤT</text>
+<text x="54" y="1308" font-size="14" fill="#42516c" font-weight="400">Luồng phân tích riêng: không chặn chat hoặc thanh toán, không tự sửa đơn hay quyết định tài chính</text>
+<rect x="50" y="1325" width="345" height="160" rx="12" fill="white" stroke="#69758c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="67" y="1349" font-size="11" fill="#69758c" font-weight="700">ĐỀ XUẤT</text>
+<text x="67" y="1376" font-size="19" fill="#111c35" font-weight="700">Event có nguồn</text>
+<text x="67" y="1403" font-size="15" fill="#42516c" font-weight="400">UI: chỉ là quan sát hành vi</text>
+<text x="67" y="1426" font-size="15" fill="#42516c" font-weight="400">Conversion: server sau commit</text>
+<text x="67" y="1449" font-size="15" fill="#42516c" font-weight="400">Purpose / consent / redact</text>
+<text x="67" y="1472" font-size="15" fill="#42516c" font-weight="400">eventId / time / schemaVersion</text>
+<rect x="460" y="1325" width="345" height="160" rx="12" fill="white" stroke="#69758c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="477" y="1349" font-size="11" fill="#69758c" font-weight="700">ĐỀ XUẤT</text>
+<text x="477" y="1376" font-size="19" fill="#111c35" font-weight="700">Queue → event store</text>
+<text x="477" y="1403" font-size="15" fill="#42516c" font-weight="400">Outbox / dedup / retry / DLQ</text>
+<text x="477" y="1426" font-size="15" fill="#42516c" font-weight="400">Replay và sự kiện tới muộn</text>
+<text x="477" y="1449" font-size="15" fill="#42516c" font-weight="400">Retention / opt-out / quyền đọc</text>
+<text x="477" y="1472" font-size="15" fill="#42516c" font-weight="400">Không nhập raw chat mặc định</text>
+<rect x="870" y="1325" width="345" height="160" rx="12" fill="white" stroke="#69758c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="887" y="1349" font-size="11" fill="#69758c" font-weight="700">ĐỀ XUẤT</text>
+<text x="887" y="1376" font-size="19" fill="#111c35" font-weight="700">Aggregate → insights</text>
+<text x="887" y="1403" font-size="15" fill="#42516c" font-weight="400">Funnel / nhu cầu / repeat purchase</text>
+<text x="887" y="1426" font-size="15" fill="#42516c" font-weight="400">Window / denominator / freshness</text>
+<text x="887" y="1449" font-size="15" fill="#42516c" font-weight="400">Coverage / missing-data rõ ràng</text>
+<text x="887" y="1472" font-size="15" fill="#42516c" font-weight="400">Suy luận AI phải có chứng cứ</text>
+<rect x="1280" y="1325" width="350" height="160" rx="12" fill="white" stroke="#69758c" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1297" y="1349" font-size="11" fill="#69758c" font-weight="700">ĐỀ XUẤT</text>
+<text x="1297" y="1376" font-size="19" fill="#111c35" font-weight="700">CRM &amp; personalization</text>
+<text x="1297" y="1403" font-size="15" fill="#42516c" font-weight="400">Staff review trước hành động</text>
+<text x="1297" y="1426" font-size="15" fill="#42516c" font-weight="400">Khách quản lý preference của mình</text>
+<text x="1297" y="1449" font-size="15" fill="#42516c" font-weight="400">Không suy diễn thuộc tính nhạy cảm</text>
+<text x="1297" y="1472" font-size="15" fill="#42516c" font-weight="400">Không tự gửi marketing / đổi giá</text>
+<polyline points="395,1395 460,1395" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="805,1395 870,1395" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1215,1395 1280,1395" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1030,1220 1030,1240 40,1240 40,1310 220,1310 220,1325" fill="none" stroke="#163cff" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="386" y="1238" font-size="13" fill="#163cff" font-weight="600">committed domain events / mục đích được phép</text>
+<text x="40" y="1552" font-size="15" fill="#42516c" font-weight="400">Bản đề xuất dựa trên source; paid provider và analytics chưa triển khai/kiểm chứng. Chi tiết quyền, failure paths và roadmap: DESIGN.md.</text>
+</g></svg></main></html>

@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "assertions": 21,
+  "widths": [
+    320,
+    390,
+    1280
+  ],
+  "scope": "Actual RestrictedPage component and shared content; MemoryRouter fixture on shared frontend, no provider access",
+  "server": "http://127.0.0.1:5207"
+}

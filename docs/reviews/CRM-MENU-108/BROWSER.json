@@ -1,0 +1,10 @@
+{
+  "status": "PASSED",
+  "assertions": 18,
+  "widths": [
+    390,
+    1280
+  ],
+  "scope": "Current source-extracted dialog JSX, native browser and actual CSS; synthetic navigation; not full authenticated CRM",
+  "server": "http://127.0.0.1:5207"
+}

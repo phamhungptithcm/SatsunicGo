@@ -456,11 +456,30 @@ export function Workspace({
         ref={dialog}
         onCancel={() => setMenu(false)}
         onClose={() => setMenu(false)}
+        onClick={(event) => {
+          if (event.target !== event.currentTarget) return;
+          const bounds = event.currentTarget.getBoundingClientRect();
+          if (
+            event.clientX < bounds.left ||
+            event.clientX > bounds.right ||
+            event.clientY < bounds.top ||
+            event.clientY > bounds.bottom
+          )
+            setMenu(false);
+        }}
       >
         <div className="pageHeading">
           <strong>Menu vận hành</strong>
-          <button autoFocus type="button" onClick={() => setMenu(false)}>
-            Đóng menu
+          <button
+            autoFocus
+            type="button"
+            className="workspaceMenuClose"
+            aria-label="Đóng menu"
+            onClick={() => setMenu(false)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
           </button>
         </div>
         {navigation}

@@ -1,0 +1,50 @@
+{
+  "candidate_sha256": "d966a53cf644e73b21038e11326780f290c09f695063633acf57deeabec81fce",
+  "checks": [
+    {
+      "command": "VITE_BETA_RELEASE=true npm test",
+      "status": "PASSED",
+      "files": 105,
+      "tests": 897,
+      "log": "/private/tmp/login105-unit-final.log"
+    },
+    {
+      "command": "npx playwright test --config tests/browser/login105.config.ts",
+      "status": "PASSED",
+      "tests": 29,
+      "evidence": "tests/browser/output/login105/results.json",
+      "synthetic_transports": true
+    },
+    {
+      "command": "npm run lint",
+      "status": "PASSED",
+      "log": "/private/tmp/login105-lint-final.log"
+    },
+    {
+      "command": "npm run build",
+      "status": "PASSED",
+      "log": "/private/tmp/login105-build-final.log"
+    },
+    {
+      "command": "npm run build --prefix functions",
+      "status": "PASSED",
+      "log": "/private/tmp/login105-functions-build-final.log"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASSED"
+    },
+    {
+      "command": "Repository intelligence gate",
+      "status": "DEGRADED",
+      "log": "/private/tmp/login105-intelligence-final.log"
+    }
+  ],
+  "logs_sha256": {
+    "/private/tmp/login105-unit-final.log": "19851462e55c729a8621cf19ed2823d335aa1a2c1f83c26ab660da146384c622",
+    "/private/tmp/login105-lint-final.log": "4308fdf63abeb7a250ad4d82d7524988ca088340747fac920b21d430bd08bc6f",
+    "/private/tmp/login105-build-final.log": "80709b3c03d5aa2a32871b4bd30a786a0a00e2af71cedb8127983244fe5eb356",
+    "/private/tmp/login105-functions-build-final.log": "880d1fd8ea5d62229e570adc4b51e27c3ef67c1a713458c028381b3842954005",
+    "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/tests/browser/output/login105/results.json": "6d5496211cac5658d190220d4bf180cade89c8be5d5a444b696e1ecf07558abc"
+  }
+}

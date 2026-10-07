@@ -4,6 +4,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
 import { ProductDetails } from "../../src/features/content/ProductDetail";
 vi.mock("../../src/shared/firebase", () => ({
+  app: null,
+  db: null,
   auth: null,
   callService: vi.fn(),
   login: vi.fn(),

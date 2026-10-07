@@ -9,3 +9,7 @@ Product Language Gate PASSED locally: Purpose distinct destinations; Agency nati
 Final review cycle 1 PASSED locally: requirement/security/code-quality/failure/error/trade-offs/readiness boundaries reviewed. TypeScript, scoped ESLint, diff check passed; real shared5207 page verified all three image loads and labels at1440/390. Desktop screenshot visually inspected. Assets165–174KiB each,960x640, lazy/async, no external image requests. Intelligence DEGRADED (stale indexes); current source verified. Existing auth/payment/business logic untouched. Unrelated WIP not certified.
 
 Production NOT_READY until release owner freezes/builds/deploys candidate and browser readback. Active production release chat coordinated; this chat must not race shared deployment. Manual report fallback; token/cost Unavailable; memory candidates None.
+
+## Production readback — 2026-10-07
+
+Verified https://satsunicgo.web.app/ in Chrome after user approval. All three rendered marketArt images have naturalWidth > 0 and sources /images/markets/us-v2.webp, jp-v2.webp, kr-v2.webp. Visible badge text US/JP/KR; screenshot visually inspected for country labels/crops. DOM confirms all revised heading/body copy present. Website update criterion PASSED for homepage imagery/copy; this readback does not certify unrelated shared release changes or provider/payment workflows. No duplicate deployment performed by this chat.

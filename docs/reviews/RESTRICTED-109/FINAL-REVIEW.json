@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task_id": "RESTRICTED-109",
+  "status": "PASSED",
+  "head": "22214b64743d6abbcaf4162382b6e53605348adc",
+  "source_sha256": {
+    "packages/domain/restricted-content.ts": "bcc204fc9fe2099a33cc87e90ed15b23be98541eaf0ca932a245309411679a08",
+    "packages/domain/public-content.ts": "4f7354a18d107261db814d3e261331bcb800de4cf86ff9dbec2668f4f9f59876",
+    "src/features/content/RestrictedPage.tsx": "943ec31bf878da39812b17d2cc212ee567faa3211c6218270d011f79a0398d16",
+    "src/features/content/restricted-page.css": "1c62a74195c6c1174f4e9153e503fc75dff3b0eb216d443f96083200b45eeeb3",
+    "functions/src/public.ts": "988d263ec6d012663e03626df2cb71de01adf9dff03764dd87ef2600bfd36c7e"
+  },
+  "app_integration": "RestrictedPage import and exact restricted route only; unrelated concurrent App changes excluded",
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "PASSED",
+      "findings": []
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "findings": [],
+      "scope": "Human requested removal of unrelated carrier references; removed carrier panel and links without inventing universal bans."
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "SatsunicGo-only guidance, four example groups, checklist, request CTA and FAQ; no DHL names, external links or carrier-specific bans in UI or fallback HTML.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No auth/payment/provider writes, external link noopener/noreferrer, fallback content escaped.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Shared data, small dedicated React/CSS; TypeScript, targeted ESLint and Functions build passed.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Content-only page needs no provider request; native FAQ and shared server body preserved.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new async/error flow; fallback rendering tested isolated.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Local implementation assessment passed; NOT_DEPLOYED, carrier/route acceptance remains unverified.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Four common groups and carrier-qualified prohibited examples rather than invented exhaustive law or commercial policy.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "HTML-CHECK.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    }
+  },
+  "limitations": [
+    "DEGRADED intelligence indexes; bounded source/compiler evidence.",
+    "Full global shell, real device, assistive technology and live carrier acceptance NOT_TESTED.",
+    "No frontend production bundle regenerated; compiler and Functions build passed.",
+    "Dirty unrelated concurrent App and other work preserved; full worktree not reviewed.",
+    "Runtime CLI unavailable; task-local records."
+  ],
+  "residual_risks": [
+    "Carrier rules may change; per-item/per-route human confirmation remains necessary."
+  ]
+}

@@ -21,6 +21,7 @@ import { publicCopy } from "../../../packages/domain/public-content";
 import { askAnswerSchema } from "../../../packages/domain/ask-stream";
 import { requireVerifiedGoogle } from "../auth/guards";
 import { assertPaidAskReadiness } from "./ask-paid-gate";
+import { pilotAnswer } from "./ask-pilot-answer";
 import {
   redactChat,
   redactDraft,
@@ -65,6 +66,18 @@ export const ask = onCall(
     // deterministic answers and explicit workflows use their existing paths.
     const verifiedUid = requireVerifiedGoogle(req.auth);
     const db = getFirestore();
+    if (process.env.GCLOUD_PROJECT === "satsunicgo") {
+      await response?.sendChunk({ type: "status", phase: "retrieving" });
+      const result = await pilotAnswer(
+        verifiedUid,
+        p.data,
+        response
+          ? AbortSignal.any([AbortSignal.timeout(20000), response.signal])
+          : AbortSignal.timeout(20000),
+      );
+      await response?.sendChunk({ type: "answer", answer: result });
+      return result;
+    }
     assertPaidAskReadiness(
       verifiedUid,
       (await db.doc("settings/aiPaidPilot").get()).data(),

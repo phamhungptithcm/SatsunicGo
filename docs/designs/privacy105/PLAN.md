@@ -1,0 +1,6 @@
+# PRIVACY105 — concrete implementation plan
+2026-10-07. Existing page PublicPage/publicCopy placeholder verified. Intelligence DEGRADED stale indexes; bounded source Support/Profile/ProductReviews/Firebase/AI docs verified. Draft CONTENT_DRAFT.md separates observed mechanisms and unknown policy facts. Need verify all routes/provider fields against source before implementation freeze.
+
+New PrivacyPage React component + scoped CSS: restrained title/short intro, summary anchors, desktop data table/mobile cards, plain sections, existing account/support actions. Route only privacy through component in App PublicPage; no global style/copy or auth/backend/provider changes. Preserve unrelated shared WIP. Medium risk public privacy statements: do not invent retention, legal entity, provider-sharing or deletion guarantees. Owner details pending asynchronous question. No claim of legal compliance.
+
+Validation: compiler/scoped lint, mobile320/390/desktop1440/reflow/keyboard, strings/8principles review, source factual mapping, final review. Policy publish/deployment not authorized. Approval needed for this concrete draft/layout before existing application edits. Draft can be completed locally without unknown facts by visibly disclosing pending information, but cannot claim official complete privacy policy until owner verifies those facts.

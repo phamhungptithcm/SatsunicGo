@@ -13,7 +13,7 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
   const challenge = useSyncExternalStore(subscribeMfa, pendingMfa, () => null);
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const sending = useRef(false);
+  const sending = useRef<typeof challenge>(null);
   const [code, setCode] = useState("");
   const [factor, setFactor] = useState("");
   const [busy, setBusy] = useState(false);
@@ -30,6 +30,7 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
     setCode("");
     setError("");
     setBusy(false);
+    sending.current = null;
     setFactor(
       challenge.hints.find(
         (hint) => hint.factorId === TotpMultiFactorGenerator.FACTOR_ID,
@@ -45,23 +46,33 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
         previous.focus();
     };
   }, [challenge]);
+  useEffect(() => {
+    // Focus after React has committed the enabled input, not in a frame that
+    // can run while it is still disabled by the previous verification.
+    if (challenge && !busy && error) input.current?.focus();
+  }, [challenge, busy, error]);
   function cancel() {
-    if (sending.current) return;
+    if (sending.current === challenge) return;
     setCode("");
     setError("");
     clearMfa();
   }
-  async function submit(event: FormEvent) {
-    event.preventDefault();
-    if (!challenge || sending.current || !factor || !/^[0-9]{6}$/.test(code))
+  async function submit(event?: FormEvent, nextCode = code) {
+    event?.preventDefault();
+    if (
+      !challenge ||
+      sending.current === challenge ||
+      !factor ||
+      !/^[0-9]{6}$/.test(nextCode)
+    )
       return;
     const current = challenge;
-    sending.current = true;
+    sending.current = current;
     setBusy(true);
     setError("");
     try {
-      await verifyMfa(factor, code);
-      setCode("");
+      await verifyMfa(factor, nextCode);
+      if (pendingMfa() === current) setCode("");
     } catch (failure) {
       if (pendingMfa() !== current) return;
       const expired = [
@@ -72,15 +83,17 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
       setError(
         expired
           ? "Phiên đăng nhập đã hết hạn. Hủy rồi đăng nhập lại."
-          : "Mã chưa đúng hoặc đã hết hạn. Nhập mã mới để thử lại.",
+          : (failure as { code?: string }).code ===
+              "auth/network-request-failed"
+            ? "Chưa kết nối được. Kiểm tra mạng rồi thử lại."
+            : "Mã chưa đúng hoặc đã hết hạn. Nhập mã mới để thử lại.",
       );
       setCode("");
-      requestAnimationFrame(() => {
-        if (pendingMfa() === current) input.current?.focus();
-      });
     } finally {
-      sending.current = false;
-      setBusy(false);
+      if (sending.current === current) {
+        sending.current = null;
+        setBusy(false);
+      }
     }
   }
   if (!challenge) return null;
@@ -106,7 +119,11 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
             Ứng dụng xác thực
             <select
               value={factor}
-              onChange={(event) => setFactor(event.target.value)}
+              onChange={(event) => {
+                setFactor(event.target.value);
+                setCode("");
+                setError("");
+              }}
               disabled={busy}
             >
               {factors.map((hint, index) => (
@@ -128,13 +145,17 @@ export function LoginChallenge({ onOpen }: { onOpen: () => void }) {
             <input
               ref={input}
               value={code}
-              onChange={(event) =>
-                setCode(event.target.value.replace(/[^0-9]/g, "").slice(0, 6))
-              }
+              onChange={(event) => {
+                const next = event.target.value
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 6);
+                setCode(next);
+                setError("");
+                if (next.length === 6) void submit(undefined, next);
+              }}
               inputMode="numeric"
               autoComplete="one-time-code"
               pattern="[0-9]{6}"
-              maxLength={6}
               required
               disabled={busy}
               aria-invalid={Boolean(error)}

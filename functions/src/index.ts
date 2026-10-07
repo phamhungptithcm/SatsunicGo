@@ -485,6 +485,7 @@ export { membershipReminderPolicy } from "./membership-reminder-policy";
 export { readOrderOperations } from "./workspace";
 
 export { catalogCheckout } from "./catalog-checkout";
+export { cartCommand } from "./cart";
 
 export { invoiceCommand, invoiceList, invoiceDetail } from "./invoices";
 export { invoiceShare } from "./invoice-share";

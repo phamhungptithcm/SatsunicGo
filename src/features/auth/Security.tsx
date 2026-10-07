@@ -11,8 +11,25 @@ import {
 } from "firebase/auth";
 import { auth } from "../../shared/firebase";
 import { captureMfa, pendingMfa, verifyMfa } from "./mfa";
+import {
+  enrollTotp,
+  waitForEnrollment,
+  publishEnrollment,
+  subscribeEnrollment,
+} from "./enrollment";
+import { useOptionalMfaAccess } from "./staff-mfa-context";
 
-export function Security({ user }: { user: User | null }) {
+export function Security({
+  user,
+  required = false,
+  onReady,
+}: {
+  user: User | null;
+  required?: boolean;
+  onReady?: () => void;
+}) {
+  const optionalAccess = useOptionalMfaAccess(user);
+  const blocked = !required && optionalAccess.blocked;
   const [secret, setSecret] = useState<TotpSecret | null>(null);
   const [qr, setQr] = useState("");
   const [qrFailed, setQrFailed] = useState(false);
@@ -28,8 +45,22 @@ export function Security({ user }: { user: User | null }) {
   const [factors, setFactors] = useState<number | null>(null);
   const [, setRevision] = useState(0);
   const epoch = useRef(0);
+  const flight = useRef<number | null>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const form = useRef<HTMLFormElement>(null);
+  const ready = useRef(onReady);
+  const acknowledged = useRef(false);
+  const uncertain = useRef(false);
+  const [needsReauth, setNeedsReauth] = useState(false);
+  useEffect(() => {
+    ready.current = onReady;
+  }, [onReady]);
   useEffect(() => {
     const attempt = ++epoch.current;
+    flight.current = null;
+    acknowledged.current = false;
+    uncertain.current = false;
+    setNeedsReauth(false);
     setSecret(null);
     setQr("");
     setQrFailed(false);
@@ -41,30 +72,45 @@ export function Security({ user }: { user: User | null }) {
 
     setFactors(null);
     setStatusFailed(false);
+    if (blocked)
+      return () => {
+        ++epoch.current;
+        flight.current = null;
+      };
     if (user)
-      void user
-        .reload()
-        .then(() => {
-          if (epoch.current === attempt)
-            setFactors(multiFactor(user).enrolledFactors.length);
+      void waitForEnrollment(user)
+        .then(() => (epoch.current === attempt ? user.reload() : undefined))
+        .then(async () => {
+          if (epoch.current !== attempt) return;
+          const count = multiFactor(user).enrolledFactors.length;
+          setFactors(count);
+          if (required) {
+            if (count > 0) {
+              await user.getIdToken(true);
+              if (epoch.current === attempt) ready.current?.();
+            } else void begin();
+          }
         })
         .catch(() => {
           if (epoch.current === attempt) {
             setStatusFailed(true);
-            setError(
-              "Chưa tải được trạng thái bảo mật. Tải lại trang để thử lại.",
-            );
+            setError("Chưa tải được trạng thái bảo mật. Kiểm tra lại.");
           }
         });
     return () => {
       ++epoch.current;
+      flight.current = null;
     };
-  }, [user]);
+    // Identity is the lifecycle boundary; operation guards handle all late replies.
+  }, [user, required, blocked]);
   const challenge = pendingMfa();
   const challengeFactors =
     challenge?.hints.filter(
       (h) => h.factorId === TotpMultiFactorGenerator.FACTOR_ID,
     ) ?? [];
+  useEffect(() => {
+    if (secret && !busy) input.current?.focus();
+  }, [secret, busy, error]);
   function clearSetup() {
     setSecret(null);
     setQr("");
@@ -72,10 +118,27 @@ export function Security({ user }: { user: User | null }) {
     setCopyState("");
     setCode("");
   }
+  useEffect(
+    () =>
+      subscribeEnrollment((current, count) => {
+        if (current !== user) return;
+        ++epoch.current;
+        flight.current = null;
+        clearSetup();
+        setFactors(count);
+        setStatusFailed(false);
+        setBusy(false);
+        setVerifying(false);
+        setError("");
+      }),
+    [user],
+  );
   function cancel() {
     ++epoch.current;
+    flight.current = null;
     clearSetup();
     setBusy(false);
+    setVerifying(false);
     setError("");
   }
   async function copyKey() {
@@ -90,19 +153,25 @@ export function Security({ user }: { user: User | null }) {
     }
   }
   async function reauthenticate() {
-    if (!user || busy) return;
+    if (!user || flight.current !== null) return;
     const attempt = ++epoch.current;
+    flight.current = attempt;
     clearSetup();
     setBusy(true);
     setError("");
+    let restart = false;
 
     try {
       await reauthenticateWithPopup(user, new GoogleAuthProvider());
       if (epoch.current !== attempt) return;
       await user.reload();
       if (epoch.current !== attempt) return;
-      setFactors(multiFactor(user).enrolledFactors.length);
+      const count = multiFactor(user).enrolledFactors.length;
+      setFactors(count);
+      restart = required && count === 0;
+      if (required && count > 0) ready.current?.();
       setStatusFailed(false);
+      setNeedsReauth(false);
       notify(
         "Đã xác thực lại với Google. Bạn có thể tiếp tục thiết lập.",
         "success",
@@ -115,12 +184,18 @@ export function Security({ user }: { user: User | null }) {
         setError("Chưa xác thực lại được. Thử đăng nhập lại với Google.");
       }
     } finally {
-      if (epoch.current === attempt) setBusy(false);
+      if (epoch.current === attempt) {
+        flight.current = null;
+        setBusy(false);
+        if (restart) void begin();
+      }
     }
   }
   async function begin() {
-    if (!user || busy) return;
+    if (!user || blocked || flight.current !== null || acknowledged.current)
+      return;
     const attempt = ++epoch.current;
+    flight.current = attempt;
     clearSetup();
     setBusy(true);
     setError("");
@@ -140,101 +215,221 @@ export function Security({ user }: { user: User | null }) {
       } catch {
         if (epoch.current === attempt) setQrFailed(true);
       }
-    } catch {
-      if (epoch.current === attempt)
+    } catch (failure) {
+      if (epoch.current === attempt) {
+        const recent =
+          (failure as { code?: string }).code === "auth/requires-recent-login";
+        setNeedsReauth(recent);
         setError(
-          "Chưa tạo được thiết lập. Xác thực lại với Google rồi thử thêm ứng dụng lần nữa.",
+          recent
+            ? "Xác thực lại với Google để tiếp tục thiết lập."
+            : "Chưa tạo được thiết lập. Thử lại.",
         );
+      }
     } finally {
-      if (epoch.current === attempt) setBusy(false);
+      if (epoch.current === attempt) {
+        flight.current = null;
+        setBusy(false);
+        requestAnimationFrame(() => {
+          if (epoch.current === attempt) input.current?.focus();
+        });
+      }
     }
   }
-  async function verify(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function verify(e?: FormEvent<HTMLFormElement>, nextCode = code) {
+    e?.preventDefault();
+    const factor = String(
+      form.current ? (new FormData(form.current).get("factor") ?? "") : "",
+    );
     if (
-      busy ||
-      !/^[0-9]{6}$/.test(code) ||
-      (challenge &&
-        !challengeFactors.some(
-          (h) => h.uid === String(new FormData(e.currentTarget).get("factor")),
-        ))
+      blocked ||
+      flight.current !== null ||
+      acknowledged.current ||
+      !/^[0-9]{6}$/.test(nextCode) ||
+      (challenge && !challengeFactors.some((h) => h.uid === factor))
     )
       return;
-    const factor = String(new FormData(e.currentTarget).get("factor") ?? "");
     const attempt = ++epoch.current;
+    flight.current = attempt;
     setBusy(true);
     setVerifying(true);
     setError("");
 
     let enrolled = false;
     try {
-      if (challenge) await verifyMfa(factor, code);
+      if (challenge) await verifyMfa(factor, nextCode);
       else if (secret && user) {
-        await multiFactor(user).enroll(
-          TotpMultiFactorGenerator.assertionForEnrollment(secret, code),
-          "Authenticator",
-        );
+        await enrollTotp(user, secret, nextCode);
         enrolled = true;
       } else return;
       if (epoch.current !== attempt) return;
+      acknowledged.current = enrolled;
       clearSetup();
       if (user) {
         setFactors(null);
         await user.reload();
         if (epoch.current !== attempt) return;
+        await user.getIdToken(true);
+        if (epoch.current !== attempt) return;
         const count = multiFactor(user).enrolledFactors.length;
         setFactors(count);
         setStatusFailed(false);
         if (enrolled && count === 0) {
-          setError(
-            "Chưa xác nhận được trạng thái bảo mật. Tải lại trang để kiểm tra.",
-          );
+          setError("Chưa xác nhận được trạng thái bảo mật. Kiểm tra lại.");
           return;
         }
+        if (required && count > 0) ready.current?.();
       }
       notify(
         enrolled ? "Đã bật xác thực hai bước." : "Đã xác nhận mã xác thực.",
         "success",
       );
+      if (enrolled && user)
+        publishEnrollment(user, multiFactor(user).enrolledFactors.length);
       setRevision((v) => v + 1);
-    } catch {
+    } catch (failure) {
       if (epoch.current !== attempt) return;
       if (enrolled) setStatusFailed(true);
+      const failureCode = (failure as { code?: string }).code;
+      const expired = [
+        "auth/requires-recent-login",
+        "auth/invalid-multi-factor-session",
+        "auth/session-expired",
+      ].includes(failureCode ?? "");
+      const invalidCode = [
+        "auth/invalid-verification-code",
+        "auth/code-expired",
+      ].includes(failureCode ?? "");
+      if (!enrolled && !expired && !invalidCode && !challenge) {
+        // A transport/service failure may follow server acceptance. Read back
+        // before permitting another enrollment, instead of assuming rejection.
+        uncertain.current = true;
+        acknowledged.current = true;
+        clearSetup();
+        setFactors(null);
+        setStatusFailed(true);
+      }
+      if (!enrolled && expired) {
+        clearSetup();
+        setNeedsReauth(true);
+      }
       setError(
         enrolled
-          ? "Ứng dụng đã được đăng ký nhưng chưa tải được trạng thái mới. Tải lại trang để kiểm tra."
-          : "Mã chưa được xác nhận. Nhập mã mới nhất trong ứng dụng và kiểm tra thời gian trên thiết bị rồi thử lại.",
+          ? "Ứng dụng đã được đăng ký nhưng chưa tải được trạng thái mới. Kiểm tra lại."
+          : uncertain.current
+            ? "Chưa xác nhận được thiết lập. Kiểm tra lại trạng thái để tiếp tục."
+            : expired
+              ? "Phiên thiết lập đã hết hạn. Xác thực lại với Google để tiếp tục."
+              : failureCode === "auth/network-request-failed"
+                ? "Chưa kết nối được. Kiểm tra mạng rồi thử lại."
+                : "Mã chưa đúng hoặc đã hết hạn. Nhập mã mới để thử lại.",
       );
+      setCode("");
+      requestAnimationFrame(() => {
+        if (epoch.current === attempt) input.current?.focus();
+      });
     } finally {
       if (epoch.current === attempt) {
+        flight.current = null;
         setBusy(false);
         setVerifying(false);
       }
     }
   }
+  async function refreshStatus() {
+    if (!user || flight.current !== null) return;
+    const attempt = ++epoch.current;
+    flight.current = attempt;
+    setBusy(true);
+    setError("");
+    try {
+      await user.reload();
+      if (epoch.current !== attempt) return;
+      await user.getIdToken(true);
+      if (epoch.current !== attempt) return;
+      const count = multiFactor(user).enrolledFactors.length;
+      setFactors(count);
+      setStatusFailed(false);
+      if (acknowledged.current && count === 0) {
+        if (uncertain.current) {
+          acknowledged.current = false;
+          uncertain.current = false;
+          setError("Chưa đăng ký ứng dụng xác thực. Thử thiết lập lại.");
+        } else {
+          setStatusFailed(true);
+          setError("Chưa xác nhận được trạng thái bảo mật. Kiểm tra lại.");
+        }
+      } else if (count > 0) {
+        notify("Đã bật xác thực hai bước.", "success");
+        ready.current?.();
+        publishEnrollment(user, count);
+      }
+    } catch {
+      if (epoch.current === attempt) {
+        setStatusFailed(true);
+        setError("Chưa tải được trạng thái bảo mật. Kiểm tra lại.");
+      }
+    } finally {
+      if (epoch.current === attempt) {
+        flight.current = null;
+        setBusy(false);
+      }
+    }
+  }
+  if (blocked)
+    return (
+      <section className="securityPage">
+        <header className="securityHeading">
+          <h1>Bảo mật tài khoản</h1>
+        </header>
+        <p role="status">
+          {optionalAccess.status === "setup"
+            ? "Hoàn tất thiết lập trong cửa sổ bảo mật."
+            : optionalAccess.status === "checking"
+              ? "Đang kiểm tra bảo mật…"
+              : "Chưa kiểm tra được bảo mật."}
+        </p>
+        {optionalAccess.status === "unavailable" && (
+          <button
+            type="button"
+            className="securitySecondary"
+            onClick={optionalAccess.retry}
+          >
+            Kiểm tra lại quyền
+          </button>
+        )}
+      </section>
+    );
   return (
     <section className="securityPage">
-      <header className="securityHeading">
-        <h1>Bảo mật tài khoản</h1>
-      </header>
+      {!required && (
+        <header className="securityHeading">
+          <h1>Bảo mật tài khoản</h1>
+        </header>
+      )}
       {user && (
         <div className="securityOverview">
-          <div className="securityOverviewRow">
-            <h2>Xác thực hai bước</h2>
-            <span
-              role={factors ? "status" : undefined}
-              className={`securityBadge ${factors ? "isEnabled" : ""}`}
-            >
-              {factors === null
-                ? statusFailed
-                  ? "Chưa xác định"
-                  : "Đang kiểm tra"
-                : factors
-                  ? "Đã bật"
-                  : "Chưa bật"}
-            </span>
-          </div>
-          {!secret && !challenge && factors === 0 && (
+          {required && factors === null && !error && !busy && (
+            <p role="status">Đang kiểm tra bảo mật…</p>
+          )}
+          {!required && (
+            <div className="securityOverviewRow">
+              <h2>Xác thực hai bước</h2>
+              <span
+                role={factors ? "status" : undefined}
+                className={`securityBadge ${factors ? "isEnabled" : ""}`}
+              >
+                {factors === null
+                  ? statusFailed
+                    ? "Chưa xác định"
+                    : "Đang kiểm tra"
+                  : factors
+                    ? "Đã bật"
+                    : "Chưa bật"}
+              </span>
+            </div>
+          )}
+          {!secret && !challenge && factors === 0 && !acknowledged.current && (
             <div className="securityActions">
               <button
                 className="securityPrimary"
@@ -243,28 +438,30 @@ export function Security({ user }: { user: User | null }) {
               >
                 {busy ? "Đang xử lý…" : "Thêm ứng dụng xác thực"}
               </button>
-              <button
-                className="securitySecondary"
-                disabled={busy}
-                onClick={() => void reauthenticate()}
-              >
-                Xác thực lại với Google
-              </button>
-              {busy && !verifying && (
+              {(!required || needsReauth) && (
+                <button
+                  className="securitySecondary"
+                  disabled={busy}
+                  onClick={() => void reauthenticate()}
+                >
+                  Xác thực lại với Google
+                </button>
+              )}
+              {!required && busy && !verifying && (
                 <button className="securitySecondary" onClick={cancel}>
                   Hủy thiết lập
                 </button>
               )}
             </div>
           )}
-          {!secret && !challenge && factors === null && statusFailed && (
+          {!secret && !challenge && (statusFailed || acknowledged.current) && (
             <div className="securityActions">
               <button
                 className="securitySecondary"
                 disabled={busy}
-                onClick={() => void reauthenticate()}
+                onClick={() => void refreshStatus()}
               >
-                Xác thực lại với Google
+                {busy ? "Đang kiểm tra…" : "Kiểm tra lại"}
               </button>
             </div>
           )}
@@ -323,25 +520,29 @@ export function Security({ user }: { user: User | null }) {
                     </svg>
                   </button>
                 </div>
-                {copyState && (
-                  <p
-                    className="securityCopyFeedback"
-                    role={copyState === "failed" ? "alert" : "status"}
-                  >
-                    {copyState === "done"
-                      ? "Đã sao chép"
-                      : copyState === "failed"
-                        ? "Không sao chép được. Chọn khóa để sao chép thủ công."
-                        : "Đang sao chép…"}
-                  </p>
-                )}
+                <p
+                  className="securityCopyFeedback"
+                  role={copyState === "failed" ? "alert" : "status"}
+                >
+                  {copyState === "done"
+                    ? "Đã sao chép"
+                    : copyState === "failed"
+                      ? "Không sao chép được. Chọn khóa để sao chép thủ công."
+                      : copyState === "pending"
+                        ? "Đang sao chép…"
+                        : ""}
+                </p>
                 <p className="securityPrivacy">
                   Không chia sẻ mã QR hoặc khóa này.
                 </p>
               </div>
             </div>
           )}
-          <form className="securityForm" onSubmit={(e) => void verify(e)}>
+          <form
+            ref={form}
+            className="securityForm"
+            onSubmit={(e) => void verify(e)}
+          >
             <p>
               {challenge
                 ? "Nhập mã từ ứng dụng xác thực."
@@ -378,17 +579,20 @@ export function Security({ user }: { user: User | null }) {
               </span>
             </label>
             <input
+              ref={input}
               id="security-code"
               name="code"
               value={code}
-              onChange={(e) =>
-                setCode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))
-              }
+              onChange={(e) => {
+                const next = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+                setCode(next);
+                setError("");
+                if (next.length === 6) void verify(undefined, next);
+              }}
               inputMode="numeric"
               autoComplete="one-time-code"
               pattern="[0-9]{6}"
               required
-              maxLength={6}
               placeholder="000000"
               disabled={busy}
               aria-invalid={error ? true : undefined}
@@ -409,7 +613,7 @@ export function Security({ user }: { user: User | null }) {
                     ? "Xác nhận mã"
                     : "Bật xác thực hai bước"}
               </button>
-              {secret && (
+              {secret && !required && (
                 <button
                   type="button"
                   className="securitySecondary"

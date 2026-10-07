@@ -1,0 +1,58 @@
+flowchart TB
+  subgraph channel[Product surfaces]
+    U[Customer Ask Anything]
+    S[Staff CRM Copilot]
+  end
+  subgraph ai[Applied AI platform — target design]
+    G[Identity / capability / schema / quota gateway]
+    R[Server intent router]
+    C[Context: public knowledge + scoped private projection]
+    L[Bounded runner: read / explain / draft / clarify]
+    P[Tool policy: schema + permission + timeout]
+    T[Allowlisted read and draft tools]
+    M[Provider adapter — paid path currently blocked]
+    O[Output schema / citations / partial results]
+    G --> R --> C --> L
+    L --> P --> T --> L
+    L <--> M
+    L --> O
+  end
+  U --> G
+  S --> G
+  O --> U
+  O --> S
+  subgraph business[Authoritative business workflow]
+    A[Human confirmation bound to actor / payload / version / expiry]
+    W[Commands: ownership / roles / domain states / operationId]
+    D[(Firestore business source of truth)]
+    E[Staff and verified payment / carrier events]
+    A --> W --> D
+    W --> E --> D
+  end
+  U --> A
+  S --> A
+  T -->|scoped reads only| D
+  subgraph state[State outside the prompt]
+    H[Conversation / draft / pending operations]
+    B[Token budget / provenance-preserving compaction — proposed]
+    Q[Opt-in preferences / retention — proposed]
+    V[Audit metadata / usage / latency]
+  end
+  D --> H
+  H --> C
+  B --> C
+  Q --> C
+  L --> V
+  W --> V
+  subgraph insights[Customer Intelligence — proposed asynchronous pipeline]
+    F[Purpose / consent / minimization]
+    X[Versioned event envelope / committed outbox]
+    Y[Dedup / retry / event store / retention]
+    Z[Aggregate / feature definitions / freshness / coverage]
+    I[Evidence-backed insights / staff review]
+    F --> X --> Y --> Z --> I
+  end
+  U -. observations only .-> F
+  D -. committed domain events .-> X
+  I --> S
+  I -. opt-in preference candidate .-> Q

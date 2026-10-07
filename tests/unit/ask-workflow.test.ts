@@ -25,6 +25,21 @@ test("buying intent does not get captured as a generic FAQ", () => {
   expect(shoppingIntent("Mua hộ hoạt động thế nào?")).toBe(false);
   expect(shoppingIntent("https://shop.example/product")).toBe(true);
 });
+test("explicit request preparation is shopping intent, including mixed FAQ wording", () => {
+  for (const question of [
+    "Soạn yêu cầu mua hộ bình giữ nhiệt từ Nhật",
+    "Tạo một bản nháp yêu cầu mua hộ giày size 42",
+    "Chuẩn bị yêu cầu mua hộ áo. Mua hộ hoạt động thế nào?",
+    "Draft a purchase request for a jacket",
+  ])
+    expect(shoppingIntent(question)).toBe(true);
+  for (const question of [
+    "Mua hộ là gì?",
+    "How does buying assistance work?",
+    "Quy trình tạo yêu cầu hoạt động thế nào?",
+  ])
+    expect(shoppingIntent(question)).toBe(false);
+});
 test("deterministic workflow respects hold, approval, actual money and terminal states", () => {
   expect(nextCustomerAction(order)).toBe("waiting");
   expect(nextCustomerAction({ ...order, stage: "QUOTED" })).toBe("acceptQuote");

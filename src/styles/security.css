@@ -164,6 +164,7 @@
 .securityPage .securityCopyFeedback {
   font-size: 12px;
   margin: 6px 0;
+  min-height: 20px;
 }
 .securityForm {
   max-width: 360px;

@@ -5,6 +5,8 @@ import type { User } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../shared/firebase";
 import { preloadNavigation } from "./route-modules";
+import { useCart } from "../features/cart/cart-store";
+import { CartIcon } from "../features/cart/AddToCart";
 const navigation = [
   ["Sản phẩm", "/products"],
   ["Mua hộ", "/request"],
@@ -185,6 +187,8 @@ export function SiteHeader({
   signOut: () => Promise<void>;
   busy: boolean;
 }) {
+  const { cart, loading, error, cached } = useCart();
+  const cartCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
@@ -290,6 +294,27 @@ export function SiteHeader({
           )}
         </nav>
         <div className="headerActions">
+          <NavLink
+            className="headerCart107"
+            to="/cart"
+            onClick={() => setOpen(false)}
+            aria-label={
+              error
+                ? "Giỏ hàng chưa tải được"
+                : loading
+                  ? "Giỏ hàng đang tải"
+                  : cached
+                    ? `Giỏ hàng, ${cartCount} sản phẩm từ bản lưu`
+                    : `Giỏ hàng, ${cartCount} sản phẩm`
+            }
+          >
+            <CartIcon />
+            {!loading && !error && cartCount > 0 && (
+              <span aria-hidden="true">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            )}
+          </NavLink>
           <Link
             className="headerRequest"
             to="/request"

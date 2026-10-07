@@ -1,0 +1,6 @@
+# RESTRICTED-109 approved scope
+Human Approved after plan: redesign /restricted with short opening, example cards, carrier-qualified prohibited/restricted distinction, preparation checklist, existing request CTA and short FAQs; consistent public HTML. No deployment or changes to acceptance policy, payment/auth/shipping engine.
+Intelligence DEGRADED (stale indexes, CocoIndex unhealthy); bounded source verified App.PublicPage, packages/domain/public-content and functions/public.contentHtml consumer, including AI context. Shared structured content feeds UI, fallback HTML and publicCopy; no unsupported service guarantee. DHL UK guidance verified 2026-10-07, linked in product; examples explicitly carrier-specific and not exhaustive legal guidance or proof of SatsunicGo carrier partnership.
+Files: new restricted-content.ts, RestrictedPage.tsx/css; scoped App route, public-content restricted copy and functions public route. Validation: compiler/lint, responsive rendered proxy with actual page and keyboard FAQ/CTA, SSR content parity source/unit proof, final product and implementation review. Preserve unrelated dirty concurrent work; reuse5207.
+
+Approved correction directly requested by human: remove unrelated carrier names/material and external links. Preserve SatsunicGo conditional item review; no replacement commercial prohibitions invented.

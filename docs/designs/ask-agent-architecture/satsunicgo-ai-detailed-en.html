@@ -1,0 +1,199 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>SatsunicGo AI</title><style>body{margin:0}svg{display:block;width:100%;height:auto}</style><svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1690" viewBox="0 0 1600 1690" role="img" aria-label="SatsunicGo AI architecture"><title>SatsunicGo AI</title><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#3e66c8" /></marker></defs><rect width="1600" height="1690" fill="white" /><rect width="1600" height="104" fill="#111c35" /><rect y="101" width="1600" height="3" fill="#163cff" />
+<text x="30" y="48" font-family="Arial,sans-serif" font-size="34" fill="white" font-weight="700">SatsunicGo AI</text>
+<text x="30" y="81" font-family="Arial,sans-serif" font-size="18" fill="#bccbff" font-weight="400">Ask Anything · Understand your customers</text>
+<rect x="300" y="140" width="740" height="750" rx="18" fill="#eef3ff" stroke="#163cff35" />
+<rect x="320" y="158" width="28" height="25" rx="7" fill="#163cff" stroke="#163cff" />
+<text x="326" y="176" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">01</text>
+<text x="359" y="177" font-family="Arial,sans-serif" font-size="23" fill="#163cff" font-weight="700">Agent runner</text>
+<text x="322" y="205" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Runs as the signed-in user</text>
+<rect x="1080" y="140" width="490" height="270" rx="18" fill="#f5efff" stroke="#7c3aed35" />
+<rect x="1100" y="158" width="28" height="25" rx="7" fill="#7c3aed" stroke="#7c3aed" />
+<text x="1106" y="176" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">02</text>
+<text x="1139" y="177" font-family="Arial,sans-serif" font-size="23" fill="#7c3aed" font-weight="700">LLM provider layer</text>
+<text x="1102" y="205" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">One interface for model calls</text>
+<rect x="1080" y="450" width="490" height="765" rx="18" fill="#edfaf7" stroke="#087f7035" />
+<rect x="1100" y="468" width="28" height="25" rx="7" fill="#087f70" stroke="#087f70" />
+<text x="1106" y="486" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">03</text>
+<text x="1139" y="487" font-family="Arial,sans-serif" font-size="23" fill="#087f70" font-weight="700">Tools &amp; data access</text>
+<text x="1102" y="515" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Only allowed tools · recheck access on every call</text>
+<rect x="30" y="240" width="235" height="145" rx="12" fill="white" stroke="#163cff75" />
+<rect x="31" y="253" width="4" height="119" rx="2" fill="#163cff" stroke="#163cff" />
+<text x="50" y="274" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">User</text>
+<text x="50" y="304" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Customer: Ask Anything</text>
+<text x="50" y="329" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Team member: CRM</text>
+<g fill="none" stroke="#111c35" stroke-width="2"><circle cx="51" cy="211" r="7" /><path d="M39 232v-6a12 12 0 0 1 24 0v6" /></g>
+<rect x="30" y="485" width="235" height="135" rx="12" fill="white" stroke="#163cff75" />
+<rect x="31" y="498" width="4" height="109" rx="2" fill="#163cff" stroke="#163cff" />
+<text x="50" y="519" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">API</text>
+<text x="50" y="549" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Auth · App Check · schema</text>
+<text x="50" y="574" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Validate and accept requests</text>
+<rect x="330" y="240" width="290" height="140" rx="12" fill="white" stroke="#163cff75" />
+<rect x="331" y="253" width="4" height="114" rx="2" fill="#163cff" stroke="#163cff" />
+<text x="350" y="274" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Build context</text>
+<text x="350" y="304" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Question + memory + history</text>
+<text x="350" y="329" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Sources + data + tool list</text>
+<rect x="350" y="343" width="215" height="24" rx="6" fill="#edf2ff" stroke="#edf2ff" />
+<text x="359" y="360" font-family="Arial,sans-serif" font-size="12" fill="#163cff" font-weight="600">owner-scoped · sourceId</text>
+<rect x="750" y="240" width="260" height="140" rx="12" fill="white" stroke="#163cff75" />
+<rect x="751" y="253" width="4" height="114" rx="2" fill="#163cff" stroke="#163cff" />
+<text x="770" y="274" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Call the model</text>
+<text x="770" y="304" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Answer or request a tool</text>
+<text x="770" y="329" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">No tool calls → final answer</text>
+<rect x="770" y="343" width="220" height="24" rx="6" fill="#edf2ff" stroke="#edf2ff" />
+<text x="779" y="360" font-family="Arial,sans-serif" font-size="12" fill="#163cff" font-weight="600">structured output · citations</text>
+<polyline points="620,300 750,300" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="659" y="285" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">request</text>
+<polyline points="1010,278 1100,278" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="1030" y="263" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">chat()</text>
+<polyline points="1100,325 1010,325" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="1033" y="347" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">reply</text>
+<polyline points="330,275 265,275" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="272" y="259" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">live reply</text>
+<polyline points="148,385 148,485" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="161" y="445" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">send / approve</text>
+<polyline points="265,555 475,555 475,380" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="285" y="540" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">validated request</text>
+<rect x="750" y="480" width="260" height="165" rx="12" fill="#fff8e9" stroke="#bd681575" />
+<rect x="751" y="493" width="4" height="139" rx="2" fill="#bd6815" stroke="#bd6815" />
+<text x="770" y="514" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Permission gate</text>
+<text x="770" y="544" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Role allows this tool?</text>
+<text x="770" y="569" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Valid input? Current version?</text>
+<text x="770" y="594" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Writes wait for approval</text>
+<rect x="770" y="609" width="220" height="24" rx="6" fill="#ffebc3" stroke="#ffebc3" />
+<text x="779" y="626" font-family="Arial,sans-serif" font-size="12" fill="#a55510" font-weight="600">RBAC · schema · version</text>
+<polyline points="880,380 880,480" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="895" y="432" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">tool calls</text>
+<rect x="750" y="735" width="260" height="120" rx="12" fill="white" stroke="#163cff75" />
+<rect x="751" y="748" width="4" height="94" rx="2" fill="#163cff" stroke="#163cff" />
+<text x="770" y="769" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Run tools</text>
+<text x="770" y="799" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Independent reads in parallel</text>
+<text x="770" y="824" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Writes on one order: in order</text>
+<polyline points="880,645 880,735" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="895" y="695" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">allowed</text>
+<polyline points="1010,774 1100,774" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="1021" y="757" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">run(args)</text>
+<polyline points="1100,814 1010,814" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="1033" y="838" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">result</text>
+<polyline points="750,797 700,797 700,420 475,420 475,380" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="527" y="403" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">tool results</text>
+<rect x="330" y="610" width="310" height="245" rx="12" fill="#111c35" stroke="#111c35" />
+<text x="350" y="643" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Loop until there is a final answer</text>
+<text x="350" y="675" font-family="Arial,sans-serif" font-size="15" fill="#c5d3f8" font-weight="400">Every turn checks:</text>
+<text x="350" y="709" font-family="monospace" font-size="15" fill="#d4dffe" font-weight="400">max steps · token budget</text>
+<text x="350" y="739" font-family="monospace" font-size="15" fill="#d4dffe" font-weight="400">timeout · cancellation</text>
+<text x="350" y="769" font-family="monospace" font-size="15" fill="#d4dffe" font-weight="400">requestId · traceId</text>
+<text x="350" y="818" font-family="Arial,sans-serif" font-size="14" fill="#aebfe7" font-weight="400">One tool fails → keep other results</text>
+<rect x="1100" y="232" width="450" height="110" rx="12" fill="white" stroke="#7c3aed75" />
+<rect x="1101" y="245" width="4" height="84" rx="2" fill="#7c3aed" stroke="#7c3aed" />
+<text x="1120" y="266" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Model adapter</text>
+<text x="1120" y="296" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Logs each call: tokens, cost, latency</text>
+<rect x="1100" y="360" width="210" height="24" rx="6" fill="#eae0ff" stroke="#eae0ff" />
+<text x="1109" y="377" font-family="Arial,sans-serif" font-size="12" fill="#7541b9" font-weight="600">Genkit</text>
+<rect x="1330" y="360" width="220" height="24" rx="6" fill="#eae0ff" stroke="#eae0ff" />
+<text x="1339" y="377" font-family="Arial,sans-serif" font-size="12" fill="#7541b9" font-weight="600">Vertex AI / Gemini</text>
+<rect x="1100" y="535" width="450" height="490" rx="12" fill="white" stroke="#78bfb4" />
+<text x="1120" y="570" font-family="Arial,sans-serif" font-size="23" fill="#111c35" font-weight="700">Tool registry</text>
+<text x="1120" y="598" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Grouped by area · load only what the task needs</text>
+<text x="1120" y="638" font-family="Arial,sans-serif" font-size="16" fill="#087f70" font-weight="700">Read · scoped lookups</text>
+<rect x="1120" y="650" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="668" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">searchPublished · getPublicFeePolicy</text>
+<rect x="1120" y="681" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="699" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">comparePublishedPlans · getMyOrder</text>
+<text x="1120" y="744" font-family="Arial,sans-serif" font-size="16" fill="#087f70" font-weight="700">Draft · nothing submitted</text>
+<rect x="1120" y="756" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="774" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">collectShoppingDetails</text>
+<rect x="1120" y="787" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="805" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">prepareRequestDraft</text>
+<text x="1120" y="850" font-family="Arial,sans-serif" font-size="16" fill="#a55510" font-weight="700">Write · needs user confirmation</text>
+<rect x="1120" y="862" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="880" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">askWorkflow: submitRequest / acceptQuote</text>
+<text x="1120" y="927" font-family="Arial,sans-serif" font-size="16" fill="#a55510" font-weight="700">Payment · separate workflow</text>
+<rect x="1120" y="939" width="410" height="26" rx="6" fill="#f1f6f7" stroke="#e0e8eb" />
+<text x="1131" y="957" font-family="monospace" font-size="13" fill="#33425c" font-weight="400">createPaymentLink · payosWebhook</text>
+<rect x="1100" y="1090" width="450" height="100" rx="12" fill="white" stroke="#087f7075" />
+<rect x="1101" y="1103" width="4" height="74" rx="2" fill="#087f70" stroke="#087f70" />
+<text x="1120" y="1124" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Firestore</text>
+<text x="1120" y="1154" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">orders · products · membership · CRM</text>
+<text x="1120" y="1179" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Check owner / role · record each write</text>
+<polyline points="1325,1025 1325,1090" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="1340" y="1060" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">check access each time</text>
+<rect x="30" y="720" width="235" height="170" rx="12" fill="#fff8e9" stroke="#bd681575" />
+<rect x="31" y="733" width="4" height="144" rx="2" fill="#bd6815" stroke="#bd6815" />
+<text x="50" y="754" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Approval binding</text>
+<text x="50" y="784" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">actor · action · orderId</text>
+<text x="50" y="809" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">payloadHash · version</text>
+<text x="50" y="834" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">expiry · operationId</text>
+<text x="30" y="919" font-family="Arial,sans-serif" font-size="14" fill="#97581d" font-weight="400">Changed data → approve again</text>
+<rect x="300" y="930" width="740" height="285" rx="18" fill="#f0f4fb" stroke="#44639435" />
+<rect x="320" y="948" width="28" height="25" rx="7" fill="#446394" stroke="#446394" />
+<text x="326" y="966" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">04</text>
+<text x="359" y="967" font-family="Arial,sans-serif" font-size="23" fill="#446394" font-weight="700">Compaction</text>
+<text x="322" y="995" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Keep what the next turn needs; order state stays outside the prompt</text>
+<polyline points="475,890 475,930" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="490" y="917" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">long history</text>
+<text x="330" y="1031" font-family="Arial,sans-serif" font-size="12" fill="#446394" font-weight="700">CONTEXT BUDGET</text>
+<rect x="330" y="1045" width="230" height="17" rx="3" fill="#a7bdfa" stroke="#a7bdfa" />
+<rect x="560" y="1045" width="170" height="17" rx="3" fill="#88d2c8" stroke="#88d2c8" />
+<rect x="730" y="1045" width="100" height="17" rx="3" fill="#d8bef5" stroke="#d8bef5" />
+<rect x="830" y="1045" width="180" height="17" rx="3" fill="#111c35" stroke="#111c35" />
+<text x="335" y="1085" font-family="Arial,sans-serif" font-size="13" fill="#536179" font-weight="400">history</text>
+<text x="567" y="1085" font-family="Arial,sans-serif" font-size="13" fill="#536179" font-weight="400">sources</text>
+<text x="740" y="1085" font-family="Arial,sans-serif" font-size="13" fill="#536179" font-weight="400">tools</text>
+<text x="853" y="1085" font-family="Arial,sans-serif" font-size="13" fill="#111c35" font-weight="600">output reserve</text>
+<rect x="330" y="1106" width="212" height="85" rx="12" fill="white" stroke="#44639475" />
+<rect x="331" y="1119" width="4" height="59" rx="2" fill="#446394" stroke="#446394" />
+<text x="350" y="1140" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Clear old results</text>
+<text x="350" y="1170" font-family="Arial,sans-serif" font-size="14" fill="#536179" font-weight="400">Keep source references</text>
+<rect x="563" y="1106" width="212" height="85" rx="12" fill="white" stroke="#44639475" />
+<rect x="564" y="1119" width="4" height="59" rx="2" fill="#446394" stroke="#446394" />
+<text x="583" y="1140" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Summarize</text>
+<text x="583" y="1170" font-family="Arial,sans-serif" font-size="14" fill="#536179" font-weight="400">Keep key points and sources</text>
+<rect x="796" y="1106" width="214" height="85" rx="12" fill="white" stroke="#44639475" />
+<rect x="797" y="1119" width="4" height="59" rx="2" fill="#446394" stroke="#446394" />
+<text x="816" y="1140" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Keep active work</text>
+<text x="816" y="1170" font-family="Arial,sans-serif" font-size="14" fill="#536179" font-weight="400">Orders, drafts, pending tasks</text>
+<rect x="30" y="1260" width="1540" height="155" rx="18" fill="#f3f2ff" stroke="#5855b335" />
+<rect x="50" y="1278" width="28" height="25" rx="7" fill="#5855b3" stroke="#5855b3" />
+<text x="56" y="1296" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">05</text>
+<text x="89" y="1297" font-family="Arial,sans-serif" font-size="23" fill="#5855b3" font-weight="700">Memory &amp; state</text>
+<text x="52" y="1325" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Memory cannot grant access or prove payment</text>
+<rect x="50" y="1333" width="480" height="60" rx="12" fill="white" stroke="#5855b375" />
+<rect x="51" y="1346" width="4" height="34" rx="2" fill="#5855b3" stroke="#5855b3" />
+<text x="70" y="1367" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Conversation history</text>
+<rect x="560" y="1333" width="480" height="60" rx="12" fill="white" stroke="#5855b375" />
+<rect x="561" y="1346" width="4" height="34" rx="2" fill="#5855b3" stroke="#5855b3" />
+<text x="580" y="1367" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Memory · user-chosen preferences</text>
+<rect x="1070" y="1333" width="480" height="60" rx="12" fill="white" stroke="#5855b375" />
+<rect x="1071" y="1346" width="4" height="34" rx="2" fill="#5855b3" stroke="#5855b3" />
+<text x="1090" y="1367" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Audit logs · usage · costs</text>
+<polyline points="475,1215 475,1260" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<text x="490" y="1242" font-family="Arial,sans-serif" font-size="14" fill="#365cb4" font-weight="600">save summary</text>
+<rect x="30" y="1455" width="1540" height="205" rx="18" fill="#fff5ec" stroke="#b9551535" />
+<rect x="50" y="1473" width="28" height="25" rx="7" fill="#b95515" stroke="#b95515" />
+<text x="56" y="1491" font-family="Arial,sans-serif" font-size="12" fill="white" font-weight="700">06</text>
+<text x="89" y="1492" font-family="Arial,sans-serif" font-size="23" fill="#b95515" font-weight="700">Customer behavior</text>
+<text x="52" y="1520" font-family="Arial,sans-serif" font-size="15" fill="#536179" font-weight="400">Runs separately from chat and payments · use only permitted data</text>
+<rect x="50" y="1537" width="365" height="102" rx="12" fill="white" stroke="#b9551575" />
+<rect x="51" y="1550" width="4" height="76" rx="2" fill="#b95515" stroke="#b95515" />
+<text x="70" y="1571" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Customer activity</text>
+<text x="70" y="1601" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">views · searches · orders</text>
+<text x="70" y="1626" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">UI events ≠ completed purchases</text>
+<rect x="445" y="1537" width="365" height="102" rx="12" fill="white" stroke="#b9551575" />
+<rect x="446" y="1550" width="4" height="76" rx="2" fill="#b95515" stroke="#b95515" />
+<text x="465" y="1571" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Event pipeline</text>
+<text x="465" y="1601" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">outbox · dedup · retry</text>
+<text x="465" y="1626" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">consent · retention · privacy</text>
+<rect x="840" y="1537" width="365" height="102" rx="12" fill="white" stroke="#b9551575" />
+<rect x="841" y="1550" width="4" height="76" rx="2" fill="#b95515" stroke="#b95515" />
+<text x="860" y="1571" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Insights &amp; suggestions</text>
+<text x="860" y="1601" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">funnel · repeat purchase</text>
+<text x="860" y="1626" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">time window · coverage</text>
+<rect x="1235" y="1537" width="315" height="102" rx="12" fill="white" stroke="#b9551575" />
+<rect x="1236" y="1550" width="4" height="76" rx="2" fill="#b95515" stroke="#b95515" />
+<text x="1255" y="1571" font-family="Arial,sans-serif" font-size="21" fill="#111c35" font-weight="700">Team review</text>
+<text x="1255" y="1601" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Sources and timestamps</text>
+<text x="1255" y="1626" font-family="Arial,sans-serif" font-size="16" fill="#536179" font-weight="400">Authorized people decide</text>
+<polyline points="415,1586 445,1586" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<polyline points="810,1586 840,1586" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+<polyline points="1205,1586 1235,1586" fill="none" stroke="#3e66c8" stroke-width="2.2" marker-end="url(#arrow)" />
+</svg></html>

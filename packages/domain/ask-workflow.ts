@@ -69,10 +69,16 @@ export const conversationActionSchema = z.discriminatedUnion("action", [
     .strict(),
 ]);
 export function shoppingIntent(text: string) {
-  return (
-    /(?:muốn|cần|tìm|đặt|mua giúp|mua hộ cho|mua cho|want|buy me|looking for|order me)|https?:\/\//i.test(
+  const explicitDraft =
+    /(?:soạn|tạo|lập|chuẩn bị)\s+(?:một\s+)?(?:bản nháp\s+)?yêu cầu\s+mua hộ|(?:draft|prepare|create)\s+(?:a\s+)?(?:shopping|purchase|buying)\s+request/i.test(
       text,
-    ) && !/hoạt động thế nào|how .*work|mua hộ là gì/i.test(text)
+    );
+  return (
+    explicitDraft ||
+    (/(?:muốn|cần|tìm|đặt|mua giúp|mua hộ cho|mua cho|want|buy me|looking for|order me)|https?:\/\//i.test(
+      text,
+    ) &&
+      !/hoạt động thế nào|how .*work|mua hộ là gì/i.test(text))
   );
 }
 // Addresses are collected in the separate recipient control, never model context.

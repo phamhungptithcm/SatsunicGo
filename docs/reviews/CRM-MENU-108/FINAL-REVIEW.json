@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "task_id": "CRM-MENU-108",
+  "status": "PASSED",
+  "head": "22214b64743d6abbcaf4162382b6e53605348adc",
+  "source_sha256": {
+    "src/features/crm/Workspace.tsx": "338d46da47c03e7b82e5401d0996153365a0ffba44527621139114a60170839f",
+    "src/features/crm/Workspace.css": "7bdf95c10ded3f06be35fa6bcb112da02ea9113112ecd4ddb6eb35f08db1d8bc"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "PASSED",
+      "findings": []
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "X with accessible label and 44px target; outside closes, inside stays open; Escape/navigation/focus retained.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No authentication, access roles, provider or persistence changes.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Small React/native-dialog geometry check and scoped screen CSS; TypeScript and targeted ESLint passed.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Outside and inside hit geometry distinguished; repeat open/close and native dismissal observed.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new async/provider error path; native onClose/onCancel state synchronization retained.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Assessment complete: local-only change, NOT_DEPLOYED; full authenticated CRM/real Android NOT_TESTED.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Native dialog backdrop has no separate element; coordinate bounds distinguish backdrop from dialog whitespace.",
+      "evidence_refs": [
+        "BROWSER.json",
+        "PRODUCT-CONTENT.md",
+        "PLAN-APPROVAL.md"
+      ]
+    }
+  },
+  "limitations": [
+    "DEGRADED indexes; bounded source evidence used.",
+    "Source-extracted dialog browser proxy with real handler JSX/CSS, synthetic navigation; not full authenticated CRM.",
+    "Two verification fixture import failures corrected; final browser run 18 assertions passed.",
+    "Unrelated concurrent App.tsx trailing whitespace makes whole-worktree diff check fail; scoped diff check passed, unrelated file preserved.",
+    "Runtime report CLI unavailable; task-local evidence recorded."
+  ],
+  "residual_risks": [
+    "Real Android browser and screen-reader software not tested."
+  ]
+}

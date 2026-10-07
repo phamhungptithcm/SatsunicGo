@@ -1,0 +1,5 @@
+# CRM-MENU-108 completion
+
+Scoped acceptance: 100% (X/accessibility/44px target 40%; outside dismissal and inside retention 40%; Escape/navigation/focus regression 20%), observed through source-extracted browser proxy. 18 assertions at widths 390 and 1280 PASSED. TypeScript noEmit and targeted Workspace ESLint PASSED; scoped diff check PASSED. Screenshots captured and narrow screenshot inspected. Final review cycle 1 PASSED across all seven dimensions; no known open findings within executed scope. Product content gate PASSED. No dependency, data or auth changes.
+
+NOT_DEPLOYED. Full authenticated CRM, production, actual Android device and screen-reader software NOT_TESTED. Initial fixture React/CommonJS import errors corrected before final passing run. Repository intelligence DEGRADED; source verified with bounded reads. Shared5207 reused; no additional server or restart. Dirty shared worktree and unrelated App trailing whitespace preserved. No commit/push made for this task. Source hashes in FINAL-REVIEW.json; user Approved evidence and impact plan in PLAN-APPROVAL.md. Token usage, billed cost and API-equivalent estimate: Unavailable. Memory candidates: None.

@@ -1,4 +1,5 @@
 import { notify } from "../../shared/feedback";
+import { AskPilot } from "./AskPilot";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { policyDateLabel, policyVersionLabel } from "./policy-display099";
 import "./admin-workbench096.css";
@@ -306,6 +307,7 @@ export function Settings() {
           Thử lại thao tác đang chờ
         </button>
       )}
+      <AskPilot />
     </section>
   );
 }

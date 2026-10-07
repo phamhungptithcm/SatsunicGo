@@ -1,0 +1,119 @@
+.privacy105 {
+  max-width: 960px;
+  margin-inline: auto;
+  color: #111c35;
+}
+.privacy105 header {
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+.privacy105 h1 {
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.25;
+  margin: 8px 0 12px;
+  letter-spacing: -0.7px;
+}
+.privacy105 .privacyEyebrow {
+  font-size: 13px;
+  color: #627089;
+}
+.privacy105 p,
+.privacy105 li {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #536077;
+}
+.privacy105 p {
+  margin: 12px 0;
+}
+.privacy105 nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  background: #f6f8fc;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+}
+.privacy105 a {
+  color: #163cff;
+  text-underline-offset: 3px;
+}
+.privacy105 nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.privacy105 a:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.privacy105 .privacySections > section {
+  padding: 28px 0;
+  border-bottom: 1px solid #e3e7ef;
+  scroll-margin-top: 100px;
+}
+.privacy105 h2 {
+  font-size: 21px;
+  line-height: 1.4;
+  margin: 0 0 16px;
+}
+.privacy105 ul {
+  padding-left: 22px;
+}
+.privacy105 li + li {
+  margin-top: 6px;
+}
+.privacyData {
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.privacyDataHead,
+.privacyDataRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.privacyDataHead {
+  background: #f6f8fc;
+  font-weight: 600;
+}
+.privacyDataRow + .privacyDataRow {
+  border-top: 1px solid #e3e7ef;
+}
+.privacyDataRow strong {
+  font-weight: 550;
+}
+.privacyDataRow span {
+  color: #536077;
+}
+@media (max-width: 600px) {
+  .privacyDataHead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    padding: 0;
+  }
+  .privacyDataRow {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px;
+  }
+  .privacy105 nav {
+    padding: 10px;
+  }
+  .privacy105 .privacySections > section {
+    padding: 24px 0;
+  }
+}

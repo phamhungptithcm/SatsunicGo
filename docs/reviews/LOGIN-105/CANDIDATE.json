@@ -1,0 +1,24 @@
+{
+  "task_id": "SATSUNICGO-LOGIN-105",
+  "created_at": "2026-10-07T16:08:16.046435+00:00",
+  "head": "22214b64743d6abbcaf4162382b6e53605348adc",
+  "files": {
+    "src/app/App.tsx": "a4c287baa3a043b72700ab9d496e84bc0579633d00cd09bc9b56ffc55f2486b6",
+    "src/features/auth/LoginChallenge.tsx": "3a036ce124f258653da2267404ab80c3d397fc1236f61042a952815055513337",
+    "src/features/auth/Security.tsx": "926f0afb27b4ede0b90af1edd73f523f76546beeaada2cdd0792cbdd8d36eb31",
+    "src/features/auth/StaffMfaSetup.tsx": "118be9cdcb80cd5202ad36aabf761684eb82e89ef194d9d33a6340cb8b6c4948",
+    "src/features/auth/enrollment.ts": "02ccc25d0e561265fba2645b5b90cedc6f45823bad5cfd0834bac31fd420294a",
+    "src/features/auth/staff-mfa-context.ts": "4e5d53abb72afb69019491c8cab7823644e3fb8e425c73e7351240f5a2a8bea5",
+    "src/features/auth/login-challenge.css": "5ca30ad19f59a38888c2bfbc86b6b206e80a6a6440c64bc723db0e5bd221dbcd",
+    "src/styles/security.css": "c07b71ac86d8c37aabb5d98283d1b2e1301ba1494f0872b77c71f5eaf494cc3e",
+    "functions/generated/public-assets.json": "6a8bdaf6b43657e91164c985d0f3b543d40cd70dc3c2193bfbf45e1e3201f8c0",
+    "tests/browser/login105.config.ts": "53f01e5e831c6a2ae46ba094dfee0f40d668d54e1162681b47cccacb5a37121e",
+    "tests/browser/login105.spec.ts": "54dbced304dc9d11dda5980f47733327c3688b2d9864af10b3f7a84dfeecc196",
+    "tests/unit/enrollment105.test.ts": "a5c70b6119e03259d55223b0afcb8df1dc9868512e870119987e2ed17116d6c0"
+  },
+  "excluded_concurrent_changes": {
+    "src/features/content/ProductSpreadsheet.tsx": "78bf0cd3beba3e07e1c8d9e5a80b13fee1932f2d60de932ad91cf6d2a98c17c1",
+    ".codex/config.toml": "5f0982f69ea17ccc3d1902f56120df7160ed1d3934c27b71fcb5365abf4c61a0"
+  },
+  "scope": "Approved local implementation and validation only; no deployment."
+}

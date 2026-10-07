@@ -1,3 +1,4 @@
+import { restrictedBody } from "./restricted-content";
 export const publicCopy: Record<string, [string, string]> = {
   "how-it-works": [
     "Mua hộ từng bước",
@@ -23,8 +24,5 @@ export const publicCopy: Record<string, [string, string]> = {
     "Điều khoản mua hộ",
     "Sản phẩm niêm yết thanh toán toàn bộ; yêu cầu mua hộ ngoài danh mục thanh toán hai đợt theo báo giá. Điều khoản mua hàng, đổi trả, hủy và hoàn tiền cần được đơn vị vận hành duyệt trước khi nhận giao dịch thật.",
   ],
-  restricted: [
-    "Hàng hạn chế",
-    "Nhân viên cần kiểm tra sản phẩm và tuyến vận chuyển trước khi chốt báo giá. AI không xác nhận tính hợp pháp hoặc khả năng nhập khẩu.",
-  ],
+  restricted: ["Hàng hạn chế", restrictedBody],
 };

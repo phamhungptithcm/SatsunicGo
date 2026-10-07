@@ -1,3 +1,5 @@
+import { RestrictedPage } from "../features/content/RestrictedPage";
+import { PrivacyPage } from "../features/content/PrivacyPage";
 import { AuthFeedbackToast } from "../features/auth/AuthFeedbackToast";
 import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
 import {
@@ -7,6 +9,11 @@ import {
 } from "../features/auth/auth-feedback";
 import { pendingMfa, subscribeMfa } from "../features/auth/mfa";
 import { LoginChallenge } from "../features/auth/LoginChallenge";
+import {
+  StaffMfaSetup,
+  useStaffMfaReady,
+  useStaffMfaRecovery,
+} from "../features/auth/StaffMfaSetup";
 import { routeModules } from "./route-modules";
 import { LoadingState } from "../shared/Loading";
 import { CampaignBanner } from "../features/content/CampaignBanner";
@@ -48,6 +55,8 @@ import "../styles/account.css";
 import "../styles/security.css";
 import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
+import { CartProvider } from "../features/cart/cart-store";
+const CartPage = lazy(() => import("../features/cart/Cart").then(m => ({ default: m.CartPage }))); 
 import { notify, withProgress } from "../shared/feedback";
 import { publicCopy } from "../../packages/domain/public-content";
 import {
@@ -267,7 +276,8 @@ export function App() {
     setAuthError("");
     try {
       await withProgress(login, { overlay: !isCrmPath(location.pathname) });
-      if (auth?.currentUser) notify("Đã đăng nhập.", "success");
+      if (auth?.currentUser && !pendingMfa())
+        notify("Đã đăng nhập.", "success");
     } catch (e) {
       setAuthError((e as Error).message);
     } finally {
@@ -290,7 +300,8 @@ export function App() {
     }
   }
   return (
-    <>
+    <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
+    <StaffMfaSetup user={user} signOut={signOut} busy={authBusy}>
       <OneTap user={user} onError={setAuthError} />
       <AuthFeedbackToast
         message={authError || redirectError}
@@ -406,9 +417,10 @@ export function App() {
               />
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
+              <Route path="/cart" element={<CartPage signIn={signIn} />} />
               <Route
                 path="/products/:slug/checkout"
-                element={<ProductCheckout user={user} signIn={signIn} />}
+                element={<ProductCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />}
               />
               <Route path="/posts" element={<Catalog kind="posts" />} />
               <Route
@@ -476,11 +488,13 @@ export function App() {
           startCollapsed={
             location.pathname.startsWith("/posts") ||
             location.pathname.startsWith("/account") ||
-            location.pathname === "/request"
+            location.pathname === "/request" ||
+            location.pathname === "/cart"
           }
         />
       )}
-    </>
+    </StaffMfaSetup>
+    </CartProvider>
   );
 }
 function JourneyTimeline() {
@@ -1232,6 +1246,8 @@ function Staff({
     [loading, setLoading] = useState(!!user && !!db);
   const [revision, setRevision] = useState(0);
   const challenge = useSyncExternalStore(subscribeMfa, pendingMfa, () => null);
+  const mfaReady = useStaffMfaReady(user);
+  const mfaRecovery = useStaffMfaRecovery(user);
   useEffect(() => {
     if (!user || !db) {
       setAccess(null);
@@ -1286,6 +1302,15 @@ function Staff({
         }
       />
     );
+  if (!mfaReady)
+    return (
+      <CrmAccessScreen
+        state={mfaRecovery.unavailable ? "error" : "checking"}
+        retry={mfaRecovery.unavailable ? mfaRecovery.retry : undefined}
+        signOut={signOut}
+        busy={busy}
+      />
+    );
   return (
     <Workspace
       key={`${user.uid}:${roles.join(",")}`}
@@ -1302,6 +1327,8 @@ function Staff({
 function PublicPage() {
   const path = useLocation().pathname.slice(1);
   if (path === "fees") return <ShippingRates />;
+  if (path === "privacy") return <PrivacyPage />;
+  if (path === "restricted") return <RestrictedPage />;
   const content = publicCopy[path];
   if (!content)
     return (

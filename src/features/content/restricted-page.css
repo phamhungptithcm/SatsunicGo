@@ -1,0 +1,172 @@
+.restrictedPage {
+  padding-top: 48px;
+  padding-bottom: 56px;
+  color: #111c35;
+}
+.restrictedHeading {
+  max-width: 720px;
+  margin-bottom: 32px;
+}
+.restrictedEyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: #66758e;
+}
+.restrictedPage h1 {
+  margin: 10px 0 14px;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+}
+.restrictedPage h2 {
+  font-size: 20px;
+  margin: 0 0 18px;
+  line-height: 1.4;
+}
+.restrictedPage h3 {
+  font-size: 16px;
+  margin: 12px 0 8px;
+  line-height: 1.4;
+}
+.restrictedPage p {
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+  color: #66758e;
+}
+.restrictedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.restrictedCard {
+  border: 1px solid #e2e6ef;
+  border-radius: 16px;
+  padding: 22px;
+  min-width: 0;
+}
+.restrictedIcon {
+  display: inline-flex;
+  background: #eef1ff;
+  color: #163cff;
+  padding: 10px;
+  border-radius: 12px;
+}
+.restrictedIcon svg {
+  width: 24px;
+  height: 24px;
+}
+.restrictedCard p.restrictedHint {
+  font-size: 13px;
+  margin-top: 12px;
+}
+.restrictedPrepare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 32px 0;
+  padding: 28px;
+  border: 1px solid #e2e6ef;
+  border-radius: 16px;
+}
+.restrictedPrepare ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  font-size: 14px;
+}
+.restrictedPrepare li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.restrictedPrepare li span {
+  color: #163cff;
+  font-size: 12px;
+  font-weight: 600;
+  flex: 0 0 20px;
+}
+.restrictedAction {
+  align-self: center;
+}
+.restrictedAction h3 {
+  margin-top: 0;
+}
+.restrictedAction .primary {
+  margin-top: 18px;
+  min-height: 44px;
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+.restrictedFaq {
+  max-width: 850px;
+}
+.restrictedFaq details {
+  border-bottom: 1px solid #e2e6ef;
+  padding: 0 0 14px;
+  margin-bottom: 14px;
+}
+.restrictedFaq summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 44px;
+  display: list-item;
+  align-content: center;
+}
+.restrictedFaq p {
+  font-size: 14px;
+  padding: 8px 0 4px;
+}
+.restrictedPage :focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 4px;
+}
+@media (max-width: 1000px) {
+  .restrictedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .restrictedPage {
+    padding-top: 30px;
+    padding-bottom: 36px;
+  }
+  .restrictedHeading {
+    margin-bottom: 26px;
+  }
+  .restrictedGrid {
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
+  .restrictedCard {
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: 12px;
+  }
+  .restrictedIcon {
+    grid-row: 1/4;
+    align-self: start;
+  }
+  .restrictedCard h3 {
+    margin-top: 0;
+  }
+  .restrictedCard p {
+    font-size: 14px;
+  }
+  .restrictedPrepare {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 24px;
+  }
+  .restrictedAction .primary {
+    max-width: 100%;
+    font-size: 14px;
+  }
+  .restrictedPage h2 {
+    font-size: 18px;
+  }
+}

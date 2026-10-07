@@ -1,0 +1,42 @@
+.askPilot106 {
+  display: block;
+  margin-top: 20px;
+}
+.askPilot106 h2 {
+  font-size: 20px;
+  font-weight: 650;
+  margin-bottom: 12px;
+}
+.askPilot106 h3 {
+  font-size: 17px;
+  font-weight: 650;
+  margin: 16px 0 8px;
+}
+.askPilot106 p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+.askPilot106 button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin: 6px 8px 6px 0;
+  border: 1px solid #dce1ec;
+  font-weight: 600;
+}
+.askPilot106 button:not(.primary) {
+  background: #fff;
+  color: #111c35;
+}
+.askPilot106 button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.askPilot106 button:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.askPilot106 h3:focus {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}

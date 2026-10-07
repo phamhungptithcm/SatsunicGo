@@ -1,0 +1,211 @@
+{
+  "environment": "production satsunicgo",
+  "stage": "AWAITING_MAC_UNLOCK_FOR_PUBLICATION_CONFIRMATION",
+  "realProductsCreated": 26,
+  "productImagesUploadedAndAttached": 26,
+  "readbackVersions": [
+    2
+  ],
+  "publishedThisRun": 0,
+  "enrichedRowsValidated": 26,
+  "validationErrors": 0,
+  "publicationCandidates": 25,
+  "heldDraft": [
+    "Preparation H Rapid Relief with Lidocaine: conditions for public drug catalog still unverified"
+  ],
+  "authorization": "User repeatedly authorized real product insertion, images and publication; human Chrome owner signed in; latest user requested no manual confirm clicks",
+  "blockedBy": "Native browser confirmation: Mac locked; getJsDialog.accept CDP focus timeout; native app reports locked Mac",
+  "writes": "Normal authenticated CRM import and editor workspace commands only; no AdminSDK bypass, secrets or direct database datafix",
+  "exportReadback": [
+    {
+      "id": "0f832c4c-96b0-4b2a-8214-9ae80b8a50dd",
+      "slug": "paula-s-choice-skin-balancing-invisible-finish-gel-moisturizer-2-fl-oz",
+      "version": "2",
+      "mediaId": "1b7b2aaa-06b8-45cb-8cff-bd982e4f72ac",
+      "status": "draft"
+    },
+    {
+      "id": "1ac63344-a0c5-4fc6-a03a-a0fed202a95e",
+      "slug": "eagle-brand-medicated-oil-36-ml",
+      "version": "2",
+      "mediaId": "6447eeb3-e7f9-475c-9e25-72e25aa44d8c",
+      "status": "draft"
+    },
+    {
+      "id": "2210109e-9507-4379-aed2-c7569f97a529",
+      "slug": "sports-research-triple-strength-omega-3-fish-oil-150-fish-softgels",
+      "version": "2",
+      "mediaId": "0abc419d-cae8-47bc-9ed8-87aeefd29158",
+      "status": "draft"
+    },
+    {
+      "id": "23be9c96-9c7b-434e-bdbd-93c352b4a235",
+      "slug": "azelaic-acid-suspension-10",
+      "version": "2",
+      "mediaId": "6082602f-11a2-4873-8ddf-c54dbbd28f01",
+      "status": "draft"
+    },
+    {
+      "id": "24a1e82a-65cc-4c9d-90ed-a6fc7e7c8a0e",
+      "slug": "puritan-s-pride-biotin-10000-mcg-100-softgels",
+      "version": "2",
+      "mediaId": "cbc0cf4c-d9dc-47cf-9b51-e08f7b2457d2",
+      "status": "draft"
+    },
+    {
+      "id": "27281f6c-3130-48a3-8a30-f76cbc676c3a",
+      "slug": "kirkland-signature-vitamin-e-180-mg-500-softgels",
+      "version": "2",
+      "mediaId": "10dd95ca-a0e6-4111-922f-3d4f7c3be35f",
+      "status": "draft"
+    },
+    {
+      "id": "2d003b0d-6b21-44cb-a298-2b9cf69ec307",
+      "slug": "osteo-bi-flex-triple-strength-200-tablets",
+      "version": "2",
+      "mediaId": "10110964-0456-4a48-8ac8-59857863ae5a",
+      "status": "draft"
+    },
+    {
+      "id": "31e1b0d9-f594-44a0-a80f-227863cacf33",
+      "slug": "cerave-eye-repair-cream-0-5-oz",
+      "version": "2",
+      "mediaId": "c1ddc9e5-9bb4-44da-91b6-b789e2f4d15f",
+      "status": "draft"
+    },
+    {
+      "id": "3359578c-ace5-4955-a896-5eac092727db",
+      "slug": "cerave-foaming-facial-cleanser-12-fl-oz",
+      "version": "2",
+      "mediaId": "fcd943d1-3dfc-421c-81e5-1157c1bdb28f",
+      "status": "draft"
+    },
+    {
+      "id": "42a09302-2499-482b-8798-043289ebbee1",
+      "slug": "n1n-premium-tart-cherry-extract-3000-mg-200-veggie-caps",
+      "version": "2",
+      "mediaId": "e82d91f0-c8e7-4b87-b00c-9755b116578a",
+      "status": "draft"
+    },
+    {
+      "id": "576e57d2-bb45-4207-9c82-3ff0de9147a6",
+      "slug": "cetaphil-daily-facial-cleanser-8-fl-oz",
+      "version": "2",
+      "mediaId": "6630a88d-c291-438c-be77-2ad46e2e112d",
+      "status": "draft"
+    },
+    {
+      "id": "773ab183-dd58-47fd-bede-2939d726193c",
+      "slug": "l-oreal-plump-ambition-hyaluron-lip-oil-24hr-care",
+      "version": "2",
+      "mediaId": "40d4dccc-e5c8-4ece-8e4a-12ebcdea2622",
+      "status": "draft"
+    },
+    {
+      "id": "77d75fa0-7607-4a2d-97a2-e9f8ad7e3e6b",
+      "slug": "citracal-maximum-plus-calcium-citrate-d3-280-caplets",
+      "version": "2",
+      "mediaId": "e77d03c0-32bb-4604-99f1-8312bc5998ea",
+      "status": "draft"
+    },
+    {
+      "id": "907632d1-db73-491e-812b-bb6855c36060",
+      "slug": "olay-regenerist-10-1-7-oz-2-pack",
+      "version": "2",
+      "mediaId": "c45c5dda-0939-467e-82b4-f1eb87aef122",
+      "status": "draft"
+    },
+    {
+      "id": "99d03224-132e-4d09-b600-81c314ac779c",
+      "slug": "kirkland-signature-fish-oil-1000-mg-400-softgels",
+      "version": "2",
+      "mediaId": "cf6e1b08-5d42-404a-9ea7-f2a823f52a60",
+      "status": "draft"
+    },
+    {
+      "id": "9ce88a98-08e6-4491-9d34-f65f538d94a4",
+      "slug": "one-a-day-women-s-50-healthy-advantage-multivitamin-300-tablets",
+      "version": "2",
+      "mediaId": "52e5e99f-b2bc-465f-9140-9512a46a8675",
+      "status": "draft"
+    },
+    {
+      "id": "9de79517-0db9-484e-ae12-474bdd736050",
+      "slug": "nature-made-vitamin-d-extra-strength-125-mcg-240-softgels",
+      "version": "2",
+      "mediaId": "61c00d23-4442-4e2a-a543-2fc8d04ebcd5",
+      "status": "draft"
+    },
+    {
+      "id": "a1f47631-2f4a-4a7c-a831-b83ddf9d0245",
+      "slug": "one-a-day-men-s-50-healthy-advantage-multivitamin-300-tablets",
+      "version": "2",
+      "mediaId": "43a6b347-21a2-49c5-b3e4-df147b7361c3",
+      "status": "draft"
+    },
+    {
+      "id": "aa302187-3476-4bf0-b709-89050d205c79",
+      "slug": "ensure-original-vanilla-nutrition-powder-14-1-oz",
+      "version": "2",
+      "mediaId": "e32d6c49-81d0-454e-b67a-394359e201c6",
+      "status": "draft"
+    },
+    {
+      "id": "b9dcbc7c-c56c-41e6-9620-85e2c01bcb02",
+      "slug": "trunature-advanced-strength-cinsulin-cinnamon",
+      "version": "2",
+      "mediaId": "1301d5f3-0727-49cf-8600-69e0cc3a3b1f",
+      "status": "draft"
+    },
+    {
+      "id": "ced49b96-5fc4-447c-b747-58bd17cf8928",
+      "slug": "one-a-day-women-s-multivitamin-300-tablets",
+      "version": "2",
+      "mediaId": "2030966e-6aec-474f-ae57-9497938757ef",
+      "status": "draft"
+    },
+    {
+      "id": "d96c335e-7174-4f9f-9ddc-490c5339b044",
+      "slug": "trunature-ginkgo-biloba-120-mg-340-softgels",
+      "version": "2",
+      "mediaId": "66229594-99fc-4b76-b894-6cff9345d80b",
+      "status": "draft"
+    },
+    {
+      "id": "e57b1f80-f463-4415-9355-a5d3929a5f02",
+      "slug": "neutrogena-rapid-firming-collagen-triple-lift-face-serum-1-fl-oz",
+      "version": "2",
+      "mediaId": "8d61f801-06f9-4a53-9663-084b60600ae3",
+      "status": "draft"
+    },
+    {
+      "id": "f3073799-5b1d-482f-8264-a4660c4f7235",
+      "slug": "preparation-h-rapid-relief-hemorrhoid-cream-with-lidocaine-0-75-oz",
+      "version": "2",
+      "mediaId": "bd88ed1c-82a1-4ead-afd3-2acde3658a40",
+      "status": "draft"
+    },
+    {
+      "id": "f55618a3-5620-4f6e-90c7-c7d34794ea44",
+      "slug": "nature-made-prenatal-folic-acid-dha-150-softgels",
+      "version": "2",
+      "mediaId": "a7308077-5679-4190-a1d3-ea9a67d00ff3",
+      "status": "draft"
+    },
+    {
+      "id": "fca4f0c3-1cd3-4f1a-acf1-ab218231241f",
+      "slug": "kirkland-signature-glucosamine-with-msm-375-tablets",
+      "version": "2",
+      "mediaId": "c5d10450-5faa-43fe-9835-0a58b2cee496",
+      "status": "draft"
+    }
+  ],
+  "remaining": [
+    "Unlock Mac; agent accepts existing publication dialog",
+    "Read back updated versions/status and public product routes/images",
+    "Review public in-context product content; retain unavailable prices/origin/stock/expiry unset"
+  ],
+  "tokenUsage": "Unavailable",
+  "cost": "Unavailable",
+  "memoryCandidates": "None"
+}
