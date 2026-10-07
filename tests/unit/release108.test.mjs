@@ -329,6 +329,6 @@ test('production holds remove only held bindings/imports and reject compiler/inv
 
 test('provider receipt refuses changed, replaced or unfinished Hosting releases during source verification', () => {
   const release = {name:'sites/satsunicgo/releases/one',type:'DEPLOY',releaseTime:'2026-10-07T00:00:00Z',version:{name:'sites/satsunicgo/versions/one',status:'FINALIZED'}};
-  assertStableHostingRelease(release, structuredClone(release));
+  assertStableHostingRelease(release, globalThis.structuredClone(release));
   for (const replacement of [ {...release,name:'sites/satsunicgo/releases/two'}, {...release,releaseTime:'2026-10-07T00:01:00Z'}, {...release,version:{...release.version,name:'sites/satsunicgo/versions/two'}}, {...release,type:'SITE_DISABLE'}, {...release,version:{...release.version,status:'CREATED'}} ]) assert.throws(() => assertStableHostingRelease(release,replacement), /HOSTING/);
 });
