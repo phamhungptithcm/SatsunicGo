@@ -166,6 +166,12 @@ jobs:
           node scripts/release/release.mjs assert-head
           cd release-stage/deployment
           node ../../node_modules/firebase-tools/lib/bin/firebase.js deploy --project satsunicgo --config firebase.json --only functions:satsunicgo,hosting --non-interactive --message "$RELEASE_TAG / $GITHUB_SHA"
+      - name: Refresh keyless identity for provider readback
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+          project_id: satsunicgo
       - name: Verify Hosting hashes and Functions source/revisions
         run: node scripts/release/verify-production.mjs after
       - name: Publish release only with verified production evidence

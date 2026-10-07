@@ -22,3 +22,8 @@ Remote integration correction scope (same approved CI setup):
 - Auth emulator is included to prevent Admin Auth from looking for real credentials.
 - Scheduled-maintenance fixtures now use its actual authorized canonical demo database, retaining unique synthetic document IDs.
 - Payment/SMTP transaction-core suites retain their existing fake SDKs and assertions, with a narrowly scoped test-only capability mock that rejects real identities, nonloopback stores and injected cloud credentials. Real provider-hold tests remain unmocked. Paid-AI assertions now verify the actual unconditional release hold before provider invocation and preserve the quota counter; application gates are unchanged.
+
+Final verification corrections:
+- Main run 37702785743 passed quality and reached build dependency installation; cancelled before artifact upload, tag/draft reservation or provider deployment.
+- Provider verification now binds initial/final Hosting release/version/time around all file/source checks; replacement, disable and unfinished versions fail closed. Identity is refreshed before provider readback to reduce OIDC expiry interruptions.
+- Rules runner selects Storage port9298, enabling the existing conditional private-image transaction test without changing its selector/assertions.

@@ -55,10 +55,24 @@ export async function verifyHosting(manifest, read = fetchBytes) {
   }
   return { origin, verifiedFiles: entries.length };
 }
+export function assertStableHostingRelease(previous, current) {
+  for (const release of [previous, current]) {
+    if (release?.type !== 'DEPLOY' || !release.version?.name || release.version.status !== 'FINALIZED' || !release.name || !release.releaseTime) throw Error('HOSTING_RELEASE_NOT_FINALIZED');
+  }
+  if (previous.name !== current.name || previous.version.name !== current.version.name || previous.releaseTime !== current.releaseTime) throw Error('HOSTING_CHANGED_DURING_VERIFICATION');
+}
+async function readHostingRelease(token) {
+  const releases = JSON.parse((await fetchBytes('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}` })).toString());
+  return releases.releases?.[0];
+}
 export async function verifyProduction() {
   const manifest = verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);
   const bundleSha256 = readFileSync('bundle.sha256', 'utf8').split(/\s/)[0];
   if (!/^[a-f0-9]{64}$/.test(bundleSha256) || digest(readFileSync(`release-${manifest.tag}.tar.gz`)) !== bundleSha256) throw Error('BUNDLE_CHECKSUM_MISMATCH');
+  // Token stays in memory; bind edge and source checks to one finalized Hosting release.
+  const token = execFileSync('gcloud', ['auth', 'print-access-token'], { encoding: 'utf8', timeout: 30_000 }).trim();
+  const initialHostingRelease = await readHostingRelease(token);
+  assertStableHostingRelease(initialHostingRelease, initialHostingRelease);
   // Static edge propagation is bounded; content mismatch never becomes success by ignoring it.
   let hosting;
   for (let attempt = 0; attempt < 6; attempt++) {
@@ -92,11 +106,8 @@ export async function verifyProduction() {
     const current = after.find(f => f.name === fn.name);
     return current.serviceConfig.revision !== fn.serviceConfig.revision || JSON.stringify(current.buildConfig.source) !== JSON.stringify(fn.buildConfig.source);
   })) throw Error('FUNCTION_CHANGED_DURING_VERIFICATION');
-  // Token is retained only in process memory and never logged or written to an artifact.
-  const token = execFileSync('gcloud', ['auth', 'print-access-token'], { encoding: 'utf8', timeout: 30_000 }).trim();
-  const releases = JSON.parse((await fetchBytes('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}` })).toString());
-  const latest = releases.releases?.[0];
-  if (latest?.type !== 'DEPLOY' || !latest.version?.name || latest.version.status !== 'FINALIZED') throw Error('HOSTING_RELEASE_NOT_FINALIZED');
+  const latest = await readHostingRelease(token);
+  assertStableHostingRelease(initialHostingRelease, latest);
   writeFileSync('deployment.json', JSON.stringify({ schemaVersion: 1, status: 'VERIFIED', project: 'satsunicgo',
     tag: manifest.tag, sha: manifest.sha, bundleSha256, verifiedAt: new Date().toISOString(),
     hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions }, null, 2) + '\n');

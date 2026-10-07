@@ -14,7 +14,7 @@ const groups = [
 for (const [group, port, project] of groups) {
   const config = JSON.parse(readFileSync('firebase.json', 'utf8'));
   for (const section of ['firestore', 'storage']) for (const key of ['rules', 'indexes']) if (config[section]?.[key]) config[section][key] = resolve(root, config[section][key]);
-  config.emulators = { auth: {port:9199,host:'127.0.0.1'}, firestore:{port,host:'127.0.0.1'}, storage:{port:9299,host:'127.0.0.1'}, ui:{enabled:false}, singleProjectMode:false };
+  config.emulators = { auth: {port:9199,host:'127.0.0.1'}, firestore:{port,host:'127.0.0.1'}, storage:{port:9298,host:'127.0.0.1'}, ui:{enabled:false}, singleProjectMode:false };
   const directory = mkdtempSync(join(tmpdir(), 'satsunicgo-ci-rules-'));
   const path = join(directory, 'firebase.json');
   writeFileSync(path, JSON.stringify(config));
