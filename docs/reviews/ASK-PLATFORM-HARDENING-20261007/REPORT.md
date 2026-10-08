@@ -23,9 +23,12 @@ This iteration implements and verifies hardening of existing Ask retrieval, read
 5. Added owner/MFA approved public-source lifecycle, content-hash/version fences, immutable revisions, effective dates, revocation, quota and direct-read denial. Found stale-source revocation UI and radio-group required-label errors; fixed and tested.
 6. Reviewed rendered mobile UI; repaired a wrapped required marker and added expired/unavailable-source revocation coverage. Fresh scoped review retains full-plan and production blockers.
 
+7. S18 customer workspace: Profile form mounted in Ask through explicit lazy expand control. Unknown address/profile save now retains exact operation/payload/version, blocks edited writes, validates correlated result and fences account changes. Unique instance IDs avoid page/panel collisions. Actual backend and UI checks passed; reload durability and remaining platform work keep overall review BLOCKED.
+
 ## Quality evidence
 
-- Frontend and backend TypeScript noEmit: PASSED.
+- Frontend and backend TypeScript noEmit: PASSED in preceding cycle; latest S18 frontend TypeScript PASSED (no backend implementation change).
+- S18 current checks: **5 backend integration**, **8 browser recovery**, **15 affected unit**, **5 Ask browser regression** tests PASSED. Browser fixtures mock auth/backend; backend tests execute actual workspaceCommand on synthetic demo records.
 - Scoped ESLint and whitespace: PASSED.
 - Full unit suite on production-compatible Node 22 with test-only App Check site key unset and permitted loopback: **111 files / 954 tests PASSED**. Production App Check remains unchanged.
 - Latest demo integration: **3 suites / 23 tests PASSED**, including 7 approved-knowledge cases, 10 workflow/recovery cases and 6 existing hardening cases.
@@ -35,7 +38,7 @@ This iteration implements and verifies hardening of existing Ask retrieval, read
 - Repository intelligence: DEGRADED; source/compiler/test verification used. Legacy approval validator requires READY despite repository policy allowing DEGRADED; no false READY result recorded.
 - Product-content evidence: PRODUCT-CONTENT.md and PRODUCT-CONTENT-KNOWLEDGE.md. New Vietnamese owner controls and VI/EN quoted-answer semantics reviewed; full customer Ask locale coverage remains incomplete.
 - ai-agent-kit is not available on PATH or in local node_modules; runtime review receipt/report command NOT_RUN. Saved review JSON is not claimed as a runtime receipt.
-- No commits, push, deploy, provider calls, spend enablement or production data operations performed.
+- No commits, push, deploy, paid provider calls, spend enablement or production data operations performed. Restored stopped shared frontend on 5207 with demo settings; backend data preserved. Firestore is available, but complete Auth/Functions runtime is not claimed.
 
 ## Live production readback
 
@@ -55,7 +58,7 @@ This iteration implements and verifies hardening of existing Ask retrieval, read
 | Hybrid semantic retrieval / index / retrieval benchmark | NOT_IMPLEMENTED; current lexical retrieval only, bounded 100 docs / 8 excerpts |
 | General grounded provider Q&A | NOT_READY; existing general paid guard intentionally rejects every generation; owner-pilot remains separately limited |
 | Preview / expiring approval / execute gateway across all capabilities | Partial existing commerce flow; no universal payload-bound approval gateway |
-| Profile/address/membership/change/document/staff task expansion inside Ask | NOT_IMPLEMENTED for full planned coverage; existing standalone services preserved |
+| Profile/address/membership/change/document/staff task expansion inside Ask | S18 Profile/address now available through explicit Ask panel control; mounted-session recovery hardened. Membership/change/document/staff expansion, full English form and durable reload reconciliation remain incomplete |
 | Durable compaction / optional memory | NOT_IMPLEMENTED |
 | Customer analytics outbox / aggregates / insights | NOT_IMPLEMENTED |
 | Full happy/bad capability acceptance corpus and canary/release | NOT_IMPLEMENTED; new scenarios cover current hardening only |

@@ -35,3 +35,9 @@ npx tsc -p functions/tsconfig.json --noEmit
 ```
 
 Integration new suite: 10 passing cases. Existing hardening regression: 6 passing cases. Browser new suite: 5 passing cases; composer regression: 8 passing cases. Unit counts and whole-repo failure are in REPORT.md. Rules suites that replace shared emulator rules were not run. New tests clean their own UUID-scoped synthetic records only.
+
+## S18 executed continuation
+- Actual workspaceCommand demo: concurrent/exact address replay -> one address and audit; tampered payload rejected; profile lost-response retry retains expectedVersion; stale new operation rejected; locked owner cannot replay; invalid/forged-owner payload cannot persist. 5 PASSED.
+- Actual Profile/CustomerWorkspace rendering with synthetic backend/auth: happy; unavailable; malformed version; terminal conflict; owner switch with late callback; mobile no overflow; inline collapse/reopen preserves pending op; profile expectedVersion retry. 8 PASSED.
+- Existing profile-state/required-label/Ask-transport unit checks 15 PASSED; actual Ask browser regression 5 PASSED. Initial browser runs caught fixture locator mistakes (case and region/textbox ambiguity); corrected fixtures, no weakened assertions.
+- Browser fixture is not production App Check/auth proof. Full reload recovery is not implemented; tests do not imply it.

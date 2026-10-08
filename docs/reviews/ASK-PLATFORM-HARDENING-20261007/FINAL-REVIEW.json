@@ -66,7 +66,8 @@
       "evidence_refs": [
         "PRODUCT-CONTENT.md",
         "tests/browser/ask-platform.spec.ts",
-        "PRODUCT-CONTENT-KNOWLEDGE.md"
+        "PRODUCT-CONTENT-KNOWLEDGE.md",
+        "PRODUCT-CONTENT-PROFILE.md"
       ]
     }
   },
@@ -148,6 +149,30 @@
       "summary": "Required label marker wrapped onto separate mobile line.",
       "status": "FIXED",
       "evidence": "Nested inline label caption; rendered mobile-preview screenshot."
+    },
+    {
+      "id": "F10",
+      "severity": "high",
+      "location": "src/features/profile/Profile.tsx",
+      "summary": "Unknown save outcome retried with new operation ID could duplicate address creation.",
+      "status": "FIXED_WITHIN_MOUNTED_SESSION",
+      "evidence": "Retained immutable command; 5 backend and 8 browser cases including profile expectedVersion and inline collapse/reopen; reload durability remains outstanding."
+    },
+    {
+      "id": "F11",
+      "severity": "medium",
+      "location": "src/features/profile/Profile.tsx",
+      "summary": "Malformed/uncorrelated save result could be announced as success.",
+      "status": "FIXED",
+      "evidence": "Strict result schema, owner/profile ID and expected result version; invalid-result browser regression."
+    },
+    {
+      "id": "F12",
+      "severity": "medium",
+      "location": "src/features/profile/Profile.tsx",
+      "summary": "Reused page/panel Profile instances would duplicate IDs and accessibility references.",
+      "status": "FIXED",
+      "evidence": "useId scopes every heading/step reference; source inspected and browser regression passed."
     }
   ],
   "residual_risks": [
@@ -162,13 +187,13 @@
   ],
   "source_manifest": "SOURCE_MANIFEST.json",
   "review_cycles": 4,
-  "reviewed_head": "caeec532a77176f7412551ab6621fe9df1d5da48",
-  "source_manifest_sha256": "c094f760ac9798586b228b452cb2d07f40055fa5ab012b16b465491e956c8621",
+  "reviewed_head": "08302e0ae7c440a70c10316de43c86e69aec05fe",
+  "source_manifest_sha256": "bde43eee79da906aec363281456992e839039f9ca23f3d8f2f618ad2c065f884",
   "latest_cycle": {
-    "cycle": 6,
+    "cycle": 7,
     "status": "BLOCKED",
-    "scoped_checks": "Node22 full unit 954 passed; latest 23 demo integrations; 6 owner UI browser; post-label fix 16 focused tests; frontend/backend tsc and scoped lint passed.",
-    "remaining": "Full architecture acceptance and release incomplete. No production deploy; IAM SDK403; approved corpus missing; paid authorization expired.",
+    "scoped_checks": "S18: 5 actual backend demo tests, 8 actual-component synthetic backend browser scenarios, 15 affected unit regressions, 5 Ask browser regressions; TypeScript/ESLint/whitespace passed.",
+    "remaining": "Full platform and production acceptance remain incomplete. Pending profile recovery does not survive full reload/unmount; general durable reconciliation is not implemented. English Profile form not implemented.",
     "runtime_receipt": "NOT_RUN: ai-agent-kit unavailable"
   }
 }
