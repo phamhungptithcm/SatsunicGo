@@ -28,6 +28,17 @@ export function checkInventory(manifest, deployed, allowMissing) {
   }
   if (!allowMissing && actual.size !== names.size) throw Error('MISSING_DEPLOYED_FUNCTION');
 }
+export async function waitForActiveInventory(manifest, read = inventory, pause = () => new Promise(done => setTimeout(done, 10_000))) {
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const current = read();
+    try { checkInventory(manifest, current, false); return current; }
+    catch (error) {
+      const transient = ['FUNCTION_NOT_ACTIVE_OR_SOURCE_UNAVAILABLE', 'MISSING_DEPLOYED_FUNCTION'].includes(error.message);
+      if (!transient || current.some(fn => !['ACTIVE', 'DEPLOYING'].includes(fn.state)) || attempt === 5) throw error;
+      await pause();
+    }
+  }
+}
 async function fetchBytes(url, headers = {}) {
   const response = await fetch(url, { headers, redirect: 'error', signal: AbortSignal.timeout(30_000) });
   if (!response.ok) throw Error('PROVIDER_HTTP_FAILURE');
@@ -65,6 +76,12 @@ export async function readHostingRelease(token, read = fetchBytes) {
   const releases = JSON.parse((await read('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}`, 'x-goog-user-project': 'satsunicgo' })).toString());
   return releases.releases?.[0];
 }
+export async function readFunctionSource(source, token, read = fetchBytes) {
+  if (!/^[a-z0-9._-]+$/.test(source.bucket) || !/^[\w./-]+$/.test(source.object) || source.object.split('/').includes('..') || !/^\d+$/.test(source.generation ?? '')) throw Error('INVALID_PROVIDER_SOURCE_REFERENCE');
+  return read(`https://storage.googleapis.com/storage/v1/b/${source.bucket}/o/${encodeURIComponent(source.object)}?alt=media&generation=${source.generation}`, {
+    Authorization: `Bearer ${token}`, 'x-goog-user-project': 'satsunicgo',
+  });
+}
 export async function verifyProduction() {
   const manifest = verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);
   const bundleSha256 = readFileSync('bundle.sha256', 'utf8').split(/\s/)[0];
@@ -82,8 +99,7 @@ export async function verifyProduction() {
       await new Promise(resolveWait => setTimeout(resolveWait, 10_000));
     }
   }
-  const deployed = inventory();
-  checkInventory(manifest, deployed, false);
+  const deployed = await waitForActiveInventory(manifest);
   const directory = mkdtempSync(join(tmpdir(), 'release-source-'));
   const sources = new Set(), functions = [];
   try {
@@ -93,7 +109,7 @@ export async function verifyProduction() {
       const uri = `gs://${source.bucket}/${source.object}#${source.generation}`;
       if (!sources.has(uri)) {
         const file = join(directory, `source-${sources.size}.zip`);
-        execFileSync('gcloud', ['storage', 'cp', uri, file, '--quiet'], { timeout: 120_000, stdio: 'pipe' });
+        writeFileSync(file, await readFunctionSource(source, token));
         execFileSync('python3', ['scripts/release/verify-source.py', file, 'release-stage/manifest.json'], { timeout: 60_000, stdio: 'pipe' });
         sources.add(uri);
       }
@@ -117,7 +133,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (process.argv[2] === 'before') checkInventory(verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG), inventory(), true);
     else if (process.argv[2] === 'after') await verifyProduction();
     else throw Error('INVALID_VERIFICATION_OPERATION');
-  } catch {
+  } catch (error) {
+    const code = /^[A-Z][A-Z_]{2,79}$/.test(error.message ?? '') ? error.message : 'PROVIDER_COMMAND_OR_REQUEST_FAILED';
+    console.error(`Verification code: ${code}`);
     // External commands may contain provider details. Keep this log free of opaque responses.
     console.error('PRODUCTION_VERIFICATION_FAILED: inspect workflow step and provider state; release remains a draft.');
     process.exitCode = 1;

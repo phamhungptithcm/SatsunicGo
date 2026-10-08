@@ -68,3 +68,7 @@ Official references: [GitHub concurrency](https://docs.github.com/en/actions/how
 ## Existing production holds
 
 The artifact preserves the reviewed 62-Function production boundary from RELEASE-ALL-LATEST-20261007. Seven held exports (Ask workflow/conversation, maintenance, payment link/webhook/reconciliation and email delivery) remain omitted from the compiled deployment entry only. Application source is unchanged. Their names are recorded in the artifact manifest. Exact AST binding/import checks reject compiler or inventory drift. Missing provider credentials are not created or bypassed. Activating held Functions requires a separate reviewed provider release.
+
+## Immutable stage and provider readback
+
+The CLI runs in a separately verified copy of the staged artifact so Hosting hash caches and CLI logs cannot modify the original manifest directory. Both copies are verified before promotion; post-deploy checks retain strict no-extra-file verification. Hosting metadata explicitly charges the satsunicgo quota project. Source archives use generation-pinned Storage reads with an in-memory token and full ZIP hash comparison. Functions receive only a bounded wait for transient deployment states; failed or unexpected inventories never qualify for publication.

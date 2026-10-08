@@ -27,3 +27,9 @@ Final verification corrections:
 - Main run 37702785743 passed quality and reached build dependency installation; cancelled before artifact upload, tag/draft reservation or provider deployment.
 - Provider verification now binds initial/final Hosting release/version/time around all file/source checks; replacement, disable and unfinished versions fail closed. Identity is refreshed before provider readback to reduce OIDC expiry interruptions.
 - Rules runner selects Storage port9298, enabling the existing conditional private-image transaction test without changing its selector/assertions.
+
+First release run37704171123 passed allquality gates, then failed the production public-config guard with INPUT_INVALID. Two unused VITE_RELEASE keys were outside its existing whitelist; they are removed from the build environment. The guard is unchanged. Tag/SHA binding remains in candidate, Functions package version, dist/release-version.json, Functions release.json and the file-hash manifest. No artifact upload, tag/draft or deployment occurred.
+
+## Provider activation corrections
+
+Run37705487725 reserved immutable v0.1.0/tag/assets. Firebase CLI15.32.1 unconditionally checks Appspot actAs even for Gen2; granted only the new deploy account iam.serviceAccountUser on existing satsunicgo@appspot.gserviceaccount.com. Runtime/build accounts remain compute; no token creator or broad SA grant. Attempt2 completed Functions/Hosting promotion but correctly retained a draft after failed verification. Hosting REST diagnosis returned SERVICE_DISABLED consumer projects/32555940559. Fixed metadata headers bind quota to satsunicgo; live response HTTP200. No broader IAM/API enablement required. New approved source da9f5438e549ca68efe636b7340910f3c5c1384e is running37707571610. Production success pending receipt.

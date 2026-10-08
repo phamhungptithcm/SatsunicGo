@@ -1,28 +1,23 @@
 # CICD-108 quality evidence
 
-Source baseline: `caeec532a77176f7412551ab6621fe9df1d5da48`; scoped uncommitted workflow/helpers/tests/documents reviewed. Intelligence DEGRADED: indexes stale after concurrent release commit; bounded CI, package, Firebase CLI and source inspection used. The previous index refresh succeeded before that concurrent commit; complete indexed impact coverage is not claimed.
+Approved automatic release implementation and complete production setup. Actual release candidate: `da9f5438e549ca68efe636b7340910f3c5c1384e`, run [37707571610](https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37707571610), quality/build PASSED; deploy/provider verification pending. Last complete green candidate `3330c4b3795565732cd6a35afe6127e8d1885c85`, run [37705041758](https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37705041758).
 
-Selected profiles: universal, infrastructure, TypeScript/JavaScript. Node 22 is configured in Actions/Functions; local validation used Node 25.9.0, Python 3.14.4. Node 22 runner execution is NOT_RUN.
+| Gate | Evidence |
+| --- | --- |
+| Node22 / Java21 quality | Current run passed typecheck, lint and all mandatory quality gates before production build; production build passed |
+| Unit | 108 files, 914 cases passed |
+| Release helpers | Current source:27cases passed locally and GitHub; zero skipped |
+| Public configuration | 13 passed |
+| Rules integration | Current source:40files,539cases (517+4+3+15),zero skipped |
+| HTTP / isolated restore | Auth, invalid tokens, persistence, idempotency, cross-customer boundaries, public routes and isolated Firestore/Storage restore passed |
+| Audit | No high/critical at existing gate; root15low/moderate and standalone13moderate remain |
+| Artifact | Immutable archive checksum; 271 hashed files, 62 exported Functions; seven existing held exports preserved; standalone lock exact tested version/integrity; no rebuild at deploy |
+| Static / failure checks | Focused ESLint, actionlint, Python syntax, whitespace, archive tampering, unsafe paths, tag/asset conflicts, retry original artifact, provider replacement and quota-project regression passed |
+| Production | v0.1.0 original bundle deployed by run37705487725 attempt2; publication blocked on REST quota failure. Fixed header confirmed metadata HTTP200; automated new-source receipt pending |
+| Setup | WIF ACTIVE restricted immutable repo/owner/main/push/workflow/production; dedicated keyless SA/custom role, source bucket read, compute and CLI-required Appspot actAs; public vars and production environment verified |
+| API / database / UI | NOT_APPLICABLE: application source, public API, schema/rules/index deploy, UI untouched |
+| Rollback / live provider business acceptance | NOT_RUN: no production restore/rollback or paid-provider business acceptance implied |
 
-| Gate | Result | Evidence / limits |
-| --- | --- | --- |
-| Compilation | PASSED | `npm run typecheck` (root TypeScript + Functions build); `npm run build` (TypeScript/Vite/public asset generation) |
-| Unit tests | PASSED | Clean-CI public configuration overrides: 108 test files, 914 tests passed after sandbox escalation for an ephemeral telemetry listener. No application changes were made to get this result. |
-| Release helper tests | PASSED | `node --test tests/unit/release108.test.mjs`: 24 cases; SemVer, production auth identity, notes completeness, manifest tampering, archive/source ZIP rejection, dependency parity, recovery, tag conflicts, publication/receipt checks |
-| Public configuration tests | PASSED | `npm run test:release-config`: 13/13 |
-| Static analysis | PASSED | Root `npm run lint`; focused ESLint on all new JS/helpers/tests; `actionlint` on both workflows; `git diff --check` |
-| Architecture / dependency impact | PASSED | Validation/build/deploy split; no app/domain/schema edits; standalone Functions lock derived offline from tested root graph; version/integrity drift rejected |
-| Artifact smoke | PASSED | Real local compiled output: create → archive → safely unpack → verify; 271 hashed files, inventory 69 Functions. No deployment performed. |
-| Production configuration guard | PASSED locally | Existing public-config guard passed; existing preflight local checks passed and inventoried 69 source Functions. These are not provider acceptance. |
-| Dependency audit | PASSED existing high threshold | Root: 15 existing low/moderate findings; derived Functions deployment lock: 13 moderate findings. Neither scan reported high/critical; this is not a zero-vulnerability claim. No dependency upgrade in scope. |
-| Security review | PASSED code scope | Exact production target; pinned Actions; no cloud credential in test job; OIDC only at deploy; no dotenv packaging; no `--force`; immutable asset/tag conflicts fail; source archives never extracted or printed |
-| Integration (rules/HTTP/restore) | NOT_RUN locally | Shared runtime preserved; local isolated/duplicate emulator servers not authorized. All three remain mandatory, blocking CI gates before release build. |
-| GitHub runner / provider deployment | NOT_RUN | No GitHub production environment/variables or GCP WIF pool; no commit/push/remote activation in this task |
-| Rollback execution | NOT_RUN | Operator procedure prepared; real rollback is a production mutation and requires named authorization |
-| Database / API migration | NOT_APPLICABLE | No schema/data/public API changes; rules/indexes excluded from automatic deploy |
-| UI / localization / SEO / motion / product language | NOT_APPLICABLE | App UI and product data presentation unchanged. Generated release notes are technical delivery documentation and workflow summary is operator output; copy/verification semantics reviewed in requirement/error-handling dimensions. |
-| Final review | BLOCKED for production | Two cycles; in-scope code findings fixed and reverified. Missing integration/runner/provider evidence prevents a successful production handoff. See cycle JSON and completion report. |
+Intelligence DEGRADED: stale/unhealthy indexes; bounded source, CLI, Git, compiler and executable evidence. Local shared runtime5207 and demo backend ports untouched. Shared root checkout remains at baseline with unrelated concurrent WIP; clean temporary clone holds released source. Generated public-assets output remains excluded from source commits. Documentation records partial/non-atomic deployment, failed-draft publication, external manual concurrency and rollback constraints. Main remains unprotected (scope excluded).
 
-The initial plain `npm test` loaded ignored local production Firebase configuration and failed seven import suites (`document is not defined`). A clean-CI configuration run then exposed sandbox `listen EPERM`; its approved escalated rerun passed 914/914. Neither failure was hidden or treated as an application fix.
-
-Build warnings about existing large frontend chunks/ineffective dynamic imports remain outside scope. The local build regenerated `functions/generated/public-assets.json` (two asset-name changes); recovery of that validation output was rejected by command approval review and remains pending explicit recovery authorization. Existing unrelated output/browser directories remain untouched.
+Final review must remain BLOCKED until current automated release and provider receipts pass. Token usage, actual billed cost and API-equivalent estimate Unavailable. Memory candidates None; no memory stored.

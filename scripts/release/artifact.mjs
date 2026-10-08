@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import process from 'node:process';
 import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { resolve, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SEMVER, SHA } from './release.mjs';
 import { preflight } from './preflight.mjs';
@@ -67,6 +67,13 @@ export function verify(root, expectedSha, expectedTag) {
     if (metadata.tag !== expectedTag || metadata.sha !== expectedSha) throw Error('VERSION_METADATA_MISMATCH');
   }
   return manifest;
+}
+export function prepareWorkspace(root, target, expectedSha, expectedTag) {
+  root = resolve(root); target = resolve(target);
+  if (target === root || target.startsWith(root + sep) || root.startsWith(target + sep) || existsSync(target)) throw Error('UNSAFE_DEPLOYMENT_WORKSPACE');
+  verify(root, expectedSha, expectedTag);
+  cpSync(root, target, { recursive: true, errorOnExist: true, force: false });
+  return verify(target, expectedSha, expectedTag);
 }
 // Preserve the explicitly held deployment boundary from the latest production release.
 export const HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail']);
@@ -149,6 +156,7 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   if (process.argv[2] === 'create') create(process.cwd(), resolve('release-stage'), resolve('candidate.json'));
+  else if (process.argv[2] === 'workspace') prepareWorkspace(resolve('release-stage'), resolve('release-work'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);
   else if (process.argv[2] === 'verify') {
     if (!process.env.RELEASE_TAG) throw Error('MISSING_RELEASE_TAG');
     verify(resolve('release-stage'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);

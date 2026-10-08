@@ -1,5 +1,6 @@
 import test from 'node:test';
 import { Buffer } from 'node:buffer';
+import { createRequire } from 'node:module';
 import process from 'node:process';
 import { URL } from 'node:url';
 import assert from 'node:assert/strict';
@@ -8,8 +9,8 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSyn
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
-import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS } from '../../scripts/release/artifact.mjs';
-import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease } from '../../scripts/release/verify-production.mjs';
+import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace } from '../../scripts/release/artifact.mjs';
+import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory } from '../../scripts/release/verify-production.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -343,4 +344,54 @@ test('Hosting metadata charges the authorized production project, never the OAut
     return Buffer.from(JSON.stringify({releases: [expected]}));
   });
   assert.deepEqual(result, expected);
+});
+
+test('real Firebase Hosting cache writes cannot contaminate the immutable promotion artifact', t => {
+  const {root, stage} = builtFixture(t);
+  const work = join(root, 'release-work');
+  const original = verify(stage, sha, 'v1.2.3');
+  assert.deepEqual(prepareWorkspace(stage, work, sha, 'v1.2.3'), original);
+  const cache = createRequire(import.meta.url)(join(repositoryRoot, 'node_modules/firebase-tools/lib/deploy/hosting/hashcache.js'));
+  cache.dump(join(work, 'deployment'), 'fixture', new Map([['index.html', {mtime: 1, hash: 'fixture'}]]));
+  assert.deepEqual(verify(stage, sha, 'v1.2.3'), original);
+  assert.throws(() => verify(work, sha, 'v1.2.3'), /UNSAFE_ARTIFACT_PATH/);
+  assert.throws(() => prepareWorkspace(stage, work, sha, 'v1.2.3'), /UNSAFE_DEPLOYMENT_WORKSPACE/);
+  assert.throws(() => prepareWorkspace(stage, join(stage, 'nested'), sha, 'v1.2.3'), /UNSAFE_DEPLOYMENT_WORKSPACE/);
+  put(stage, 'deployment/functions/extra.json', '{}');
+  assert.throws(() => prepareWorkspace(stage, join(root, 'other'), sha, 'v1.2.3'), /HASH/);
+});
+
+test('Function source readback pins object generation and reuses the in-memory provider token', async () => {
+  const source = {bucket:'gcf-v2-sources-278913913091-asia-southeast1',object:'publicPage/function-source.zip',generation:'123'};
+  const bytes = Buffer.from('source-fixture');
+  assert.equal(await readFunctionSource(source, 'fixture-token', async (url, headers) => {
+    const parsed = new URL(url);
+    assert.equal(parsed.hostname, 'storage.googleapis.com');
+    assert.match(parsed.pathname, /publicPage%2Ffunction-source.zip$/);
+    assert.equal(parsed.searchParams.get('generation'), '123');
+    assert.equal(parsed.searchParams.get('alt'), 'media');
+    assert.equal(headers.Authorization, 'Bearer fixture-token');
+    assert.equal(headers['x-goog-user-project'], 'satsunicgo');
+    return bytes;
+  }), bytes);
+  for (const invalid of [{...source,object:'../outside'}, {...source,generation:'123&other=1'}, {...source,bucket:'bucket/escape'}]) {
+    await assert.rejects(() => readFunctionSource(invalid, 'fixture', async () => {throw Error('MUST_NOT_REQUEST');}), /INVALID_PROVIDER_SOURCE_REFERENCE/);
+  }
+  await assert.rejects(() => readFunctionSource(source, 'fixture', async () => {throw Error('HTTP_FAILURE');}), /HTTP_FAILURE/);
+});
+
+test('provider stabilization waits only for bounded transient deployment states, without ignoring final failure', async t => {
+  const {manifest} = builtFixture(t);
+  const active = manifest.inventory.map(f => ({name:`functions/${f.name}`,state:'ACTIVE',serviceConfig:{revision:'one'},buildConfig:{source:{storageSource:{}}}}));
+  const deploying = active.map(f => ({...f,state:'DEPLOYING'}));
+  let reads = 0, pauses = 0;
+  assert.deepEqual(await waitForActiveInventory(manifest, () => ++reads === 1 ? deploying : active, async () => {pauses++;}), active);
+  assert.equal(reads, 2); assert.equal(pauses, 1);
+  reads = 0;
+  await assert.rejects(() => waitForActiveInventory(manifest, () => {reads++;return deploying;}, async () => {}), /NOT_ACTIVE/);
+  assert.equal(reads, 6);
+  reads = 0;
+  await assert.rejects(() => waitForActiveInventory(manifest, () => {reads++;return active.map(f => ({...f,state:'FAILED'}));}, async () => {throw Error('MUST_NOT_PAUSE');}), /NOT_ACTIVE/);
+  assert.equal(reads, 1);
+  await assert.rejects(() => waitForActiveInventory(manifest, () => [...active,{name:'functions/unexpected',state:'ACTIVE'}], async () => {throw Error('MUST_NOT_PAUSE');}), /REMOVAL/);
 });

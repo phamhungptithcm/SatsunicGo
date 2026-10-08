@@ -14,3 +14,9 @@ Permission list and condition are saved in `scripts/release/production-deployer-
 Validation: provider condition negative cases; resource/IAM readback without values; GitHub variable-name/environment-policy readback; remote CI including isolated emulators; main release tag/artifact/checksum/Hosting/Function provider receipt. Token and actual billed cost unavailable unless provider evidence exists.
 
 Manifest cleanup: the command reviewer still rejects `git restore`; leave that validation output untouched and exclude it from the scoped candidate. Do not bypass the rejection using another tool.
+
+## Required CLI actAs delta — 2026-10-08
+
+Bound to owner instruction `setup all thing required`. Run37705487725 positively verified OIDC, immutable bundle upload, tag/draft reservation and pre-deploy inventory; Functions deployment stopped before provider updates. Installed Firebase CLI15.32.1 `checkServiceAccountIam(projectId)` unconditionally tests `iam.serviceAccounts.actAs` on `${projectId}@appspot.gserviceaccount.com`, independently of the62 observed Gen2 compute runtime/build identities.
+
+Smallest required setup delta: grant `roles/iam.serviceAccountUser` to the dedicated release principal only on existing `satsunicgo@appspot.gserviceaccount.com`. Keep compute actAs binding and every runtime account unchanged. No project-wide service-account role, token-creator role, account key, customer-data or secret-payload access is added. This is the CLI prerequisite account, not a claim that deployed Gen2 runtimes use App Engine. Verify binding, then rerun failed deploy job against the preserved original artifact; do not rebuild or move its tag.
