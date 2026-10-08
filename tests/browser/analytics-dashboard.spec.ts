@@ -225,155 +225,195 @@ test("newer filter owns its response and bounded blocks show unavailable", async
   await expect(page.locator(".aDonutLayout tbody tr")).toHaveCount(0);
 });
 
-test("consent on an open product, explicit clicks, safe Ask taxonomy and withdrawal", async ({
-  page,
-}) => {
-  await freezeHmr(page);
-  await page.setViewportSize({ width: 390, height: 900 });
-  const source = await (
-      await page.request.get(`${base}/src/shared/AnalyticsConsent.tsx`)
-    ).text(),
-    entry = await (await page.request.get(`${base}/src/app/main.tsx`)).text();
-  const react = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1],
-    router = source.match(/from "([^"]*\/react-router-dom\.js[^"]*)"/)?.[1],
-    root = entry.match(/from "([^"]*\/react-dom_client\.js[^"]*)"/)?.[1];
-  const analyticsUrl = source.match(/from "([^"]*\/analytics\.ts[^"]*)"/)?.[1];
-  expect(react && router && root && analyticsUrl).toBeTruthy();
-  await page.route("**/src/shared/firebase.ts*", (r) =>
-    r.fulfill({
-      contentType: "text/javascript",
-      body: "export const auth=null;export const functions={};",
-    }),
-  );
-  await page.route("**/firebase_functions.js*", (r) =>
-    r.fulfill({
-      contentType: "text/javascript",
-      body: 'export const httpsCallable=(_f,name)=>async data=>{window.trackingCalls.push({name,data});return {data:name==="analyticsSession"?{session:crypto.randomUUID(),startedAt:Date.now()}:{accepted:20}};};',
-    }),
-  );
-  await page.route("**/consent-analytics/main.js", (r) =>
-    r.fulfill({
-      contentType: "text/javascript",
-      body: `import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>(type)=>type;window.__vite_plugin_react_preamble_installed__=true;
+for (const consentWidth of [1440, 390, 320])
+  test(`consent before auth, explicit clicks, safe Ask taxonomy and withdrawal ${consentWidth}`, async ({
+    page,
+  }) => {
+    await freezeHmr(page);
+    await page.setViewportSize({ width: consentWidth, height: 900 });
+    const source = await (
+        await page.request.get(`${base}/src/shared/AnalyticsConsent.tsx`)
+      ).text(),
+      entry = await (await page.request.get(`${base}/src/app/main.tsx`)).text();
+    const react = source.match(/from "([^"]*\/react\.js[^"]*)"/)?.[1],
+      router = source.match(/from "([^"]*\/react-router-dom\.js[^"]*)"/)?.[1],
+      root = entry.match(/from "([^"]*\/react-dom_client\.js[^"]*)"/)?.[1];
+    const analyticsUrl = source.match(
+      /from "([^"]*\/analytics\.ts[^"]*)"/,
+    )?.[1];
+    expect(react && router && root && analyticsUrl).toBeTruthy();
+    await page.route("**/src/shared/firebase.ts*", (r) =>
+      r.fulfill({
+        contentType: "text/javascript",
+        body: "export const auth=null;export const functions={};",
+      }),
+    );
+    await page.route("**/firebase_functions.js*", (r) =>
+      r.fulfill({
+        contentType: "text/javascript",
+        body: 'export const httpsCallable=(_f,name)=>async data=>{window.trackingCalls.push({name,data});return {data:name==="analyticsSession"?{session:crypto.randomUUID(),startedAt:Date.now()}:{accepted:20}};};',
+      }),
+    );
+    await page.route("**/consent-analytics/main.js", (r) =>
+      r.fulfill({
+        contentType: "text/javascript",
+        body: `import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>(type)=>type;window.__vite_plugin_react_preamble_installed__=true;
  const React=(await import(${JSON.stringify(react)})).default;const {BrowserRouter}=await import(${JSON.stringify(router)});const {createRoot}=(await import(${JSON.stringify(root)})).default;await import('/src/styles/global.css');const {AnalyticsConsent}=await import('/src/shared/AnalyticsConsent.tsx');const {analyticsTracker,trackAsk}=await import(${JSON.stringify(analyticsUrl)});window.trackingCalls=[];window.flushAnalytics=()=>analyticsTracker.flush();window.askAnalytics=()=>trackAsk('Phí vận chuyển và person@example.com','fixed-turn');
- function Fixture(){const [account,setAccount]=React.useState(null);return React.createElement(React.Fragment,null,React.createElement(AnalyticsConsent,{account,ready:true}),React.createElement('article',{'data-analytics-product':'synthetic-product','data-analytics-product-view':'synthetic-product','data-analytics-product-slug':'synthetic-analytics'},React.createElement('h1',null,'Sản phẩm kiểm thử'),React.createElement('a',{href:'/products/synthetic-product',onClick:e=>e.preventDefault()},'Xem sản phẩm'),React.createElement('button',{type:'button'},'Tải lại đánh giá')),React.createElement('button',{onClick:()=>setAccount('synthetic-account')},'Đổi tài khoản'));}
+ function Fixture(){const [account,setAccount]=React.useState(null),[ready,setReady]=React.useState(false);window.finishAnalyticsAuth=()=>setReady(true);React.useEffect(()=>{window.scrollTo({top:0,left:0});document.getElementById("main")?.focus({preventScroll:true});},[]);return React.createElement(React.Fragment,{key:String(ready)},React.createElement(AnalyticsConsent,{account,ready}),React.createElement("header",{className:"topbar"},"SatsunicGo"),React.createElement('article',{id:'main',tabIndex:-1,'data-analytics-product':'synthetic-product','data-analytics-product-view':'synthetic-product','data-analytics-product-slug':'synthetic-analytics'},React.createElement('h1',null,'Sản phẩm kiểm thử'),React.createElement('a',{href:'/products/synthetic-product',onClick:e=>e.preventDefault()},'Xem sản phẩm'),React.createElement('button',{type:'button'},'Tải lại đánh giá')),React.createElement('button',{onClick:()=>setAccount('synthetic-account')},'Đổi tài khoản'));}
  const rootElement=createRoot(document.getElementById('root'));rootElement.render(React.createElement(React.StrictMode,null,React.createElement(BrowserRouter,null,React.createElement(Fixture))));window.showPrivacy=async()=>{const {PrivacyPage}=await import('/src/features/content/PrivacyPage.tsx');rootElement.render(React.createElement(BrowserRouter,null,React.createElement(PrivacyPage)));};`,
-    }),
-  );
-  await page.route("**/products/synthetic-analytics?qa=1", (r) =>
-    r.fulfill({
-      contentType: "text/html",
-      body: '<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="/consent-analytics/main.js"></script></body></html>',
-    }),
-  );
-  await page.goto(`${base}/products/synthetic-analytics?qa=1`);
-  await expect(
-    page.getByRole("button", { name: "Cho phép thống kê", exact: true }),
-  ).toBeVisible();
-  expect(
-    await page.evaluate(
-      () =>
-        (window as unknown as { trackingCalls: unknown[] }).trackingCalls
-          .length,
-    ),
-  ).toBe(0);
-  await page.screenshot({
-    path: "docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/consent-390.png",
-    fullPage: true,
-  });
-  await page.getByRole("button", { name: "Từ chối", exact: true }).click();
-  await page.getByRole("link", { name: "Xem sản phẩm" }).click();
-  await page.evaluate(
-    async () =>
-      await (
-        window as unknown as { flushAnalytics: () => Promise<void> }
-      ).flushAnalytics(),
-  );
-  expect(
-    await page.evaluate(
-      () =>
-        (window as unknown as { trackingCalls: unknown[] }).trackingCalls
-          .length,
-    ),
-  ).toBe(0);
-  await page
-    .getByRole("button", { name: "Quyền thống kê", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Cho phép thống kê", exact: true })
-    .click();
-  await expect
-    .poll(() =>
-      page.evaluate(
+      }),
+    );
+    await page.route("**/products/synthetic-analytics?qa=1", (r) =>
+      r.fulfill({
+        contentType: "text/html",
+        body: '<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="/consent-analytics/main.js"></script></body></html>',
+      }),
+    );
+    await page.goto(`${base}/products/synthetic-analytics?qa=1`);
+    await expect(
+      page.getByRole("button", { name: "Cho phép thống kê", exact: true }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
         () =>
-          (
-            window as unknown as { trackingCalls: { name: string }[] }
-          ).trackingCalls.filter((c) => c.name === "analyticsSession").length,
+          (window as unknown as { trackingCalls: unknown[] }).trackingCalls
+            .length,
       ),
-    )
-    .toBeGreaterThan(0);
-  await page.getByRole("button", { name: "Tải lại đánh giá" }).click();
-  await page.getByRole("link", { name: "Xem sản phẩm" }).click();
-  await page.evaluate(async () => {
-    const w = window as unknown as {
-      flushAnalytics: () => Promise<void>;
-      askAnalytics: () => void;
-    };
-    w.askAnalytics();
-    w.askAnalytics();
-    await w.flushAnalytics();
-  });
-  const events = await page.evaluate(() =>
-    (
-      window as unknown as {
-        trackingCalls: {
-          name: string;
-          data: { events?: { kind: string; topic?: string }[] };
-        }[];
-      }
-    ).trackingCalls.flatMap((c) => c.data.events ?? []),
-  );
-  expect(events.filter((e) => e.kind === "product_view")).toHaveLength(1);
-  expect(events.filter((e) => e.kind === "product_click")).toHaveLength(1);
-  expect(events.filter((e) => e.kind === "ask")).toHaveLength(1);
-  expect(JSON.stringify(events)).not.toContain("person@example.com");
-  await page
-    .getByRole("button", { name: "Quyền thống kê", exact: true })
-    .click();
-  await page.screenshot({
-    path: "docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/withdraw-390.png",
-    fullPage: true,
-  });
-  await page
-    .getByRole("button", { name: "Dừng ghi nhận", exact: true })
-    .click();
-  await expect
-    .poll(async () =>
-      page.evaluate(
+    ).toBe(0);
+    await page.screenshot({
+      path: `docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/consent-${consentWidth}.png`,
+      fullPage: true,
+    });
+    for (const name of ["Cho phép thống kê", "Từ chối"]) {
+      const button = page.getByRole("button", { name, exact: true });
+      expect(
+        await button.evaluate((el) => {
+          const r = el.getBoundingClientRect(),
+            x = r.left + r.width / 2,
+            y = r.top + r.height / 2;
+          return (
+            r.top >= 0 &&
+            r.bottom <= innerHeight &&
+            el.contains(document.elementFromPoint(x, y))
+          );
+        }),
+      ).toBe(true);
+    }
+    await page
+      .getByRole("button", { name: "Cho phép thống kê", exact: true })
+      .click();
+    // Opt-in can precede auth restoration, but no transport starts before ready.
+    expect(
+      await page.evaluate(
         () =>
-          (
-            window as unknown as { trackingCalls: { name: string }[] }
-          ).trackingCalls.filter((c) => c.name === "analyticsWithdraw").length,
+          (window as unknown as { trackingCalls: unknown[] }).trackingCalls
+            .length,
       ),
-    )
-    .toBeGreaterThan(0);
-  await page.evaluate(
-    async () =>
-      await (
-        window as unknown as { showPrivacy: () => Promise<void> }
-      ).showPrivacy(),
-  );
-  await expect(
-    page.getByRole("heading", { name: "Thống kê truy cập tùy chọn" }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Cơ chế xóa tự động chạy nền", { exact: false }),
-  ).toBeVisible();
-  await page.screenshot({
-    path: "docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/privacy-390.png",
-    fullPage: true,
+    ).toBe(0);
+    await page
+      .getByRole("button", { name: "Quyền thống kê", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Dừng ghi nhận", exact: true })
+      .click();
+    await page.evaluate(() =>
+      (
+        window as unknown as { finishAnalyticsAuth: () => void }
+      ).finishAnalyticsAuth(),
+    );
+    await page.getByRole("link", { name: "Xem sản phẩm" }).click();
+    await page.evaluate(
+      async () =>
+        await (
+          window as unknown as { flushAnalytics: () => Promise<void> }
+        ).flushAnalytics(),
+    );
+    expect(
+      await page.evaluate(
+        () =>
+          (window as unknown as { trackingCalls: unknown[] }).trackingCalls
+            .length,
+      ),
+    ).toBe(0);
+    await page
+      .getByRole("button", { name: "Quyền thống kê", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Cho phép thống kê", exact: true })
+      .click();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (
+              window as unknown as { trackingCalls: { name: string }[] }
+            ).trackingCalls.filter((c) => c.name === "analyticsSession").length,
+        ),
+      )
+      .toBeGreaterThan(0);
+    await page.getByRole("button", { name: "Tải lại đánh giá" }).click();
+    await page.getByRole("link", { name: "Xem sản phẩm" }).click();
+    await page.evaluate(async () => {
+      const w = window as unknown as {
+        flushAnalytics: () => Promise<void>;
+        askAnalytics: () => void;
+      };
+      w.askAnalytics();
+      w.askAnalytics();
+      await w.flushAnalytics();
+    });
+    const events = await page.evaluate(() =>
+      (
+        window as unknown as {
+          trackingCalls: {
+            name: string;
+            data: { events?: { kind: string; topic?: string }[] };
+          }[];
+        }
+      ).trackingCalls.flatMap((c) => c.data.events ?? []),
+    );
+    expect(events.filter((e) => e.kind === "product_view")).toHaveLength(1);
+    expect(events.filter((e) => e.kind === "product_click")).toHaveLength(1);
+    expect(events.filter((e) => e.kind === "ask")).toHaveLength(1);
+    expect(JSON.stringify(events)).not.toContain("person@example.com");
+    await page
+      .getByRole("button", { name: "Quyền thống kê", exact: true })
+      .click();
+    await page.screenshot({
+      path: `docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/withdraw-${consentWidth}.png`,
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Dừng ghi nhận", exact: true })
+      .click();
+    await expect
+      .poll(async () =>
+        page.evaluate(
+          () =>
+            (
+              window as unknown as { trackingCalls: { name: string }[] }
+            ).trackingCalls.filter((c) => c.name === "analyticsWithdraw")
+              .length,
+        ),
+      )
+      .toBeGreaterThan(0);
+    await page.evaluate(
+      async () =>
+        await (
+          window as unknown as { showPrivacy: () => Promise<void> }
+        ).showPrivacy(),
+    );
+    await expect(
+      page.getByRole("heading", { name: "Thống kê truy cập tùy chọn" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Cơ chế xóa tự động chạy nền", { exact: false }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: `docs/reviews/ANALYTICS-DASHBOARD-20261008/screenshots/privacy-${consentWidth}.png`,
+      fullPage: true,
+    });
   });
-});
 
 test("analytics text scaling and unavailable money stay readable", async ({
   page,

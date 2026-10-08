@@ -81,7 +81,8 @@ export function AnalyticsConsent({
       analyticsTracker.dispose();
     };
   }, []);
-  if (!ready || !publicPage) return null;
+  // Present the choice before auth resolves; tracker effects remain gated by ready.
+  if (!publicPage) return null;
   if (consent !== null && !expanded)
     return (
       <button
