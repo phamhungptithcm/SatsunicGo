@@ -14,6 +14,10 @@ I had already built Ask Anything on [HunpeoLabs](https://hunpeolabs.com) so visi
 
 The longer story is in [SatsunicGo: Making Overseas Shopping Feel More Like a Conversation](https://hunpeolabs.com/resources/blog/satsunicgo-building-an-applied-ai-shopping-product). This repository is where I am building it.
 
+![SatsunicGo homepage showing the purchase assistance journey and Ask Anything composer](docs/assets/readme/webapp-home.png)
+
+_The customer homepage during development, with the purchase assistance steps and Ask Anything at the bottom._
+
 ## “Can you help me buy this?”
 
 Someone might arrive with a link and a clear request:
@@ -32,6 +36,10 @@ People should be able to ask those questions without knowing where the service k
 
 That is the experience I am working toward. Ask still needs work, particularly around context, retrieval, and the steps between a useful answer and a completed request.
 
+![SatsunicGo Ask panel showing a CeraVe search, product results, and a purchase assistance link](docs/assets/readme/webapp-ask.png)
+
+_Product discovery inside Ask. This screenshot shows the starting point of the conversation._
+
 ## The work behind the conversation
 
 A purchase still moves through the business: reviewing the request, quoting, getting the customer's approval, purchasing, checking the goods, packing, and shipping. SatsunicGo includes the customer screens and staff workspace for that work, alongside payments, membership, support, and content management.
@@ -43,6 +51,10 @@ Ask helps people understand and reach these steps. The application checks access
 ## The Lego pieces behind Ask
 
 I think of the design as a few Lego pieces that need to fit together. The LLM interprets the question and explains the response. Knowledge supplies product and service information. Tools look up current facts or prepare the next step. The backend checks who is asking, what they can access, and what action they have confirmed.
+
+![SatsunicGo target AI architecture connecting the agent runner, model adapter, permission gate, tools, context compaction, memory, audit logs, and a separate customer activity pipeline](docs/assets/readme/ask-architecture.png)
+
+_The design I am working toward, including parts still being built. [View the architecture diagram at full size](docs/assets/readme/ask-architecture.png)._
 
 The code uses React, TypeScript, and Vite for the web application; Firebase Authentication, Firestore, Storage, and Cloud Functions for identity and business data; and Genkit with Gemini for the model integration. Shared domain modules hold validation and business rules. payOS is part of the payment integration.
 
