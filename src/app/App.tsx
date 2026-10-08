@@ -1,3 +1,4 @@
+import { AnalyticsConsent } from "../shared/AnalyticsConsent";
 import { RestrictedPage } from "../features/content/RestrictedPage";
 import { PrivacyPage } from "../features/content/PrivacyPage";
 import { TermsPage } from "../features/content/TermsPage";
@@ -304,6 +305,7 @@ export function App() {
   return (
     <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
     <StaffMfaSetup user={user} signOut={signOut} busy={authBusy}>
+      <AnalyticsConsent account={user?.uid ?? null} ready={authReady} />
       <OneTap user={user} onError={setAuthError} />
       <AuthFeedbackToast
         message={authError || redirectError}

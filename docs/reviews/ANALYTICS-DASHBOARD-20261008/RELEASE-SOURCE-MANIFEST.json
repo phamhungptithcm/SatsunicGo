@@ -1,0 +1,135 @@
+{
+  "scope": "Isolated release candidate source; source hashes are not CI artifact or provider attestations",
+  "base": "b62d5cf0b017adbad0b45bcd052598896123316c",
+  "capturedAt": "2026-10-08T16:02:07.332Z",
+  "files": [
+    {
+      "file": "firestore.indexes.json",
+      "sha256": "f29fbaf53430f06adade7dbd887c0521d614557c8b9e71acecf895b5a4a33660"
+    },
+    {
+      "file": "functions/generated/public-assets.json",
+      "sha256": "b21474e87d8444ae6e372e6b16bb8166be4c9972cae4f5aea0be3ddc856fefb4"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-worker.ts",
+      "sha256": "b231a6e813e2cf771a453f5ec36415738625539b8c354d3f2a608c603b34fce4"
+    },
+    {
+      "file": "functions/src/dashboard-analytics.ts",
+      "sha256": "4f89d279abd5d9dc526afe397e27a603fa63fe506d53fa46be8f1172dd00418b"
+    },
+    {
+      "file": "functions/src/index.ts",
+      "sha256": "f8cdc6731de83ffbeee3cdef32ecc315ec68b99f55f2f1805d71eb087cde71b1"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "scripts/release/preflight.mjs",
+      "sha256": "e637f285ff0b30b84d046b317c434eed2c8f557e3202ef6241a9f59045ff08c3"
+    },
+    {
+      "file": "src/app/App.tsx",
+      "sha256": "27c0a4ae3c6c14593b5f22a2bd64af4251aabf1feac7a84b0929d237ce844bb5"
+    },
+    {
+      "file": "src/features/ask/Ask.tsx",
+      "sha256": "aa98c6f5cdff6d32c40d71015dc2a7c37489fa86c4fa5d3b235c8255dc242e64"
+    },
+    {
+      "file": "src/features/ask/CatalogSearch.tsx",
+      "sha256": "d99fd5e66811c925a34ee8be1acb0dabfecaf09e0335e3f7d9e9b4a596e00286"
+    },
+    {
+      "file": "src/features/ask/Commerce.tsx",
+      "sha256": "e5df078a4be0b71eb86f353d40ba3232b431b848a333242cae33cce17c3c4fc6"
+    },
+    {
+      "file": "src/features/content/CatalogCard.tsx",
+      "sha256": "00440c9cfcb9a163d8c09f480d46e0d5ad87e2c831357b0d80b15336cbe70fe1"
+    },
+    {
+      "file": "src/features/content/PrivacyPage.tsx",
+      "sha256": "7af303d3bd832c3e2c72c2d7327177632add0c87dac4c08f7e42779862d88ea1"
+    },
+    {
+      "file": "src/features/content/ProductDetail.tsx",
+      "sha256": "03f3ffc7cfb91144c351938997e92de6dfaefa11b6c020c50338c855baaaea78"
+    },
+    {
+      "file": "src/features/content/ProductsCatalog.tsx",
+      "sha256": "2ff5604ba802890fc4131159973aa6424a07f5300dd6414409f616b6255331d2"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/dashboard094.css",
+      "sha256": "86a927d039a096c5477d7f2fac5c0ad238d5f402f26f83607fd2e4c395f481e3"
+    },
+    {
+      "file": "src/features/products/Checkout.tsx",
+      "sha256": "d74ba7b46a92447757b28f5f9eade7345b111c0d840ad2a20d3665443ea3b61f"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/analytics-consent.css",
+      "sha256": "045a8b507b9928baa7edc3b435af207857a17eef88b590ae4d98a9cf82790ab6"
+    },
+    {
+      "file": "src/shared/analytics.ts",
+      "sha256": "79eac596833602e9d437a80d135e6b1b1af83792c7c2197c8f1ebba5ec9b60c3"
+    },
+    {
+      "file": "tests/browser/analytics-dashboard.spec.ts",
+      "sha256": "0e04b155679ec9980723194e48bea2ca80deee8dee7cf6b09c97390882cc253b"
+    },
+    {
+      "file": "tests/browser/dashboard094.spec.ts",
+      "sha256": "22b2e73ab6200e34fa53276925ffcc498a1ced58ce75c9e90a9008a2910e318e"
+    },
+    {
+      "file": "tests/http/analytics.mjs",
+      "sha256": "a7b62d5b05fa8c0d5cb42954861ff3a9d931f0cd1ec2c3d5935ec633c528d610"
+    },
+    {
+      "file": "tests/http/callable.mjs",
+      "sha256": "620c0a5ad92b3e832d409264c62c2baed07c2d15292f5f2e18c57e1b9f2f35e6"
+    },
+    {
+      "file": "tests/rules/analytics.test.ts",
+      "sha256": "b77fddddd5d4ad007d2b53f3c42b6bcd946ae52bf77ecb13d3af86c628f96ab3"
+    },
+    {
+      "file": "tests/unit/analytics-client.test.ts",
+      "sha256": "ae2e7f8d00aa8af8e30eae4fac1f4ae364afa76b0c885b0d2f536c9552c0d434"
+    },
+    {
+      "file": "tests/unit/analytics.test.ts",
+      "sha256": "bff90f44dd2523bf7727803de5f80b5e91c4015dbbc9dc8946cdab541052ef17"
+    },
+    {
+      "file": "tests/unit/dashboard-analytics.test.ts",
+      "sha256": "8741e8564b7da9d81c218103e61fbda692fa5da64697d8dbf83648b595ac91b5"
+    },
+    {
+      "file": "tests/unit/release-preflight067.test.ts",
+      "sha256": "5b84c7d63a095eb744b2730e3b8a77f20bcbedb6c579e4607dacfa71e816e484"
+    }
+  ]
+}

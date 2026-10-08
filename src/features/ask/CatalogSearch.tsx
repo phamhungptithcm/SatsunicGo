@@ -1,3 +1,4 @@
+import { trackProduct } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -129,7 +130,7 @@ export function CatalogSearch({
                 </span>
               )}
               <div>
-                <Link to={`/products/${row.slug}`}>{row.title}</Link>
+                <Link data-analytics-product={row.id} to={`/products/${row.slug}`}>{row.title}</Link>
                 <p>
                   {price.success
                     ? `${price.data.listedPrice.toLocaleString(vi ? "vi-VN" : "en-US")} ₫`
@@ -142,7 +143,7 @@ export function CatalogSearch({
                 <button
                   type="button"
                   aria-pressed={selected === row.slug}
-                  onClick={() => setSelected(row.slug)}
+                  onClick={() => { trackProduct(row.id, "product_click"); setSelected(row.slug); }}
                 >
                   {vi ? "Chọn mua" : "Buy"}
                 </button>

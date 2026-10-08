@@ -531,3 +531,8 @@ export {
   askKnowledgeCommand,
   askKnowledgePreview,
 } from "./ai/approved-knowledge";
+
+// First-party analytics: independent consent, private projections and bounded reads.
+export { analyticsSession, analyticsIngest, analyticsLinkOrder, analyticsWithdraw } from "./analytics-ingest";
+export { analyticsOrderChanged, analyticsPaymentCreated, analyticsJobCreated, analyticsCompact } from "./analytics-worker";
+export { dashboardAnalytics } from "./dashboard-analytics";

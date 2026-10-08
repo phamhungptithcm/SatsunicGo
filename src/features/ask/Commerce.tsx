@@ -1,3 +1,4 @@
+import { linkAnalyticsOrder } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import { CatalogPurchase } from "./CatalogPurchase";
 import { InlineSupport } from "./InlineSupport";
@@ -325,6 +326,8 @@ export function useAskCommerce(
               envelope,
             );
             if (!isCurrent(scope)) return result;
+            if (["submitRequest", "catalogCheckout"].includes(envelope.action) && result.id)
+              linkAnalyticsOrder(result.id);
             version.current = Math.max(version.current, result.version);
             if (durable) {
               retirePending();
@@ -465,6 +468,7 @@ export function useAskCommerce(
     setBusy(true);
     try {
       const result = await callService<{
+        id?: string;
         version: number;
         outcome?: "no_operation";
       }>("askWorkflow", {
@@ -478,6 +482,9 @@ export function useAskCommerce(
       version.current = Math.max(version.current, result.version);
       const key = `ask-pending:${uid}:${cid}`;
       const saved = sessionStorage.getItem(key);
+      const recovered = saved ? JSON.parse(saved) : null;
+      if (recovered && ["submitRequest", "catalogCheckout"].includes(recovered.action) && result.id)
+        linkAnalyticsOrder(result.id);
       if (saved && JSON.parse(saved).operationId === clientPending)
         sessionStorage.removeItem(key);
       setClientPending(null);

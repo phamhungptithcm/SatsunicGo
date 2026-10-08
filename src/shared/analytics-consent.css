@@ -1,0 +1,75 @@
+.analyticsConsent {
+  position: relative;
+  z-index: 8;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin: 12px auto;
+  padding: 18px 20px;
+  max-width: 1120px;
+  border: 1px solid #d5deed;
+  border-radius: 16px;
+  background: #f5f8ff;
+  color: #152443;
+  font-size: 14px;
+}
+.analyticsConsent p {
+  margin: 6px 0;
+  line-height: 1.6;
+}
+.analyticsConsent small {
+  display: block;
+  color: #405271;
+}
+.analyticsConsent a {
+  display: inline-block;
+  margin-top: 8px;
+}
+.analyticsConsentActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex-shrink: 0;
+  max-width: 310px;
+}
+.analyticsConsent button,
+.analyticsSettings {
+  border: 1px solid #bac9df;
+  border-radius: 9px;
+  padding: 10px 14px;
+  background: #fff;
+  color: #152443;
+  font: inherit;
+  cursor: pointer;
+}
+.analyticsConsent button:nth-child(2) {
+  background: #163cff;
+  color: #fff;
+  border-color: #163cff;
+}
+.analyticsSettings {
+  display: block;
+  margin: 8px auto;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+.analyticsConsent button:focus-visible,
+.analyticsSettings:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 650px) {
+  .analyticsConsent {
+    margin: 8px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+    gap: 12px;
+  }
+  .analyticsConsentActions {
+    max-width: none;
+  }
+  .analyticsConsentActions button {
+    flex: 1;
+  }
+}

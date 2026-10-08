@@ -187,6 +187,7 @@ export function ProductsCatalog() {
                     <CatalogCard
                       key={`${row.id}:${row.mediaId}`}
                       id={row.mediaId}
+                productId={row.id}
                       slug={row.slug}
                       title={row.title}
                       alt={row.mediaAlt ?? row.title}

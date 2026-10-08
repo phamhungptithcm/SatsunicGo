@@ -1,0 +1,97 @@
+{
+  "phase": "Pre-commit v2a",
+  "sourceManifestSha256": "566753ae8d7a24c24b3692313197aeddbfacaef8d458ac2bc312eed28a5876e9",
+  "checks": [
+    {
+      "command": "npm run typecheck",
+      "status": "PASSED",
+      "scope": "Isolated root and Functions source"
+    },
+    {
+      "command": "npm run build; npm run build --workspace functions (separate commands)",
+      "status": "PASSED",
+      "scope": "Local source compilation and generated public asset binding, not deployed artifact",
+      "limits": "Node25.9 local, existing large chunks and ineffective dynamic import warnings"
+    },
+    {
+      "command": "npm run lint",
+      "status": "PASSED",
+      "scope": "Full src, domain, functions/src and tests"
+    },
+    {
+      "command": "npm test -- --maxWorkers=4",
+      "status": "PASSED",
+      "tests": 972,
+      "files": 114,
+      "seconds": 10.31
+    },
+    {
+      "command": "node --test tests/unit/release108.test.mjs tests/unit/public-config069.test.mjs",
+      "status": "PASSED",
+      "tests": 43
+    },
+    {
+      "command": "env GCLOUD_PROJECT=demo-satsunicgo FUNCTIONS_EMULATOR=true FIRESTORE_EMULATOR_HOST=127.0.0.1:18207 ./node_modules/.bin/vitest run --config vitest.rules.config.ts tests/rules/analytics.test.ts",
+      "status": "PASSED",
+      "tests": 11,
+      "seconds": 53.23,
+      "scope": "Existing real Firestore demo, callable.run synthetic auth, owned fixtures cleaned; no reset or extra backend started"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config docs/reviews/ANALYTICS-DASHBOARD-20261008/browser.config.ts",
+      "status": "PASSED",
+      "tests": 16,
+      "seconds": 10.9,
+      "scope": "Shared5207 actual reviewed components/router/CSS, synthetic transport; isolated Dashboard hash equals served source",
+      "limits": "Not isolated full-App auth/callable/provider proof"
+    },
+    {
+      "command": "preflight({root:process.cwd(),project:\"satsunicgo\"})",
+      "status": "PASSED",
+      "sourceFunctions": 80,
+      "analyticsFunctions": 9,
+      "errors": [],
+      "scope": "Static source inventory including held exports, not deployed count"
+    },
+    {
+      "command": "npm audit --omit=dev --audit-level=high",
+      "status": "PASSED",
+      "high": 0,
+      "critical": 0,
+      "moderate": 13,
+      "low": 2,
+      "scope": "No dependency changes; existing lower severity audit findings preserved"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASSED"
+    }
+  ],
+  "priorFindings": [
+    {
+      "cycle": 7,
+      "severity": "P1",
+      "finding": "Release scanner omitted Firestore triggers",
+      "fix": "Explicit official-module constructor allowlist; real declarations and wrong-region/import regression tests",
+      "status": "FIX_VERIFIED_AWAITING_FRESH_REVIEW"
+    },
+    {
+      "cycle": 7,
+      "severity": "P1",
+      "finding": "Imported dashboard options unresolved in inventory",
+      "fix": "Local identical options and complete-nine-export test",
+      "status": "FIX_VERIFIED_AWAITING_FRESH_REVIEW"
+    },
+    {
+      "cycle": "Full unit gate",
+      "finding": "Two UTC date labels lacked mandatory markers",
+      "fix": "Existing requiredMark treatment, decorative aria-hidden marker, all972units and current browser checks pass",
+      "status": "FIX_VERIFIED_AWAITING_FRESH_REVIEW"
+    }
+  ],
+  "production": "NOT_DEPLOYED_PENDING_MATCHING_CI",
+  "nativeGovernance": "DEGRADED source fallback; kit receipt unavailable and READY-only validator incompatible with permitted degraded mode",
+  "tokens": "Unavailable",
+  "actualBilledCost": "Unavailable",
+  "memoryCandidates": "None"
+}

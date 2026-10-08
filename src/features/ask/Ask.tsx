@@ -19,6 +19,7 @@ import {
   type CatalogSearchResult,
 } from "./catalog-search";
 import { CatalogSearch } from "./CatalogSearch";
+import { trackAsk } from "../../shared/analytics";
 import type { Commerce } from "./Commerce";
 import type { AskImage } from "../../../packages/domain/ask-images";
 
@@ -97,6 +98,7 @@ function mixedReadCandidate(text: string) {
 type Turn = {
   id: number;
   question: string;
+  analyticsTurn?: string;
   answer?: AskAnswer;
   status: "pending" | "answered" | "error" | "stopped";
   rateLimited?: boolean;
@@ -243,7 +245,7 @@ const ConversationContent = memo(function ConversationContent({
   language: AskLanguage;
   busy: boolean;
   visible: boolean;
-  onRetry: (question: string) => Promise<unknown>;
+  onRetry: (question: string, analyticsRetry?: string) => Promise<unknown>;
   commerce: Commerce;
 }) {
   const vi = language === "vi";
@@ -340,7 +342,7 @@ const ConversationContent = memo(function ConversationContent({
                 <button
                   type="button"
                   disabled={busy}
-                  onClick={() => void onRetry(turn.question)}
+                  onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
                 >
                   {turn.mixed.language === "vi"
                     ? "Tra cứu lại các thông tin"
@@ -413,7 +415,7 @@ const ConversationContent = memo(function ConversationContent({
               <button
                 type="button"
                 disabled={busy}
-                onClick={() => void onRetry(turn.question)}
+                onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
               >
                 {vi ? "Thử lại" : "Try again"}
               </button>
@@ -852,7 +854,7 @@ export function Ask({
     };
   }, [latestTurnId, open, exiting]);
   const ask = useCallback(
-    async (question: string, images: AskImage[] = []) => {
+    async (question: string, images: AskImage[] = [], analyticsRetry?: string) => {
       const text = question.trim();
       if (
         !text ||
@@ -874,6 +876,7 @@ export function Ask({
       ]);
       abort.current = controller;
       const id = ++activeId.current;
+      const analyticsTurn = analyticsRetry ?? crypto.randomUUID();
       const requestUid = auth?.currentUser?.uid ?? null;
       const requestCid = latestConversation.current;
       const requestGeneration = authGeneration.current;
@@ -894,7 +897,7 @@ export function Ask({
         };
       setTurns((current) => [
         ...current.slice(-11),
-        { id, question: text, status: "pending" },
+        { id, question: text, status: "pending", analyticsTurn },
       ]);
       setInput((current) => (current.trim() === text ? "" : current));
       setBusy(true);
@@ -905,6 +908,9 @@ export function Ask({
       try {
         // Only explicit multi-clause, image-free reads enter this local panel path.
         // Existing standalone commerce actions retain their serial authority below.
+        // Only accepted question turns; commerce confirmations retain their command meaning.
+        if (images.length || !customerChatAction(text, commerce.order, commerce.draft))
+          trackAsk(text, analyticsTurn);
         const mixedSyntax = mixedReadCandidate(text);
         if (
           !images.length &&
@@ -1455,7 +1461,7 @@ export function Ask({
         "How does the deposit work?",
         "Can I request an item without a link?",
       ];
-  async function sendMessage(question = input) {
+  async function sendMessage(question = input, analyticsRetry?: string) {
     if (
       busy ||
       commerce.busy ||
@@ -1492,7 +1498,7 @@ export function Ask({
             : "Help find the product in this image. Ask if uncertain."
           : "");
       const requestId = activeId.current + 1;
-      const answer = ask(content, selected);
+      const answer = ask(content, selected, analyticsRetry);
       if (preparing.current === token) preparing.current = null;
       const sent = await answer;
       if (sent && currentContext() && activeId.current === requestId)

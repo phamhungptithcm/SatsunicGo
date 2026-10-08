@@ -1,3 +1,4 @@
+import { analyticsHttpLifecycle } from "./analytics.mjs";
 import process from "node:process";
 import console from "node:console";
 const { fetch } = globalThis;
@@ -119,7 +120,8 @@ assert.ok(!html.includes("<script>unsafe()</script>"));
 const draft = await fetch(`${publicEndpoint}/posts/draft-${slug}`);
 assert.equal(draft.status, 404);
 assert.ok(!(await draft.text()).includes("PRIVATE_DRAFT_FIXTURE"));
+await analyticsHttpLifecycle({db,buyer:a,manager:b,passwordUser,command,payload});
 await db.terminate();
 console.log(
-  "PASS: callable HTTP emulator authentication, invalid-token denial, persistence, idempotency, cross-customer denial; public HTML/SEO/client entry and private-draft denial. Hosting, App Check and real Google login NOT_TESTED.",
+  "PASS: callable HTTP emulator authentication, invalid-token denial, persistence, idempotency, cross-customer denial; analytics consent, ingestion dedup, real Firestore triggers, verified emulator buyer attribution, dashboard auth and withdrawal; public HTML/SEO/client entry and private-draft denial. Hosting, App Check and real Google login NOT_TESTED.",
 );

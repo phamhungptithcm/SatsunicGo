@@ -48,7 +48,7 @@ async function mount(page: Page, mode: Mode = "success") {
   await page.route("**/src/shared/firebase.ts*", (route) =>
     route.fulfill({
       contentType: "text/javascript",
-      body: `export const callService = (...args) => window.dashboard094Call(...args);`,
+      body: `export const auth = null; export const functions = null; export const callService = (...args) => window.dashboard094Call(...args);`,
     }),
   );
   await page.route("**/dashboard094-fixture/main.js", (route) =>
@@ -86,7 +86,7 @@ async function mount(page: Page, mode: Mode = "success") {
         if (mode === 'deferred') return new Promise(resolve => window.dashboard094Pending.push({ range, response, resolve }));
         return response;
       };
-      const { Dashboard } = await import('/src/features/crm/Dashboard.tsx');
+      const { OperationalDashboard: Dashboard } = await import('/src/features/crm/Dashboard.tsx');
       const { ToastHost } = await import('/src/shared/Toast.tsx');
       const root = createRoot(document.getElementById('root'));
       window.dashboard094Unmount = () => root.unmount();

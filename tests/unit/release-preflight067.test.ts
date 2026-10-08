@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 const modulePath='../../scripts/release/preflight.mjs';
@@ -48,3 +48,27 @@ test('banner route wrong target or region fails closed',()=>fixture((root,put,c)
 test('banner media route cannot be omitted',()=>fixture((root,put,c)=>{c.hosting.rewrites=c.hosting.rewrites.filter(r=>r.source!=='/campaign-banners/**');put('firebase.json',c);expect(preflight({root,project:'satsunicgo'}).errors).toContain('REWRITE_ORDER_OR_EXTRA_MISMATCH');}));
 test('extra banner wildcard cannot replace exact canonical route',()=>fixture((root,put,c)=>{c.hosting.rewrites.unshift({source:'/campaign-*/**',function:{functionId:'campaignBannersPublic',region:'asia-southeast1'}});put('firebase.json',c);expect(preflight({root,project:'satsunicgo'}).errors).toContain('REWRITE_ORDER_OR_EXTRA_MISMATCH');}));
 test('banner callable cannot satisfy Hosting HTTP binding',()=>fixture((root,put)=>{put('functions/src/campaign-banners.ts',`import {onCall} from 'firebase-functions/v2/https';const opts={region:'asia-southeast1'};export const campaignBannersPublic=onCall(opts,()=>{});export const websiteBannerAdmin=onCall(opts,()=>{});export const websiteBannerCommand=onCall(opts,()=>{});export const websiteBannerPreview=onCall(opts,()=>{});`);expect(preflight({root,project:'satsunicgo'}).errors).toContain('REWRITE_MISMATCH:/campaign-banners');}));
+
+// Analytics release compatibility: inspect actual declarations, not copies of constructor syntax.
+test('inventory resolves all nine analytics declarations with production region',()=>fixture((root,put)=>{
+  for(const name of ['analytics-ingest','analytics-worker','dashboard-analytics'])
+    put(`functions/src/${name}.ts`,readFileSync(new URL(`../../functions/src/${name}.ts`,import.meta.url),'utf8'));
+  const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',index+`export {analyticsSession,analyticsIngest,analyticsLinkOrder,analyticsWithdraw} from './analytics-ingest';export {analyticsOrderChanged,analyticsPaymentCreated,analyticsJobCreated,analyticsCompact} from './analytics-worker';export {dashboardAnalytics} from './dashboard-analytics';`);
+  const result=preflight({root,project:'satsunicgo'});
+  expect(result.errors).toEqual([]);
+  expect(result.inventory).toHaveLength(17);
+  const expected={analyticsSession:'onCall',analyticsIngest:'onCall',analyticsLinkOrder:'onCall',analyticsWithdraw:'onCall',analyticsOrderChanged:'onDocumentWritten',analyticsPaymentCreated:'onDocumentCreated',analyticsJobCreated:'onDocumentCreated',analyticsCompact:'onSchedule',dashboardAnalytics:'onCall'};
+  for(const [name,kind] of Object.entries(expected))
+    expect(result.inventory.find((item:{name:string})=>item.name===name)).toMatchObject({kind,region:'asia-southeast1'});
+}));
+test('Firestore triggers retain explicit region and trusted constructor import checks',()=>fixture((root,put)=>{
+  const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',index+`export { changed } from './analytics-trigger';`);
+  put('functions/src/analytics-trigger.ts',`import {onDocumentWritten as written} from 'firebase-functions/v2/firestore';const options={region:'us-central1'};export const changed=written({...options,document:'orders/{id}'},()=>{});`);
+  expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_REGION_MISMATCH');
+  for(const [name,module] of [['onDocumentUpdated','firebase-functions/v2/firestore'],['onCall','firebase-functions/v2/firestore'],['onDocumentWritten','untrusted']]){
+    put('functions/src/analytics-trigger.ts',`import {${name} as trigger} from '${module}';export const changed=trigger({region:'asia-southeast1',document:'orders/{id}'},()=>{});`);
+    expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+  }
+}));

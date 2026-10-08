@@ -1,3 +1,9 @@
+import { useLocation } from "react-router-dom";
+import {
+  analyticsNavigation,
+  productRouteMatches,
+  trackProduct,
+} from "../../shared/analytics";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { ContentRow } from "../../shared/public-content";
@@ -10,6 +16,16 @@ import { ProductReviews } from "./ProductReviews";
 import "./product-detail080.css";
 import { AddToCart } from "../cart/AddToCart";
 export function ProductDetails({ row }: { row: ContentRow }) {
+  const location = useLocation();
+  const currentProduct = productRouteMatches(location.pathname, row.slug);
+  useEffect(() => {
+    if (!currentProduct) return;
+    trackProduct(
+      row.id,
+      "product_view",
+      analyticsNavigation(location) + ":" + row.id,
+    );
+  }, [row.id, currentProduct, location]);
   const [failed, setFailed] = useState(false);
   useEffect(() => setFailed(false), [row.mediaId]);
   const source = (
@@ -32,7 +48,12 @@ export function ProductDetails({ row }: { row: ContentRow }) {
       ? row.title.slice(brandPrefix.length).trim() || row.title
       : row.title;
   return (
-    <article className="sgProductDetail">
+    <article
+      className="sgProductDetail"
+      data-analytics-product={row.id}
+      data-analytics-product-view={currentProduct ? row.id : undefined}
+      data-analytics-product-slug={row.slug}
+    >
       <div className="sgProductHero">
         <div className="sgProductImage">
           {row.mediaId && !failed ? (

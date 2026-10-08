@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 import "./privacy105.css";
 const sections = [
   {
+    id: "privacy-analytics",
+    title: "Thống kê truy cập tùy chọn",
+    body: "Chỉ ghi nhận khi bạn chọn Cho phép thống kê và hệ thống đã bật thu thập. Thống kê gồm mã trình duyệt và phiên ngẫu nhiên, nhóm trang đã xem, mã sản phẩm được chọn và chủ đề câu hỏi Ask trong danh sách cố định. Không lưu nguyên văn câu hỏi, địa chỉ, email hoặc thông tin thanh toán vào sự kiện truy cập. Khi đăng nhập, hệ thống có thể liên kết phiên với đơn thuộc tài khoản của bạn để tính số phiên có đơn thanh toán. Mã liên kết vẫn là dữ liệu có thể liên quan đến tài khoản, không được coi là dữ liệu hoàn toàn ẩn danh.\n\nBạn có thể từ chối hoặc chọn Quyền thống kê → Dừng ghi nhận. Việc này không ảnh hưởng đến mua hàng và dừng ghi nhận tiếp theo; số liệu đã tổng hợp không bị xóa ngay.\n\nCấu hình lưu riêng cho thống kê: sự kiện 7 ngày; phiên và dữ liệu liên kết làm việc tối đa 45 ngày; tổng hợp không chứa nội dung cá nhân 365 ngày. Cơ chế xóa tự động chạy nền, không bảo đảm xóa đúng thời điểm hết hạn. Biên nhận chống đếm trùng và đối chiếu nguồn tài chính có thể được giữ 365 ngày. Thời hạn này chỉ áp dụng cho thống kê, không thay đổi thời hạn lưu đơn, giao dịch hoặc hồ sơ hỗ trợ.",
+  },
+  {
     id: "privacy-1",
     title: "Thông tin được dùng",
     body: "| Thông tin | Dùng để làm gì |\n| --- | --- |\n| Tên, email và ảnh tài khoản Google | Đăng nhập và hiển thị tài khoản của bạn |\n| Tên người nhận, số điện thoại và địa chỉ | Chuẩn bị giao hàng và liên hệ về đơn |\n| Sản phẩm, yêu cầu mua hộ, đơn hàng và thanh toán | Báo giá, xử lý đơn và đối chiếu giao dịch |\n| Tin nhắn, yêu cầu hỗ trợ và ảnh bạn gửi | Hiểu yêu cầu, kiểm tra hàng và hỗ trợ bạn |\n| Đánh giá bạn gửi | Hiển thị đánh giá được duyệt trên trang sản phẩm |\n\nChỉ gửi thông tin cần cho việc mua hộ. Không gửi mật khẩu, mã xác thực hoặc thông tin thẻ ngân hàng qua chat.",
