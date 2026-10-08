@@ -1,4 +1,5 @@
 "use client";
+import { CustomerWorkspace } from "./CustomerWorkspace";
 import { customerChatAction } from "../../../packages/domain/chat-action";
 import {
   extractOrderTrackingIntent,
@@ -1818,6 +1819,7 @@ export function Ask({
             />
           )}
         </div>
+        {commerceEnabled && <CustomerWorkspace user={commerce.user} language={language} />}
         <div className={styles.dialogBottom}>{composer(true)}</div>
       </dialog>
     </>

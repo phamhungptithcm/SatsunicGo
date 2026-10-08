@@ -7,6 +7,7 @@ for (const mode of [
   "account-switch",
   "mobile",
   "inline-unknown",
+  "profile-unknown",
 ])
   test(`Profile recovery ${mode}`, async ({ page }) => {
     if (mode === "mobile")
@@ -39,6 +40,7 @@ for (const mode of [
         await new Promise((resolve) => setTimeout(resolve, 400));
       if (
         (mode === "unknown" ||
+          mode === "profile-unknown" ||
           mode === "inline-unknown" ||
           mode === "account-switch") &&
         requests.length === 1
@@ -50,7 +52,15 @@ for (const mode of [
         return r.fulfill({ json: { id: "synthetic-address", version: 99 } });
       if (mode === "terminal")
         return r.fulfill({ json: { error: { code: "functions/aborted" } } });
-      return r.fulfill({ json: { id: "synthetic-address", version: 1 } });
+      return r.fulfill({
+        json: {
+          id:
+            mode === "profile-unknown"
+              ? "profile-synthetic-one"
+              : "synthetic-address",
+          version: 1,
+        },
+      });
     });
     await page.route("**/profile-fixture", (r) =>
       r.fulfill({
@@ -63,19 +73,30 @@ for (const mode of [
       await page
         .getByRole("button", { name: "Hồ sơ và địa chỉ", exact: true })
         .click();
-    await page
-      .getByRole("button", { name: "Địa chỉ nhận hàng", exact: true })
-      .click();
-    await page
-      .getByLabel("Người nhận", { exact: false })
-      .fill("Synthetic recipient");
-    await page.getByLabel(/điện thoại/i).fill("0900000000");
-    await page
-      .getByRole("textbox", { name: /^Địa chỉ/ })
-      .fill("Synthetic QA address only");
-    await page
-      .getByRole("button", { name: "Lưu địa chỉ", exact: true })
-      .click();
+    if (mode === "profile-unknown") {
+      await page.getByLabel(/Tên hiển thị/).fill("Synthetic changed name");
+      await page
+        .getByRole("button", { name: "Lưu hồ sơ", exact: true })
+        .click();
+    } else {
+      await page
+        .getByRole("button", { name: "Địa chỉ nhận hàng", exact: true })
+        .click();
+      await page
+        .getByLabel("Người nhận", { exact: false })
+        .fill("Synthetic recipient");
+      await page.getByLabel(/điện thoại/i).fill("0900000000");
+      await page
+        .getByRole("textbox", { name: /^Địa chỉ/ })
+        .fill("Synthetic QA address only");
+      await page
+        .getByRole("button", { name: "Lưu địa chỉ", exact: true })
+        .click();
+    }
+    const field =
+      mode === "profile-unknown"
+        ? page.getByLabel(/Tên hiển thị/)
+        : page.getByLabel("Người nhận", { exact: false });
     await expect.poll(() => requests.length).toBe(1);
     if (mode === "account-switch") {
       const oldResponse = page.waitForResponse("**/profile-response");
@@ -86,9 +107,7 @@ for (const mode of [
         "",
       );
       await oldResponse;
-      await expect(
-        page.getByLabel("Người nhận", { exact: false }),
-      ).toBeEnabled();
+      await expect(field).toBeEnabled();
       await expect(
         page.getByText(/Chưa xác minh được kết quả lưu/),
       ).toHaveCount(0);
@@ -97,15 +116,14 @@ for (const mode of [
       ).toHaveCount(0);
     } else if (
       mode === "unknown" ||
+      mode === "profile-unknown" ||
       mode === "inline-unknown" ||
       mode === "invalid-result"
     ) {
       await expect(
         page.getByText(/Chưa xác minh được kết quả lưu/),
       ).toBeVisible();
-      await expect(
-        page.getByLabel("Người nhận", { exact: false }),
-      ).toBeDisabled();
+      await expect(field).toBeDisabled();
       if (mode === "inline-unknown") {
         await page
           .getByRole("button", { name: "Hồ sơ và địa chỉ", exact: true })
@@ -122,23 +140,16 @@ for (const mode of [
         .click();
       await expect.poll(() => requests.length).toBe(2);
       expect(requests[1]).toEqual(requests[0]);
-      await expect(
-        page.getByLabel("Người nhận", { exact: false }),
-      ).toBeEnabled();
+      await expect(field).toBeEnabled();
     } else if (mode === "terminal") {
       await expect(
         page.getByText(/Tải lại và kiểm tra thông tin/),
       ).toBeVisible();
-      await expect(
-        page.getByLabel("Người nhận", { exact: false }),
-      ).toBeEnabled();
+      await expect(field).toBeEnabled();
       await expect(
         page.getByRole("button", { name: "Đối chiếu thao tác đang chờ" }),
       ).toHaveCount(0);
-    } else
-      await expect(
-        page.getByLabel("Người nhận", { exact: false }),
-      ).toBeEnabled();
+    } else await expect(field).toBeEnabled();
     if (mode === "mobile")
       expect(
         await page.evaluate(

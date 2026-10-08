@@ -1,0 +1,21 @@
+.askCustomerWorkspace {
+  max-height: 55dvh;
+  overflow: auto;
+  padding: 0 16px;
+  border-top: 1px solid #e2e6ef;
+}
+.askCustomerWorkspace > button {
+  min-height: 44px;
+  width: 100%;
+  text-align: left;
+}
+.askCustomerWorkspace .profilePage {
+  padding: 16px 0;
+  max-width: 100%;
+}
+.askCustomerWorkspace .profileHeader {
+  flex-wrap: wrap;
+}
+.askCustomerWorkspace .profileFieldsRow {
+  grid-template-columns: 1fr;
+}

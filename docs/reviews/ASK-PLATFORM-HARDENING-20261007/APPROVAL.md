@@ -28,3 +28,5 @@ Continuation approved by human request: “Tiếp tuwjjc hardness loop đó đ�
 Production hardening supporting paths (scoped to required radio-group legend marker and test correctness): src/features/membership/PlanEditor.tsx; tests/unit/required-labels092.test.ts. All other Membership WIP preserved.
 
 S18 scoped paths: src/features/profile/Profile.tsx; tests/browser/profile-recovery.spec.ts; tests/browser/profile-recovery.config.ts; tests/rules/profile-recovery.test.ts. Current human continuation authorizes the already-planned customer workspace hardening.
+
+S18 Ask integration: NEW src/features/ask/CustomerWorkspace.tsx and customer-workspace.css; Ask.tsx import/mount only; Profile instance IDs; browser integration evidence.

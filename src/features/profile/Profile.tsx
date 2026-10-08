@@ -2,7 +2,14 @@ import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import "./profile.css";
 import { Link } from "react-router-dom";
-import { useEffect, useReducer, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  useId,
+  type FormEvent,
+} from "react";
 import type { User } from "firebase/auth";
 import {
   collection,
@@ -16,6 +23,7 @@ import { auth, db, callService } from "../../shared/firebase";
 import { initialProfileRead, profileReadReducer } from "./profile-state";
 import { z } from "zod";
 export function Profile({ user }: { user: User | null }) {
+  const instanceId = useId();
   const [read, dispatch] = useReducer(profileReadReducer, undefined, () =>
     initialProfileRead(user?.uid),
   );
@@ -259,10 +267,13 @@ export function Profile({ user }: { user: User | null }) {
     ) : null;
   }
   return (
-    <section className="page profilePage" aria-labelledby="profileTitle">
+    <section
+      className="page profilePage"
+      aria-labelledby={`${instanceId}-profileTitle`}
+    >
       <header className="profileHeader">
         <div>
-          <h1 id="profileTitle">Hồ sơ và địa chỉ</h1>
+          <h1 id={`${instanceId}-profileTitle`}>Hồ sơ và địa chỉ</h1>
           <p>Thông tin cá nhân và địa chỉ nhận hàng của bạn.</p>
         </div>
         {user && (
@@ -283,7 +294,9 @@ export function Profile({ user }: { user: User | null }) {
                 disabled={busy}
                 aria-current={step === number ? "step" : undefined}
                 aria-controls={
-                  number === 1 ? "profilePersonalPanel" : "profileAddressPanel"
+                  number === 1
+                    ? `${instanceId}-profilePersonalPanel`
+                    : `${instanceId}-profileAddressPanel`
                 }
                 onClick={() => setStep(number)}
               >
@@ -297,15 +310,15 @@ export function Profile({ user }: { user: User | null }) {
             ))}
           </nav>
           <form
-            id="profilePersonalPanel"
+            id={`${instanceId}-profilePersonalPanel`}
             hidden={step !== 1}
             className="form profileCard"
             onSubmit={(e) => void save(e, "saveProfile")}
-            aria-labelledby="personalTitle"
+            aria-labelledby={`${instanceId}-personalTitle`}
           >
             <header className="profileCardHeading">
               <div>
-                <h2 id="personalTitle">Thông tin cá nhân</h2>
+                <h2 id={`${instanceId}-personalTitle`}>Thông tin cá nhân</h2>
                 <p>Cập nhật tên và tùy chọn nhận thông tin.</p>
               </div>
             </header>
@@ -367,15 +380,18 @@ export function Profile({ user }: { user: User | null }) {
             </fieldset>
           </form>
           <div
-            id="profileAddressPanel"
+            id={`${instanceId}-profileAddressPanel`}
             hidden={step !== 2}
             className="profileAddressColumn"
           >
             {!visible.profileReady && readStatus("profile", step === 2)}
-            <section className="profileCard" aria-labelledby="addressesTitle">
+            <section
+              className="profileCard"
+              aria-labelledby={`${instanceId}-addressesTitle`}
+            >
               <header className="profileCardHeading">
                 <div>
-                  <h2 id="addressesTitle">Địa chỉ đã lưu</h2>
+                  <h2 id={`${instanceId}-addressesTitle`}>Địa chỉ đã lưu</h2>
                   <p>Thông tin người nhận cho đơn hàng của bạn.</p>
                 </div>
               </header>
@@ -417,11 +433,13 @@ export function Profile({ user }: { user: User | null }) {
               key={`${user.uid}:${visible.locked}`}
               className="form profileCard"
               onSubmit={(e) => void save(e, "saveAddress")}
-              aria-labelledby="newAddressTitle"
+              aria-labelledby={`${instanceId}-newAddressTitle`}
             >
               <header className="profileCardHeading">
                 <div>
-                  <h2 id="newAddressTitle">Thêm địa chỉ nhận hàng</h2>
+                  <h2 id={`${instanceId}-newAddressTitle`}>
+                    Thêm địa chỉ nhận hàng
+                  </h2>
                 </div>
               </header>
               <fieldset
