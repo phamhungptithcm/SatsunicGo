@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, expect, test } from "vitest";
 import { randomUUID } from "node:crypto";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { knowledgeSource } from "../../functions/src/ai/approved-knowledge";
@@ -228,7 +229,7 @@ test("direct client reads cannot expose approval/operation metadata, including t
   // No rules argument: use the shared emulator's current rules without replacing them.
   const env = await initializeTestEnvironment({
     projectId: "demo-satsunicgo",
-    firestore: { host: "127.0.0.1", port: 18207 },
+    firestore: demoFirestoreEndpoint(process.env),
   });
   try {
     const client = env.authenticatedContext(f.uid).firestore();
