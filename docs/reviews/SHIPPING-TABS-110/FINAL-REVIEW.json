@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "task_id": "SHIPPING-TABS-110",
+  "status": "PASSED",
+  "head": "caeec532a77176f7412551ab6621fe9df1d5da48",
+  "source_sha256": {
+    "src/features/shipping/Shipping.tsx": "1e273ec4264676366017c2b5d598e770441186ddfdbc42bd02de8f9f5ec512ad",
+    "src/features/shipping/shipping-workbench.css": "ba1143ba5a44b6a632b668c287b6afffe33e241031f1e01c7ab135a5c0cce2b6"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "BLOCKED",
+      "findings": [
+        "toolbar display overrides hidden"
+      ]
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "findings": []
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Scoped evidence and limits recorded in REPORT.md",
+      "evidence_refs": [
+        "REPORT.md",
+        "BROWSER.json"
+      ]
+    }
+  },
+  "residual_risks": [
+    "Real device and full authenticated shipping workflow not tested; no production deployment."
+  ]
+}

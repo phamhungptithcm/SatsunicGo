@@ -1,6 +1,12 @@
 import { contentRow, type RichNode } from "./content-row";
 import { selectedProducts } from "../../packages/domain/product-selection";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import {
   documentId,
   getDocs,
@@ -182,6 +188,7 @@ export function usePublicContent(kind: "products" | "posts") {
 }
 
 // Read bounded pages; every published product remains reachable, including non-featured rows.
+const CATALOG_PAGE_SIZE = 10;
 export function useCatalogPages() {
   const [rows, setRows] = useState<ContentRow[]>([]),
     [cached, setCached] = useState(false),
@@ -192,9 +199,10 @@ export function useCatalogPages() {
       new URLSearchParams(window.location.search).get("after"),
     ),
     active = useRef(false),
+    exhausted = useRef(false),
     mounted = useRef(true);
-  async function load() {
-    if (active.current) return;
+  const load = useCallback(async () => {
+    if (active.current || exhausted.current || !mounted.current) return;
     active.current = true;
     setLoading(true);
     setError("");
@@ -206,7 +214,7 @@ export function useCatalogPages() {
           where("status", "==", "published"),
           orderBy(documentId()),
           ...(cursor.current ? [startAfter(cursor.current)] : []),
-          limit(30),
+          limit(CATALOG_PAGE_SIZE),
         ),
       );
       if (!mounted.current) return;
@@ -218,7 +226,8 @@ export function useCatalogPages() {
         ...page.filter((p) => !old.some((r) => r.id === p.id)),
       ]);
       cursor.current = snapshot.docs.at(-1)?.id ?? cursor.current;
-      setHasMore(snapshot.size === 30);
+      exhausted.current = snapshot.size < CATALOG_PAGE_SIZE;
+      setHasMore(!exhausted.current);
       setCached(snapshot.metadata.fromCache);
     } catch {
       if (mounted.current)
@@ -227,14 +236,14 @@ export function useCatalogPages() {
       active.current = false;
       if (mounted.current) setLoading(false);
     }
-  }
+  }, []);
   useEffect(() => {
     mounted.current = true;
     void load();
     return () => {
       mounted.current = false;
     };
-  }, []);
+  }, [load]);
   return {
     rows,
     loading,

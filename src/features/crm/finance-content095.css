@@ -325,3 +325,9 @@
     }
   }
 }
+
+/* Refund presentation only; shared composer/field conventions remain unchanged. */
+.fc095Refunds > .fc095SectionHead { align-items: center; gap: 12px; }
+.fc095Refunds > .fc095SectionHead > .primary { flex-shrink: 0; }
+.fc095Refunds > .fc095Notice { border: 0; background: transparent; padding: 0; font-size: 13px; line-height: 1.6; margin: 0 0 20px; }
+.workspaceShell .workspaceContent .fc095Refunds > .fc095SectionHead h2 { margin: 0; }

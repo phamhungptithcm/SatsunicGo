@@ -90,3 +90,65 @@ test("cancellation and provider errors cannot publish an answer", async () => {
   expect(askRateLimited({ code: "functions/resource-exhausted" })).toBe(true);
   expect(askRateLimited({ code: "functions/unavailable" })).toBe(false);
 });
+
+test("bad case: conflicting stream and final answers never publish an answer", async () => {
+  const events: unknown[] = [];
+  await expect(
+    consumeAskStream(
+      {
+        stream: chunks([{ type: "answer", answer }]),
+        data: Promise.resolve({ ...answer, title: "Different" }),
+      },
+      (event) => events.push(event),
+      new AbortController().signal,
+    ),
+  ).rejects.toThrow("INVALID_RESPONSE");
+  expect(events).toEqual([]);
+});
+
+test("bad case: provider fails after a streamed answer; no success is published", async () => {
+  const events: unknown[] = [];
+  await expect(
+    consumeAskStream(
+      {
+        stream: chunks([{ type: "answer", answer }]),
+        data: Promise.reject(new Error("provider failed")),
+      },
+      (event) => events.push(event),
+      new AbortController().signal,
+    ),
+  ).rejects.toThrow("provider failed");
+  expect(events).toEqual([]);
+});
+
+test.each(["stream", "final"])(
+  "bad case: cancellation interrupts a stalled %s",
+  async (phase) => {
+    const controller = new AbortController();
+    const events: unknown[] = [];
+    let returned = false;
+    const never = new Promise<never>(() => {});
+    const stream: AsyncIterable<unknown> =
+      phase === "stream"
+        ? {
+            [Symbol.asyncIterator]: () => ({
+              next: () => never,
+              return: async () => {
+                returned = true;
+                return { done: true, value: undefined };
+              },
+            }),
+          }
+        : chunks([{ type: "answer", answer }]);
+    const pending = consumeAskStream(
+      { stream, data: phase === "final" ? never : Promise.resolve(answer) },
+      (event) => events.push(event),
+      controller.signal,
+    );
+    await Promise.resolve();
+    controller.abort(new Error("cancelled"));
+    await expect(pending).rejects.toThrow("cancelled");
+    expect(events).toEqual([]);
+    if (phase === "stream") expect(returned).toBe(true);
+  },
+);

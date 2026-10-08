@@ -1,0 +1,7 @@
+{
+  "endpoint": "Firebase callable SDK URL",
+  "authentication": "none",
+  "appCheck": "none",
+  "returnedAnswer": false,
+  "errorStatus": "NON_JSON"
+}

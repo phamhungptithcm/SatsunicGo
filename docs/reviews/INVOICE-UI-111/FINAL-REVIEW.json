@@ -1,0 +1,49 @@
+{
+  "task": "INVOICE-UI-111",
+  "decision": "BLOCKED",
+  "date": "2026-10-07",
+  "sourceCommit": "caeec532a77176f7412551ab6621fe9df1d5da48",
+  "sourceHashes": {
+    "src/features/invoices/Documents.tsx": "e61522c897a0715f9245e7f55599312c7c4f4c3a94a924c95229d53492cbf558",
+    "src/features/invoices/documents.css": "f190753827ab245151bdbe6c06710c192c292933cab064713dd14cfac97061d3"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "findings": [
+        "Seller composer print exclusion missing after details replacement",
+        "Required touch target initially 40px unlike shared44px",
+        "Invoice stylesheet repeated layout and responsive overrides"
+      ],
+      "fixes": [
+        "Exclude composers in print",
+        "Use44px seller icon action",
+        "Consolidate repeated layout/breakpoint declarations"
+      ]
+    },
+    {
+      "cycle": 2,
+      "scope": "approved invoice source and CSS only",
+      "checks": {
+        "eslint": "PASSED",
+        "invoiceUnitTests": "PASSED:8 tests across3 files",
+        "diffWhitespace": "PASSED",
+        "rootTypecheck": "FAILED: concurrent support-care111.spec.ts Window.calls and support-filter111.test.ts callback types",
+        "liveVisualKeyboardMobilePrint": "NOT_RUN: local IAB denies CRM access"
+      },
+      "decision": "BLOCKED"
+    }
+  ],
+  "security": "Existing canConfigure/canIssue, native required validation, operation identity, pending locking, authenticated callable payloads and immutable issued snapshots unchanged. No production writes or role changes.",
+  "remaining": [
+    "Authorized local browser visual acceptance",
+    "Resolve integrated compiler failures through owning sessions",
+    "Fresh product-content and implementation review after rendering"
+  ],
+  "productionReadiness": "NOT_READY",
+  "deployment": "NOT_RUN",
+  "runtimeLedger": "CLI unavailable on PATH; local evidence recorded in task docs",
+  "usage": "Unavailable",
+  "actualCost": "Unavailable",
+  "memoryCandidates": "None"
+}

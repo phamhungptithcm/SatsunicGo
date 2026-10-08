@@ -2,12 +2,8 @@ import { notify } from "../../shared/feedback";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { PageTabs } from "../../shared/PageTabs";
 import "../settings/admin-workbench096.css";
-import {
-  CrmHeading,
-  CrmIcon,
-  CrmReference,
-  CrmState,
-} from "../crm/CrmPresentation";
+import "./membership-editor.css";
+import { CrmIcon, CrmReference, CrmState } from "../crm/CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ReminderSettings } from "./ReminderSettings";
 import { callService } from "../../shared/firebase";
@@ -126,7 +122,9 @@ export function PlanEditor() {
           name: String(f.get("name")),
           price: Number(f.get("price")),
           periodDays: Number(f.get("days")),
-          serviceDiscountBps: Number(f.get("bps")),
+          serviceDiscountBps: Math.round(
+            Number(f.get("discountPercent")) * 100,
+          ),
           discountCap: Number(f.get("cap")),
           status: String(f.get("status")),
         },
@@ -205,45 +203,40 @@ export function PlanEditor() {
   }
   return (
     <section className="admin096">
-      <CrmHeading
-        title="Gói thành viên"
-        description="Quản lý giá, kỳ hạn, quyền lợi và cấp tặng."
-        reload={<button
-              disabled={busy || uncertain || loading}
-              onClick={() => void load()}
-            >
-              <CrmIcon name="refresh" />
-              Tải lại
-            </button>}
-        actions={
-          <>
-
-            <button
-              className="primary"
-              disabled={busy || uncertain}
-              onClick={() => {
-                setSelected(null);
-                openEditor();
-              }}
-            >
-              <CrmIcon name="document" />
-              Tạo gói
-            </button>
-          </>
-        }
-      />
-      <PageTabs
-        id="membership"
-        label="Tác vụ gói thành viên"
-        value={task}
-        onChange={setTask}
-        disabled={busy || uncertain}
-        items={[
-          { value: "plans", label: "Danh sách gói" },
-          { value: "gift", label: "Cấp tặng" },
-          { value: "reminders", label: "Nhắc gia hạn" },
-        ]}
-      />
+      <div className="membershipToolbar">
+        <PageTabs
+          id="membership"
+          label="Tác vụ gói thành viên"
+          value={task}
+          onChange={setTask}
+          disabled={busy || uncertain}
+          items={[
+            { value: "plans", label: "Danh sách gói" },
+            { value: "gift", label: "Cấp tặng" },
+            { value: "reminders", label: "Nhắc gia hạn" },
+          ]}
+        />
+        <div className="crmActions">
+          <button
+            disabled={busy || uncertain || loading}
+            onClick={() => void load()}
+          >
+            <CrmIcon name="refresh" />
+            Tải lại
+          </button>
+          <button
+            className="primary"
+            disabled={busy || uncertain || editing}
+            onClick={() => {
+              setSelected(null);
+              openEditor();
+            }}
+          >
+            <CrmIcon name="document" />
+            Tạo gói
+          </button>
+        </div>
+      </div>
       <div
         id="membership-panel-plans"
         role="tabpanel"
@@ -272,7 +265,7 @@ export function PlanEditor() {
         {loading && (
           <CrmState kind="loading" title="Đang tải gói thành viên…" />
         )}
-        {ready && !plans.length && (
+        {ready && !plans.length && !editing && (
           <CrmState
             kind="empty"
             title="Chưa có gói thành viên trong trang này."
@@ -334,94 +327,99 @@ export function PlanEditor() {
           open={editing}
           onToggle={(e) => setEditing(e.currentTarget.open)}
         >
-          <summary>{selected ? "Chỉnh sửa gói" : "Tạo gói"}</summary>
-          <StepForm
-            steps={["Gói", "Giá & quyền lợi", "Kiểm tra"]}
-            disabled={busy || uncertain}
+          <summary>
+            {selected ? "Chỉnh sửa gói thành viên" : "Tạo gói thành viên"}
+          </summary>
+          <form
             key={`${selected?.id ?? "new"}:${selected?.version ?? 0}`}
-            className="form"
+            className="form membershipForm"
             onSubmit={(e) => void save(e)}
           >
-            <h2 className="crmSectionHeading">
-              {selected ? "Chỉnh sửa gói" : "Gói mới"}
-            </h2>
-            {selected && (
-              <details className="crmItemDetails">
-                <summary>Thông tin bản đã lưu</summary>
-                <CrmReference label="Mã gói" value={selected.id} />
-              </details>
-            )}
-            <fieldset className="form adminFields" disabled={busy || uncertain}>
-              <StepStage index={0}>
-                <label>
-                  Gói
-                  <select name="name" defaultValue={selected?.name ?? "FREE"}>
-                    {["FREE", "PLUS", "BUSINESS"].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
-                  </select>
-                </label>
-              </StepStage>
-              <StepStage index={1}>
-                {[
-                  [
-                    "price",
-                    "Giá trả trước (₫)",
-                    selected?.price,
-                    0,
-                    1000000000000,
-                  ],
-                  ["days", "Kỳ hạn (ngày)", selected?.periodDays, 1, 366],
-                  [
-                    "bps",
-                    "Giảm phí mua hộ (bps · 100 bps = 1%)",
-                    selected?.serviceDiscountBps,
-                    0,
-                    10000,
-                  ],
-                  [
-                    "cap",
-                    "Giảm tối đa (₫)",
-                    selected?.discountCap,
-                    0,
-                    1000000000000,
-                  ],
-                ].map(([name, label, value, min, max]) => (
-                  <label key={String(name)}>
-                    <span className="formLabelText">
-                      {label}{" "}
-                      <span className="requiredMark" aria-hidden="true">
-                        *
-                      </span>
-                    </span>
+            <fieldset disabled={busy || uncertain} className="membershipType">
+              <legend>Loại gói <span className="requiredMark" aria-hidden="true">*</span></legend>
+              <div className="membershipChoices">
+                {["FREE", "PLUS", "BUSINESS"].map((name) => (
+                  <label key={name}>
                     <input
-                      name={String(name)}
-                      type="number"
-                      step={1}
-                      min={Number(min)}
-                      max={Number(max)}
-                      defaultValue={value ?? ""}
+                      type="radio"
+                      name="name"
+                      value={name}
+                      defaultChecked={name === (selected?.name ?? "FREE")}
                       required
                     />
+                    <span>{name}</span>
                   </label>
                 ))}
-              </StepStage>
-              <StepStage index={2}>
-                <label>
-                  Trạng thái
-                  <select
-                    name="status"
-                    defaultValue={selected?.status ?? "draft"}
-                  >
-                    <option value="draft">Bản nháp</option>
-                    <option value="published">Đã duyệt và mở bán</option>
-                    <option value="archived">Lưu trữ</option>
-                  </select>
+              </div>
+            </fieldset>
+            <fieldset className="membershipFields" disabled={busy || uncertain}>
+              <legend className="membershipSrOnly">Giá và quyền lợi</legend>
+              {[
+                [
+                  "price",
+                  "Giá trả trước (₫)",
+                  selected?.price,
+                  0,
+                  1000000000000,
+                  1,
+                ],
+                ["days", "Thời hạn (ngày)", selected?.periodDays, 1, 366, 1],
+                [
+                  "discountPercent",
+                  "Giảm phí mua hộ (%)",
+                  selected ? selected.serviceDiscountBps / 100 : undefined,
+                  0,
+                  100,
+                  0.01,
+                ],
+                [
+                  "cap",
+                  "Mức giảm tối đa (₫)",
+                  selected?.discountCap,
+                  0,
+                  1000000000000,
+                  1,
+                ],
+              ].map(([name, label, value, min, max, step]) => (
+                <label key={String(name)}>
+                  <span>
+                    {label}{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
+                  </span>
+                  <input
+                    name={String(name)}
+                    type="number"
+                    inputMode={
+                      name === "discountPercent" ? "decimal" : "numeric"
+                    }
+                    min={Number(min)}
+                    max={Number(max)}
+                    step={Number(step)}
+                    defaultValue={value ?? ""}
+                    required
+                  />
                 </label>
-                <button className="primary" disabled={busy || uncertain}>
-                  <CrmIcon name="check" />
-                  Lưu gói
-                </button>
+              ))}
+            </fieldset>
+            <p className="membershipHint">
+              Quyền lợi đã chốt trong báo giá cũ giữ nguyên.
+            </p>
+            <div className="membershipFooter">
+              <label>
+                Trạng thái
+                <select
+                  name="status"
+                  defaultValue={selected?.status ?? "draft"}
+                  disabled={busy || uncertain}
+                >
+                  <option value="draft">Bản nháp</option>
+                  <option value="published">Đã duyệt và mở bán</option>
+                  <option value="archived">Lưu trữ</option>
+                </select>
+              </label>
+              <div className="crmActions">
                 <button
                   type="button"
                   disabled={busy || uncertain}
@@ -430,11 +428,15 @@ export function PlanEditor() {
                     editor.current?.querySelector("summary")?.focus();
                   }}
                 >
-                  Đóng chỉnh sửa
+                  Hủy
                 </button>
-              </StepStage>
-            </fieldset>
-          </StepForm>
+                <button className="primary" disabled={busy || uncertain}>
+                  <CrmIcon name="check" />
+                  {busy ? "Đang lưu…" : "Lưu gói"}
+                </button>
+              </div>
+            </div>
+          </form>
         </details>
       </div>
       <div

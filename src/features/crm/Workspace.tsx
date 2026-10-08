@@ -209,7 +209,7 @@ export const workspacePages = [
   },
   {
     path: "content",
-    label: "Sản phẩm & bài viết",
+    label: "Sản phẩm",
     group: "Nội dung",
     roles: ["OWNER", "CONTENT_EDITOR"],
   },

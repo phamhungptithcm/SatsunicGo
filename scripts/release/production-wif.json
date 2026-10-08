@@ -1,0 +1,14 @@
+{
+  "project": "satsunicgo",
+  "projectNumber": "278913913091",
+  "pool": "github-release",
+  "provider": "satsunicgo-main",
+  "serviceAccount": "github-release@satsunicgo.iam.gserviceaccount.com",
+  "issuerUri": "https://token.actions.githubusercontent.com",
+  "attributeMapping": {
+    "google.subject": "assertion.sub",
+    "attribute.repository_id": "assertion.repository_id",
+    "attribute.repository_owner_id": "assertion.repository_owner_id"
+  },
+  "attributeCondition": "assertion.repository_id == '1403691876' && assertion.repository_owner_id == '32831453' && assertion.ref == 'refs/heads/main' && assertion.event_name == 'push' && assertion.workflow_ref == 'phamhungptithcm/SatsunicGo/.github/workflows/release.yml@refs/heads/main' && assertion.sub == 'repo:phamhungptithcm@32831453/SatsunicGo@1403691876:environment:production'"
+}

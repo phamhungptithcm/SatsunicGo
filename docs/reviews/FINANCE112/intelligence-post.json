@@ -1,0 +1,13 @@
+{
+  "mode": "DEGRADED",
+  "ready": false,
+  "codegraph": {
+    "health_check": "Passed",
+    "index_status": "Stale"
+  },
+  "cocoindex": {
+    "health_check": "Failed",
+    "index_status": "Stale"
+  },
+  "limitation": "CocoIndex daemon log permission failure; stale indexes; bounded direct-source verification used."
+}

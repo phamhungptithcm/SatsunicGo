@@ -1,6 +1,7 @@
 import { notify } from "../../shared/feedback";
 import { PageTabs } from "../../shared/PageTabs";
 import "../crm/finance-content095.css";
+import "./finance-workbench112.css";
 import {
   CrmIcon,
   CrmHeading,
@@ -358,7 +359,11 @@ export function Finance() {
   }
   if (authority)
     return (
-      <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
+      <section
+        className="fc095 fc095Finance financeWorkbench112"
+        ref={surface}
+        tabIndex={-1}
+      >
         <CrmHeading title="Thanh toán & đối soát" />
         <CrmState kind="error" title="Cần kiểm tra lại quyền truy cập." />
         {busy && (
@@ -371,26 +376,23 @@ export function Finance() {
       </section>
     );
   return (
-    <section className="fc095 fc095Finance" ref={surface} tabIndex={-1}>
+    <section
+      className="fc095 fc095Finance financeWorkbench112"
+      ref={surface}
+      tabIndex={-1}
+    >
       <CrmHeading
         title="Thanh toán & đối soát"
         description="Kiểm tra tiền vào, kích hoạt gói và xử lý giao dịch chưa khớp."
-        reload={<button disabled={busy || blocked} onClick={() => void load()}>
+        reload={
+          <button disabled={busy || blocked} onClick={() => void load()}>
             <CrmIcon name="refresh" /> Tải lại
-          </button>}
-
+          </button>
+        }
       />
-      <p className="fc095Notice">
-        Tiền membership được phân bổ cho hóa đơn gói riêng, không thanh toán số
-        dư đơn mua hộ. Chỉ xác nhận khi đã đối chiếu tiền vào tài khoản doanh
-        nghiệp.
-      </p>
-      <div className="fc095Secondary">
-        <FinancialReview disabled={busy || blocked} transport={transport} />
-      </div>
-      <p className="muted">
-        Mỗi nhóm hiển thị tối đa 30 bản ghi đã tải; không phải tổng toàn hệ
-        thống.
+      <p className="financePurpose">
+        Đối chiếu giao dịch ngân hàng, xác nhận tiền vào và xử lý khoản chưa
+        khớp.
       </p>
       <PageTabs
         id="finance"
@@ -404,8 +406,29 @@ export function Finance() {
           { value: "paymentExceptions", label: "Ngoại lệ" },
         ]}
       />
+      <p className="financePageHint">
+        Mỗi nhóm hiển thị tối đa 30 bản ghi trên trang hiện tại, không phải tổng
+        toàn hệ thống.
+      </p>
       {busy && <CrmState kind="loading" title="Đang tải / lưu tài chính…" />}
+      {error && <CrmState kind="error" title={error} />}
+      {uncertain && (
+        <div className="notice" role="status">
+          <CrmReference
+            label="Hóa đơn đang chờ"
+            value={String(confirmation.current?.invoiceId ?? "")}
+          />
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() => void executeConfirmation()}
+          >
+            Thử lại thao tác đang chờ
+          </button>
+        </div>
+      )}
       <section
+        className="financeQueue"
         id="finance-panel-transferReviews"
         role="tabpanel"
         aria-labelledby="finance-tab-transferReviews"
@@ -415,11 +438,20 @@ export function Finance() {
         <h2 className="crmSectionHeading">
           <CrmIcon name="clock" /> Thông báo chuyển khoản
         </h2>
+        <p className="financeQueueDescription">
+          Kiểm tra đúng đơn, số tiền và tài khoản nhận trước khi xác nhận. Thông
+          báo của khách chưa phải tiền đã xác nhận.
+        </p>
         {!busy && !error && !reviews.some((r) => r.status === "pending") && (
           <CrmState
             kind="empty"
             title="Chưa có thông báo chờ đối soát trong trang này."
-          />
+          >
+            <p>
+              Chọn nhóm khác để kiểm tra hóa đơn thành viên hoặc ngoại lệ thanh
+              toán.
+            </p>
+          </CrmState>
         )}
         {reviews
           .filter((r) => r.status === "pending")
@@ -442,6 +474,7 @@ export function Finance() {
         )}
       </section>
       <section
+        className="financeQueue"
         id="finance-panel-membershipInvoices"
         role="tabpanel"
         aria-labelledby="finance-tab-membershipInvoices"
@@ -451,10 +484,17 @@ export function Finance() {
         <h2 className="crmSectionHeading">
           <CrmIcon name="document" /> Hóa đơn thành viên
         </h2>
+        <p className="financeQueueDescription">
+          Xác nhận tiền vào để kích hoạt đúng gói thành viên.
+        </p>
+        <p className="financeContextNote">
+          Tiền gói thành viên chỉ phân bổ cho hóa đơn gói, không thanh toán số
+          dư đơn mua hộ.
+        </p>
         {!busy && !error && !invoices.length && (
           <CrmState
             kind="empty"
-            title="Chưa có hóa đơn membership trong trang này."
+            title="Chưa có hóa đơn thành viên trong trang này."
           />
         )}
         <div className="crmList">
@@ -462,7 +502,7 @@ export function Finance() {
             <article className="crmItem" key={i.id}>
               <div className="crmItemMain">
                 <h3 className="crmItemTitle">
-                  {i.planSnapshot?.name || "Gói membership"}
+                  {i.planSnapshot?.name || "Gói thành viên"}
                 </h3>
               </div>
               <dl className="crmFacts">
@@ -483,6 +523,10 @@ export function Finance() {
               {i.state === "pending" && (
                 <details className="crmItemDetails" name="crm-finance-actions">
                   <summary>Xác nhận tiền vào và kích hoạt gói</summary>
+                  <p className="financeContextNote">
+                    Chỉ xác nhận khi đã đối chiếu tiền vào đúng tài khoản doanh
+                    nghiệp. Thao tác này sẽ kích hoạt gói thành viên.
+                  </p>
                   <form className="form" onSubmit={(e) => void confirm(e, i)}>
                     <fieldset className="form" disabled={busy || blocked}>
                       <label>
@@ -533,6 +577,7 @@ export function Finance() {
         )}
       </section>
       <section
+        className="financeQueue"
         id="finance-panel-paymentExceptions"
         role="tabpanel"
         aria-labelledby="finance-tab-paymentExceptions"
@@ -542,6 +587,10 @@ export function Finance() {
         <h2 className="crmSectionHeading">
           <CrmIcon name="warning" /> Ngoại lệ thanh toán
         </h2>
+        <p className="financeQueueDescription">
+          Kiểm tra giao dịch chưa khớp. Chỉ phân bổ vào đơn khi tiền vào đã được
+          xác minh.
+        </p>
         {!busy && !error && !exceptions.length && (
           <CrmState
             kind="empty"
@@ -584,23 +633,16 @@ export function Finance() {
           </button>
         )}
       </section>
-      {uncertain && (
-        <div className="notice">
-          <CrmReference
-            label="Hóa đơn đang chờ"
-            value={String(confirmation.current?.invoiceId ?? "")}
-          />
-          <button
-            className="primary"
-            disabled={busy}
-            onClick={() => void executeConfirmation()}
-          >
-            Thử lại thao tác đang chờ
-          </button>
-        </div>
-      )}
-
-      {error && <CrmState kind="error" title={error} />}
+      <section
+        className="financeSecondary"
+        aria-labelledby="finance-secondary-title"
+      >
+        <h2 id="finance-secondary-title">Điều chỉnh giao dịch</h2>
+        <p className="financeQueueDescription">
+          Dùng khi ngân hàng đã đảo khoản tiền vào được ghi nhận trước đó.
+        </p>
+        <FinancialReview disabled={busy || blocked} transport={transport} />
+      </section>
     </section>
   );
 }
@@ -738,9 +780,20 @@ function TransferReviewForm({
         Chờ đối soát chuyển khoản
       </h3>
       <CrmReference label="Mã đơn" value={review.orderId} />
-      <p>
-        Khách thông báo {review.amount.toLocaleString("vi-VN")} ₫ · nội dung{" "}
-        {review.reference}. Thông báo chưa phải tiền đã xác nhận.
+      <dl className="crmFacts">
+        <div>
+          <dt>Số tiền khách thông báo</dt>
+          <dd>
+            <strong>{review.amount.toLocaleString("vi-VN")} ₫</strong>
+          </dd>
+        </div>
+        <div>
+          <dt>Nội dung chuyển khoản</dt>
+          <dd>{review.reference}</dd>
+        </div>
+      </dl>
+      <p className="financeContextNote">
+        Thông báo chưa phải tiền đã xác nhận.
       </p>
       {done ? (
         <p className="notice" role="status">

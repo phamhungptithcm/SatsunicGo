@@ -108,7 +108,7 @@
 }
 .invoiceWorkspace .crmHeading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 12px;
@@ -122,7 +122,53 @@
 .invoiceWorkspace .crmHeading p,
 .invoiceContext {
   color: #63708a;
-  margin: 0 0 20px;
+  margin: 0 0 12px;
+}
+.invoiceContext {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.invoiceWorkspace .crmPageActions {
+  margin-bottom: 12px;
+  align-items: center;
+}
+.invoiceWorkspace .invoiceSettingsButton {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+.invoiceWorkspace .invoiceSellerForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.invoiceSellerForm > label:nth-child(2) {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.invoiceSellerForm > button {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+.invoiceWorkspace .invoiceSidebar > .documentList {
+  margin: 0;
+}
+.invoiceWorkspace .invoiceSidebar .crmState {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 20px 16px;
+  align-items: center;
+  min-height: 64px;
+  background: white;
+}
+@media (max-width: 600px) {
+  .invoiceWorkspace .invoiceSellerForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .invoiceSellerForm > label:nth-child(2) {
+    grid-row: auto;
+  }
 }
 .invoiceWorkspace .crmActions {
   display: flex;
@@ -135,6 +181,10 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: 13px;
+  padding: 8px 12px;
 }
 .invoiceWorkspace :is(button, input, textarea) {
   min-height: 40px;
@@ -145,8 +195,8 @@
 }
 .invoiceLayout {
   display: grid;
-  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
-  gap: 20px;
+  grid-template-columns: minmax(250px, 28%) minmax(0, 1fr);
+  gap: 18px;
   align-items: start;
 }
 .invoiceSidebar,
@@ -158,9 +208,9 @@
   overflow-wrap: anywhere;
 }
 .invoicePanelTitle {
-  font-size: 17px;
+  font-size: 16px;
   margin: 0;
-  padding: 18px;
+  padding: 14px 16px;
   border-bottom: 1px solid #e9edf4;
 }
 .invoiceSidebar > :is(details, form) {
@@ -223,7 +273,7 @@
   padding: 16px 18px;
 }
 .invoiceDetail {
-  padding: 20px;
+  padding: 22px;
 }
 .invoiceDetail > .salesStatement {
   border: 0;
@@ -299,7 +349,7 @@
     animation: none;
   }
 }
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .invoiceLayout {
     grid-template-columns: minmax(0, 1fr);
     gap: 14px;
@@ -328,6 +378,7 @@
 @media print {
   .invoiceWorkspace .invoiceSidebar,
   .invoiceWorkspace .crmHeading,
+  .invoiceWorkspace .fc095Composer,
   .invoiceContext {
     display: none !important;
   }
@@ -347,22 +398,7 @@
   }
 }
 
-/* Approved visual refinement: reserve space for detail; never split action text. */
 @media screen {
-  .invoiceLayout {
-    grid-template-columns: minmax(250px, 28%) minmax(0, 1fr);
-    gap: 18px;
-  }
-  .invoiceWorkspace button {
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-size: 13px;
-    padding: 8px 12px;
-  }
-  .invoicePanelTitle {
-    padding: 14px 16px;
-    font-size: 16px;
-  }
   .invoiceWorkspace .invoiceRow {
     padding: 14px 16px;
     gap: 10px;
@@ -371,10 +407,7 @@
     font-size: 14px;
   }
   .invoiceWorkspace .crmItemMeta {
-    font-size: 11px;
-  }
-  .invoiceDetail {
-    padding: 22px;
+    font-size: 12px;
   }
   .invoiceDetail .statementTotals {
     gap: 8px 18px;
@@ -389,24 +422,6 @@
   }
   .invoiceDetail .statementActions > button {
     max-width: 100%;
-  }
-}
-@media screen and (max-width: 960px) {
-  .invoiceLayout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .invoiceWorkspace:not(.invoiceWorkspace--detail) .invoiceDetail {
-    display: none;
-  }
-  .invoiceWorkspace--detail .invoiceSidebar {
-    display: none;
-  }
-  .invoiceBack {
-    display: inline-flex !important;
-    margin-bottom: 14px;
-  }
-  .invoiceDetail {
-    padding: 18px;
   }
 }
 @media screen and (max-width: 480px) {

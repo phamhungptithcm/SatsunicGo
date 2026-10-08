@@ -1,3 +1,4 @@
+import { productThumbnail } from "./product-thumbnail";
 import { validateStudioImage } from "./blog-studio";
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -175,7 +176,33 @@ export const publicImage = onRequest(
           return;
         }
       } else verifyImage(bytes, media.mime);
-      res.type(media.mime).send(bytes);
+      if (media.contentKind === "products" && req.query.w) {
+        const thumbnail = await productThumbnail(
+          bytes,
+          media.mime,
+          String(req.query.w),
+        );
+        if (!thumbnail) {
+          res.status(400).end();
+          return;
+        }
+        // Recheck publication after storage/transform work, even for cached derivatives.
+        const current = (
+          await db.doc(`products/${media.contentId}`).get()
+        ).data();
+        if (current?.status !== "published" || current.mediaId !== id) {
+          res.status(404).end();
+          return;
+        }
+        const etag = `"${createHash("sha256").update(thumbnail).digest("hex")}"`;
+        res.set("Cache-Control", "private, no-cache");
+        res.set("ETag", etag);
+        if (req.headers["if-none-match"] === etag) {
+          res.status(304).end();
+          return;
+        }
+        res.type("image/webp").send(thumbnail);
+      } else res.type(media.mime).send(bytes);
     } catch {
       res.status(404).end();
     }

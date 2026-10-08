@@ -365,3 +365,37 @@
 .workspaceShell .shippingWorkbench .shippingTopbar .pageTabs {
   margin: 0;
 }
+.workspaceShell .shippingWorkbench .shippingNavigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+.workspaceShell .shippingWorkbench .shippingNavigation .pageTabs {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+.workspaceShell .shippingWorkbench .shippingNavigation .pageTabs button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.workspaceShell .shippingWorkbench .shippingNavigation .shippingToolbar {
+  flex: 0 0 auto;
+}
+.workspaceShell .shippingWorkbench .shippingNavigation .shippingToolbar[hidden] {
+  display: none;
+}
+.workspaceShell .shippingWorkbench .shippingNavigation .shippingToolbar button {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .workspaceShell .shippingWorkbench .shippingNavigation {
+    gap: 8px;
+  }
+  .workspaceShell .shippingWorkbench .shippingNavigation .shippingToolbar button {
+    padding-inline: 12px;
+  }
+}

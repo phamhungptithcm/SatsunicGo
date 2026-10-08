@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import {
   knowledgeLimits,
+  chunkKnowledge,
   publishedKnowledge,
   retrieveKnowledge,
 } from "../../functions/src/ai/knowledge-retrieval";
@@ -89,4 +90,80 @@ test("bounded document pool, excerpts and context; sources are unique", () => {
       body: "x".repeat(20000) + "secretterm",
     })?.body,
   ).not.toContain("secretterm");
+});
+
+test("happy case: retrieves eligibility and exception from the same policy", () => {
+  const row = post(
+    "returns-conditions",
+    "Returns",
+    "Return eligibility: unused goods.\n\n" +
+      "Packaging instructions. ".repeat(60) +
+      "\n\nReturn exception: custom goods are excluded.",
+  );
+  const results = retrieveKnowledge([row], "return eligibility exception");
+  expect(results.some((row) => row.text.includes("eligibility"))).toBe(true);
+  expect(results.some((row) => row.text.includes("exception"))).toBe(true);
+  expect(results).toHaveLength(2);
+  expect(results.every((result) => row.body.includes(result.text))).toBe(true);
+});
+
+test("bad case: conflicting publications cannot share one authoritative citation", () => {
+  const first = post("policy-one", "Policy", "refund eligible");
+  expect(
+    retrieveKnowledge(
+      [first, { ...first, body: "refund prohibited" }],
+      "refund",
+    ),
+  ).toEqual([]);
+  expect(retrieveKnowledge([first, first], "refund")).toHaveLength(1);
+});
+
+test("chunk spans preserve source paragraphs and UTF-16 characters within bounded size", () => {
+  const body =
+    "# Shipping\n\n" +
+    "a".repeat(1186) +
+    "😀" +
+    "\n\n# Exceptions\n\n" +
+    "Refund only after review. ".repeat(140);
+  const spans = chunkKnowledge(body);
+  expect(spans.map((span) => span.text).join("")).toBe(body);
+  for (const span of spans) {
+    expect(span.text).toBe(
+      body.slice(span.position, span.position + span.text.length),
+    );
+    expect(span.text.length).toBeLessThanOrEqual(
+      knowledgeLimits.excerptCharacters,
+    );
+    expect(span.text).not.toMatch(/^[\uDC00-\uDFFF]|[\uD800-\uDBFF]$/u);
+  }
+  expect(chunkKnowledge("")).toEqual([]);
+  expect(
+    chunkKnowledge("a".repeat(30000))
+      .map((span) => span.text)
+      .join(""),
+  ).toHaveLength(20000);
+});
+
+test.each([NaN, Infinity, -1])(
+  "bad case: invalid retrieval count %s cannot bypass bounds",
+  (maximum) => {
+    expect(
+      retrieveKnowledge(
+        [post("policy-one", "Policy", "refund")],
+        "refund",
+        maximum,
+      ),
+    ).toEqual([]);
+  },
+);
+
+test("bad case: document hard bound never retains half an emoji", () => {
+  const body = "a".repeat(19999) + "😀";
+  const row = post("unicode-bound", "Policy", body);
+  expect(row.body).toHaveLength(19999);
+  expect(
+    chunkKnowledge(body)
+      .map((span) => span.text)
+      .join(""),
+  ).toBe(row.body);
 });

@@ -1,0 +1,6 @@
+{
+  "src/app/App.tsx": "25b6fc81873fcf874181fcd5bd97a5b9e95e83ac6d426176cf42e8f61798a9de",
+  "src/features/content/TermsPage.tsx": "5dc05ab9b6e74a10e27752de418d551047552eaf76e4c485ee730dbc4afdb41e",
+  "src/features/content/terms-page.css": "eed4140d25a9f483d66ea9f917b716aff873d870d2e8dd3c389fd4318c9fc445",
+  "packages/domain/public-content.ts": "1ee5cd46f5e549a480c4d2735c95507c014049e5a01974cb6091bfca5fde68e7"
+}

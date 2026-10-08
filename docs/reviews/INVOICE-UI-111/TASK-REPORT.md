@@ -1,0 +1,11 @@
+# INVOICE-UI-111 task report
+
+Approved scope implemented in Documents.tsx and documents.css. Reuses CrmHeading, CrmIcon, CrmState and WorkbenchComposer095; no shared/global CSS, backend, ledger, API, roles or runtime changes. Seller settings now compact icon action and single-screen form; shorter labels and native required markers; local spacing aligned and repeated breakpoint/layout rules consolidated. Print excludes composers. Unrelated dirty work preserved.
+
+Quality: scoped ESLint PASSED; three invoice unit files /8 tests PASSED; diff check PASSED. Root TypeScript FAILED in concurrent support-care111 and support-filter111 test files. React19/TypeScript6/Vite8/Vitest4 stack, web-app/frontend-html-css/typescript-javascript/visual-design/product-content profiles applied to bounded review. CodeGraph and CocoIndex DEGRADED (stale; CocoIndex health failure). No complete impact claim.
+
+Two review cycles recorded: first found touch-target/print/style duplication issues, corrected; second current review BLOCKED on authenticated UI and integrated compiler acceptance. No successful handoff or deploy readiness. List/detail request-race safeguards, issued statement immutability, draft/void print rules and normal auth calls retained; focused tests pass. Full screen/mobile/keyboard/print acceptance pending authorized local CRM login. No runtime restart/reseed, extra server, auth bypass or production write. Production NOT_READY / deployment NOT_RUN. Commit/push for this scope NOT_RUN pending acceptance. Source hashes in FINAL-REVIEW.json.
+
+Coordination sent to UI and release sessions; UI session confirms no shared/global edits and also lacks authorized local OWNER session. Release notified of missing invoice acceptance and concurrent compiler blockers. Next: log into local CRM normally, run visual/keyboard/mobile/print checks, resolve integrated compiler through file owners, refresh review; coordinate release only after acceptance.
+
+Acceptance progress: source implementation complete; focused regressions complete; real-context visual acceptance incomplete; final review blocked. Weighted percentage unavailable (no configured runtime ledger). Provider token usage and actual cost Unavailable. API-equivalent cost Unavailable. Memory candidates: None.

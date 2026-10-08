@@ -10,7 +10,7 @@ import {
   bodyText,
   type StudioPost,
 } from "../../packages/domain/blog-studio";
-import { draftSchema as originalDraftSchema } from "/private/tmp/release027-original-studio-reference/lib/blog/schema";
+import { draftSchema as originalDraftSchema } from "../fixtures/studio-reference/lib/blog/schema";
 import { invoke } from "./http";
 
 // Approved exclusive NEW spec lease. Root alone executes; captures record differences,

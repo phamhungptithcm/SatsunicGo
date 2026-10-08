@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "assertions": 21,
+  "widths": [
+    320,
+    390,
+    1280
+  ],
+  "scope": "Source-extracted current shippingNavigation JSX, actual PageTabs and CSS; synthetic local pack form; not provider/CRM workflow",
+  "server": "http://127.0.0.1:5207"
+}

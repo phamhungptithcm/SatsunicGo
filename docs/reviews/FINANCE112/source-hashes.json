@@ -1,0 +1,6 @@
+{
+  "src/features/payments/Finance.tsx": "76fa191892dfb184c25447de1ce0a585c1cfc63e3144dd6552c740dc590dff4b",
+  "src/features/payments/FinancialReview.tsx": "5dce2b638c6872816a4dfcd671c94f6b877213e415cc4f781dadc7ec7989b290",
+  "src/features/payments/finance-workbench112.css": "49d804c105912c7d1e96236871e50c3c038ceb195d7fb7b48321f8df95c0f617",
+  "tests/browser/finance112.spec.ts": "69e9e4b5af633d0a6cb8ef924d913127f09297f09ffb7ee73350cfcf0e25897f"
+}

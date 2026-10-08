@@ -526,3 +526,8 @@ export {
   productReviewModerate,
   productReviewAdmin,
 } from "./product-reviews";
+
+export {
+  askKnowledgeCommand,
+  askKnowledgePreview,
+} from "./ai/approved-knowledge";

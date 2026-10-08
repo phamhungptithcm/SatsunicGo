@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "status": "VERIFIED",
+  "project": "satsunicgo",
+  "tag": "v0.3.0",
+  "sha": "e8a34d4e7e531b06508fd64307a5ce6e9a06e2aa",
+  "bundleSha256": "a013bb1744e4e935acc5f29e6ed1ace31910d9ca6150db6ba940081e8c554b3f",
+  "verifiedAt": "2026-10-08T00:57:13.801Z",
+  "hosting": {
+    "origin": "https://satsunicgo.web.app",
+    "verifiedFiles": 181,
+    "version": "sites/satsunicgo/versions/c0f8547645d12dd6",
+    "releaseTime": "2026-10-08T00:55:49.394Z"
+  },
+  "functions": [
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingRatesPublic",
+      "revision": "shippingratespublic-00005-nek",
+      "sourceGeneration": "1791420802711572"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewAdmin",
+      "revision": "productreviewadmin-00005-zoq",
+      "sourceGeneration": "1791420830225393"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentReport",
+      "revision": "blogcommentreport-00005-jaq",
+      "sourceGeneration": "1791420825335082"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readStaffAccess",
+      "revision": "readstaffaccess-00005-tuf",
+      "sourceGeneration": "1791420804084858"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioMediaRead",
+      "revision": "studiomediaread-00005-wiw",
+      "sourceGeneration": "1791420818760514"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/catalogCheckout",
+      "revision": "catalogcheckout-00005-fib",
+      "sourceGeneration": "1791420805217563"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioRead",
+      "revision": "studioread-00005-bej",
+      "sourceGeneration": "1791420806270297"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioCommand",
+      "revision": "studiocommand-00005-hub",
+      "sourceGeneration": "1791420817670981"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/orderConversationCommand",
+      "revision": "orderconversationcommand-00005-nol",
+      "sourceGeneration": "1791420805722292"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/saveCustomerNotes",
+      "revision": "savecustomernotes-00005-jiv",
+      "sourceGeneration": "1791420803744294"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/workspaceCommand",
+      "revision": "workspacecommand-00008-yuy",
+      "sourceGeneration": "1791420803535554"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingRatesAdmin",
+      "revision": "shippingratesadmin-00006-kav",
+      "sourceGeneration": "1791420805725329"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderOperations",
+      "revision": "readorderoperations-00005-wug",
+      "sourceGeneration": "1791420805216545"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioMediaUpload",
+      "revision": "studiomediaupload-00005-diw",
+      "sourceGeneration": "1791420839221626"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioAdvancedCommand",
+      "revision": "studioadvancedcommand-00005-dit",
+      "sourceGeneration": "1791420826517096"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/listFollowUps",
+      "revision": "listfollowups-00005-wip",
+      "sourceGeneration": "1791420805632106"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioAdvancedRead",
+      "revision": "studioadvancedread-00005-les",
+      "sourceGeneration": "1791420825406986"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/campaignBannersPublic",
+      "revision": "campaignbannerspublic-00005-wis",
+      "sourceGeneration": "1791420909242033"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readNotification",
+      "revision": "readnotification-00005-ses",
+      "sourceGeneration": "1791420805292474"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicPage",
+      "revision": "publicpage-00009-fol",
+      "sourceGeneration": "1791420803232617"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentSubmit",
+      "revision": "blogcommentsubmit-00005-kif",
+      "sourceGeneration": "1791420817834716"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceDetail",
+      "revision": "invoicedetail-00005-kax",
+      "sourceGeneration": "1791420804061748"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipReminderPolicy",
+      "revision": "membershipreminderpolicy-00006-yuh",
+      "sourceGeneration": "1791420802067509"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderImage",
+      "revision": "readorderimage-00005-geh",
+      "sourceGeneration": "1791420909976053"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/consolidationCommand",
+      "revision": "consolidationcommand-00005-rir",
+      "sourceGeneration": "1791420803701548"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentCommand",
+      "revision": "blogcommentcommand-00005-fig",
+      "sourceGeneration": "1791420825018357"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerCommand",
+      "revision": "websitebannercommand-00005-jem",
+      "sourceGeneration": "1791420826832305"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicDiscovery",
+      "revision": "publicdiscovery-00005-jah",
+      "sourceGeneration": "1791420803197421"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/orderHistory",
+      "revision": "orderhistory-00005-qes",
+      "sourceGeneration": "1791420806927780"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/operationalDashboard",
+      "revision": "operationaldashboard-00005-jiy",
+      "sourceGeneration": "1791420805749454"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/changeCommand",
+      "revision": "changecommand-00005-vit",
+      "sourceGeneration": "1791420804830301"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/outboxCommand",
+      "revision": "outboxcommand-00006-tut",
+      "sourceGeneration": "1791420803890673"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipCommand",
+      "revision": "membershipcommand-00006-tih",
+      "sourceGeneration": "1791420802340580"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOwnerConfiguration",
+      "revision": "readownerconfiguration-00008-jah",
+      "sourceGeneration": "1791420804033452"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/listCustomers",
+      "revision": "listcustomers-00005-xim",
+      "sourceGeneration": "1791420805717723"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewRead",
+      "revision": "productreviewread-00005-fuy",
+      "sourceGeneration": "1791420827630808"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/refundCommand",
+      "revision": "refundcommand-00006-fax",
+      "sourceGeneration": "1791420804042872"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/customerOrderTracking",
+      "revision": "customerordertracking-00005-qeb",
+      "sourceGeneration": "1791420805932680"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/command",
+      "revision": "command-00006-dej",
+      "sourceGeneration": "1791420667381676"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/uploadContentImage",
+      "revision": "uploadcontentimage-00005-jup",
+      "sourceGeneration": "1791420831149274"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerAdmin",
+      "revision": "websitebanneradmin-00005-kul",
+      "sourceGeneration": "1791420827390232"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/financeReview",
+      "revision": "financereview-00006-xis",
+      "sourceGeneration": "1791420806070815"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingCommand",
+      "revision": "shippingcommand-00005-man",
+      "sourceGeneration": "1791420805634588"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceShare",
+      "revision": "invoiceshare-00005-ros",
+      "sourceGeneration": "1791420804497759"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceCommand",
+      "revision": "invoicecommand-00006-ged",
+      "sourceGeneration": "1791420804394697"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderConversation",
+      "revision": "readorderconversation-00005-gip",
+      "sourceGeneration": "1791420804154266"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/ask",
+      "revision": "ask-00006-xit",
+      "sourceGeneration": "1791420806022989"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicImage",
+      "revision": "publicimage-00005-dac",
+      "sourceGeneration": "1791420803523725"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceList",
+      "revision": "invoicelist-00005-dip",
+      "sourceGeneration": "1791420803983679"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/cartCommand",
+      "revision": "cartcommand-00005-fun",
+      "sourceGeneration": "1791420806321975"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/listWork",
+      "revision": "listwork-00005-tam",
+      "sourceGeneration": "1791420803533956"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerPreview",
+      "revision": "websitebannerpreview-00005-ray",
+      "sourceGeneration": "1791420826820247"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewEligibility",
+      "revision": "productrevieweligibility-00005-veq",
+      "sourceGeneration": "1791420828077006"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewWrite",
+      "revision": "productreviewwrite-00005-fem",
+      "sourceGeneration": "1791420828195647"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentList",
+      "revision": "blogcommentlist-00005-kaj",
+      "sourceGeneration": "1791420823447723"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/returnCommand",
+      "revision": "returncommand-00005-san",
+      "sourceGeneration": "1791420804005699"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/listCrmStaff",
+      "revision": "listcrmstaff-00005-dil",
+      "sourceGeneration": "1791420805218417"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/ticketMessages",
+      "revision": "ticketmessages-00005-qiz",
+      "sourceGeneration": "1791420804049231"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/uploadOrderImage",
+      "revision": "uploadorderimage-00005-rih",
+      "sourceGeneration": "1791420908957761"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/listOrderImages",
+      "revision": "listorderimages-00005-qef",
+      "sourceGeneration": "1791420909330583"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/readCustomer",
+      "revision": "readcustomer-00005-yoy",
+      "sourceGeneration": "1791420804747609"
+    },
+    {
+      "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewModerate",
+      "revision": "productreviewmoderate-00005-zof",
+      "sourceGeneration": "1791420828536116"
+    }
+  ]
+}

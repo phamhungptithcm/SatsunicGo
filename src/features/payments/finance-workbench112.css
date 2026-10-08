@@ -1,0 +1,140 @@
+/* Finance112: scoped composition over shared tabs, forms and CRM primitives. */
+.fc095.financeWorkbench112 {
+  min-width: 0;
+}
+.financeWorkbench112 .financePurpose {
+  margin: 0 0 20px;
+  color: #46546d;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.financeWorkbench112 .financePageHint {
+  margin: 12px 0 24px;
+  color: #647087;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.financeWorkbench112 .financeQueue {
+  min-width: 0;
+}
+.financeWorkbench112 .financeQueueDescription {
+  margin: 8px 0 20px;
+  max-width: 760px;
+  color: #46546d;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.financeWorkbench112 .financeContextNote {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-inline-start: 2px solid var(--blue, #163cff);
+  border-radius: 0 6px 6px 0;
+  background: #f4f6fc;
+  color: #46546d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.fc095.financeWorkbench112 .crmState {
+  min-height: 0;
+  padding: 24px;
+  gap: 14px;
+}
+.financeWorkbench112 .crmState p {
+  margin: 6px 0 0;
+  color: #647087;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.fc095.financeWorkbench112 .crmItem {
+  margin-bottom: 12px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--border, #e3e7ef);
+}
+.financeWorkbench112 .crmFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 16px 0;
+}
+.financeWorkbench112 .crmFacts dt {
+  color: #647087;
+  font-size: 12px;
+}
+.financeWorkbench112 .crmFacts dd {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.financeWorkbench112 .crmFacts strong {
+  color: var(--navy, #111c35);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.fc095.financeWorkbench112 .crmItemDetails {
+  margin: 16px 0 0;
+  border-top: 1px solid var(--border, #e3e7ef);
+  padding-top: 8px;
+}
+.fc095.financeWorkbench112 .crmItemDetails > summary {
+  display: flex;
+  min-height: 44px;
+  list-style: none;
+  font-weight: 600;
+}
+.financeWorkbench112 .crmItemDetails > summary::-webkit-details-marker {
+  display: none;
+}
+.financeWorkbench112 .crmItemDetails .form {
+  max-width: 760px;
+  gap: 16px;
+}
+.financeWorkbench112 .crmItemDetails fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.financeWorkbench112 .crmItemDetails label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.financeWorkbench112 .crmItemDetails textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+.financeWorkbench112 .crmItemDetails button {
+  justify-self: start;
+}
+.financeWorkbench112 .financeSecondary {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border, #e3e7ef);
+}
+.financeWorkbench112 .financeSecondary h2 {
+  margin: 0;
+  color: #46546d;
+  font-size: 14px;
+}
+.financeWorkbench112 .financeSecondary > .crmItemDetails {
+  padding: 4px 16px;
+  border: 1px solid var(--border, #e3e7ef);
+  border-radius: 10px;
+  background: #fff;
+}
+@media (max-width: 600px) {
+  .financeWorkbench112 .financePageHint {
+    margin-bottom: 20px;
+  }
+  .fc095.financeWorkbench112 .crmItem,
+  .fc095.financeWorkbench112 .crmState {
+    padding: 16px;
+  }
+  .financeWorkbench112 .crmFacts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .financeWorkbench112 .crmItemDetails button {
+    max-width: 100%;
+  }
+}

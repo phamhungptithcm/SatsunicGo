@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { auth, db, callService } from "../../shared/firebase";
 import { initialProfileRead, profileReadReducer } from "./profile-state";
+import { z } from "zod";
 export function Profile({ user }: { user: User | null }) {
   const [read, dispatch] = useReducer(profileReadReducer, undefined, () =>
     initialProfileRead(user?.uid),
@@ -29,6 +30,24 @@ export function Profile({ user }: { user: User | null }) {
     [busy, setBusy] = useState(false),
     [retry, setRetry] = useState(0);
   const [step, setStep] = useState<1 | 2>(1);
+  const [uncertain, setUncertain] = useState(false);
+  const pending = useRef<{
+    owner: string;
+    command: {
+      action: "saveProfile" | "saveAddress";
+      operationId: string;
+      expectedVersion?: number;
+      payload: Record<string, string | boolean>;
+    };
+  } | null>(null);
+  useEffect(() => {
+    pending.current = null;
+    writing.current = false;
+    setUncertain(false);
+    return () => {
+      pending.current = null;
+    };
+  }, [user?.uid]);
   const epoch = useRef(0),
     writing = useRef(false);
   useEffect(() => {
@@ -54,6 +73,9 @@ export function Profile({ user }: { user: User | null }) {
         if (value?.locked === true) {
           locked = true;
           epoch.current++;
+          pending.current = null;
+          writing.current = false;
+          setUncertain(false);
           dispatch({ type: "locked", uid });
           setError("");
 
@@ -104,8 +126,11 @@ export function Profile({ user }: { user: User | null }) {
       b();
     };
   }, [user?.uid, retry]);
-  async function save(e: FormEvent<HTMLFormElement>, action: string) {
-    e.preventDefault();
+  async function save(
+    e?: FormEvent<HTMLFormElement>,
+    action?: "saveProfile" | "saveAddress",
+  ) {
+    e?.preventDefault();
     if (
       !user ||
       auth?.currentUser?.uid !== user.uid ||
@@ -113,61 +138,102 @@ export function Profile({ user }: { user: User | null }) {
       writing.current ||
       read.uid !== user.uid ||
       !read.profileReady ||
-      (action === "saveAddress" && !read.addressesReady)
+      ((pending.current?.command.action ?? action) === "saveAddress" &&
+        !read.addressesReady)
     )
       return;
+    if (pending.current && (e || pending.current.owner !== user.uid)) return;
+    if (!pending.current) {
+      if (!e || !action) return;
+      const f = new FormData(e.currentTarget);
+      pending.current = {
+        owner: user.uid,
+        command: {
+          action,
+          operationId: crypto.randomUUID(),
+          ...(action === "saveProfile" && version !== undefined
+            ? { expectedVersion: version }
+            : {}),
+          payload:
+            action === "saveProfile"
+              ? {
+                  displayName: String(f.get("displayName") ?? ""),
+                  businessName: String(f.get("businessName") ?? ""),
+                  marketingConsent: f.get("marketingConsent") === "on",
+                }
+              : {
+                  recipient: String(f.get("recipient") ?? ""),
+                  phone: String(f.get("phone") ?? ""),
+                  address: String(f.get("address") ?? ""),
+                },
+        },
+      };
+    }
+    const request = pending.current.command;
     writing.current = true;
-    const context = epoch.current;
-    const owner = user.uid;
-    const f = new FormData(e.currentTarget);
+    const context = epoch.current,
+      owner = user.uid;
+    const owns = () =>
+      context === epoch.current &&
+      currentUid.current === owner &&
+      auth?.currentUser?.uid === owner;
     setError("");
-
     setBusy(true);
-    const payload =
-      action === "saveProfile"
-        ? {
-            displayName: f.get("displayName"),
-            businessName: f.get("businessName"),
-            marketingConsent: f.get("marketingConsent") === "on",
-          }
-        : {
-            recipient: f.get("recipient"),
-            phone: f.get("phone"),
-            address: f.get("address"),
-          };
+    setUncertain(true);
     try {
-      await callService("workspaceCommand", {
-        action,
-        operationId: crypto.randomUUID(),
-        ...(action === "saveProfile" && version !== undefined
-          ? { expectedVersion: version }
-          : {}),
-        payload,
-      });
+      const result = z
+        .object({
+          id: z.string().min(1).max(128),
+          version: z.number().int().positive().safe(),
+        })
+        .strict()
+        .parse(await callService("workspaceCommand", request));
       if (
-        context === epoch.current &&
-        currentUid.current === owner &&
-        auth?.currentUser?.uid === owner
+        (request.action === "saveProfile" && result.id !== owner) ||
+        result.version !== (request.expectedVersion ?? 0) + 1
       )
+        throw Error("INVALID_SAVE_RESULT");
+      if (owns()) {
+        pending.current = null;
+        setUncertain(false);
         notify(
-          action === "saveProfile" ? "Đã lưu hồ sơ." : "Đã lưu địa chỉ.",
+          request.action === "saveProfile"
+            ? "Đã lưu hồ sơ."
+            : "Đã lưu địa chỉ.",
           "success",
         );
-    } catch {
-      if (
-        context === epoch.current &&
-        currentUid.current === owner &&
-        auth?.currentUser?.uid === owner
-      )
-        setError("Chưa lưu được thông tin. Kiểm tra kết nối và thử lại.");
+      }
+    } catch (error) {
+      if (owns()) {
+        const code = String((error as { code?: unknown })?.code ?? "").replace(
+          /^functions\//,
+          "",
+        );
+        if (
+          [
+            "invalid-argument",
+            "permission-denied",
+            "unauthenticated",
+            "aborted",
+            "already-exists",
+            "failed-precondition",
+          ].includes(code)
+        ) {
+          pending.current = null;
+          setUncertain(false);
+          setError(
+            "Chưa lưu được thông tin. Tải lại và kiểm tra thông tin trước khi thử lại.",
+          );
+        } else
+          setError(
+            "Chưa xác minh được kết quả lưu. Đối chiếu thao tác đang chờ trước khi tiếp tục.",
+          );
+      }
     } finally {
-      writing.current = false;
-      if (
-        context === epoch.current &&
-        currentUid.current === owner &&
-        auth?.currentUser?.uid === owner
-      )
+      if (owns()) {
+        writing.current = false;
         setBusy(false);
+      }
     }
   }
   function readStatus(kind: "profile" | "addresses", overlay: boolean) {
@@ -245,7 +311,9 @@ export function Profile({ user }: { user: User | null }) {
             </header>
             {readStatus("profile", step === 1)}
             <fieldset
-              disabled={busy || !visible.profileReady || visible.locked}
+              disabled={
+                busy || uncertain || !visible.profileReady || visible.locked
+              }
             >
               <label>
                 <span className="formLabelText">
@@ -359,6 +427,7 @@ export function Profile({ user }: { user: User | null }) {
               <fieldset
                 disabled={
                   busy ||
+                  uncertain ||
                   !visible.profileReady ||
                   !visible.addressesReady ||
                   visible.locked
@@ -434,6 +503,15 @@ export function Profile({ user }: { user: User | null }) {
             </p>
           )}
         </div>
+      )}
+      {user && uncertain && !visible.locked && (
+        <button
+          type="button"
+          disabled={busy || !visible.profileReady}
+          onClick={() => void save()}
+        >
+          Đối chiếu thao tác đang chờ
+        </button>
       )}
       <footer className="profilePrivacy">
         <span>Dữ liệu cá nhân</span>

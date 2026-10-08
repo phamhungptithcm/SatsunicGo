@@ -1,0 +1,7 @@
+{
+  "service": "ask",
+  "publicInvoker": false,
+  "authenticatedPublicInvoker": false,
+  "bindingCount": 0,
+  "scope": "read-only IAM metadata; member identities omitted"
+}

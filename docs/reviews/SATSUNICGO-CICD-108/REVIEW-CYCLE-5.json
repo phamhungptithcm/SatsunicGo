@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CICD-108",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Main-triggered tests, version, notes, immutable promotion and verification are implemented within owner-approved scope.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-CICD-108-APPROVAL.md",
+        ".github/workflows/release.yml",
+        "tests/unit/release108.test.mjs"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Configured narrow keyless IAM and immutable owner/repository/main/workflow/production OIDC trust; safe archive checks; test-only provider mocks reject production identities, nonloopback stores and cloud credentials.",
+      "evidence_refs": [
+        "scripts/release/artifact.mjs",
+        "scripts/release/verify-source.py",
+        "scripts/release/unpack.py",
+        "scripts/release/verify-production.mjs"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Final source4994c9f passed Node22/Java21 typecheck/lint,914 unit cases,26 helpers,13 config cases,539 rules cases across40 suites with zero skips, HTTP, restore, audit and build. Focused ESLint/actionlint/Python syntax checks passed.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/QUALITY-GATES.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Executable cases cover tampering, missing/extra files, unsafe archives, missing originals, superseded SHA, tag/asset conflicts and invalid publication receipts.",
+      "evidence_refs": [
+        "tests/unit/release108.test.mjs"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Bounded command/network timeouts and retries, draft failure state, immutable recovery and explicit rollback/partial-deployment handling verified locally.",
+      "evidence_refs": [
+        "scripts/release/release.mjs",
+        "scripts/release/verify-production.mjs",
+        "docs/releases/CICD-108.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Run 37705487725 deployed v0.1.0 but metadata verification refused publication. Quota-header correction da9f543 is in new release run 37707571610; complete automated verification pending.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/REVIEW-CYCLE-5.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37707571610"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Non-atomic promotion, outside-lock manual deployments, moderate audit findings and rollback limitations are recorded.",
+      "evidence_refs": [
+        "docs/releases/CICD-108.md",
+        "docs/reviews/SATSUNICGO-CICD-108/COMPLETION.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CI108-FIXTURE",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Absolute temporary fixture imports broke remote typecheck; vendored unchanged snapshots plus relative imports passed typecheck.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/SETUP-EVIDENCE.md"
+      ],
+      "resolution": "Absolute temporary fixture imports broke remote typecheck; vendored unchanged snapshots plus relative imports passed typecheck.",
+      "category": "production_readiness",
+      "location": "tests/browser/release-studio-component-reference032.spec.ts"
+    },
+    {
+      "id": "CI108-HOLDS",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Full inventory would include seven held provider Functions; package-only bounded AST transform preserves existing 62-Function boundary; 25 cases and real package import verified.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/SETUP-EVIDENCE.md"
+      ],
+      "resolution": "Full inventory would include seven held provider Functions; package-only bounded AST transform preserves existing 62-Function boundary; 25 cases and real package import verified.",
+      "category": "production_readiness",
+      "location": "scripts/release/artifact.mjs"
+    },
+    {
+      "id": "CI108-RUNNER",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Existing integration runner omitted Auth and dedicated suite namespaces; dedicated GitHub emulator groups and current synthetic-provider/paid-AI test contracts implemented; final remote suite evidence pending.",
+      "evidence_refs": [
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37703558180"
+      ],
+      "resolution": "Final candidate run 37703558180 passed all40 rule suites/539 cases with zero skipped, Auth/HTTP/restore and all other gates.",
+      "category": "production_readiness",
+      "location": "scripts/release/test-integrations.mjs"
+    },
+    {
+      "id": "CI108-HOSTING",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": "scripts/release/verify-production.mjs",
+      "summary": "Hosting could change during Functions-source verification without its metadata being compared to the initially verified release.",
+      "resolution": "Initial/final Hosting release/version/time identity now compared; disable/replacement/unfinished states reject receipts. OIDC refreshed before readback.26 helper cases and complete final remote CI passed.",
+      "evidence_refs": [
+        "tests/unit/release108.test.mjs",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37703558180"
+      ]
+    },
+    {
+      "id": "CI108-QUOTA",
+      "severity": "high",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": "scripts/release/verify-production.mjs",
+      "summary": "Hosting REST token used an unauthorized OAuth client quota project, blocking required metadata verification.",
+      "resolution": "Fixed quota header targets satsunicgo; live HTTP 200 read and 27 helper regression cases passed. Automated provider receipt still pending.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/REVIEW-CYCLE-5.md",
+        "tests/unit/release108.test.mjs"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Main remains unprotected; branch-protection changes were excluded.",
+    "Non-atomic Hosting/Functions promotion requires provider readback on failures.",
+    "Existing moderate dependency advisories remain.",
+    "Seven provider exports remain held; no live commercial/provider acceptance claimed."
+  ],
+  "limitations": [
+    "Self-review only; repository intelligence DEGRADED.",
+    "Actual new-source automated provider verification pending.",
+    "Local shared runtime unchanged.",
+    "Token usage and actual cost unavailable."
+  ]
+}

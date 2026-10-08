@@ -2,10 +2,16 @@ name: Local quality gates
 on:
   pull_request:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      build:
+        description: Build frontend after validation (release builds its own immutable artifact)
+        type: boolean
+        default: true
 permissions:
   contents: read
 concurrency:
-  group: quality-${{ github.ref }}
+  group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   local:
@@ -27,8 +33,11 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
-      - run: npm run build
-      - run: npm run test:rules
+      - run: node --test tests/unit/release108.test.mjs
+      - run: npm run test:release-config
+      - run: node scripts/release/test-integrations.mjs rules
       - run: npm run test:http
       - run: npm run test:restore
       - run: npm audit --omit=dev --audit-level=high
+      - if: ${{ github.event_name != 'push' || inputs.build }}
+        run: npm run build

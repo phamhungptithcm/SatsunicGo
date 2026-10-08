@@ -1,0 +1,8 @@
+{
+  "functions/src/media.ts": "710bad74f93d9dc1aae6ebf36a8033c428e94431dc6e399873604333f38f7c57",
+  "functions/src/product-thumbnail.ts": "828bc10a8ea44514d7dfe5d1faa80ca20a7af58e34c4cd707f1aa57dfa792edb",
+  "src/features/content/CatalogCard.tsx": "39a0f33e18e7717e28e814fd3e17a471b7835e0f865b179631a81c08c0de97ab",
+  "src/features/content/ProductsCatalog.tsx": "38875789b02a9769c043e04651834ceadfe69307067e300f3675c365358d473d",
+  "src/features/content/products-catalog.css": "7149ef785e9014124f331afc4a91256397cb8b255fa4fe07a681ea8d5b320638",
+  "tests/unit/product-thumbnail.test.ts": "05482ea2a9e3515a4049717d2c041bfeddaa805486055fd3eb1cca4fe5086eda"
+}

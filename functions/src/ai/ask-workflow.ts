@@ -95,6 +95,30 @@ export const askWorkflow = onCall(
           version: current.data()?.version ?? 0,
           outcome: "no_operation",
         };
+      if (saved.data()?.state === "done") {
+        const result = z
+          .object({
+            id: z
+              .string()
+              .regex(/^[A-Za-z0-9_-]{1,100}$/)
+              .optional(),
+            version: z.number().int().nonnegative().safe(),
+          })
+          .strict()
+          .safeParse(saved.data()?.result);
+        if (
+          result.success &&
+          current.exists &&
+          Number.isSafeInteger(current.data()?.version) &&
+          result.data.version <= current.data()!.version &&
+          (!result.data.id || result.data.id === current.data()?.orderId)
+        )
+          return result.data;
+        throw new HttpsError(
+          "failed-precondition",
+          "Cần hỗ trợ đối chiếu thao tác đang chờ.",
+        );
+      }
       if (!saved.data()?.request)
         throw new HttpsError(
           "failed-precondition",

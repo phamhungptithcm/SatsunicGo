@@ -22,19 +22,20 @@ test("settings tabs retain form draft; balanced mobile layout; toast success", a
   await page.route("**/ask107-settings", (route) =>
     route.fulfill({
       contentType: "text/html",
-      body: `<div id="root"></div><script type="module">import '/src/styles/global.css';import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;import React from '${react}';import ReactDOM from '${root}';const {Settings}=await import('/src/features/settings/Settings.tsx');const {ToastHost}=await import('/src/shared/Toast.tsx');ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(React.Fragment,null,React.createElement(Settings),React.createElement(ToastHost)));</script>`,
+      body: `<div class="workspaceShell" style="display:block"><main class="workspaceContent"><div id="root"></div></main></div><script type="module">import '/src/styles/global.css';import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;import React from '${react}';import ReactDOM from '${root}';const {Settings}=await import('/src/features/settings/Settings.tsx');const {ToastHost}=await import('/src/shared/Toast.tsx');ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(React.Fragment,null,React.createElement(Settings),React.createElement(ToastHost)));</script>`,
     }),
   );
   await page.goto("/ask107-settings");
   await page
     .getByLabel("Phiên bản điều khoản", { exact: false })
     .fill("demo-draft");
+  await page.getByRole("button", { name: "Tiếp tục →", exact: true }).click();
   await expect(
     page.getByLabel("Số VND", { exact: false }).first(),
   ).toBeVisible();
-  await page.getByRole("tab", { name: "Thử Ask", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Bật thử Ask" })).toBeVisible();
-  await page.getByRole("tab", { name: "Tỷ giá & điều khoản" }).click();
+  await page.getByRole("tab", { name: "AI Budget", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Bật AI" })).toBeVisible();
+  await page.getByRole("tab", { name: "Tỷ giá & Điều khoản" }).click();
   await expect(
     page.getByLabel("Phiên bản điều khoản", { exact: false }),
   ).toHaveValue("demo-draft");
@@ -52,10 +53,10 @@ test("settings tabs retain form draft; balanced mobile layout; toast success", a
     path: "output/ask107/settings-mobile.png",
     fullPage: true,
   });
-  await page.getByRole("tab", { name: "Tỷ giá & điều khoản" }).focus();
+  await page.getByRole("tab", { name: "Tỷ giá & Điều khoản" }).focus();
   await page.keyboard.press("ArrowRight");
   await expect(
-    page.getByRole("tab", { name: "Thử Ask", exact: true }),
+    page.getByRole("tab", { name: "AI Budget", exact: true }),
   ).toBeFocused();
   await page.screenshot({
     path: "output/ask107/ask-mobile.png",
@@ -87,7 +88,7 @@ for (const scenario of [
     await page.route("**/ask107-mfa*", (route) =>
       route.fulfill({
         contentType: "text/html",
-        body: `<div id="root"></div><script type="module">import '/src/styles/global.css';import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;import React from '${react}';import ReactDOM from '${root}';import {fakeAuth} from '${sdk}';const {ActionMfa,requestActionMfa}=await import('/src/features/auth/ActionMfa.tsx');const {LoginChallenge}=await import('/src/features/auth/LoginChallenge.tsx');const {ToastHost}=await import('/src/shared/Toast.tsx');const {runWithMfaRecovery}=await import('/src/shared/mfa-recovery.ts');let calls=0;function Demo(){const [status,setStatus]=React.useState('waiting');return React.createElement(React.Fragment,null,React.createElement('button',{onClick:()=>{if(location.search.includes('page'))setTimeout(()=>setStatus('changed'),100);return runWithMfaRecovery(async()=>{calls++;if(calls===1)throw {code:'functions/failed-precondition',details:{reason:'RECENT_MFA_REQUIRED'}};return 'resumed '+calls},()=>requestActionMfa(fakeAuth),()=>true).then(setStatus).catch(()=>setStatus("cancelled"))}},'Run'),React.createElement('p',null,status),React.createElement(ActionMfa,{pageKey:status}),React.createElement(LoginChallenge,{onOpen:()=>{}}),React.createElement(ToastHost));}ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(Demo));</script>`,
+        body: `<div class="workspaceShell" style="display:block"><main class="workspaceContent"><div id="root"></div></main></div><script type="module">import '/src/styles/global.css';import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;import React from '${react}';import ReactDOM from '${root}';import {fakeAuth} from '${sdk}';const {ActionMfa,requestActionMfa}=await import('/src/features/auth/ActionMfa.tsx');const {LoginChallenge}=await import('/src/features/auth/LoginChallenge.tsx');const {ToastHost}=await import('/src/shared/Toast.tsx');const {runWithMfaRecovery}=await import('/src/shared/mfa-recovery.ts');let calls=0;function Demo(){const [status,setStatus]=React.useState('waiting');return React.createElement(React.Fragment,null,React.createElement('button',{onClick:()=>{if(location.search.includes('page'))setTimeout(()=>setStatus('changed'),100);return runWithMfaRecovery(async()=>{calls++;if(calls===1)throw {code:'functions/failed-precondition',details:{reason:'RECENT_MFA_REQUIRED'}};return 'resumed '+calls},()=>requestActionMfa(fakeAuth),()=>true).then(setStatus).catch(()=>setStatus("cancelled"))}},'Run'),React.createElement('p',null,status),React.createElement(ActionMfa,{pageKey:status}),React.createElement(LoginChallenge,{onOpen:()=>{}}),React.createElement(ToastHost));}ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(Demo));</script>`,
       }),
     );
     await page.goto(`/ask107-mfa?${scenario}`);

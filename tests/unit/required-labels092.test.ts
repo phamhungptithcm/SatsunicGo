@@ -55,6 +55,42 @@ const markers = (node: ts.Node) =>
       attribute(n, "className")?.initializer?.getText() === '"requiredMark"',
   );
 
+// Native named radio groups express one required selection through their legend.
+function radioLegend(control: ts.JsxOpeningElement | ts.JsxSelfClosingElement) {
+  if (
+    control.tagName.getText() !== "input" ||
+    attribute(control, "type")?.initializer?.getText() !== '"radio"'
+  )
+    return undefined;
+  const name = attribute(control, "name")?.initializer;
+  if (!name || !ts.isStringLiteral(name)) return undefined;
+  let group: ts.Node | undefined = control.parent;
+  while (
+    group &&
+    !(
+      ts.isJsxElement(group) &&
+      group.openingElement.tagName.getText() === "fieldset"
+    )
+  )
+    group = group.parent;
+  if (!group || !ts.isJsxElement(group)) return undefined;
+  const radios = controls(group).filter(
+    (row) => attribute(row, "type")?.initializer?.getText() === '"radio"',
+  );
+  if (
+    radios.some(
+      (row) =>
+        attribute(row, "name")?.initializer?.getText() !== name.getText(),
+    )
+  )
+    return undefined;
+  return group.children.find(
+    (child) =>
+      ts.isJsxElement(child) &&
+      child.openingElement.tagName.getText() === "legend",
+  );
+}
+
 describe("Required labels throughout the system", () => {
   it("marks wrapping and externally associated required fields, retaining conditional requirements", () => {
     const failures: string[] = [];
@@ -89,6 +125,7 @@ describe("Required labels throughout the system", () => {
           wrapping = wrapping.parent;
         const id = attribute(control, "id")?.initializer?.getText();
         const label =
+          radioLegend(control) ??
           wrapping ??
           labels.find(
             (l) =>
@@ -160,6 +197,18 @@ describe("Required labels throughout the system", () => {
         )
           parent = parent.parent;
         if (!parent) {
+          const requiredGroup = controls(source).some((control) => {
+            const legend = radioLegend(control),
+              required = attribute(control, "required");
+            return (
+              legend &&
+              marker.pos >= legend.pos &&
+              marker.end <= legend.end &&
+              required &&
+              expression(required)?.kind !== ts.SyntaxKind.FalseKeyword
+            );
+          });
+          if (requiredGroup) continue;
           // The request composer accepts either text or images; its visible label
           // describes this combined field and records its conditional requirement.
           let field: ts.Node | undefined = node.parent;
@@ -199,4 +248,37 @@ describe("Required labels throughout the system", () => {
     }
     expect(failures).toEqual([]);
   });
+});
+
+it("required radio group accepts its marked legend; other controls and mixed groups do not", () => {
+  const parse = (body: string) =>
+    ts.createSourceFile(
+      "fixture.tsx",
+      `const form=${body}`,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TSX,
+    );
+  const marker = '<span className="requiredMark">*</span>';
+  const group = parse(
+    `<fieldset><legend>Plan ${marker}</legend><label>Free<input type="radio" name="plan" required /></label><label>Plus<input type="radio" name="plan" required /></label></fieldset>`,
+  );
+  expect(
+    controls(group).every(
+      (control) => markers(radioLegend(control)!).length === 1,
+    ),
+  ).toBe(true);
+  for (const body of [
+    `<fieldset><legend>Text ${marker}</legend><input required /></fieldset>`,
+    `<fieldset><legend>Plans ${marker}</legend><input type="radio" name="one" required /><input type="radio" name="two" required /></fieldset>`,
+    `<fieldset><legend>Plan</legend><input type="radio" name="plan" required /></fieldset>`,
+  ]) {
+    const source = parse(body);
+    expect(
+      controls(source).every((control) => {
+        const legend = radioLegend(control);
+        return !legend || markers(legend).length === 0;
+      }),
+    ).toBe(true);
+  }
 });

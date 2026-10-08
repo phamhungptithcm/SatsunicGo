@@ -1,5 +1,6 @@
 import { notify } from "../../shared/feedback";
 import "../crm/customer-workspace095.css";
+import "../crm/support-care-empty.css";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useSearchParams, Link } from "react-router-dom";
@@ -325,6 +326,7 @@ function StaffTicket({
 export function StaffSupport() {
   const [params] = useSearchParams();
   const target = params.get("ticket");
+  const [status, setStatus] = useState("all");
   const [next, setNext] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState<
@@ -359,6 +361,7 @@ export function StaffSupport() {
       }>("listWork", {
         kind: "supportTickets",
         ...(target ? { id: target } : {}),
+        ...(!target && status !== "all" ? { supportStatus: status } : {}),
         ...(after ? { after } : {}),
       });
       if (current !== listRequest.current) return;
@@ -377,7 +380,7 @@ export function StaffSupport() {
     return () => {
       listRequest.current++;
     };
-  }, [target]);
+  }, [target, status]);
   return (
     <section
       className="customerWorkspace095 customerWorkspace095--support"
@@ -386,27 +389,42 @@ export function StaffSupport() {
       <CrmHeading
         title="Hội thoại hỗ trợ"
         description="Mở hội thoại để xem nội dung, phản hồi và cập nhật trạng thái giải quyết."
-        reload={<button disabled={loading || locked} onClick={() => void load()}>
-              <CrmIcon name="refresh" />
-              Tải lại hội thoại
-            </button>}
+        reload={
+          <button disabled={loading || locked} onClick={() => void load()}>
+            <CrmIcon name="refresh" />
+            Tải lại hội thoại
+          </button>
+        }
         actions={
-          <>
-            {target && <Link to="/crm/support">← Tất cả hội thoại</Link>}
-
-          </>
+          <>{target && <Link to="/crm/support">← Tất cả hội thoại</Link>}</>
         }
       />
       <div
         className="customerWorkspace095-surface customerWorkspace095-supportList"
         aria-busy={loading}
       >
-        <div className="customerWorkspace095-resultHeading">
-          <h2>{target ? "Hội thoại được chọn" : "Danh sách hội thoại"}</h2>
-          {!loading && !error && (
+        {!target && (
+          <div className="crmFilters customerWorkspace095-filters">
+            <label>
+              Trạng thái
+              <select
+                value={status}
+                disabled={locked}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="all">Tất cả</option>
+                <option value="open">Đang mở</option>
+                <option value="resolved">Đã giải quyết</option>
+              </select>
+            </label>
+          </div>
+        )}
+        {!loading && !error && tickets.length > 0 && (
+          <div className="customerWorkspace095-resultHeading">
+            {target && <h2>Hội thoại được chọn</h2>}
             <span>{tickets.length} hội thoại trong trang</span>
-          )}
-        </div>
+          </div>
+        )}
         {loading && <CrmState kind="loading" title="Đang tải hội thoại…" />}
         {tickets.map((t) => (
           <StaffTicket
@@ -418,18 +436,23 @@ export function StaffSupport() {
           />
         ))}
         {!loading && !error && !tickets.length && (
-          <CrmState
-            kind="empty"
-            title={
-              target
+          <div className="supportCareEmpty">
+            <CrmIcon name="message" />
+            <h3>
+              {target
                 ? "Chưa tìm thấy hội thoại được chọn"
-                : "Chưa có hội thoại trong trang hiện tại"
-            }
-          >
-            {target
-              ? "Thử tải lại hoặc quay về danh sách hội thoại."
-              : "Bạn có thể tải lại để kiểm tra hội thoại mới."}
-          </CrmState>
+                : status === "all"
+                  ? "Chưa có hội thoại trong trang này"
+                  : "Chưa có hội thoại phù hợp"}
+            </h3>
+            <p>
+              {target
+                ? "Thử tải lại hoặc quay về danh sách hội thoại."
+                : status === "all"
+                  ? "Bạn có thể tải lại để kiểm tra hội thoại mới."
+                  : "Thử chọn trạng thái khác hoặc tải lại hội thoại."}
+            </p>
+          </div>
         )}
         {next && (
           <div className="crmPagination">

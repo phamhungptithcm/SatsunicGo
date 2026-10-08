@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "task_id": "TERMS113",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Desktop screenshot reveals overridden reading width; fix within approved scope.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Static trusted text, React escaping, no data access or auth changes.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Frontend and functions TypeScript and scoped ESLint passed.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Static page has no network dependency; existing request destination retained.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new async operation or error branch. Existing unknown-page behavior retained.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Local presentation only; no migrations or config changes. Deployment unverified, index and approval validator limitations recorded.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Dedicated component isolates CSS; server uses shared text with paragraph rendering.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "TERMS113-F1",
+      "severity": "LOW",
+      "status": "OPEN",
+      "category": "visual-design",
+      "location": "src/features/content/terms-page.css:1",
+      "summary": "Shared .page CSS overrides the intended 800px reading width.",
+      "resolution": null,
+      "evidence_refs": [
+        "output/playwright/terms113/desktop.png"
+      ]
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "Indexes stale; DEGRADED native analysis.",
+    "No deployment; production NOT_READY."
+  ]
+}

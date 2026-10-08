@@ -505,3 +505,46 @@
     width: 100%;
   }
 }
+
+/* Product list: one action row, create first; lazy offscreen row layout. */
+.ceWorkspace .ceListTools .ceExport {
+  flex-basis: 100%;
+  width: 100%;
+}
+.ceWorkspace .ceExport button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.ceWorkspace .ceExport .ceAddProduct {
+  background: #163cff;
+  color: #fff;
+  border-color: #163cff;
+}
+.ceWorkspace .ceTable tbody tr {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 82px;
+}
+@media (max-width: 640px) {
+  .ceWorkspace .ceListTools .ceExport select {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ceWorkspace .ceExport .ceAddProduct {
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .ceWorkspace .ceListTools .ceExport select:first-of-type {
+    flex: 1 1 200px;
+    min-width: min(200px, 100%);
+  }
+  .ceWorkspace .ceListTools .ceExport select:nth-of-type(2) {
+    flex: 0 0 72px;
+  }
+  .ceWorkspace .ceExport button:not(.ceAddProduct) {
+    flex: 1 1 auto;
+  }
+}

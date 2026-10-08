@@ -1,0 +1,9 @@
+{
+  "purpose": "Portable unchanged original reference fixture for existing browser parity tests; not application code",
+  "source": "release027-original-studio-reference",
+  "sha256": {
+    "fixture.ts": "e6e312854b4360883ad0109d6cee5e03306b14b25e5a72ab1e4ff8f1990c7404",
+    "lib/blog/schema.ts": "2af933886434e84dc0601b4d0149f38c8ab0d49bf3a7de6dd8ddb74507e8916d",
+    "lib/blog/editor-image.ts": "8e3a7cda4b5d3150601e2b76f92d5da1234b2328814834add7198835ff3ece1d"
+  }
+}

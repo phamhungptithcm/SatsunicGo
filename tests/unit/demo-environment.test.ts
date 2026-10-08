@@ -16,3 +16,23 @@ it("fails closed before network imports for ambient cloud, missing flags and non
   ])
     expect(() => assertDemoTestEnvironment(bad)).toThrow();
 });
+
+it("shared demo emulator is allowed; arbitrary local ports are denied", () => {
+  expect(() =>
+    assertDemoTestEnvironment({
+      ...safe,
+      FIRESTORE_EMULATOR_HOST: "127.0.0.1:18207",
+    }),
+  ).not.toThrow();
+  for (const host of [
+    "127.0.0.1:8080",
+    "localhost:18207",
+    "127.0.0.1:18207@production",
+    "",
+    "0.0.0.0:18207",
+  ]) {
+    expect(() =>
+      assertDemoTestEnvironment({ ...safe, FIRESTORE_EMULATOR_HOST: host }),
+    ).toThrow();
+  }
+});

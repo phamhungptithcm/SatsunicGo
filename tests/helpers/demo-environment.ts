@@ -4,10 +4,12 @@ export function assertDemoTestEnvironment(
   if (
     env.GCLOUD_PROJECT !== "demo-satsunicgo" ||
     env.FUNCTIONS_EMULATOR !== "true" ||
-    env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:8181"
+    !["127.0.0.1:8181", "127.0.0.1:18207"].includes(
+      env.FIRESTORE_EMULATOR_HOST ?? "",
+    )
   ) {
     throw new Error(
-      "Integration tests require demo-satsunicgo, FUNCTIONS_EMULATOR=true and loopback Firestore 127.0.0.1:8181 before Firebase imports.",
+      "Integration tests require demo-satsunicgo, FUNCTIONS_EMULATOR=true and loopback Firestore 127.0.0.1:8181 or shared 127.0.0.1:18207 before Firebase imports.",
     );
   }
 }

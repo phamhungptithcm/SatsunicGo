@@ -1,0 +1,6 @@
+{
+  "functions/src/ai/knowledge-retrieval.ts": "ccfef1439ba6d756b0c3c7204bba23b10f139f639559b4c8350f14fd12c2c18b",
+  "src/features/ask/transport.ts": "1abfe91734517ab5088cdf88ad206c4c8c9385bff2d1241178277bf8461bb628",
+  "tests/unit/ask-knowledge.test.ts": "3d8fa2c00dc7b686b65395a303dbfb0177805dd6029731159c3565e7ab6e0ce1",
+  "tests/unit/ask-transport.test.ts": "a9997dc6300c29971be027e9f7667062f7c14ad2a12ba6aa1bea88075474c3ec"
+}

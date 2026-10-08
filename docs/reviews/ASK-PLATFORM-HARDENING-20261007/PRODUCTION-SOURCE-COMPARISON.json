@@ -1,0 +1,40 @@
+{
+  "comparison": "compiled Node22/TypeScript artifacts; not TS presence",
+  "files": [
+    {
+      "file": "lib/functions/src/ai/ask.js",
+      "deployedPresent": true,
+      "deployedHash": "e7bb19a365cdb6312b4ff61dee57800de44bff147053331f57e97ffb249cd6cb",
+      "candidateHash": "ed9b647fd28ddc9902afa553193980b43094e54d256ccf9b370044790f10c9a8",
+      "matches": false
+    },
+    {
+      "file": "lib/functions/src/ai/ask-workflow.js",
+      "deployedPresent": true,
+      "deployedHash": "6123cd3055f865d1f289a3c5c7a9c818025c1ce75d3361bfe50eea2221949e24",
+      "candidateHash": "5439951116486945fb7ea9e6a62fbafc9d19bf45e4f648559a0d0d2c6b30a229",
+      "matches": false
+    },
+    {
+      "file": "lib/functions/src/ai/knowledge-retrieval.js",
+      "deployedPresent": true,
+      "deployedHash": "ac2e544c6df501babf4c61e8710ff7d140739488426dac70f489ee290933c5ef",
+      "candidateHash": "9bfe849fcc107d66820eb9041538c6ef3b9c26a6cdaed8eda95392f8339202e9",
+      "matches": false
+    },
+    {
+      "file": "lib/functions/src/ai/run-guard.js",
+      "deployedPresent": false,
+      "deployedHash": null,
+      "candidateHash": "fb1835c9e037a85574e1000773f0e2cab0783c54673cac144376ac1da09ada7e",
+      "matches": false
+    },
+    {
+      "file": "lib/functions/src/ai/approved-knowledge.js",
+      "deployedPresent": false,
+      "deployedHash": null,
+      "candidateHash": "6756accdcbb06b503fa69a80967e641e6753ab3c553c8aa453c48942f80d9006",
+      "matches": false
+    }
+  ]
+}

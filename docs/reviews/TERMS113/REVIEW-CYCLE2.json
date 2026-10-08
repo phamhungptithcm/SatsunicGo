@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "task_id": "TERMS113",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Three approved sections, shared copy, responsive reading width 800px desktop, mobile no overflow, keyboard CTA verified. Product content gate passed.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/PRODUCT-CONTENT.md",
+        "output/playwright/terms113/desktop.png",
+        "output/playwright/terms113/mobile.png"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Static trusted text, React escaping, no data access or auth changes.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Frontend and functions TypeScript and scoped ESLint passed.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts",
+        "docs/reviews/TERMS113/TASK-REPORT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Static page has no network dependency; existing request destination retained.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new async operation or error branch. Existing unknown-page behavior retained.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Local presentation only; no migrations or config changes. Deployment unverified, index and approval validator limitations recorded.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Dedicated component isolates CSS; server uses shared text with paragraph rendering.",
+      "evidence_refs": [
+        "docs/reviews/TERMS113/APPROVAL.md",
+        "src/features/content/TermsPage.tsx",
+        "packages/domain/public-content.ts"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "TERMS113-F1",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "visual-design",
+      "location": "src/features/content/terms-page.css:1",
+      "summary": "Shared .page CSS overrides the intended 800px reading width.",
+      "resolution": "Scoped selector increased to .page.purchaseTerms. Browser reports readingWidth 800, viewport/scrollWidth 1440; fresh screenshot inspected.",
+      "evidence_refs": [
+        "src/features/content/terms-page.css",
+        "output/playwright/terms113/desktop.png"
+      ]
+    }
+  ],
+  "residual_risks": [],
+  "limitations": [
+    "DEGRADED native source analysis: both optional indexes stale.",
+    "Approval validator requires READY and failed despite explicit owner approval and allowed DEGRADED policy.",
+    "No deploy/provider rendering/device/screen-reader verification. Token usage and cost unavailable."
+  ]
+}

@@ -1,5 +1,6 @@
 import { RestrictedPage } from "../features/content/RestrictedPage";
 import { PrivacyPage } from "../features/content/PrivacyPage";
+import { TermsPage } from "../features/content/TermsPage";
 import { AuthFeedbackToast } from "../features/auth/AuthFeedbackToast";
 import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
 import {
@@ -1330,6 +1331,7 @@ function PublicPage() {
   const path = useLocation().pathname.slice(1);
   if (path === "fees") return <ShippingRates />;
   if (path === "privacy") return <PrivacyPage />;
+  if (path === "terms") return <TermsPage />;
   if (path === "restricted") return <RestrictedPage />;
   const content = publicCopy[path];
   if (!content)

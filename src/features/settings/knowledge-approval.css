@@ -1,0 +1,36 @@
+.knowledgeApproval {
+  margin-top: 20px;
+}
+.knowledgeApproval fieldset {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.knowledgeApproval label {
+  display: grid;
+  gap: 6px;
+}
+.knowledgeApproval input,
+.knowledgeApproval select {
+  max-width: 100%;
+  min-width: 0;
+}
+.knowledgeApproval button {
+  min-height: 44px;
+}
+.knowledgeEvidence {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow: auto;
+  background: #f5f7fc;
+  padding: 16px;
+  border: 1px solid #dce1ec;
+  border-radius: 12px;
+}
+.knowledgeApproval .knowledgeReview {
+  display: flex;
+  align-items: start;
+}

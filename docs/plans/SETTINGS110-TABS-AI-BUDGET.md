@@ -1,0 +1,14 @@
+# SETTINGS110 shared tabs, policy stepper and AI Budget
+
+Status APPROVED via user message apporved for concrete new UI scope requested by user screenshots.
+
+Evidence: Finance.tsx uses shared PageTabs, matching screenshot2 underline tabs. Settings currently implements custom segmented tabs and full policy form; AskPilot renders two actions plus separate reload button. Shared StepForm validates active stage and keeps mounted fields/drafts. Repository intelligence check launched; bounded verified source evidence, stale indexes from recent gate imply DEGRADED until current result. Preserve unrelated ASK109, CI/catalog/media WIP.
+
+Implementation:
+- Settings.tsx: use PageTabs unmodified, labels Tỷ giá & Điều khoản and AI Budget, native panels and draft preservation. Remove segmented-tab CSS overrides only scoped to Settings.
+- Policy uses shared StepForm/StepStage: Điều khoản → Tỷ giá → Hiệu lực → Kiểm tra. Step1termsVersion; step2existingUSD/JPY/KRW rational rates with smallest-source-unit semantics; step3start/end local device dates; step4summary plus owner commercial approval checkbox and Lưu chính sách. Validate before advancing, all data before final save; preserve version/idempotency/unknown-write recovery and quote snapshots.
+- AskPilot.tsx remains internal component name; visible title AI Budget. Header has title, verified enabled green Bật / disabled red Tắt badge (not zero or off if unreadable), accessible icon-only reload in same header. Badge reflects server policy, not global public AI availability. Brief owner-only scope copy; cards Giới hạn / Đã giữ / Còn lại (reservation is not invoiced spend). Compact line explains1000VNDreserve inclfailedattempt and cloudinvoice distinction. Provider/expiry details concise.
+- One footer action bottom-right: Bật AI when off / Tắt AI when on; no line wrapping, mobile safe44px targets. Keep explicit enable-budget confirmation in one compact dialog and existing automatic MFA. Unknown command outcome retains originaloperationID/payload, cannot silently switch pending action or invent saved state; header reload read-only. Null state disabled with Chưa xác minh.
+- Files: Settings.tsx, AskPilot.tsx, settings107.css or scoped successor, focused component tests and review docs only. Shared PageTabs/StepForm, backend/API/provider region/budget10000/permissions/payments unchanged.
+
+Validation: screenshot-style parity with Finance shared component; desktop390/320mobile no overflow or button wrapping; tabs keyboard and draft retention; step required fields/date/rational-rate validation, summary/back/edit/save; AI enabled/off/unavailable badges, reload, activation confirmation/MFA/cancel/unknownwrite exact retry. Product language gate with eightprinciples and fresh final review. Shared frontend5207 only. No production release or broad commit under this plan without release authorization/evidence.

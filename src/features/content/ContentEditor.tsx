@@ -47,7 +47,7 @@ export function ContentEditor() {
   function edit(row: ContentRow | null) {
     if (
       busy ||
-      (dirty && !window.confirm("Bỏ thay đổi chưa lưu để mở nội dung khác?"))
+      (dirty && !window.confirm("Bỏ thay đổi chưa lưu để mở sản phẩm khác?"))
     )
       return;
     setEditorEpoch((value) => value + 1);
@@ -61,8 +61,8 @@ export function ContentEditor() {
     setStep(0);
     slugManual.current = !!row;
   }
-  const [kind, setKind] = useState<"products" | "posts">("products"),
-    [rows, setRows] = useState<ContentRow[]>([]),
+  const kind = "products";
+  const [rows, setRows] = useState<ContentRow[]>([]),
     [current, setCurrent] = useState<ContentRow | null>(null),
     [mediaId, setMediaId] = useState(""),
     [error, setError] = useState(""),
@@ -72,8 +72,13 @@ export function ContentEditor() {
   const requests = useRef(createRequestSequence()),
     retry = useRef(createRetryIdentity()),
     saves = useRef(createRequestSequence());
+  const sentinel = useRef<HTMLDivElement>(null);
+  const inFlight = useRef<number | null>(null);
+  const cursors = useRef(new Set<string>());
   async function load(after?: string) {
+    if (after && inFlight.current !== null) return;
     const revision = requests.current.next();
+    inFlight.current = revision;
     setLoading(true);
     setError("");
     try {
@@ -82,20 +87,35 @@ export function ContentEditor() {
         { kind, ...(after ? { after } : {}) },
       );
       if (!requests.current.current(revision)) return;
-      setRows((previous) =>
-        after
-          ? [
-              ...previous,
-              ...r.rows.filter(
-                (row) => !previous.some((old) => old.id === row.id),
-              ),
-            ]
-          : r.rows,
+      const repeatedCursor = Boolean(
+        r.next &&
+        (r.next === after ||
+          (after && cursors.current.has(r.next)) ||
+          r.rows.length === 0),
       );
-      setNext(r.next);
-    } catch (e) {
-      if (requests.current.current(revision)) setError((e as Error).message);
+      if (!after) cursors.current.clear();
+      if (after) cursors.current.add(after);
+      setRows((previous) => {
+        const merged = new Map(
+          (after ? previous : []).map((row) => [row.id, row]),
+        );
+        for (const row of r.rows) merged.set(row.id, row);
+        return [...merged.values()];
+      });
+      if (!after) {
+        const ids = new Set(r.rows.map((row) => row.id));
+        setSelected(
+          (previous) => new Set([...previous].filter((id) => ids.has(id))),
+        );
+      }
+      setNext(repeatedCursor ? null : r.next);
+      if (repeatedCursor)
+        setError("Không thể tải tiếp danh sách. Làm mới để tải lại.");
+    } catch {
+      if (requests.current.current(revision))
+        setError("Không tải được sản phẩm. Thử lại để tiếp tục.");
     } finally {
+      if (inFlight.current === revision) inFlight.current = null;
       if (requests.current.current(revision)) setLoading(false);
     }
   }
@@ -110,7 +130,45 @@ export function ContentEditor() {
       requests.current.invalidate();
       saves.current.invalidate();
     };
-  }, [kind]);
+  }, []);
+  useEffect(() => {
+    const target = sentinel.current;
+    if (
+      !target ||
+      editing ||
+      loading ||
+      busy ||
+      error ||
+      !next ||
+      search ||
+      statusFilter ||
+      categoryFilter ||
+      typeof IntersectionObserver === "undefined"
+    )
+      return;
+    let active = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (active && entries.some((entry) => entry.isIntersecting))
+          void load(next);
+      },
+      { rootMargin: "240px 0px" },
+    );
+    observer.observe(target);
+    return () => {
+      active = false;
+      observer.disconnect();
+    };
+  }, [
+    editing,
+    loading,
+    busy,
+    error,
+    next,
+    search,
+    statusFilter,
+    categoryFilter,
+  ]);
   useEffect(() => {
     setMediaId(current?.mediaId ?? "");
   }, [current]);
@@ -196,7 +254,7 @@ export function ContentEditor() {
         HTMLSelectElement &&
       (formRef.current.elements.namedItem("status") as HTMLSelectElement)
         .value === "published" &&
-      !window.confirm("Xuất bản nội dung này công khai trên website?")
+      !window.confirm("Xuất bản sản phẩm này công khai trên website?")
     )
       return;
     const saveRevision = saves.current.next();
@@ -212,45 +270,37 @@ export function ContentEditor() {
           .filter((key) => String(f.get(key) ?? "").trim())
           .map((key) => [key, String(f.get(key)).trim()]),
       ),
-      ...(kind === "products"
-        ? {
-            market: String(f.get("market")),
-            orderable: f.get("orderable") === "on",
-            ...(f.get("listedPrice")
-              ? { listedPrice: Number(f.get("listedPrice")) }
-              : {}),
-            ...(String(f.get("termsVersion") ?? "").trim()
-              ? { termsVersion: String(f.get("termsVersion")).trim() }
-              : {}),
-            catalogOptions: String(f.get("catalogOptions") ?? "")
-              .split("\n")
-              .map((s) => s.trim())
-              .filter(Boolean),
-            featured: f.get("featured") === "on",
-            featuredOrder: Number(f.get("featuredOrder") || 9999),
-            manufacturingOrigin: String(
-              f.get("manufacturingOrigin") ?? "",
-            ).trim(),
-            brand: String(f.get("brand") ?? "").trim(),
-            productSummary: String(f.get("productSummary") ?? "").trim(),
-            retailer: String(f.get("retailer") ?? "").trim(),
-            sourceUrl: String(f.get("sourceUrl") ?? "").trim(),
-            usageSteps: JSON.parse(String(f.get("usageSteps") || "[]")),
-            origin: String(f.get("origin") ?? "").trim(),
-            functions: String(f.get("functions") ?? "").trim(),
-            usage: String(f.get("usage") ?? "").trim(),
-            ...(f.get("price")
-              ? { referencePrice: Number(f.get("price")) }
-              : {}),
-            ...(f.get("priceTime")
-              ? {
-                  priceCheckedAt: new Date(
-                    String(f.get("priceTime")),
-                  ).getTime(),
-                }
-              : {}),
-          }
-        : {}),
+      ...{
+        market: String(f.get("market")),
+        orderable: f.get("orderable") === "on",
+        ...(f.get("listedPrice")
+          ? { listedPrice: Number(f.get("listedPrice")) }
+          : {}),
+        ...(String(f.get("termsVersion") ?? "").trim()
+          ? { termsVersion: String(f.get("termsVersion")).trim() }
+          : {}),
+        catalogOptions: String(f.get("catalogOptions") ?? "")
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        featured: f.get("featured") === "on",
+        featuredOrder: Number(f.get("featuredOrder") || 9999),
+        manufacturingOrigin: String(f.get("manufacturingOrigin") ?? "").trim(),
+        brand: String(f.get("brand") ?? "").trim(),
+        productSummary: String(f.get("productSummary") ?? "").trim(),
+        retailer: String(f.get("retailer") ?? "").trim(),
+        sourceUrl: String(f.get("sourceUrl") ?? "").trim(),
+        usageSteps: JSON.parse(String(f.get("usageSteps") || "[]")),
+        origin: String(f.get("origin") ?? "").trim(),
+        functions: String(f.get("functions") ?? "").trim(),
+        usage: String(f.get("usage") ?? "").trim(),
+        ...(f.get("price") ? { referencePrice: Number(f.get("price")) } : {}),
+        ...(f.get("priceTime")
+          ? {
+              priceCheckedAt: new Date(String(f.get("priceTime"))).getTime(),
+            }
+          : {}),
+      },
       ...(mediaId ? { mediaId } : {}),
       status,
       ...(status === "scheduled"
@@ -280,7 +330,7 @@ export function ContentEditor() {
       });
       if (!saves.current.current(saveRevision)) return;
       retry.current.clear();
-      notify("Đã lưu nội dung.", "success");
+      notify("Đã lưu sản phẩm.", "success");
       setCurrent(null);
       setEditing(false);
       setDirty(false);
@@ -296,40 +346,13 @@ export function ContentEditor() {
   return (
     <section className="ceWorkspace">
       <CrmHeading
-        title={kind === "products" ? "Sản phẩm" : "Bài viết"}
-        actions={
+        title="Sản phẩm"
+        reload={
           !editing && (
-            <>
-              <select
-                aria-label="Loại nội dung"
-                value={kind}
-                disabled={busy}
-                onChange={(e) => {
-                  if (
-                    dirty &&
-                    !window.confirm(
-                      "Đổi loại nội dung và bỏ thay đổi chưa lưu?",
-                    )
-                  )
-                    return;
-                  setEditing(false);
-                  setDirty(false);
-                  setSelected(new Set());
-                  setKind(e.target.value as typeof kind);
-                }}
-              >
-                <option value="products">Sản phẩm</option>
-                <option value="posts">Bài viết</option>
-              </select>
-              <button disabled={loading || busy} onClick={() => void load()}>
-                <CrmIcon name="refresh" />
-                Làm mới
-              </button>
-              <button disabled={busy} onClick={() => edit(null)}>
-                <CrmIcon name="document" />
-                {kind === "products" ? "Thêm sản phẩm" : "Thêm bài viết"}
-              </button>
-            </>
+            <button disabled={loading || busy} onClick={() => void load()}>
+              <CrmIcon name="refresh" />
+              Làm mới
+            </button>
           )
         }
       />
@@ -340,9 +363,7 @@ export function ContentEditor() {
               <label className="ceSearch">
                 <span>Tìm trong danh sách đã tải</span>
                 <input
-                  aria-label={
-                    kind === "products" ? "Tìm sản phẩm" : "Tìm bài viết"
-                  }
+                  aria-label="Tìm sản phẩm"
                   type="search"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -380,19 +401,55 @@ export function ContentEditor() {
                     ))}
                 </select>
               </label>
-              {(search || statusFilter || categoryFilter) && <button type="button" onClick={() => { setSearch(""); setStatusFilter(""); setCategoryFilter(""); }}>Xóa bộ lọc</button>}
+              {(search || statusFilter || categoryFilter) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setStatusFilter("");
+                    setCategoryFilter("");
+                  }}
+                >
+                  Xóa bộ lọc
+                </button>
+              )}
             </div>
-            <p className="crmFilterScope" role="status">{visibleRows.length} / {rows.length} mục đã tải · Lọc ngay khi thay đổi</p>
-            {kind === "products" && (
+            <p className="crmFilterScope" role="status">
+              {visibleRows.length} / {rows.length} mục đã tải · Lọc ngay khi
+              thay đổi
+            </p>
+            {
               <ProductSpreadsheet
+                leadingAction={
+                  <button
+                    className="primary ceAddProduct"
+                    disabled={busy}
+                    onClick={() => edit(null)}
+                  >
+                    <svg
+                      className="crmIcon"
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    >
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Thêm sản phẩm
+                  </button>
+                }
                 rows={rows}
                 filtered={visibleRows}
                 selected={selected}
                 onSaved={() => load()}
               />
-            )}
+            }
           </div>
-          {loading && <CrmState kind="loading" title="Đang tải nội dung…" />}
+          {loading && rows.length === 0 && (
+            <CrmState kind="loading" title="Đang tải sản phẩm…" />
+          )}
           {error && (
             <p role="alert" className="error">
               {error}
@@ -403,8 +460,8 @@ export function ContentEditor() {
               kind="empty"
               title={
                 rows.length
-                  ? "Không có nội dung khớp bộ lọc."
-                  : "Chưa có nội dung. Thêm mới hoặc nhập Excel để bắt đầu."
+                  ? "Không có sản phẩm khớp bộ lọc trong danh sách đã tải."
+                  : "Chưa có sản phẩm. Thêm sản phẩm hoặc nhập Excel để bắt đầu."
               }
             />
           )}
@@ -414,14 +471,12 @@ export function ContentEditor() {
                 <thead>
                   <tr>
                     <th>Chọn</th>
-                    <th>{kind === "products" ? "Sản phẩm" : "Bài viết"}</th>
+                    <th>Sản phẩm</th>
                     <th>Danh mục</th>
-                    {kind === "products" && (
-                      <>
-                        <th>Giá tham khảo</th>
-                        <th>Giá trọn gói</th>
-                      </>
-                    )}
+                    <>
+                      <th>Giá tham khảo</th>
+                      <th>Giá trọn gói</th>
+                    </>
                     <th>Trạng thái</th>
                   </tr>
                 </thead>
@@ -463,20 +518,18 @@ export function ContentEditor() {
                         </button>
                       </td>
                       <td data-label="Danh mục">{row.category || "—"}</td>
-                      {kind === "products" && (
-                        <>
-                          <td data-label="Giá tham khảo">
-                            {row.referencePrice === undefined
-                              ? "Chưa có giá"
-                              : `${row.referencePrice.toLocaleString("vi-VN")} ₫`}
-                          </td>
-                          <td data-label="Giá trọn gói">
-                            {row.listedPrice === undefined
-                              ? "Chưa niêm yết"
-                              : `${row.listedPrice.toLocaleString("vi-VN")} ₫`}
-                          </td>
-                        </>
-                      )}
+                      <>
+                        <td data-label="Giá tham khảo">
+                          {row.referencePrice === undefined
+                            ? "Chưa có giá"
+                            : `${row.referencePrice.toLocaleString("vi-VN")} ₫`}
+                        </td>
+                        <td data-label="Giá trọn gói">
+                          {row.listedPrice === undefined
+                            ? "Chưa niêm yết"
+                            : `${row.listedPrice.toLocaleString("vi-VN")} ₫`}
+                        </td>
+                      </>
                       <td data-label="Trạng thái">
                         <span className="crmBadge">
                           {(
@@ -495,17 +548,20 @@ export function ContentEditor() {
               </table>
             </div>
           )}
-          <div className="ceListFooter">
+          <div className="ceListFooter" ref={sentinel}>
+            {loading && rows.length > 0 && (
+              <span role="status">Đang tải thêm sản phẩm…</span>
+            )}
             <span>
-              {visibleRows.length} kết quả trong {rows.length} nội dung đã tải
-              {next ? " · Còn nội dung chưa tải" : ""}
+              {visibleRows.length} kết quả trong {rows.length} sản phẩm đã tải
+              {next ? " · Còn sản phẩm chưa tải" : ""}
             </span>
-            {next && (
+            {(next || error) && (
               <button
                 disabled={loading || busy}
-                onClick={() => void load(next)}
+                onClick={() => void load(next ?? undefined)}
               >
-                Tải thêm
+                {error ? "Thử lại" : "Tải thêm"}
               </button>
             )}
           </div>
@@ -528,11 +584,7 @@ export function ContentEditor() {
             header={
               <div className="ceEditorNav">
                 <h2 className="crmSectionHeading">
-                  {current
-                    ? "Sửa nội dung"
-                    : kind === "products"
-                      ? "Thêm sản phẩm"
-                      : "Thêm bài viết"}
+                  {current ? "Sửa sản phẩm" : "Thêm sản phẩm"}
                 </h2>
                 <button
                   className="ceListIcon"
@@ -611,7 +663,7 @@ export function ContentEditor() {
           >
             {current && (
               <div data-step-stage="4" hidden={step !== 4}>
-                <CrmReference label="Mã nội dung" value={current.id} />
+                <CrmReference label="Mã sản phẩm" value={current.id} />
               </div>
             )}
 
@@ -621,7 +673,7 @@ export function ContentEditor() {
               </h3>
               <label>
                 <span className="formLabelText">
-                  {kind === "products" ? "Tên sản phẩm" : "Tiêu đề"}{" "}
+                  Tên sản phẩm{" "}
                   <span className="requiredMark" aria-hidden="true">
                     *
                   </span>
@@ -715,7 +767,7 @@ export function ContentEditor() {
                   Tiêu đề tìm kiếm
                   <input
                     name="seoTitle"
-                    placeholder="Để trống dùng tên nội dung"
+                    placeholder="Để trống dùng tên sản phẩm"
                     maxLength={160}
                     defaultValue={current?.seoTitle}
                   />
@@ -731,190 +783,188 @@ export function ContentEditor() {
                 </label>
               </div>
             </div>
-            {kind === "products" && (
-              <>
-                <div data-step-stage="2" hidden={step !== 2}>
-                  <h3 className="sr-only" tabIndex={-1}>
-                    Ảnh & chi tiết
-                  </h3>
-                  <ProductInformationFields
-                    key={`${current?.id ?? "new"}-${current?.version ?? 0}`}
-                    row={current}
-                  />
-                  <div className="ceFieldGrid">
-                    <label>
-                      <input
-                        name="featured"
-                        type="checkbox"
-                        defaultChecked={current?.featured !== false}
-                      />{" "}
-                      Sản phẩm nổi bật
-                    </label>
-                    <label>
-                      Thứ tự hiển thị
-                      <input
-                        name="featuredOrder"
-                        type="number"
-                        min={0}
-                        max={9999}
-                        step={1}
-                        defaultValue={current?.featuredOrder ?? 9999}
-                      />
-                      <small>Số nhỏ hơn được ưu tiên giới thiệu.</small>
-                    </label>
-                    <label>
-                      Nguồn gốc
-                      <textarea
-                        name="origin"
-                        maxLength={4000}
-                        defaultValue={current?.origin}
-                      />
-                    </label>
-                    <label>
-                      Công dụng
-                      <textarea
-                        name="functions"
-                        maxLength={4000}
-                        defaultValue={current?.functions}
-                      />
-                    </label>
-                    <label>
-                      Cách dùng
-                      <textarea
-                        name="usage"
-                        maxLength={4000}
-                        defaultValue={current?.usage}
-                      />
-                    </label>
-                  </div>
-                </div>
-                <div data-step-stage="3" hidden={step !== 3}>
-                  <h3 className="sr-only" tabIndex={-1}>
-                    Giá & hiển thị
-                  </h3>
-                  <label>
-                    <span className="formLabelText">
-                      Mua tại{" "}
-                      {orderable && (
-                        <span className="requiredMark" aria-hidden="true">
-                          *
-                        </span>
-                      )}
-                    </span>
-                    <select
-                      name="market"
-                      required={orderable}
-                      defaultValue={current?.market ?? "US"}
-                    >
-                      <option value="US">Mỹ</option>
-                      <option value="JP">Nhật Bản</option>
-                      <option value="KR">Hàn Quốc</option>
-                    </select>
-                  </label>
+            <>
+              <div data-step-stage="2" hidden={step !== 2}>
+                <h3 className="sr-only" tabIndex={-1}>
+                  Ảnh & chi tiết
+                </h3>
+                <ProductInformationFields
+                  key={`${current?.id ?? "new"}-${current?.version ?? 0}`}
+                  row={current}
+                />
+                <div className="ceFieldGrid">
                   <label>
                     <input
+                      name="featured"
                       type="checkbox"
-                      name="orderable"
-                      checked={orderable}
-                      onChange={(event) => setOrderable(event.target.checked)}
+                      defaultChecked={current?.featured !== false}
                     />{" "}
-                    Cho phép đặt mua
+                    Sản phẩm nổi bật
                   </label>
                   <label>
-                    <span className="formLabelText">
-                      Giá bán (₫){" "}
-                      {orderable && (
-                        <span className="requiredMark" aria-hidden="true">
-                          *
-                        </span>
-                      )}
-                    </span>
+                    Thứ tự hiển thị
+                    <input
+                      name="featuredOrder"
+                      type="number"
+                      min={0}
+                      max={9999}
+                      step={1}
+                      defaultValue={current?.featuredOrder ?? 9999}
+                    />
+                    <small>Số nhỏ hơn được ưu tiên giới thiệu.</small>
+                  </label>
+                  <label>
+                    Nguồn gốc
+                    <textarea
+                      name="origin"
+                      maxLength={4000}
+                      defaultValue={current?.origin}
+                    />
+                  </label>
+                  <label>
+                    Công dụng
+                    <textarea
+                      name="functions"
+                      maxLength={4000}
+                      defaultValue={current?.functions}
+                    />
+                  </label>
+                  <label>
+                    Cách dùng
+                    <textarea
+                      name="usage"
+                      maxLength={4000}
+                      defaultValue={current?.usage}
+                    />
+                  </label>
+                </div>
+              </div>
+              <div data-step-stage="3" hidden={step !== 3}>
+                <h3 className="sr-only" tabIndex={-1}>
+                  Giá & hiển thị
+                </h3>
+                <label>
+                  <span className="formLabelText">
+                    Mua tại{" "}
+                    {orderable && (
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    )}
+                  </span>
+                  <select
+                    name="market"
+                    required={orderable}
+                    defaultValue={current?.market ?? "US"}
+                  >
+                    <option value="US">Mỹ</option>
+                    <option value="JP">Nhật Bản</option>
+                    <option value="KR">Hàn Quốc</option>
+                  </select>
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="orderable"
+                    checked={orderable}
+                    onChange={(event) => setOrderable(event.target.checked)}
+                  />{" "}
+                  Cho phép đặt mua
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Giá bán (₫){" "}
+                    {orderable && (
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    type="number"
+                    name="listedPrice"
+                    required={orderable}
+                    min={1}
+                    max={1000000000000}
+                    step={1}
+                    defaultValue={current?.listedPrice}
+                  />
+                  <small>
+                    Bao gồm toàn bộ phí mua hộ và giao hàng. Không thu thêm đợt
+                    hai.
+                  </small>
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Điều khoản mua hàng{" "}
+                    {orderable && (
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    name="termsVersion"
+                    required={orderable}
+                    maxLength={80}
+                    defaultValue={current?.termsVersion}
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Mẫu sản phẩm{" "}
+                    {orderable && Boolean(variantText.trim()) && (
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    )}
+                  </span>
+                  <textarea
+                    name="catalogOptions"
+                    required={orderable && Boolean(variantText.trim())}
+                    defaultValue={current?.catalogOptions?.join("\n")}
+                  />
+                  <small>
+                    Các mẫu dùng chung giá niêm yết. Mẫu khác giá cần sản phẩm
+                    riêng.
+                  </small>
+                </label>
+                <div className="ceFieldGrid">
+                  <label>
+                    Giá tham khảo (₫)
                     <input
                       type="number"
-                      name="listedPrice"
-                      required={orderable}
-                      min={1}
+                      name="price"
+                      min={0}
                       max={1000000000000}
                       step={1}
-                      defaultValue={current?.listedPrice}
+                      defaultValue={current?.referencePrice}
                     />
-                    <small>
-                      Bao gồm toàn bộ phí mua hộ và giao hàng. Không thu thêm
-                      đợt hai.
-                    </small>
+                    <small>Chỉ tham khảo, không dùng để thanh toán.</small>
                   </label>
                   <label>
-                    <span className="formLabelText">
-                      Điều khoản mua hàng{" "}
-                      {orderable && (
-                        <span className="requiredMark" aria-hidden="true">
-                          *
-                        </span>
-                      )}
-                    </span>
+                    Ngày kiểm tra giá
                     <input
-                      name="termsVersion"
-                      required={orderable}
-                      maxLength={80}
-                      defaultValue={current?.termsVersion}
+                      name="priceTime"
+                      type="datetime-local"
+                      defaultValue={
+                        current?.priceCheckedAt
+                          ? new Date(
+                              current.priceCheckedAt -
+                                new Date(
+                                  current.priceCheckedAt,
+                                ).getTimezoneOffset() *
+                                  60000,
+                            )
+                              .toISOString()
+                              .slice(0, 16)
+                          : ""
+                      }
                     />
                   </label>
-                  <label>
-                    <span className="formLabelText">
-                      Mẫu sản phẩm{" "}
-                      {orderable && Boolean(variantText.trim()) && (
-                        <span className="requiredMark" aria-hidden="true">
-                          *
-                        </span>
-                      )}
-                    </span>
-                    <textarea
-                      name="catalogOptions"
-                      required={orderable && Boolean(variantText.trim())}
-                      defaultValue={current?.catalogOptions?.join("\n")}
-                    />
-                    <small>
-                      Các mẫu dùng chung giá niêm yết. Mẫu khác giá cần sản phẩm
-                      riêng.
-                    </small>
-                  </label>
-                  <div className="ceFieldGrid">
-                    <label>
-                      Giá tham khảo (₫)
-                      <input
-                        type="number"
-                        name="price"
-                        min={0}
-                        max={1000000000000}
-                        step={1}
-                        defaultValue={current?.referencePrice}
-                      />
-                      <small>Chỉ tham khảo, không dùng để thanh toán.</small>
-                    </label>
-                    <label>
-                      Ngày kiểm tra giá
-                      <input
-                        name="priceTime"
-                        type="datetime-local"
-                        defaultValue={
-                          current?.priceCheckedAt
-                            ? new Date(
-                                current.priceCheckedAt -
-                                  new Date(
-                                    current.priceCheckedAt,
-                                  ).getTimezoneOffset() *
-                                    60000,
-                              )
-                                .toISOString()
-                                .slice(0, 16)
-                            : ""
-                        }
-                      />
-                    </label>
-                  </div>
                 </div>
-              </>
-            )}
+              </div>
+            </>
             <div data-step-stage="2" hidden={step !== 2}>
               <h3 className="crmSectionHeading">Ảnh sản phẩm</h3>
               <MediaUpload onUploaded={setMediaId} />
@@ -1006,14 +1056,14 @@ export function ContentEditor() {
                 </button>
                 <button className="primary" disabled={busy}>
                   <CrmIcon name="check" />
-                  {busy ? "Đang lưu…" : "Lưu nội dung"}
+                  {busy ? "Đang lưu…" : "Lưu sản phẩm"}
                 </button>
               </div>
             </StepStage>
           </StepForm>
         </div>
       )}
-      {!editing && kind === "products" && (
+      {!editing && (
         <details className="crmItemDetails">
           <summary>Đánh giá sản phẩm</summary>
           <ProductReviewModeration />

@@ -492,58 +492,60 @@ export function Shipping({ roles }: { roles: string[] }) {
           }
         />
 
-        <PageTabs
-          id="shipping"
-          label="Kiện và lô gom"
-          value={workspace}
-          onChange={setWorkspace}
-          disabled={locked || loading || busy || uncertain}
-          items={[
-            {
-              value: "parcels",
-              label: (
-                <>
-                  <CrmIcon name="box" />
-                  Kiện hàng
-                </>
-              ),
-            },
-            ...(mayPack || mayTrack
-              ? [
-                  {
-                    value: "batches" as const,
-                    label: (
-                      <>
-                        <CrmIcon name="document" />
-                        Lô gom & cước
-                      </>
-                    ),
-                  },
-                ]
-              : []),
-          ]}
-        />
-        <div
-          className="crmActions shippingToolbar"
-          hidden={workspace !== "parcels"}
-        >
-          {mayPack && (
-            <button
-              className="primary"
-              data-shipping-create
-              disabled={locked || loading || busy || uncertain}
-              onClick={() => {
-                if (packForm.current) {
-                  packForm.current.open = true;
-                  packForm.current
-                    .querySelector<HTMLElement>("summary")
-                    ?.focus();
-                }
-              }}
-            >
-              <CrmIcon name="box" /> Tạo kiện
-            </button>
-          )}
+        <div className="shippingNavigation">
+          <PageTabs
+            id="shipping"
+            label="Kiện và lô gom"
+            value={workspace}
+            onChange={setWorkspace}
+            disabled={locked || loading || busy || uncertain}
+            items={[
+              {
+                value: "parcels",
+                label: (
+                  <>
+                    <CrmIcon name="box" />
+                    Kiện hàng
+                  </>
+                ),
+              },
+              ...(mayPack || mayTrack
+                ? [
+                    {
+                      value: "batches" as const,
+                      label: (
+                        <>
+                          <CrmIcon name="document" />
+                          Lô gom & cước
+                        </>
+                      ),
+                    },
+                  ]
+                : []),
+            ]}
+          />
+          <div
+            className="crmActions shippingToolbar"
+            hidden={workspace !== "parcels"}
+          >
+            {mayPack && (
+              <button
+                className="primary"
+                data-shipping-create
+                disabled={locked || loading || busy || uncertain}
+                onClick={() => {
+                  if (packForm.current) {
+                    packForm.current.open = true;
+                    packForm.current
+                      .querySelector<HTMLElement>("summary")
+                      ?.focus();
+                  }
+                }}
+              >
+                <CrmIcon name="box" /> Tạo kiện
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div

@@ -6,6 +6,26 @@ import {
 import type { AskAnswer } from "./knowledge";
 
 type StreamResult = { stream: AsyncIterable<unknown>; data: Promise<unknown> };
+function cancellable<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const aborted = () => {
+      signal.removeEventListener("abort", aborted);
+      reject(signal.reason ?? new DOMException("Aborted", "AbortError"));
+    };
+    signal.addEventListener("abort", aborted, { once: true });
+    promise.then(
+      (value) => {
+        signal.removeEventListener("abort", aborted);
+        resolve(value);
+      },
+      (error) => {
+        signal.removeEventListener("abort", aborted);
+        reject(error);
+      },
+    );
+    if (signal.aborted) aborted();
+  });
+}
 export async function consumeAskStream(
   result: StreamResult,
   onEvent: (event: AskStreamEvent) => void,
@@ -19,19 +39,43 @@ export async function consumeAskStream(
   let bytes = 0,
     count = 0,
     answered = false;
-  for await (const value of result.stream) {
+  let streamedAnswer: AskStreamEvent | undefined;
+  const iterator = result.stream[Symbol.asyncIterator]();
+  try {
+    while (true) {
+      signal.throwIfAborted();
+      const next = await cancellable(iterator.next(), signal);
+      if (next.done) break;
+      const value = next.value;
+      signal.throwIfAborted();
+      bytes += new TextEncoder().encode(JSON.stringify(value)).byteLength;
+      if (++count > 12 || bytes > 30_000 || answered)
+        throw Error("INVALID_RESPONSE");
+      const event = askStreamEventSchema.parse(value);
+      if (event.type === "answer") {
+        answered = true;
+        streamedAnswer = event;
+      } else onEvent(event);
+    }
     signal.throwIfAborted();
-    bytes += new TextEncoder().encode(JSON.stringify(value)).byteLength;
-    if (++count > 12 || bytes > 30_000 || answered)
-      throw Error("INVALID_RESPONSE");
-    const event = askStreamEventSchema.parse(value);
-    if (event.type === "answer") answered = true;
-    onEvent(event);
+    const settled = await cancellable(final, signal);
+    signal.throwIfAborted();
+    if ("error" in settled) throw settled.error;
+    const answer = askAnswerSchema.parse(settled.value);
+    if (streamedAnswer?.type === "answer") {
+      if (JSON.stringify(streamedAnswer.answer) !== JSON.stringify(answer))
+        throw Error("INVALID_RESPONSE");
+      onEvent(streamedAnswer);
+    }
+    return answer;
+  } finally {
+    // A provider may never settle next()/return(); cleanup must not block cancel.
+    try {
+      void iterator.return?.().catch(() => {});
+    } catch {
+      /* already closed */
+    }
   }
-  signal.throwIfAborted();
-  const settled = await final;
-  if ("error" in settled) throw settled.error;
-  return askAnswerSchema.parse(settled.value);
 }
 export function askRateLimited(error: unknown) {
   return (

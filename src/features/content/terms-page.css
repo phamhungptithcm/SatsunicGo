@@ -1,0 +1,71 @@
+.page.purchaseTerms {
+  max-width: 800px;
+  margin-inline: auto;
+  color: #111c35;
+}
+.purchaseTerms header {
+  margin-bottom: 28px;
+}
+.purchaseTerms h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+.purchaseTerms p {
+  margin: 0;
+  color: #536077;
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.purchaseTermsSections {
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #e3e7ef;
+}
+.purchaseTermsSections > li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid #e3e7ef;
+}
+.purchaseTermsNumber {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #163cff;
+  font-size: 14px;
+  font-weight: 600;
+}
+.purchaseTerms h2 {
+  margin: 2px 0 8px;
+  font-size: 19px;
+  line-height: 1.45;
+}
+.purchaseTerms .purchaseTermsAction {
+  gap: 16px;
+  min-height: 48px;
+}
+.purchaseTermsAction:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 4px;
+}
+@media (max-width: 600px) {
+  .purchaseTermsSections > li {
+    gap: 12px;
+    padding: 20px 0;
+  }
+  .purchaseTerms h2 {
+    font-size: 18px;
+  }
+  .purchaseTerms .purchaseTermsAction {
+    width: 100%;
+    justify-content: center;
+  }
+}

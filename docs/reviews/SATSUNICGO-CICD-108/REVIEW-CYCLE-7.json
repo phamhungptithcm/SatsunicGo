@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-CICD-108",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Main-triggered tests, version, notes, immutable promotion and verification are implemented within owner-approved scope.",
+      "evidence_refs": [
+        "docs/plans/SATSUNICGO-CICD-108-APPROVAL.md",
+        ".github/workflows/release.yml",
+        "tests/unit/release108.test.mjs",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Configured narrow keyless IAM and immutable owner/repository/main/workflow/production OIDC trust; safe archive checks; test-only provider mocks reject production identities, nonloopback stores and cloud credentials.",
+      "evidence_refs": [
+        "scripts/release/artifact.mjs",
+        "scripts/release/verify-source.py",
+        "scripts/release/unpack.py",
+        "scripts/release/verify-production.mjs",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Current Node22/Java21 Actions passed914 unit,30helpers,13 config,539 rules zero skips HTTP restore audit typecheck lint/build; real cache isolation/generation/transient/timeout regressions passed.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/QUALITY-GATES.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Executable cases cover tampering, missing/extra files, unsafe archives, missing originals, superseded SHA, tag/asset conflicts and invalid publication receipts.",
+      "evidence_refs": [
+        "tests/unit/release108.test.mjs",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Bounded command/network timeouts and retries, draft failure state, immutable recovery and explicit rollback/partial-deployment handling verified locally.",
+      "evidence_refs": [
+        "scripts/release/release.mjs",
+        "scripts/release/verify-production.mjs",
+        "docs/releases/CICD-108.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Current e8a34d4e7e531b06508fd64307a5ce6e9a06e2aa complete Actions/OIDC artifact promotion/readback/publication passed;181Hostingfiles and62 Functions source ZIPs/stable revisions verified. Bounded pipeline proof only; held/live business/whole-worktree attestation excluded.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/REVIEW-CYCLE-6.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Non-atomic promotion, outside-lock manual deployments, moderate audit findings and rollback limitations are recorded.",
+      "evidence_refs": [
+        "docs/releases/CICD-108.md",
+        "docs/reviews/SATSUNICGO-CICD-108/COMPLETION.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121",
+        "docs/reviews/SATSUNICGO-CICD-108/DEPLOYMENT-v0.3.0.json"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "CI108-FIXTURE",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Absolute temporary fixture imports broke remote typecheck; vendored unchanged snapshots plus relative imports passed typecheck.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/SETUP-EVIDENCE.md"
+      ],
+      "resolution": "Absolute temporary fixture imports broke remote typecheck; vendored unchanged snapshots plus relative imports passed typecheck.",
+      "category": "production_readiness",
+      "location": "tests/browser/release-studio-component-reference032.spec.ts"
+    },
+    {
+      "id": "CI108-HOLDS",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Full inventory would include seven held provider Functions; package-only bounded AST transform preserves existing 62-Function boundary; 25 cases and real package import verified.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/SETUP-EVIDENCE.md"
+      ],
+      "resolution": "Full inventory would include seven held provider Functions; package-only bounded AST transform preserves existing 62-Function boundary; 25 cases and real package import verified.",
+      "category": "production_readiness",
+      "location": "scripts/release/artifact.mjs"
+    },
+    {
+      "id": "CI108-RUNNER",
+      "severity": "high",
+      "status": "FIXED",
+      "summary": "Existing integration runner omitted Auth and dedicated suite namespaces; dedicated GitHub emulator groups and current synthetic-provider/paid-AI test contracts implemented; final remote suite evidence pending.",
+      "evidence_refs": [
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37703558180"
+      ],
+      "resolution": "Final candidate run 37703558180 passed all40 rule suites/539 cases with zero skipped, Auth/HTTP/restore and all other gates.",
+      "category": "production_readiness",
+      "location": "scripts/release/test-integrations.mjs"
+    },
+    {
+      "id": "CI108-HOSTING",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": "scripts/release/verify-production.mjs",
+      "summary": "Hosting could change during Functions-source verification without its metadata being compared to the initially verified release.",
+      "resolution": "Initial/final Hosting release/version/time identity now compared; disable/replacement/unfinished states reject receipts. OIDC refreshed before readback.26 helper cases and complete final remote CI passed.",
+      "evidence_refs": [
+        "tests/unit/release108.test.mjs",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37703558180"
+      ]
+    },
+    {
+      "id": "CI108-QUOTA",
+      "severity": "high",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": "scripts/release/verify-production.mjs",
+      "summary": "Hosting REST token used an unauthorized OAuth client quota project, blocking required metadata verification.",
+      "resolution": "Fixed quota header targets satsunicgo; live HTTP 200 read and 27 helper regression cases passed. Automated provider receipt still pending.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/REVIEW-CYCLE-5.md",
+        "tests/unit/release108.test.mjs"
+      ]
+    },
+    {
+      "id": "CI108-CLI-CACHE",
+      "severity": "high",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": ".github/workflows/release.yml",
+      "summary": "Firebase Hosting cache contaminated the original strict manifest directory during successful CLI promotion.",
+      "resolution": "Separate fully verified copy for CLI writes; actual CLI cache writer regression confirms original manifest unchanged and contaminated copy still rejected.30helpercases passed; source generation REST and bounded ACTIVE stabilization included.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/REVIEW-CYCLE-6.md",
+        "tests/unit/release108.test.mjs"
+      ]
+    },
+    {
+      "id": "CI108-APPSPOT",
+      "severity": "medium",
+      "status": "FIXED",
+      "category": "production_readiness",
+      "location": "docs/plans/SATSUNICGO-CICD-108-SETUP-APPROVAL.md",
+      "summary": "Firebase CLI required legacy Appspot actAs despite Gen2 compute runtimes.",
+      "resolution": "Narrow binding only on that existing account under all-required owner setup authorization; runtime accounts unchanged; current automated deployment passed.",
+      "evidence_refs": [
+        "docs/reviews/SATSUNICGO-CICD-108/SETUP-EVIDENCE.md",
+        "https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37709203121"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Main remains unprotected; branch-protection changes were excluded.",
+    "Non-atomic Hosting/Functions promotion requires provider readback on failures.",
+    "Existing moderate dependency advisories remain.",
+    "Seven provider exports remain held; no live commercial/provider acceptance claimed."
+  ],
+  "limitations": [
+    "Bounded self-review; no authenticated independent certification/workcell attestation.",
+    "Legacy root ledger stateDISCOVER,dirty baseline checkout; not a certification of unrelated WIP.",
+    "Repository intelligence DEGRADED.",
+    "Seven existing held Functions/live paid-provider acceptance/production rollback outside executed proof.",
+    "Token and actual cost Unavailable."
+  ]
+}

@@ -1,0 +1,151 @@
+.workspaceShell .workspaceContent .admin096 .membershipToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.membershipToolbar .pageTabs {
+  margin: 0;
+  border: 0;
+  min-width: 0;
+}
+.membershipToolbar > .crmActions {
+  flex-shrink: 0;
+  margin: 0;
+}
+.membershipForm {
+  display: grid;
+  gap: 20px;
+  max-width: 860px;
+}
+.membershipForm fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.membershipType legend {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.membershipChoices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.membershipChoices label {
+  position: relative;
+  cursor: pointer;
+}
+.membershipChoices input {
+  position: absolute;
+  opacity: 0;
+  width: 1px !important;
+  min-height: 0 !important;
+}
+.membershipChoices span {
+  display: block;
+  padding: 14px 8px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-weight: 650;
+  background: #fff;
+}
+.membershipChoices input:checked + span {
+  border-color: #163cff;
+  color: #163cff;
+  background: #f1f4ff;
+  box-shadow: inset 0 0 0 1px #163cff;
+}
+.membershipChoices input:focus-visible + span {
+  outline: 3px solid #8fa4ff;
+  outline-offset: 3px;
+}
+.membershipChoices input:disabled + span {
+  opacity: 0.6;
+  cursor: default;
+}
+.membershipFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.membershipFields label,
+.membershipFooter label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+}
+.membershipHint {
+  margin: 0;
+  font-size: 13px;
+  color: #62718b;
+}
+.membershipFooter {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.membershipFooter > label {
+  width: 240px;
+  max-width: 100%;
+}
+.membershipFooter .crmActions {
+  margin: 0;
+}
+.membershipSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .workspaceShell .workspaceContent .admin096 .membershipToolbar {
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    gap: 8px;
+  }
+  .membershipToolbar .pageTabs {
+    width: 100%;
+  }
+  .membershipFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .membershipFooter {
+    flex-wrap: wrap;
+  }
+  .membershipFooter > label {
+    width: 100%;
+  }
+  .membershipFooter .crmActions {
+    margin-left: auto;
+  }
+}
+.workspaceContent:has(.membershipToolbar) {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.membershipChoices label {
+  min-width: 0;
+}
+@media (max-width: 400px) {
+  .membershipChoices {
+    gap: 6px;
+  }
+  .membershipChoices span {
+    padding-inline: 4px;
+    font-size: 12px;
+  }
+}

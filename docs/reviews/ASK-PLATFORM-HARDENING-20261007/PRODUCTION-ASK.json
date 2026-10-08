@@ -1,0 +1,20 @@
+{
+  "buildConfig": {
+    "build": "projects/278913913091/locations/asia-southeast1/builds/2eb63001-9f3a-4e14-b8ca-bef343de53e8",
+    "runtime": "nodejs22",
+    "sourceProvenance": {
+      "resolvedStorageSource": {
+        "bucket": "gcf-v2-sources-278913913091-asia-southeast1",
+        "generation": "1791419637753281",
+        "object": "ask/function-source.zip"
+      }
+    }
+  },
+  "name": "projects/satsunicgo/locations/asia-southeast1/functions/ask",
+  "serviceConfig": {
+    "ingressSettings": "ALLOW_ALL",
+    "uri": "https://ask-b37peexksa-as.a.run.app"
+  },
+  "state": "ACTIVE",
+  "updateTime": "2026-10-08T00:34:54.770685466Z"
+}

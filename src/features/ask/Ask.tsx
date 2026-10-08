@@ -251,6 +251,7 @@ const ConversationContent = memo(function ConversationContent({
       {turns.map((turn) => (
         <section
           className={styles.turn}
+          data-ask-turn={turn.id}
           key={turn.id}
           aria-label={turn.question}
         >
@@ -466,6 +467,7 @@ export function Ask({
   const dialog = useRef<HTMLDialogElement>(null);
   const chatInput = useRef<HTMLInputElement>(null);
   const idleInput = useRef<HTMLInputElement>(null);
+  const sendOrigin = useRef<{ id: number; rect: DOMRect } | null>(null);
   const conversation = useRef<HTMLDivElement>(null);
   const abort = useRef<AbortController | null>(null);
   const activeId = useRef(0);
@@ -816,6 +818,38 @@ export function Ask({
     }, 320);
   }
 
+  const latestTurnId = turns.at(-1)?.id;
+  useEffect(() => {
+    const origin = sendOrigin.current;
+    if (!open || exiting || !origin) return;
+    sendOrigin.current = null;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    let animation: Animation | undefined;
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        const bubble = conversation.current?.querySelector<HTMLElement>(
+          `[data-ask-turn="${origin.id}"] > div`,
+        );
+        if (!bubble || !dialog.current?.open) return;
+        const target = bubble.getBoundingClientRect();
+        animation = bubble.animate(
+          [
+            {
+              transform: `translate(${origin.rect.left - target.left}px, ${origin.rect.top - target.top}px)`,
+              opacity: 0.2,
+            },
+            { transform: "translate(0, 0)", opacity: 1 },
+          ],
+          { duration: 300, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" },
+        );
+      });
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      animation?.cancel();
+    };
+  }, [latestTurnId, open, exiting]);
   const ask = useCallback(
     async (question: string, images: AskImage[] = []) => {
       const text = question.trim();
@@ -851,11 +885,17 @@ export function Ask({
         .filter((turn) => turn.status === "answered")
         .slice(-6)
         .map((turn) => turn.question);
+      const composerInput = open ? chatInput.current : idleInput.current;
+      if (composerInput && composerInput.value.trim() === text)
+        sendOrigin.current = {
+          id,
+          rect: composerInput.getBoundingClientRect(),
+        };
       setTurns((current) => [
         ...current.slice(-11),
         { id, question: text, status: "pending" },
       ]);
-      setInput("");
+      setInput((current) => (current.trim() === text ? "" : current));
       setBusy(true);
       setPhase("retrieving");
       setDismissed(false);
@@ -1375,9 +1415,6 @@ export function Ask({
                     : turn,
                 ),
           );
-          setInput((current) =>
-            !ownsRequest() || current.trim() ? current : text,
-          );
         }
       } finally {
         if (ownsRequest()) {
@@ -1390,7 +1427,7 @@ export function Ask({
         }
       }
     },
-    [turns, language, aiAvailable, route.pathname, commerce, chatReady],
+    [turns, language, aiAvailable, route.pathname, commerce, chatReady, open],
   );
 
   const vi = language === "vi";

@@ -1,5 +1,8 @@
+import { PageTabs } from "../../shared/PageTabs";
+import { StepForm, StepStage } from "../../shared/StepForm";
 import { notify } from "../../shared/feedback";
 import { AskPilot } from "./AskPilot";
+import { KnowledgeApproval } from "./KnowledgeApproval";
 import "./settings107.css";
 import { policyDateLabel, policyVersionLabel } from "./policy-display099";
 import "./admin-workbench096.css";
@@ -22,7 +25,7 @@ function localTime(value?: number) {
     .slice(0, 16);
 }
 export function Settings() {
-  const [tab, setTab] = useState("policy");
+  const [tab, setTab] = useState<"policy" | "ask">("policy");
   const [policy, setPolicy] = useState<Policy | null>(null),
     [ready, setReady] = useState(false),
     [reading, setReading] = useState(false),
@@ -148,46 +151,22 @@ export function Settings() {
     <section className="admin096 settings107">
       <CrmHeading
         title="Cấu hình"
-        description="Quản lý tỷ giá, điều khoản và thử Ask."
+        description="Quản lý tỷ giá, điều khoản và ngân sách AI."
       />
-      <div className="settingsTabs" role="tablist" aria-label="Mục cấu hình">
-        {[
-          ["policy", "Tỷ giá & điều khoản"],
-          ["ask", "Thử Ask"],
-        ].map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            id={`tab-${id}`}
-            aria-controls={`panel-${id}`}
-            aria-selected={tab === id}
-            tabIndex={tab === id ? 0 : -1}
-            onClick={() => setTab(id)}
-            onKeyDown={(e) => {
-              if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
-                e.preventDefault();
-                const next =
-                  e.key === "Home"
-                    ? "policy"
-                    : e.key === "End"
-                      ? "ask"
-                      : tab === "policy"
-                        ? "ask"
-                        : "policy";
-                setTab(next);
-                document.getElementById(`tab-${next}`)?.focus();
-              }
-            }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <PageTabs
+        id="settings"
+        label="Mục cấu hình"
+        value={tab}
+        onChange={setTab}
+        items={[
+          { value: "policy", label: "Tỷ giá & Điều khoản" },
+          { value: "ask", label: "AI Budget" },
+        ]}
+      />
       <div
         role="tabpanel"
-        id="panel-policy"
-        aria-labelledby="tab-policy"
+        id="settings-panel-policy"
+        aria-labelledby="settings-tab-policy"
         hidden={tab !== "policy"}
       >
         {ready && (
@@ -208,120 +187,164 @@ export function Settings() {
             {reading && (
               <CrmState kind="loading" title="Đang tải chính sách…" />
             )}
-            <form
+            <StepForm
               key={policy?.version ?? "new"}
               className="form"
+              steps={["Điều khoản", "Tỷ giá", "Hiệu lực", "Kiểm tra"]}
+              disabled={!ready || busy || reading || uncertain}
+              validateStep={(step, form) => {
+                if (step !== 2) return null;
+                const data = new FormData(form);
+                return new Date(String(data.get("until"))).getTime() >
+                  new Date(String(data.get("from"))).getTime()
+                  ? null
+                  : "Hết hạn phải sau thời gian bắt đầu.";
+              }}
+              review={(data) => (
+                <dl
+                  className="policyReview"
+                  aria-label="Thông tin trước khi gửi"
+                >
+                  <div>
+                    <dt>Điều khoản</dt>
+                    <dd>{String(data.get("terms"))}</dd>
+                  </div>
+                  {["USD", "JPY", "KRW"].map((c) => (
+                    <div key={c}>
+                      <dt>{c} · VND cho đơn vị nhỏ nhất</dt>
+                      <dd>
+                        {String(data.get(`${c}-num`))} VND /{" "}
+                        {String(data.get(`${c}-den`))} đơn vị
+                      </dd>
+                    </div>
+                  ))}
+                  <div>
+                    <dt>Áp dụng từ · giờ trên thiết bị</dt>
+                    <dd>
+                      {new Date(String(data.get("from"))).toLocaleString(
+                        "vi-VN",
+                      )}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Hết hạn · giờ trên thiết bị</dt>
+                    <dd>
+                      {new Date(String(data.get("until"))).toLocaleString(
+                        "vi-VN",
+                      )}
+                    </dd>
+                  </div>
+                </dl>
+              )}
+              finalAction={
+                <button
+                  className="primary"
+                  type="submit"
+                  disabled={!ready || busy || reading || uncertain}
+                >
+                  {busy ? "Đang lưu…" : "Lưu chính sách"}
+                </button>
+              }
               onSubmit={(e) => void save(e)}
             >
-              <fieldset
-                className="form"
-                disabled={!ready || busy || reading || uncertain}
-              >
-                <div className="policyGroup group0">
-                  <label>
-                    <span className="formLabelText">
-                      Phiên bản điều khoản{" "}
-                      <span className="requiredMark" aria-hidden="true">
-                        *
-                      </span>
+              <StepStage index={0}>
+                <label>
+                  <span className="formLabelText">
+                    Phiên bản điều khoản{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
                     </span>
-                    <input
-                      name="terms"
-                      required
-                      maxLength={80}
-                      defaultValue={policy?.termsVersion}
-                    />
-                  </label>
-                </div>
-                <div className="policyGroup group1">
-                  <h3>Tỷ giá quy đổi</h3>
-                  {["USD", "JPY", "KRW"].map((c) => (
-                    <fieldset className="crmRateFields adminRateRow" key={c}>
-                      <legend>{c} · VND cho đơn vị nhỏ nhất</legend>
-                      <label>
-                        <span className="formLabelText">
-                          Số VND{" "}
-                          <span className="requiredMark" aria-hidden="true">
-                            *
-                          </span>
+                  </span>
+                  <input
+                    name="terms"
+                    required
+                    maxLength={80}
+                    defaultValue={policy?.termsVersion}
+                  />
+                </label>
+              </StepStage>
+              <StepStage index={1}>
+                <h3>Tỷ giá quy đổi</h3>
+                {["USD", "JPY", "KRW"].map((c) => (
+                  <fieldset className="crmRateFields adminRateRow" key={c}>
+                    <legend>{c} · VND cho đơn vị nhỏ nhất</legend>
+                    <label>
+                      <span className="formLabelText">
+                        Số VND{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
                         </span>
-                        <input
-                          name={`${c}-num`}
-                          type="number"
-                          min={1}
-                          max={1000000000}
-                          required
-                          defaultValue={policy?.rates[c]?.numerator}
-                        />
-                      </label>
-                      <label>
-                        <span className="formLabelText">
-                          Số đơn vị tiền nguồn{" "}
-                          <span className="requiredMark" aria-hidden="true">
-                            *
-                          </span>
+                      </span>
+                      <input
+                        name={`${c}-num`}
+                        type="number"
+                        min={1}
+                        max={1000000000}
+                        required
+                        defaultValue={policy?.rates[c]?.numerator}
+                      />
+                    </label>
+                    <label>
+                      <span className="formLabelText">
+                        Số đơn vị tiền nguồn{" "}
+                        <span className="requiredMark" aria-hidden="true">
+                          *
                         </span>
-                        <input
-                          name={`${c}-den`}
-                          type="number"
-                          min={1}
-                          max={1000000000}
-                          required
-                          defaultValue={policy?.rates[c]?.denominator}
-                        />
-                      </label>
-                    </fieldset>
-                  ))}
-                </div>
-                <div className="policyGroup group2">
-                  <h3>Thời gian áp dụng</h3>
-                  <label>
-                    <span className="formLabelText">
-                      Áp dụng từ · giờ trên thiết bị{" "}
-                      <span className="requiredMark" aria-hidden="true">
-                        *
                       </span>
+                      <input
+                        name={`${c}-den`}
+                        type="number"
+                        min={1}
+                        max={1000000000}
+                        required
+                        defaultValue={policy?.rates[c]?.denominator}
+                      />
+                    </label>
+                  </fieldset>
+                ))}
+              </StepStage>
+              <StepStage index={2}>
+                <h3>Thời gian áp dụng</h3>
+                <label>
+                  <span className="formLabelText">
+                    Áp dụng từ · giờ trên thiết bị{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
                     </span>
-                    <input
-                      name="from"
-                      type="datetime-local"
-                      required
-                      defaultValue={localTime(policy?.effectiveFrom)}
-                    />
-                  </label>
-                  <label>
-                    <span className="formLabelText">
-                      Hết hạn · giờ trên thiết bị{" "}
-                      <span className="requiredMark" aria-hidden="true">
-                        *
-                      </span>
+                  </span>
+                  <input
+                    name="from"
+                    type="datetime-local"
+                    required
+                    defaultValue={localTime(policy?.effectiveFrom)}
+                  />
+                </label>
+                <label>
+                  <span className="formLabelText">
+                    Hết hạn · giờ trên thiết bị{" "}
+                    <span className="requiredMark" aria-hidden="true">
+                      *
                     </span>
-                    <input
-                      name="until"
-                      type="datetime-local"
-                      required
-                      defaultValue={localTime(policy?.expiresAt)}
-                    />
-                  </label>
-                </div>
-                <div className="policyGroup group3">
-                  <label className="policyCheck">
-                    <input
-                      name="approved"
-                      type="checkbox"
-                      defaultChecked={policy?.approved}
-                    />{" "}
-                    Đã duyệt điều khoản và tỷ giá thương mại
-                  </label>
-                  <button
-                    className="primary"
-                    disabled={!ready || busy || reading || uncertain}
-                  >
-                    {busy ? "Đang lưu…" : "Lưu chính sách"}
-                  </button>
-                </div>
-              </fieldset>
-            </form>
+                  </span>
+                  <input
+                    name="until"
+                    type="datetime-local"
+                    required
+                    defaultValue={localTime(policy?.expiresAt)}
+                  />
+                </label>
+              </StepStage>
+              <section className="crmStepStage">
+                <label className="policyCheck">
+                  <input
+                    name="approved"
+                    type="checkbox"
+                    defaultChecked={policy?.approved}
+                  />{" "}
+                  Đã duyệt điều khoản và tỷ giá thương mại
+                </label>
+              </section>
+            </StepForm>
             {error && (
               <button
                 type="button"
@@ -358,11 +381,12 @@ export function Settings() {
       </div>
       <div
         role="tabpanel"
-        id="panel-ask"
-        aria-labelledby="tab-ask"
+        id="settings-panel-ask"
+        aria-labelledby="settings-tab-ask"
         hidden={tab !== "ask"}
       >
         <AskPilot />
+        <KnowledgeApproval />
       </div>
     </section>
   );

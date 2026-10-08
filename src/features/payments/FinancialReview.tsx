@@ -289,6 +289,13 @@ export function FinancialReview({
             </label>
           </StepStage>
           <StepStage index={2}>
+            <p className="financeContextNote">
+              {action === "closeException"
+                ? "Đóng ngoại lệ chỉ lưu kết quả kiểm tra, không ghi thêm tiền."
+                : action === "allocateException"
+                  ? "Phân bổ tiền đã xác minh vào đơn đã chọn, không tự cho đơn đi tiếp."
+                  : "Ghi nhận khoản ngân hàng đã đảo, giữ lịch sử gốc và tạm giữ đơn để đối soát."}
+            </p>
             <button
               className="primary"
               disabled={busy || uncertain || disabled}

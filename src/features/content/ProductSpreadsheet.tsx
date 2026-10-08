@@ -1,5 +1,5 @@
 import { csvCell } from "../../../packages/domain";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { callService } from "../../shared/firebase";
 import type { ContentRow } from "../../shared/public-content";
 import {
@@ -18,11 +18,13 @@ export function ProductSpreadsheet({
   selected,
   filtered,
   onSaved,
+  leadingAction,
 }: {
   rows: ContentRow[];
   selected: Set<string>;
   filtered: ContentRow[];
   onSaved: () => Promise<void>;
+  leadingAction?: ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null),
     cancel = useRef(false),
@@ -150,6 +152,7 @@ export function ProductSpreadsheet({
   return (
     <div className="ceSpreadsheet">
       <div className="ceExport">
+        {leadingAction}
         <select
           aria-label="Phạm vi xuất"
           value={scope}
@@ -197,9 +200,33 @@ export function ProductSpreadsheet({
             })
           }
         >
+          <svg
+            className="crmIcon"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+          </svg>
           Xuất dữ liệu
         </button>
         <button disabled={busy} onClick={() => dialog.current?.showModal()}>
+          <svg
+            className="crmIcon"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 15V3m-5 5 5-5 5 5M4 16v5h16v-5" />
+          </svg>
           Nhập Excel
         </button>
         {busy && (

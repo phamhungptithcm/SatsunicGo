@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK109",
+  "status": "PASSED",
+  "cycle": 2,
+  "source_hashes": {
+    "src/features/ask/Ask.tsx": "0d2ab902f1472d8bdb8f1ac1a9fbc394df63e71fd118809b432d4d259e40a859",
+    "tests/browser/ask109.config.ts": "4c730b050dc28e0d304203009399f44e92de4ca98e6d02a1bfd21e23030dd77f",
+    "tests/browser/ask109.spec.ts": "f22cd94c9c8304192a9896e17481ff111ede53763ad2613707e2743299eddd7d"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Enter/button clear accepted question; animated bubble; unchanged blocked guards",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No auth/API/payment/provider change; no additional transcript logging",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript and scoped ESLint passed; no dependencies",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Error retry, pending draft, preparation draft, close and reduced motion tested",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Failed turn retained; no composer restoration or new-draft overwrite",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Scoped implementation verified locally; production deployment not performed or claimed",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Animation optional, request flow independent; actual provider not exercised",
+      "evidence_refs": [
+        "src/features/ask/Ask.tsx",
+        "tests/browser/ask109.config.ts",
+        "tests/browser/ask109.spec.ts",
+        "docs/reviews/ASK109-PRODUCT-CONTENT.md"
+      ]
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "findings": [
+        "Answer updates should not cancel send animation early",
+        "Closure must use current panel open state",
+        "Draft changes during preparation must not be overwritten"
+      ],
+      "fixes": [
+        "Effect depends on turn ID and open/exiting rather than mutable turn object",
+        "open added to ask callback dependencies",
+        "Only clear composer if its current trimmed value matches submitted question"
+      ]
+    },
+    {
+      "cycle": 2,
+      "findings": [],
+      "checks": [
+        "8 browser cases passed",
+        "tsc --noEmit passed",
+        "scoped ESLint passed",
+        "git diff --check passed",
+        "desktop/mobile rendered screenshot reviewed"
+      ]
+    }
+  ],
+  "findings": [],
+  "residual_risks": [
+    "Provider/production path not exercised; test transport synthetic",
+    "No hardware FPS or screen-reader certification"
+  ],
+  "limitations": [
+    "Intelligence DEGRADED: stale indexes with healthy queries",
+    "Runtime ledger CLI unavailable; file fallback",
+    "Token usage and actual billed cost Unavailable"
+  ]
+}

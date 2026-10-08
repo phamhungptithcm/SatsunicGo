@@ -120,28 +120,28 @@ export function Refunds() {
       <CrmHeading
         title="Hoàn tiền"
         description="Tạo yêu cầu và đối chiếu giao dịch hoàn tiền theo đơn."
-        reload={<button
-              disabled={busy || requestUncertain}
-              onClick={() => void load()}
-            >
-              <CrmIcon name="refresh" /> Tải lại
-            </button>}
-        actions={
-          <>
-
-            <button
-              className="primary"
-              disabled={busy || requestUncertain}
-              onClick={() => setCreating(true)}
-            >
-              <CrmIcon name="document" /> Tạo yêu cầu hoàn tiền
-            </button>
-          </>
+        reload={
+          <button
+            disabled={busy || requestUncertain}
+            onClick={() => void load()}
+          >
+            <CrmIcon name="refresh" /> Tải lại
+          </button>
         }
       />
+      <div className="fc095SectionHead">
+        <h2>Yêu cầu hoàn tiền</h2>
+        <button
+          className="primary"
+          disabled={busy || requestUncertain}
+          onClick={() => setCreating(true)}
+        >
+          <CrmIcon name="document" /> Tạo yêu cầu
+        </button>
+      </div>
       <p className="fc095Notice">
-        Yêu cầu chỉ dành trước số tiền có thể hoàn. Chỉ xác nhận sau khi đã đối
-        chiếu giao dịch tiền ra thực tế; không tự chuyển tiền.
+        Tạo yêu cầu chưa chuyển tiền. Chỉ xác nhận sau khi đã đối chiếu khoản
+        hoàn thực tế.
       </p>
       <WorkbenchComposer095
         open={creating}
@@ -212,10 +212,6 @@ export function Refunds() {
           )}
         </StepForm>
       </WorkbenchComposer095>
-      <div className="fc095SectionHead">
-        <h2>Yêu cầu hoàn tiền</h2>
-        <span className="muted">Danh sách theo trang</span>
-      </div>
       {busy && <CrmState kind="loading" title="Đang tải / lưu…" />}
       {error && <CrmState kind="error" title={error} />}
       <div className="crmList">

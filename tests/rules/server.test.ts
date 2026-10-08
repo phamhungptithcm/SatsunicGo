@@ -42,7 +42,7 @@ async function invoke(
 }
 beforeAll(async () => {
   process.env.FUNCTIONS_EMULATOR = "true";
-  process.env.GCLOUD_PROJECT = `demo-satsunicgo-server-${randomUUID().slice(0, 8)}`;
+  process.env.GCLOUD_PROJECT = "demo-satsunicgo";
   process.env.FIREBASE_CONFIG = JSON.stringify({
     projectId: process.env.GCLOUD_PROJECT,
   });
@@ -820,7 +820,7 @@ it("operational dashboard is staff-only and returns bounded counts without custo
     operationalDashboard.run(req(owner, { from: 1, until: Date.now() })),
   ).rejects.toMatchObject({ code: "invalid-argument" });
 });
-it("AI context ownership and global quota deny before model invocation", async () => {
+it("paid AI remains held before model invocation even with settings and quota state", async () => {
   const { ask } = await import("../../functions/src/ai/ask");
   const id = `${prefix}-ai-private`;
   await db.doc(`orders/${id}`).set({ ownerId: customer, stage: "REQUESTED" });
@@ -836,13 +836,14 @@ it("AI context ownership and global quota deny before model invocation", async (
     orderId: id,
   };
   await expect(ask.run(req(other, data))).rejects.toMatchObject({
-    code: "permission-denied",
+    code: "unavailable",
   });
   const day = Math.floor(Date.now() / 86400000);
   await db.doc(`aiQuota/global-${day}`).set({ count: 500 });
   await expect(ask.run(req(customer, data))).rejects.toMatchObject({
-    code: "resource-exhausted",
+    code: "unavailable",
   });
+  expect((await db.doc(`aiQuota/global-${day}`).get()).data()?.count).toBe(500);
   await db.doc("settings/ai").set({ enabled: false, approved: false });
   await expect(ask.run(req(customer, data))).rejects.toMatchObject({
     code: "unavailable",

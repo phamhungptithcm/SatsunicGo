@@ -143,6 +143,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
     [busy, setBusy] = useState(false),
     [share, setShare] = useState("");
   const [mobileDetail, setMobileDetail] = useState(false);
+  const [sellerEditing, setSellerEditing] = useState(false);
   const [creating, setCreating] = useState(Boolean(search.get("order")));
   const detailTarget = useRef<HTMLElement | null>(null);
   const returnTarget = useRef<HTMLButtonElement | null>(null);
@@ -407,10 +408,27 @@ export function Documents({ staff = false }: { staff?: boolean }) {
                 disabled={busy || pending}
                 onClick={() => {
                   setMobileDetail(false);
+                  setSellerEditing(false);
                   setCreating(true);
                 }}
               >
                 <CrmIcon name="document" /> Tạo bản nháp
+              </button>
+            )}
+            {staff && list?.canConfigure && (
+              <button
+                type="button"
+                className="invoiceSettingsButton"
+                aria-label="Thông tin người bán"
+                title="Thông tin người bán"
+                aria-expanded={sellerEditing}
+                disabled={busy || pending}
+                onClick={() => {
+                  setCreating(false);
+                  setSellerEditing(!sellerEditing);
+                }}
+              >
+                <CrmIcon name="person" />
               </button>
             )}
           </>
@@ -432,16 +450,20 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       )}
       {listLoading && <CrmState kind="loading" title="Đang tải hóa đơn…" />}
       {staff && list?.canConfigure && (
-        <details className="noPrint fc095Settings">
-          <summary>Thông tin người bán</summary>
+        <WorkbenchComposer095
+          open={sellerEditing}
+          title="Thông tin người bán"
+          locked={busy || pending}
+          onClose={() => setSellerEditing(false)}
+        >
           <form
-            className="form"
+            className="form invoiceSellerForm"
             key={list.seller?.version ?? 0}
             onSubmit={configure}
           >
             <label>
               <span className="formLabelText">
-                Tên doanh nghiệp/người bán{" "}
+                Tên người bán{" "}
                 <span className="requiredMark" aria-hidden="true">
                   *
                 </span>
@@ -473,7 +495,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
             </label>
             <label>
               <span className="formLabelText">
-                Thông tin liên hệ{" "}
+                Liên hệ{" "}
                 <span className="requiredMark" aria-hidden="true">
                   *
                 </span>
@@ -487,14 +509,16 @@ export function Documents({ staff = false }: { staff?: boolean }) {
                 defaultValue={list.seller?.seller.contact}
               />
             </label>
-            <button disabled={busy || pending}>Lưu thông tin người bán</button>
+            <button className="primary" disabled={busy || pending}>
+              Lưu thông tin
+            </button>
           </form>
-        </details>
+        </WorkbenchComposer095>
       )}
       {staff && list?.canIssue && (
         <WorkbenchComposer095
           open={creating}
-          title="Tạo bản nháp từ đơn hàng"
+          title="Tạo bản nháp"
           locked={busy || pending}
           onClose={() => setCreating(false)}
         >
@@ -504,7 +528,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
           <form className="form noPrint" onSubmit={create}>
             <label>
               <span className="formLabelText">
-                Mã đơn đã chốt tổng cuối{" "}
+                Mã đơn{" "}
                 <span className="requiredMark" aria-hidden="true">
                   *
                 </span>
@@ -520,7 +544,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
               />
             </label>
             <button className="primary" disabled={busy || pending}>
-              Tạo bản nháp từ đơn
+              Tạo bản nháp
             </button>
           </form>
         </WorkbenchComposer095>
@@ -530,7 +554,16 @@ export function Documents({ staff = false }: { staff?: boolean }) {
       >
         <aside className="invoiceSidebar" aria-label="Danh sách hóa đơn">
           <h2 className="invoicePanelTitle">Danh sách hóa đơn</h2>
-          {orderFilter && <p className="crmFilterScope">Đơn <CrmReference label="Mã đơn" value={orderFilter} />{!creating && !busy && !pending && <Link to={staff ? "/crm/documents" : "/account/documents"}>Xóa bộ lọc</Link>}</p>}
+          {orderFilter && (
+            <p className="crmFilterScope">
+              Đơn <CrmReference label="Mã đơn" value={orderFilter} />
+              {!creating && !busy && !pending && (
+                <Link to={staff ? "/crm/documents" : "/account/documents"}>
+                  Xóa bộ lọc
+                </Link>
+              )}
+            </p>
+          )}
           <div className="noPrint documentList crmList" aria-busy={listLoading}>
             {list?.rows.map((d) => (
               <article
@@ -566,7 +599,7 @@ export function Documents({ staff = false }: { staff?: boolean }) {
               </article>
             ))}
             {list && !listLoading && !error && !list.rows.length && (
-              <CrmState kind="empty" title="Chưa có hóa đơn trong trang này." />
+              <CrmState kind="empty" title="Chưa có hóa đơn ở trang này" />
             )}
           </div>
           {list?.next && (

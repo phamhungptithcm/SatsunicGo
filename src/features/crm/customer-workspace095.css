@@ -319,3 +319,29 @@
   border-color: var(--blue);
   color: #fff;
 }
+
+.workspaceShell .customerWorkspace095-empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 44px 24px;
+  text-align: center;
+}
+.workspaceShell .customerWorkspace095-empty > .crmIcon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 6px;
+  color: #647087;
+}
+.workspaceShell .customerWorkspace095-empty h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.workspaceShell .customerWorkspace095-empty p {
+  max-width: 420px;
+  margin: 0;
+  color: #647087;
+  font-size: 13px;
+  line-height: 1.7;
+}

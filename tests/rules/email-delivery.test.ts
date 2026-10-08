@@ -1,3 +1,4 @@
+import { syntheticProviderAllowed } from "../helpers/synthetic-provider-gate";
 import { initializeApp, deleteApp } from "firebase-admin/app";
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import { randomUUID } from "node:crypto";
@@ -209,4 +210,10 @@ afterAll(async () => {
   await db.terminate();
   const { getApp } = await import("firebase-admin/app");
   await deleteApp(getApp());
+});
+
+// Exercise only synthetic provider transaction cores; real release-gate tests remain unmocked.
+vi.mock("../../functions/src/provider-release-gate", async (actual) => {
+  const original = await actual<typeof import("../../functions/src/provider-release-gate")>();
+  return { ...original, releaseCapabilityAllowed: syntheticProviderAllowed };
 });

@@ -1,0 +1,312 @@
+[
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingRatesPublic",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewAdmin",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentReport",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readStaffAccess",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioMediaRead",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/catalogCheckout",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioRead",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/orderConversationCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/saveCustomerNotes",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/workspaceCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingRatesAdmin",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderOperations",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioMediaUpload",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioAdvancedCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/listFollowUps",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/studioAdvancedRead",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/campaignBannersPublic",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readNotification",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicPage",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentSubmit",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceDetail",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipReminderPolicy",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderImage",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/consolidationCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicDiscovery",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/orderHistory",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/operationalDashboard",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/changeCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/outboxCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/membershipCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOwnerConfiguration",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/listCustomers",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewRead",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/refundCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/customerOrderTracking",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/command",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/uploadContentImage",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerAdmin",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/financeReview",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/shippingCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceShare",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readOrderConversation",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/ask",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/publicImage",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/invoiceList",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/cartCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/listWork",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/websiteBannerPreview",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewEligibility",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewWrite",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/blogCommentList",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/returnCommand",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/listCrmStaff",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/ticketMessages",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/uploadOrderImage",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/listOrderImages",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/readCustomer",
+    "state": "ACTIVE"
+  },
+  {
+    "environment": "GEN_2",
+    "name": "projects/satsunicgo/locations/asia-southeast1/functions/productReviewModerate",
+    "state": "ACTIVE"
+  }
+]

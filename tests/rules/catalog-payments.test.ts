@@ -1,3 +1,4 @@
+import { syntheticProviderAllowed } from "../helpers/synthetic-provider-gate";
 import { beforeAll, expect, it, vi } from "vitest";
 import { randomUUID } from "node:crypto";
 import type { CallableRequest } from "firebase-functions/v2/https";
@@ -114,4 +115,10 @@ it("persists a full catalog intent without undefined quote fields; provider fail
   });
   expect(provider.create).toHaveBeenCalledOnce();
   expect((await db.doc(`orders/${id}`).get()).data()?.collected).toBe(0);
+});
+
+// Exercise only synthetic provider transaction cores; real release-gate tests remain unmocked.
+vi.mock("../../functions/src/provider-release-gate", async (actual) => {
+  const original = await actual<typeof import("../../functions/src/provider-release-gate")>();
+  return { ...original, releaseCapabilityAllowed: syntheticProviderAllowed };
 });

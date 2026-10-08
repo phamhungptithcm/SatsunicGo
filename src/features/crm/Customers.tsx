@@ -1,4 +1,5 @@
 import "./customer-workspace095.css";
+import "./support-care-empty.css";
 import { CrmHeading, CrmIcon, CrmReference, CrmState } from "./CrmPresentation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
@@ -181,8 +182,22 @@ export function Customers({
                 ? "Xem danh sách"
                 : "Tìm khách hàng"}
           </button>
-          {(filter.search || filter.mode !== "name" || filter.mine || filter.due !== "overdue") && (
-            <button type="button" disabled={busy} onClick={() => change({ search: "", mode: "name", due: "overdue", mine: false })}>
+          {(filter.search ||
+            filter.mode !== "name" ||
+            filter.mine ||
+            filter.due !== "overdue") && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() =>
+                change({
+                  search: "",
+                  mode: "name",
+                  due: "overdue",
+                  mine: false,
+                })
+              }
+            >
               Xóa bộ lọc
             </button>
           )}
@@ -220,13 +235,15 @@ export function Customers({
           )}
           {page && !busy && (
             <>
-              <div className="customerWorkspace095-resultHeading">
-                <h2>{followUps ? "Lịch hẹn" : "Danh sách khách hàng"}</h2>
-                <span>
-                  {page.rows.length} {followUps ? "lịch hẹn" : "khách hàng"}{" "}
-                  trong trang
-                </span>
-              </div>
+              {page.rows.length > 0 && (
+                <div className="customerWorkspace095-resultHeading">
+                  <h2>{followUps ? "Lịch hẹn" : "Danh sách khách hàng"}</h2>
+                  <span>
+                    {page.rows.length} {followUps ? "lịch hẹn" : "khách hàng"}{" "}
+                    trong trang
+                  </span>
+                </div>
+              )}
               {page.rows.length > 0 && (
                 <div className="tableWrap crmTable crmRecordTable crmCustomersTable">
                   <table role="table">
@@ -308,32 +325,45 @@ export function Customers({
                   </table>
                 </div>
               )}
-              {!page.rows.length && (
-                <CrmState
-                  kind="empty"
-                  title={
-                    followUps
-                      ? "Chưa có lịch hẹn phù hợp"
-                      : "Chưa có khách hàng phù hợp"
-                  }
-                >
-                  {followUps
-                    ? filter.mine
-                      ? "Thử chọn khoảng thời gian khác hoặc bỏ lọc Việc của tôi."
-                      : "Thử chọn khoảng thời gian khác để xem lịch hẹn."
-                    : filter.search.trim()
+              {!page.rows.length && !followUps && (
+                <div className="customerWorkspace095-empty">
+                  <CrmIcon name="person" />
+                  <h3>Chưa có khách hàng phù hợp</h3>
+                  <p>
+                    {filter.search.trim()
                       ? "Kiểm tra tên hoặc mã khách hàng rồi tìm lại."
                       : "Danh sách hiện tại chưa có khách hàng. Bạn có thể thử tải lại."}
-                </CrmState>
+                  </p>
+                </div>
               )}
-              <div className="crmPagination">
-                <span>Tối đa 30 khách hàng mỗi trang</span>
-                {page.next && (
-                  <button disabled={busy} onClick={() => void load(page.next!)}>
-                    Trang tiếp theo
-                  </button>
-                )}
-              </div>
+              {!page.rows.length && followUps && (
+                <div className="supportCareEmpty">
+                  <CrmIcon name="clock" />
+                  <h3>Chưa có lịch hẹn phù hợp</h3>
+                  <p>
+                    {filter.mine
+                      ? "Thử chọn khoảng thời gian khác hoặc bỏ lọc Việc của tôi."
+                      : "Thử chọn khoảng thời gian khác để xem lịch hẹn."}
+                  </p>
+                </div>
+              )}
+              {(page.rows.length > 0 || page.next) && (
+                <div className="crmPagination">
+                  <span>
+                    {followUps
+                      ? "Tối đa 30 lịch hẹn mỗi trang"
+                      : "Tối đa 30 khách hàng mỗi trang"}
+                  </span>
+                  {page.next && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void load(page.next!)}
+                    >
+                      Trang tiếp theo
+                    </button>
+                  )}
+                </div>
+              )}
             </>
           )}
         </div>

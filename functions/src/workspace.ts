@@ -66,6 +66,7 @@ export const listWork = onCall(opts, async (req) => {
           .string()
           .regex(/^[a-zA-Z0-9-]{1,80}$/)
           .optional(),
+        supportStatus: z.enum(["open", "resolved"]).optional(),
         changeState: z.literal("accepted").optional(),
         queue: z
           .enum([
@@ -90,8 +91,9 @@ export const listWork = onCall(opts, async (req) => {
       .safeParse(req.data);
     if (!parsed.success)
       throw new HttpsError("invalid-argument", "Không hợp lệ.");
-    const { kind, after, id, queue, changeState } = parsed.data;
+    const { kind, after, id, queue, changeState, supportStatus } = parsed.data;
     if (
+      (supportStatus && kind !== "supportTickets") ||
       (changeState && kind !== "orderChanges") ||
       (queue && kind !== "orders") ||
       (id &&
@@ -175,6 +177,7 @@ export const listWork = onCall(opts, async (req) => {
         throw new HttpsError("permission-denied", "Đơn chưa được phân công.");
       q = q.where("__name__", "==", id);
     }
+    if (supportStatus) q = q.where("status", "==", supportStatus);
     if (queue) {
       if (queue === "holds") q = q.where("hold", ">", "");
       else {
@@ -193,6 +196,7 @@ export const listWork = onCall(opts, async (req) => {
       const last = await tx.get(db.doc(`${kind}/${after}`));
       if (
         !last.exists ||
+        (supportStatus && last.data()?.status !== supportStatus) ||
         (acceptedChanges &&
           (last.data()?.state !== "accepted" ||
             !Number.isSafeInteger(last.data()?.reviewedAt) ||

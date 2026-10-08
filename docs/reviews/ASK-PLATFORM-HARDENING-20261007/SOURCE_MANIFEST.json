@@ -1,0 +1,33 @@
+{
+  "head": "caeec532a77176f7412551ab6621fe9df1d5da48",
+  "files": {
+    "functions/src/ai/approved-knowledge.ts": "06b1ca9f0db3e678be582ab2516910f2cc70f3b67b561122c491d7bbf2816e13",
+    "functions/src/ai/ask-workflow.ts": "0855f5520a864d80cd010fd2c6a3b8fcf400574b64687a644298d45e3c406eda",
+    "functions/src/ai/ask.ts": "dd8d43c85c95e4bb17485ec6d76ab1470214ea67b97fbf488e4fa9a7151bb37d",
+    "functions/src/ai/knowledge-retrieval.ts": "c7dbfe98a65a8a3b5759476ab586bbe9fe892be2975785cc07f96f84ef64dad0",
+    "functions/src/ai/run-guard.ts": "4f0515c729da4e233f5a1281ab63ad09d794d8537562361b36bd8a56f69550d5",
+    "functions/src/index.ts": "9c471c9b5feaff0579afdbfdfd85012045b397f091b640a2563e685b0a618043",
+    "packages/domain/ask-knowledge-body.ts": "137bbb5be74bfabf26b1010977292df093ce0af4fcb542a180a20e01b0ef80f1",
+    "packages/domain/ask-knowledge.ts": "d8e283f8d0d8f9cfdcfd7e73daaf151fe223ce5b85af3824810f1b2b84ec34e3",
+    "packages/domain/ask-stream.ts": "461624d239ae717c3244abb2eb5f8b080873880aa7838544dad6c270b3e3e427",
+    "src/features/ask/transport.ts": "adc90a332bd33abb7595199732fafc3335605c140581c28276f3e83ede8e94f8",
+    "src/features/membership/PlanEditor.tsx": "044441aa6af9a7db3254ddb1c31b351fd167dcda35bf2355f7389b0a1601b514",
+    "src/features/settings/KnowledgeApproval.tsx": "a367c337305a78056280bc162021ce75283ff67c3f4c6c30d9f28cdd55a9024f",
+    "src/features/settings/Settings.tsx": "2b481d94790be0fbe6ac9582bb55b3801e8f32fabb8de5467ed45c6e96aaed52",
+    "src/features/settings/knowledge-approval.css": "300dd46a6ee5e4d37967260552377734868da6b900b3aecc6484fcec0fd62209",
+    "tests/browser/ask-platform.config.ts": "54680c37da8f2c5d66caa762e8d87f30786c5016318ed48ec824d2fa15e3d383",
+    "tests/browser/ask-platform.spec.ts": "8ff3d03b41b86abb43f6cf95cc92d5027871b39b41098cb4b1ae6020c7bd6fdd",
+    "tests/browser/knowledge-approval.config.ts": "53919059ceedd90cd8eb76f7c6ccea40dac2b24a2db7733735b8bd9f0a6d234f",
+    "tests/browser/knowledge-approval.spec.ts": "94f67e40bf3cda24430fb8227ed79f013a7f9433c95eb383054c749d16a10538",
+    "tests/helpers/demo-environment.ts": "12e128c29d5db0f2377c3a3bd34410d14c37c9d8916fd3a1dd177dae9c051fb9",
+    "tests/rules/ask-approved-knowledge.test.ts": "68a46ab37b9a8c38a77be5190c54992a420886901dff3422118cf7a97f287a5a",
+    "tests/rules/ask-platform.test.ts": "e9ae11369fb820d5c086b553848fd76f4d360dafb79136b8ba7eedd28381bb11",
+    "tests/unit/ask-approved-knowledge.test.ts": "17609688a514fb14358ce8e9385b1f3581aefdef031f5ea76b96f601d277bd6c",
+    "tests/unit/ask-knowledge.test.ts": "13ed6c70bbe748f00a07a89bbe4ccd3c4cef67f2274927220bef39f5cca2d196",
+    "tests/unit/ask-run-guard.test.ts": "fd493342a8ccd2fc4bf4046ceb11a8c60948bc2d3da03455c3e75353ff5211af",
+    "tests/unit/ask-transport.test.ts": "22887ebe28054a6b7972c7b83b45ec205acd1655ae3a9f32bf347b628052cece",
+    "tests/unit/demo-environment.test.ts": "1f257e9653b9ae37fbe3a28b5275757d5e4e92f018fd03ca7d080529e3e3b908",
+    "tests/unit/required-labels092.test.ts": "91f93a94a1e0edcfb8f1d1affd46e3b96c87d8bdd12a51e05dce2aca955b14e8"
+  },
+  "ownership": "Hashes bind observed source; whole-file hashes of concurrent Settings/Membership do not authorize shipping their unrelated hunks."
+}

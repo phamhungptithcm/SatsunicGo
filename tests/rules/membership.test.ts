@@ -32,7 +32,7 @@ beforeAll(async () => {
     );
   process.env.FUNCTIONS_EMULATOR = "true";
   app = initializeApp({
-    projectId: `demo-satsunicgo-membership-${randomUUID().slice(0, 8)}`,
+    projectId: "demo-satsunicgo",
   });
   db = getFirestore();
   await Promise.all([

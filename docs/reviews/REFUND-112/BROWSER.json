@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "assertions": 22,
+  "widths": [
+    320,
+    390,
+    1280
+  ],
+  "scope": "Actual Refunds and shared CRM composer/StepForm; synthetic read-only empty API; writes blocked; not live money workflow",
+  "server": "http://127.0.0.1:5207"
+}

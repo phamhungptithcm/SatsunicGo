@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK-PLATFORM-HARDENING-20261007",
+  "status": "BLOCKED",
+  "dimensions": {
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google, account lock, owner fences, privileged action rejection remain enforced. No secrets or production data accessed.",
+      "evidence_refs": [
+        "SCENARIOS.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped ESLint and frontend/backend TypeScript checks passed. No new dependencies.",
+      "evidence_refs": [
+        "SCENARIOS.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Invalid streams, stalled cancellation, version conflict, replay tampering, recovery corruption, unauthorized operations exercised.",
+      "evidence_refs": [
+        "SCENARIOS.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No answer event before successful validated final data; malformed recovery fails closed.",
+      "evidence_refs": [
+        "SCENARIOS.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Lexical retrieval remains bounded/partial; character bounds do not claim token bounds. Stream success waits for final envelope.",
+      "evidence_refs": [
+        "SCENARIOS.md",
+        "SOURCE_MANIFEST.json"
+      ]
+    },
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Full approved platform plan has remaining slices; scope of this implementation iteration is explicitly recorded.",
+      "evidence_refs": [
+        "REPORT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "BLOCKED: candidate not deployed; current Ask IAM rejects SDK traffic; real authenticated/App Check acceptance missing; pricing window expired; full platform plan incomplete. Full Node22 unit suite passed 954 tests.",
+      "evidence_refs": [
+        "REPORT.md",
+        "../../../functions/src/ai/ask-paid-gate.ts",
+        "PRODUCTION-SOURCE-COMPARISON.json",
+        "PRODUCTION-ASK-IAM.json"
+      ]
+    },
+    "product_content": {
+      "status": "PASSED",
+      "summary": "Owner approval UI and VI/EN quoted-guidance answer semantics reviewed in source and real rendered fixture; mobile label corrected. Full customer locale/product flow remains incomplete.",
+      "evidence_refs": [
+        "PRODUCT-CONTENT.md",
+        "tests/browser/ask-platform.spec.ts",
+        "PRODUCT-CONTENT-KNOWLEDGE.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "high",
+      "location": "src/features/ask/transport.ts",
+      "summary": "A streamed answer could publish before final provider failure or final mismatch.",
+      "status": "FIXED",
+      "evidence": "Unit mismatch/provider-rejection tests and real-consumer browser error/draft scenarios."
+    },
+    {
+      "id": "F02",
+      "severity": "medium",
+      "location": "src/features/ask/transport.ts",
+      "summary": "Cancellation could wait forever for stalled iterator.next or final data.",
+      "status": "FIXED",
+      "evidence": "Stalled stream/final cancellation tests and browser close scenario."
+    },
+    {
+      "id": "F03",
+      "severity": "medium",
+      "location": "functions/src/ai/knowledge-retrieval.ts",
+      "summary": "One excerpt per document discarded complementary eligibility/exception evidence; conflicting citation content was ambiguous.",
+      "status": "FIXED",
+      "evidence": "Same-policy eligibility/exception, duplicate/conflicting-source tests."
+    },
+    {
+      "id": "F04",
+      "severity": "high",
+      "location": "functions/src/ai/ask-workflow.ts",
+      "summary": "Resume of completed immediate draft operation failed because completed operation had no request.",
+      "status": "FIXED",
+      "evidence": "New integration failed before fix, passed after fix."
+    },
+    {
+      "id": "F05",
+      "severity": "medium",
+      "location": "functions/src/ai/ask-workflow.ts",
+      "summary": "Completed recovery needs validated version/order correlation; safe-integer alone is insufficient.",
+      "status": "FIXED",
+      "evidence": "Integration rejects corrupt negative/ahead versions and foreign order result, including account lock."
+    },
+    {
+      "id": "F06",
+      "severity": "medium",
+      "location": "functions/src/ai/run-guard.ts",
+      "summary": "Admission policy must be immutable per run and safe to call without method binding.",
+      "status": "FIXED",
+      "evidence": "Unit mutation/destructured admission regression."
+    },
+    {
+      "id": "B01",
+      "severity": "high",
+      "location": "docs/plans/ASK-PLATFORM-20261007/PLAN.md",
+      "summary": "Full architecture implementation remains incomplete; this change only hardens existing retrieval/model-loop/stream/recovery paths.",
+      "status": "OPEN"
+    },
+    {
+      "id": "B02",
+      "severity": "medium",
+      "location": "src/features/membership/PlanEditor.tsx:343",
+      "summary": "Full unit suite has missing required marker in concurrent Membership work, outside Ask edit set.",
+      "status": "OPEN"
+    },
+    {
+      "id": "F08",
+      "severity": "medium",
+      "location": "src/features/settings/KnowledgeApproval.tsx",
+      "summary": "Expired or unavailable approved sources must remain revocable.",
+      "status": "FIXED",
+      "evidence": "approved vs active state distinction; demo preview regression and expired-revoke browser scenario."
+    },
+    {
+      "id": "F09",
+      "severity": "low",
+      "location": "src/features/settings/KnowledgeApproval.tsx",
+      "summary": "Required label marker wrapped onto separate mobile line.",
+      "status": "FIXED",
+      "evidence": "Nested inline label caption; rendered mobile-preview screenshot."
+    }
+  ],
+  "residual_risks": [
+    "No semantic/vector retrieval or approved-corpus lifecycle implemented.",
+    "Genkit run guard is not evidence that gated provider dispatch is enabled.",
+    "Browser tests use real consumer/component with synthetic provider and mocked commerce/auth; integration invokes actual server handlers on demo Firestore, not deployed HTTP/App Check."
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED.",
+    "ai-agent-kit executable unavailable; review JSON saved but no runtime review receipt claimed.",
+    "Full plan remains NOT_DONE."
+  ],
+  "source_manifest": "SOURCE_MANIFEST.json",
+  "review_cycles": 4,
+  "reviewed_head": "caeec532a77176f7412551ab6621fe9df1d5da48",
+  "source_manifest_sha256": "c094f760ac9798586b228b452cb2d07f40055fa5ab012b16b465491e956c8621",
+  "latest_cycle": {
+    "cycle": 6,
+    "status": "BLOCKED",
+    "scoped_checks": "Node22 full unit 954 passed; latest 23 demo integrations; 6 owner UI browser; post-label fix 16 focused tests; frontend/backend tsc and scoped lint passed.",
+    "remaining": "Full architecture acceptance and release incomplete. No production deploy; IAM SDK403; approved corpus missing; paid authorization expired.",
+    "runtime_receipt": "NOT_RUN: ai-agent-kit unavailable"
+  }
+}

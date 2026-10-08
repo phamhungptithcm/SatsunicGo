@@ -1,0 +1,20 @@
+{
+  "status": "PASSED",
+  "environment": "Synthetic browser fixture using actual Workspace and ContentEditor on shared 5207; backend writes blocked; no provider/authenticated production proof",
+  "checks": [
+    "selected XLSX download and import dialog",
+    "desktop navbar/create-first/product-only",
+    "automatic cursor append, ID deduplication, terminal stop",
+    "append failure preserves rows, no retry loop, manual retry succeeds",
+    "repeated cursor stops automatic requests",
+    "loaded-only filter prevents eager full scan, keyboard fallback works",
+    "editor entry disconnects observer; late read does not alter form",
+    "390px mobile layout, readable selects and keyboard focus",
+    "768px tablet and reduced motion",
+    "empty state",
+    "initial failure and retry",
+    "IntersectionObserver unavailable: manual fallback"
+  ],
+  "pageErrors": [],
+  "dependencyProxy": "Installed real ExcelJS UMD bundle supplied by browser fixture; shared Vite optimized URL returns HTTP 504 Outdated Optimize Dep. Live XLSX loading remains BLOCKED."
+}

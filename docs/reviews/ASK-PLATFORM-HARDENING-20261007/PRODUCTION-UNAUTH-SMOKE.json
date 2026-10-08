@@ -1,0 +1,7 @@
+{
+  "authentication": "none",
+  "appCheck": "none",
+  "returnedAnswer": false,
+  "errorStatus": "NON_JSON",
+  "testScope": "unauthenticated denial only; not authenticated/provider acceptance"
+}
