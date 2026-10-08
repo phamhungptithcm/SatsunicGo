@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { Buffer } from 'node:buffer';
 import process from 'node:process';
 import { URL } from 'node:url';
 import assert from 'node:assert/strict';
@@ -8,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
 import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS } from '../../scripts/release/artifact.mjs';
-import { checkInventory, verifyHosting, assertStableHostingRelease } from '../../scripts/release/verify-production.mjs';
+import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease } from '../../scripts/release/verify-production.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -331,4 +332,15 @@ test('provider receipt refuses changed, replaced or unfinished Hosting releases 
   const release = {name:'sites/satsunicgo/releases/one',type:'DEPLOY',releaseTime:'2026-10-07T00:00:00Z',version:{name:'sites/satsunicgo/versions/one',status:'FINALIZED'}};
   assertStableHostingRelease(release, globalThis.structuredClone(release));
   for (const replacement of [ {...release,name:'sites/satsunicgo/releases/two'}, {...release,releaseTime:'2026-10-07T00:01:00Z'}, {...release,version:{...release.version,name:'sites/satsunicgo/versions/two'}}, {...release,type:'SITE_DISABLE'}, {...release,version:{...release.version,status:'CREATED'}} ]) assert.throws(() => assertStableHostingRelease(release,replacement), /HOSTING/);
+});
+
+test('Hosting metadata charges the authorized production project, never the OAuth client project', async () => {
+  const expected = {name: 'sites/satsunicgo/releases/one'};
+  const result = await readHostingRelease('test-token', async (url, headers) => {
+    assert.equal(new URL(url).hostname, 'firebasehosting.googleapis.com');
+    assert.equal(headers['x-goog-user-project'], 'satsunicgo');
+    assert.equal(headers.Authorization, 'Bearer test-token');
+    return Buffer.from(JSON.stringify({releases: [expected]}));
+  });
+  assert.deepEqual(result, expected);
 });

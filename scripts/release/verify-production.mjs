@@ -61,8 +61,8 @@ export function assertStableHostingRelease(previous, current) {
   }
   if (previous.name !== current.name || previous.version.name !== current.version.name || previous.releaseTime !== current.releaseTime) throw Error('HOSTING_CHANGED_DURING_VERIFICATION');
 }
-async function readHostingRelease(token) {
-  const releases = JSON.parse((await fetchBytes('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}` })).toString());
+export async function readHostingRelease(token, read = fetchBytes) {
+  const releases = JSON.parse((await read('https://firebasehosting.googleapis.com/v1beta1/sites/satsunicgo/releases?pageSize=1', { Authorization: `Bearer ${token}`, 'x-goog-user-project': 'satsunicgo' })).toString());
   return releases.releases?.[0];
 }
 export async function verifyProduction() {
