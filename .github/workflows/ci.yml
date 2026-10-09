@@ -34,6 +34,7 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: node --test tests/unit/release108.test.mjs
+      - run: node --test tests/unit/deep-review.test.mjs
       - run: npm run test:release-config
       - run: node scripts/release/test-integrations.mjs rules
       - run: npm run test:http
