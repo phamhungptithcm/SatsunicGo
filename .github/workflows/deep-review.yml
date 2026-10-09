@@ -40,9 +40,16 @@ jobs:
       - name: Resolve exact review range
         env:
           EVENT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           cd target
           HEAD_SHA="$(git rev-parse HEAD)"
+          if [[ "$GITHUB_EVENT_NAME" != 'pull_request' ]]; then
+            VERIFIED_TAG="$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq 'select(.body | contains("<!-- satsunicgo-production-verified -->")) | .tag_name')"
+            [[ "$VERIFIED_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo '::error::No verified production baseline'; exit 1; }
+            EVENT_BASE="$(git rev-parse "refs/tags/$VERIFIED_TAG^{commit}")"
+            git merge-base --is-ancestor "$EVENT_BASE" "$HEAD_SHA" || exit 1
+          fi
           if [[ -z "$EVENT_BASE" ]]; then EVENT_BASE="$(git rev-parse HEAD^)"; fi
           [[ "$EVENT_BASE" =~ ^[0-9a-f]{40}$ && "$EVENT_BASE" != '0000000000000000000000000000000000000000' ]] || exit 1
           BASE_SHA="$(git merge-base "$EVENT_BASE" "$HEAD_SHA")"

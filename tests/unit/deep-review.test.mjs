@@ -139,4 +139,6 @@ test("release quality forwards only Gemini key and build cannot bypass quality",
     /pull_request_target|id-token:|contents: write|secrets: inherit/,
   );
   assert.match(deep, /github.event.pull_request.base.sha \|\| github.sha/);
+  assert.match(deep, /satsunicgo-production-verified/);
+  assert.match(deep, /git merge-base --is-ancestor/);
 });

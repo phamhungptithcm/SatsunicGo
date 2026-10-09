@@ -18,7 +18,7 @@ gh secret set GEMINI_API_KEY --repo phamhungptithcm/SatsunicGo
 
 ## Gates and evidence
 
-- Internal PRs review merge-base → exact PR head. Main pushes review previous head → exact pushed head. Manual dispatch reviews the previous commit → current commit.
+- Internal PRs review merge-base → exact PR head. Main pushes and manual dispatch review the latest published, provider-verified production release → exact candidate head. Failed earlier pushes cannot remove unreviewed changes from this range. Missing/non-ancestor baseline blocks the review.
 - `ci.yml` invokes `deep-review.yml`. Release build depends on the entire reusable quality workflow, including deep review. Missing key, quota/429, timeout, malformed output, unexpected warnings, budget exhaustion, missing/waived/failed coverage or High/Critical findings block the build.
 - External fork PRs fail with an explicit NOT_RUN message, without receiving a secret. Maintainers must bring reviewed code to a trusted branch. The PR's integration scripts are read from its base commit; the target is a separate checkout and is never installed/executed.
 - Review runs with read-only repository permissions, no production environment, no WIF and no deployment credentials. An isolated HOME prevents loading local credentials/MCP configuration. Repository OCR rule overrides are rejected pending explicit trusted integration.
