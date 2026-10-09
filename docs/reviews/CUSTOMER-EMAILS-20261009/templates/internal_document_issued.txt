@@ -1,0 +1,14 @@
+Chứng từ đơn hàng đã được xuất
+
+Số tiền trên chứng từ phản ánh thời điểm xuất.
+
+Chứng từ nội bộ: {{documentNumber}}
+
+Xem chứng từ đơn hàng: {{ctaUrl}}
+
+Đây không phải hóa đơn điện tử thuế.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -1,0 +1,15 @@
+Yêu cầu hoàn tiền đã được hủy
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+Số tiền trong yêu cầu: {{refundAmount}}
+
+Xem yêu cầu hoàn tiền: {{ctaUrl}}
+
+Bạn có thể trao đổi với bên mình trong đơn nếu cần làm rõ.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

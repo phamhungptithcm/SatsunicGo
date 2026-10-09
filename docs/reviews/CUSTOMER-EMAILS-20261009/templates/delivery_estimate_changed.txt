@@ -1,0 +1,17 @@
+Lịch giao dự kiến thay đổi
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+Dự kiến trước đó: {{previousWindow}}
+Dự kiến mới: {{deliveryWindow}}
+
+Xem lịch giao dự kiến: {{ctaUrl}}
+
+Thời gian trên là dự kiến, chưa phải cam kết giao hàng.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

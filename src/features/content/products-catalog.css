@@ -194,12 +194,23 @@
   box-shadow: 0 2px 8px #111c3503;
 }
 .products074 .productImage {
-  aspect-ratio: 1.25;
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
   background: #f8f9fc;
 }
 .products074 .productImage img {
-  padding: 24px;
+  position: absolute;
+  inset: 0;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(12px, 2vw, 24px);
   object-fit: contain;
+  object-position: center;
 }
 .products074 .productMonogram svg {
   width: 48px;
@@ -238,13 +249,61 @@
 }
 .products074 .productAction {
   flex: 0;
-  padding-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 0.85fr) minmax(0, 1.1fr);
+  gap: 6px;
+  align-items: stretch;
+  border-top: 0;
+  padding-top: 0;
 }
-.products074 .productAction a {
+.products074 .productAction .cartAdd107 {
+  display: contents;
+}
+.products074 .productAction:not(:has(.cartAdd107)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.products074 .productAction .cartAdd107 > :is(label, p) {
+  grid-column: 1 / -1;
+}
+.products074 .productAction .cartAdd107 > label {
+  color: #111c35;
+}
+.products074 .productAction :is(a, button) {
   min-height: 44px;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
-  font-size: 13px;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #dce4ff;
+  border-radius: 8px;
+  padding: 8px 6px;
+  background: #fff;
+  color: #163cff;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.products074 .productAction :is(a, button):hover:not(:disabled) {
+  background: #f4f6ff;
+}
+.products074 .productAction :is(a, button):focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.products074 .productAction .cartAddButton107 svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.products074 .productAction .cartAdd107 > p > a {
+  display: inline;
+  border: 0;
+  padding: 0;
+  background: transparent;
 }
 .products074Pagination {
   text-align: center;
@@ -419,12 +478,4 @@
 }
 .products074 .productCardPending {
   background: #f3f5f9;
-}
-.products074 .productImage {
-  aspect-ratio: 1;
-}
-.products074 .productImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }

@@ -1,0 +1,15 @@
+Đơn hàng đã đủ thanh toán
+
+Bạn không cần thanh toán thêm theo bảng chi phí đã chốt.
+
+Cần thanh toán thêm: {{zeroAmount}}
+
+Đơn hàng: {{orderRef}}
+Chi phí cuối: {{finalTotal}}
+
+Xem bảng chi phí: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

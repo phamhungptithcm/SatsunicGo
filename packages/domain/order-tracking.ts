@@ -286,7 +286,9 @@ export function trackingMilestones(
   const vi = language === "vi",
     custom = tracking.purchaseKind === "custom";
   const steps = [
-    { stages: ["REQUESTED"], label: vi ? "Yêu cầu" : "Request" },
+    ...(!tracking.upfrontPayment || tracking.stage === "REQUESTED"
+      ? [{ stages: ["REQUESTED"], label: vi ? "Yêu cầu" : "Request" }]
+      : []),
     ...(custom && !tracking.upfrontPayment
       ? [{ stages: ["QUOTED"], label: vi ? "Báo giá" : "Quote" }]
       : []),
@@ -348,4 +350,70 @@ export function trackingMilestones(
           ? ("current" as const)
           : ("upcoming" as const),
   }));
+}
+
+/** Latest recorded activity for each milestone, never an inferred transition time.
+ * Payment events have no purpose in the redacted DTO: only initial events before
+ * purchasing are usable. Missing/truncated history must not fabricate a date.
+ */
+export function trackingMilestoneUpdates(
+  tracking: CustomerOrderTracking,
+  language: "vi" | "en",
+): (number | null)[] {
+  const steps = trackingMilestones(tracking, language);
+  const times: (number | null)[] = steps.map(() => null);
+  const history = tracking.timeline.filter(
+    (event) =>
+      Number.isSafeInteger(event.createdAt) &&
+      event.createdAt > 0 &&
+      event.createdAt <= tracking.observedAt,
+  );
+  const purchase = history
+    .filter((e) =>
+      ["claimPurchase", "recordPurchase"].includes(e.action),
+    )
+    .reduce((first, e) => Math.min(first, e.createdAt), Infinity);
+  const stages: Record<string, CustomerOrderTracking["stage"]> = {
+    submitRequest: "REQUESTED",
+    catalogCheckout: "QUOTE_ACCEPTED",
+    issueQuote: "QUOTED",
+    acceptQuote: "QUOTE_ACCEPTED",
+    claimPurchase: "PURCHASING",
+    recordPurchase: "PURCHASED",
+    receive: "ORIGIN_RECEIVED",
+    pack: "ORIGIN_RECEIVED",
+    finalize: "PACKED",
+    approveFinal: "PACKED",
+    dispatch: "IN_TRANSIT",
+    confirmReceipt: "COMPLETED",
+    cancelRequest: "CANCELLED",
+  };
+  for (const event of history) {
+    let stage = stages[event.action];
+    // Accepting a quote/creating an order is not proof of a payment update.
+    if (["acceptQuote", "catalogCheckout"].includes(event.action)) continue;
+    if (event.action === "verifyTransfer") {
+      if (
+        tracking.timelinePartial ||
+        event.createdAt >= purchase ||
+        (purchase === Infinity && tracking.stage !== "QUOTE_ACCEPTED")
+      )
+        continue;
+      stage = "QUOTE_ACCEPTED";
+    }
+    if (event.action === "track")
+      stage = ["DELIVERED", "COMPLETED"].includes(tracking.stage)
+        ? "DELIVERED"
+        : "IN_TRANSIT";
+    if (!stage) continue;
+    const label = trackingMilestones({ ...tracking, stage }, language).find(
+      (step) => step.state === "current",
+    )?.label;
+    const index = steps.findIndex((step) => step.label === label);
+    if (index < 0 || steps[index].state === "upcoming") continue;
+    // Only the final track event can establish delivered activity. Earlier scans
+    // remain in history, rather than being presented as delivery timestamps.
+    times[index] = Math.max(times[index] ?? 0, event.createdAt);
+  }
+  return times;
 }

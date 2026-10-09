@@ -1,4 +1,12 @@
-import { maintenanceDemoEnvironmentAllowed, releaseCapabilityAllowed } from "./provider-release-gate";
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
+import { projectCustomerNotification } from "./customer-notification-delivery";
+import {
+  maintenanceDemoEnvironmentAllowed,
+  releaseCapabilityAllowed,
+} from "./provider-release-gate";
 import { publishDueStudioPosts } from "./blog-studio";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { FieldPath, getFirestore } from "firebase-admin/firestore";
@@ -11,7 +19,14 @@ export const maintenance = onSchedule(
     let db: ReturnType<typeof getFirestore>;
     try {
       db = getFirestore();
-      if (!releaseCapabilityAllowed("scheduledMaintenance", process.env, Reflect.get(db, "projectId"))) return;
+      if (
+        !releaseCapabilityAllowed(
+          "scheduledMaintenance",
+          process.env,
+          Reflect.get(db, "projectId"),
+        )
+      )
+        return;
     } catch {
       return;
     }
@@ -100,6 +115,21 @@ export const maintenance = onSchedule(
               action: "membershipExpired",
               state: "queued",
               createdAt: now,
+              ...customerEventFields(() =>
+                customerEvent(
+                  "membership_expired",
+                  {
+                    ownerId: d.id,
+                    entityId: d.id,
+                    entityVersion: s.data()!.endsAt,
+                    occurredAt: now,
+                  },
+                  {
+                    planName: s.data()!.planSnapshot?.name,
+                    endsAt: s.data()!.endsAt,
+                  },
+                ),
+              ),
             },
           );
           tx.create(db.collection("auditEvents").doc(), {
@@ -163,6 +193,18 @@ export const maintenance = onSchedule(
               state: "queued",
               createdAt: now,
               endsAt: value.endsAt,
+              ...customerEventFields(() =>
+                customerEvent(
+                  "membership_expiring",
+                  {
+                    ownerId: row.id,
+                    entityId: row.id,
+                    entityVersion: value.endsAt,
+                    occurredAt: now,
+                  },
+                  { planName: value.planSnapshot?.name, endsAt: value.endsAt },
+                ),
+              ),
             });
           }),
         ),
@@ -216,6 +258,7 @@ export const maintenance = onSchedule(
             // Only configuration-blocked, never-claimed deliveries are safe to resume.
             if (
               current.data()?.emailState === "blocked_external" &&
+              current.data()?.customerEvent &&
               (current.data()?.emailAttempts ?? 0) === 0 &&
               !current.data()?.claimedAt
             )
@@ -230,10 +273,29 @@ export const maintenance = onSchedule(
       .limit(30)
       .get();
     await Promise.all(
-      jobs.docs.map((d) =>
-        db.runTransaction(async (tx) => {
+      jobs.docs.map(async (d) => {
+        if (await projectCustomerNotification(db, d.id, now)) return;
+        return db.runTransaction(async (tx) => {
           const job = await tx.get(d.ref);
           if (job.data()?.state !== "queued") return;
+          if (
+            [
+              "claimPurchase",
+              "pack",
+              "confirmReceipt",
+              "releaseHold",
+              "packParcel",
+              "batch-seal",
+              "batch-dispatch",
+            ].includes(job.data()?.action)
+          ) {
+            tx.update(d.ref, {
+              state: "suppressed",
+              emailState: "blocked_policy",
+              suppressionReason: "internal_action",
+            });
+            return;
+          }
           tx.create(db.doc(`notifications/${d.id}`), {
             ownerId: job.data()?.ownerId,
             orderId: job.data()?.orderId ?? null,
@@ -246,10 +308,10 @@ export const maintenance = onSchedule(
           tx.update(d.ref, {
             state: "inAppDelivered",
             deliveredAt: now,
-            emailState: emailReady ? "queued" : "blocked_external",
+            emailState: "blocked_policy",
           });
-        }),
-      ),
+        });
+      }),
     );
   },
 );

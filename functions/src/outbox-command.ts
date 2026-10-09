@@ -3,6 +3,11 @@ import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { z } from "zod";
 import {
+  emailProviderReady,
+  parseEmailProviderConfig,
+} from "./email/provider-config";
+import { releaseCapabilityAllowed } from "./provider-release-gate";
+import {
   isStringRoleArray,
   recentMfa,
   requireVerifiedGoogle,
@@ -99,13 +104,14 @@ export const outboxCommand = onCall(
             "failed-precondition",
             "Email cần đối soát hoặc đã hết số lần thử. Không tự gửi lại.",
           );
-        const c = config.data();
+        const c = parseEmailProviderConfig(config.data());
         if (
-          c?.enabled !== true ||
-          !c.host ||
-          !c.user ||
-          !c.from ||
-          !/^[a-zA-Z0-9.-]+$/.test(c.messageIdDomain ?? "")
+          !emailProviderReady(c, now) ||
+          !releaseCapabilityAllowed(
+            "email",
+            process.env,
+            Reflect.get(db, "projectId"),
+          )
         )
           throw new HttpsError(
             "failed-precondition",

@@ -31,6 +31,9 @@ export function PurchaseCompletion({
       <div role="status" className="purchaseCompleteStatus">
         <h1>Thanh toán thành công</h1>
         <p>{checkout.total.toLocaleString("vi-VN")} ₫</p>
+        {checkout.provider === "sepay_sandbox" && (
+          <p className="purchaseHint">Thanh toán thử, không thu tiền thật.</p>
+        )}
       </div>
       <ul
         className="purchaseCompleteOrders"

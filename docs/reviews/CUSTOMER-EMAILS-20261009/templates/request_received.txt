@@ -1,0 +1,14 @@
+Đã nhận yêu cầu mua hộ
+
+Bạn có thể xem lại yêu cầu và theo dõi bước tiếp theo trong tài khoản.
+
+Đơn hàng: {{orderRef}}
+
+Xem yêu cầu: {{ctaUrl}}
+
+Cảm ơn bạn đã tin tưởng SatsunicGo.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

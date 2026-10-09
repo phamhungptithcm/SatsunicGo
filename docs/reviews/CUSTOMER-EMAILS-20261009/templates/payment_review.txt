@@ -1,0 +1,14 @@
+Cần đối chiếu thanh toán
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+
+Xem việc cần bổ sung: {{ctaUrl}}
+
+Nếu đã chuyển tiền, bạn chưa cần chuyển lại trong lúc kiểm tra.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

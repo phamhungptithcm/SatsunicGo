@@ -170,24 +170,36 @@ const readServices = new Set([
   "productReviewEligibility",
   "productReviewAdmin",
 ]);
-export async function callService<T>(name: string, data: unknown): Promise<T> {
+export async function callService<T>(
+  name: string,
+  data: unknown,
+  feedback: "global" | "inline" = "global",
+): Promise<T> {
   if (!functions || !navigator.onLine)
     throw Error("Không thể kết nối lúc này. Kiểm tra kết nối và thử lại.");
   const readOnly =
     readServices.has(name) ||
-    (name === "purchaseCheckout" && (data as {action?:string})?.action === "status") ||
-    (name === "purchaseDraftImage" && (data as {action?:string})?.action === "read") ||
+    (name === "purchaseCheckout" &&
+      (data as { action?: string })?.action === "status") ||
+    (name === "purchaseDraftImage" &&
+      (data as { action?: string })?.action === "read") ||
     (name === "shippingRatesAdmin" &&
       (data as { action?: string })?.action === "read");
   try {
-    return (await recoverCallable(name, data, readOnly)).data as T;
+    return (await recoverCallable(name, data, readOnly, feedback === "inline"))
+      .data as T;
   } catch (e) {
     const error = serviceError(e, "Chưa xử lý được. Thử lại sau.");
-    notify(error.message, "error");
+    if (feedback === "global") notify(error.message, "error");
     throw error;
   }
 }
-async function recoverCallable(name: string, data: unknown, readOnly = false) {
+async function recoverCallable(
+  name: string,
+  data: unknown,
+  readOnly = false,
+  inline = false,
+) {
   const uid = auth?.currentUser?.uid;
   const path = window.location.pathname;
   const payload = structuredClone(data);
@@ -197,7 +209,7 @@ async function recoverCallable(name: string, data: unknown, readOnly = false) {
         httpsCallable(functions!, name, { timeout: readOnly ? 15000 : 60000 })(
           payload,
         ),
-      { overlay: !readOnly },
+      { overlay: !readOnly && !inline },
     );
   return runWithMfaRecovery(
     execute,

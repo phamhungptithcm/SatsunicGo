@@ -43,7 +43,7 @@ function builtFixture(t, beforeCreate = () => {}) {
   put(root, 'functions/package-lock.json', { version: '0.1.0', packages: { '': { name: 'fixture', version: '0.1.0' } } });
   put(root, 'package.json', { overrides: {} });
   put(root, 'package-lock.json', { lockfileVersion: 3, packages: { functions: { name: 'fixture', version: '0.1.0' } } });
-  put(root, 'functions/lib/functions/src/index.js', 'fixture precompiled');
+  put(root, 'functions/lib/functions/src/index.js', '/* fixture precompiled */');
   put(root, 'functions/src/index.ts', `import { onRequest } from 'firebase-functions/v2/https';\n${['campaignBannersPublic', 'publicDiscovery', 'publicImage', 'publicPage'].map(name => `export const ${name} = onRequest({ region: 'asia-southeast1' }, () => {});`).join('\n')}`);
   put(root, 'candidate.json', { tag: 'v1.2.3', sha, repository: 'owner/repo' });
   put(root, 'release-notes.md', 'Fixture release notes');
@@ -135,7 +135,7 @@ test('compiled demo exclusion is deterministic even with emulator env and preser
   assert.equal(exports.purchaseCheckout,checkout);
   assert.equal(loads.length,1);
   assert.deepEqual(result.emulatorOnlyExports,['purchaseDemoPayment']);
-  assert.deepEqual(HELD_EXPORTS,['askWorkflow','currentAskConversation','maintenance','createPaymentLink','payosWebhook','reconcilePayments','deliverEmail','askFeedbackCleanup']);
+  assert.deepEqual(HELD_EXPORTS,['askWorkflow','currentAskConversation','maintenance','createPaymentLink','payosWebhook','reconcilePayments','askFeedbackCleanup']);
   assert.doesNotThrow(()=>excludeEmulatorOnlyExports(result.compiled));
 });
 for(const [label,compiled] of [
@@ -178,6 +178,191 @@ test('artifact source and compiled demo exception remain excluded and separately
   assert.deepEqual(manifest.heldExports,[]);
   assert.equal(readFileSync(join(stage,'deployment/functions/lib/functions/src/index.js'),'utf8').includes('FUNCTIONS_EMULATOR'),false);
   assert.equal(verify(stage,sha,'v1.2.3').tag,'v1.2.3');
+});
+const allDemoMetadata=[...demoMetadata,
+  {name:'purchaseDemoWebhook',kind:'onRequest',region:'asia-southeast1',source:'functions/src/purchase-demo-gateway.ts'},
+  {name:'purchaseSePayPayment',kind:'onCall',region:'asia-southeast1',source:'functions/src/purchase-sepay.ts'},
+  {name:'purchaseSePayIpn',kind:'onRequest',region:'asia-southeast1',source:'functions/src/purchase-sepay.ts'},
+  {name:'purchaseSePayInboxWorker',kind:'onDocumentCreated',region:'asia-southeast1',source:'functions/src/purchase-sepay.ts'},
+];
+const allDemoCompiled=`${demoCompiled}
+exports.purchaseDemoWebhook = exports.purchaseSePayPayment = exports.purchaseSePayIpn = exports.purchaseSePayInboxWorker = void 0;
+const purchase_demo_gateway_1 = require('./purchase-demo-gateway');
+exports.purchaseDemoWebhook = process.env.FUNCTIONS_EMULATOR === 'true' ? purchase_demo_gateway_1.purchaseDemoWebhook : undefined;
+const purchase_sepay_1 = require('./purchase-sepay');
+const localSePay = process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';
+exports.purchaseSePayPayment = localSePay ? purchase_sepay_1.purchaseSePayPayment : undefined;
+exports.purchaseSePayIpn = localSePay ? purchase_sepay_1.purchaseSePayIpn : undefined;
+exports.purchaseSePayInboxWorker = localSePay ? purchase_sepay_1.purchaseSePayInboxWorker : undefined;`;
+function addAllDemoSource(root){
+  const original=readFileSync(join(root,'functions/src/index.ts'),'utf8');
+  put(root,'functions/src/index.ts',`${original}
+import {purchaseDemoPayment as guardedPurchaseDemoPayment} from './purchase-checkout';
+export const purchaseDemoPayment=process.env.FUNCTIONS_EMULATOR === 'true' ? guardedPurchaseDemoPayment : undefined;
+import {purchaseDemoWebhook as guardedPurchaseDemoWebhook} from './purchase-demo-gateway';
+export const purchaseDemoWebhook=process.env.FUNCTIONS_EMULATOR === 'true' ? guardedPurchaseDemoWebhook : undefined;
+import {purchaseSePayPayment as sandboxSePayPayment,purchaseSePayIpn as sandboxSePayIpn,purchaseSePayInboxWorker as sandboxSePayInboxWorker} from './purchase-sepay';
+const localSePay=process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';
+export const purchaseSePayPayment=localSePay ? sandboxSePayPayment : undefined;
+export const purchaseSePayIpn=localSePay ? sandboxSePayIpn : undefined;
+export const purchaseSePayInboxWorker=localSePay ? sandboxSePayInboxWorker : undefined;`);
+  put(root,'functions/src/purchase-checkout.ts',`import {onCall} from 'firebase-functions/v2/https';export const purchaseDemoPayment=onCall({region:'asia-southeast1'},()=>{});`);
+  put(root,'functions/src/purchase-demo-gateway.ts',`import {onRequest} from 'firebase-functions/v2/https';export const purchaseDemoWebhook=onRequest({region:'asia-southeast1'},()=>{});`);
+  put(root,'functions/src/purchase-sepay.ts',`import {onCall,onRequest} from 'firebase-functions/v2/https';import {onDocumentCreated} from 'firebase-functions/v2/firestore';const options={region:'asia-southeast1'};export const purchaseSePayPayment=onCall(options,()=>{});export const purchaseSePayIpn=onRequest(options,()=>{});export const purchaseSePayInboxWorker=onDocumentCreated({...options,document:'purchaseSePayInbox/{id}'},()=>{});`);
+}
+test('all five demo exports and their shared imports are stripped once with production getters preserved',()=>{
+  const result=excludeEmulatorOnlyExports(allDemoCompiled,allDemoMetadata),exports={},loads=[];
+  const checkout=()=>{},forbidden=()=>{throw Error('DEMO_MUST_NOT_LOAD');};
+  runInNewContext(result.compiled,{exports,process:{env:{FUNCTIONS_EMULATOR:'true',GCLOUD_PROJECT:'demo-satsunicgo'}},require:name=>{loads.push(name);assert.equal(name,'./purchase-checkout');return {purchaseCheckout:checkout,purchaseDemoPayment:forbidden};}});
+  for(const {name} of allDemoMetadata)assert.equal(exports[name],undefined);
+  assert.equal(exports.purchaseCheckout,checkout);
+  assert.deepEqual(loads,['./purchase-checkout']);
+  assert.deepEqual(result.emulatorOnlyExports,allDemoMetadata.map(row=>row.name));
+  assert.equal(result.compiled.includes('localSePay'),false);
+  assert.equal(result.compiled.includes('purchase-sepay'),false);
+  assert.equal(result.compiled.includes('purchase-demo-gateway'),false);
+  assert.doesNotThrow(()=>excludeEmulatorOnlyExports(result.compiled));
+});
+for(const [label,compiled] of [
+  ['missing project fence',allDemoCompiled.replace(" && process.env.GCLOUD_PROJECT === 'demo-satsunicgo'",'')],
+  ['production project fence',allDemoCompiled.replace('demo-satsunicgo','satsunicgo')],
+  ['or project fence',allDemoCompiled.replace('&&','||')],
+  ['mutable project guard',allDemoCompiled.replace('const localSePay','let localSePay')],
+  ['mutated project guard',`${allDemoCompiled}\nlocalSePay=true;`],
+  ['escaped project guard',`${allDemoCompiled}\nconst escaped=localSePay;`],
+  ['missing project guard',allDemoCompiled.replace(/const localSePay[^;]*;/,'')],
+  ['mutable shared SDK import',allDemoCompiled.replace('const purchase_sepay_1','let purchase_sepay_1')],
+  ['escaped shared SDK import',`${allDemoCompiled}\nconst escaped=purchase_sepay_1;`],
+  ['shared import reused by production export',`${allDemoCompiled}\nObject.defineProperty(exports,'production',{get:()=>purchase_sepay_1.production});`],
+  ['duplicate shared SDK import',`${allDemoCompiled}\nconst purchase_sepay_1=require('./purchase-sepay');`],
+  ['wrong shared SDK module',allDemoCompiled.replace("require('./purchase-sepay')","require('./other-sepay')")],
+  ['wrong SePay target',allDemoCompiled.replace('? purchase_sepay_1.purchaseSePayIpn','? purchase_sepay_1.purchaseSePayPayment')],
+  ['unsafe SePay false branch',allDemoCompiled.replace('purchase_sepay_1.purchaseSePayIpn : undefined','purchase_sepay_1.purchaseSePayIpn : purchase_sepay_1.purchaseSePayIpn')],
+  ['computed SePay export',allDemoCompiled.replace('exports.purchaseSePayIpn = localSePay',"exports['purchaseSePayIpn'] = localSePay")],
+  ['computed webhook export',allDemoCompiled.replace('exports.purchaseDemoWebhook = process',"exports['purchaseDemoWebhook'] = process")],
+  ['duplicated SePay assignment',`${allDemoCompiled}\nexports.purchaseSePayIpn=localSePay ? purchase_sepay_1.purchaseSePayIpn : undefined;`],
+  ['missing SePay assignment',allDemoCompiled.replace('exports.purchaseSePayIpn = localSePay ? purchase_sepay_1.purchaseSePayIpn : undefined;','')],
+  ['environment alias',`const env=process.env;env.FUNCTIONS_EMULATOR='true';${allDemoCompiled}`],
+  ['environment mutator',`Object.assign(process.env,{GCLOUD_PROJECT:'demo-satsunicgo'});${allDemoCompiled}`],
+  ['malformed compiled syntax',`${allDemoCompiled}\nconst broken=;`],
+])test(`five-demo compiled exclusion rejects ${label}`,()=>assert.throws(()=>excludeEmulatorOnlyExports(compiled,allDemoMetadata),/EMULATOR_(?:EXPORT_COMPILED_SHAPE|BINDING_(?:ESCAPES|SHADOWED|MUTATED))/));
+test('five-demo metadata cannot invent, duplicate, omit or replace source evidence',()=>{
+  for(const row of allDemoMetadata){
+    for(const changed of [{...row,region:'us-central1'},{...row,kind:'onSchedule'},{...row,source:'functions/src/other.ts'},{...row,unexpected:true}])
+      assert.throws(()=>excludeEmulatorOnlyExports(allDemoCompiled,allDemoMetadata.map(value=>value.name===row.name?changed:value)),/EMULATOR_EXPORT_METADATA/);
+  }
+  for(const rows of [null,{},[null],[[]],[{name:'unapprovedDemo'}],[...allDemoMetadata,allDemoMetadata[0]],[...allDemoMetadata.slice(0,-1),allDemoMetadata[0]]])assert.throws(()=>excludeEmulatorOnlyExports(allDemoCompiled,rows),/EMULATOR_EXPORT_METADATA/);
+  const inherited=Object.assign(Object.create(allDemoMetadata[0]),{a:1,b:2,c:3,d:4});
+  assert.throws(()=>excludeEmulatorOnlyExports(demoCompiled,[inherited]),/EMULATOR_EXPORT_METADATA/);
+  assert.throws(()=>excludeEmulatorOnlyExports(allDemoCompiled,allDemoMetadata.slice(0,-1)),/EMULATOR_EXPORT_COMPILED_SHAPE/);
+  assert.throws(()=>excludeEmulatorOnlyExports('exports.purchaseDemoPayment=void 0;',allDemoMetadata),/EMULATOR_EXPORT_COMPILED_SHAPE/);
+  const replaced=allDemoCompiled.replace('exports.purchaseSePayIpn = localSePay ? purchase_sepay_1.purchaseSePayIpn : undefined;','exports.purchaseSePayPayment = localSePay ? purchase_sepay_1.purchaseSePayPayment : undefined;');
+  assert.throws(()=>excludeEmulatorOnlyExports(replaced,allDemoMetadata),/EMULATOR_EXPORT_COMPILED_SHAPE/);
+});
+test('stripped package verification rejects reintroduced demo bindings even if file hashes are recomputed',t=>{
+  for(const {name} of allDemoMetadata){
+    const {stage}=builtFixture(t,root=>{addAllDemoSource(root);put(root,'functions/lib/functions/src/index.js',allDemoCompiled);});
+    const relative='deployment/functions/lib/functions/src/index.js',entry=readFileSync(join(stage,relative),'utf8')+`\nObject.defineProperty(exports,'${name}',{get:()=>()=>{}});`;
+    put(stage,relative,entry);
+    const manifest=JSON.parse(readFileSync(join(stage,'manifest.json'),'utf8'));
+    manifest.files[relative]=digest(entry);put(stage,'manifest.json',manifest);
+    assert.throws(()=>verify(stage,sha,'v1.2.3'),/EMULATOR_EXPORT_COMPILED_SHAPE/);
+  }
+});
+test('source preflight and compiled five-demo shape must agree before artifact creation',t=>{
+  assert.throws(()=>builtFixture(t,root=>{
+    addAllDemoSource(root);
+    put(root,'functions/lib/functions/src/index.js',allDemoCompiled.replace('exports.purchaseSePayIpn = localSePay ? purchase_sepay_1.purchaseSePayIpn : undefined;',''));
+  }),/EMULATOR_EXPORT_COMPILED_SHAPE/);
+  assert.throws(()=>builtFixture(t,root=>{
+    addAllDemoSource(root);
+    put(root,'functions/src/index.ts',readFileSync(join(root,'functions/src/index.ts'),'utf8').replace("process.env.GCLOUD_PROJECT === 'demo-satsunicgo'","process.env.GCLOUD_PROJECT === 'satsunicgo'"));
+    put(root,'functions/lib/functions/src/index.js',allDemoCompiled);
+  }),/RELEASE_PREFLIGHT_FAILED/);
+});
+test('production package SDK discovery excludes all five demos even under an emulator environment',t=>{
+  const publicNames=['campaignBannersPublic','publicDiscovery','publicImage','publicPage'];
+  const {stage,manifest}=builtFixture(t,root=>{
+    addAllDemoSource(root);
+    const publicCompiled=`const {onRequest}=require('firebase-functions/v2/https');\n${publicNames.map(name=>`exports.${name}=onRequest({region:'asia-southeast1'},()=>{});`).join('\n')}`;
+    put(root,'functions/lib/functions/src/index.js',allDemoCompiled.replace(/const purchase_checkout_1[^;]*;\s*Object.defineProperty\(exports,'purchaseCheckout'[^\n]*\);/,'')+'\n'+publicCompiled);
+  });
+  assert.equal(manifest.inventory.length,publicNames.length);
+  assert.deepEqual(manifest.emulatorOnlyExports,allDemoMetadata.map(row=>row.name));
+  const discovery=spawnSync(process.execPath,['-e',`require(process.argv[1]).loadStack(process.argv[2]).then(stack=>console.log(JSON.stringify(Object.keys(stack.endpoints).sort()))).catch(()=>{process.exitCode=1;});`,join(repositoryRoot,'node_modules/firebase-functions/lib/runtime/loader.js'),join(stage,'deployment/functions')],{
+    env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules'),FUNCTIONS_EMULATOR:'true',GCLOUD_PROJECT:'demo-satsunicgo',GOOGLE_CLOUD_PROJECT:'demo-satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'demo-satsunicgo'})},encoding:'utf8',timeout:15000,
+  });
+  assert.equal(discovery.status,0,discovery.stderr);
+  assert.deepEqual(JSON.parse(discovery.stdout.trim()),publicNames.sort());
+  const compiled=readFileSync(join(stage,'deployment/functions/lib/functions/src/index.js'),'utf8');
+  assert.equal(compiled.includes('localSePay'),false);
+  assert.equal(manifest.files['deployment/functions/lib/functions/src/index.js'],digest(compiled));
+  assert.equal(verify(stage,sha,'v1.2.3').tag,'v1.2.3');
+});
+test('production package SDK discovery retains both email schedules and excludes every remaining hold and demo',t=>{
+  const publicNames=['campaignBannersPublic','publicDiscovery','publicImage','publicPage'];
+  const emailNames=['deliverEmail','deliverSubscriptionEmail'];
+  const {stage,manifest}=builtFixture(t,root=>{
+    addAllDemoSource(root);
+    const original=readFileSync(join(root,'functions/src/index.ts'),'utf8');
+    put(root,'functions/src/index.ts',`${original}\nexport {${HELD_EXPORTS.join(',')}} from './jobs';\nexport {deliverEmail} from './email';\nexport {deliverSubscriptionEmail} from './subscription-email';`);
+    const scheduleSource=names=>`import {onSchedule} from 'firebase-functions/v2/scheduler';\n${names.map(name=>`export const ${name}=onSchedule({region:'asia-southeast1',schedule:'every 5 minutes'},()=>{});`).join('\n')}`;
+    const scheduleCompiled=names=>`const {onSchedule}=require('firebase-functions/v2/scheduler');\n${names.map(name=>`exports.${name}=onSchedule({region:'asia-southeast1',schedule:'every 5 minutes'},()=>{});`).join('\n')}`;
+    put(root,'functions/src/jobs.ts',scheduleSource(HELD_EXPORTS));
+    for(const [module,name] of [['email','deliverEmail'],['subscription-email','deliverSubscriptionEmail']]){
+      put(root,`functions/src/${module}.ts`,scheduleSource([name]));
+      put(root,`functions/lib/functions/src/${module}.js`,scheduleCompiled([name]));
+    }
+    put(root,'functions/lib/functions/src/jobs.js',scheduleCompiled(HELD_EXPORTS));
+    const compiled=[
+      allDemoCompiled.replace(/const purchase_checkout_1[^;]*;\s*Object.defineProperty\(exports,'purchaseCheckout'[^\n]*\);/,''),
+      'var workflow=require("./ai/ask-workflow");',
+      'var payments=require("./payments/payos");',
+      'var jobs=require("./jobs");',
+      ...HELD_EXPORTS.map(name=>`Object.defineProperty(exports,"${name}",{enumerable:true,get:function(){return jobs.${name};}});`),
+      'var email=require("./email");',
+      'Object.defineProperty(exports,"deliverEmail",{enumerable:true,get:function(){return email.deliverEmail;}});',
+      'var subscription=require("./subscription-email");',
+      'Object.defineProperty(exports,"deliverSubscriptionEmail",{enumerable:true,get:function(){return subscription.deliverSubscriptionEmail;}});',
+      "const {onRequest}=require('firebase-functions/v2/https');",
+      ...publicNames.map(name=>`exports.${name}=onRequest({region:'asia-southeast1'},()=>{});`),
+    ].join('\n');
+    put(root,'functions/lib/functions/src/index.js',compiled);
+  });
+  const expected=[...publicNames,...emailNames].sort();
+  assert.deepEqual(manifest.inventory.map(row=>row.name).sort(),expected);
+  assert.deepEqual(manifest.heldExports,[...HELD_EXPORTS].sort());
+  assert.deepEqual(manifest.emulatorOnlyExports,allDemoMetadata.map(row=>row.name));
+  const script=`const net=require('node:net'),tls=require('node:tls');let attempts=0;const deny=()=>{attempts++;throw Error('NETWORK_DISABLED_FOR_DISCOVERY');};net.connect=net.createConnection=net.Socket.prototype.connect=tls.connect=deny;globalThis.fetch=async()=>deny();require(process.argv[1]).loadStack(process.argv[2]).then(stack=>console.log(JSON.stringify({endpoints:stack.endpoints,networkAttempts:attempts}))).catch(error=>{console.error(error.message);process.exitCode=1;});`;
+  const discovery=spawnSync(process.execPath,['-e',script,join(repositoryRoot,'node_modules/firebase-functions/lib/runtime/loader.js'),join(stage,'deployment/functions')],{
+    env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules'),FUNCTIONS_EMULATOR:'true',GCLOUD_PROJECT:'demo-satsunicgo',GOOGLE_CLOUD_PROJECT:'demo-satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'demo-satsunicgo'})},encoding:'utf8',timeout:15000,
+  });
+  assert.equal(discovery.status,0,discovery.stderr);
+  const {endpoints,networkAttempts}=JSON.parse(discovery.stdout.trim());
+  assert.equal(networkAttempts,0);
+  assert.deepEqual(Object.keys(endpoints).sort(),expected);
+  for(const name of emailNames){
+    assert.equal(endpoints[name].scheduleTrigger.schedule,'every 5 minutes');
+    assert.deepEqual(endpoints[name].region,['asia-southeast1']);
+  }
+  for(const name of [...HELD_EXPORTS,...allDemoMetadata.map(row=>row.name)])assert.equal(endpoints[name],undefined);
+  const entry=readFileSync(join(stage,'deployment/functions/lib/functions/src/index.js'),'utf8');
+  assert.match(entry,/require\("\.\/email"\)/);
+  assert.match(entry,/"deliverEmail"/);
+  assert.equal(manifest.files['deployment/functions/lib/functions/src/index.js'],digest(entry));
+  assert.equal(verify(stage,sha,'v1.2.3').tag,'v1.2.3');
+});
+test('already stripped rollback package with the prior email hold verifies and copies without rewriting files',t=>{
+  const {root,stage,manifest}=builtFixture(t);
+  const historical={...manifest,heldExports:[...HELD_EXPORTS,'deliverEmail'].sort()};
+  put(stage,'manifest.json',historical);
+  assert.equal(historical.inventory.some(row=>row.name==='deliverEmail'),false);
+  assert.deepEqual(verify(stage,sha,'v1.2.3'),historical);
+  const target=join(root,'rollback-workspace');
+  const copied=prepareWorkspace(stage,target,sha,'v1.2.3');
+  assert.deepEqual(copied,historical);
+  assert.deepEqual(copied.files,manifest.files);
+  assert.deepEqual(readFileSync(join(target,'deployment/functions/lib/functions/src/index.js')),readFileSync(join(stage,'deployment/functions/lib/functions/src/index.js')));
 });
 test('mandatory runtime assets fail packaging when absent or symlinked',t=>{
   for(const name of REQUIRED_FUNCTION_ASSETS){
@@ -419,15 +604,20 @@ test('mismatched receipt checksum or source cannot publish success', t => {
 });
 
 test('production holds remove only held bindings/imports and reject compiler/inventory drift', () => {
-  const inventory = [...HELD_EXPORTS.map(name => ({name})), {name:'readNotification'}];
-  const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...HELD_EXPORTS.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`), 'Object.defineProperty(exports, "readNotification", {get: function(){return jobs.readNotification;}});'].join('\n');
+  const retained = [{name:'readNotification'}, {name:'deliverEmail'}, {name:'deliverSubscriptionEmail'}];
+  const inventory = [...HELD_EXPORTS.map(name => ({name})), ...retained];
+  const emailBinding = 'Object.defineProperty(exports, "deliverEmail", {get: function(){return email.deliverEmail;}});';
+  const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...HELD_EXPORTS.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`), 'Object.defineProperty(exports, "readNotification", {get: function(){return jobs.readNotification;}});', emailBinding, 'Object.defineProperty(exports, "deliverSubscriptionEmail", {get: function(){return jobs.deliverSubscriptionEmail;}});'].join('\n');
   const result = applyProductionHolds(compiled, inventory);
-  assert.deepEqual(result.inventory, [{name:'readNotification'}]);
-  assert.equal(result.heldExports.length, 8);
+  assert.deepEqual(result.inventory, retained);
+  assert.equal(result.heldExports.length, 7);
   assert.match(result.compiled, /require\(".\/jobs"\)/);
+  assert.match(result.compiled, /require\(".\/email"\)/);
+  assert.ok(result.compiled.includes(emailBinding));
+  assert.match(result.compiled, /"deliverSubscriptionEmail"/);
   assert.match(result.compiled, /"readNotification"/);
   assert.equal(result.compiled.includes('payments/payos'), false);
-  assert.throws(() => applyProductionHolds(compiled.replace('"deliverEmail"','"wrong"'), inventory), /COMPILED_SHAPE/);
+  assert.throws(() => applyProductionHolds(compiled.replace('"maintenance"','"wrong"'), inventory), /COMPILED_SHAPE/);
   assert.throws(() => applyProductionHolds(compiled, inventory.slice(1)), /INVENTORY_DRIFT/);
 });
 
@@ -505,8 +695,8 @@ const lifecycleCompiled = [
   cleanupBinding,
   'Object.defineProperty(exports, "askFeedbackWithdraw", {get: function(){return lifecycle.askFeedbackWithdraw;}});',
 ].join('\n');
-test('release holds include unapproved cleanup while preserving the original seven holds', () => {
-  assert.deepEqual(HELD_EXPORTS, ['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail', 'askFeedbackCleanup']);
+test('release holds preserve six unrelated base holds and unapproved cleanup', () => {
+  assert.deepEqual(HELD_EXPORTS, ['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'askFeedbackCleanup']);
   assert.equal(Object.isFrozen(HELD_EXPORTS), true);
 });
 test('cleanup-only hold preserves the lifecycle module and noncleanup customer endpoints', () => {
@@ -517,10 +707,10 @@ test('cleanup-only hold preserves the lifecycle module and noncleanup customer e
   assert.match(result.compiled, /require\("\.\/ai\/feedback-lifecycle"\)/);
   assert.match(result.compiled, /"askFeedbackWithdraw"/);
 });
-test('legacy seven-hold inventory remains valid without a cleanup export', () => {
+test('six base holds remain valid without a cleanup export', () => {
   const legacy = HELD_EXPORTS.filter(name => name !== 'askFeedbackCleanup');
   const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...legacy.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`)].join('\n');
-  assert.equal(legacy.length, 7);
+  assert.equal(legacy.length, 6);
   assert.deepEqual(applyProductionHolds(compiled, legacy.map(name => ({name}))).heldExports, [...legacy].sort());
   assert.throws(() => applyProductionHolds(compiled, legacy.slice(1).map(name => ({name}))), /INVENTORY_DRIFT/);
 });

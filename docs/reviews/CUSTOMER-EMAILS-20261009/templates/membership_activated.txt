@@ -1,0 +1,15 @@
+Gói của bạn đã được kích hoạt
+
+Bạn có thể xem các quyền lợi áp dụng trong thông tin gói.
+
+Gói sử dụng: {{planName}}
+Có hiệu lực đến: {{endsAt}}
+
+Xem gói của bạn: {{ctaUrl}}
+
+Cảm ơn bạn đã sử dụng gói của SatsunicGo.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

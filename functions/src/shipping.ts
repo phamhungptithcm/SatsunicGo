@@ -1,3 +1,4 @@
+import { parcelCustomerEvent, customerEventFields } from "./customer-notification-events";
 import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -257,6 +258,7 @@ export const shippingCommand = onCall(options, async (req) => {
           id: parcel.id,
           version: parcel.version,
           state: parcel.state,
+          updatedAt: Date.now(),
           route: parcel.route,
           warehouse: parcel.warehouse,
           ...(publicEstimate ? { deliveryEstimate: publicEstimate } : {}),
@@ -274,17 +276,20 @@ export const shippingCommand = onCall(options, async (req) => {
         createdAt: Date.now(),
       });
       const result = { id, version: parcel.version };
-      // Metadata-only ETA does not initiate customer/provider delivery jobs.
+      // One event per owner+parcel revision; ETA policy remains disabled.
       if (d.action !== "setDeliveryEstimate")
-        for (const order of orders)
-          tx.create(db.collection("outboxJobs").doc(), {
-            ownerId: order.ownerId,
-            orderId: order.id,
-            resourceId: id,
-            action: d.action,
-            state: "queued",
-            createdAt: Date.now(),
+        for (const ownerId of new Set(orders.map(o => o.ownerId))) {
+          const order = orders.find(o => o.ownerId === ownerId)!;
+          tx.create(db.doc(`outboxJobs/parcel-${id}-${parcel.version}-${ownerId}`), {
+            ownerId, orderId: order.id, resourceId: id, action: d.action,
+            state: "queued", createdAt: Date.now(),
+            ...customerEventFields(() => {
+              const event = parcelCustomerEvent(parcel, orders, ownerId, d.action, Date.now());
+              if (!event) throw Error("NO_CUSTOMER_EVENT");
+              return event;
+            }),
           });
+        }
       tx.create(op, { hash, result, createdAt: Date.now() });
       return result;
     });

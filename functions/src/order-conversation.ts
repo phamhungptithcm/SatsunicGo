@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { createHash } from "node:crypto";
 import { getFirestore, type Transaction } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
@@ -247,6 +251,19 @@ export const orderConversationCommand = onCall(opts, async (req) => {
         action: "orderConversationReply",
         state: "queued",
         createdAt: now,
+        ...customerEventFields(() =>
+          customerEvent(
+            "order_reply",
+            {
+              ownerId: access.ownerId,
+              entityId: d.orderId,
+              orderId: d.orderId,
+              entityVersion: now,
+              occurredAt: now,
+            },
+            { orderRef: d.orderId },
+          ),
+        ),
       });
     if (staffRecipient && staffRecipient !== uid)
       tx.create(

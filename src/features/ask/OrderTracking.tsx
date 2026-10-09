@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import type { CSSProperties } from "react";
+import "./order-tracking.css";
+import { Link, useLocation } from "react-router-dom";
 import { DeliveryEstimate } from "../shipping/DeliveryEstimate";
 import {
   trackingMilestones,
+  trackingMilestoneUpdates,
   trackingStageLabel,
   type CustomerOrderTracking,
 } from "../../../packages/domain/order-tracking";
@@ -44,7 +47,34 @@ const events: Record<string, [string, string]> = {
     "Payment exception resolved",
   ],
 };
-/** Pure projection renderer. The caller owns authentication/request generation. */
+function TrackingIcon({
+  kind,
+}: {
+  kind: "check" | "box" | "truck" | "home" | "clock";
+}) {
+  const paths = {
+    check: "m5 12 4 4 10-10",
+    box: "m3 7 9-4 9 4v10l-9 4-9-4V7Zm0 0 9 4 9-4M12 11v10M7 5l10 5",
+    truck:
+      "M3 5h11v12H3V5Zm11 5h4l3 4v3h-7M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm11 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z",
+    home: "m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8",
+    clock: "M12 8v4l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
+  };
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={paths[kind]} />
+    </svg>
+  );
+}
+/** Pure owner projection renderer shared by Account and Ask; no polling or cache. */
 export function OrderTracking({
   tracking,
   language = "vi",
@@ -52,8 +82,30 @@ export function OrderTracking({
   tracking: CustomerOrderTracking;
   language?: "vi" | "en";
 }) {
-  const vi = language === "vi",
-    steps = trackingMilestones(tracking, language);
+  const vi = language === "vi";
+  const location = useLocation();
+  const orderPath = `/account/orders/${encodeURIComponent(tracking.orderId)}`;
+  const steps = trackingMilestones(tracking, language);
+  const updates = trackingMilestoneUpdates(tracking, language);
+  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const format = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-GB", {
+    timeZone: zone,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+  const date = (value: number) => {
+    const parts = Object.fromEntries(
+      format.formatToParts(value).map((p) => [p.type, p.value]),
+    );
+    return `${parts.day}/${parts.month}/${parts.year} · ${parts.hour}:${parts.minute}`;
+  };
+  const stamp = (value: number) => (
+    <time dateTime={new Date(value).toISOString()}>{date(value)}</time>
+  );
   const states = {
     packed: vi ? "Đã đóng gói" : "Packed",
     in_transit: vi ? "Đang vận chuyển" : "In transit",
@@ -61,85 +113,206 @@ export function OrderTracking({
     failed: vi ? "Giao kiện chưa thành công" : "Parcel delivery failed",
     returned: vi ? "Kiện đã trả lại" : "Parcel returned",
   };
-  const date = (value: number) =>
-    new Date(value).toLocaleString(vi ? "vi-VN" : "en-US");
+  const routes = [
+    ...new Set(tracking.shipments.map((p) => p.route).filter(Boolean)),
+  ];
   return (
     <section
-      className="orderTracking"
+      className="orderTracking ot"
       aria-label={vi ? "Theo dõi đơn hàng" : "Order tracking"}
     >
-      <header>
-        <h2>{vi ? "Theo dõi đơn hàng" : "Order tracking"}</h2>
-        <p className="orderTrackingReference">
-          {vi ? "Mã đơn" : "Order ID"}: <code>{tracking.orderId}</code>
-        </p>
+      <header className="ot-reference">
+        <span>{vi ? "Theo dõi đơn hàng" : "Order tracking"}</span>
+        <code>{tracking.orderId}</code>
       </header>
-      <p>
-        <strong>{trackingStageLabel(tracking, language)}</strong>
-        {tracking.onHold && (
-          <span> · {vi ? "Đang tạm giữ xử lý" : "Processing on hold"}</span>
-        )}
-      </p>
-      <ol
-        className="orderTrackingSteps"
-        aria-label={vi ? "Các bước xử lý" : "Processing steps"}
-      >
-        {steps.map((step, index) => (
-          <li
-            key={step.label}
-            data-state={step.state}
-            aria-current={step.state === "current" ? "step" : undefined}
-          >
-            <span className="orderTrackingStepIcon" aria-hidden="true">
-              {index + 1}
+      <div className="ot-panel">
+        <div className="ot-hero">
+          <div className="ot-main">
+            <span className="ot-eyebrow">
+              {vi ? "Đơn hàng của bạn" : "Your order"}
             </span>
-            <div className="orderTrackingStepContent">
-              <span className="orderTrackingStepLabel">{step.label}</span>{" "}
-              <small className="orderTrackingStepStatus">
-                {step.state === "upcoming"
-                  ? vi
-                    ? "Chưa đến bước này"
-                    : "Upcoming"
-                  : step.state === "current"
-                    ? vi
-                      ? "Bước hiện tại"
-                      : "Current step"
-                    : vi
-                      ? "Đã qua bước này"
-                      : "Previous step"}
-              </small>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <DeliveryEstimate
-        aggregate
-        value={tracking.estimate}
-        observedAt={tracking.observedAt}
-        language={language}
-      />
-      <p className="muted">
-        {vi
-          ? "Các cập nhật được nhân viên ghi nhận thủ công. Trạng thái của một kiện không xác nhận toàn bộ đơn đã giao."
-          : "Staff record these updates manually. One delivered parcel does not confirm delivery of the entire order."}
+            <h2>{trackingStageLabel(tracking, language)}</h2>
+            {tracking.onHold && (
+              <p className="ot-notice" role="status">
+                {vi ? "Đang tạm giữ xử lý" : "Processing on hold"}
+              </p>
+            )}
+            <p className="ot-description">
+              {vi
+                ? "Theo các cập nhật đã ghi nhận của đơn hàng."
+                : "Based on recorded order updates."}
+            </p>
+            {routes.length > 0 && (
+              <p className="ot-route">
+                <TrackingIcon kind="truck" />
+                <span>
+                  {vi ? "Tuyến vận chuyển" : "Shipping route"}:{" "}
+                  {routes.join(" · ")}
+                </span>
+              </p>
+            )}
+          </div>
+          <aside
+            className="ot-eta"
+            aria-label={vi ? "Thời gian giao dự kiến" : "Estimated delivery"}
+          >
+            <DeliveryEstimate
+              aggregate
+              compact
+              value={
+                tracking.stage === "IN_TRANSIT" &&
+                !tracking.onHold &&
+                !tracking.shipmentsPartial
+                  ? tracking.estimate
+                  : null
+              }
+              observedAt={tracking.observedAt}
+              language={language}
+            />
+          </aside>
+        </div>
+        <div className="ot-timeline-heading">
+          <span>
+            {vi ? "Cập nhật gần nhất từng mốc" : "Latest activity per step"}
+          </span>
+          <span>{zone}</span>
+        </div>
+        <ol
+          data-compact={steps.length <= 6}
+          className="ot-steps"
+          aria-label={vi ? "Các bước xử lý" : "Processing steps"}
+        >
+          {steps.map((step, index) => (
+            <li
+              key={step.label}
+              data-state={step.state}
+              aria-current={step.state === "current" ? "step" : undefined}
+              style={{ "--i": index } as CSSProperties}
+            >
+              <span className="ot-step-icon">
+                <TrackingIcon
+                  kind={
+                    step.state === "completed"
+                      ? "check"
+                      : index === steps.length - 1
+                        ? "home"
+                        : index === steps.length - 2
+                          ? "truck"
+                          : "box"
+                  }
+                />
+              </span>
+              <div className="ot-step-content">
+                <strong>{step.label}</strong>
+                {step.state === "completed" && (
+                  <span className="ot-sr-only">
+                    {vi ? "Đã qua bước này" : "Previous step"}
+                  </span>
+                )}
+                <small className="ot-step-tag">
+                  {step.state === "current"
+                    ? tracking.onHold
+                      ? vi
+                        ? "Tạm dừng"
+                        : "On hold"
+                      : vi
+                        ? "Hiện tại"
+                        : "Current"
+                    : steps[index - 1]?.state === "current"
+                      ? vi
+                        ? "Tiếp theo"
+                        : "Next"
+                      : ""}
+                </small>
+                <span className="ot-step-time">
+                  {updates[index]
+                    ? stamp(updates[index])
+                    : step.state === "upcoming"
+                      ? vi
+                        ? "Chưa có cập nhật"
+                        : "No update yet"
+                      : vi
+                        ? "Chưa có thời điểm ghi nhận"
+                        : "Recorded time unavailable"}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <p className="ot-readtime">
+        <TrackingIcon kind="clock" />
+        <span>
+          {vi ? "Đọc lúc " : "Read at "}
+          {stamp(tracking.observedAt)} · {zone} ·{" "}
+          {vi ? "không cập nhật trực tiếp" : "not live"}
+        </span>
       </p>
       {tracking.shipmentsPartial && (
-        <p role="status">
+        <p className="ot-notice" role="status">
           {vi
             ? "Thông tin kiện chưa đầy đủ. Liên hệ hỗ trợ để kiểm tra."
             : "Parcel information is incomplete. Contact support to check."}
         </p>
       )}
-      {tracking.shipments.length > 0 && (
-        <div className="orderTrackingParcels">
+      <div className="ot-details">
+        <section
+          className="ot-history"
+          aria-label={vi ? "Lịch sử cập nhật" : "Update history"}
+        >
+          <h3>{vi ? "Lịch sử cập nhật" : "Update history"}</h3>
+          {tracking.timeline.length === 0 && (
+            <p className="quietNote">
+              {vi ? "Chưa có lịch sử cập nhật." : "No update history yet."}
+            </p>
+          )}
+          <ol>
+            {[...tracking.timeline]
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .map((event, index) => (
+                <li key={event.createdAt + ":" + index}>
+                  <span className="ot-history-dot" aria-hidden="true" />
+                  <div>
+                    <strong>
+                      {events[event.action]?.[vi ? 0 : 1] ??
+                        (vi ? "Đã cập nhật đơn" : "Order updated")}
+                    </strong>
+                    {stamp(event.createdAt)}
+                  </div>
+                </li>
+              ))}
+          </ol>
+          {tracking.timelinePartial && (
+            <p className="quietNote">
+              {vi
+                ? "Chỉ hiển thị lịch sử gần đây đã đọc được, tối đa 50 cập nhật."
+                : "Only available recent history is shown, up to 50 updates."}
+            </p>
+          )}
+        </section>
+        <section
+          className="ot-parcels"
+          aria-label={vi ? "Kiện của đơn này" : "Parcels for this order"}
+        >
           <h3>{vi ? "Kiện của đơn này" : "Parcels for this order"}</h3>
+          {tracking.shipments.length === 0 && (
+            <p className="quietNote">
+              {vi
+                ? "Chưa có thông tin kiện hàng."
+                : "No parcel information yet."}
+            </p>
+          )}
           {tracking.shipments.map((p) => (
             <article key={p.id}>
-              <p>
-                <strong>{states[p.state]}</strong> · {p.route}
-              </p>
+              <div className="ot-parcel-heading">
+                <TrackingIcon kind="box" />
+                <strong>{states[p.state]}</strong>
+              </div>
               <p>
                 {vi ? "Mã kiện" : "Parcel ID"}: <code>{p.id}</code>
+              </p>
+              <p>
+                {vi ? "Tuyến vận chuyển" : "Shipping route"}: {p.route}
               </p>
               {p.carrier && (
                 <p>
@@ -159,56 +332,24 @@ export function OrderTracking({
                 language={language}
               />
               {p.updatedAt && (
-                <p>
-                  {vi ? "Cập nhật" : "Updated"}:{" "}
-                  <time dateTime={new Date(p.updatedAt).toISOString()}>
-                    {date(p.updatedAt)}
-                  </time>
+                <p className="quietNote">
+                  {vi ? "Cập nhật" : "Updated"}: {stamp(p.updatedAt)}
                 </p>
               )}
             </article>
           ))}
-        </div>
+          <p className="quietNote">
+            {vi
+              ? "Các cập nhật được nhân viên ghi nhận thủ công. Trạng thái của một kiện không xác nhận toàn bộ đơn đã giao."
+              : "Staff record these updates manually. One delivered parcel does not confirm delivery of the entire order."}
+          </p>
+        </section>
+      </div>
+      {location.pathname !== orderPath && (
+        <Link className="ot-order-link" to={orderPath}>
+          {vi ? "Mở đơn đang tra cứu" : "Open the tracked order"}
+        </Link>
       )}
-      {tracking.timeline.length > 0 && (
-        <details>
-          <summary>{vi ? "Lịch sử cập nhật" : "Update history"}</summary>
-          <ol>
-            {tracking.timeline.map((event, index) => (
-              <li key={event.createdAt + ":" + index}>
-                <span>
-                  {events[event.action]?.[vi ? 0 : 1] ??
-                    (vi ? "Đã cập nhật đơn" : "Order updated")}
-                </span>{" "}
-                ·{" "}
-                <time dateTime={new Date(event.createdAt).toISOString()}>
-                  {date(event.createdAt)}
-                </time>
-              </li>
-            ))}
-          </ol>
-        </details>
-      )}
-      {tracking.timelinePartial && (
-        <p className="muted">
-          {vi
-            ? "Chỉ hiển thị lịch sử gần đây đã đọc được, tối đa 50 cập nhật."
-            : "Only available recent history is shown, up to 50 updates."}
-        </p>
-      )}
-      <p className="muted">
-        {vi ? "Đọc lúc" : "Read at"}{" "}
-        <time dateTime={new Date(tracking.observedAt).toISOString()}>
-          {date(tracking.observedAt)}
-        </time>{" "}
-        ·{" "}
-        {vi
-          ? "giờ địa phương · không cập nhật trực tiếp"
-          : "local time · not live"}
-      </p>
-      <Link to={`/account/orders/${encodeURIComponent(tracking.orderId)}`}>
-        {vi ? "Mở đơn đang tra cứu" : "Open the tracked order"}
-      </Link>
     </section>
   );
 }

@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { createHash } from "node:crypto";
@@ -119,6 +123,7 @@ export const financeReview = onCall(
             "aborted",
             "Đơn đã thay đổi. Tải lại để đối soát.",
           );
+        let allocatedAmount: number | undefined;
         if (d.action === "reverse") {
           const entryRef = db.doc(`financialEntries/${d.entryId}`),
             counterRef = db.doc(`financialReversals/${d.entryId}`),
@@ -195,6 +200,7 @@ export const financeReview = onCall(
               "already-exists",
               "Giao dịch đã được phân bổ; đóng ngoại lệ sau khi đối soát.",
             );
+          allocatedAmount = amount;
           tx.create(bankRef, {
             kind: "payment",
             provider: "payos",
@@ -237,6 +243,26 @@ export const financeReview = onCall(
           action: d.action,
           state: "queued",
           createdAt: now,
+          ...customerEventFields(() => {
+            const context = {
+              ownerId: o.ownerId,
+              entityId: d.orderId,
+              orderId: d.orderId,
+              entityVersion: o.version + 1,
+              occurredAt: now,
+            };
+            return d.action === "reverse"
+              ? customerEvent("financial_adjustment", context, {
+                  orderRef: d.orderId,
+                  customerReason:
+                    "Khoản thanh toán cần điều chỉnh sau đối chiếu",
+                  costImpact: `Khoản ghi nhận giảm: ${new Intl.NumberFormat("vi-VN").format(d.amount)} ₫`,
+                })
+              : customerEvent("payment_allocated", context, {
+                  orderRef: d.orderId,
+                  paidAmount: allocatedAmount!,
+                });
+          }),
         });
         resourceId = d.orderId;
       }

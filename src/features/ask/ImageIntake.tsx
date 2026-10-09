@@ -147,9 +147,10 @@ export function useAskImages({
         const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
         canvas.width = Math.max(1, Math.round(bitmap.width * scale));
         canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-        canvas
-          .getContext("2d")!
-          .drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        const drawing = canvas.getContext("2d")!;
+        drawing.fillStyle = "#ffffff";
+        drawing.fillRect(0, 0, canvas.width, canvas.height);
+        drawing.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
         bitmap.close();
         const preview = canvas.toDataURL("image/jpeg", 0.9);
         if (preview.length > 2800000) throw Error("image");

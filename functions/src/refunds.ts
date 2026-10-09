@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { createHash, randomUUID } from "node:crypto";
@@ -156,6 +160,28 @@ export const refundCommand = onCall(
         action: `refund-${d.action}`,
         state: "queued",
         createdAt: now,
+        ...customerEventFields(() => {
+          const context = {
+            ownerId: o.ownerId,
+            entityId: d.orderId,
+            orderId: d.orderId,
+            entityVersion: version,
+            occurredAt: now,
+          };
+          const values = {
+            orderRef: d.orderId,
+            refundAmount:
+              d.action === "request"
+                ? d.amount!
+                : (refund.data()!.amount as number),
+          };
+          return d.action === "request"
+            ? customerEvent("refund_requested", context, values)
+            : customerEvent("refund_request_cancelled", context, {
+                ...values,
+                customerReason: "Yêu cầu đã được dừng xử lý",
+              });
+        }),
       });
       const result = { id, version };
       tx.create(op, { hash, result, createdAt: now });

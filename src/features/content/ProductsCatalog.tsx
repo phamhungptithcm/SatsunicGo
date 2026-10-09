@@ -188,7 +188,7 @@ export function ProductsCatalog() {
                     <CatalogCard
                       key={`${row.id}:${row.mediaId}`}
                       id={row.mediaId}
-                productId={row.id}
+                      productId={row.id}
                       slug={row.slug}
                       title={row.title}
                       alt={row.mediaAlt ?? row.title}
@@ -218,13 +218,16 @@ export function ProductsCatalog() {
                             "Chưa mở đặt mua"
                           )}
                         </p>
-                        {available && <AddToCart key={row.id} product={row} />}
                         <div className="productAction">
-                          <Link to={`/products/${row.slug}`}>Chi tiết</Link>
-                          {available && (
-                            <Link to={`/products/${row.slug}/checkout`}>
-                              Chọn mua <span aria-hidden="true">↗</span>
-                            </Link>
+                          {available ? (
+                            <AddToCart key={row.id} product={row} compact>
+                              <Link to={`/products/${row.slug}`}>Chi tiết</Link>
+                              <Link to={`/products/${row.slug}/checkout`}>
+                                Chọn mua
+                              </Link>
+                            </AddToCart>
+                          ) : (
+                            <Link to={`/products/${row.slug}`}>Chi tiết</Link>
                           )}
                         </div>
                       </div>

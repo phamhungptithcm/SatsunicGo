@@ -1,0 +1,15 @@
+Gói của bạn sắp hết hạn
+
+Bạn có thể chọn gia hạn nếu còn nhu cầu.
+
+Gói sử dụng: {{planName}}
+Ngày hết hạn: {{endsAt}}
+
+Xem thông tin gia hạn: {{ctaUrl}}
+
+SatsunicGo không tự trừ tiền để gia hạn.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

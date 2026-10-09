@@ -1,3 +1,8 @@
+import {
+  CheckoutNotificationChoices,
+  NotificationSaveStatus,
+} from "../notifications/NotificationPreferences";
+import { useNotificationPreferences } from "../notifications/use-notification-preferences";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { User } from "firebase/auth";
@@ -9,27 +14,39 @@ import type {
   CheckoutRecipient,
   CheckoutSnapshot,
 } from "../../../packages/domain/purchase-checkout";
-import {
-  admitPurchaseCheckoutAcknowledgement,
-  checkoutRecipientSchema,
-} from "../../../packages/domain/purchase-checkout";
+import { admitPurchaseCheckoutAcknowledgement } from "../../../packages/domain/purchase-checkout";
 import type {
   ShippingRateConfig,
   ShippingQuoteInput,
 } from "../../../packages/domain/shipping-rates";
 import "./purchase-checkout.css";
 import { PurchaseThumbnail } from "./purchase-thumbnail";
+import { PurchaseSignIn } from "./purchase-sign-in";
+import { purchaseFeedback } from "./purchase-feedback";
+import { PurchasePaymentMethods } from "./purchase-payment-methods";
+import { PurchaseRegionAutocomplete } from "./purchase-region-autocomplete";
+import {
+  purchaseProvinceSelection,
+  type PurchaseProvince,
+} from "./purchase-region-search";
+import {
+  availablePurchasePaymentMethods,
+  isPurchasePaymentMethod,
+  type PurchasePaymentCapabilities,
+  type PurchasePaymentMethod,
+} from "./purchase-payment-selection";
+import {
+  purchaseRecipientFields,
+  validatePurchaseRecipient,
+  type PurchaseRecipientField,
+} from "./purchase-recipient-validation";
 const money = (n: number) => `${n.toLocaleString("vi-VN")} ₫`;
-type Province = {
-  code: string;
-  name: string;
-  communes: { code: string; name: string }[];
-};
 type Setup = {
-  regions: Province[];
+  regions: PurchaseProvince[];
   shipping: ShippingRateConfig | null;
   shippingOrigin: string;
   pricing: unknown;
+  paymentCapabilities?: PurchasePaymentCapabilities;
 };
 type Preview = CheckoutSnapshot & { previewHash: string };
 type SavedAddress = {
@@ -46,6 +63,7 @@ type Commit = {
   previewId: string;
   previewHash: string;
   confirmed: true;
+  paymentMethod?: PurchasePaymentMethod;
 };
 const blank: CheckoutRecipient = {
   recipient: "",
@@ -98,34 +116,78 @@ export function PurchaseCheckout({
     [recipient, setRecipient] = useState<CheckoutRecipient>(blank),
     [addresses, setAddresses] = useState<SavedAddress[]>([]),
     [saved, setSaved] = useState("");
+  const [addressReset, setAddressReset] = useState(0);
   const [step, setStep] = useState<1 | 2>(balance ? 2 : 1),
     [preview, setPreview] = useState<Preview | null>(null),
     [confirmed, setConfirmed] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [recipientAttempted, setRecipientAttempted] = useState(false);
+  const [paymentMethod, setPaymentMethod] =
+    useState<PurchasePaymentMethod | null>(null);
+  const enabledPaymentMethods = availablePurchasePaymentMethods(
+    setup?.paymentCapabilities,
+  );
+  const notifications = useNotificationPreferences(user, "checkout");
   const [warehouse, setWarehouse] = useState<"texas_cali" | "oregon">(
       "texas_cali",
     ),
     [category, setCategory] = useState(""),
     [weight, setWeight] = useState("");
   const heading = useRef<HTMLHeadingElement>(null),
+    recipientForm = useRef<HTMLFormElement>(null),
     flight = useRef(false),
     pending = useRef<Commit | null>(null),
     generation = useRef(0);
   const key = `purchase-commit:${user?.uid ?? "guest"}:${balance ? `balance-${orderId}` : "initial"}`;
+  const fieldErrors = recipientAttempted
+    ? validatePurchaseRecipient(recipient).errors
+    : {};
+  function fieldProps(field: PurchaseRecipientField) {
+    return {
+      id: `purchase-${field}`,
+      name: field,
+      "aria-labelledby": `purchase-${field}-label`,
+      "aria-invalid": Boolean(fieldErrors[field]),
+      "aria-describedby": fieldErrors[field]
+        ? `purchase-${field}-error`
+        : undefined,
+    };
+  }
+  function fieldError(field: PurchaseRecipientField) {
+    return (
+      <span className="purchaseFieldError" id={`purchase-${field}-error`}>
+        {fieldErrors[field]}
+      </span>
+    );
+  }
   useEffect(() => {
     let active = true;
     pending.current = null;
     setPreview(null);
     setConfirmed(false);
     setStep(balance ? 2 : 1);
+    setRecipientAttempted(false);
+    setSetup(null);
+    setPaymentMethod(null);
     if (!user) return;
     void callService<Setup>("purchaseCheckoutSetup", {})
       .then((s) => {
-        if (active) setSetup(s);
+        if (active) {
+          setSetup(s);
+          setPaymentMethod(
+            availablePurchasePaymentMethods(s.paymentCapabilities)[0] ?? null,
+          );
+        }
       })
       .catch((e) => {
-        if (active) setError((e as Error).message);
+        if (active)
+          setError(
+            purchaseFeedback(
+              e,
+              "Chưa tải được thông tin mua hàng. Kiểm tra kết nối rồi thử lại.",
+            ),
+          );
       });
     if (db)
       void getDocs(
@@ -154,7 +216,9 @@ export function PurchaseCheckout({
         /^[0-9a-f-]{36}$/i.test(stored.operationId) &&
         /^[0-9a-f-]{36}$/i.test(stored.previewId) &&
         /^[a-f0-9]{64}$/.test(stored.previewHash) &&
-        stored.confirmed === true
+        stored.confirmed === true &&
+        (stored.paymentMethod === undefined ||
+          isPurchasePaymentMethod(stored.paymentMethod))
       ) {
         pending.current = stored;
         setError(
@@ -207,12 +271,19 @@ export function PurchaseCheckout({
       })
       .then((p) => {
         if (active && p) {
+          if (notifications.dirty) void notifications.save();
           setPreview(p);
           setRecipient(p.recipient);
         }
       })
       .catch((e) => {
-        if (active) setError((e as Error).message);
+        if (active)
+          setError(
+            purchaseFeedback(
+              e,
+              "Chưa mở được khoản cần thanh toán thêm. Kiểm tra kết nối rồi thử lại.",
+            ),
+          );
       });
     return () => {
       active = false;
@@ -250,12 +321,15 @@ export function PurchaseCheckout({
   async function overview() {
     if (flight.current || !user) return;
     setError("");
-    const parsed = checkoutRecipientSchema.safeParse(recipient);
+    const { parsed, errors } = validatePurchaseRecipient(recipient);
+    setRecipientAttempted(true);
     if (!parsed.success) {
-      setError(
-        "Nhập người nhận, số điện thoại, tỉnh/thành, phường/xã và địa chỉ nhận hàng.",
-      );
-      heading.current?.focus();
+      const first = purchaseRecipientFields.find((field) => errors[field]);
+      recipientForm.current
+        ?.querySelector<
+          HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >(`[name="${first}"]:not(:disabled)`)
+        ?.focus({ preventScroll: true });
       return;
     }
     let shipping;
@@ -283,7 +357,13 @@ export function PurchaseCheckout({
       setStep(2);
       requestAnimationFrame(() => heading.current?.focus());
     } catch (e) {
-      if (request === generation.current) setError((e as Error).message);
+      if (request === generation.current)
+        setError(
+          purchaseFeedback(
+            e,
+            "Chưa tải được tổng quan. Thông tin nhận hàng vẫn được giữ; kiểm tra kết nối rồi thử lại.",
+          ),
+        );
     } finally {
       flight.current = false;
       setBusy(false);
@@ -293,7 +373,11 @@ export function PurchaseCheckout({
     if (
       flight.current ||
       !user ||
-      (!pending.current && (!preview || !confirmed))
+      (!pending.current &&
+        (!preview ||
+          !confirmed ||
+          !paymentMethod ||
+          !enabledPaymentMethods.includes(paymentMethod)))
     )
       return;
     setError("");
@@ -303,6 +387,7 @@ export function PurchaseCheckout({
       previewId: preview!.id,
       previewHash: preview!.previewHash,
       confirmed: true as const,
+      paymentMethod: paymentMethod!,
     };
     try {
       sessionStorage.setItem(key, JSON.stringify(command));
@@ -323,6 +408,7 @@ export function PurchaseCheckout({
           command,
         ),
         command.previewId,
+        command.paymentMethod,
       );
       if (request !== generation.current) return;
       sessionStorage.removeItem(key);
@@ -347,7 +433,12 @@ export function PurchaseCheckout({
         setConfirmed(false);
         setPreview(null);
         if (!balance) setStep(1);
-        setError((e as Error).message);
+        setError(
+          purchaseFeedback(
+            e,
+            "Chưa xác nhận được thông tin. Xem lại tổng quan trước khi thanh toán.",
+          ),
+        );
       } else
         setError(
           "Chưa rõ kết quả. Kiểm tra lại cùng lần đã gửi; không tạo thanh toán mới.",
@@ -369,9 +460,7 @@ export function PurchaseCheckout({
       <section className="page purchaseCheckout">
         <h1>Hoàn tất đơn mua hộ</h1>
         <p>Đăng nhập để dùng giỏ và địa chỉ của bạn.</p>
-        <button className="primary" onClick={signIn}>
-          Đăng nhập để tiếp tục
-        </button>
+        <PurchaseSignIn signIn={signIn} />
       </section>
     );
   return (
@@ -397,6 +486,7 @@ export function PurchaseCheckout({
         </p>
       </header>
       <PurchaseJourney current={step} />
+      {!balance && <NotificationSaveStatus controller={notifications} />}
       {error && (
         <div className="purchaseError" role="alert">
           <p>{error}</p>
@@ -423,6 +513,8 @@ export function PurchaseCheckout({
         <div className="purchaseGrid">
           {step === 1 ? (
             <form
+              id="purchaseRecipientForm"
+              ref={recipientForm}
               className="purchaseCard recipientForm"
               onSubmit={(e) => {
                 e.preventDefault();
@@ -438,6 +530,8 @@ export function PurchaseCheckout({
                   disabled={busy || Boolean(pending.current)}
                   onChange={(e) => {
                     setSaved(e.target.value);
+                    setAddressReset((revision) => revision + 1);
+                    setRecipientAttempted(false);
                     const a = addresses.find((a) => a.id === e.target.value);
                     setRecipient(
                       a
@@ -478,24 +572,37 @@ export function PurchaseCheckout({
               <fieldset disabled={busy || Boolean(pending.current)}>
                 <div className="purchaseFields">
                   <label>
-                    Người nhận
-                    <span className="requiredMark" aria-hidden="true">
-                      *
+                    <span
+                      className="purchaseFieldLabel"
+                      id="purchase-recipient-label"
+                    >
+                      Người nhận{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
                     </span>
                     <input
+                      {...fieldProps("recipient")}
                       autoComplete="shipping name"
                       value={recipient.recipient}
                       onChange={(e) => edit({ recipient: e.target.value })}
                       maxLength={120}
                       required
                     />
+                    {fieldError("recipient")}
                   </label>
                   <label>
-                    Số điện thoại
-                    <span className="requiredMark" aria-hidden="true">
-                      *
+                    <span
+                      className="purchaseFieldLabel"
+                      id="purchase-phone-label"
+                    >
+                      Số điện thoại{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
                     </span>
                     <input
+                      {...fieldProps("phone")}
                       autoComplete="shipping tel"
                       type="tel"
                       value={recipient.phone}
@@ -505,92 +612,104 @@ export function PurchaseCheckout({
                       maxLength={20}
                       required
                     />
+                    {fieldError("phone")}
                   </label>
                   <label>
-                    Quốc gia
+                    <span className="purchaseFieldLabel">Quốc gia</span>
                     <input value="Việt Nam" readOnly />
+                    <span className="purchaseFieldError" aria-hidden="true" />
                   </label>
-                  <label>
-                    Tỉnh / thành phố
-                    <span className="requiredMark" aria-hidden="true">
-                      *
-                    </span>
-                    <select
-                      required
+                  <div className="purchaseRegionField">
+                    <PurchaseRegionAutocomplete
+                      key={addressReset}
+                      {...fieldProps("provinceCode")}
+                      label="Tỉnh / thành phố"
+                      options={setup?.regions ?? []}
+                      disabled={
+                        !setup?.regions.length ||
+                        busy ||
+                        Boolean(pending.current)
+                      }
+                      placeholder={
+                        setup?.regions.length
+                          ? "Tìm tỉnh / thành phố"
+                          : "Chưa có danh mục tỉnh / thành phố"
+                      }
                       value={recipient.provinceCode}
-                      onChange={(e) => {
-                        const p = setup?.regions.find(
-                          (p) => p.code === e.target.value,
-                        );
-                        edit({
-                          provinceCode: e.target.value,
-                          province: p?.name ?? "",
-                          communeCode: "",
-                          commune: "",
-                        });
-                      }}
-                    >
-                      <option value="">Chọn tỉnh / thành phố</option>
-                      {setup?.regions.map((p) => (
-                        <option key={p.code} value={p.code}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    Phường / xã
-                    <span className="requiredMark" aria-hidden="true">
-                      *
-                    </span>
-                    <select
-                      required
-                      disabled={!province}
+                      onSelect={(option) =>
+                        edit(
+                          purchaseProvinceSelection(
+                            setup?.regions ?? [],
+                            option?.code ?? "",
+                          ),
+                        )
+                      }
+                    />
+                    {fieldError("provinceCode")}
+                  </div>
+                  <div className="purchaseRegionField">
+                    <PurchaseRegionAutocomplete
+                      key={`${addressReset}:${recipient.provinceCode}`}
+                      {...fieldProps("communeCode")}
+                      label="Phường / xã"
+                      options={province?.communes ?? []}
+                      disabled={
+                        !province?.communes.length ||
+                        busy ||
+                        Boolean(pending.current)
+                      }
+                      placeholder={
+                        province
+                          ? "Tìm phường / xã"
+                          : "Chọn tỉnh / thành phố trước"
+                      }
                       value={recipient.communeCode}
-                      onChange={(e) =>
+                      onSelect={(option) =>
                         edit({
-                          communeCode: e.target.value,
-                          commune:
-                            province?.communes.find(
-                              (c) => c.code === e.target.value,
-                            )?.name ?? "",
+                          communeCode: option?.code ?? "",
+                          commune: option?.name ?? "",
                         })
                       }
-                    >
-                      <option value="">
-                        {province
-                          ? "Chọn phường / xã"
-                          : "Chọn tỉnh / thành phố trước"}
-                      </option>
-                      {province?.communes.map((c) => (
-                        <option key={c.code} value={c.code}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                    />
+                    {fieldError("communeCode")}
+                  </div>
                   <label className="purchaseWide">
-                    Số nhà, đường, tòa nhà / căn hộ
-                    <span className="requiredMark" aria-hidden="true">
-                      *
+                    <span
+                      className="purchaseFieldLabel"
+                      id="purchase-street-label"
+                    >
+                      Số nhà, đường, tòa nhà / căn hộ{" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
                     </span>
                     <input
+                      {...fieldProps("street")}
                       required
                       autoComplete="shipping street-address"
                       value={recipient.street}
                       onChange={(e) => edit({ street: e.target.value })}
                       maxLength={300}
                     />
+                    {fieldError("street")}
                   </label>
                   <label className="purchaseWide">
-                    Ghi chú giao hàng <small>Không bắt buộc</small>
+                    <span
+                      className="purchaseFieldLabel"
+                      id="purchase-note-label"
+                    >
+                      Ghi chú giao hàng <small>Không bắt buộc</small>
+                    </span>
                     <textarea
+                      {...fieldProps("note")}
                       value={recipient.note}
                       onChange={(e) => edit({ note: e.target.value })}
                       maxLength={500}
                     />
+                    {fieldError("note")}
                   </label>
                 </div>
+                <CheckoutNotificationChoices controller={notifications} />
               </fieldset>
               {!setup?.regions.length && (
                 <p role="status">
@@ -603,18 +722,6 @@ export function PurchaseCheckout({
                   </button>
                 </p>
               )}
-              <button
-                type="submit"
-                className="primary"
-                disabled={
-                  busy ||
-                  cached ||
-                  Boolean(pending.current) ||
-                  !setup?.regions.length
-                }
-              >
-                Xem tổng quan →
-              </button>
             </form>
           ) : (
             <section className="purchaseCard purchaseReview">
@@ -672,6 +779,15 @@ export function PurchaseCheckout({
                   Việt Nam
                 </p>
               </div>
+              <PurchasePaymentMethods
+                value={paymentMethod}
+                enabledMethods={enabledPaymentMethods}
+                disabled={busy || Boolean(pending.current)}
+                onChange={(method) => {
+                  setPaymentMethod(method);
+                  setConfirmed(false);
+                }}
+              />
               {!balance && (
                 <p className="purchaseTerms">
                   Giá niêm yết giữ trọn gói. Món cần tìm mua có thể phát sinh
@@ -839,6 +955,28 @@ export function PurchaseCheckout({
                 </details>
               </section>
             )}
+            {step === 1 && (
+              <div className="purchaseOverviewAction">
+                <p className="purchaseValidationSummary" role="status">
+                  {Object.keys(fieldErrors).length > 0
+                    ? "Kiểm tra các ô được đánh dấu để tiếp tục."
+                    : ""}
+                </p>
+                <button
+                  type="submit"
+                  form="purchaseRecipientForm"
+                  className="primary"
+                  disabled={
+                    busy ||
+                    cached ||
+                    Boolean(pending.current) ||
+                    !setup?.regions.length
+                  }
+                >
+                  {busy ? "Đang kiểm tra…" : "Xem tổng quan →"}
+                </button>
+              </div>
+            )}
             {step === 2 && preview && (
               <div className="purchaseConfirm">
                 <label>
@@ -869,7 +1007,13 @@ export function PurchaseCheckout({
                   </button>
                   <button
                     className="primary"
-                    disabled={busy || !confirmed || Boolean(pending.current)}
+                    disabled={
+                      busy ||
+                      !confirmed ||
+                      Boolean(pending.current) ||
+                      !paymentMethod ||
+                      !enabledPaymentMethods.includes(paymentMethod)
+                    }
                     onClick={() => void commit()}
                   >
                     {busy ? "Đang xử lý…" : "Xác nhận & thanh toán"}

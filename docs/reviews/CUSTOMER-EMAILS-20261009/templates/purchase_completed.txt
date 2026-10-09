@@ -1,0 +1,13 @@
+Đã mua đủ hàng
+
+Các món trong đơn đã được mua đủ.
+
+Đơn hàng: {{orderRef}}
+Sản phẩm: {{itemSummary}}
+
+Xem tiến độ: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

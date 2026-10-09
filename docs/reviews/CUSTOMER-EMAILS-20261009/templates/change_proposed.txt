@@ -1,0 +1,14 @@
+Có phương án thay đổi
+
+Bạn xem phương án và chi phí trước khi chọn đồng ý hoặc từ chối.
+
+Đơn hàng: {{orderRef}}
+Phương án: {{changeSummary}}
+Chi phí: {{costImpact}}
+
+Xem phương án: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

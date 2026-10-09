@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { customCartTotal } from "../../../packages/domain/cart";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
@@ -9,6 +9,7 @@ import { CartIcon } from "./AddToCart";
 import "./cart.css";
 import "./purchase-checkout.css";
 import { PurchaseThumbnail, purchaseMediaSrc } from "./purchase-thumbnail";
+import { PurchaseSignIn } from "./purchase-sign-in";
 
 const money = (n: number) => `${n.toLocaleString("vi-VN")} ₫`;
 export function CartPage({ signIn }: { signIn: () => void }) {
@@ -25,6 +26,7 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     guestItems,
     pending,
     change,
+    changeGuest,
     mergeGuest,
     resetGuest,
     refresh,
@@ -37,10 +39,43 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     }),
     [reading, setReading] = useState(true),
     [retry, setRetry] = useState(0);
+  const automaticTransfer = useRef("");
+  const hasGuestItems = Boolean(user && guestItems.length);
+  useEffect(() => {
+    if (!online) {
+      automaticTransfer.current = "";
+      return;
+    }
+    if (
+      !user ||
+      !hasGuestItems ||
+      loading ||
+      busy ||
+      pending ||
+      cached ||
+      cart.activeCheckoutId
+    )
+      return;
+    const signature = JSON.stringify([user.uid, guestItems]);
+    if (automaticTransfer.current === signature) return;
+    automaticTransfer.current = signature;
+    void mergeGuest();
+  }, [
+    user,
+    hasGuestItems,
+    guestItems,
+    loading,
+    busy,
+    pending,
+    cached,
+    online,
+    cart.activeCheckoutId,
+    mergeGuest,
+  ]);
   const ids = JSON.stringify(
     [
       ...new Set(
-        cart.items
+        [...cart.items, ...(user ? guestItems : [])]
           .filter((item) => item.kind !== "custom")
           .map((item) => item.productId),
       ),
@@ -64,7 +99,10 @@ export function CartPage({ signIn }: { signIn: () => void }) {
       live = false;
     };
   }, [ids, retry, online]);
-  const entries = cart.items.map((item) => {
+  const entries = [
+    ...cart.items.map((item) => ({ item, guest: false })),
+    ...(user ? guestItems.map((item) => ({ item, guest: true })) : []),
+  ].map(({ item, guest }) => {
     const product = item.custom
         ? {
             title: item.custom.name,
@@ -85,6 +123,7 @@ export function CartPage({ signIn }: { signIn: () => void }) {
           : item.variant === ""));
     return {
       item,
+      guest,
       product,
       valid,
       price: item.custom
@@ -94,9 +133,15 @@ export function CartPage({ signIn }: { signIn: () => void }) {
           : null,
     };
   });
-  const quantity = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-  const total = entries.every((e) => e.valid && e.price !== null)
-    ? entries.reduce(
+  const summaryEntries = cart.activeCheckoutId
+    ? entries.filter((entry) => !entry.guest)
+    : entries;
+  const quantity = summaryEntries.reduce(
+    (sum, { item }) => sum + item.quantity,
+    0,
+  );
+  const total = summaryEntries.every((e) => e.valid && e.price !== null)
+    ? summaryEntries.reduce(
         (sum, e) =>
           sum +
           (e.item.custom
@@ -111,6 +156,7 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     !products.cached &&
     !pending &&
     !busy &&
+    !hasGuestItems &&
     cart.items.length > 0 &&
     entries.every((entry) => entry.valid) &&
     (!user || !cached);
@@ -120,6 +166,7 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     pending ||
     Boolean(cart.activeCheckoutId) ||
     (!!user && (cached || !online));
+  const guestDisabled = loading || busy || pending;
   return (
     <section className="page cart107">
       <Link className="cartBack107" to="/products">
@@ -129,35 +176,15 @@ export function CartPage({ signIn }: { signIn: () => void }) {
         <h1>Giỏ hàng</h1>
       </div>
       {storageWarning && (
-        <div className="cartNotice107" role="status">
+        <div className="cartRecovery107" role="status">
           {storageWarning}
           <button type="button" onClick={resetGuest}>
             Xóa bản giỏ trên trình duyệt
           </button>
         </div>
       )}
-      {guestItems.length > 0 && user && (
-        <div className="cartNotice107">
-          <span>
-            Bạn còn {guestItems.length} mẫu sản phẩm trong giỏ trên trình duyệt.
-          </span>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={() => void mergeGuest()}
-          >
-            Gộp vào giỏ tài khoản
-          </button>
-        </div>
-      )}
-      {!online && (
-        <p className="cartNotice107" role="status">
-          Bạn đang ngoại tuyến. Giá chưa được kiểm tra lại. Kết nối để tiếp tục
-          đặt mua.
-        </p>
-      )}
-      {error && (
-        <div className="cartNotice107" role="alert">
+      {error && !hasGuestItems && (
+        <div className="cartRecovery107" role="alert">
           <span>{error}</span>
           {pending ? (
             <button
@@ -180,8 +207,8 @@ export function CartPage({ signIn }: { signIn: () => void }) {
           )}
         </div>
       )}
-      {pending && !error && (
-        <p role="status">
+      {pending && !busy && !error && !hasGuestItems && (
+        <p className="cartRecovery107" role="status">
           Có lần cập nhật chưa xác nhận.{" "}
           <button
             type="button"
@@ -193,15 +220,21 @@ export function CartPage({ signIn }: { signIn: () => void }) {
         </p>
       )}
       {loading ? (
-        <LoadingState>Đang tải giỏ hàng…</LoadingState>
-      ) : cart.items.length === 0 ? (
+        <LoadingState>Đang cập nhật giỏ hàng…</LoadingState>
+      ) : entries.length === 0 ? (
         <div className="cartEmpty107">
           <CartIcon />
-          <h2>{error ? "Chưa hiển thị được giỏ" : "Giỏ hàng đang trống"}</h2>
+          <h2>
+            {hasGuestItems || error
+              ? "Chưa hiển thị được giỏ"
+              : "Giỏ hàng đang trống"}
+          </h2>
           <p>
-            {error
-              ? "Tải lại để kiểm tra sản phẩm đã lưu trong tài khoản."
-              : "Chọn sản phẩm để bắt đầu mua hộ."}
+            {hasGuestItems
+              ? `${guestItems.length} mẫu sản phẩm đã chọn vẫn được giữ lại.`
+              : error
+                ? "Thử tải lại giỏ."
+                : "Chọn sản phẩm để bắt đầu mua hộ."}
           </p>
           <Link className="primary" to="/products">
             Xem sản phẩm
@@ -209,28 +242,14 @@ export function CartPage({ signIn }: { signIn: () => void }) {
         </div>
       ) : (
         <>
-          {products.error && (
-            <div className="cartNotice107" role="status">
-              <span>{products.error}</span>
-              <button
-                type="button"
-                disabled={reading || !online}
-                onClick={() => setRetry((n) => n + 1)}
-              >
-                Tải lại sản phẩm và giá
-              </button>
-            </div>
-          )}
           <div className="cartLayout107">
             <div>
-              {reading && (
-                <LoadingState overlay={false}>
-                  Đang kiểm tra sản phẩm và giá…
-                </LoadingState>
-              )}
               <ul className="cartItems107">
-                {entries.map(({ item, product, valid, price }) => (
-                  <li className="cartItem107" key={item.lineId}>
+                {entries.map(({ item, product, valid, price, guest }) => (
+                  <li
+                    className="cartItem107"
+                    key={`${guest ? "guest" : "account"}:${item.lineId}`}
+                  >
                     <div className="cartImage107">
                       {item.custom ? (
                         <PurchaseThumbnail
@@ -243,6 +262,9 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                           src={purchaseMediaSrc(product.mediaId)}
                           alt={product.mediaAlt || product.title}
                           loading="lazy"
+                          onLoad={(e) => {
+                            e.currentTarget.hidden = false;
+                          }}
                           onError={(e) => {
                             e.currentTarget.hidden = true;
                           }}
@@ -276,8 +298,13 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                       </p>
                       {!valid && !reading && !products.cached && (
                         <p className="cartUnavailable107" role="status">
-                          Sản phẩm hoặc mẫu này chưa mở đặt mua. Chọn lại trong
-                          danh mục.
+                          Chưa thể đặt mua sản phẩm hoặc mẫu này. Xóa món này
+                          hoặc chọn lại trong danh mục.
+                        </p>
+                      )}
+                      {guest && valid && !busy && (
+                        <p className="cartUnavailable107">
+                          Chưa lưu vào giỏ tài khoản.
                         </p>
                       )}
                       <div className="cartItemActions107">
@@ -285,9 +312,12 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                           <button
                             type="button"
                             aria-label={`Giảm số lượng ${product?.title ?? "sản phẩm"}`}
-                            disabled={disabled || item.quantity <= 1}
+                            disabled={
+                              (guest ? guestDisabled : disabled) ||
+                              item.quantity <= 1
+                            }
                             onClick={() =>
-                              void change({
+                              void (guest ? changeGuest : change)({
                                 action: "quantity",
                                 lineId: item.lineId,
                                 quantity: item.quantity - 1,
@@ -304,9 +334,12 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                           <button
                             type="button"
                             aria-label={`Tăng số lượng ${product?.title ?? "sản phẩm"}`}
-                            disabled={disabled || item.quantity >= 100}
+                            disabled={
+                              (guest ? guestDisabled : disabled) ||
+                              item.quantity >= 100
+                            }
                             onClick={() =>
-                              void change({
+                              void (guest ? changeGuest : change)({
                                 action: "quantity",
                                 lineId: item.lineId,
                                 quantity: item.quantity + 1,
@@ -319,10 +352,10 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                         <button
                           type="button"
                           className="cartRemove107"
-                          disabled={disabled}
+                          disabled={guest ? guestDisabled : disabled}
                           aria-label={`Xóa ${product?.title ?? "sản phẩm"} khỏi giỏ`}
                           onClick={() =>
-                            void change({
+                            void (guest ? changeGuest : change)({
                               action: "remove",
                               lineId: item.lineId,
                             })
@@ -344,13 +377,17 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                   </li>
                 ))}
               </ul>
-              {user && (cached || busy) && (
-                <p className="cartSaved107" role="status">
-                  {busy
-                    ? "Đang lưu…"
-                    : "Giỏ chưa được cập nhật. Kết nối để tải lại."}
-                </p>
-              )}
+              {user &&
+                online &&
+                !hasGuestItems &&
+                !error &&
+                (cached || busy) && (
+                  <p className="cartSaved107" role="status">
+                    {busy
+                      ? "Đang lưu…"
+                      : "Giỏ chưa được cập nhật. Kết nối để tải lại."}
+                  </p>
+                )}
               <Link className="cartBack107" to="/products">
                 ← Tiếp tục chọn sản phẩm
               </Link>
@@ -358,15 +395,59 @@ export function CartPage({ signIn }: { signIn: () => void }) {
             <aside className="cartSummary107">
               <h2>Tóm tắt</h2>
               <div>
-                <span>Số lượng</span>
+                <span>
+                  {cart.activeCheckoutId ? "Đang chờ thanh toán" : "Số lượng"}
+                </span>
                 <span>{quantity} sản phẩm</span>
               </div>
               <div className="cartTotal107">
-                <span>Tạm tính</span>
+                <span>
+                  {products.cached
+                    ? "Tạm tính · giá chưa cập nhật"
+                    : "Tạm tính"}
+                </span>
                 <strong>
                   {total === null ? "Chưa xác định" : money(total)}
                 </strong>
               </div>
+              {(hasGuestItems || reading || products.error || !online) && (
+                <p className="cartPriceState107" role="status">
+                  <span>
+                    {hasGuestItems && cart.activeCheckoutId
+                      ? "Hoàn tất thanh toán đang chờ để thêm các món đã chọn."
+                      : hasGuestItems && busy
+                        ? "Đang cập nhật giỏ hàng…"
+                        : !online
+                          ? "Kết nối mạng để tiếp tục đặt mua."
+                          : hasGuestItems
+                            ? error ||
+                              "Chưa lưu được các món đã chọn. Thử lại hoặc xóa món không cần mua."
+                            : reading
+                              ? "Đang cập nhật giá…"
+                              : products.error}
+                  </span>
+                  {online &&
+                    !busy &&
+                    !cart.activeCheckoutId &&
+                    (hasGuestItems || products.error) &&
+                    !reading && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          hasGuestItems
+                            ? void (cached
+                                ? refresh()
+                                : pending
+                                  ? retryPending()
+                                  : mergeGuest())
+                            : setRetry((n) => n + 1)
+                        }
+                      >
+                        Thử lại
+                      </button>
+                    )}
+                </p>
+              )}
               {user ? (
                 <button
                   type="button"
@@ -389,9 +470,7 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                     : "Xem lại để đặt mua"}
                 </button>
               ) : (
-                <button type="button" className="primary" onClick={signIn}>
-                  Đăng nhập để đặt mua
-                </button>
+                <PurchaseSignIn signIn={signIn} />
               )}
             </aside>
           </div>

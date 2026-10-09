@@ -1,0 +1,15 @@
+Gói của bạn đã hết hạn
+
+Bạn có thể xem quyền lợi hiện tại và gia hạn khi cần.
+
+Gói sử dụng: {{planName}}
+Đã hết hạn ngày: {{endsAt}}
+
+Xem gói của bạn: {{ctaUrl}}
+
+Cảm ơn bạn đã sử dụng gói trong thời gian qua.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

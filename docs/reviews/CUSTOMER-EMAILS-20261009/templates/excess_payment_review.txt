@@ -1,0 +1,16 @@
+Có khoản thanh toán dư
+
+Bạn có thể trao đổi với bên mình về cách xử lý khoản chênh lệch.
+
+Khoản dư đã đối chiếu: {{excessAmount}}
+
+Đơn hàng: {{orderRef}}
+
+Xem khoản chênh lệch: {{ctaUrl}}
+
+Khoản này chưa được xác nhận hoàn tiền.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

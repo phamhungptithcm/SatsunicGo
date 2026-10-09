@@ -1,0 +1,15 @@
+Chứng từ thanh toán đã sẵn sàng
+
+Bạn có thể xem và tải chứng từ trong tài khoản.
+
+Chứng từ: {{receiptRef}}
+Khoản thanh toán: {{paidAmount}}
+
+Xem chứng từ: {{ctaUrl}}
+
+Chứng từ này không thay thế hóa đơn thuế.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

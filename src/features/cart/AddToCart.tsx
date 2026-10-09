@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import type { ContentRow } from "../../shared/public-content";
@@ -24,7 +24,15 @@ export function CartIcon() {
     </svg>
   );
 }
-export function AddToCart({ product }: { product: ContentRow }) {
+export function AddToCart({
+  product,
+  compact = false,
+  children,
+}: {
+  product: ContentRow;
+  compact?: boolean;
+  children?: ReactNode;
+}) {
   const { change, busy, pending, loading, user, cached, online } = useCart();
   const [variant, setVariant] = useState(""),
     [quantity, setQuantity] = useState(1),
@@ -32,10 +40,11 @@ export function AddToCart({ product }: { product: ContentRow }) {
   const parsed = catalogProductSchema.safeParse(product);
   if (!parsed.success) return null;
   const options = parsed.data.catalogOptions;
+  const selectedQuantity = compact ? 1 : quantity;
   const valid =
-    Number.isInteger(quantity) &&
-    quantity >= 1 &&
-    quantity <= 100 &&
+    Number.isInteger(selectedQuantity) &&
+    selectedQuantity >= 1 &&
+    selectedQuantity <= 100 &&
     (!options.length || options.includes(variant));
   return (
     <div className="cartAdd107">
@@ -57,21 +66,23 @@ export function AddToCart({ product }: { product: ContentRow }) {
           </select>
         </label>
       )}
-      <label>
-        <span>Số lượng</span>
-        <input
-          type="number"
-          min={1}
-          max={100}
-          step={1}
-          value={quantity}
-          disabled={busy || pending}
-          onChange={(e) => {
-            setQuantity(Number(e.target.value));
-            setMessage("");
-          }}
-        />
-      </label>
+      {!compact && (
+        <label>
+          <span>Số lượng</span>
+          <input
+            type="number"
+            min={1}
+            max={100}
+            step={1}
+            value={quantity}
+            disabled={busy || pending}
+            onChange={(e) => {
+              setQuantity(Number(e.target.value));
+              setMessage("");
+            }}
+          />
+        </label>
+      )}
       <button
         type="button"
         className="cartAddButton107"
@@ -90,7 +101,7 @@ export function AddToCart({ product }: { product: ContentRow }) {
                 {
                   productId: product.id,
                   variant,
-                  quantity,
+                  quantity: selectedQuantity,
                   lineId: crypto.randomUUID(),
                 },
               ],
@@ -103,6 +114,7 @@ export function AddToCart({ product }: { product: ContentRow }) {
         <CartIcon />
         {busy ? "Đang lưu…" : "Thêm vào giỏ"}
       </button>
+      {children}
       {message && (
         <p role="status">
           {message} <Link to="/cart">Xem giỏ hàng</Link>

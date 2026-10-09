@@ -187,8 +187,11 @@ export function SiteHeader({
   signOut: () => Promise<void>;
   busy: boolean;
 }) {
-  const { cart, loading, error, cached } = useCart();
-  const cartCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+  const { cart, loading, error, cached, guestItems } = useCart();
+  const cartCount = [...cart.items, ...guestItems].reduce(
+    (sum, item) => sum + item.quantity,
+    0,
+  );
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
@@ -299,7 +302,7 @@ export function SiteHeader({
             to="/cart"
             onClick={() => setOpen(false)}
             aria-label={
-              error
+              error && cached
                 ? "Giỏ hàng chưa tải được"
                 : loading
                   ? "Giỏ hàng đang tải"
@@ -309,7 +312,7 @@ export function SiteHeader({
             }
           >
             <CartIcon />
-            {!loading && !error && cartCount > 0 && (
+            {!loading && !(error && cached) && cartCount > 0 && (
               <span aria-hidden="true">
                 {cartCount > 99 ? "99+" : cartCount}
               </span>

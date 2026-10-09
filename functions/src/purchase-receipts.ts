@@ -1,3 +1,4 @@
+import { customerEvent, customerEventFields } from "./customer-notification-events";
 import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
@@ -7,6 +8,7 @@ import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { z } from "zod";
 import { requireVerifiedGoogle } from "./auth/guards";
 import { purchaseDemoEnvironment } from "./purchase-checkout";
+import { withPurchaseMutation } from "./purchase-mutation-queue";
 import {
   renderPurchaseReceipt,
   type PurchaseReceiptData,
@@ -15,25 +17,31 @@ const hash = (b: Buffer) => createHash("sha256").update(b).digest("hex");
 /** Lease before I/O; deterministic private object + outbox identifiers. Money
  * confirmation is independent of rendering/delivery success. */
 export async function processPurchaseReceipt(id: string) {
+  return withPurchaseMutation(`receipt-${id}`, () => processReceipt(id));
+}
+async function processReceipt(id: string) {
   const db = getFirestore(),
     ref = db.doc(`purchaseReceiptJobs/${id}`),
     receiptRef = db.doc(`purchaseReceipts/${id}`),
     claim = randomUUID(),
     now = Date.now();
   const receipt = await db.runTransaction(async (tx) => {
-    const [job, snapshot] = await Promise.all([
-      tx.get(ref),
-      tx.get(receiptRef),
-    ]);
+    const [job, snapshot] = await tx.getAll(ref, receiptRef);
     const data = job.data();
-    if (
-      !data ||
-      !snapshot.exists ||
-      data.state === "ready" ||
-      data.state === "failed" ||
-      (data.state === "processing" && data.leaseUntil > now)
-    )
+    if (!data) return null;
+    if (!snapshot.exists) {
+      tx.update(ref, {
+        state: "failed",
+        failureCode: "RECEIPT_MISSING",
+        leaseUntil: 0,
+      });
       return null;
+    }
+    if (data.state === "ready" || data.state === "failed") {
+      if (data.leaseUntil) tx.update(ref, { leaseUntil: 0 });
+      return null;
+    }
+    if (data.state === "processing" && data.leaseUntil > now) return null;
     if (data.attempts >= 3) {
       tx.update(ref, {
         state: "failed",
@@ -70,18 +78,18 @@ export async function processPurchaseReceipt(id: string) {
         },
       });
     await db.runTransaction(async (tx) => {
-      const [job, current, demo] = await Promise.all([
-        tx.get(ref),
-        tx.get(receiptRef),
-        tx.get(db.doc("settings/purchaseDemo")),
-      ]);
+      const [job, current, demo] = await tx.getAll(
+        ref,
+        receiptRef,
+        db.doc("settings/purchaseDemo"),
+      );
       if (job.data()?.claim !== claim || job.data()?.state !== "processing")
         return;
       if (current.data()?.snapshotHash !== receipt.snapshotHash)
         throw Error("RECEIPT_SNAPSHOT_CHANGED");
       const delivered =
         Boolean(receipt.ownerEmail) &&
-        receipt.provider === "demo" &&
+        ["demo", "sepay_sandbox"].includes(receipt.provider) &&
         purchaseDemoEnvironment(db) &&
         demo.data()?.enabled === true;
       const emailState = !receipt.ownerEmail
@@ -108,6 +116,15 @@ export async function processPurchaseReceipt(id: string) {
         state: emailState,
         createdAt: now,
         transport: delivered ? "demo_sink" : "unconfigured",
+        customerDeliveryJobId: `purchase-receipt-${id}`,
+        customerSenderEnabled: false,
+      });
+      // Shared customer inbox; receipt mail remains opt-in to avoid a second payment email.
+      tx.create(db.doc(`outboxJobs/purchase-receipt-${id}`), {
+        ownerId: receipt.ownerId, resourceId: id, action: "purchaseReceiptReady", state: "queued", createdAt: now,
+        ...customerEventFields(() => customerEvent("receipt_ready", {
+          ownerId: receipt.ownerId, entityId: id, entityVersion: 1, occurredAt: now,
+        }, {receiptRef: id, paidAmount: receipt.total})),
       });
       tx.update(receiptRef, {
         state: "ready",
@@ -122,7 +139,23 @@ export async function processPurchaseReceipt(id: string) {
         completedAt: Date.now(),
       });
     });
-  } catch {
+  } catch (error) {
+    // Store only bounded diagnostic categories; never storage messages, paths or PII.
+    const failureDetail =
+      error instanceof Error &&
+      [
+        "RECEIPT_INVALID",
+        "RECEIPT_BALANCE_INVALID",
+        "RECEIPT_SNAPSHOT_CHANGED",
+        "PDF_TOO_LARGE",
+        "FONT_CMAP_MISSING",
+      ].includes(error.message)
+        ? error.message
+        : ["ENOENT", "ECONNREFUSED", "ETIMEDOUT"].includes(
+              String((error as { code?: unknown } | null)?.code),
+            )
+          ? String((error as { code: unknown }).code)
+          : "UNCLASSIFIED";
     await db.runTransaction(async (tx) => {
       const job = await tx.get(ref);
       if (job.data()?.claim !== claim || job.data()?.state !== "processing")
@@ -132,6 +165,7 @@ export async function processPurchaseReceipt(id: string) {
         state: failed ? "failed" : "queued",
         leaseUntil: 0,
         failureCode: "PDF_OR_STORAGE_FAILED",
+        failureDetail,
       });
       tx.update(receiptRef, { state: failed ? "failed" : "queued" });
     });

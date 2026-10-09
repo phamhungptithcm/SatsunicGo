@@ -620,9 +620,9 @@ function JourneyTimeline() {
     >
       <div className="journeyTop">
         <span>
-          Từ món hàng bạn muốn
+          Bạn chọn món,
           <br />
-          <strong>đến tận tay bạn.</strong>
+          <strong>chúng mình lo.</strong>
         </span>
       </div>
       <div className="journeyTrack">
@@ -633,23 +633,23 @@ function JourneyTimeline() {
           {[
             [
               "01",
-              "Bạn gửi yêu cầu",
-              "Tên sản phẩm hoặc link, số lượng, biến thể.",
+              "Chọn món",
+              "Chọn hàng có sẵn hoặc gửi món cần mua hộ.",
             ],
             [
               "02",
-              "Xem và duyệt báo giá",
-              "Chi phí dự kiến và điều khoản trước khi cọc.",
+              "Xem giá và thanh toán",
+              "Rõ chi phí, đồng ý rồi thanh toán.",
             ],
             [
               "03",
-              "Mua và kiểm hàng",
-              "Nhân viên mua hộ, nhận kho và đóng gói.",
+              "Mua và gửi hàng",
+              "Chúng mình mua, kiểm tra và đóng gói.",
             ],
             [
               "04",
-              "Thanh toán số dư, nhận hàng",
-              "Tổng cuối đã duyệt, trả đủ trước xuất gửi.",
+              "Nhận hàng",
+              "Theo dõi đơn, đợi hàng về tận nhà.",
             ],
           ].map(([n, t, d]) => (
             <li key={n}>
@@ -662,17 +662,6 @@ function JourneyTimeline() {
           ))}
         </ol>
       </div>
-      <div className="journeyFoot">
-        <span>
-          Cọc <strong>50%</strong>
-        </span>
-        <p>
-          Theo báo giá bạn đã chấp nhận.
-          <br />
-          Số dư tính theo chi phí cuối đã duyệt.
-        </p>
-      </div>
-      <p className="journeyIllustration">Minh họa quy trình mua hộ</p>
     </div>
   );
 }
@@ -686,15 +675,12 @@ function Home() {
             <span /> Mua hộ Mỹ · Nhật · Hàn
           </span>
           <h1>
-            Bạn chọn.
+            Chính hãng từ xa.
             <br />
-            Chúng mình lo
-            <br />
-            <span>phần còn lại.</span>
+            <span>Ưng ý về nhà.</span>
           </h1>
           <p>
-            Gửi tên hoặc link món hàng bạn muốn mua tại Mỹ, Nhật, Hàn. Nhận báo
-            giá rõ ràng trước khi quyết định.
+            Món bạn thích từ Mỹ, Nhật, Hàn — rõ nguồn gốc, an tâm chọn mua.
           </p>
           <Link className="primary" to="/request">
             Gửi yêu cầu mua hộ <Icon />

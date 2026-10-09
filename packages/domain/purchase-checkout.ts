@@ -112,16 +112,21 @@ export type CheckoutSnapshot = {
 };
 export type PurchaseCheckout = CheckoutSnapshot & {
   state: "pending" | "unknown" | "paid" | "cancelled" | "review_required";
-  provider: "demo" | "payos_unavailable";
+  provider: "demo" | "payos_unavailable" | "sepay_sandbox";
+  paymentMethod?: "BANK_TRANSFER";
+  sepayInvoice?: string;
   paidAt?: number;
   paymentReference?: string;
   receiptId?: string;
+  demoPaymentLinkId?: string;
+  receivedAmount?: number;
 };
 const checkoutAcknowledgementSchema = z.object({
   id: z.string().uuid(),
   state: z.literal("pending"),
   total: money.positive(),
-  provider: z.literal("demo"),
+  provider: z.enum(["demo", "sepay_sandbox"]),
+  paymentMethod: z.literal("BANK_TRANSFER").optional(),
 });
 const sourcingAcknowledgementSchema = z.object({
   id: z.string().uuid(),
@@ -135,9 +140,16 @@ const sourcingAcknowledgementContextSchema = z.object({
 export function admitPurchaseCheckoutAcknowledgement(
   value: unknown,
   previewId: string,
+  expectedMethod?: "BANK_TRANSFER" | "NAPAS_BANK_TRANSFER" | "CARD",
 ) {
   const result = checkoutAcknowledgementSchema.parse(value);
-  if (result.id !== previewId) throw Error("INVALID_CHECKOUT_ACKNOWLEDGEMENT");
+  if (
+    (expectedMethod && result.paymentMethod !== expectedMethod) ||
+    (result.provider === "sepay_sandbox" &&
+      result.paymentMethod !== "BANK_TRANSFER") ||
+    result.id !== previewId
+  )
+    throw Error("INVALID_CHECKOUT_ACKNOWLEDGEMENT");
   return result;
 }
 /** Replay is bound to the submitted version, even after a newer order read. */

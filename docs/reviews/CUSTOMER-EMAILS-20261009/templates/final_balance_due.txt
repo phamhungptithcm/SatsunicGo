@@ -1,0 +1,16 @@
+Chi phí cuối đã được chốt
+
+Bạn xem bảng chi phí trước khi thanh toán phần còn lại nhé.
+
+Còn cần thanh toán: {{balanceDue}}
+
+Đơn hàng: {{orderRef}}
+Chi phí cuối: {{finalTotal}}
+Đã thanh toán sau điều chỉnh: {{netPaid}}
+
+Xem chi phí và thanh toán: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

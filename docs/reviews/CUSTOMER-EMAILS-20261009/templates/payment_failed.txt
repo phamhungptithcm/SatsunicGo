@@ -1,0 +1,14 @@
+Thanh toán chưa hoàn tất
+
+Kiểm tra trạng thái trước khi thanh toán lại.
+
+Đơn hàng: {{orderRef}}
+
+Kiểm tra thanh toán: {{ctaUrl}}
+
+Nếu ngân hàng đã trừ tiền, bạn liên hệ hỗ trợ để kiểm tra nhé.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

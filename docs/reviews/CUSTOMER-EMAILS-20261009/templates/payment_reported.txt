@@ -1,0 +1,12 @@
+Đã nhận thông tin chuyển khoản
+
+Khoản tiền đang chờ đối chiếu. Bạn chưa cần chuyển lại.
+
+Đơn hàng: {{orderRef}}
+
+Xem trạng thái thanh toán: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

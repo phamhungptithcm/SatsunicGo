@@ -2,6 +2,7 @@ import { test, expect } from 'vitest';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import ts from 'typescript';
 const modulePath='../../scripts/release/preflight.mjs';
 const { preflight }=await import(modulePath);
 const routes={'/campaign-banners':'campaignBannersPublic','/campaign-banners/**':'campaignBannersPublic','/robots.txt':'publicDiscovery','/sitemap.xml':'publicDiscovery','/media/**':'publicImage','/products':'publicPage','/posts':'publicPage','/products/**':'publicPage','/posts/**':'publicPage','/how-it-works':'publicPage','/fees':'publicPage','/privacy':'publicPage','/terms':'publicPage','/restricted':'publicPage'};
@@ -148,6 +149,129 @@ test.each([
 ])('demo exception independently rejects unsafe target: %s',target=>fixture((root,put)=>{
   demoFixture(root,put,demoExport,target);
   expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+}));
+
+const additionalDemoSpecs=[
+  {name:'purchaseDemoWebhook',binding:'guardedPurchaseDemoWebhook',from:'purchase-demo-gateway',kind:'onRequest',sdk:'https',sepay:false},
+  {name:'purchaseSePayPayment',binding:'sandboxSePayPayment',from:'purchase-sepay',kind:'onCall',sdk:'https',sepay:true},
+  {name:'purchaseSePayIpn',binding:'sandboxSePayIpn',from:'purchase-sepay',kind:'onRequest',sdk:'https',sepay:true},
+  {name:'purchaseSePayInboxWorker',binding:'sandboxSePayInboxWorker',from:'purchase-sepay',kind:'onDocumentCreated',sdk:'firestore',sepay:true},
+] as const;
+type AdditionalDemoSpec=typeof additionalDemoSpecs[number];
+const sepayGuard=`const localSePay=process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';`;
+const additionalDemoExport=(spec:AdditionalDemoSpec)=>`export const ${spec.name}=${spec.sepay?'localSePay':"process.env.FUNCTIONS_EMULATOR === 'true'"} ? ${spec.binding} : undefined;`;
+const additionalDemoTarget=(spec:AdditionalDemoSpec)=>`import {${spec.kind}} from 'firebase-functions/v2/${spec.sdk}';export const ${spec.name}=${spec.kind}({region:'asia-southeast1'${spec.sdk==='firestore'?",document:'purchaseSePayInbox/{id}'":''}},()=>{});`;
+function additionalDemoFixture(root:string,put:(file:string,value:unknown)=>void,spec:AdditionalDemoSpec,entry=additionalDemoExport(spec),target=additionalDemoTarget(spec),guard=sepayGuard){
+  put(`functions/src/${spec.from}.ts`,target);
+  const original=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',`${original}\nimport {${spec.name} as ${spec.binding}} from './${spec.from}';\n${spec.sepay?guard:''}\n${entry}`);
+}
+for(const spec of additionalDemoSpecs){
+  test(`exact ${spec.name} validates its own SDK kind and is excluded from production inventory`,()=>fixture((root,put)=>{
+    additionalDemoFixture(root,put,spec);
+    const result=preflight({root,project:'satsunicgo'});
+    expect(result.errors).toEqual([]);
+    expect(result.inventory).toHaveLength(8);
+    expect(result.inventory.some((row:{name:string})=>row.name===spec.name)).toBe(false);
+    expect(result.emulatorOnlyExports).toEqual([{name:spec.name,kind:spec.kind,region:'asia-southeast1',source:`functions/src/${spec.from}.ts`}]);
+    expect(result.compiledLibraryFreshness).toContain('UNVERIFIED');
+    expect(result.readiness).toBe('NOT_READY');
+  }));
+  const entry=additionalDemoExport(spec);
+  test.each([
+    ['unconditional',`export const ${spec.name}=${spec.binding};`],
+    ['mutable export',entry.replace('export const','export let')],
+    ['aliased export',`const local=${spec.sepay?'localSePay':"process.env.FUNCTIONS_EMULATOR === 'true'"} ? ${spec.binding} : undefined;export {local as ${spec.name}};`],
+    ['direct reexport',`export {${spec.name}} from './${spec.from}';`],
+    ['unsafe false branch',entry.replace(': undefined',`: ${spec.binding}`)],
+    ['different true binding',entry.replace(`? ${spec.binding}`,`? runtime`)],
+    ['void false branch',entry.replace(': undefined',': void 0')],
+    ['escaped import',`const alias=${spec.binding};${entry}`],
+    ['escaped conditional export',`${entry}const alias=${spec.name};`],
+    ['duplicate named export',`${entry}export {${spec.name}};`],
+    ['shared declaration',entry.replace(';',',extra=runtime();')],
+    ['shadowed import',`function shadow(${spec.binding}){}${entry}`],
+    ['shadowed process',`function shadow(process){}${entry}`],
+    ['mutated process environment',`process.env.FUNCTIONS_EMULATOR='true';${entry}`],
+    ['process environment mutator',`Object.assign(process.env,{FUNCTIONS_EMULATOR:'true'});${entry}`],
+    ['escaped process environment',`const env=process.env;env.FUNCTIONS_EMULATOR='true';${entry}`],
+  ])(`changed ${spec.name} export fails closed: %s`,(_label,changed)=>fixture((root,put)=>{
+    additionalDemoFixture(root,put,spec,changed);
+    expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+  }));
+  const target=additionalDemoTarget(spec);
+  test.each([
+    ['mutable target',target.replace('export const','export let')],
+    ['wrong target region',target.replace('asia-southeast1','us-central1')],
+    ['wrong SDK module',target.replace(`firebase-functions/v2/${spec.sdk}`,'other-sdk')],
+    ['wrong SDK kind',target.replaceAll(spec.kind,spec.kind==='onCall'?'onRequest':'onCall')],
+    ['type-only constructor',target.replace('import {','import type {')],
+    ['target mutated after declaration',`${target}${spec.name}=runtime();`],
+    ['target escapes through alias',`${target}const alias=${spec.name};`],
+    ['shadowed SDK constructor',`${target}function shadow(${spec.kind}){}`],
+  ])(`${spec.name} exception rejects unsafe target: %s`,(_label,changed)=>fixture((root,put)=>{
+    additionalDemoFixture(root,put,spec,entry,changed);
+    expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+  }));
+  test(`${spec.name} import cannot be redirected to another module or name`,()=>fixture((root,put)=>{
+    additionalDemoFixture(root,put,spec);
+    const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+    for(const changed of [index.replace(`from './${spec.from}'`,`from './other-target'`),index.replace(`{${spec.name} as ${spec.binding}}`,`{otherTarget as ${spec.binding}}`)]){
+      put('functions/src/index.ts',changed);
+      expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+    }
+  }));
+}
+test.each([
+  ['mutable guard',sepayGuard.replace('const ','let ')],
+  ['missing project guard',`const localSePay=process.env.FUNCTIONS_EMULATOR === 'true';`],
+  ['production project',sepayGuard.replace('demo-satsunicgo','satsunicgo')],
+  ['loose emulator comparison',sepayGuard.replace('===','==')],
+  ['loose project comparison',sepayGuard.replace("=== 'demo-satsunicgo'","== 'demo-satsunicgo'")],
+  ['or guard',sepayGuard.replace('&&','||')],
+  ['project-only guard',`const localSePay=process.env.GCLOUD_PROJECT === 'demo-satsunicgo';`],
+  ['computed project property',sepayGuard.replace('.GCLOUD_PROJECT',"['GCLOUD_PROJECT']")],
+  ['reversed project comparison',sepayGuard.replace("process.env.GCLOUD_PROJECT === 'demo-satsunicgo'","'demo-satsunicgo' === process.env.GCLOUD_PROJECT")],
+  ['guard changed after declaration',`${sepayGuard}localSePay=true;`],
+  ['guard alias',`${sepayGuard}const alias=localSePay;`],
+  ['guard escaped to unknown call',`${sepayGuard}change(localSePay);`],
+  ['exported guard',sepayGuard.replace('const ','export const ')],
+  ['duplicate guard',`${sepayGuard}${sepayGuard}`],
+  ['shadowed guard',`${sepayGuard}function shadow(localSePay){}`],
+])('SePay exact shared guard rejects %s',(_label,guard)=>fixture((root,put)=>{
+  additionalDemoFixture(root,put,additionalDemoSpecs[1],undefined,undefined,guard);
+  expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+}));
+test('unknown conditional endpoints never inherit a demo exception',()=>fixture((root,put)=>{
+  additionalDemoFixture(root,put,additionalDemoSpecs[1]);
+  const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',index+`export const unapprovedDemo=localSePay ? sandboxSePayPayment : undefined;`);
+  expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+}));
+test('current canonical five demo declarations and target sources remain outside production inventory',()=>fixture((root,put)=>{
+  const index=readFileSync(new URL('../../functions/src/index.ts',import.meta.url),'utf8');
+  const ast=ts.createSourceFile('index.ts',index,ts.ScriptTarget.Latest,true);
+  const names=new Set(['purchaseDemoPayment','localSePay',...additionalDemoSpecs.map(spec=>spec.name)]);
+  const aliases=new Set(['guardedPurchaseDemoPayment',...additionalDemoSpecs.map(spec=>spec.binding)]);
+  const declarations=ast.statements.filter(node=>
+    ts.isVariableStatement(node)&&node.declarationList.declarations.some(declaration=>ts.isIdentifier(declaration.name)&&names.has(declaration.name.text))||
+    ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)&&node.importClause.namedBindings.elements.some(binding=>aliases.has(binding.name.text))
+  ).map(node=>node.getText(ast)).join('\n');
+  for(const file of ['purchase-checkout','purchase-demo-gateway','purchase-sepay'])put(`functions/src/${file}.ts`,readFileSync(new URL(`../../functions/src/${file}.ts`,import.meta.url),'utf8'));
+  put('functions/src/index.ts',readFileSync(path.join(root,'functions/src/index.ts'),'utf8')+'\n'+declarations);
+  const result=preflight({root,project:'satsunicgo'});
+  expect(result.errors).toEqual([]);
+  expect(result.inventory).toHaveLength(8);
+  expect(result.emulatorOnlyExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseDemoPayment',...additionalDemoSpecs.map(spec=>spec.name)].sort());
+  expect(result.inventory.every((row:{name:string})=>!names.has(row.name))).toBe(true);
+  expect(result.cloud).toBe('NOT_CHECKED');
+}));
+test('original demo payment rejects environment aliases and mutator calls',()=>fixture((root,put)=>{
+  for(const escape of [`Object.assign(process.env,{FUNCTIONS_EMULATOR:'true'});`,`change(process);`,`const env=process.env;`]){
+    put('functions/src/index.ts',`export {publicPage,publicDiscovery,publicImage} from './public';export {maintenance} from './jobs';export {campaignBannersPublic,websiteBannerAdmin,websiteBannerCommand,websiteBannerPreview} from './campaign-banners';`);
+    demoFixture(root,put,escape+demoExport);
+    expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+  }
 }));
 // Analytics release compatibility: inspect actual declarations, not copies of constructor syntax.
 test('inventory resolves all nine analytics declarations with production region',()=>fixture((root,put)=>{

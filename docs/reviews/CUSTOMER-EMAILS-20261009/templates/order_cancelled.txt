@@ -1,0 +1,14 @@
+Đơn hàng đã được hủy
+
+Bạn có thể xem trạng thái xử lý khoản đã thanh toán trong đơn.
+
+Đơn hàng: {{orderRef}}
+
+Xem đơn đã hủy: {{ctaUrl}}
+
+Thông báo hủy đơn chưa phải xác nhận hoàn tiền.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

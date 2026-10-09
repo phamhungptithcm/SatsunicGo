@@ -1,0 +1,16 @@
+Đã xác nhận thanh toán
+
+{{paymentScope}}
+
+Khoản đã nhận: {{paidAmount}}
+
+Đơn hàng: {{orderRef}}
+
+Xem thanh toán: {{ctaUrl}}
+
+Cảm ơn bạn đã tin tưởng SatsunicGo.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

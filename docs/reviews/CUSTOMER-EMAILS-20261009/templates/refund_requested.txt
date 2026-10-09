@@ -1,0 +1,14 @@
+Đã ghi nhận yêu cầu hoàn tiền
+
+Yêu cầu đang chờ xử lý. Tiền chưa được xác nhận hoàn.
+
+Số tiền đề nghị hoàn: {{refundAmount}}
+
+Đơn hàng: {{orderRef}}
+
+Xem yêu cầu hoàn tiền: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

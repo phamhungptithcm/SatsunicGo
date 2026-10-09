@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { productInformationShape } from "../../packages/domain/product-information";
 import {
   catalogOptionsSchema,
@@ -760,6 +764,18 @@ export const workspaceCommand = onCall(opts, async (req) => {
           action: "replyTicket",
           state: "queued",
           createdAt: now,
+          ...customerEventFields(() =>
+            customerEvent(
+              "support_reply",
+              {
+                ownerId: old.data()!.ownerId,
+                entityId,
+                entityVersion: (old.data()?.version ?? 0) + 1,
+                occurredAt: now,
+              },
+              { ticketRef: entityId },
+            ),
+          ),
         });
       data = { status: data.status };
     }

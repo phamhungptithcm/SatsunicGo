@@ -41,6 +41,9 @@ export function PurchaseThumbnail({
           alt=""
           width={44}
           height={44}
+          onLoad={(e) => {
+            e.currentTarget.hidden = false;
+          }}
           onError={(e) => {
             e.currentTarget.hidden = true;
           }}

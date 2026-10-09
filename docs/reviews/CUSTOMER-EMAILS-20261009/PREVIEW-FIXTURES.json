@@ -1,0 +1,74 @@
+{
+  "common": {
+    "orderRef": "SG-MINH-HOA-001",
+    "itemSummary": "2 áo cotton trắng, cỡ M",
+    "quotedTotal": "1.200.000 ₫",
+    "paidAmount": "1.200.000 ₫",
+    "paymentScope": "Khoản này gồm tiền hàng và phí mua hộ ban đầu. Chi phí vận chuyển sẽ được chốt riêng.",
+    "customerReason": "Cửa hàng đã điều chỉnh giá sản phẩm",
+    "proposedTotal": "1.300.000 ₫",
+    "differenceAmount": "100.000 ₫",
+    "changeSummary": "đổi sang màu xanh, giữ nguyên cỡ M",
+    "costImpact": "Tổng chi phí của phương án mới là 1.300.000 ₫, tăng 100.000 ₫",
+    "nextStep": "Bạn có thể mở đơn để xem thông tin và trao đổi phương án xử lý.",
+    "purchasedSummary": "1 trong 2 áo cotton trắng, cỡ M",
+    "remainingSummary": "1 áo cotton trắng, cỡ M",
+    "receivedSummary": "1 áo cotton trắng, cỡ M",
+    "finalTotal": "1.360.000 ₫",
+    "netPaid": "1.200.000 ₫",
+    "balanceDue": "160.000 ₫",
+    "excessAmount": "50.000 ₫",
+    "parcelRef": "KIEN-MINH-HOA-01",
+    "carrierName": "Đơn vị vận chuyển minh họa",
+    "trackingCode": "VD-MINH-HOA-001",
+    "parcelItems": "1 áo cotton trắng, cỡ M",
+    "trackingSummary": "Kiện đã đến điểm trung chuyển",
+    "observedAt": "09:30 ngày 09/10/2026 (giờ Việt Nam)",
+    "previousWindow": "12–14/10/2026",
+    "deliveryWindow": "14–16/10/2026",
+    "refundAmount": "200.000 ₫",
+    "refundRecordedAt": "09/10/2026 (giờ Việt Nam)",
+    "ticketRef": "HT-MINH-HOA-01",
+    "planName": "Gói minh họa",
+    "endsAt": "31/10/2026 (giờ Việt Nam)",
+    "receiptRef": "CT-MINH-HOA-001",
+    "documentNumber": "SG-20261009001",
+    "previousTotal": "1.200.000 ₫",
+    "zeroAmount": "0 ₫",
+    "fullReceivedSummary": "2 áo cotton trắng, cỡ M"
+  },
+  "overrides": {
+    "payment_review": {
+      "customerReason": "Thông tin khoản chuyển chưa khớp với lượt thanh toán"
+    },
+    "order_hold": {
+      "customerReason": "Cần làm rõ mẫu sản phẩm trước khi mua tiếp"
+    },
+    "warehouse_issue": {
+      "customerReason": "Có 1 áo bị rách khi nhận tại kho"
+    },
+    "delivery_estimate_changed": {
+      "customerReason": "Lịch vận chuyển đã được cập nhật"
+    },
+    "delivery_failed": {
+      "customerReason": "Đơn vị vận chuyển chưa liên hệ được người nhận",
+      "nextStep": "Bạn kiểm tra số điện thoại trong đơn và trao đổi với bên mình để xử lý tiếp nhé."
+    },
+    "refund_request_cancelled": {
+      "customerReason": "Khoản hoàn đã được thay bằng phương án xử lý được hai bên thống nhất"
+    },
+    "financial_adjustment": {
+      "customerReason": "Khoản tiền trước đó được ghi nhận nhầm vào đơn này",
+      "costImpact": "Số tiền còn cần thanh toán sau điều chỉnh là 160.000 ₫"
+    },
+    "final_no_balance": {
+      "finalTotal": "1.200.000 ₫"
+    },
+    "excess_payment_review": {
+      "finalTotal": "1.150.000 ₫"
+    },
+    "shipment_dispatched": {
+      "parcelItems": "2 áo cotton trắng, cỡ M"
+    }
+  }
+}

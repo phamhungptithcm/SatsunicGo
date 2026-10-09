@@ -8,27 +8,26 @@ import {
 } from "react";
 import type { User } from "firebase/auth";
 import { doc, getDocFromServer, onSnapshot } from "firebase/firestore";
-import { z } from "zod";
 import {
   cartCommandSchema,
   cartItemsSchema,
   cartSchema,
-  consumeCart,
   mergeCart,
   type Cart,
   type CartCommand,
   type CartItem,
 } from "../../../packages/domain/cart";
-import { app, callService, db } from "../../shared/firebase";
+import { app, auth, callService, db } from "../../shared/firebase";
+import {
+  guestSchema,
+  GuestTransferError,
+  readGuestTransfer,
+  reconcileGuestTransfer,
+  transferGuestCart,
+} from "./cart-guest-transfer";
 
 const scope = app?.options.projectId ?? "unconfigured";
 export const guestCartKey = `satsunicgo-cart-v1:${scope}:guest`;
-const guestSchema = z.object({
-  version: z.literal(1),
-  revision: z.number().int().nonnegative(),
-  items: cartItemsSchema,
-  appliedMerges: z.array(z.string().uuid()).max(100).default([]),
-});
 const empty = (ownerId = "guest"): Cart => ({
   ownerId,
   revision: 0,
@@ -67,9 +66,12 @@ type CartContextValue = {
   guestItems: CartItem[];
   pending: boolean;
   change: (change: Change) => Promise<boolean>;
+  changeGuest: (
+    change: Exclude<Change, { action: "merge" }>,
+  ) => Promise<boolean>;
   refresh: () => Promise<void>;
   retryPending: () => Promise<boolean>;
-  mergeGuest: () => Promise<void>;
+  mergeGuest: () => Promise<boolean>;
   resetGuest: () => void;
   consume: (orderId: string, lineId: string) => Promise<boolean>;
 };
@@ -92,6 +94,7 @@ export function CartProvider({
     [loading, setLoading] = useState(true),
     [busy, setBusy] = useState(false),
     [cached, setCached] = useState(!!user);
+  const [merging, setMerging] = useState(false);
   const [online, setOnline] = useState(navigator.onLine),
     [error, setError] = useState(""),
     [storageWarning, setStorageWarning] = useState(""),
@@ -101,6 +104,10 @@ export function CartProvider({
     flight = useRef(false),
     live = useRef(true),
     attempt = useRef<CartCommand | null>(null);
+  const generation = useRef(0),
+    transferFlight = useRef(false),
+    identity = useRef(user?.uid ?? "guest");
+  identity.current = user?.uid ?? "guest";
   const persistentGuest = useRef(true);
   const pendingKey = `satsunicgo-cart-pending-v1:${scope}:${user?.uid ?? "guest"}`;
   function apply(next: Cart) {
@@ -109,6 +116,25 @@ export function CartProvider({
   }
   useEffect(() => {
     live.current = true;
+    const session = ++generation.current;
+    const active = () =>
+      live.current &&
+      generation.current === session &&
+      identity.current === (user?.uid ?? "guest") &&
+      (auth?.currentUser?.uid ?? "guest") === (user?.uid ?? "guest");
+    apply(empty(user?.uid));
+    setLoading(true);
+    setBusy(false);
+    setMerging(false);
+    setCached(!!user);
+    setError("");
+    setStorageWarning("");
+    setGuestItems([]);
+    setPending(false);
+    attempt.current = null;
+    flight.current = false;
+    transferFlight.current = false;
+    persistentGuest.current = true;
     if (!ready)
       return () => {
         live.current = false;
@@ -142,20 +168,21 @@ export function CartProvider({
         doc(db, "carts", user.uid),
         { includeMetadataChanges: true },
         (snapshot) => {
-          if (!live.current) return;
+          if (!active()) return;
           const parsed = snapshot.exists()
             ? cartSchema.safeParse(snapshot.data())
             : { success: true as const, data: empty(user.uid) };
           if (!parsed.success || parsed.data.ownerId !== user.uid) {
             apply(empty(user.uid));
             setError("Chưa đọc được giỏ tài khoản. Thử tải lại.");
-          } else if (parsed.data.revision >= current.current.revision)
+          } else if (parsed.data.revision >= current.current.revision) {
             apply(parsed.data);
+          }
           setCached(!parsed.success || snapshot.metadata.fromCache);
           setLoading(false);
         },
         () => {
-          if (live.current) {
+          if (active()) {
             apply(empty(user.uid));
             setError(
               "Chưa mở được giỏ tài khoản. Kiểm tra kết nối và quyền truy cập rồi tải lại.",
@@ -192,22 +219,39 @@ export function CartProvider({
   }, [ready, user, pendingKey]);
   async function refresh() {
     if (!user || !db) return;
+    const session = generation.current;
+    const active = () =>
+      live.current &&
+      generation.current === session &&
+      identity.current === user.uid &&
+      auth?.currentUser?.uid === user.uid;
+    if (!active()) return;
     try {
       const s = await getDocFromServer(doc(db, "carts", user.uid));
       const c = s.exists() ? cartSchema.parse(s.data()) : empty(user.uid);
       if (c.ownerId !== user.uid) throw Error("OWNER");
-      if (live.current) {
+      if (active()) {
         if (c.revision >= current.current.revision) apply(c);
         setCached(false);
         setError("");
       }
     } catch {
-      if (live.current)
+      if (active())
         setError("Chưa tải lại được giỏ. Kiểm tra kết nối rồi thử lại.");
     }
   }
-  async function send(command: CartCommand): Promise<boolean> {
+  async function send(
+    command: CartCommand,
+    reconcileGuest = true,
+  ): Promise<boolean> {
     if (flight.current || !user || !navigator.onLine) return false;
+    const session = generation.current;
+    const active = () =>
+      live.current &&
+      generation.current === session &&
+      identity.current === user.uid &&
+      auth?.currentUser?.uid === user.uid;
+    if (!active()) return false;
     try {
       sessionStorage.setItem(pendingKey, JSON.stringify(command));
     } catch {
@@ -223,41 +267,18 @@ export function CartProvider({
     setError("");
     try {
       const result = cartSchema.parse(
-        await callService<Cart>("cartCommand", command),
+        await callService<Cart>("cartCommand", command, "inline"),
       );
-      if (!live.current) return false;
+      if (!active()) return false;
       if (result.ownerId !== user.uid) throw Error("OWNER");
       if (result.revision >= current.current.revision) apply(result);
-      if (command.action === "merge" && guestItems.length > 0) {
-        const guest = readGuest();
-        const shared = command.items.filter((item) =>
-          guest.items.some((g) => g.lineId === item.lineId),
-        );
-        if (
-          shared.length &&
-          !guest.appliedMerges.includes(command.operationId)
-        ) {
-          let remaining = guest.items;
-          for (const item of shared)
-            remaining = consumeCart(remaining, item, item.lineId);
-          const appliedMerges = [
-            ...guest.appliedMerges,
-            command.operationId,
-          ].slice(-100);
-          // Persist reconciliation before dropping the pending command, including retries.
-          if (remaining.length)
-            localStorage.setItem(
-              guestCartKey,
-              JSON.stringify({
-                version: 1,
-                revision: guest.revision + 1,
-                items: remaining,
-                appliedMerges,
-              }),
-            );
-          else localStorage.removeItem(guestCartKey);
-          setGuestItems(remaining);
-        }
+      if (
+        command.action === "merge" &&
+        reconcileGuest &&
+        guestItems.length > 0
+      ) {
+        reconcileGuestTransfer(localStorage, guestCartKey, command);
+        setGuestItems(readGuest().items);
       }
       sessionStorage.removeItem(pendingKey);
       attempt.current = null;
@@ -265,7 +286,7 @@ export function CartProvider({
       setCached(false);
       return true;
     } catch (e) {
-      if (!live.current) return false;
+      if (!active()) return false;
       const code = (e as { code?: string }).code ?? "";
       if (
         [
@@ -281,19 +302,29 @@ export function CartProvider({
         setPending(false);
         sessionStorage.removeItem(pendingKey);
         await refresh();
-        setError((e as Error).message);
+        if (active()) setError((e as Error).message);
       } else
         setError(
           "Chưa rõ giỏ đã cập nhật chưa. Thử kiểm tra lại cùng lần cập nhật.",
         );
       return false;
     } finally {
-      flight.current = false;
-      if (live.current) setBusy(false);
+      if (active()) {
+        flight.current = false;
+        setBusy(false);
+      }
     }
   }
   async function change(input: Change) {
-    if (!ready || loading || flight.current || attempt.current) return false;
+    if (
+      !ready ||
+      loading ||
+      flight.current ||
+      transferFlight.current ||
+      attempt.current ||
+      identity.current !== (user?.uid ?? "guest")
+    )
+      return false;
     if (user) {
       if (!navigator.onLine || cached) {
         setError("Kết nối và tải lại giỏ trước khi thay đổi.");
@@ -353,18 +384,144 @@ export function CartProvider({
     }
   }
   async function mergeGuest() {
-    let source: GuestCart;
-    try {
-      source = readGuest();
-    } catch {
-      setError("Chưa đọc được giỏ trên trình duyệt.");
-      return;
+    if (
+      !user ||
+      !ready ||
+      loading ||
+      cached ||
+      !online ||
+      transferFlight.current ||
+      flight.current
+    )
+      return false;
+    if (!navigator.locks) {
+      setError(
+        "Mở giỏ bằng trình duyệt mới hơn để tiếp tục với các món đã chọn.",
+      );
+      return false;
     }
-    if (source.items.length)
-      await change({ action: "merge", items: source.items });
+    const session = generation.current;
+    const active = () =>
+      live.current &&
+      generation.current === session &&
+      identity.current === user.uid &&
+      auth?.currentUser?.uid === user.uid;
+    transferFlight.current = true;
+    setMerging(true);
+    try {
+      const existing = readGuestTransfer(localStorage, guestCartKey);
+      if (
+        attempt.current &&
+        attempt.current.operationId !== existing?.command.operationId
+      )
+        return false;
+      const result = await transferGuestCart({
+        storage: localStorage,
+        key: guestCartKey,
+        ownerId: user.uid,
+        active,
+        current: () => current.current,
+        lock: (run) => navigator.locks.request(`${guestCartKey}:transfer`, run),
+        send: async (command) => {
+          const confirmed = await send(command, false);
+          return confirmed
+            ? "confirmed"
+            : attempt.current
+              ? "uncertain"
+              : "rejected";
+        },
+      });
+      if (!active()) return false;
+      setGuestItems(readGuest().items);
+      if (result === "confirmed") setError("");
+      return result === "confirmed";
+    } catch (e) {
+      if (active())
+        setError(
+          e instanceof GuestTransferError
+            ? e.message
+            : "Chưa lưu được các món đã chọn vào giỏ. Các món vẫn được giữ lại để thử lại.",
+        );
+      return false;
+    } finally {
+      if (active()) {
+        transferFlight.current = false;
+        setMerging(false);
+      }
+    }
+  }
+  async function changeGuest(input: Exclude<Change, { action: "merge" }>) {
+    if (!user || pending || busy || merging || transferFlight.current)
+      return false;
+    const session = generation.current;
+    const active = () =>
+      live.current &&
+      generation.current === session &&
+      identity.current === user.uid &&
+      auth?.currentUser?.uid === user.uid;
+    transferFlight.current = true;
+    setMerging(true);
+    const edit = async () => {
+      if (!active()) return false;
+      try {
+        if (readGuestTransfer(localStorage, guestCartKey)) {
+          setError("Kiểm tra lại lần lưu giỏ trước khi sửa món đã chọn.");
+          return false;
+        }
+        const source = readGuest();
+        setGuestItems(source.items);
+        if (!source.items.some((item) => item.lineId === input.lineId)) {
+          setError("Món đã được cập nhật. Xem lại giỏ trước khi sửa.");
+          return false;
+        }
+        const items = cartItemsSchema.parse(
+          input.action === "remove"
+            ? source.items.filter((item) => item.lineId !== input.lineId)
+            : source.items.map((item) =>
+                item.lineId === input.lineId
+                  ? { ...item, quantity: input.quantity }
+                  : item,
+              ),
+        );
+        localStorage.setItem(
+          guestCartKey,
+          JSON.stringify({
+            version: 1,
+            revision: source.revision + 1,
+            items,
+            appliedMerges: source.appliedMerges,
+          }),
+        );
+        setGuestItems(items);
+        setError("");
+        return true;
+      } catch {
+        setError("Chưa sửa được món đã chọn. Thử lại.");
+        return false;
+      }
+    };
+    try {
+      return await (navigator.locks
+        ? navigator.locks.request(`${guestCartKey}:transfer`, edit)
+        : edit());
+    } finally {
+      if (active()) {
+        transferFlight.current = false;
+        setMerging(false);
+      }
+    }
   }
   function resetGuest() {
     try {
+      if (
+        pending ||
+        busy ||
+        merging ||
+        readGuestTransfer(localStorage, guestCartKey)
+      ) {
+        setError("Kiểm tra lại lần lưu giỏ trước khi xóa bản lưu.");
+        return;
+      }
       localStorage.removeItem(guestCartKey);
       persistentGuest.current = true;
       setGuestItems([]);
@@ -377,10 +534,10 @@ export function CartProvider({
   return (
     <CartContext.Provider
       value={{
-        cart,
+        cart: cart.ownerId === identity.current ? cart : empty(user?.uid),
         user,
-        loading,
-        busy,
+        loading: loading || cart.ownerId !== identity.current,
+        busy: busy || merging,
         cached,
         online,
         error,
@@ -388,13 +545,29 @@ export function CartProvider({
         guestItems,
         pending,
         change,
+        changeGuest,
         refresh,
         mergeGuest,
         resetGuest,
-        retryPending: async () =>
-          attempt.current ? send(attempt.current) : false,
+        retryPending: async () => {
+          if (!attempt.current) return false;
+          try {
+            if (
+              readGuestTransfer(localStorage, guestCartKey)?.command
+                .operationId === attempt.current.operationId
+            )
+              return mergeGuest();
+          } catch {
+            setError(
+              "Chưa đọc được lần lưu giỏ. Các món đã chọn vẫn được giữ lại.",
+            );
+            return false;
+          }
+          return send(attempt.current);
+        },
         consume: async (orderId, lineId) => {
-          if (attempt.current || flight.current) return false;
+          if (attempt.current || flight.current || transferFlight.current)
+            return false;
           return send({
             action: "consume",
             operationId: crypto.randomUUID(),

@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import { purchaseImageThumbnail } from "./purchase-image-thumbnail";
 import { createHash } from "node:crypto";
 import { getFirestore, type Transaction } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
@@ -80,11 +80,7 @@ export const purchaseDraftImage = onCall(options, async (req) => {
     verifyImage(bytes, media.mime);
     if ((await read())?.id !== media.id)
       throw new HttpsError("permission-denied", "Ảnh đã thay đổi.");
-    const thumbnail = await sharp(bytes, { limitInputPixels: 25000000 })
-      .rotate()
-      .resize(160, 160, { fit: "cover", withoutEnlargement: true })
-      .jpeg({ quality: 78 })
-      .toBuffer();
+    const thumbnail = await purchaseImageThumbnail(bytes, media.mime);
     return { mime: "image/jpeg", base64: thumbnail.toString("base64") };
   }
   const bytes = Buffer.from(d.base64, "base64");

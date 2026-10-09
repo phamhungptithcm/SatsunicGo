@@ -1,0 +1,554 @@
+/* Shared Account/Ask surface. Container queries follow the available card width. */
+.orderTracking.ot {
+  container-type: inline-size;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 12px;
+  min-width: 0;
+  background: transparent;
+  color: #111c35;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ot * {
+  box-sizing: border-box;
+}
+.ot svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.ot .ot-reference {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #657087;
+  font-size: 12px;
+}
+.ot code {
+  overflow-wrap: anywhere;
+  font-size: inherit;
+}
+.ot .ot-panel,
+.ot .ot-history,
+.ot .ot-parcels {
+  background: #fff;
+  border: 1px solid #e4e8f0;
+  border-radius: 14px;
+  min-width: 0;
+}
+.ot .ot-panel {
+  animation: ot-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes ot-enter {
+  from {
+    opacity: 0.65;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ot .ot-hero {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+}
+.ot .ot-main {
+  min-width: 0;
+}
+.ot .ot-eyebrow {
+  color: #657087;
+  font-size: 12px;
+}
+.ot h2 {
+  font-size: 24px;
+  letter-spacing: -0.6px;
+  line-height: 1.25;
+  margin: 8px 0 10px;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+.ot .ot-description {
+  color: #657087;
+  margin: 0;
+  font-size: 13px;
+}
+.ot .ot-route {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 18px 0 0;
+  font-size: 12px;
+  color: #526078;
+  overflow-wrap: anywhere;
+}
+.ot .ot-eta {
+  background: #f5f7ff;
+  border: 1px solid #e8ecff;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 0;
+  font-size: 12px;
+}
+.ot .ot-eta p {
+  margin: 0 0 8px;
+}
+.ot .ot-eta strong {
+  display: block;
+  color: #163cff;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.ot .ot-eta time {
+  font-size: 15px;
+  font-weight: 650;
+  color: #111c35;
+}
+.ot .ot-eta .quietNote {
+  font-size: 11px;
+  color: #657087;
+  line-height: 1.7;
+}
+.ot .ot-eta .quietNote time {
+  font-size: 11px;
+  font-weight: 400;
+  color: inherit;
+}
+.ot .ot-timeline-heading {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 14px 24px 0;
+  border-top: 1px solid #edf0f5;
+  color: #657087;
+  font-size: 10px;
+}
+.ot .ot-steps {
+  display: grid;
+  list-style: none;
+  margin: 0;
+  padding: 20px 24px 16px;
+  gap: 0;
+}
+.ot .ot-steps li {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 12px;
+  min-height: 62px;
+  color: #657087;
+}
+.ot .ot-steps li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 14px;
+  top: 30px;
+  bottom: 0;
+  width: 2px;
+  background: #edf0f5;
+}
+.ot .ot-steps li[data-state="completed"]::before {
+  background: #b9c2ff;
+  animation: ot-line 480ms ease both;
+  animation-delay: calc(var(--i) * 65ms);
+  transform-origin: top;
+}
+.ot .ot-step-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #e4e8f0;
+  background: #fff;
+  position: relative;
+}
+.ot .ot-step-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.ot [data-state="completed"] .ot-step-icon {
+  background: #f1f3ff;
+  border-color: #e8ebff;
+  color: #6575e8;
+}
+.ot [data-state="current"] {
+  color: #163cff;
+}
+.ot [data-state="current"] .ot-step-icon {
+  color: #fff;
+  border-color: #163cff;
+  background: #163cff;
+  box-shadow: 0 0 0 4px #eef0ff;
+}
+.ot [data-state="current"] .ot-step-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px solid #163cff;
+  border-radius: 50%;
+  animation: ot-ring 1150ms ease-out 2;
+  opacity: 0;
+  pointer-events: none;
+}
+.ot .ot-step-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 4px 6px;
+  min-width: 0;
+  padding-top: 3px;
+}
+.ot .ot-step-content strong {
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+  color: #111c35;
+}
+.ot [data-state="current"] strong {
+  color: #163cff;
+}
+.ot .ot-step-tag {
+  font-size: 9px;
+  line-height: 16px;
+  color: #657087;
+  white-space: nowrap;
+}
+.ot [data-state="current"] .ot-step-tag {
+  color: #163cff;
+  background: #f1f3ff;
+  border-radius: 3px;
+  padding: 0 5px;
+}
+.ot .ot-step-time {
+  grid-column: 1/-1;
+  font-size: 10px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ot .ot-readtime {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: #657087;
+  font-size: 10px;
+  margin: 12px 2px 18px;
+  overflow-wrap: anywhere;
+}
+.ot .ot-readtime svg {
+  width: 13px;
+  height: 15px;
+}
+.ot .ot-notice {
+  padding: 12px 14px;
+  border: 1px solid #e4e8f0;
+  border-radius: 8px;
+  background: #f8f9fc;
+  color: #526078;
+  font-size: 12px;
+}
+.ot .ot-details {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.ot .ot-history,
+.ot .ot-parcels {
+  padding: 20px;
+  overflow-wrap: anywhere;
+}
+.ot h3 {
+  font-size: 14px;
+  margin: 0 0 18px;
+  font-weight: 700;
+}
+.ot .ot-history ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ot .ot-history li {
+  display: grid;
+  position: relative;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 12px;
+  padding: 0 0 20px;
+}
+.ot .ot-history li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  bottom: 0;
+  width: 1px;
+  background: #e7eaf2;
+}
+.ot .ot-history-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #d8ddeb;
+  z-index: 1;
+}
+.ot .ot-history li:first-child .ot-history-dot {
+  background: #163cff;
+  box-shadow: 0 0 0 3px #edf0ff;
+}
+.ot .ot-history strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.ot .ot-history time {
+  font-size: 11px;
+  color: #657087;
+  font-variant-numeric: tabular-nums;
+}
+.ot .ot-parcels article {
+  border-top: 1px solid #edf0f5;
+  padding: 14px 0;
+  min-width: 0;
+}
+.ot .ot-parcels article:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+.ot .ot-parcels p {
+  font-size: 12px;
+  margin: 7px 0;
+}
+.ot .ot-parcel-heading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #163cff;
+  font-size: 12px;
+}
+.ot .quietNote {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #657087;
+}
+.ot .ot-order-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12px;
+}
+.ot a:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+@container (min-width:640px) {
+  .ot .ot-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
+    padding: 28px;
+    gap: 32px;
+  }
+  .ot .ot-details {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+}
+@container (min-width:1120px) {
+  .ot .ot-steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    padding-top: 36px;
+  }
+  .ot .ot-steps li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 88px;
+    text-align: center;
+  }
+  .ot .ot-step-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .ot .ot-steps li:not(:last-child)::before {
+    left: calc(50% + 17px);
+    right: calc(-50% + 17px);
+    top: 16px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    transform-origin: left;
+  }
+  .ot .ot-step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .ot .ot-step-tag {
+    position: absolute;
+    top: -24px;
+  }
+  .ot .ot-step-content strong {
+    font-size: 11px;
+  }
+}
+@container (min-width:800px) {
+  .ot .ot-steps[data-compact="true"] {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    padding-top: 36px;
+  }
+  .ot .ot-steps[data-compact="true"] li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 88px;
+    text-align: center;
+  }
+  .ot .ot-steps[data-compact="true"] .ot-step-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .ot .ot-steps[data-compact="true"] li:not(:last-child)::before {
+    left: calc(50% + 17px);
+    right: calc(-50% + 17px);
+    top: 16px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    transform-origin: left;
+  }
+  .ot .ot-steps[data-compact="true"] .ot-step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .ot .ot-steps[data-compact="true"] .ot-step-tag {
+    position: absolute;
+    top: -24px;
+  }
+}
+@keyframes ot-line {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ot-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ot *,
+  .ot *::before,
+  .ot *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (max-width: 360px) {
+  .ot .ot-hero {
+    padding: 18px;
+  }
+  .ot .ot-steps {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .ot .ot-step-content {
+    column-gap: 3px;
+  }
+  .ot .ot-step-content strong {
+    font-size: 10px;
+  }
+  .ot .ot-step-tag {
+    font-size: 8px;
+  }
+  .ot h2 {
+    font-size: 22px;
+  }
+  .ot .ot-history,
+  .ot .ot-parcels {
+    padding: 16px;
+  }
+}
+/* Explicit specificity prevents the surrounding account typography from resizing the hero. */
+.orderTracking.ot h2 {
+  font-size: 28px;
+  line-height: 1.25;
+  margin: 8px 0 10px;
+}
+.orderTracking.ot .quietNote {
+  display: block;
+  gap: 0;
+}
+.orderTracking.ot .deliveryEstimateCompact > span {
+  display: block;
+  color: #657087;
+  font-size: 11px;
+}
+.orderTracking.ot .deliveryEstimateCompact > span:first-child {
+  color: #163cff;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.orderTracking.ot .deliveryEstimateRange {
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+.orderTracking.ot .deliveryEstimateRange time {
+  font: inherit;
+  color: inherit;
+}
+.orderTracking.ot .deliveryEstimateCompact > .quietNote {
+  margin: 10px 0 0;
+}
+.orderTracking.ot .deliveryEstimateCompact details {
+  margin-top: 10px;
+  font-size: 10px;
+  color: #657087;
+}
+.orderTracking.ot .deliveryEstimateCompact summary {
+  cursor: pointer;
+  padding: 4px 0;
+}
+.orderTracking.ot .deliveryEstimateCompact details > div {
+  margin-top: 8px;
+}
+@media (max-width: 360px) {
+  .orderTracking.ot h2 {
+    font-size: 24px;
+  }
+}
+.ot .ot-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

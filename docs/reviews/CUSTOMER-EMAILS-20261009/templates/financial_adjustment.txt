@@ -1,0 +1,13 @@
+Thanh toán có điều chỉnh
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+Ảnh hưởng đến chi phí: {{costImpact}}
+
+Xem điều chỉnh thanh toán: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -1,3 +1,4 @@
+import { orderCustomerFields } from "./customer-notification-events";
 import {
   isStringRoleArray,
   recentMfa,
@@ -430,6 +431,7 @@ export const command = onCall(config, async (req) => {
       action: d.action,
       state: "queued",
       createdAt: now,
+      ...orderCustomerFields(d.action, o, now, typeof finance?.amount === "number" ? finance.amount : undefined),
     });
     return result;
   });
@@ -548,6 +550,8 @@ export { askFeedbackWithdraw, askFeedbackInbox, askFeedbackCleanup, askFeedbackE
 export { purchaseCheckout } from "./purchase-checkout";
 import { purchaseDemoPayment as guardedPurchaseDemoPayment } from "./purchase-checkout";
 export const purchaseDemoPayment = process.env.FUNCTIONS_EMULATOR === "true" ? guardedPurchaseDemoPayment : undefined;
+import { purchaseDemoWebhook as guardedPurchaseDemoWebhook } from "./purchase-demo-gateway";
+export const purchaseDemoWebhook = process.env.FUNCTIONS_EMULATOR === "true" ? guardedPurchaseDemoWebhook : undefined;
 export { purchaseBalanceCheckout } from "./purchase-checkout";
 export { purchaseCheckoutSetup } from "./purchase-checkout";
 
@@ -557,3 +561,15 @@ export { purchaseOrderRead } from "./purchase-checkout";
 export { purchaseReceipt, purchaseReceiptWorker, purchaseReceiptRecovery } from "./purchase-receipts";
 
 export { purchaseSourcingChange } from "./purchase-adjustment";
+
+// SePay sandbox endpoints are never part of a production release.
+import { purchaseSePayPayment as sandboxSePayPayment, purchaseSePayIpn as sandboxSePayIpn, purchaseSePayInboxWorker as sandboxSePayInboxWorker } from "./purchase-sepay";
+const localSePay = process.env.FUNCTIONS_EMULATOR === "true" && process.env.GCLOUD_PROJECT === "demo-satsunicgo";
+export const purchaseSePayPayment = localSePay ? sandboxSePayPayment : undefined;
+export const purchaseSePayIpn = localSePay ? sandboxSePayIpn : undefined;
+export const purchaseSePayInboxWorker = localSePay ? sandboxSePayInboxWorker : undefined;
+
+export { customerNotificationCreated } from "./customer-notification-delivery";
+
+export { notificationPreferences } from "./notification-preferences";
+export { deliverSubscriptionEmail } from "./subscription-email";

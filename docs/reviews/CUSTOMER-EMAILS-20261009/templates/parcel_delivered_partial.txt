@@ -1,0 +1,15 @@
+Đã giao một kiện hàng
+
+Đơn vẫn còn hàng đang được xử lý hoặc vận chuyển.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+Đã giao trong kiện: {{parcelItems}}
+Phần còn lại: {{remainingSummary}}
+
+Xem các kiện còn lại: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

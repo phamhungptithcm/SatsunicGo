@@ -1,0 +1,14 @@
+Hàng nhận có vấn đề
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+
+Xem tình trạng hàng: {{ctaUrl}}
+
+{{nextStep}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy
