@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import { useCatalogPages } from "../../shared/public-content";
 import "./products-catalog.css";
+import "../../shared/public-tabs.css";
 import { AddToCart } from "../cart/AddToCart";
 
 const markets = [
@@ -119,7 +120,7 @@ export function ProductsCatalog() {
           )}
         </div>
         <div
-          className="products074Markets"
+          className="products074Markets publicTabs"
           role="group"
           aria-label="Lọc quốc gia mua hàng"
         >
@@ -187,6 +188,7 @@ export function ProductsCatalog() {
                     <CatalogCard
                       key={`${row.id}:${row.mediaId}`}
                       id={row.mediaId}
+                productId={row.id}
                       slug={row.slug}
                       title={row.title}
                       alt={row.mediaAlt ?? row.title}

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ANALYTICS-DASHBOARD-20261008",
+  "status": "BLOCKED",
+  "source_review_status": "PASSED",
+  "cycle": 6,
+  "reviewer": "analytics_review_cycle1 (read-only independent)",
+  "recordedAt": "2026-10-08T14:57:34.210391+00:00",
+  "head": "53d59bd88fa7da9d1243692336ecd09b6540ea31",
+  "manifest_capture": "2026-10-08T14:49:26.991198+00:00",
+  "source_manifest_sha256": "64fc2d85a83abb13557685bef6f85a8fd31697870786a3b623a240c055e6afc3",
+  "source_hash_recheck": {
+    "analytics_owned_mismatches": [],
+    "concurrent_integration": {
+      "path": "src/features/ask/Commerce.tsx",
+      "frozen_sha256": "38525e1b1d4590ab2657c51402753c427f7c496d73cd8abde5c297ebb4181129",
+      "independently_reviewed_sha256": "e2bc300c632cb8748cb8375d543f0516e6e605e50d86d81e1a4f910fec6fdd7c",
+      "current_sha256": "e2bc300c632cb8748cb8375d543f0516e6e605e50d86d81e1a4f910fec6fdd7c",
+      "current_matches_inspected": true,
+      "boundary": "Analytics admitted-result hooks inspected at current revision; unrelated whole-file WIP not isolated/release-ready"
+    }
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "BLOCKED",
+      "summary": "Source matches approved scope; planned actual authenticated full-app chain not run",
+      "evidence_refs": [
+        "SOURCE_MANIFEST.json",
+        "VERIFICATION.json",
+        "REPORT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Strict payloads, hashes, server auth/ownership, private rules, finance segregation; provider App Check verification remains a release gate",
+      "evidence_refs": [
+        "VERIFICATION.json",
+        "REVIEW-CYCLES.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Bounded resources, canonical-source projection and transactional idempotency; current source review",
+      "evidence_refs": [
+        "SOURCE_MANIFEST.json",
+        "QUALITY-GATES.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Executable lifecycle, retry, retention, unavailable, nav and stale product regressions in stated test scope",
+      "evidence_refs": [
+        "VERIFICATION.json",
+        "REVIEW-CYCLES.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe messages, stale requests, cancellation and visible backlog/loss; no raw payload logs",
+      "evidence_refs": [
+        "PRODUCT-CONTENT.md",
+        "VERIFICATION.json"
+      ]
+    },
+    "product_language": {
+      "status": "PASSED",
+      "summary": "160 current strings,8principles and current in-context Chromium screenshots/states; no cross-browser certification",
+      "evidence_refs": [
+        "PRODUCT-CONTENT.md",
+        "PRODUCT-STRINGS.json",
+        "screenshots"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "NOT_READY/NOT_DEPLOYED: no isolated artifact or provider activation/ACTIVE/integrated evidence; managed validator/kit limits",
+      "evidence_refs": [
+        "ACTIVATION.md",
+        "QUALITY-GATES.md",
+        "REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Recorded optional coverage, bounded reads, fixed topics, provisional cohorts/retention and money meanings disclosed",
+      "evidence_refs": [
+        "PRODUCT-CONTENT.md",
+        "ACTIVATION.md"
+      ]
+    }
+  },
+  "findings": [],
+  "corrected_findings_ref": "REVIEW-CYCLES.json",
+  "residual_risks": [
+    "Coarse safe Ask taxonomy and consent/offline undercoverage",
+    "Read/retention caps return unknown/partial; sticky loss needs reconciliation",
+    "Shared integration contains separately changing unrelated WIP"
+  ],
+  "limitations": [
+    "25 units independently passed by reviewer;11Firestore/16browser/build/lint/typecheck evidence root-provided",
+    "Browser synthetic transport and callable.run auth are not full authenticated HTTP/trigger proof",
+    "Auth19207/Functions15207 absent; restart approval pending",
+    "Repository intelligence DEGRADED (indexes stale), permitted native fallback; READY-only validator failed, guard unchanged",
+    "ai-agent-kit CLI unavailable; no governed runtime receipt claimed",
+    "ProductionTTL/tracking/functions not active, no productionSLO or per1000read/write measurement"
+  ],
+  "memory_candidates": []
+}

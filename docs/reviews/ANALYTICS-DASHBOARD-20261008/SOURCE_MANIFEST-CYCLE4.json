@@ -1,0 +1,42 @@
+{
+  "task": "SATSUNICGO-ANALYTICS-DASHBOARD-20261008",
+  "capturedAt": "2026-10-08T14:29:46.433417+00:00",
+  "head": "53d59bd88fa7da9d1243692336ecd09b6540ea31",
+  "boundary": "Current shared source; integration files include preserved unrelated WIP. Not an isolated deploy artifact.",
+  "files": {
+    "packages/domain/analytics.ts": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc",
+    "functions/src/analytics-ingest.ts": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318",
+    "functions/src/analytics-worker.ts": "b231a6e813e2cf771a453f5ec36415738625539b8c354d3f2a608c603b34fce4",
+    "functions/src/dashboard-analytics.ts": "999bc115d30834c9f53afe4cc45fc1eea18c72d32b32a3974465172dfb4c92ce",
+    "functions/src/index.ts": "5c70d22ac5dd85658c275a5afde5fed3718b429787141cbd6adf6aa19ba7e285",
+    "firestore.indexes.json": "f29fbaf53430f06adade7dbd887c0521d614557c8b9e71acecf895b5a4a33660",
+    "src/shared/analytics.ts": "77c2e9dec3c94633933494b4f95eced57ef8b40d96c6d38c82c28c53bd51e5c6",
+    "src/shared/AnalyticsConsent.tsx": "45f1e4d03d58712cf77fdd5c754cf5d8d84049fb9b4b1a82afd12e49d7cfb7fc",
+    "src/shared/analytics-consent.css": "045a8b507b9928baa7edc3b435af207857a17eef88b590ae4d98a9cf82790ab6",
+    "src/app/App.tsx": "27c0a4ae3c6c14593b5f22a2bd64af4251aabf1feac7a84b0929d237ce844bb5",
+    "src/features/content/CatalogCard.tsx": "00440c9cfcb9a163d8c09f480d46e0d5ad87e2c831357b0d80b15336cbe70fe1",
+    "src/features/content/ProductsCatalog.tsx": "2ff5604ba802890fc4131159973aa6424a07f5300dd6414409f616b6255331d2",
+    "src/features/content/ProductDetail.tsx": "8ab23f24dd32093c60fedc0ef3ee1a1ee60daa9566bac974bf4174940d40fd1f",
+    "src/features/content/PrivacyPage.tsx": "7af303d3bd832c3e2c72c2d7327177632add0c87dac4c08f7e42779862d88ea1",
+    "src/features/ask/Ask.tsx": "5c6b89732e1395a0d10c0e4de05e4fe689e0d3285629f3b10d5a4a795d8c5709",
+    "src/features/ask/CatalogSearch.tsx": "ddb17f9b67910322962c9f76da4f875e67b7f203d89e309f2c9e755e6faecd19",
+    "src/features/ask/Commerce.tsx": "4cabf13300f60353fae7d26ecdba9da9a5e4d1f1892b47560091e649f9f78b93",
+    "src/features/products/Checkout.tsx": "d74ba7b46a92447757b28f5f9eade7345b111c0d840ad2a20d3665443ea3b61f",
+    "src/features/crm/Dashboard.tsx": "a870584509b364fa6697ef68457be75a69561af37083b829c27456dbd3e680ac",
+    "src/features/crm/DashboardCharts.tsx": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d",
+    "src/features/crm/dashboard094.css": "86a927d039a096c5477d7f2fac5c0ad238d5f402f26f83607fd2e4c395f481e3"
+  },
+  "cycle": 4,
+  "sharedIntegrationRecheckAt": "2026-10-08T14:34:32.697984+00:00",
+  "sharedIntegrationChangedDuringReview": [
+    "src/features/ask/Ask.tsx",
+    "src/features/ask/Commerce.tsx"
+  ],
+  "sharedIntegrationRecheckChanges": [
+    {
+      "path": "src/features/ask/Commerce.tsx",
+      "previous": "813186a07468dfe7c5e36f41d7737696b999c477b420b53c2debb61b40bd3788",
+      "current": "4cabf13300f60353fae7d26ecdba9da9a5e4d1f1892b47560091e649f9f78b93"
+    }
+  ]
+}

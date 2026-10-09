@@ -1,3 +1,4 @@
+import { trackProduct } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,18 +10,21 @@ import {
   type CatalogSearchResult,
 } from "./catalog-search";
 import styles from "./Ask.module.css";
+import { WebResearch } from "./WebResearch";
 export function CatalogSearch({
   result,
   question,
   commerce,
   vi,
   active,
+  onResults,
 }: {
   result: CatalogSearchResult;
   question: string;
   commerce: Commerce;
   vi: boolean;
   active: boolean;
+  onResults?: (result: CatalogSearchResult) => void;
 }) {
   const [data, setData] = useState(result),
     [selected, setSelected] = useState(""),
@@ -29,11 +33,17 @@ export function CatalogSearch({
   const abort = useRef<AbortController | null>(null);
   const searching = useRef(false);
   const automaticPages = useRef(0);
-  useEffect(() => () => {
-    abort.current?.abort();
-    abort.current = null;
-    searching.current = false;
-  }, []);
+  useEffect(() => {
+    if (active) onResults?.(data);
+  }, [active, data, onResults]);
+  useEffect(
+    () => () => {
+      abort.current?.abort();
+      abort.current = null;
+      searching.current = false;
+    },
+    [],
+  );
   const more = useCallback(async () => {
     if (searching.current) return;
     searching.current = true;
@@ -100,18 +110,28 @@ export function CatalogSearch({
         </p>
       )}
       {!data.rows.length && (
-        <>{loading ? <LoadingState overlay={false}>{vi
-              ? "Đang tìm tiếp trong danh mục…"
-              : "Searching more of the catalog…"}</LoadingState> : <p role="status">{data.hasMore
-              ? vi
-                ? "Chưa thấy sản phẩm trong phần đã kiểm tra. Có thể tìm tiếp."
-                : "No match in the products checked so far. You can search further."
-              : vi
-                ? "Chưa có sản phẩm phù hợp. Anh/chị có thể gửi yêu cầu mua hộ ngay trong chat."
-                : "No matching products yet. You can request an item within this chat."}</p>}</>
+        <>
+          {loading ? (
+            <LoadingState overlay={false}>
+              {vi
+                ? "Đang tìm tiếp trong danh mục…"
+                : "Searching more of the catalog…"}
+            </LoadingState>
+          ) : (
+            <p role="status">
+              {data.hasMore
+                ? vi
+                  ? "Chưa thấy sản phẩm trong phần đã kiểm tra. Có thể tìm tiếp."
+                  : "No match in the products checked so far. You can search further."
+                : vi
+                  ? "Chưa có sản phẩm phù hợp. Anh/chị có thể gửi yêu cầu mua hộ ngay trong chat."
+                  : "No matching products yet. You can request an item within this chat."}
+            </p>
+          )}
+        </>
       )}
       <ul className={styles.catalogResultList}>
-        {data.rows.map((row) => {
+        {data.rows.map((row, index) => {
           const price = catalogProductSchema.safeParse(row);
           return (
             <li key={row.id}>
@@ -129,7 +149,9 @@ export function CatalogSearch({
                 </span>
               )}
               <div>
-                <Link to={`/products/${row.slug}`}>{row.title}</Link>
+                <Link data-analytics-product={row.id} to={`/products/${row.slug}`}>
+                  {index + 1}. {row.title}
+                </Link>
                 <p>
                   {price.success
                     ? `${price.data.listedPrice.toLocaleString(vi ? "vi-VN" : "en-US")} ₫`
@@ -142,7 +164,7 @@ export function CatalogSearch({
                 <button
                   type="button"
                   aria-pressed={selected === row.slug}
-                  onClick={() => setSelected(row.slug)}
+                  onClick={() => { trackProduct(row.id, "product_click"); setSelected(row.slug); }}
                 >
                   {vi ? "Chọn mua" : "Buy"}
                 </button>
@@ -163,6 +185,10 @@ export function CatalogSearch({
         </button>
       )}
       {error && <p role="alert">{error}</p>}
+      {!data.rows.length && !data.hasMore && !data.stale && !error && active && !commerce.order &&
+        (import.meta.env.DEV || import.meta.env.VITE_ASK_RESEARCH_ENABLED === "true") && (
+          <WebResearch question={question} commerce={commerce} vi={vi} active={active} />
+        )}
       {selected && active && !commerce.order && (
         <CatalogPurchase
           key={selected}

@@ -377,10 +377,13 @@ export const workspaceCommand = onCall(opts, async (req) => {
     providerReady = await verifyPilotProvider();
   }
   return db.runTransaction(async (tx) => {
-    const [access, profile, oldOp] = await Promise.all([
+    const [access, profile, oldOp, customerSaveFence] = await Promise.all([
       tx.get(db.doc(`staffAccess/${uid}`)),
       tx.get(db.doc(`users/${uid}`)),
       tx.get(op),
+      ["saveProfile", "saveAddress"].includes(d.action)
+        ? tx.get(db.doc(`customerSaveFences/${uid}-${d.operationId}`))
+        : Promise.resolve(null),
     ]);
     if (access.data()?.locked || profile.data()?.locked)
       throw new HttpsError(
@@ -432,6 +435,12 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "failed-precondition",
         "Cần xác thực gần đây và hai lớp.",
         { reason: "RECENT_MFA_REQUIRED" },
+      );
+    if (customerSaveFence?.exists)
+      throw new HttpsError(
+        "failed-precondition",
+        "Lần lưu trước đã được đóng. Gửi lại thông tin để lưu.",
+        { reason: "SAVE_CANCELLED" },
       );
     if (oldOp.exists) {
       if (oldOp.data()?.hash !== hash)

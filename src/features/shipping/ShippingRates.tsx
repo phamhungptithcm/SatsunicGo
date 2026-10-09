@@ -28,6 +28,7 @@ import {
   type PriceAvailability,
 } from "./rate-detail-view";
 import "./shipping-rates.css";
+import "../../shared/public-tabs.css";
 const serviceLabels = {
   standard: "Thông thường · 8–12 ngày",
   express: "Nhanh · 6–8 ngày",
@@ -386,7 +387,7 @@ export function ShippingRates({ staff = false }: { staff?: boolean }) {
         <div className="rateCalculator" aria-busy={busy}>
           <div className="rateInputs">
             <div
-              className="rateDirections"
+              className={`rateDirections${staff ? "" : " publicTabs"}`}
               data-direction={direction}
               aria-label="Chiều gửi"
             >

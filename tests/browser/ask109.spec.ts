@@ -35,13 +35,13 @@ for (const mode of [
     await page.route("**/src/features/ask/Commerce.tsx*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const useAskCommerce=()=>({busy:false,pendingOperation:null,conversationId:null,draft:{},order:null,user:null,restorationReady:true,resolved:()=>{},run:async()=>{}});export const CommercePanel=()=>null;`,
+        body: `export const useAskCommerce=()=>({commandScope:()=>null,commandIdentity:()=>null,reviewBarrier:async()=>null,busy:false,pendingOperation:null,conversationId:null,draft:{},order:null,user:null,restorationReady:true,resolved:()=>{},run:async()=>{}});export const CommercePanel=()=>null;export function askReadinessMessage(){throw Error("Unexpected commerce readiness in non-commerce fixture")}`,
       }),
     );
     await page.route("**/src/features/ask/ImageIntake.tsx*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const useAskImages=()=>({photos:[],working:false,prepare:async()=>{if(location.search.includes("preparing"))await new Promise(r=>setTimeout(r,150));return []},markSent:()=>{},add:()=>{},remove:()=>{}});`,
+        body: `export const useAskImages=()=>({photos:[],working:false,prepare:async()=>{if(location.search.includes("preparing"))await new Promise(resolve=>{window.qaReleasePrepare=resolve;window.qaPrepareEntered=true});return []},markSent:()=>{},add:()=>{},remove:()=>{}});`,
       }),
     );
     let calls = 0;
@@ -83,7 +83,24 @@ for (const mode of [
         .filter({ visible: true })
         .click();
     else await input.press("Enter");
-    if (mode === "preparing") await input.fill("Bản nháp tiếp theo");
+    if (mode === "preparing") {
+      await expect
+        .poll(() =>
+          page.evaluate(
+            () =>
+              (window as unknown as { qaPrepareEntered?: boolean })
+                .qaPrepareEntered,
+          ),
+        )
+        .toBe(true);
+      await input.fill("Bản nháp tiếp theo");
+      await expect(input).toHaveValue("Bản nháp tiếp theo");
+      expect(calls).toBe(0);
+      await page.evaluate(() =>
+        (window as unknown as { qaReleasePrepare: () => void })
+          .qaReleasePrepare(),
+      );
+    }
     const composer = page
       .getByRole("dialog")
       .getByRole("textbox", { name: "Hỏi SatsunicGo" });

@@ -1,4 +1,5 @@
 import { LoadingState } from "../../shared/Loading";
+import { PurchaseAdjustment } from "./purchase-adjustment";
 import { OrderImages } from "./OrderImages";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -104,6 +105,9 @@ export function OrderTools({
   }
   return (
     <div className="orderTools">
+      {(section === "all" || section === "actions") && (
+        <PurchaseAdjustment key={order.id} order={order} />
+      )}
       {showImages && (section === "all" || section === "files") && (
         <OrderImages
           key={order.id}
@@ -139,7 +143,9 @@ export function OrderTools({
             Bảng đối chiếu nội bộ, không phải hóa đơn thuế. Chỉ các khoản đã xác
             nhận mới xuất hiện ở đây.
           </p>
-          {historyLoading && <LoadingState overlay={false}>Đang tải lịch sử…</LoadingState>}
+          {historyLoading && (
+            <LoadingState overlay={false}>Đang tải lịch sử…</LoadingState>
+          )}
           {history?.entries.map((e) => (
             <p key={e.id}>
               {e.kind === "refund"
@@ -177,6 +183,7 @@ export function OrderTools({
         </details>
       )}
       {(section === "all" || section === "actions") &&
+        !order.checkoutId &&
         order.acceptedAt &&
         order.stage !== "CANCELLED" &&
         paymentDue(order) > 0 && (
@@ -184,6 +191,32 @@ export function OrderTools({
             Tạo link thanh toán payOS
           </button>
         )}
+      {order.checkoutId && (section === "all" || section === "actions") && (
+        <div className="orderUtilityActions">
+          <Link to={`/checkout/payment/${order.checkoutId}`}>
+            Thanh toán và chứng từ PDF
+          </Link>
+          {order.latestReceiptId &&
+            order.latestReceiptId !== order.checkoutId && (
+              <Link to={`/checkout/payment/${order.latestReceiptId}`}>
+                Chứng từ thanh toán mới nhất
+              </Link>
+            )}
+          {order.upfront &&
+            order.finalApproved &&
+            paymentDue(order, "balance") > 0 && (
+              <Link
+                to={
+                  order.balanceCheckoutId
+                    ? `/checkout/payment/${order.balanceCheckoutId}`
+                    : `/checkout?order=${order.id}`
+                }
+              >
+                Duyệt và thanh toán thêm
+              </Link>
+            )}
+        </div>
+      )}
       {checkout && (
         <p>
           <a href={checkout} target="_blank" rel="noopener noreferrer">

@@ -5,13 +5,22 @@ export function customerChatAction(
   order: Order | null,
   draft: unknown,
 ) {
+  // A question is not action consent, including full-width punctuation.
+  if (text.length > 1000 || /[?？]/u.test(text)) return null;
   const value = text
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[đĐ]/gu, "d")
     .trim()
     .toLowerCase()
-    .replace(/[.!?]+$/g, "");
+    .replace(/\s+/gu, " ")
+    .replace(/[.!]+$/gu, "")
+    .trim()
+    .replace(/^(?:(?:minh|toi|anh|chi) (?:dong y )?|dong y |please )/u, "")
+    .replace(/ (?:nhe|nha|giup minh|giup toi)$/u, "");
   if (
     !order &&
-    /^(gửi yêu cầu( mua hộ)?|submit( buying)? request)$/.test(value) &&
+    /^(gui yeu cau( mua ho)?|submit( buying)? request)$/.test(value) &&
     requestSchema.safeParse(draft).success
   )
     return "submitRequest";
@@ -19,17 +28,17 @@ export function customerChatAction(
   const next = nextCustomerAction(order);
   if (
     next === "acceptQuote" &&
-    /^(chấp nhận báo giá|duyệt báo giá|accept quote)$/.test(value)
+    /^(chap nhan bao gia|duyet bao gia|accept quote)$/.test(value)
   )
     return "acceptQuote";
   if (
     next === "approveFinal" &&
-    /^(duyệt tổng phí cuối|approve final total)$/.test(value)
+    /^(duyet tong phi cuoi|approve final total)$/.test(value)
   )
     return "approveFinal";
   if (
     next === "confirmReceipt" &&
-    /^(mình đã nhận đủ hàng|tôi đã nhận đủ hàng|đã nhận đủ hàng|confirm all items received)$/.test(
+    /^(minh da nhan du hang|toi da nhan du hang|da nhan du hang|confirm all items received)$/.test(
       value,
     )
   )

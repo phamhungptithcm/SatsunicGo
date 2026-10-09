@@ -24,6 +24,7 @@ export const itemSchema = z
     quantity: z.number().int().min(1).max(100),
     variant: z.string().max(200).default(""),
     condition: z.enum(["new", "used", "any"]).optional(),
+    unitSourceMinor: money.positive().optional(),
   })
   .strict();
 export const requestSchema = z
@@ -163,6 +164,29 @@ export const stageLabels: Record<Stage, string> = {
   CANCELLED: "Đã hủy",
 };
 export type Order = {
+  checkoutId?: string;
+  latestReceiptId?: string;
+  balanceCheckoutId?: string | null;
+  actualSourceMinor?: number;
+  requiresSourcing?: boolean;
+  purchaseAdjustment?: {
+    version: number;
+    sourceLimitMinor: number;
+    total: number;
+    reason: string;
+    approved: boolean;
+  };
+  upfront?: {
+    initialTotal: number;
+    goods: number;
+    service: number;
+    policyVersion: number;
+    termsVersion: string;
+    unitSourceMinor: number;
+    fxNumerator: number;
+    fxDenominator: number;
+    sourceCurrency: "USD" | "JPY" | "KRW";
+  };
   purchaseKind?: "catalog" | "custom";
   catalogSnapshot?: import("./catalog-checkout").CatalogSnapshot;
   id: string;
@@ -234,6 +258,13 @@ export function canDispatch(o: Order) {
   );
 }
 export function orderStageLabel(o: Order) {
+  if (o.upfront && o.stage === "PACKED")
+    return o.finalApproved ? "Chờ thanh toán chi phí còn lại" : "Chờ duyệt chi phí cuối";
+  if (o.upfront && o.stage === "QUOTE_ACCEPTED")
+    return o.collected - o.refunded - (o.refundReserved ?? 0) >=
+      purchaseAmount(o)
+      ? "Đã thanh toán · cần tìm mua"
+      : "Chờ thanh toán toàn bộ ban đầu";
   if (o.purchaseKind === "catalog" && o.stage === "QUOTE_ACCEPTED")
     return o.collected - o.refunded - (o.refundReserved ?? 0) >=
       purchaseAmount(o)
@@ -253,22 +284,28 @@ export function catalogPayable(o: Order) {
   return safeMoney(o.finalTotal);
 }
 export function purchaseAmount(o: Order) {
-  return o.purchaseKind === "catalog"
-    ? catalogPayable(o)
-    : (o.deposit ?? Infinity);
+  return o.upfront
+    ? o.upfront.initialTotal
+    : o.purchaseKind === "catalog"
+      ? catalogPayable(o)
+      : (o.deposit ?? Infinity);
 }
 export function paymentPurpose(o: Order): "full" | "deposit" | "balance" {
-  return o.purchaseKind === "catalog"
+  return o.upfront && !o.finalApproved
     ? "full"
-    : o.finalApproved && o.finalTotal !== undefined
-      ? "balance"
-      : "deposit";
+    : o.purchaseKind === "catalog"
+      ? "full"
+      : o.finalApproved && o.finalTotal !== undefined
+        ? "balance"
+        : "deposit";
 }
 export function paymentDue(o: Order, purpose = paymentPurpose(o)) {
   if (purpose !== paymentPurpose(o)) throw Error("INVALID_PAYMENT_PURPOSE");
   const target =
     purpose === "full"
-      ? catalogPayable(o)
+      ? o.upfront
+        ? o.upfront.initialTotal
+        : catalogPayable(o)
       : purpose === "deposit"
         ? o.deposit
         : o.finalTotal;
@@ -409,7 +446,32 @@ export function evolve(
         })
         .strict()
         .parse(payload);
-      guard(o.stage === "PURCHASING" && !o.hold && p.quantity <= count);
+      guard(
+        o.stage === "PURCHASING" &&
+          !o.hold &&
+          p.quantity <= count &&
+          (!o.upfront ||
+            o.collected - o.refunded - (o.refundReserved ?? 0) >=
+              purchaseAmount(o)),
+      );
+      if (o.upfront) {
+        const nextCost = safeMoney(
+            (o.actualSourceMinor ?? 0) + p.actualSourceMinor,
+          ),
+          original = o.upfront.unitSourceMinor * count;
+        if (
+          nextCost > original &&
+          (!o.purchaseAdjustment?.approved ||
+            nextCost > o.purchaseAdjustment.sourceLimitMinor ||
+            o.collected - o.refunded - (o.refundReserved ?? 0) <
+              o.purchaseAdjustment.total)
+        )
+          throw Error("SOURCE_ADJUSTMENT_NOT_FUNDED");
+      }
+      if (o.upfront)
+        o.actualSourceMinor = safeMoney(
+          (o.actualSourceMinor ?? 0) + p.actualSourceMinor,
+        );
       o.purchasedLines = addLineCounts(
         o.items,
         o.purchasedLines,
@@ -488,6 +550,17 @@ export function evolve(
           p.total < p.freightShare)
       )
         throw Error("FREIGHT_MISMATCH");
+      if (
+        o.upfront &&
+        p.total <
+          convertFx(
+            o.actualSourceMinor ?? 0,
+            o.upfront.fxNumerator,
+            o.upfront.fxDenominator,
+          ) +
+            o.upfront.service
+      )
+        throw Error("ACTUAL_COST_NOT_COVERED");
       if (o.consolidatedFreight)
         o.finalFreightVersion = o.consolidatedFreight.version;
       o.finalTotal = p.total;

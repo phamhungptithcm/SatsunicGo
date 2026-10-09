@@ -1,4 +1,11 @@
+import { linkAnalyticsOrder } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
+import {
+  admitAskCommandResult,
+  admitAskRecoveryResult,
+  admitAskPendingEnvelope,
+} from "../../../packages/domain/ask-command-result";
+import { askConversationSchema } from "../../../packages/domain/ask-workflow";
 import { CatalogPurchase } from "./CatalogPurchase";
 import { InlineSupport } from "./InlineSupport";
 import { CustomerChanges } from "../orders/Changes";
@@ -10,6 +17,7 @@ import {
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type FormEvent,
@@ -36,6 +44,8 @@ import {
   safeCheckout,
   type AskConversation,
   type ShoppingDraft,
+  recipientSchema,
+  shoppingDraftSchema,
 } from "../../../packages/domain/ask-workflow";
 import type { AskAnswer } from "./knowledge";
 import styles from "./Ask.module.css";
@@ -66,10 +76,62 @@ export function createCommerceContextFence() {
       token === busySequence && current(scope, actualUid),
   };
 }
-type Mutation = {
+export type CommerceMutation = {
   action: string;
   payload: unknown;
   expectedOrderVersion?: number;
+};
+type Mutation = CommerceMutation;
+type ReadinessIssue =
+  | "draft-conflict"
+  | "manual-unsaved"
+  | "recipient-unsaved"
+  | "recipient-unverified";
+export function askReadinessMessage(
+  issue: ReadinessIssue,
+  language: "vi" | "en",
+) {
+  const messages = {
+    "draft-conflict": [
+      "Bản nháp đã thay đổi ở nơi khác. Tải lại và kiểm tra bản mới trước khi lưu hoặc gửi.",
+      "The draft changed elsewhere. Reload and review the latest draft before saving or sending.",
+    ],
+    "manual-unsaved": [
+      "Thông tin đang sửa chưa được lưu. Lưu bản nháp, kiểm tra lại rồi gửi yêu cầu.",
+      "Your edits are not saved. Save the draft, review it, then send the request.",
+    ],
+    "recipient-unsaved": [
+      "Thông tin nhận hàng đang được sửa. Lưu và kiểm tra lại trước khi tiếp tục.",
+      "Delivery details are being edited. Save and review them before continuing.",
+    ],
+    "recipient-unverified": [
+      "Chưa xác minh được thông tin nhận hàng đã lưu. Chờ tải xong hoặc kiểm tra kết nối.",
+      "Saved delivery details are not verified yet. Wait for them to load or check your connection.",
+    ],
+  };
+  return messages[issue][language === "vi" ? 0 : 1];
+}
+function readinessFromError(value: string): ReadinessIssue | null {
+  const issue = value.replace(/^ASK_READINESS:/, "");
+  return value.startsWith("ASK_READINESS:") &&
+    [
+      "draft-conflict",
+      "manual-unsaved",
+      "recipient-unsaved",
+      "recipient-unverified",
+    ].includes(issue)
+    ? (issue as ReadinessIssue)
+    : null;
+}
+const draftSignature = (value: unknown) => {
+  const parsed = shoppingDraftSchema.safeParse(value ?? {});
+  return JSON.stringify(parsed.success ? parsed.data : (value ?? {}));
+};
+type EditorReadiness = {
+  manualDirty: boolean;
+  recipientEditing: boolean;
+  recipientVerified: boolean;
+  recipientVersion?: number;
 };
 export function useAskCommerce(
   onRestore: (c: AskConversation) => void,
@@ -79,9 +141,21 @@ export function useAskCommerce(
   const [conversation, setConversation] = useState<AskConversation | null>(
     null,
   );
+  const conversationRef = useRef(conversation);
+  conversationRef.current = conversation;
   const [conversationId, setConversationId] = useState<string | undefined>();
   const [restorationReady, setRestorationReady] = useState(false);
-  const [draft, setDraft] = useState<ShoppingDraft>({});
+  const [draft, updateDraft] = useState<ShoppingDraft>({});
+  const draftBase = useRef({ signature: draftSignature({}), version: 0 });
+  const draftConflict = useRef(false);
+  const [, refreshDraftReadiness] = useState(0);
+  const editorReadiness = useRef<{ owner?: object; state: EditorReadiness }>({
+    state: {
+      manualDirty: false,
+      recipientEditing: false,
+      recipientVerified: false,
+    },
+  });
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState("");
   const [catalogSlugs, setCatalogSlugs] = useState<string[]>([]);
@@ -109,7 +183,73 @@ export function useAskCommerce(
   restore.current = onRestore;
   const draftRef = useRef(draft);
   draftRef.current = draft;
+  const setDraft = useCallback(
+    (next: ShoppingDraft | ((previous: ShoppingDraft) => ShoppingDraft)) => {
+      const value = typeof next === "function" ? next(draftRef.current) : next;
+      draftRef.current = value;
+      updateDraft(value);
+      if (draftSignature(value) === draftBase.current.signature)
+        draftConflict.current = false;
+    },
+    [],
+  );
+  const publishEditorReadiness = useCallback(
+    (owner: object, state: EditorReadiness | null) => {
+      if (!isCurrent(renderedScope)) return;
+      const previous = editorReadiness.current;
+      if (state) editorReadiness.current = { owner, state };
+      else if (previous.owner === owner)
+        editorReadiness.current = {
+          state: {
+            manualDirty: false,
+            recipientEditing: false,
+            recipientVerified: false,
+          },
+        };
+      if (
+        JSON.stringify(previous.state) !==
+        JSON.stringify(editorReadiness.current.state)
+      )
+        refreshDraftReadiness((value) => value + 1);
+    },
+    [user, conversationId, renderedScope.epoch],
+  );
+  const readinessIssue = useCallback(
+    (action: string): ReadinessIssue | null => {
+      if (
+        ["saveDraft", "submitRequest"].includes(action) &&
+        draftConflict.current
+      )
+        return "draft-conflict";
+      if (
+        action === "submitRequest" &&
+        editorReadiness.current.state.manualDirty
+      )
+        return "manual-unsaved";
+      if (["acceptQuote", "payment"].includes(action)) {
+        if (!conversationRef.current?.recipientSaved)
+          return "recipient-unsaved";
+        if (
+          !editorReadiness.current.state.recipientVerified ||
+          editorReadiness.current.state.recipientVersion !== version.current
+        )
+          return "recipient-unverified";
+        if (editorReadiness.current.state.recipientEditing)
+          return "recipient-unsaved";
+      }
+      return null;
+    },
+    [],
+  );
+  const recipientRevisionCurrent = useCallback(
+    (verifiedVersion: number) => verifiedVersion === version.current,
+    [],
+  );
   const queue = useRef<Promise<unknown>>(Promise.resolve());
+  const verifiedConversationVersion = useRef<number | null>(null);
+  const verifiedOrderVersion = useRef<number | null>(null);
+  const liveOrder = useRef(order);
+  liveOrder.current = order;
   useEffect(() => {
     if (!auth || !enabled) return;
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -117,8 +257,19 @@ export function useAskCommerce(
       const previousUid = currentUid.current;
       currentUid.current = u?.uid ?? null;
       contextFence.current.reset(currentUid.current, undefined);
+      verifiedConversationVersion.current = null;
+      verifiedOrderVersion.current = null;
       setBusy(false);
       queue.current = Promise.resolve();
+      draftBase.current = { signature: draftSignature({}), version: 0 };
+      draftConflict.current = false;
+      editorReadiness.current = {
+        state: {
+          manualDirty: false,
+          recipientEditing: false,
+          recipientVerified: false,
+        },
+      };
       if (previousUid !== (u?.uid ?? null)) {
         setDraft({});
         setCatalogSlugs([]);
@@ -188,9 +339,14 @@ export function useAskCommerce(
       const saved = sessionStorage.getItem(
         `ask-pending:${user.uid}:${conversationId}`,
       );
-      if (saved) setClientPending(JSON.parse(saved).operationId ?? null);
+      if (saved)
+        setClientPending(
+          admitAskPendingEnvelope(JSON.parse(saved), conversationId)
+            .operationId,
+        );
     } catch {
-      setError("Chưa đọc được thao tác đang chờ. Liên hệ hỗ trợ để đối chiếu.");
+      setClientPending("invalid-pending-identity");
+      setError("ASK_PENDING_UNVERIFIED");
     }
   }, [user, conversationId]);
   useEffect(() => {
@@ -209,22 +365,64 @@ export function useAskCommerce(
         if (!valid()) return;
         // Cached absence/content cannot finish initial ownership-verified restoration.
         if (!hydrated.current && snap.metadata.fromCache) return;
-        const c = snap.data() as AskConversation | undefined;
+        const raw = snap.data();
+        const parsed = askConversationSchema.safeParse(raw);
+        if (
+          raw !== undefined &&
+          (!parsed.success || parsed.data.ownerId !== user.uid)
+        ) {
+          hydrated.current = false;
+          setRestorationReady(false);
+          setConversation(null);
+          verifiedConversationVersion.current = null;
+          setOrder(null);
+          setDraft({});
+          restore.current({
+            ownerId: user.uid,
+            version: 0,
+            updatedAt: 0,
+            turns: [],
+          });
+          setError("ASK_CONVERSATION_UNVERIFIED");
+          return;
+        }
+        const c = parsed.success ? parsed.data : undefined;
+        setError((previous) =>
+          previous === "ASK_CONVERSATION_UNVERIFIED" ? "" : previous,
+        );
         if (c) {
+          if (c.version < draftBase.current.version) return;
           if (currentOrderId.current !== c.orderId) setOrder(null);
           currentOrderId.current = c.orderId;
           version.current = Math.max(version.current, c.version);
+          conversationRef.current = c;
+          if (!snap.metadata.fromCache)
+            verifiedConversationVersion.current = c.version;
           setConversation(c);
+          const signature = draftSignature(c.draft);
           if (!hydrated.current) {
             setDraft(c.draft ?? draftRef.current);
             restore.current(c);
+          } else if (signature !== draftBase.current.signature) {
+            const localDirty =
+              editorReadiness.current.state.manualDirty ||
+              draftSignature(draftRef.current) !== draftBase.current.signature;
+            if (localDirty && signature !== draftSignature(draftRef.current))
+              draftConflict.current = true;
+            else {
+              draftConflict.current = false;
+              setDraft(c.draft ?? {});
+            }
+            refreshDraftReadiness((value) => value + 1);
           }
+          draftBase.current = { signature, version: c.version };
         }
         hydrated.current = true;
         setRestorationReady(true);
       },
       () => {
         if (!valid()) return;
+        verifiedConversationVersion.current = null;
         setError("Chưa tải được hội thoại. Kiểm tra kết nối và thử lại.");
       },
     );
@@ -235,6 +433,8 @@ export function useAskCommerce(
   }, [user, conversationId]);
   useEffect(() => {
     setOrder(null);
+    liveOrder.current = null;
+    verifiedOrderVersion.current = null;
     const orderId = conversation?.orderId;
     if (!db || !user || !conversationId || !orderId) return;
     const scope = {
@@ -251,10 +451,20 @@ export function useAskCommerce(
       currentOrderId.current === orderId;
     const unsubscribe = onSnapshot(
       doc(db, "orders", orderId),
+      { includeMetadataChanges: true },
       (snap) => {
-        if (valid()) setOrder((snap.data() as Order) ?? null);
+        if (valid()) {
+          const value = (snap.data() as Order) ?? null;
+          liveOrder.current = value;
+          verifiedOrderVersion.current =
+            !snap.metadata.fromCache && value?.ownerId === user.uid
+              ? value.version
+              : null;
+          setOrder(value);
+        }
       },
       () => {
+        if (valid()) verifiedOrderVersion.current = null;
         if (valid())
           setError(
             "Chưa cập nhật được đơn. Thông tin đang hiển thị có thể đã cũ.",
@@ -266,8 +476,54 @@ export function useAskCommerce(
       unsubscribe();
     };
   }, [user, conversationId, conversation?.orderId]);
+  function commandScope() {
+    const scope = contextFence.current.snapshot();
+    const currentOrder = liveOrder.current;
+    if (
+      !isCurrent(scope) ||
+      !scope.uid ||
+      !scope.cid ||
+      !hydrated.current ||
+      verifiedConversationVersion.current !== version.current ||
+      (currentOrderId.current &&
+        (!currentOrder ||
+          currentOrder.ownerId !== scope.uid ||
+          currentOrder.id !== currentOrderId.current ||
+          verifiedOrderVersion.current !== currentOrder.version))
+    )
+      return null;
+    return {
+      ownerId: scope.uid,
+      conversationId: scope.cid,
+      epoch: scope.epoch,
+      conversationVersion: version.current,
+      orderId: currentOrder?.id ?? null,
+      orderVersion: currentOrder?.version ?? null,
+      draftSignature: draftSignature(draftRef.current),
+    };
+  }
+  function commandIdentity() {
+    const value = contextFence.current.snapshot();
+    // View identity also binds anonymous drafts; commandScope still requires
+    // authenticated, hydrated metadata before any consequential action.
+    return isCurrent(value)
+      ? {
+          ownerId: value.uid,
+          conversationId: value.cid ?? null,
+          epoch: value.epoch,
+        }
+      : null;
+  }
+  function reviewBarrier() {
+    const scope = renderedScope;
+    const job = queue.current
+      .catch(() => {})
+      .then(() => (isCurrent(scope) ? commandScope() : null));
+    queue.current = job;
+    return job;
+  }
   const mutate = useCallback(
-    (input: Mutation) => {
+    (input: Mutation, admit?: () => boolean) => {
       if (!user || !conversationId)
         return Promise.reject(Error("Đăng nhập để lưu và tiếp tục yêu cầu."));
       const uid = user.uid,
@@ -278,13 +534,28 @@ export function useAskCommerce(
         .then(async () => {
           if (!isCurrent(scope) || !hydrated.current)
             throw Error("Đang tải hội thoại. Thử lại sau.");
+          const issue = readinessIssue(input.action);
+          if (issue) throw Error(`ASK_READINESS:${issue}`);
+          if (
+            input.action === "submitRequest" &&
+            draftSignature(input.payload) !== draftSignature(draftRef.current)
+          )
+            throw Error("ASK_READINESS:draft-conflict");
           const key = `ask-pending:${uid}:${cid}`;
           // Non-PII command envelopes survive reload for recovery of unknown results.
           const stored = sessionStorage.getItem(key);
-          const envelope = stored
+          const pending = stored
+            ? admitAskPendingEnvelope(JSON.parse(stored), cid)
+            : null;
+          if (pending && pending.action !== "catalogCheckout")
+            throw Error("ASK_COMMAND_RESULT_UNVERIFIED");
+          // Preview consent is local metadata: never put it in the RPC envelope.
+          // A pending catalog command must be reconciled, not replayed by new consent.
+          if (admit && (pending || !admit())) throw Error("ASK_PREVIEW_STALE");
+          const envelope = pending
             ? {
-                ...JSON.parse(stored),
-                payload: JSON.parse(stored).payload ?? input.payload,
+                ...pending,
+                payload: pending.payload,
               }
             : {
                 ...input,
@@ -320,12 +591,35 @@ export function useAskCommerce(
           };
           if (durable) setClientPending(envelope.operationId);
           try {
-            const result = await callService<{ id?: string; version: number }>(
+            const rawResult = await callService<unknown>(
               "askWorkflow",
               envelope,
             );
+            const result = admitAskCommandResult(rawResult, {
+              action: envelope.action,
+              expectedVersion: envelope.expectedVersion,
+              ...(conversation?.orderId
+                ? { orderId: conversation.orderId }
+                : {}),
+            });
             if (!isCurrent(scope)) return result;
+            if (
+              ["submitRequest", "catalogCheckout"].includes(envelope.action) &&
+              result.id
+            )
+              linkAnalyticsOrder(result.id);
             version.current = Math.max(version.current, result.version);
+            if (
+              envelope.action === "saveDraft" &&
+              result.version >= draftBase.current.version
+            ) {
+              draftBase.current = {
+                signature: draftSignature(envelope.payload),
+                version: result.version,
+              };
+              draftConflict.current = false;
+              refreshDraftReadiness((value) => value + 1);
+            }
             if (durable) {
               retirePending();
               setClientPending(null);
@@ -353,7 +647,7 @@ export function useAskCommerce(
       queue.current = job;
       return job;
     },
-    [user, conversationId, renderedScope.epoch],
+    [user, conversationId, renderedScope.epoch, conversation?.orderId],
   );
   useEffect(() => {
     if (isCurrent(renderedScope) && conversation?.turns.length) {
@@ -394,14 +688,14 @@ export function useAskCommerce(
         );
     }
   }
-  async function run(input: Mutation) {
+  async function run(input: Mutation, admit?: () => boolean) {
     const scope = renderedScope;
     if (!isCurrent(scope)) return false;
     const token = contextFence.current.begin();
     setBusy(true);
     setError("");
     try {
-      await mutate(input);
+      await mutate(input, admit);
       return isCurrent(scope);
     } catch (e) {
       if (ownsBusy(scope, token)) setError((e as Error).message);
@@ -429,16 +723,33 @@ export function useAskCommerce(
         payload: {},
       });
       if (!ownsBusy(scope, token)) return;
-      version.current = result.version;
+      version.current = admitAskCommandResult(result, {
+        action: "saveDraft",
+        expectedVersion: 0,
+      }).version;
       hydrated.current = false;
       setRestorationReady(false);
       currentCid.current = id;
       contextFence.current.reset(uid, id);
+      verifiedConversationVersion.current = null;
+      verifiedOrderVersion.current = null;
       queue.current = Promise.resolve();
       setBusy(false);
       setConversation(null);
       setOrder(null);
       setDraft({});
+      draftBase.current = {
+        signature: draftSignature({}),
+        version: result.version,
+      };
+      draftConflict.current = false;
+      editorReadiness.current = {
+        state: {
+          manualDirty: false,
+          recipientEditing: false,
+          recipientVerified: false,
+        },
+      };
       setCatalogSlugs([]);
       setClientPending(null);
       setError("");
@@ -464,10 +775,12 @@ export function useAskCommerce(
     const token = contextFence.current.begin();
     setBusy(true);
     try {
-      const result = await callService<{
-        version: number;
-        outcome?: "no_operation";
-      }>("askWorkflow", {
+      const key = `ask-pending:${uid}:${cid}`;
+      const saved = sessionStorage.getItem(key);
+      const original = saved
+        ? admitAskPendingEnvelope(JSON.parse(saved), cid)
+        : undefined;
+      const rawResult = await callService<unknown>("askWorkflow", {
         conversationId: cid,
         operationId: crypto.randomUUID(),
         expectedVersion: version.current,
@@ -475,17 +788,39 @@ export function useAskCommerce(
         payload: clientPending ? { operationId: clientPending } : {},
       });
       if (!ownsBusy(scope, token)) return;
+      const result = admitAskRecoveryResult(
+        rawResult,
+        original
+          ? {
+              action: original.action,
+              expectedVersion: original.expectedVersion,
+              ...(conversation?.orderId
+                ? { orderId: conversation.orderId }
+                : {}),
+            }
+          : undefined,
+        conversation?.orderId,
+      );
+      if (
+        original &&
+        ["submitRequest", "catalogCheckout"].includes(original.action) &&
+        "id" in result &&
+        result.id
+      )
+        linkAnalyticsOrder(result.id);
       version.current = Math.max(version.current, result.version);
-      const key = `ask-pending:${uid}:${cid}`;
-      const saved = sessionStorage.getItem(key);
-      if (saved && JSON.parse(saved).operationId === clientPending)
+      const current = sessionStorage.getItem(key);
+      if (current && JSON.parse(current).operationId === original?.operationId)
         sessionStorage.removeItem(key);
       setClientPending(null);
       setError(
-        result.outcome === "no_operation"
+        "outcome" in result && result.outcome === "no_operation"
           ? "Chưa ghi nhận thao tác trước. Kiểm tra lựa chọn rồi gửi lại."
           : "",
       );
+      return "outcome" in result && result.outcome === "no_operation"
+        ? ("no_operation" as const)
+        : ("recorded" as const);
     } catch {
       if (isCurrent(scope))
         setError(
@@ -504,8 +839,14 @@ export function useAskCommerce(
     conversation,
     conversationId,
     restorationReady,
+    commandScope,
+    commandIdentity,
+    reviewBarrier,
     draft,
     setDraft,
+    readinessIssue,
+    publishEditorReadiness,
+    recipientRevisionCurrent,
     order,
     error,
     setError,
@@ -515,6 +856,15 @@ export function useAskCommerce(
   };
 }
 export type Commerce = ReturnType<typeof useAskCommerce>;
+type PanelDraftView = {
+  manualFields?: Record<string, string>;
+  manualBaseFields?: Record<string, string>;
+  observedDraftFields?: Record<string, string>;
+  manualDirty?: boolean;
+  editing?: boolean;
+  recipient?: { recipient: string; phone: string; address: string };
+  recipientEditing?: boolean;
+};
 function AskOrderChanges({ order, vi }: { order: Order; vi: boolean }) {
   const [open, setOpen] = useState(false);
   return (
@@ -531,8 +881,10 @@ export function CommercePanel({
   commerce: c,
   language,
   hasMessages = false,
+  catalogFocused = false,
 }: {
   hasMessages?: boolean;
+  catalogFocused?: boolean;
   commerce: Commerce;
   language: "vi" | "en";
 }) {
@@ -555,6 +907,18 @@ export function CommercePanel({
     parentAuthority.current.reset(c.user?.uid ?? null, renderedResource);
   }
   const observedUid = useRef(auth?.currentUser?.uid ?? null);
+  const viewIdentity = JSON.stringify([
+    c.user?.uid ?? null,
+    c.conversationId ?? null,
+    c.order?.id ?? null,
+    identityEpoch,
+  ]);
+  const viewDraft = useRef<{ identity: string; value: PanelDraftView }>({
+    identity: viewIdentity,
+    value: {},
+  });
+  if (viewDraft.current.identity !== viewIdentity)
+    viewDraft.current = { identity: viewIdentity, value: {} };
   useEffect(() => {
     if (!auth) return;
     let live = true;
@@ -587,6 +951,8 @@ export function CommercePanel({
       parentAuthority={parentAuthority.current}
       language={language}
       hasMessages={hasMessages}
+      catalogFocused={catalogFocused}
+      viewDraft={viewDraft.current.value}
     />
   );
 }
@@ -595,15 +961,19 @@ function CommercePanelContext({
   parentAuthority,
   language,
   hasMessages,
+  catalogFocused,
+  viewDraft,
 }: {
   commerce: Commerce;
   parentAuthority: ReturnType<typeof createCommerceContextFence>;
   language: "vi" | "en";
   hasMessages: boolean;
+  catalogFocused: boolean;
+  viewDraft: PanelDraftView;
 }) {
   const vi = language === "vi",
     t = (a: string, b: string) => (vi ? a : b);
-  const [editing, setEditing] = useState(false),
+  const [editing, setEditing] = useState(viewDraft.editing ?? false),
     [checkout, setCheckout] = useState("");
   const [qrImage, setQrImage] = useState("");
   const [paymentExpiry, setPaymentExpiry] = useState(0),
@@ -613,7 +983,69 @@ function CommercePanelContext({
     const timer = setInterval(() => setClock(Date.now()), 1000);
     return () => clearInterval(timer);
   }, [paymentExpiry]);
-  const [recipientEditing, setRecipientEditing] = useState(false);
+  const [recipientEditing, setRecipientEditing] = useState(
+    viewDraft.recipientEditing ?? false,
+  );
+  const [manualDirty, setManualDirty] = useState(
+    viewDraft.manualDirty ?? false,
+  );
+  const draftFields: Record<string, string> = {
+    market: c.draft.market ?? "",
+    notes: c.draft.notes ?? "",
+  };
+  (c.draft.items?.length
+    ? c.draft.items
+    : [{ name: "", variant: "", quantity: 1, url: "" }]
+  ).forEach((item, index) => {
+    for (const field of ["name", "variant", "quantity", "url"] as const)
+      draftFields[`${field}-${index}`] = String(item[field] ?? "");
+  });
+  function manualValue(name: string) {
+    // A newer chat edit wins for that field; unrelated unsaved form edits stay.
+    if (viewDraft.observedDraftFields?.[name] !== draftFields[name])
+      return draftFields[name];
+    return viewDraft.manualBaseFields?.[name] === draftFields[name]
+      ? (viewDraft.manualFields?.[name] ?? draftFields[name])
+      : draftFields[name];
+  }
+  const manualRevision = useRef(0),
+    recipientRevision = useRef(0);
+  const recipientEditingRef = useRef(viewDraft.recipientEditing ?? false);
+  const [recipientVerification, setRecipientVerification] = useState<{
+    version: number;
+    data: { recipient: string; phone: string; address: string };
+  } | null>(null);
+  const savedRecipient =
+    recipientVerification &&
+    recipientVerification.version === c.conversation?.version &&
+    c.recipientRevisionCurrent(recipientVerification.version)
+      ? (recipientVerification?.data ?? null)
+      : null;
+  const savedRecipientRef = useRef<typeof recipientVerification>(null);
+  const [recipientLoadFailed, setRecipientLoadFailed] = useState(false);
+  const [recipientReload, setRecipientReload] = useState(0);
+  const recipientSave = useRef<{
+    revision: number;
+    signature: string;
+    acknowledged: boolean;
+  } | null>(null);
+  function closeVerifiedRecipient() {
+    const pending = recipientSave.current;
+    if (
+      pending?.acknowledged &&
+      pending.revision === recipientRevision.current &&
+      savedRecipientRef.current !== null &&
+      c.recipientRevisionCurrent(savedRecipientRef.current.version) &&
+      JSON.stringify(savedRecipientRef.current.data) === pending.signature
+    ) {
+      recipientSave.current = null;
+      recipientEditingRef.current = false;
+      viewDraft.recipientEditing = false;
+      viewDraft.recipient = undefined;
+      setRecipientEditing(false);
+    }
+  }
+  const editorOwner = useRef({});
   const capturedParentScope = useRef(parentAuthority.snapshot());
   const panelFence = useRef(createCommerceContextFence());
   const panelScope = useRef<CommerceScope | null>(null);
@@ -648,6 +1080,21 @@ function CommercePanelContext({
       token,
       auth?.currentUser?.uid ?? null,
     );
+  useLayoutEffect(() => {
+    if (!currentPanel()) return;
+    const previous = viewDraft.observedDraftFields;
+    if (previous)
+      for (const name of Object.keys(previous)) {
+        if (previous[name] !== draftFields[name]) {
+          // Retire the old override after a committed replacement. Comparing
+          // only values would resurrect it when chat returns to its old value.
+          if (viewDraft.manualFields) delete viewDraft.manualFields[name];
+          if (viewDraft.manualBaseFields)
+            delete viewDraft.manualBaseFields[name];
+        }
+      }
+    viewDraft.observedDraftFields = { ...draftFields };
+  });
   useEffect(() => {
     livePanel.current = true;
     panelFence.current.reset(
@@ -669,11 +1116,36 @@ function CommercePanelContext({
   const [addresses, setAddresses] = useState<
     { id: string; recipient: string; phone: string; address: string }[]
   >([]);
-  const [recipient, setRecipient] = useState({
-    recipient: "",
-    phone: "",
-    address: "",
-  });
+  const [recipient, updateRecipient] = useState(
+    viewDraft.recipient ?? {
+      recipient: "",
+      phone: "",
+      address: "",
+    },
+  );
+  function setRecipient(value: typeof recipient) {
+    viewDraft.recipient = value;
+    updateRecipient(value);
+  }
+  useLayoutEffect(() => {
+    if (currentPanel())
+      c.publishEditorReadiness?.(editorOwner.current, {
+        manualDirty,
+        recipientEditing,
+        recipientVerified: savedRecipient !== null,
+        recipientVersion: savedRecipient
+          ? recipientVerification?.version
+          : undefined,
+      });
+    const owner = editorOwner.current;
+    return () => c.publishEditorReadiness?.(owner, null);
+  }, [
+    c.publishEditorReadiness,
+    manualDirty,
+    recipientEditing,
+    savedRecipient,
+    recipientVerification?.version,
+  ]);
   useEffect(() => {
     if (!db || !c.user || !currentPanel()) return;
     let live = true;
@@ -699,7 +1171,11 @@ function CommercePanelContext({
     };
   }, [c.user?.uid, c.conversationId]);
   useEffect(() => {
-    setRecipient({ recipient: "", phone: "", address: "" });
+    if (!recipientEditingRef.current)
+      setRecipient({ recipient: "", phone: "", address: "" });
+    setRecipientVerification(null);
+    savedRecipientRef.current = null;
+    setRecipientLoadFailed(false);
     if (
       !db ||
       !c.user ||
@@ -709,25 +1185,51 @@ function CommercePanelContext({
     )
       return;
     const uid = c.user.uid,
-      orderId = c.order.id;
+      orderId = c.order.id,
+      subscriptionVersion = c.conversation.version;
     let live = true;
+    const valid = () =>
+      live && currentPanel() && c.recipientRevisionCurrent(subscriptionVersion);
     const unsubscribe = onSnapshot(
       doc(db, "orderRecipients", orderId),
+      { includeMetadataChanges: true },
       (snap) => {
-        if (!live || !currentPanel()) return;
+        if (!valid()) return;
+        if (snap.metadata.fromCache) return;
         const saved = snap.data();
-        if (saved && saved.ownerId === uid)
-          setRecipient({
-            recipient: saved.recipient,
-            phone: saved.phone,
-            address: saved.address,
-          });
+        const parsed = recipientSchema.safeParse({
+          recipient: saved?.recipient,
+          phone: saved?.phone,
+          address: saved?.address,
+        });
+        if (saved?.ownerId === uid && parsed.success) {
+          if (
+            recipientSave.current &&
+            JSON.stringify(parsed.data) !== recipientSave.current.signature
+          )
+            return;
+          const verification = {
+            version: subscriptionVersion,
+            data: parsed.data,
+          };
+          savedRecipientRef.current = verification;
+          setRecipientVerification(verification);
+          setRecipientLoadFailed(false);
+          if (!recipientEditingRef.current) setRecipient(parsed.data);
+          closeVerifiedRecipient();
+        } else {
+          savedRecipientRef.current = null;
+          setRecipientVerification(null);
+          setRecipientLoadFailed(true);
+        }
       },
       () => {
-        if (live && currentPanel())
-          c.setError(
-            "Chưa tải được thông tin nhận hàng. Thử lại khi có kết nối.",
-          );
+        if (valid()) {
+          live = false;
+          savedRecipientRef.current = null;
+          setRecipientVerification(null);
+          setRecipientLoadFailed(true);
+        }
       },
     );
     return () => {
@@ -740,11 +1242,14 @@ function CommercePanelContext({
     c.order?.id,
     c.order?.version,
     c.conversation?.recipientSaved,
+    c.conversation?.version,
+    recipientReload,
   ]);
   async function payment() {
     if (!c.order || !currentPanel()) return;
-    if (!c.conversation?.recipientSaved) {
-      c.setError("Lưu thông tin nhận hàng trước khi thanh toán.");
+    const readiness = c.readinessIssue("payment");
+    if (readiness) {
+      c.setError(`ASK_READINESS:${readiness}`);
       return;
     }
     const token = panelFence.current.begin();
@@ -798,7 +1303,7 @@ function CommercePanelContext({
       if (ownsPayment(token)) setPaymentBusy(false);
     }
   }
-  function saveDraft(event: FormEvent<HTMLFormElement>) {
+  async function saveDraft(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!currentPanel()) return;
     const f = new FormData(event.currentTarget);
@@ -834,11 +1339,21 @@ function CommercePanelContext({
       return;
     }
     c.setDraft(parsed.data);
-    setEditing(false);
-    if (c.user) void c.run({ action: "saveDraft", payload: parsed.data });
+    const revision = manualRevision.current;
+    const saved =
+      !c.user || (await c.run({ action: "saveDraft", payload: parsed.data }));
+    if (saved && currentPanel() && manualRevision.current === revision) {
+      setManualDirty(false);
+      setEditing(false);
+      viewDraft.manualDirty = false;
+      viewDraft.editing = false;
+      viewDraft.manualFields = undefined;
+      viewDraft.manualBaseFields = undefined;
+    }
   }
   const validDraft = requestSchema.safeParse(c.draft),
     order = c.order;
+  const errorReadiness = readinessFromError(c.error);
   const action = order ? nextCustomerAction(order) : null;
   const money = (n: number) =>
     new Intl.NumberFormat(vi ? "vi-VN" : "en-US", {
@@ -866,18 +1381,38 @@ function CommercePanelContext({
           }
         />
       )}
-      {!order && (
+      {!order && !catalogFocused && (
         <>
           {c.catalogSlugs.length > 0 && (
             <CatalogPurchase commerce={c} vi={vi} />
           )}
           {(hasMessages || !!c.draft.items?.length) && (
             <details className={styles.manualFallback}>
-              <summary onClick={() => setEditing(true)}>
+              <summary
+                onClick={() => {
+                  viewDraft.editing = true;
+                  setEditing(true);
+                }}
+              >
                 {t("Điền thông tin nếu cần", "Enter details if needed")}
               </summary>
               {editing && (
-                <form onSubmit={saveDraft} className={styles.inlineForm}>
+                <form
+                  onSubmit={saveDraft}
+                  onChange={(event) => {
+                    manualRevision.current++;
+                    viewDraft.manualFields = Object.fromEntries(
+                      Array.from(
+                        new FormData(event.currentTarget),
+                        ([key, value]) => [key, String(value)],
+                      ),
+                    );
+                    viewDraft.manualBaseFields = { ...draftFields };
+                    viewDraft.manualDirty = true;
+                    setManualDirty(true);
+                  }}
+                  className={styles.inlineForm}
+                >
                   <label>
                     <span className="formLabelText">
                       {t("Mua từ", "Source market")}{" "}
@@ -886,8 +1421,9 @@ function CommercePanelContext({
                       </span>
                     </span>
                     <select
+                      key={c.draft.market ?? ""}
                       name="market"
-                      defaultValue={c.draft.market ?? ""}
+                      defaultValue={manualValue("market")}
                       required
                     >
                       <option value="">
@@ -912,8 +1448,9 @@ function CommercePanelContext({
                           </span>
                         </span>
                         <input
+                          key={`name-${i}-${item.name}`}
                           name={`name-${i}`}
-                          defaultValue={item.name}
+                          defaultValue={manualValue(`name-${i}`)}
                           required
                           minLength={2}
                           maxLength={200}
@@ -922,8 +1459,9 @@ function CommercePanelContext({
                       <label>
                         {t("Link", "Link")}
                         <input
+                          key={`url-${i}-${item.url}`}
                           name={`url-${i}`}
-                          defaultValue={item.url ?? ""}
+                          defaultValue={manualValue(`url-${i}`)}
                           type="url"
                           maxLength={2048}
                         />
@@ -931,8 +1469,9 @@ function CommercePanelContext({
                       <label>
                         {t("Màu / size / phiên bản", "Color / size / variant")}
                         <input
+                          key={`variant-${i}-${item.variant}`}
                           name={`variant-${i}`}
-                          defaultValue={item.variant}
+                          defaultValue={manualValue(`variant-${i}`)}
                           maxLength={200}
                         />
                       </label>
@@ -944,9 +1483,10 @@ function CommercePanelContext({
                           </span>
                         </span>
                         <input
+                          key={`quantity-${i}-${item.quantity}`}
                           name={`quantity-${i}`}
                           type="number"
-                          defaultValue={item.quantity}
+                          defaultValue={manualValue(`quantity-${i}`)}
                           min={1}
                           max={100}
                           required
@@ -957,8 +1497,9 @@ function CommercePanelContext({
                   <label>
                     {t("Ghi chú", "Notes")}
                     <textarea
+                      key={c.draft.notes ?? ""}
                       name="notes"
-                      defaultValue={c.draft.notes ?? ""}
+                      defaultValue={manualValue("notes")}
                       maxLength={2000}
                     />
                   </label>
@@ -997,7 +1538,9 @@ function CommercePanelContext({
           )}
           {validDraft.success && c.user && (
             <button
-              disabled={c.busy}
+              disabled={
+                c.busy || manualDirty || !!c.readinessIssue?.("submitRequest")
+              }
               type="button"
               onClick={() =>
                 void c.run({
@@ -1006,8 +1549,16 @@ function CommercePanelContext({
                 })
               }
             >
-              {t("Gửi yêu cầu mua hộ", "Send buying request")}
+              {t("Kiểm tra yêu cầu", "Review request")}
             </button>
+          )}
+          {validDraft.success && c.readinessIssue?.("submitRequest") && (
+            <p role="status">
+              {askReadinessMessage(
+                c.readinessIssue("submitRequest")!,
+                language,
+              )}
+            </p>
           )}
         </>
       )}
@@ -1089,14 +1640,40 @@ function CommercePanelContext({
                 order.refunded === 0)) && (
               <form
                 className={styles.inlineForm}
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   if (!currentPanel()) return;
-                  void c.run({
+                  const revision = recipientRevision.current;
+                  const parsed = recipientSchema.safeParse(recipient);
+                  recipientSave.current = {
+                    revision,
+                    signature: JSON.stringify(
+                      parsed.success ? parsed.data : recipient,
+                    ),
+                    acknowledged: false,
+                  };
+                  savedRecipientRef.current = null;
+                  setRecipientVerification(null);
+                  const saved = await c.run({
                     action: "saveRecipient",
                     expectedOrderVersion: order.version,
                     payload: recipient,
                   });
+                  if (!currentPanel()) return;
+                  if (saved && recipientSave.current?.revision === revision) {
+                    recipientSave.current.acknowledged = true;
+                    closeVerifiedRecipient();
+                  } else if (
+                    !saved &&
+                    recipientSave.current?.revision === revision
+                  )
+                    recipientSave.current = null;
+                }}
+                onChange={() => {
+                  recipientRevision.current++;
+                  viewDraft.recipientEditing = true;
+                  recipientEditingRef.current = true;
+                  setRecipientEditing(true);
                 }}
               >
                 <h3>{t("Thông tin nhận hàng", "Delivery details")}</h3>
@@ -1198,16 +1775,34 @@ function CommercePanelContext({
                 </button>
               </form>
             )}
-          {c.conversation?.recipientSaved && (
+          {c.conversation?.recipientSaved && !savedRecipient && (
+            <p role={recipientLoadFailed ? "alert" : "status"}>
+              {recipientLoadFailed
+                ? t(
+                    "Chưa tải được thông tin nhận hàng. Thử tải lại; phần đang sửa vẫn được giữ.",
+                    "Delivery details could not load. Retry loading; your edits are kept.",
+                  )
+                : askReadinessMessage("recipient-unverified", language)}
+            </p>
+          )}
+          {recipientLoadFailed && (
+            <button
+              type="button"
+              onClick={() => setRecipientReload((value) => value + 1)}
+            >
+              {t("Thử tải lại", "Retry loading")}
+            </button>
+          )}
+          {c.conversation?.recipientSaved && savedRecipient && (
             <details className={styles.deliveryDetails}>
               <summary>
-                {t("Giao đến", "Delivery address")} · {recipient.recipient}
+                {t("Giao đến", "Delivery address")} · {savedRecipient.recipient}
               </summary>
               <p>
                 {t("Thông tin nhận hàng đã lưu", "Saved delivery details")}:{" "}
-                {recipient.recipient} · {recipient.phone}
+                {savedRecipient.recipient} · {savedRecipient.phone}
                 <br />
-                {recipient.address}
+                {savedRecipient.address}
               </p>
               {(["REQUESTED", "QUOTED"].includes(order.stage) ||
                 (order.purchaseKind === "catalog" &&
@@ -1216,7 +1811,11 @@ function CommercePanelContext({
                   order.refunded === 0)) && (
                 <button
                   type="button"
-                  onClick={() => setRecipientEditing(!recipientEditing)}
+                  onClick={() => {
+                    recipientEditingRef.current = !recipientEditing;
+                    viewDraft.recipientEditing = !recipientEditing;
+                    setRecipientEditing(!recipientEditing);
+                  }}
                 >
                   {t("Kiểm tra / sửa địa chỉ", "Review / edit address")}
                 </button>
@@ -1231,6 +1830,8 @@ function CommercePanelContext({
                 c.busy ||
                 !c.conversation?.recipientSaved ||
                 recipientEditing ||
+                !savedRecipient ||
+                !!c.readinessIssue("acceptQuote") ||
                 order.quote.expiresAt <= Date.now()
               }
               onClick={() =>
@@ -1241,7 +1842,7 @@ function CommercePanelContext({
                 })
               }
             >
-              {t("Chấp nhận báo giá và mức cọc", "Accept quote and deposit")}
+              {t("Kiểm tra báo giá và mức cọc", "Review quote and deposit")}
             </button>
           )}
           {order.quote &&
@@ -1267,7 +1868,7 @@ function CommercePanelContext({
                 })
               }
             >
-              {t("Duyệt tổng phí cuối", "Approve final total")}
+              {t("Kiểm tra tổng tiền cuối", "Review final total")}
             </button>
           )}
           {action === "payment" && (
@@ -1282,6 +1883,8 @@ function CommercePanelContext({
                   c.busy ||
                   !c.conversation?.recipientSaved ||
                   recipientEditing ||
+                  !savedRecipient ||
+                  !!c.readinessIssue("payment") ||
                   paymentBusy ||
                   (!!paymentExpiry && paymentExpiry <= clock)
                 }
@@ -1353,7 +1956,7 @@ function CommercePanelContext({
                 })
               }
             >
-              {t("Xác nhận đã nhận đủ hàng", "Confirm all items received")}
+              {t("Kiểm tra xác nhận nhận hàng", "Review receipt confirmation")}
             </button>
           )}
           {order.tracking && (
@@ -1401,9 +2004,32 @@ function CommercePanelContext({
       )}
       {c.error && (
         <p role="alert">
-          {vi
-            ? c.error
-            : "This step could not finish. Check your connection and retry."}
+          {errorReadiness
+            ? askReadinessMessage(errorReadiness, language)
+            : c.error === "ASK_PENDING_UNVERIFIED"
+              ? t(
+                  "Chưa đọc được thao tác đang chờ. Liên hệ hỗ trợ để đối chiếu.",
+                  "The pending action could not be read. Contact support to reconcile it.",
+                )
+              : c.error === "ASK_CONVERSATION_UNVERIFIED"
+                ? t(
+                    "Chưa xác minh được hội thoại. Hãy tải lại hoặc liên hệ hỗ trợ.",
+                    "The conversation could not be verified. Reload or contact support.",
+                  )
+                : c.error === "ASK_COMMAND_RESULT_UNVERIFIED"
+                  ? t(
+                      "Chưa xác minh được kết quả. Hãy đối chiếu thao tác đang chờ trước khi thử lại.",
+                      "The result could not be verified. Recover the pending action before trying again.",
+                    )
+                  : c.error ===
+                      "Chưa đối chiếu được thao tác. Thử lại; không gửi yêu cầu mới."
+                    ? t(
+                        c.error,
+                        "The pending action could not be recovered. Retry recovery before sending a new request.",
+                      )
+                    : vi
+                      ? c.error
+                      : "This step could not finish. Check your connection and retry."}
         </p>
       )}
     </section>

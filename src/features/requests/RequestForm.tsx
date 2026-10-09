@@ -1,20 +1,20 @@
 import "./request-form.css";
+import { useCart } from "../cart/cart-store";
+import {
+  researchedRequestSchema,
+  decimalSourceMinor,
+} from "../../../packages/domain/purchase-checkout";
 import { notify } from "../../shared/feedback";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { requestSchema } from "../../../packages/domain";
 import {
   normalizeRequestInput,
   requestInputText,
 } from "../../../packages/domain/request-input";
 import { doc, getDoc } from "firebase/firestore";
-import {
-  configured,
-  db,
-  sendCommand,
-  callService,
-} from "../../shared/firebase";
+import { configured, db, callService } from "../../shared/firebase";
 import {
   ProductComposer,
   anonymousImageHandoff,
@@ -24,9 +24,11 @@ type Item = {
   content: string;
   quantity: number;
   variant: string;
+  researchedPrice?: string;
   condition?: "new" | "used" | "any";
 };
 type Attempt = {
+  cartRevision: number;
   operationId: string;
   payload: string;
   orderId?: string;
@@ -36,10 +38,11 @@ function pendingFor(uid?: string): Attempt | null {
   if (!uid) return null;
   try {
     const x = JSON.parse(
-      sessionStorage.getItem(`request-pending:${uid}`) ?? "null",
+      sessionStorage.getItem(`request-cart-pending:${uid}`) ?? "null",
     );
     return x &&
       typeof x.payload === "string" &&
+      Number.isSafeInteger(x.cartRevision) &&
       /^[a-f0-9-]{36}$/i.test(x.operationId)
       ? { ...x, images: x.images ?? [] }
       : null;
@@ -54,8 +57,11 @@ export function RequestForm({
   user: User | null;
   signIn: () => Promise<void>;
 }) {
+  const { cart, refresh: refreshCart } = useCart();
+  const [legacyPending] = useState(() =>
+    Boolean(user && sessionStorage.getItem(`request-pending:${user.uid}`)),
+  );
   const location = useLocation(),
-    navigate = useNavigate(),
     draftKey = `request-draft:${user?.uid ?? "anonymous"}`;
   const [initial] = useState(() => {
     try {
@@ -73,7 +79,14 @@ export function RequestForm({
     }
   });
   const [items, setItems] = useState<Item[]>(
-    initial?.items.map((i) => ({ ...i, content: requestInputText(i) })) ?? [
+    initial?.items.map((i) => ({
+      ...i,
+      content: requestInputText(i),
+      researchedPrice:
+        i.unitSourceMinor === undefined
+          ? ""
+          : String(i.unitSourceMinor / (initial.market === "US" ? 100 : 1)),
+    })) ?? [
       {
         content: sessionStorage.getItem("request-name") ?? "",
         quantity: 1,
@@ -108,7 +121,7 @@ export function RequestForm({
     try {
       return Boolean(
         user &&
-        sessionStorage.getItem(`request-pending:${user.uid}`) &&
+        sessionStorage.getItem(`request-cart-pending:${user.uid}`) &&
         !pendingFor(user.uid),
       );
     } catch {
@@ -116,6 +129,7 @@ export function RequestForm({
     }
   });
   const [imageReading, setImageReading] = useState(false);
+  const [added, setAdded] = useState(false);
   const [prefillOffered, setPrefillOffered] = useState(
     Boolean(initial && new URLSearchParams(location.search).get("name")),
   );
@@ -147,6 +161,9 @@ export function RequestForm({
         ),
         quantity: i.quantity,
         variant: i.variant,
+        ...(i.researchedPrice
+          ? { unitSourceMinor: decimalSourceMinor(i.researchedPrice, market) }
+          : {}),
         ...(i.condition ? { condition: i.condition } : {}),
       })),
       notes,
@@ -241,7 +258,7 @@ export function RequestForm({
     attemptRef.current = next;
     setAttempt(next);
     sessionStorage.setItem(
-      `request-pending:${user!.uid}`,
+      `request-cart-pending:${user!.uid}`,
       JSON.stringify(next),
     );
   }
@@ -271,6 +288,12 @@ export function RequestForm({
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (legacyPending) {
+      setError(
+        "Còn lần gửi yêu cầu cũ chưa rõ kết quả. Kiểm tra Đơn của tôi hoặc liên hệ hỗ trợ trước khi thêm yêu cầu mới.",
+      );
+      return;
+    }
     if (locked.current || imageReading || pendingUnreadable) return;
     if (step < 2 && !attempt) {
       advanceStep();
@@ -281,13 +304,15 @@ export function RequestForm({
     if (!next) {
       let candidate;
       try {
-        candidate = requestSchema.safeParse(payload());
+        candidate = researchedRequestSchema.safeParse(payload());
       } catch {
         setError("Kiểm tra link sản phẩm.");
         return;
       }
       if (!candidate.success) {
-        setError("Nhập tên, link hoặc thêm ảnh; kiểm tra số lượng từng món.");
+        setError(
+          "Nhập tên, giá bạn đã tìm hiểu và kiểm tra số lượng từng món.",
+        );
         return;
       }
       if (!user) {
@@ -303,6 +328,7 @@ export function RequestForm({
         return;
       }
       next = {
+        cartRevision: cart.revision,
         operationId: crypto.randomUUID(),
         payload: JSON.stringify(candidate.data),
         images: images.map((x) => ({
@@ -318,13 +344,12 @@ export function RequestForm({
     try {
       remember(next);
       if (!next.orderId) {
-        const result = await sendCommand(
-          "submitRequest",
-          JSON.parse(next.payload),
-          undefined,
-          undefined,
-          next.operationId,
-        );
+        const result = await callService<{ id: string }>("purchaseCheckout", {
+          action: "addRequest",
+          request: JSON.parse(next.payload),
+          expectedRevision: next.cartRevision,
+          operationId: next.operationId,
+        });
         if (!mounted.current) return;
         next = { ...next, orderId: result.id };
         remember(next);
@@ -335,15 +360,15 @@ export function RequestForm({
         const image = images.find((x) => x.hash === imageState.hash);
         if (!image)
           throw Error(
-            "Yêu cầu đã lưu. Thêm lại ảnh đã chọn để tiếp tục tải ảnh lên, hoặc xem đơn để bổ sung sau.",
+            "Món đã lưu trong giỏ. Chọn lại ảnh đã chọn để tiếp tục tải ảnh lên.",
           );
-        await callService("uploadOrderImage", {
-          orderId: next.orderId,
-          kind: "request",
+        await callService("purchaseDraftImage", {
+          action: "upload",
+          draftId: next.orderId,
+          itemIndex: image.line ?? 0,
           operationId: imageState.operationId,
           mime: image.mime,
           base64: image.base64,
-          description: "Ảnh tham khảo sản phẩm",
         });
         if (!mounted.current) return;
         next = {
@@ -354,31 +379,42 @@ export function RequestForm({
         };
         remember(next);
       }
-      sessionStorage.removeItem(`request-pending:${user.uid}`);
+      sessionStorage.removeItem(`request-cart-pending:${user.uid}`);
       sessionStorage.removeItem(draftKey);
       sessionStorage.removeItem("request-name");
-      notify("Đã gửi yêu cầu mua hộ.", "success");
-      navigate(`/account/orders/${next.orderId}`);
+      await refreshCart();
+      notify("Đã thêm các món cần tìm mua vào giỏ hàng.", "success");
+      setAdded(true);
+      setAttempt(null);
+      attemptRef.current = null;
+      setItems([
+        { content: "", quantity: 1, variant: "", researchedPrice: "" },
+      ]);
+      setImages([]);
+      setStep(0);
     } catch (e) {
       if (!mounted.current) return;
       const code = (e as { code?: string }).code;
-      if (
+      const rejected =
         !next.orderId &&
         [
           "functions/invalid-argument",
           "functions/permission-denied",
           "functions/unauthenticated",
           "functions/failed-precondition",
-        ].includes(code ?? "")
-      ) {
-        sessionStorage.removeItem(`request-pending:${user.uid}`);
+          "functions/aborted",
+        ].includes(code ?? "");
+      if (rejected) {
+        sessionStorage.removeItem(`request-cart-pending:${user.uid}`);
         setAttempt(null);
         attemptRef.current = null;
       }
       setError(
         next.orderId
-          ? `Yêu cầu đã lưu, ảnh chưa tải đủ. ${(e as Error).message}`
-          : "Chưa rõ kết quả gửi. Giữ nội dung và thử lại để tránh tạo trùng.",
+          ? `Món đã thêm vào giỏ, ảnh chưa tải đủ. ${(e as Error).message}`
+          : rejected
+            ? `Chưa thêm được món vào giỏ. ${(e as Error).message} Nội dung của bạn vẫn được giữ để sửa và thử lại.`
+            : "Chưa rõ kết quả thêm vào giỏ. Giữ nội dung và kiểm tra lại cùng lần thêm để tránh trùng.",
       );
     } finally {
       locked.current = false;
@@ -387,6 +423,13 @@ export function RequestForm({
   }
   return (
     <section className="page quickRequestPage">
+      {legacyPending && (
+        <p className="error" role="alert">
+          Còn lần gửi yêu cầu cũ cần đối chiếu.{" "}
+          <Link to="/account">Kiểm tra Đơn của tôi</Link> trước khi thêm yêu cầu
+          mới.
+        </p>
+      )}
       <header className="requestHeading">
         <div className="requestHeadingRow">
           <h1>Bạn muốn mua gì?</h1>{" "}
@@ -401,7 +444,12 @@ export function RequestForm({
                 key={c}
                 aria-pressed={market === c}
                 disabled={frozen || Boolean(attempt?.orderId)}
-                onClick={() => setMarket(c)}
+                onClick={() => {
+                  setMarket(c);
+                  setItems(
+                    items.map((item) => ({ ...item, researchedPrice: "" })),
+                  );
+                }}
               >
                 {c === "US" ? "Mỹ" : c === "JP" ? "Nhật Bản" : "Hàn Quốc"}
               </button>
@@ -409,8 +457,8 @@ export function RequestForm({
           </div>
         </div>
         <p>
-          Sản phẩm ngoài danh mục được nhân viên báo giá; thanh toán 2 đợt sau
-          khi chấp nhận.
+          Nhập món và giá bạn đã tìm hiểu, rồi thêm vào giỏ để thanh toán toàn
+          bộ ban đầu. Bạn duyệt khoản chênh lệch nếu có trước khi gửi hàng.
         </p>
         <Link className="requestCatalogLink" to="/products">
           Sản phẩm niêm yết: mua và thanh toán toàn bộ ngay →
@@ -598,6 +646,33 @@ export function RequestForm({
                     />
                   </label>
                   <label>
+                    <span className="formLabelText">
+                      Giá bạn đã tìm hiểu (
+                      {market === "US"
+                        ? "USD"
+                        : market === "JP"
+                          ? "JPY"
+                          : "KRW"}{" "}
+                      / sản phẩm){" "}
+                      <span className="requiredMark" aria-hidden="true">
+                        *
+                      </span>
+                    </span>
+                    <input
+                      required
+                      inputMode="decimal"
+                      value={item.researchedPrice ?? ""}
+                      disabled={frozen || Boolean(attempt?.orderId)}
+                      maxLength={16}
+                      placeholder={
+                        market === "US" ? "Ví dụ: 58.00" : "Nhập giá"
+                      }
+                      onChange={(e) =>
+                        edit(index, { researchedPrice: e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
                     Mẫu, màu, kích cỡ
                     <input
                       maxLength={200}
@@ -715,7 +790,10 @@ export function RequestForm({
                 <li key={index}>
                   <strong>{item.content || "Sản phẩm từ ảnh"}</strong>
                   <span>
-                    Số lượng: {item.quantity}
+                    Số lượng: {item.quantity} · Giá đã nhập:{" "}
+                    {item.researchedPrice ?? "Chưa nhập"}{" "}
+                    {market === "US" ? "USD" : market === "JP" ? "JPY" : "KRW"}{" "}
+                    / sản phẩm
                     {item.variant ? ` · ${item.variant}` : ""}
                     {item.condition
                       ? ` · ${item.condition === "new" ? "Hàng mới" : item.condition === "used" ? "Hàng đã qua sử dụng" : "Có thể xem cả hai"}`
@@ -771,7 +849,12 @@ export function RequestForm({
           </section>
         )}
         <div className="requestFinalActions">
-          {" "}
+          {added && (
+            <p role="status">
+              Đã thêm món cần tìm mua vào giỏ.{" "}
+              <Link to="/cart">Xem giỏ hàng để tiếp tục</Link>
+            </p>
+          )}{" "}
           {!configured && (
             <p role="status">Chức năng gửi chưa được kích hoạt.</p>
           )}
@@ -779,9 +862,7 @@ export function RequestForm({
             <p className="requestRecovery" role="status">
               Yêu cầu đã lưu. {attempt.images.filter((x) => x.uploaded).length}/
               {attempt.images.length} ảnh đã tải.{" "}
-              <Link to={`/account/orders/${attempt.orderId}`}>
-                Xem đơn để bổ sung ảnh sau
-              </Link>
+              <Link to="/cart">Xem giỏ hàng</Link>
             </p>
           )}
           {pendingUnreadable && (
@@ -822,14 +903,14 @@ export function RequestForm({
               }
             >
               {busy
-                ? "Đang gửi…"
+                ? "Đang thêm…"
                 : attempt?.orderId
                   ? "Tiếp tục tải ảnh"
                   : attempt
-                    ? "Thử gửi lại"
+                    ? "Kiểm tra lại lần thêm"
                     : user
-                      ? "Gửi yêu cầu →"
-                      : "Đăng nhập để gửi →"}
+                      ? "Thêm vào giỏ hàng →"
+                      : "Đăng nhập để thêm vào giỏ →"}
             </button>
           )}
         </div>

@@ -1,7 +1,6 @@
 .askCustomerWorkspace {
-  max-height: 55dvh;
-  overflow: auto;
-  padding: 0 16px;
+  min-width: 0;
+  padding: 0;
   border-top: 1px solid #e2e6ef;
 }
 .askCustomerWorkspace > button {
@@ -18,4 +17,25 @@
 }
 .askCustomerWorkspace .profileFieldsRow {
   grid-template-columns: 1fr;
+}
+.askWorkspaceControls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.askWorkspaceControls > button {
+  min-height: 44px;
+  flex: 1 1 130px;
+  text-align: left;
+}
+.askCustomerWorkspace .membershipPage {
+  padding: 16px 0;
+  max-width: 100%;
+}
+.askCustomerWorkspace .membershipPlans {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.askCustomerWorkspace .membershipPlan {
+  padding: 16px;
 }

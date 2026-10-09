@@ -21,8 +21,26 @@ import {
 } from "firebase/firestore";
 import { auth, db, callService } from "../../shared/firebase";
 import { initialProfileRead, profileReadReducer } from "./profile-state";
-import { z } from "zod";
-export function Profile({ user }: { user: User | null }) {
+import {
+  customerSaveResultSchema,
+  customerSaveResolutionSchema,
+  type CustomerSavePointer,
+} from "../../../packages/domain/customer-save";
+import {
+  readSavePointer,
+  reserveSave,
+  clearSavePointer,
+  type SaveCommand,
+} from "./save-recovery";
+export function Profile({
+  user,
+  blocked = false,
+  onPendingChange,
+}: {
+  user: User | null;
+  blocked?: boolean;
+  onPendingChange?: (pending: boolean) => void;
+}) {
   const instanceId = useId();
   const [read, dispatch] = useReducer(profileReadReducer, undefined, () =>
     initialProfileRead(user?.uid),
@@ -38,29 +56,53 @@ export function Profile({ user }: { user: User | null }) {
     [busy, setBusy] = useState(false),
     [retry, setRetry] = useState(0);
   const [step, setStep] = useState<1 | 2>(1);
+  const [resolutionMessage, setResolutionMessage] = useState("");
   const [uncertain, setUncertain] = useState(false);
-  const pending = useRef<{
-    owner: string;
-    command: {
-      action: "saveProfile" | "saveAddress";
-      operationId: string;
-      expectedVersion?: number;
-      payload: Record<string, string | boolean>;
-    };
-  } | null>(null);
+  const pending = useRef<{ owner: string; command: SaveCommand } | null>(null);
+  const durable = useRef<CustomerSavePointer | null>(null);
+  const [recoveryReady, setRecoveryReady] = useState(false);
+  const [recoveryRetry, setRecoveryRetry] = useState(0);
   useEffect(() => {
     pending.current = null;
+    durable.current = null;
     writing.current = false;
     setUncertain(false);
+    setRecoveryReady(false);
+    let live = true;
+    if (user)
+      void readSavePointer(user.uid)
+        .then((pointer) => {
+          if (!live || currentUid.current !== user.uid) return;
+          durable.current = pointer;
+          setUncertain(!!pointer);
+          setRecoveryReady(true);
+          if (pointer)
+            setError(
+              "Có lần lưu đang chờ kết quả. Kiểm tra lần lưu trước khi tiếp tục.",
+            );
+        })
+        .catch(() => {
+          if (live)
+            setError(
+              "Chưa kiểm tra được lần lưu trước. Anh/chị thử kiểm tra lại nhé.",
+            );
+        });
+    else setRecoveryReady(true);
     return () => {
+      live = false;
       pending.current = null;
+      durable.current = null;
     };
-  }, [user?.uid]);
+  }, [user?.uid, recoveryRetry]);
+  useEffect(() => {
+    onPendingChange?.(busy || uncertain);
+  }, [busy, uncertain, onPendingChange]);
   const epoch = useRef(0),
     writing = useRef(false);
   useEffect(() => {
     epoch.current++;
     dispatch({ type: "reset", uid: user?.uid ?? "" });
+    setResolutionMessage("");
     setError("");
 
     setBusy(false);
@@ -144,12 +186,15 @@ export function Profile({ user }: { user: User | null }) {
       auth?.currentUser?.uid !== user.uid ||
       read.locked ||
       writing.current ||
+      blocked ||
       read.uid !== user.uid ||
       !read.profileReady ||
+      !recoveryReady ||
       ((pending.current?.command.action ?? action) === "saveAddress" &&
         !read.addressesReady)
     )
       return;
+    if (durable.current && e) return;
     if (pending.current && (e || pending.current.owner !== user.uid)) return;
     if (!pending.current) {
       if (!e || !action) return;
@@ -186,22 +231,34 @@ export function Profile({ user }: { user: User | null }) {
       currentUid.current === owner &&
       auth?.currentUser?.uid === owner;
     setError("");
+    setResolutionMessage("");
     setBusy(true);
     setUncertain(true);
     try {
-      const result = z
-        .object({
-          id: z.string().min(1).max(128),
-          version: z.number().int().positive().safe(),
-        })
-        .strict()
-        .parse(await callService("workspaceCommand", request));
+      if (!durable.current) {
+        const reservation = await reserveSave(owner, request);
+        if (!owns()) return;
+        durable.current = reservation.pointer;
+        if (!reservation.reserved) {
+          pending.current = null;
+          setError(
+            "Có lần lưu đang chờ kết quả. Kiểm tra lần lưu trước khi tiếp tục.",
+          );
+          return;
+        }
+      }
+      const result = customerSaveResultSchema.parse(
+        await callService("workspaceCommand", request),
+      );
       if (
         (request.action === "saveProfile" && result.id !== owner) ||
         result.version !== (request.expectedVersion ?? 0) + 1
       )
         throw Error("INVALID_SAVE_RESULT");
       if (owns()) {
+        await clearSavePointer(owner, durable.current!);
+        if (!owns()) return;
+        durable.current = null;
         pending.current = null;
         setUncertain(false);
         notify(
@@ -228,15 +285,72 @@ export function Profile({ user }: { user: User | null }) {
           ].includes(code)
         ) {
           pending.current = null;
-          setUncertain(false);
           setError(
-            "Chưa lưu được thông tin. Tải lại và kiểm tra thông tin trước khi thử lại.",
+            "Chưa lưu được thông tin. Kiểm tra lần lưu trước khi thử lại.",
           );
+        } else if (!durable.current) {
+          pending.current = null;
+          setUncertain(false);
+          setRecoveryReady(false);
+          setError("Chưa chuẩn bị được lần lưu. Anh/chị thử kiểm tra lại nhé.");
         } else
           setError(
             "Chưa xác minh được kết quả lưu. Đối chiếu thao tác đang chờ trước khi tiếp tục.",
           );
       }
+    } finally {
+      if (owns()) {
+        writing.current = false;
+        setBusy(false);
+      }
+    }
+  }
+  async function resolvePrevious() {
+    if (pending.current) return save();
+    if (
+      !user ||
+      auth?.currentUser?.uid !== user.uid ||
+      !durable.current ||
+      writing.current ||
+      blocked ||
+      visible.locked
+    )
+      return;
+    const pointer = durable.current,
+      owner = user.uid,
+      context = epoch.current;
+    const owns = () =>
+      context === epoch.current &&
+      currentUid.current === owner &&
+      auth?.currentUser?.uid === owner;
+    writing.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      const result = customerSaveResolutionSchema.parse(
+        await callService("customerSaveResolve", pointer),
+      );
+      if (!owns()) return;
+      if (
+        result.status === "saved" &&
+        (result.result.version !== pointer.expectedVersion + 1 ||
+          (pointer.action === "saveProfile" && result.result.id !== owner))
+      )
+        throw Error("INVALID_RECOVERY_RESULT");
+      await clearSavePointer(owner, pointer);
+      if (!owns()) return;
+      durable.current = null;
+      setUncertain(false);
+      setResolutionMessage(
+        result.status === "saved"
+          ? "Đã xác minh lần lưu trước thành công. Kiểm tra thông tin đã lưu trước khi cập nhật tiếp."
+          : "Lần lưu trước chưa hoàn tất. Anh/chị có thể gửi lại thông tin.",
+      );
+    } catch {
+      if (owns())
+        setError(
+          "Chưa đối chiếu được kết quả. Giữ nguyên lần lưu đang chờ và thử lại.",
+        );
     } finally {
       if (owns()) {
         writing.current = false;
@@ -325,7 +439,12 @@ export function Profile({ user }: { user: User | null }) {
             {readStatus("profile", step === 1)}
             <fieldset
               disabled={
-                busy || uncertain || !visible.profileReady || visible.locked
+                busy ||
+                blocked ||
+                uncertain ||
+                !recoveryReady ||
+                !visible.profileReady ||
+                visible.locked
               }
             >
               <label>
@@ -445,7 +564,9 @@ export function Profile({ user }: { user: User | null }) {
               <fieldset
                 disabled={
                   busy ||
+                  blocked ||
                   uncertain ||
+                  !recoveryReady ||
                   !visible.profileReady ||
                   !visible.addressesReady ||
                   visible.locked
@@ -515,6 +636,11 @@ export function Profile({ user }: { user: User | null }) {
           {busy && (
             <LoadingState overlay={false}>Đang lưu thông tin…</LoadingState>
           )}
+          {resolutionMessage && (
+            <p role="status" className="profileHint">
+              {resolutionMessage}
+            </p>
+          )}
           {error && (
             <p role="alert" className="profileNotice">
               {error}
@@ -525,10 +651,19 @@ export function Profile({ user }: { user: User | null }) {
       {user && uncertain && !visible.locked && (
         <button
           type="button"
-          disabled={busy || !visible.profileReady}
-          onClick={() => void save()}
+          disabled={busy || blocked || !recoveryReady}
+          onClick={() => void resolvePrevious()}
         >
           Đối chiếu thao tác đang chờ
+        </button>
+      )}
+      {user && !recoveryReady && (
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => setRecoveryRetry((value) => value + 1)}
+        >
+          Thử kiểm tra lại
         </button>
       )}
       <footer className="profilePrivacy">

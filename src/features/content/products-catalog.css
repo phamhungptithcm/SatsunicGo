@@ -91,30 +91,6 @@
   font-size: 24px;
   color: #59657b;
 }
-.products074Markets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.products074Markets button {
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid transparent;
-  border-radius: 24px;
-  color: #59657b;
-  background: #fff;
-  font-size: 13px;
-  white-space: nowrap;
-}
-.products074Markets button:hover {
-  background: #f1f4fa;
-}
-.products074Markets button[aria-pressed="true"] {
-  color: #163cff;
-  background: #edf1ff;
-  border-color: #dce4ff;
-  font-weight: 600;
-}
 .products074Results {
   padding-top: 26px;
 }

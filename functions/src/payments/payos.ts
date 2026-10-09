@@ -24,7 +24,10 @@ function sdk() {
 }
 async function settings() {
   if (!releaseCapabilityAllowed("payments", process.env))
-    throw new HttpsError("unavailable", "Thanh toán payOS chưa được kích hoạt.");
+    throw new HttpsError(
+      "unavailable",
+      "Thanh toán payOS chưa được kích hoạt.",
+    );
   const s = (await getFirestore().doc("settings/payments").get()).data();
   if (
     s?.payosEnabled !== true ||
@@ -191,6 +194,11 @@ export const createPaymentLink = onCall(
       const o = os.data() as Order;
       if (o?.ownerId !== req.auth!.uid || u.data()?.locked)
         throw new HttpsError("permission-denied", "Không thể truy cập đơn.");
+      if (o.checkoutId)
+        throw new HttpsError(
+          "failed-precondition",
+          "Thanh toán giỏ hàng cần tiếp tục từ lượt checkout đã tạo.",
+        );
       if (!o.acceptedAt || o.stage === "CANCELLED" || o.hold)
         throw new HttpsError("failed-precondition", "Đơn chưa thể thanh toán.");
       if (

@@ -1,7 +1,7 @@
 {
-  "entry": "/assets/index-Bqmn8MLt.js",
+  "entry": "/assets/index-De1iZU2a.js",
   "css": [
-    "/assets/index-CGmH0upu.css"
+    "/assets/index-BhZY6Q-t.css"
   ],
   "csp": "default-src 'self'; script-src 'self' https://accounts.google.com https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://accounts.google.com; connect-src 'self' https://*.googleapis.com https://*.cloudfunctions.net https://*.firebaseapp.com https://accounts.google.com; frame-src https://*.firebaseapp.com https://accounts.google.com https://www.google.com; img-src 'self' data: https://firebasestorage.googleapis.com https://lh3.googleusercontent.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
 }

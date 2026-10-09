@@ -1,3 +1,4 @@
+import { linkAnalyticsOrder } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
@@ -188,6 +189,7 @@ export function ProductCheckout({
       sessionStorage.removeItem(storageKey);
       setPending(null);
       attempt.current = null;
+      linkAnalyticsOrder(result.id);
       navigate(`/account/orders/${encodeURIComponent(result.id)}`);
       if (current.cartLine)
         void consume(result.id, current.cartLine).then((removed) => {

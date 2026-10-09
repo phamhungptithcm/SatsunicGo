@@ -30,6 +30,19 @@ export type AskConversation = {
   recipientSaved?: boolean;
   pendingOperation?: string | null;
 };
+export const askConversationSchema = z.object({
+  ownerId: z.string().min(1).max(128),
+  version: z.number().int().nonnegative().safe(),
+  updatedAt: z.number().int().nonnegative().safe(),
+  turns: z.array(conversationTurnSchema).max(24),
+  draft: shoppingDraftSchema.optional(),
+  orderId: z
+    .string()
+    .regex(/^[A-Za-z0-9_-]{1,100}$/)
+    .optional(),
+  recipientSaved: z.boolean().optional(),
+  pendingOperation: z.string().uuid().nullable().optional(),
+});
 export const conversationActionSchema = z.discriminatedUnion("action", [
   z
     .object({

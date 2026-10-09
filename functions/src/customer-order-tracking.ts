@@ -218,6 +218,7 @@ export const customerOrderTracking = onCall(
         orderId,
         stage: core.data.stage,
         purchaseKind: core.data.purchaseKind ?? "custom",
+        upfrontPayment: typeof value?.checkoutId === "string",
         version: core.data.version,
         onHold: !!core.data.hold,
         observedAt,

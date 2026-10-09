@@ -74,6 +74,11 @@ export const cartCommand = onCall(
         // Return the current cart rather than a stale replay snapshot.
         return current;
       }
+      if (current.activeCheckoutId)
+        throw new HttpsError(
+          "failed-precondition",
+          "Giỏ đang có thanh toán chờ xác minh. Tiếp tục lần đó trước khi sửa giỏ.",
+        );
       let items = current.items;
       let completion: FirebaseFirestore.DocumentReference | undefined;
       if (input.action === "consume") {
@@ -120,6 +125,11 @@ export const cartCommand = onCall(
             "Giỏ đã thay đổi ở nơi khác. Xem lại giỏ rồi thử lại.",
           );
         if (input.action === "merge") {
+          if (input.items.some((item) => item.kind === "custom"))
+            throw new HttpsError(
+              "invalid-argument",
+              "Món cần tìm mua phải được thêm từ form mua hộ.",
+            );
           const products = await Promise.all(
             input.items.map((item) =>
               tx.get(db.doc(`products/${item.productId}`)),

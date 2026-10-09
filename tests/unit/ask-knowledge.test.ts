@@ -126,7 +126,8 @@ test("chunk spans preserve source paragraphs and UTF-16 characters within bounde
     "\n\n# Exceptions\n\n" +
     "Refund only after review. ".repeat(140);
   const spans = chunkKnowledge(body);
-  expect(spans.map((span) => span.text).join("")).toBe(body);
+  expect(spans[0].position).toBe(0);
+  expect(spans.at(-1)!.position + spans.at(-1)!.text.length).toBe(body.length);
   for (const span of spans) {
     expect(span.text).toBe(
       body.slice(span.position, span.position + span.text.length),
@@ -138,10 +139,9 @@ test("chunk spans preserve source paragraphs and UTF-16 characters within bounde
   }
   expect(chunkKnowledge("")).toEqual([]);
   expect(
-    chunkKnowledge("a".repeat(30000))
-      .map((span) => span.text)
-      .join(""),
-  ).toHaveLength(20000);
+    chunkKnowledge("a".repeat(30000)).at(-1)!.position +
+      chunkKnowledge("a".repeat(30000)).at(-1)!.text.length,
+  ).toBe(20000);
 });
 
 test.each([NaN, Infinity, -1])(
@@ -162,8 +162,76 @@ test("bad case: document hard bound never retains half an emoji", () => {
   const row = post("unicode-bound", "Policy", body);
   expect(row.body).toHaveLength(19999);
   expect(
-    chunkKnowledge(body)
-      .map((span) => span.text)
-      .join(""),
-  ).toBe(row.body);
+    chunkKnowledge(body).at(-1)!.position +
+      chunkKnowledge(body).at(-1)!.text.length,
+  ).toBe(row.body.length);
+});
+
+test("natural typing tolerates one edit but exact evidence ranks first", () => {
+  const rows = [
+    post("near-policy", "Policy", "Shipment"),
+    post("exact-policy", "Policy", "Shipments"),
+  ];
+  expect(retrieveKnowledge(rows, "shipmnt")[0]?.text).toBe("Shipment");
+  expect(retrieveKnowledge(rows, "shipments")[0]?.id).toBe("post:exact-policy");
+  expect(
+    retrieveKnowledge(
+      [post("numeric-policy", "Policy", "order12345 fund")],
+      "order12346",
+    ),
+  ).toEqual([]);
+  expect(
+    retrieveKnowledge([post("short-policy", "Policy", "fund")], "find"),
+  ).toEqual([]);
+});
+
+test("long-section overlap retains contiguous context without holes or rewrites", () => {
+  const body =
+    "Shipping condition: " +
+    "eligible goods ".repeat(100) +
+    "Exception: custom goods excluded.";
+  const spans = chunkKnowledge(body);
+  for (let i = 0; i < spans.length; i++) {
+    const span = spans[i];
+    expect(span.text).toBe(
+      body.slice(span.position, span.position + span.text.length),
+    );
+    expect(span.text.length).toBeLessThanOrEqual(1200);
+    if (i) {
+      expect(span.position).toBeGreaterThan(spans[i - 1].position);
+      expect(span.position).toBeLessThanOrEqual(
+        spans[i - 1].position + spans[i - 1].text.length,
+      );
+    }
+  }
+  expect(spans.at(-1)!.text).toContain("Exception: custom goods excluded.");
+});
+
+test("ambiguous typo never chooses between competing corpus spellings", () => {
+  const rows = [
+    post("first-policy", "Policy", "refund"),
+    post("other-policy", "Policy", "refuse"),
+  ];
+  expect(retrieveKnowledge(rows, "refune")).toEqual([]);
+});
+
+test("exact corpus spelling excludes fuzzy documents rather than just ranking them", () => {
+  const rows = [
+    post("first-policy", "Policy", "Shipment"),
+    post("other-policy", "Policy", "Shipments"),
+  ];
+  expect(retrieveKnowledge(rows, "shipments").map((row) => row.id)).toEqual([
+    "post:other-policy",
+  ]);
+});
+
+test("conflicting publications cannot affect typo interpretation", () => {
+  const first = post("first-policy", "Policy", "refund");
+  const conflict = post("conflicting-policy", "Policy", "refuse");
+  expect(
+    retrieveKnowledge(
+      [first, conflict, { ...conflict, body: "different" }],
+      "refune",
+    )[0]?.id,
+  ).toBe(first.id);
 });

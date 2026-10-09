@@ -7,6 +7,7 @@ import {
   knowledgePreviewResultSchema,
 } from "../../../packages/domain/ask-knowledge";
 import "./knowledge-approval.css";
+import { FeedbackReview } from "./FeedbackReview";
 
 type Preview = z.infer<typeof knowledgePreviewResultSchema>;
 type Command = z.infer<typeof knowledgeCommandSchema>;
@@ -316,6 +317,7 @@ export function KnowledgeApproval() {
       )}
       {busy && <p role="status">Đang kiểm tra nguồn…</p>}
       {message && <p role="status">{message}</p>}
+      <FeedbackReview />
     </section>
   );
 }

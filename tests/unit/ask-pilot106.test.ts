@@ -79,6 +79,7 @@ import {
   generatePilot,
   pilotLimits,
 } from "../../functions/src/ai/ask-pilot";
+import { packAskContext } from "../../functions/src/ai/knowledge-context";
 beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-10-07T18:00:00Z"));
@@ -92,6 +93,68 @@ afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
+});
+test("provider context builder counts full requests, trims history and generates the exact final counted body", async () => {
+  const counted: string[] = [],
+    generated: string[] = [];
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string, options: RequestInit) => {
+      const body = String(options.body);
+      if (url.endsWith(":countTokens")) {
+        counted.push(body);
+        return {
+          ok: true,
+          json: async () => ({
+            totalTokens: counted.length === 1 ? 10001 : 100,
+          }),
+        };
+      }
+      generated.push(body);
+      return {
+        ok: true,
+        json: async () => ({
+          candidates: [
+            { finishReason: "STOP", content: { parts: [{ text: "{}" }] } },
+          ],
+          usageMetadata: {
+            promptTokenCount: 100,
+            candidatesTokenCount: 1,
+            totalTokenCount: 101,
+          },
+        }),
+      };
+    }),
+  );
+  await generatePilot(
+    "owner",
+    async (count) => {
+      const packed = await packAskContext(
+        {
+          instruction: "System",
+          question: "Question",
+          task: { version: 3 },
+          currentFacts: { stage: "REQUESTED" },
+          recentTurns: ["old"],
+          evidence: [],
+        },
+        { inputTokens: 10000, outputTokens: 800, windowTokens: 10800 },
+        count,
+        new AbortController().signal,
+        (c) => pilotRequest(c.instruction, JSON.stringify(c)),
+      );
+      expect(packed.dropped.turns).toBe(1);
+      expect(packed.context.task).toEqual({ version: 3 });
+      return packed.serialized;
+    },
+    new AbortController().signal,
+  );
+  expect(counted).toHaveLength(2);
+  expect(generated).toEqual([counted[1]]);
+  expect(JSON.parse(generated[0])).toHaveProperty(
+    "generationConfig.maxOutputTokens",
+    800,
+  );
 });
 test("policy denies wrong owner, expiry, disabled and corrupt budget; no reset/topup", () => {
   const policy = {
@@ -136,7 +199,9 @@ test("concurrent attempts reserve at most lifetime ceiling and dispatch once eac
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url: string, options: RequestInit) => {
-      expect(url).toMatch(/^https:\/\/us-central1-aiplatform\.googleapis\.com\/v1\/projects\/satsunicgo\/locations\/us-central1\/publishers\/google\/models\/gemini-2\.5-flash-lite:/);
+      expect(url).toMatch(
+        /^https:\/\/us-central1-aiplatform\.googleapis\.com\/v1\/projects\/satsunicgo\/locations\/us-central1\/publishers\/google\/models\/gemini-2\.5-flash-lite:/,
+      );
       if (url.endsWith(":countTokens")) {
         const counted = JSON.parse(String(options.body));
         expect(counted).toEqual(JSON.parse(body));

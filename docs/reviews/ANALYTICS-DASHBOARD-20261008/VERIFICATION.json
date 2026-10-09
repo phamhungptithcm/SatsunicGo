@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task_id": "SATSUNICGO-ANALYTICS-DASHBOARD-20261008",
+  "capturedAt": "2026-10-08T14:49:26.991198+00:00",
+  "head": "53d59bd88fa7da9d1243692336ecd09b6540ea31",
+  "manifest_cycle": 6,
+  "source_manifest_sha256": "64fc2d85a83abb13557685bef6f85a8fd31697870786a3b623a240c055e6afc3",
+  "checks": [
+    {
+      "id": "unit",
+      "status": "PASSED",
+      "command": "./node_modules/.bin/vitest run tests/unit/analytics.test.ts tests/unit/analytics-client.test.ts tests/unit/dashboard-analytics.test.ts tests/unit/dashboard094.test.ts",
+      "tests": 25,
+      "durationSeconds": 0.735,
+      "boundary": "Focused source tests; synthetic transport for client"
+    },
+    {
+      "id": "firestore",
+      "status": "PASSED",
+      "command": "GCLOUD_PROJECT=demo-satsunicgo FIRESTORE_EMULATOR_HOST=127.0.0.1:18207 FUNCTIONS_EMULATOR=true ./node_modules/.bin/vitest run --config vitest.rules.config.ts tests/rules/analytics.test.ts",
+      "tests": 11,
+      "durationSeconds": 54.54,
+      "boundary": "Existing real Firestore emulator, callable.run with synthetic auth. No actual Functions HTTP/App Check/Auth emulator chain; backend unchanged since this run"
+    },
+    {
+      "id": "browser",
+      "status": "PASSED",
+      "command": "./node_modules/.bin/playwright test --config docs/reviews/ANALYTICS-DASHBOARD-20261008/browser.config.ts",
+      "tests": 16,
+      "durationSeconds": 14.3,
+      "boundary": "Current React components/CSS, real Chromium and BrowserRouter at existing5207; synthetic callable transport; unrelated children stubbed in navigation fixture"
+    },
+    {
+      "id": "compilation",
+      "status": "PASSED",
+      "command": "npm run typecheck",
+      "boundary": "Root tsc --noEmit and functions tsc; current shared source includes preserved unrelated WIP"
+    },
+    {
+      "id": "build",
+      "status": "PASSED",
+      "command": "npm run build",
+      "viteDurationSeconds": 2.53,
+      "boundary": "Shared dist is NOT an isolated release artifact; existing large-chunk/ineffective-import warnings"
+    },
+    {
+      "id": "static",
+      "status": "PASSED",
+      "command": "./node_modules/.bin/eslint <scoped analytics sources and tests>",
+      "boundary": "Full new analytics/domain/dashboard/test scope passed before navigation correction; affected5files passed after correction. Not repository-wide lint"
+    },
+    {
+      "id": "diff",
+      "status": "PASSED",
+      "command": "git diff --check -- <approved tracked integration paths>",
+      "boundary": "No whitespace issues in executed scope"
+    },
+    {
+      "id": "provider_readonly",
+      "status": "PASSED",
+      "result": "Both returned []; no active TTL policies and no matching analytics functions. Read-only, no provider mutation.",
+      "commands": [
+        "gcloud firestore fields ttls list --project=satsunicgo --database='(default)' --format='json(name,ttlConfig)'",
+        "gcloud functions list --project=satsunicgo --regions=asia-southeast1 --filter='name~analytics OR name~dashboardAnalytics' --format='json(name,state,environment)'"
+      ],
+      "recheckedAt": "2026-10-08T15:00:18.688448+00:00"
+    },
+    {
+      "id": "repo_intelligence",
+      "status": "DEGRADED",
+      "command": "python3 .ai/scripts/check-repository-intelligence.py --json",
+      "result": "Both installed/health checks passed in root; both stale. Bounded native fallback allowed by AGENTS"
+    },
+    {
+      "id": "approval_validator",
+      "status": "FAILED",
+      "command": "python3 .ai/scripts/validate_implementation_approval.py --record docs/reviews/ANALYTICS-DASHBOARD-20261008/APPROVAL.md --path src/shared/analytics.ts",
+      "result": "repository intelligence gate status must be READY. Human approval verified; higher-priority AGENTS permits DEGRADED fallback. Guard unchanged"
+    },
+    {
+      "id": "actual_full_app",
+      "status": "NOT_RUN",
+      "result": "Auth19207/Functions15207 absent; additional shared runtime start approval requested. Frontend5207 running after explicit human approval"
+    },
+    {
+      "id": "production_performance",
+      "status": "NOT_RUN",
+      "result": "No provider latency/SLO or measured reads/writes per1000events. Controlled demo20-event duplicate burst passed, with bounded45s allowance; not production evidence"
+    },
+    {
+      "id": "provider_activation",
+      "status": "NOT_RUN",
+      "result": "No deployment, enabled production policy, TTL ACTIVE readback, isolated release artifact or verified production event chain"
+    }
+  ],
+  "total_focused_tests_passed": 52,
+  "recording": "Native task-local evidence ledger; ai-agent-kit CLI unavailable, no runtime receipt claimed"
+}

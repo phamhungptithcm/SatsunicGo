@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 export function CatalogCard({
   id,
+  productId,
   slug,
   title,
   alt,
@@ -9,6 +10,7 @@ export function CatalogCard({
   children,
 }: {
   id?: string;
+  productId?: string;
   slug: string;
   title: string;
   alt: string;
@@ -25,7 +27,7 @@ export function CatalogCard({
     return () => window.clearTimeout(timer);
   }, [id]);
   return (
-    <article className={`productCard${settled ? "" : " productCardPending"}`}>
+    <article data-analytics-product={productId} className={`productCard${settled ? "" : " productCardPending"}`}>
       <Link
         className="productImage"
         to={`/products/${slug}`}

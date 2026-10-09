@@ -1,0 +1,106 @@
+.analyticsConsent {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 40;
+  box-sizing: border-box;
+  border: 1px solid #e0e6ef;
+  background: #fff;
+  color: #152443;
+  box-shadow: 0 8px 32px #111c3514;
+}
+.analyticsConsent {
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  margin: 0;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+.analyticsConsentHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.analyticsConsentHeading h2 {
+  min-width: 0;
+  margin: 0;
+  color: #111c35;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+}
+.analyticsConsent p {
+  margin: 6px 0 8px;
+  color: #526078;
+  line-height: 1.5;
+}
+.analyticsConsent a {
+  display: inline-block;
+  color: #365274;
+  font-size: 12px;
+  text-underline-offset: 3px;
+}
+.analyticsConsentActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.analyticsConsent button {
+  font: inherit;
+  cursor: pointer;
+}
+.analyticsConsentActions button {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid #d9e1ec;
+  border-radius: 9px;
+  background: #fff;
+  color: #152443;
+  font-size: 13px;
+  font-weight: 600;
+}
+.analyticsConsentActions button:last-child {
+  background: #163cff;
+  color: #fff;
+  border-color: #163cff;
+}
+.analyticsConsent .analyticsConsentClose {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin: -4px -4px -4px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #667085;
+}
+.analyticsConsentClose:hover {
+  background: #f2f5fa;
+  color: #111c35;
+}
+.analyticsConsentClose svg {
+  width: 16px;
+  height: 16px;
+}
+.analyticsConsent button:focus-visible,
+.analyticsConsent a:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .analyticsConsent {
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}

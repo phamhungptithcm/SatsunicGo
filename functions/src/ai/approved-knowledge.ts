@@ -8,13 +8,19 @@ import {
   knowledgePreviewResultSchema,
 } from "../../../packages/domain/ask-knowledge";
 import { askAnswerSchema } from "../../../packages/domain/ask-stream";
+import { askConversationSchema } from "../../../packages/domain/ask-workflow";
 import { knowledgeBody } from "../../../packages/domain/ask-knowledge-body";
 import {
   isStringRoleArray,
   recentMfa,
   requireVerifiedGoogle,
 } from "../auth/guards";
-import { publishedKnowledge, retrieveKnowledge } from "./knowledge-retrieval";
+import {
+  publishedKnowledge,
+  retrieveKnowledge,
+  type KnowledgeDocument,
+} from "./knowledge-retrieval";
+import { boundKnowledgeContext } from "./knowledge-context";
 
 /** Hash precisely the public evidence; no private records or inferred approval. */
 export function knowledgeSource(value: unknown) {
@@ -229,6 +235,86 @@ export const askKnowledgeCommand = onCall(
 );
 
 /** Public quoted evidence path, not a generated or exhaustive policy answer. */
+export function guidanceFollowup(
+  question: string,
+  language: "vi" | "en" = "en",
+) {
+  const text = question
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[đĐ]/gu, "d")
+    .toLowerCase()
+    .trim();
+  if (text.length > 200) return false;
+  return language === "vi"
+    ? /^(?:con |vay |the |cai do|dieu do)/u.test(text)
+    : /^(?:that |what about (?:that|it|its|(?:the )?exceptions?)\b|and (?:the |its )?exceptions?\b)/u.test(
+        text,
+      );
+}
+/** Persisted citations are hints, intersected with the freshly admitted public pool. */
+export function guidanceAnchor(
+  conversation: unknown,
+  uid: string,
+  language: "vi" | "en",
+  documents: readonly KnowledgeDocument[],
+) {
+  const parsed = askConversationSchema.safeParse(conversation);
+  if (!parsed.success || parsed.data.ownerId !== uid) return null;
+  const answer = parsed.data.turns.at(-1)?.answer;
+  if (!answer || answer.language !== language) return null;
+  const ids = [
+    ...new Set(
+      answer.sourceIds.filter((id) => /^post:[a-z0-9-]{2,100}$/.test(id)),
+    ),
+  ];
+  if (ids.length !== 1 || !documents.some((document) => document.id === ids[0]))
+    return null;
+  return ids[0];
+}
+function unclearGuidance(language: "vi" | "en") {
+  return askAnswerSchema.parse({
+    language,
+    title:
+      language === "vi"
+        ? "Anh/chị muốn hỏi phần nào?"
+        : "Which topic do you mean?",
+    paragraphs: [
+      language === "vi"
+        ? "Cho em biết tên dịch vụ hoặc điều kiện muốn hỏi tiếp để tìm đúng hướng dẫn đang có hiệu lực."
+        : "Name the service or condition you want to follow up on so I can find the current guidance.",
+    ],
+    bullets: [],
+    sourceIds: [],
+    action: "none",
+  });
+}
+export function quotedKnowledgeAnswer(
+  documents: readonly KnowledgeDocument[],
+  question: string,
+  language: "vi" | "en",
+) {
+  const excerpts = boundKnowledgeContext(
+    retrieveKnowledge(documents, question, 4, "coverage"),
+  );
+  if (!excerpts.length) return null;
+  return askAnswerSchema.parse({
+    language,
+    title:
+      language === "vi"
+        ? "Thông tin từ hướng dẫn SatsunicGo"
+        : "From SatsunicGo's published guidance",
+    paragraphs: [
+      language === "vi"
+        ? "Em tìm được các đoạn hướng dẫn dưới đây. Đây là trích dẫn từ nguồn đã duyệt; chưa phải báo giá hay xác nhận cho đơn hàng của anh/chị."
+        : "These are excerpts from reviewed guidance, not a quotation or confirmation for your order.",
+      ...excerpts.map((row) => `${row.title}\n${row.text}`),
+    ],
+    bullets: [],
+    sourceIds: [...new Set(excerpts.map((row) => row.id))],
+    action: "workflow",
+  });
+}
 export async function approvedKnowledgeAnswer(
   uid: string,
   input: {
@@ -256,7 +342,7 @@ export async function approvedKnowledgeAnswer(
   });
   if (!approvals.length) return null;
   // A coherent transaction rechecks approval, source and identity. No public cache.
-  const documents = await db.runTransaction(async (tx) => {
+  const context = await db.runTransaction(async (tx) => {
     const quota = db.doc(`askKnowledgeQuota/${uid}-${Math.floor(now / 60000)}`);
     const globalQuota = db.doc(
       `askKnowledgeQuota/global-${Math.floor(now / 86400000)}`,
@@ -320,25 +406,24 @@ export async function approvedKnowledgeAnswer(
       count: globalCount + 1,
       expiresAt: new Date(now + 172800000),
     });
-    return valid;
+    return {
+      documents: valid,
+      anchor: guidanceAnchor(conversation?.data(), uid, input.language, valid),
+    };
   });
   signal?.throwIfAborted();
-  const excerpts = retrieveKnowledge(documents, input.question, 4);
-  if (!excerpts.length) return null;
-  return askAnswerSchema.parse({
-    language: input.language,
-    title:
-      input.language === "vi"
-        ? "Thông tin từ hướng dẫn SatsunicGo"
-        : "From SatsunicGo's published guidance",
-    paragraphs: [
-      input.language === "vi"
-        ? "Em tìm được các đoạn hướng dẫn dưới đây. Đây là trích dẫn từ nguồn đã duyệt; chưa phải báo giá hay xác nhận cho đơn hàng của anh/chị."
-        : "These are excerpts from reviewed guidance, not a quotation or confirmation for your order.",
-      ...excerpts.map((row) => `${row.title}\n${row.text}`),
-    ],
-    bullets: [],
-    sourceIds: [...new Set(excerpts.map((row) => row.id))],
-    action: "workflow",
-  });
+  if (guidanceFollowup(input.question, input.language)) {
+    if (!context.anchor) return unclearGuidance(input.language);
+    const answer = quotedKnowledgeAnswer(
+      context.documents.filter((row) => row.id === context.anchor),
+      input.question,
+      input.language,
+    );
+    return answer ?? unclearGuidance(input.language);
+  }
+  return quotedKnowledgeAnswer(
+    context.documents,
+    input.question,
+    input.language,
+  );
 }

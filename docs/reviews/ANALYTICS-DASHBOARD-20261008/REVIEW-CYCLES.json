@@ -1,0 +1,184 @@
+{
+  "task_id": "SATSUNICGO-ANALYTICS-DASHBOARD-20261008",
+  "cycles": [
+    {
+      "cycle": 1,
+      "decision": "CHANGES_REQUESTED",
+      "manifest": null,
+      "findings": [
+        {
+          "id": "idle_creation_identity",
+          "severity": "HIGH",
+          "location": "src/shared/analytics.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Rotate real idle sessions; preserve same request for unknown outcome",
+          "verification": "Client idle/retry unit"
+        },
+        {
+          "id": "late_consent_capability",
+          "severity": "HIGH",
+          "location": "src/shared/analytics.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Revoke late prior-consent-generation response",
+          "verification": "Late-response unit"
+        },
+        {
+          "id": "catalog_full_payment_history",
+          "severity": "HIGH",
+          "location": "functions/src/analytics-worker.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Chronological canonical allocations/finalTotal threshold once",
+          "verification": "Unit/emulator installments and later refund"
+        },
+        {
+          "id": "utc_membership",
+          "severity": "MEDIUM",
+          "location": "functions/src/analytics-worker.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Membership on each event day, period union",
+          "verification": "Midnight/union emulator"
+        },
+        {
+          "id": "optin_open_product",
+          "severity": "MEDIUM",
+          "location": "src/shared/AnalyticsConsent.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Observe actual open product at consent",
+          "verification": "Real-component browser"
+        },
+        {
+          "id": "nonproduct_clicks",
+          "severity": "MEDIUM",
+          "location": "src/shared/AnalyticsConsent.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Only explicit product anchors/selections",
+          "verification": "Review versus product anchor browser"
+        },
+        {
+          "id": "pending_ttl_loss",
+          "severity": "HIGH",
+          "location": "functions/src/analytics-worker.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "No pendingTTL, terminalTTL and sticky loss",
+          "verification": "Emulator/source review"
+        },
+        {
+          "id": "old_order_current_cash",
+          "severity": "HIGH",
+          "location": "functions/src/analytics-worker.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Ledger occurrence independent of order age",
+          "verification": "500dayorder emulator"
+        },
+        {
+          "id": "unavailable_false_zero",
+          "severity": "MEDIUM",
+          "location": "src/features/crm/Dashboard.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Per-block availability and em dash",
+          "verification": "Browser and further cycle2 fix"
+        },
+        {
+          "id": "fresh_ask_identity",
+          "severity": "MEDIUM",
+          "location": "src/features/ask/Ask.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Fresh UUID, original on explicit retry",
+          "verification": "Source and identity unit"
+        }
+      ]
+    },
+    {
+      "cycle": 2,
+      "decision": "CHANGES_REQUESTED",
+      "manifest": "SOURCE_MANIFEST-CYCLE2.json",
+      "findings": [
+        {
+          "id": "account_rotation_conversion",
+          "severity": "HIGH",
+          "location": "functions/src/analytics-ingest.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Close ingestion on account change, revoke on explicit withdrawal",
+          "verification": "Logout then payment emulator/client unit"
+        },
+        {
+          "id": "unbounded_creation_retry",
+          "severity": "MEDIUM",
+          "location": "src/shared/analytics.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Three attempts and pause permanent failure",
+          "verification": "Fake-timer offline/disabled unit"
+        },
+        {
+          "id": "unavailable_retained_payload",
+          "severity": "MEDIUM",
+          "location": "functions/src/dashboard-analytics.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Suppress unavailable payload and renderer",
+          "verification": "Retention/readcap emulator and populated-row browser"
+        }
+      ]
+    },
+    {
+      "cycle": 3,
+      "decision": "CHANGES_REQUESTED",
+      "manifest": "SOURCE_MANIFEST-CYCLE3.json",
+      "findings": [
+        {
+          "id": "withdrawal_global_loss",
+          "severity": "MEDIUM",
+          "location": "functions/src/analytics-worker.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Intentional skipped receipt/terminal cancellation without loss",
+          "verification": "Withdrawal before drain emulator"
+        },
+        {
+          "id": "product_sort_missing",
+          "severity": "MEDIUM",
+          "location": "src/features/crm/DashboardCharts.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Keyboard/aria sorting; unknown last",
+          "verification": "Browser sorting"
+        }
+      ]
+    },
+    {
+      "cycle": 4,
+      "decision": "CHANGES_REQUESTED",
+      "manifest": "SOURCE_MANIFEST-CYCLE4.json",
+      "findings": [
+        {
+          "id": "history_revisit_dedup",
+          "severity": "MEDIUM",
+          "location": "src/shared/analytics.ts",
+          "status": "FIXED_VERIFIED",
+          "correction": "Current occurrence identity shared by observers",
+          "verification": "Unit and BrowserRouter Back/Forward/remount"
+        }
+      ]
+    },
+    {
+      "cycle": 5,
+      "decision": "CHANGES_REQUESTED",
+      "manifest": "SOURCE_MANIFEST-CYCLE5.json",
+      "findings": [
+        {
+          "id": "stale_product_route",
+          "severity": "MEDIUM",
+          "location": "src/features/content/ProductDetail.tsx",
+          "status": "FIXED_VERIFIED",
+          "correction": "Route-bound effect and observer tag",
+          "verification": "Encoded path unit and delayed AtoB browser"
+        }
+      ]
+    },
+    {
+      "cycle": 6,
+      "decision": "SOURCE_PASSED_GOVERNED_BLOCKED",
+      "manifest": "SOURCE_MANIFEST.json",
+      "findings": []
+    }
+  ],
+  "source_findings_total": 17,
+  "newest_cycle": 6
+}

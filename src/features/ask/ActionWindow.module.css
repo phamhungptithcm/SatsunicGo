@@ -1,0 +1,168 @@
+.window {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f8faff;
+  border: 1px solid #e2e6ef;
+  border-radius: 18px;
+  overflow: hidden;
+  color: #111c35;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #e2e6ef;
+  background: #fff;
+}
+.heading span {
+  color: #68748b;
+  font-size: 12px;
+}
+.heading h2 {
+  margin: 4px 0 0;
+  font-size: 17px;
+  line-height: 1.35;
+}
+.heading h2:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.window button {
+  min-height: 44px;
+  border: 1px solid #dce3ef;
+  border-radius: 10px;
+  background: #fff;
+  color: #111c35;
+  padding: 9px 12px;
+  font: inherit;
+  cursor: pointer;
+}
+.window button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.window button:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 2px;
+}
+.body {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  overflow-wrap: anywhere;
+}
+.body p {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.fields {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.review {
+  padding: 12px;
+  border: 1px solid #afc0ff;
+  border-radius: 12px;
+  background: #eef3ff;
+  margin-bottom: 16px;
+}
+.review h3 {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+.review p:last-child {
+  margin-bottom: 0;
+}
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 12px;
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.details div {
+  padding: 6px 0;
+  border-top: 1px solid #d6dfff;
+}
+.details dt {
+  color: #68748b;
+}
+.details dd {
+  margin: 2px 0 0;
+  color: #111c35;
+  font-weight: 600;
+}
+.window[data-visible="false"] {
+  display: none;
+}
+.footer {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid #e2e6ef;
+  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.footer .primary {
+  background: #163cff;
+  border-color: #163cff;
+  color: #fff;
+  flex: 1;
+}
+@media (max-width: 760px) {
+  .window[data-visible="false"] {
+    display: none;
+  }
+  .window {
+    height: 100%;
+  }
+}
+
+.details div[data-wide="true"] {
+  grid-column: 1 / -1;
+}
+
+/* Keep one reachable task scroller when text or browser size leaves little room. */
+@container ask-workarea (max-height: 360px) or (max-height: 24em) {
+  .window {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .heading,
+  .body {
+    flex: none;
+  }
+  .body {
+    overflow: visible;
+  }
+  .footer {
+    position: sticky;
+    bottom: 0;
+    margin-top: 0;
+    z-index: 1;
+  }
+  .footer .primary {
+    flex-basis: 12em;
+  }
+}
+
+@container ask-workarea (max-height: 220px) or (max-height: 14em) {
+  .footer {
+    position: static;
+  }
+}

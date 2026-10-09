@@ -202,33 +202,7 @@
   font-size: 13px;
 }
 .orderSections {
-  display: flex;
-  gap: 26px;
-  border-bottom: 1px solid #e9edf4;
   margin-top: 28px;
-}
-.orderSections button {
-  position: relative;
-  min-height: 46px;
-  padding: 12px 0;
-  font-size: 13px;
-  color: #65718a;
-  background: transparent;
-  border: 0;
-  transition: color 140ms ease;
-  white-space: nowrap;
-}
-.orderSections button[aria-pressed="true"] {
-  color: #1c2a45;
-  font-weight: 650;
-}
-.orderSections button[aria-pressed="true"]::after {
-  content: "";
-  height: 2px;
-  background: #163cff;
-  position: absolute;
-  inset: auto 0 -1px;
-  border-radius: 2px;
 }
 .detailSection {
   padding-top: 28px;
@@ -458,11 +432,7 @@
     font-size: 24px;
   }
   .orderSections {
-    gap: 20px;
     margin-top: 22px;
-  }
-  .orderSections button {
-    font-size: 12px;
   }
   .orderNextStep {
     padding: 18px;
@@ -489,8 +459,5 @@
   }
 }
 
-.customerOrderFilters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
-.customerOrderFilters a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #e2e6ef; border-radius: 999px; color: #526078; text-decoration: none; }
-.customerOrderFilters a[aria-current="page"] { color: #163cff; background: #edf0ff; border-color: #163cff; font-weight: 600; }
-.customerOrderFilters a:focus-visible { outline: 2px solid #163cff; outline-offset: 3px; }
+.customerOrderFilters { margin: 0 0 8px; }
 .accountTrackingNotice { padding: 12px 0; color: #526078; }

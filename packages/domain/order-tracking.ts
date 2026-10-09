@@ -183,6 +183,7 @@ export type CustomerOrderTracking = {
   orderId: string;
   stage: Stage;
   purchaseKind: "catalog" | "custom";
+  upfrontPayment?: boolean;
   version: number;
   observedAt: number;
   onHold: boolean;
@@ -210,23 +211,29 @@ export function extractOrderTrackingIntent(text: string): TrackingIntent {
       : { kind: "none" };
 }
 export function trackingStageLabel(
-  tracking: Pick<CustomerOrderTracking, "stage" | "purchaseKind">,
+  tracking: Pick<
+    CustomerOrderTracking,
+    "stage" | "purchaseKind" | "upfrontPayment"
+  >,
   language: "vi" | "en",
 ) {
   const vi: Record<Stage, string> = {
     REQUESTED: "Đã gửi yêu cầu",
     QUOTED: "Chờ duyệt báo giá",
-    QUOTE_ACCEPTED:
-      tracking.purchaseKind === "catalog"
+    QUOTE_ACCEPTED: tracking.upfrontPayment
+      ? "Thanh toán ban đầu · chuẩn bị mua hàng"
+      : tracking.purchaseKind === "catalog"
         ? "Đã tạo đơn theo giá niêm yết"
         : "Đã chấp nhận báo giá · bước thanh toán cọc",
     PURCHASING: "Đang mua hàng",
     PURCHASED: "Đã mua hàng",
     ORIGIN_RECEIVED: "Đã nhận tại kho nguồn",
     PACKED:
-      tracking.purchaseKind === "catalog"
-        ? "Đã đóng gói"
-        : "Đã đóng gói · bước thanh toán số dư",
+      tracking.upfrontPayment && tracking.purchaseKind === "custom"
+        ? "Đã đóng gói · chốt chi phí còn lại"
+        : tracking.purchaseKind === "catalog"
+          ? "Đã đóng gói"
+          : "Đã đóng gói · bước thanh toán số dư",
     READY_TO_SHIP: "Sẵn sàng xuất gửi",
     IN_TRANSIT: "Đang vận chuyển",
     DELIVERED: "Đã giao hàng",
@@ -236,17 +243,20 @@ export function trackingStageLabel(
   const en: Record<Stage, string> = {
     REQUESTED: "Request submitted",
     QUOTED: "Waiting for quote approval",
-    QUOTE_ACCEPTED:
-      tracking.purchaseKind === "catalog"
+    QUOTE_ACCEPTED: tracking.upfrontPayment
+      ? "Initial payment · preparing to purchase"
+      : tracking.purchaseKind === "catalog"
         ? "Order created at the listed price"
         : "Quote accepted · deposit payment step",
     PURCHASING: "Purchasing",
     PURCHASED: "Purchased",
     ORIGIN_RECEIVED: "Received at origin warehouse",
     PACKED:
-      tracking.purchaseKind === "catalog"
-        ? "Packed"
-        : "Packed · balance payment step",
+      tracking.upfrontPayment && tracking.purchaseKind === "custom"
+        ? "Packed · remaining costs review"
+        : tracking.purchaseKind === "catalog"
+          ? "Packed"
+          : "Packed · balance payment step",
     READY_TO_SHIP: "Ready to ship",
     IN_TRANSIT: "In transit",
     DELIVERED: "Delivered",
@@ -259,7 +269,10 @@ export function trackingStageLabel(
   );
 }
 export function trackingMilestones(
-  tracking: Pick<CustomerOrderTracking, "stage" | "purchaseKind">,
+  tracking: Pick<
+    CustomerOrderTracking,
+    "stage" | "purchaseKind" | "upfrontPayment"
+  >,
   language: "vi" | "en",
 ) {
   if (!trackingStages.includes(tracking.stage)) return [];
@@ -274,18 +287,22 @@ export function trackingMilestones(
     custom = tracking.purchaseKind === "custom";
   const steps = [
     { stages: ["REQUESTED"], label: vi ? "Yêu cầu" : "Request" },
-    ...(custom
+    ...(custom && !tracking.upfrontPayment
       ? [{ stages: ["QUOTED"], label: vi ? "Báo giá" : "Quote" }]
       : []),
     {
       stages: ["QUOTE_ACCEPTED"],
       label: vi
-        ? custom
-          ? "Thanh toán cọc"
-          : "Thanh toán toàn bộ"
-        : custom
-          ? "Deposit payment"
-          : "Full payment",
+        ? tracking.upfrontPayment
+          ? "Thanh toán ban đầu"
+          : custom
+            ? "Thanh toán cọc"
+            : "Thanh toán toàn bộ"
+        : tracking.upfrontPayment
+          ? "Initial payment"
+          : custom
+            ? "Deposit payment"
+            : "Full payment",
     },
     {
       stages: ["PURCHASING", "PURCHASED"],
@@ -299,7 +316,13 @@ export function trackingMilestones(
       ? [
           {
             stages: ["PACKED"],
-            label: vi ? "Thanh toán số dư" : "Balance payment",
+            label: tracking.upfrontPayment
+              ? vi
+                ? "Chốt chi phí còn lại"
+                : "Remaining costs review"
+              : vi
+                ? "Thanh toán số dư"
+                : "Balance payment",
           },
         ]
       : []),

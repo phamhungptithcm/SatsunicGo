@@ -583,3 +583,386 @@
     display: none;
   }
 }
+
+.analyticsOverview {
+  color: #172640;
+}
+.aSortButton {
+  background: transparent;
+  border: 0;
+  padding: 6px 0;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  text-align: inherit;
+  min-height: 32px;
+}
+.aTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 16px 0;
+}
+.aTopline p {
+  margin: 5px 0;
+  color: #53637e;
+  font-size: 13px;
+}
+.aTopline .aEyebrow {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  color: #163cff;
+}
+.aCoverage {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0;
+  font-size: 12px;
+  color: #53637e;
+  flex-wrap: wrap;
+}
+.aKpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 20px;
+}
+.aKpi {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #dce4ee;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.aKpi > span {
+  font-size: 12px;
+  font-weight: 650;
+}
+.aKpi > strong {
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: #172640;
+}
+.aKpi > small {
+  font-size: 11px;
+  line-height: 1.55;
+  color: #56657e;
+}
+.aKpi0 {
+  background: #163cff;
+  border-color: #163cff;
+}
+.aKpi0 > strong,
+.aKpi0 > span,
+.aKpi0 > small {
+  color: white;
+}
+.aGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.aChart {
+  border: 1px solid #dce4ee;
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  min-width: 0;
+  margin-bottom: 18px;
+}
+.aGrid > .aChart {
+  margin-bottom: 0;
+}
+.aChart h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+.aSub,
+.aFootnote {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #53637e;
+  margin: 8px 0 14px;
+}
+.aLegend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+  font-size: 11px;
+  color: #53637e;
+}
+.aLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.aLegend i,
+.aDonutLayout th i {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.aPlot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 270px;
+  overflow: visible;
+}
+.aPlot text,
+.aDonutLayout svg text {
+  font-size: 10px;
+  fill: #53637e;
+}
+.aPlot:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 4px;
+}
+.aPoint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  margin: 8px 0;
+}
+.aPoint output {
+  line-height: 1.6;
+  text-align: center;
+}
+.aPoint button {
+  border: 1px solid #cbd5e4;
+  border-radius: 6px;
+  min-width: 32px;
+  height: 32px;
+  background: #fff;
+  color: #172640;
+}
+.aChart details {
+  margin-top: 14px;
+  font-size: 12px;
+}
+.aChart summary {
+  cursor: pointer;
+  color: #163cff;
+}
+.aTableScroll {
+  overflow: auto;
+  max-width: 100%;
+}
+.aChart table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.aChart th,
+.aChart td {
+  padding: 12px 6px;
+  border-bottom: 1px solid #e8edf4;
+  text-align: left;
+  line-height: 1.5;
+}
+.aChart td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.aChart thead th {
+  color: #66768e;
+  font-size: 10px;
+  font-weight: 550;
+}
+.aChart th:first-child {
+  max-width: 190px;
+  overflow-wrap: anywhere;
+}
+.aChart caption {
+  text-align: left;
+  margin: 10px 0;
+  color: #53637e;
+}
+.aRankBar {
+  display: block;
+  height: 4px;
+  border-radius: 4px;
+  background: #163cff;
+  margin-top: 8px;
+  min-width: 2px;
+}
+.aNotice {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 12px 14px;
+  background: #f4f7fd;
+  border: 1px solid #dbe4f0;
+  border-radius: 9px;
+  color: #455674;
+  margin: 12px 0;
+}
+.aError {
+  background: #fff4f1;
+  color: #873c2b;
+  border-color: #edc9bd;
+}
+.aEmpty {
+  padding: 28px 0;
+  color: #61728a;
+  font-size: 12px;
+}
+.aFunnel {
+  padding: 0;
+  list-style: none;
+  margin: 22px 0;
+}
+.aFunnel li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #edf2ff;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-size: 12px;
+  gap: 12px;
+}
+.aFunnel li:nth-child(2) {
+  margin-right: 18px;
+  background: #f1f5fa;
+}
+.aFunnel li:nth-child(3) {
+  margin-right: 36px;
+  background: #eff8f4;
+}
+.aFunnel strong {
+  font-size: 20px;
+}
+.aDonutLayout {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.aDonutLayout svg {
+  width: 170px;
+  flex-shrink: 0;
+}
+.aDonutLayout svg .aDonutNumber {
+  font-size: 28px;
+  fill: #172640;
+  font-weight: 700;
+}
+.aDonutLayout table {
+  flex: 1;
+  min-width: 150px;
+}
+.aDonutLayout th i {
+  margin-right: 8px;
+}
+.aStack {
+  display: flex;
+  gap: 6px;
+  height: 225px;
+  padding-top: 18px;
+}
+.aStack > div {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.aStackColumn {
+  height: 190px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+}
+.aStackColumn span {
+  display: block;
+  min-height: 0;
+}
+.aStack small {
+  font-size: 9px;
+  color: #61728a;
+  margin-top: 8px;
+}
+.aQueueHeading {
+  font-size: 16px;
+  margin: 25px 0 6px;
+}
+.analyticsOverview .srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 1050px) {
+  .aKpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .aGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .aDonutLayout {
+    justify-content: center;
+  }
+}
+@media (max-width: 700px) {
+  .aTopline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .aGrid {
+    grid-template-columns: 1fr;
+  }
+  .aChart {
+    padding: 16px;
+  }
+  .aKpis {
+    gap: 10px;
+  }
+  .aKpi {
+    padding: 14px;
+  }
+  .aKpi > strong {
+    font-size: 27px;
+  }
+  .aKpi > span {
+    font-size: 11px;
+  }
+  .aPlot text {
+    font-size: 12px;
+  }
+  .aCoverage {
+    font-size: 11px;
+  }
+  .aLegend {
+    gap: 9px;
+  }
+  .aStack {
+    gap: 3px;
+  }
+  .aChart th,
+  .aChart td {
+    padding: 10px 4px;
+    font-size: 11px;
+  }
+}

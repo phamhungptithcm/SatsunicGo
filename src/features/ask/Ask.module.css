@@ -140,7 +140,7 @@
   inset: auto 0 max(20px, env(safe-area-inset-bottom));
   border: 1px solid #e2e6f0;
   border-radius: 28px;
-  width: min(960px, calc(100% - 40px));
+  width: min(1180px, calc(100% - 40px));
   max-width: none;
   height: min(920px, calc(100dvh - 40px));
   max-height: none;
@@ -171,9 +171,11 @@
 }
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  row-gap: 8px;
   padding: 24px 32px;
   border-bottom: 1px solid #edf0f5;
 }
@@ -186,6 +188,8 @@
   color: #163cff;
 }
 .header > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: #68748b;
   font-size: 13px;
 }
@@ -196,6 +200,115 @@
   overscroll-behavior: contain;
   padding: 28px 32px;
   scroll-padding-bottom: 24px;
+}
+.workArea {
+  container: ask-workarea / size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 390px);
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  padding: 0 20px 12px;
+}
+.workArea > .conversation {
+  min-width: 0;
+  padding: 20px 12px;
+}
+.workArea[data-task="false"],
+.workArea:not(:has(section[aria-labelledby="ask-task-heading"])) {
+  grid-template-columns: minmax(0, 1fr);
+}
+@container ask-workarea (max-height: 220px) {
+  .inlineForm textarea[name="notes"] {
+    max-height: max(44px, min(4em, 70cqh));
+  }
+}
+.workControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px 12px;
+}
+.workControls button,
+.waypoints button {
+  border: 1px solid #e2e6ef;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: #fff;
+  color: #53627c;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.workControls button[aria-pressed="true"],
+.waypoints button[aria-current] {
+  color: #163cff;
+  border-color: #afc0ff;
+  background: #eef3ff;
+}
+.workControls button:focus-visible,
+.waypoints button:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 2px;
+}
+.languageControls {
+  display: flex;
+  margin-left: auto;
+  gap: 4px;
+}
+.languageControls button {
+  padding: 8px;
+}
+.waypoints {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 20px 0;
+  min-width: 0;
+}
+.waypoints:empty {
+  display: none;
+}
+.waypoints button {
+  display: flex;
+  gap: 8px;
+  max-width: 180px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.waypoints button span {
+  color: #163cff;
+  font-weight: 600;
+}
+@media (max-width: 760px) {
+  .workArea {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0 12px 8px;
+    gap: 0;
+  }
+  .workArea[data-task="true"] > .conversation {
+    display: none;
+  }
+  .workArea > .conversation {
+    padding: 16px 4px;
+  }
+  .workControls,
+  .waypoints {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .workControls {
+    gap: 4px;
+  }
+  .workControls button {
+    font-size: 12px;
+    padding: 8px;
+  }
 }
 .turn {
   margin-bottom: 52px;

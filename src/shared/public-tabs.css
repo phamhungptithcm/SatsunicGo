@@ -1,0 +1,78 @@
+/* Public page selectors; CRM keeps its existing PageTabs presentation. */
+.publicTabs.publicTabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  isolation: auto;
+}
+.publicTabs.publicTabs::before,
+.publicTabs.publicTabs::after {
+  content: none;
+}
+.publicTabs.publicTabs > :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  min-width: auto;
+  min-height: 44px;
+  margin: 0;
+  padding: 8px 2px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #667176;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+  transform: none;
+}
+.publicTabs.publicTabs > :is(a, button)::after {
+  content: none;
+}
+.publicTabs.publicTabs > :is([aria-current="page"], [aria-pressed="true"]) {
+  color: #202b30;
+  font-weight: 600;
+  background: transparent;
+  border-color: transparent;
+}
+.publicTabs.publicTabs > :is(a, button):hover:not(:disabled) {
+  color: #202b30;
+  background: transparent;
+}
+.publicTabs.publicTabs > :is(a, button):focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: -2px;
+}
+.publicTabs.publicTabs > button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.publicTabCount {
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: #eff1ef;
+  font-size: 12px;
+  font-weight: inherit;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .publicTabs.publicTabs {
+    gap: 20px;
+  }
+}

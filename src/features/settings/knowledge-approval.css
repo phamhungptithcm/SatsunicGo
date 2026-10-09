@@ -34,3 +34,19 @@
   display: flex;
   align-items: start;
 }
+
+.feedbackReview {
+  margin-top: 20px;
+}
+.feedbackReview > button {
+  margin-block: 8px;
+  margin-inline-end: 8px;
+}
+.feedbackReview button {
+  padding: 10px 14px;
+  border: 1px solid #dce1ec;
+  border-radius: 10px;
+}
+.feedbackReview .primary {
+  border-color: #163cff;
+}

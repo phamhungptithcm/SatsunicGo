@@ -83,6 +83,7 @@ export const command = onCall(config, async (req) => {
     let transferRef;
     let refundRef;
     if (d.action !== "submitRequest") {
+      if(o?.checkoutId && ["verifyTransfer","transferReview"].includes(d.action)) throw new HttpsError("failed-precondition", "Tiếp tục từ lượt thanh toán checkout để đối chiếu tiền và chứng từ.");
       if (!snapshot.exists)
         throw new HttpsError(
           "permission-denied",
@@ -531,3 +532,28 @@ export {
   askKnowledgeCommand,
   askKnowledgePreview,
 } from "./ai/approved-knowledge";
+
+export { customerSaveResolve } from "./ai/customer-save";
+export { askResearchCommand, askResearchSearch, askResearchSelect } from "./ai/research";
+export { askFeedback, askFeedbackReview, askFeedbackPolicy } from "./ai/feedback";
+
+// First-party analytics: independent consent, private projections and bounded reads.
+export { analyticsSession, analyticsIngest, analyticsLinkOrder, analyticsWithdraw } from "./analytics-ingest";
+export { analyticsOrderChanged, analyticsPaymentCreated, analyticsJobCreated, analyticsCompact } from "./analytics-worker";
+export { dashboardAnalytics } from "./dashboard-analytics";
+
+export { askWebDiscovery, askWebSelect } from "./ai/research-live";
+export { askFeedbackWithdraw, askFeedbackInbox, askFeedbackCleanup, askFeedbackEvaluation } from "./ai/feedback-lifecycle";
+
+export { purchaseCheckout } from "./purchase-checkout";
+import { purchaseDemoPayment as guardedPurchaseDemoPayment } from "./purchase-checkout";
+export const purchaseDemoPayment = process.env.FUNCTIONS_EMULATOR === "true" ? guardedPurchaseDemoPayment : undefined;
+export { purchaseBalanceCheckout } from "./purchase-checkout";
+export { purchaseCheckoutSetup } from "./purchase-checkout";
+
+export { purchaseDraftImage } from "./purchase-images";
+export { purchaseOrderRead } from "./purchase-checkout";
+
+export { purchaseReceipt, purchaseReceiptWorker, purchaseReceiptRecovery } from "./purchase-receipts";
+
+export { purchaseSourcingChange } from "./purchase-adjustment";

@@ -26,7 +26,7 @@ for (const mode of ["enter", "error", "draft", "mobile", "close"])
     await page.route("**/src/features/ask/Commerce.tsx*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const useAskCommerce=()=>({busy:false,pendingOperation:null,conversationId:null,draft:{},order:null,user:null,restorationReady:true,resolved:()=>{},run:async()=>{}});export const CommercePanel=()=>null;`,
+        body: `export const useAskCommerce=()=>({commandScope:()=>null,commandIdentity:()=>null,reviewBarrier:async()=>null,busy:false,pendingOperation:null,conversationId:null,draft:{},order:null,user:null,restorationReady:true,resolved:()=>{},run:async()=>{}});export const CommercePanel=()=>null;export function askReadinessMessage(){throw Error("Unexpected commerce readiness in non-commerce fixture")}`,
       }),
     );
     await page.route("**/src/features/ask/ImageIntake.tsx*", (r) =>

@@ -1,5 +1,23 @@
 "use client";
+import "../../shared/public-tabs.css";
+import { isCrmPath } from "../../../packages/domain/staff-route";
+import { trackAsk } from "../../shared/analytics";
+import { chatDraftChange } from "../../../packages/domain/chat-draft";
+import {
+  catalogChatAction,
+  catalogChatSelection,
+  type CatalogChatChoice,
+  type CatalogChatContext,
+} from "../../../packages/domain/catalog-chat";
+import { CatalogChat } from "./CatalogChat";
 import { CustomerWorkspace } from "./CustomerWorkspace";
+import { ActionWindow, actionLabel } from "./ActionWindow";
+import { useActionPreview } from "./useActionPreview";
+import {
+  contextualReply,
+  draftEditOnly,
+  type PreviewCommand,
+} from "../../../packages/domain/action-preview";
 import { customerChatAction } from "../../../packages/domain/chat-action";
 import {
   extractOrderTrackingIntent,
@@ -60,9 +78,24 @@ import {
 } from "./knowledge";
 import styles from "./Ask.module.css";
 import { askRateLimited, askService } from "./transport";
+import { AnswerFeedback } from "./AnswerFeedback";
+import { WebDiscovery } from "./WebDiscovery";
+import {
+  discoveryMarket,
+  webDiscoveryInputSchema,
+  webDiscoveryResultSchema,
+  webSelectInputSchema,
+  webSelectResultSchema,
+  webReferenceDraft,
+  webChatSelection,
+  type WebDiscoveryResult,
+} from "../../../packages/domain/ask-web";
 import { useAskImages } from "./ImageIntake";
-import { CommercePanel, useAskCommerce } from "./Commerce";
-import { shoppingIntent } from "../../../packages/domain/ask-workflow";
+import { CommercePanel, useAskCommerce, askReadinessMessage } from "./Commerce";
+import {
+  shoppingIntent,
+  nextCustomerAction,
+} from "../../../packages/domain/ask-workflow";
 
 import {
   collectReadFrame,
@@ -99,6 +132,7 @@ type Turn = {
   question: string;
   answer?: AskAnswer;
   status: "pending" | "answered" | "error" | "stopped";
+  analyticsTurn?: string;
   rateLimited?: boolean;
   mixed?: {
     language: AskLanguage;
@@ -108,6 +142,8 @@ type Turn = {
     signedOut: boolean;
   };
   catalog?: CatalogSearchResult;
+  webDiscovery?: WebDiscoveryResult;
+  webQuery?: string;
   tracking?: CustomerOrderTracking;
   shipping?: {
     snapshot: ShippingRatesPublicSnapshot;
@@ -157,13 +193,16 @@ function AskIcon({ kind }: { kind: "send" | "close" | "stop" | "chat" }) {
 
 const PublishedAnswer = memo(function PublishedAnswer({
   answer,
+  readOnly = false,
 }: {
   answer: AskAnswer;
+  readOnly?: boolean;
 }) {
   const vi = answer.language === "vi";
   const navigate = useNavigate();
   const [draftError, setDraftError] = useState("");
   function reviewDraft() {
+    if (readOnly) return;
     const parsed = requestSchema.safeParse(answer.draft);
     if (!parsed.success) {
       setDraftError(
@@ -211,6 +250,7 @@ const PublishedAnswer = memo(function PublishedAnswer({
         <button
           type="button"
           className={styles.nextAction}
+          disabled={readOnly}
           onClick={reviewDraft}
         >
           {vi
@@ -237,14 +277,16 @@ const ConversationContent = memo(function ConversationContent({
   visible,
   onRetry,
   commerce,
+  onCatalogResults,
 }: {
   turns: Turn[];
   phase: "retrieving" | "selecting" | "committing";
   language: AskLanguage;
   busy: boolean;
   visible: boolean;
-  onRetry: (question: string) => Promise<unknown>;
+  onRetry: (question: string, analyticsRetry?: string) => Promise<unknown>;
   commerce: Commerce;
+  onCatalogResults: (turnId: number, result: CatalogSearchResult) => void;
 }) {
   const vi = language === "vi";
   return (
@@ -253,6 +295,7 @@ const ConversationContent = memo(function ConversationContent({
         <section
           className={styles.turn}
           data-ask-turn={turn.id}
+          tabIndex={-1}
           key={turn.id}
           aria-label={turn.question}
         >
@@ -286,6 +329,7 @@ const ConversationContent = memo(function ConversationContent({
                   commerce={commerce}
                   vi={turn.mixed.language === "vi"}
                   active={visible && turn.id === turns.at(-1)?.id && !busy}
+                  onResults={(result) => onCatalogResults(turn.id, result)}
                 />
               )}
               {turn.shipping && (
@@ -339,8 +383,10 @@ const ConversationContent = memo(function ConversationContent({
               {(!!turn.mixed.failed.length || turn.status === "error") && (
                 <button
                   type="button"
-                  disabled={busy}
-                  onClick={() => void onRetry(turn.question)}
+                  disabled={busy || !visible}
+                  onClick={() =>
+                    void onRetry(turn.question, turn.analyticsTurn)
+                  }
                 >
                   {turn.mixed.language === "vi"
                     ? "Tra cứu lại các thông tin"
@@ -367,7 +413,7 @@ const ConversationContent = memo(function ConversationContent({
             </p>
           ) : turn.answer ? (
             <>
-              <PublishedAnswer answer={turn.answer} />
+              <PublishedAnswer answer={turn.answer} readOnly={!visible} />
               {turn.shipping && (
                 <ShippingQuote
                   snapshot={turn.shipping.snapshot}
@@ -382,13 +428,22 @@ const ConversationContent = memo(function ConversationContent({
                   language={turn.answer.language}
                 />
               )}
-              {turn.catalog && (
+              {turn.webDiscovery && (
+                <WebDiscovery
+                  result={turn.webDiscovery}
+                  commerce={commerce}
+                  vi={turn.answer.language === "vi"}
+                  active={visible && turn.id === turns.at(-1)?.id && !busy}
+                />
+              )}
+              {turn.catalog && !turn.webDiscovery && (
                 <CatalogSearch
                   result={turn.catalog}
                   question={turn.question}
                   commerce={commerce}
                   vi={vi}
                   active={visible && turn.id === turns.at(-1)?.id && !busy}
+                  onResults={(result) => onCatalogResults(turn.id, result)}
                 />
               )}
             </>
@@ -412,8 +467,8 @@ const ConversationContent = memo(function ConversationContent({
               </p>
               <button
                 type="button"
-                disabled={busy}
-                onClick={() => void onRetry(turn.question)}
+                disabled={busy || !visible}
+                onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
               >
                 {vi ? "Thử lại" : "Try again"}
               </button>
@@ -460,11 +515,25 @@ export function Ask({
   const [focused, setFocused] = useState(false);
   const [input, setInput] = useState("");
   const [turns, setTurns] = useState<Turn[]>([]);
+  const [catalogChoice, setCatalogChoice] = useState<CatalogChatChoice | null>(
+    null,
+  );
+  const catalogContext = useRef<
+    (CatalogChatContext & { turnId: number }) | null
+  >(null);
   const [busy, setBusy] = useState(false);
   const [phase, setPhase] = useState<"retrieving" | "selecting" | "committing">(
     "retrieving",
   );
   const [language, setLanguage] = useState<AskLanguage>("vi");
+  const [historyTurn, setHistoryTurn] = useState<number | null>(null);
+  const [taskView, setTaskView] = useState(false);
+  const [accountTask, setAccountTask] = useState<
+    "profile" | "membership" | null
+  >(null);
+  const [accountPending, setAccountPending] = useState(false);
+  const readingPosition = useRef(0);
+  const actionsRef = useRef<ReturnType<typeof useActionPreview> | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const chatInput = useRef<HTMLInputElement>(null);
   const idleInput = useRef<HTMLInputElement>(null);
@@ -489,7 +558,11 @@ export function Ask({
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const commerceEnabled =
     import.meta.env.DEV || import.meta.env.VITE_ASK_COMMERCE_ENABLED === "true";
-  const commerce = useAskCommerce((saved) => {
+  const baseCommerce = useAskCommerce((saved) => {
+    actionsRef.current?.invalidate();
+    setHistoryTurn(null);
+    catalogContext.current = null;
+    setCatalogChoice(null);
     setInput("");
     preparing.current = null;
     selectedTracking.current = null;
@@ -511,8 +584,44 @@ export function Ask({
       setTurns(restored);
     } else setTurns([]);
   }, commerceEnabled);
+  const actions = useActionPreview({
+    commerce: baseCommerce,
+    history: historyTurn !== null,
+    accountPending,
+    onReview: () => {
+      setAccountTask(null);
+      setTaskView(true);
+    },
+  });
+  actionsRef.current = actions;
+  const commerce = actions.commerce;
   const latestConversation = useRef(commerce.conversationId);
   latestConversation.current = commerce.conversationId;
+  useEffect(() => {
+    catalogContext.current = null;
+    setCatalogChoice(null);
+  }, [commerce.conversationId]);
+  const rememberCatalog = useCallback(
+    (turnId: number, result: CatalogSearchResult) => {
+      const previous = catalogContext.current;
+      const ownerId = auth?.currentUser?.uid ?? null,
+        conversationId = latestConversation.current ?? null;
+      const same =
+        previous?.turnId === turnId &&
+        previous.ownerId === ownerId &&
+        previous.conversationId === conversationId;
+      catalogContext.current = {
+        ownerId,
+        conversationId,
+        turnId,
+        createdAt: same ? previous.createdAt : Date.now(),
+        stale: result.stale,
+        rows: result.rows.slice(0, 100),
+      };
+      if (!same) setCatalogChoice(null);
+    },
+    [],
+  );
   useEffect(() => {
     if (!auth) return;
     let uid = auth.currentUser?.uid ?? null;
@@ -523,12 +632,19 @@ export function Ask({
       if (next === uid) return;
       uid = next;
       authGeneration.current++;
+      actionsRef.current?.invalidate();
+      setHistoryTurn(null);
+      setTaskView(false);
+      setAccountTask(null);
+      setAccountPending(false);
       activeId.current++;
       abort.current?.abort();
       abort.current = null;
       operationMode.current = null;
       locked.current = false;
       selectedTracking.current = null;
+      catalogContext.current = null;
+      setCatalogChoice(null);
       setInput("");
       preparing.current = null;
       setTurns([]);
@@ -607,7 +723,14 @@ export function Ask({
   const newestTurnId = turns.at(-1)?.id;
   useEffect(() => {
     const pane = conversation.current;
-    if (!open || !pane || newestTurnId === undefined) return;
+    if (
+      !open ||
+      !pane ||
+      newestTurnId === undefined ||
+      historyTurn !== null ||
+      taskView
+    )
+      return;
     // Read from the submitted question onward. Answer/status updates never
     // yank a visitor away from the passage they are reading.
     let frame = 0;
@@ -620,7 +743,7 @@ export function Ask({
     pane.addEventListener("touchstart", cancel, { passive: true });
     pane.addEventListener("pointerdown", cancel, { passive: true });
     frame = requestAnimationFrame((started) => {
-      const latest = pane.lastElementChild;
+      const latest = pane.querySelector(`[data-ask-turn="${newestTurnId}"]`);
       if (!latest || cancelled) return;
       const from = pane.scrollTop;
       const top =
@@ -718,6 +841,7 @@ export function Ask({
   }
 
   function close() {
+    actionsRef.current?.hideReview();
     if (!open || closing.current || operationMode.current === "commit") return;
     closing.current = true;
     setExiting(true);
@@ -852,10 +976,27 @@ export function Ask({
     };
   }, [latestTurnId, open, exiting]);
   const ask = useCallback(
-    async (question: string, images: AskImage[] = []) => {
-      const text = question.trim();
+    async (
+      question: string,
+      images: AskImage[] = [],
+      analyticsRetry?: string,
+    ) => {
+      const suppliedText = question.trim();
+      const followup = turns.at(-1)?.webQuery;
+      const marketReply = discoveryMarket(suppliedText);
+      const text =
+        followup &&
+        marketReply &&
+        /^(?:Mỹ|My|US|USA|Nhật|Nhat|JP|Japan|Hàn Quốc|Han Quoc|KR|Korea)[.!]?$/iu.test(
+          suppliedText,
+        )
+          ? `${followup} ${marketReply}`
+          : !images.length
+            ? (draftEditOnly(suppliedText) ?? suppliedText)
+            : suppliedText;
       if (
         !text ||
+        historyTurn !== null ||
         !chatReady ||
         text.length > 1000 ||
         commerce.busy ||
@@ -865,6 +1006,7 @@ export function Ask({
         hideTimer.current
       )
         return;
+      const analyticsTurn = analyticsRetry ?? crypto.randomUUID();
       locked.current = true;
       operationMode.current = "read";
       const controller = new AbortController();
@@ -887,28 +1029,223 @@ export function Ask({
         .slice(-6)
         .map((turn) => turn.question);
       const composerInput = open ? chatInput.current : idleInput.current;
-      if (composerInput && composerInput.value.trim() === text)
+      if (composerInput && composerInput.value.trim() === suppliedText)
         sendOrigin.current = {
           id,
           rect: composerInput.getBoundingClientRect(),
         };
       setTurns((current) => [
         ...current.slice(-11),
-        { id, question: text, status: "pending" },
+        { id, question: suppliedText, status: "pending", analyticsTurn },
       ]);
-      setInput((current) => (current.trim() === text ? "" : current));
+      setInput((current) => (current.trim() === suppliedText ? "" : current));
       setBusy(true);
       setPhase("retrieving");
       setDismissed(false);
       setOpen(true);
       if (!session.current) session.current = crypto.randomUUID();
       try {
+        const references = [...turns]
+          .reverse()
+          .find((turn) => turn.webDiscovery)?.webDiscovery;
+        const selection = references
+          ? webChatSelection(suppliedText, references.candidates.length)
+          : null;
+        if (
+          selection &&
+          references &&
+          !images.length &&
+          commerce.user &&
+          commerce.conversationId === references.conversationId &&
+          !commerce.order &&
+          !commerce.draft.items?.length
+        ) {
+          const isVi = detectLanguage(suppliedText, language) === "vi";
+          let draft: typeof commerce.draft | undefined;
+          let message = isVi
+            ? "Anh/chị gửi rõ nguồn, số lượng và mẫu nhé. Ví dụ: “chọn nguồn 1, số lượng 2, mẫu Đen”."
+            : "Please give the source, quantity and variant, for example: “choose source 1, quantity 2, variant Black”.";
+          if (
+            selection.kind === "select" &&
+            references.expiresAt > Date.now()
+          ) {
+            const input = webSelectInputSchema.parse({
+              index: selection.index,
+              quantity: selection.quantity,
+              variant: selection.variant,
+              discoveryId: references.discoveryId,
+              conversationId: references.conversationId,
+              expectedVersion: commerce.conversation?.version,
+            });
+            const selected = webSelectResultSchema.parse(
+              await callService("askWebSelect", input),
+            );
+            if (!ownsRequest() || controller.signal.aborted) return false;
+            const expected = webReferenceDraft(
+              references,
+              selection.index,
+              selection.quantity,
+              selection.variant,
+            );
+            if (JSON.stringify(selected.draft) !== JSON.stringify(expected))
+              throw Error("INVALID_WEB_DRAFT");
+            // Persist through the existing versioned domain command; never submit or pay.
+            const saved = await commerce.run({
+              action: "saveDraft",
+              payload: selected.draft,
+            });
+            if (!ownsRequest() || controller.signal.aborted) return false;
+            if (saved) {
+              draft = selected.draft;
+              message = isVi
+                ? "Đã điền bản nháp trong tác vụ hiện tại. Anh/chị kiểm tra lại trước khi gửi để nhân viên báo giá."
+                : "The draft is filled in the current task. Review it before submitting for a staff quotation.";
+            } else
+              message = isVi
+                ? "Chưa xác nhận được bản nháp. Kiểm tra thao tác đang chờ trước khi làm tiếp."
+                : "Draft not confirmed. Check the pending action before continuing.";
+          }
+          const answer: AskAnswer = {
+            language: isVi ? "vi" : "en",
+            title: isVi ? "Bản nháp mua hộ" : "Purchase request draft",
+            paragraphs: [message],
+            bullets: [],
+            sourceIds: [],
+            action: "request",
+            ...(draft ? { shoppingDraft: draft } : {}),
+          };
+          setLanguage(answer.language);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id ? { ...turn, answer, status: "answered" } : turn,
+            ),
+          );
+          void commerce.resolved(suppliedText, answer);
+          return true;
+        }
+        const catalogScope = {
+          ownerId: requestUid,
+          conversationId: requestCid ?? null,
+        };
+        const currentChoice =
+          catalogChoice?.ownerId === requestUid &&
+          catalogChoice?.conversationId === (requestCid ?? null)
+            ? catalogChoice
+            : null;
+        const catalogAction =
+          commerceEnabled &&
+          !images.length &&
+          !commerce.order &&
+          !trackedOrderDiffers
+            ? catalogChatAction(
+                text,
+                catalogContext.current,
+                currentChoice,
+                catalogScope,
+              )
+            : null;
+        const customConflict =
+          !!currentChoice &&
+          !commerce.order &&
+          customerChatAction(text, null, commerce.draft) === "submitRequest";
+        if (catalogAction || customConflict) {
+          const nextLanguage = detectLanguage(text, language),
+            isVi = nextLanguage === "vi";
+          let title = isVi
+              ? "Anh/chị muốn chọn mẫu nào?"
+              : "Which variant would you like?",
+            description = isVi
+              ? "Chọn sản phẩm trong danh sách mới nhất, rồi cho biết mẫu và số lượng từ 1 đến 100. Giá và thị trường theo sản phẩm đang chọn."
+              : "Select a product from the latest list, then specify its variant and a quantity from 1 to 100. Price and source market follow the selected product.";
+          let actionConfirmed = false;
+          if (catalogAction?.kind === "updated") {
+            setCatalogChoice(catalogAction.choice);
+            setTaskView(true);
+            title = isVi
+              ? "Đã điền sản phẩm đang chọn"
+              : "Selected product updated";
+            description = isVi
+              ? "Em đã điền lựa chọn vào tác vụ hiện tại. Anh/chị kiểm tra mẫu, số lượng và tổng tiền trước khi xác nhận tạo đơn."
+              : "The selection is filled in the current task. Review the variant, quantity and total before confirming the order.";
+          } else if (catalogAction?.kind === "confirm") {
+            if (!commerce.user) {
+              title = isVi
+                ? "Đăng nhập để tạo đơn"
+                : "Sign in to create an order";
+              description = isVi
+                ? "Đăng nhập, tìm và chọn lại sản phẩm để tạo đơn trong tài khoản của anh/chị."
+                : "Sign in, then search and select the product again to create an order in your account.";
+            } else {
+              operationMode.current = "commit";
+              setPhase("committing");
+              const outcome = await actions.request(
+                {
+                  action: "catalogCheckout",
+                  payload: catalogAction.selection,
+                },
+                true,
+              );
+              if (!ownsRequest() || controller.signal.aborted) return;
+              if (outcome === "blocked") throw Error("ACTION_NOT_CONFIRMED");
+              if (outcome === "confirmed") {
+                actionConfirmed = true;
+                setCatalogChoice(null);
+                catalogContext.current = null;
+              }
+              title =
+                outcome === "confirmed"
+                  ? isVi
+                    ? "Đã tạo đơn"
+                    : "Order created"
+                  : isVi
+                    ? "Kiểm tra lựa chọn"
+                    : "Review your selection";
+              description =
+                outcome === "confirmed"
+                  ? isVi
+                    ? "Đơn đã được tạo. Xem trạng thái và bước thanh toán trong tác vụ hiện tại."
+                    : "The order was created. Check its status and payment step in the current task."
+                  : isVi
+                    ? "Kiểm tra sản phẩm, mẫu và số lượng trong tác vụ hiện tại, rồi xác nhận tạo đơn. Chưa tạo đơn hoặc thanh toán."
+                    : "Review the product, variant and quantity in the current task, then confirm the order. No order or payment yet.";
+            }
+          }
+          const answer: AskAnswer = {
+            language: nextLanguage,
+            title,
+            paragraphs: [description],
+            bullets: [],
+            sourceIds: [],
+            action: "order",
+          };
+          setLanguage(nextLanguage);
+          if (catalogAction?.kind !== "confirm" || actionConfirmed)
+            void commerce.resolved(text, answer);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id ? { ...turn, answer, status: "answered" } : turn,
+            ),
+          );
+          return true;
+        }
+        const draftChange =
+          !images.length && !commerce.order && !commerce.pendingOperation
+            ? chatDraftChange(text, commerce.draft)
+            : null;
+        // Topic statistics cover questions; draft selections and commerce confirmations are commands.
+        if (
+          !draftChange &&
+          (images.length ||
+            !customerChatAction(text, commerce.order, commerce.draft))
+        )
+          trackAsk(text, analyticsTurn);
         // Only explicit multi-clause, image-free reads enter this local panel path.
         // Existing standalone commerce actions retain their serial authority below.
         const mixedSyntax = mixedReadCandidate(text);
         if (
           !images.length &&
           mixedSyntax &&
+          !draftChange &&
           !customerChatAction(text, commerce.order, commerce.draft)
         ) {
           const frame = collectReadFrame(
@@ -969,6 +1306,10 @@ export function Ask({
             return true;
           }
           if (frame.tasks.length >= 2) {
+            if (frame.tasks.some((task) => task.kind === "catalog")) {
+              catalogContext.current = null;
+              setCatalogChoice(null);
+            }
             const nextLanguage = detectLanguage(text, language);
             const queries = Object.fromEntries(
               frame.tasks.map((task) => [task.kind, task.span.raw]),
@@ -1229,6 +1570,55 @@ export function Ask({
           ? customerChatAction(text, commerce.order, commerce.draft)
           : null;
         if (action) {
+          if (!commerce.user) {
+            const nextLanguage = detectLanguage(text, language);
+            const answer: AskAnswer = {
+              language: nextLanguage,
+              title:
+                nextLanguage === "vi"
+                  ? "Đăng nhập để tiếp tục"
+                  : "Sign in to continue",
+              paragraphs: [
+                nextLanguage === "vi"
+                  ? "Bản nháp vẫn ở đây. Anh/chị đăng nhập để kiểm tra và gửi yêu cầu. Chưa gửi yêu cầu hoặc thanh toán."
+                  : "Your draft is still here. Sign in to review and send the request. No request or payment has been sent.",
+              ],
+              bullets: [],
+              sourceIds: [],
+              action: "request",
+            };
+            setLanguage(nextLanguage);
+            setAccountTask(null);
+            setTaskView(true);
+            setTurns((current) =>
+              current.map((turn) =>
+                turn.id === id ? { ...turn, answer, status: "answered" } : turn,
+              ),
+            );
+            return true;
+          }
+          const readiness = commerce.readinessIssue?.(action);
+          if (readiness) {
+            const nextLanguage = detectLanguage(text, language);
+            const answer: AskAnswer = {
+              language: nextLanguage,
+              title:
+                nextLanguage === "vi"
+                  ? "Kiểm tra trước khi tiếp tục"
+                  : "Review before continuing",
+              paragraphs: [askReadinessMessage(readiness, nextLanguage)],
+              bullets: [],
+              sourceIds: [],
+              action: "none",
+            };
+            setLanguage(nextLanguage);
+            setTurns((current) =>
+              current.map((turn) =>
+                turn.id === id ? { ...turn, answer, status: "answered" } : turn,
+              ),
+            );
+            return true;
+          }
           if (
             selectedTracking.current &&
             selectedTracking.current.uid === uid &&
@@ -1261,36 +1651,87 @@ export function Ask({
           }
           operationMode.current = "commit";
           setPhase("committing");
-          const confirmed = await commerce.run({
-            action,
-            payload:
-              action === "submitRequest"
-                ? commerce.draft
-                : action === "acceptQuote"
-                  ? { quoteVersion: commerce.order!.quoteVersion }
-                  : action === "confirmReceipt"
-                    ? { received: true }
-                    : {},
-            ...(commerce.order
-              ? { expectedOrderVersion: commerce.order.version }
-              : {}),
-          });
-          if (!confirmed) throw Error("ACTION_NOT_CONFIRMED");
+          const outcome = await actions.request(
+            {
+              action,
+              payload:
+                action === "submitRequest"
+                  ? commerce.draft
+                  : action === "acceptQuote"
+                    ? { quoteVersion: commerce.order!.quoteVersion }
+                    : action === "confirmReceipt"
+                      ? { received: true }
+                      : {},
+              ...(commerce.order
+                ? { expectedOrderVersion: commerce.order.version }
+                : {}),
+            },
+            true,
+          );
+          if (outcome === "blocked") throw Error("ACTION_NOT_CONFIRMED");
           if (!ownsRequest() || controller.signal.aborted) return;
           const answer: AskAnswer = {
             language: detectLanguage(text, language),
-            title: viActionTitle(action, detectLanguage(text, language)),
+            title:
+              outcome === "confirmed"
+                ? viActionTitle(action, detectLanguage(text, language))
+                : detectLanguage(text, language) === "vi"
+                  ? "Kiểm tra trước khi xác nhận"
+                  : "Review before confirming",
             paragraphs: [
-              detectLanguage(text, language) === "vi"
-                ? "Thao tác đã được ghi nhận. Anh/chị xem trạng thái và bước tiếp theo trong thẻ đơn bên dưới."
-                : "The system processed this action. Review the current order status and next step below.",
+              outcome === "review"
+                ? detectLanguage(text, language) === "vi"
+                  ? "Kiểm tra nội dung trong tác vụ hiện tại, rồi nhắn “đồng ý” hoặc dùng nút xác nhận. Chưa gửi tác vụ."
+                  : "Review the details in the current task, then reply “yes” or use its confirmation button. The action has not been sent."
+                : detectLanguage(text, language) === "vi"
+                  ? "Thao tác đã được ghi nhận. Anh/chị xem trạng thái và bước tiếp theo trong tác vụ hiện tại."
+                  : "The system processed this action. Review the order status and next step in the current task.",
             ],
             bullets: [],
             sourceIds: [],
             action: "order",
           };
           setLanguage(answer.language);
-          void commerce.resolved(text, answer);
+          if (outcome === "confirmed") void commerce.resolved(text, answer);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id ? { ...turn, answer, status: "answered" } : turn,
+            ),
+          );
+          return true;
+        }
+        if (draftChange) {
+          const nextLanguage = detectLanguage(text, language),
+            isVi = nextLanguage === "vi";
+          const answer: AskAnswer = {
+            language: nextLanguage,
+            title:
+              draftChange.kind === "updated"
+                ? isVi
+                  ? "Đã điền vào bản nháp"
+                  : "Draft updated"
+                : isVi
+                  ? "Anh/chị muốn sửa thế nào?"
+                  : "How would you like to change it?",
+            paragraphs: [
+              draftChange.kind === "updated"
+                ? isVi
+                  ? "Em đã điền thay đổi vào bản nháp trong tác vụ hiện tại. Anh/chị kiểm tra lại trước khi gửi yêu cầu mua hộ."
+                  : "The change is filled into the draft in the current task. Review it before submitting your purchase request."
+                : isVi
+                  ? "Em cần một sản phẩm đang chọn và thông tin rõ ràng để sửa. Anh/chị cho biết sản phẩm, số lượng từ 1 đến 100 hoặc mẫu muốn chọn nhé."
+                  : "Select one item and specify a quantity from 1 to 100 or its variant so the draft can be updated.",
+            ],
+            bullets: [],
+            sourceIds: [],
+            action: "request",
+            ...(draftChange.kind === "updated"
+              ? { shoppingDraft: draftChange.draft }
+              : {}),
+          };
+          setLanguage(nextLanguage);
+          await commerce.resolved(text, answer);
+          if (!ownsRequest() || controller.signal.aborted) return;
           setTurns((current) =>
             current.map((turn) =>
               turn.id === id ? { ...turn, answer, status: "answered" } : turn,
@@ -1326,6 +1767,8 @@ export function Ask({
         if (controller.signal.aborted || !ownsRequest()) return;
         let catalog: CatalogSearchResult | undefined;
         if (!images.length && catalogSearchIntent(text)) {
+          catalogContext.current = null;
+          setCatalogChoice(null);
           try {
             catalog = await searchPublishedCatalog(text, requestSignal);
           } catch (error) {
@@ -1363,6 +1806,105 @@ export function Ask({
                 : turn,
             ),
           );
+          return true;
+        }
+        if (
+          catalog &&
+          !catalog.rows.length &&
+          !catalog.hasMore &&
+          !catalog.stale &&
+          (import.meta.env.DEV ||
+            import.meta.env.VITE_ASK_RESEARCH_ENABLED === "true") &&
+          !commerce.order &&
+          !commerce.draft.items?.length
+        ) {
+          const nextLanguage = detectLanguage(text, language),
+            isVi = nextLanguage === "vi";
+          const market = discoveryMarket(text);
+          let webDiscovery: WebDiscoveryResult | undefined;
+          let message = isVi
+            ? "Anh/chị muốn tìm sản phẩm ở Mỹ, Nhật hay Hàn Quốc? Cho em biết thị trường và tên sản phẩm để tìm nguồn phù hợp nhé."
+            : "Would you like to search in the US, Japan or South Korea? Please give the market and product name.";
+          if (market) {
+            if (
+              !commerce.user ||
+              !commerce.conversationId ||
+              !commerce.conversation ||
+              !commerce.restorationReady
+            )
+              message = isVi
+                ? "Anh/chị đăng nhập và mở hội thoại để em tìm nguồn web cho sản phẩm này nhé."
+                : "Sign in and open a conversation to find web references for this product.";
+            else {
+              try {
+                setPhase("selecting");
+                const input = webDiscoveryInputSchema.parse({
+                  query: text,
+                  market,
+                  conversationId: commerce.conversationId,
+                  expectedVersion: commerce.conversation.version,
+                });
+                const response = webDiscoveryResultSchema.parse(
+                  await callService("askWebDiscovery", input),
+                );
+                if (!ownsRequest() || controller.signal.aborted) return false;
+                if (
+                  response.conversationId !== input.conversationId ||
+                  response.expectedVersion !== input.expectedVersion ||
+                  response.market !== input.market ||
+                  response.expiresAt <= Date.now()
+                )
+                  throw Error("INVALID_WEB_REPLY");
+                const bytes = await crypto.subtle.digest(
+                  "SHA-256",
+                  new TextEncoder().encode(
+                    JSON.stringify({
+                      query: input.query,
+                      market: input.market,
+                    }),
+                  ),
+                );
+                const hash = [...new Uint8Array(bytes)]
+                  .map((n) => n.toString(16).padStart(2, "0"))
+                  .join("");
+                if (!ownsRequest() || controller.signal.aborted) return false;
+                if (response.queryHash !== hash)
+                  throw Error("INVALID_WEB_QUERY");
+                webDiscovery = response;
+                message = isVi
+                  ? "Em đã tìm nguồn tham khảo bên dưới. Chọn nguồn và mẫu anh/chị muốn mua để điền bản nháp; nhân viên sẽ kiểm tra và báo giá."
+                  : "Web references are below. Choose a source and variant to fill a draft; staff will check it and provide a quotation.";
+              } catch {
+                if (!ownsRequest() || controller.signal.aborted) return false;
+                message = isVi
+                  ? "Chưa xác nhận được kết quả tìm web. Anh/chị có thể gửi link sản phẩm để soạn yêu cầu mua hộ; giá cần nhân viên kiểm tra."
+                  : "Web results are not confirmed. You can provide a product link to prepare a purchase request; staff must verify the price.";
+              }
+            }
+          }
+          const answer: AskAnswer = {
+            language: nextLanguage,
+            title: isVi ? "Tìm nguồn mua hộ" : "Find purchase references",
+            paragraphs: [message],
+            bullets: [],
+            sourceIds: [],
+            action: "request",
+          };
+          setLanguage(nextLanguage);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id
+                ? {
+                    ...turn,
+                    answer,
+                    webDiscovery,
+                    ...(!market ? { webQuery: text } : {}),
+                    status: "answered",
+                  }
+                : turn,
+            ),
+          );
+          void commerce.resolved(suppliedText, answer);
           return true;
         }
         const askedOrderId =
@@ -1428,7 +1970,20 @@ export function Ask({
         }
       }
     },
-    [turns, language, aiAvailable, route.pathname, commerce, chatReady, open],
+    [
+      turns,
+      language,
+      aiAvailable,
+      route.pathname,
+      commerce,
+      chatReady,
+      open,
+      catalogChoice,
+      trackedOrderDiffers,
+      commerceEnabled,
+      actions,
+      historyTurn,
+    ],
   );
 
   const vi = language === "vi";
@@ -1455,7 +2010,37 @@ export function Ask({
         "How does the deposit work?",
         "Can I request an item without a link?",
       ];
-  async function sendMessage(question = input) {
+  function recordConfirmedAction(question: string) {
+    if (actions.preview?.command.action === "catalogCheckout") {
+      setCatalogChoice(null);
+      catalogContext.current = null;
+    }
+    const answer: AskAnswer = {
+      language,
+      title: vi ? "Tác vụ đã được ghi nhận" : "Action recorded",
+      paragraphs: [
+        vi
+          ? "Xem trạng thái và bước tiếp theo trong tác vụ hiện tại."
+          : "Check the status and next step in the current task.",
+      ],
+      bullets: [],
+      sourceIds: [],
+      action: "order",
+    };
+    setTurns((value) => [
+      ...value.slice(-11),
+      { id: ++activeId.current, question, answer, status: "answered" },
+    ]);
+    // Transcript persistence follows verified command success and never retries it.
+    void baseCommerce.resolved(question, answer);
+  }
+  async function confirmFromButton() {
+    if (busy || locked.current || !actions.preview) return;
+    const question = actionLabel(actions.preview.command.action, vi);
+    if ((await actions.confirm()) === "confirmed")
+      recordConfirmedAction(question);
+  }
+  async function sendMessage(question = input, analyticsRetry?: string) {
     if (
       busy ||
       commerce.busy ||
@@ -1465,6 +2050,59 @@ export function Ask({
       preparing.current !== null
     )
       return;
+    if (historyTurn !== null) return;
+    const reply = !images.photos.length ? contextualReply(question) : null;
+    if (reply) {
+      setInput("");
+      if (reply === "decline") {
+        actions.invalidate();
+        setTaskView(false);
+        chatInput.current?.focus({ preventScroll: true });
+        return;
+      }
+      let command: PreviewCommand | null = null;
+      const selection = catalogChatSelection(catalogChoice, {
+        ownerId: auth?.currentUser?.uid ?? null,
+        conversationId: commerce.conversationId ?? null,
+      });
+      if (selection && !commerce.order)
+        command = { action: "catalogCheckout", payload: selection };
+      else if (commerce.order && !trackedOrderDiffers) {
+        const action = nextCustomerAction(commerce.order);
+        if (
+          action === "acceptQuote" ||
+          action === "approveFinal" ||
+          action === "confirmReceipt"
+        )
+          command = {
+            action,
+            expectedOrderVersion: commerce.order.version,
+            payload:
+              action === "acceptQuote"
+                ? { quoteVersion: commerce.order.quoteVersion }
+                : action === "confirmReceipt"
+                  ? { received: true }
+                  : {},
+          };
+      } else if (!selection && !commerce.order) {
+        const parsed = requestSchema.safeParse(commerce.draft);
+        if (parsed.success)
+          command = { action: "submitRequest", payload: parsed.data };
+      }
+      const outcome =
+        reply === "approve" && actions.preview
+          ? await actions.confirm()
+          : command
+            ? await actions.request(command)
+            : "blocked";
+      if (outcome === "confirmed") {
+        recordConfirmedAction(question.trim());
+      } else if (outcome === "blocked") {
+        setTaskView(true);
+        setOpen(true);
+      }
+      return;
+    }
     const token = ++preparationSequence.current;
     preparing.current = token;
     const uid = auth?.currentUser?.uid ?? null;
@@ -1492,7 +2130,7 @@ export function Ask({
             : "Help find the product in this image. Ask if uncertain."
           : "");
       const requestId = activeId.current + 1;
-      const answer = ask(content, selected);
+      const answer = ask(content, selected, analyticsRetry);
       if (preparing.current === token) preparing.current = null;
       const sent = await answer;
       if (sent && currentContext() && activeId.current === requestId)
@@ -1631,7 +2269,7 @@ export function Ask({
           placeholder={vi ? "Hỏi bất cứ điều gì…" : "Ask anything..."}
           value={input}
           maxLength={1000}
-          disabled={!hydrated || !chatReady}
+          disabled={!hydrated || !chatReady || historyTurn !== null}
           onChange={(event) => setInput(event.target.value)}
           onFocus={() => setFocused(true)}
           onKeyDown={(event) => {
@@ -1651,6 +2289,7 @@ export function Ask({
             !!commerce.pendingOperation ||
             !hydrated ||
             !chatReady ||
+            historyTurn !== null ||
             (!busy &&
               ((!input.trim() && !images.photos.length) || images.working))
           }
@@ -1684,6 +2323,20 @@ export function Ask({
           <AskIcon kind="close" />
         </button>
       </form>
+      {!expanded && commerce.error === "ASK_CONVERSATION_UNVERIFIED" && (
+        <p className={styles.attachmentNotice} role="alert">
+          {vi
+            ? "Chưa xác minh được hội thoại. Hãy tải lại hoặc liên hệ hỗ trợ."
+            : "The conversation could not be verified. Reload or contact support."}
+        </p>
+      )}
+      {!expanded && commerce.error === "ASK_PENDING_UNVERIFIED" && (
+        <p className={styles.attachmentNotice} role="alert">
+          {vi
+            ? "Chưa đọc được thao tác đang chờ. Liên hệ hỗ trợ để đối chiếu."
+            : "The pending action could not be read. Contact support to reconcile it."}
+        </p>
+      )}
       {images.error && (
         <p className={styles.attachmentNotice} role="alert">
           {images.error}
@@ -1784,7 +2437,11 @@ export function Ask({
         }}
         onCancel={(event) => {
           event.preventDefault();
-          close();
+          if (taskView) {
+            actions.hideReview();
+            setTaskView(false);
+            chatInput.current?.focus({ preventScroll: true });
+          } else close();
         }}
         onClose={() => {
           if (open) close();
@@ -1796,30 +2453,298 @@ export function Ask({
           </span>
           <span>{vi ? "Hỏi SatsunicGo" : "Ask SatsunicGo"}</span>
         </header>
-        <div
-          className={styles.conversation}
-          ref={conversation}
-          role="log"
-          aria-label="Conversation with SatsunicGo"
+        <nav
+          className={styles.waypoints}
+          aria-label={vi ? "Các điểm hội thoại" : "Conversation waypoints"}
         >
-          <ConversationContent
-            turns={turns}
-            phase={phase}
-            language={language}
-            busy={busy}
-            visible={open && !exiting}
-            onRetry={sendMessage}
-            commerce={commerce}
-          />
-          {commerceEnabled && !trackedOrderDiffers && (
-            <CommercePanel
-              commerce={commerce}
+          {turns.map((turn, index) => (
+            <button
+              key={turn.id}
+              type="button"
+              title={turn.question}
+              aria-current={historyTurn === turn.id ? "step" : undefined}
+              onClick={() => {
+                if (historyTurn === null)
+                  readingPosition.current =
+                    conversation.current?.scrollTop ?? 0;
+                actions.invalidate();
+                setHistoryTurn(turn.id);
+                setTaskView(false);
+                requestAnimationFrame(() => {
+                  const pane = conversation.current,
+                    item = pane?.querySelector<HTMLElement>(
+                      `[data-ask-turn="${turn.id}"]`,
+                    );
+                  if (pane && item) {
+                    pane.scrollTop +=
+                      item.getBoundingClientRect().top -
+                      pane.getBoundingClientRect().top;
+                    item.focus({ preventScroll: true });
+                  }
+                });
+              }}
+            >
+              <span>{index + 1}</span>
+              {turn.question}
+            </button>
+          ))}
+        </nav>
+        <div className={styles.workControls}>
+          {historyTurn !== null ? (
+            <button
+              type="button"
+              onClick={() => {
+                setHistoryTurn(null);
+                actions.invalidate();
+                setTaskView(false);
+                requestAnimationFrame(() => {
+                  conversation.current?.scrollTo({
+                    top: readingPosition.current,
+                    behavior: "instant",
+                  });
+                  chatInput.current?.focus({ preventScroll: true });
+                });
+              }}
+            >
+              {vi ? "Về hội thoại hiện tại" : "Return to current conversation"}
+            </button>
+          ) : (
+            <div
+              className={isCrmPath(route.pathname) ? undefined : "publicTabs"}
+              style={
+                isCrmPath(route.pathname) ? { display: "contents" } : undefined
+              }
+            >
+              <button
+                type="button"
+                aria-pressed={!taskView}
+                onClick={() => {
+                  actions.hideReview();
+                  setTaskView(false);
+                  chatInput.current?.focus({ preventScroll: true });
+                }}
+              >
+                {vi ? "Hội thoại" : "Conversation"}
+              </button>
+              <button
+                type="button"
+                aria-pressed={taskView}
+                onClick={() => setTaskView(true)}
+              >
+                {vi ? "Tác vụ hiện tại" : "Current task"}
+              </button>
+            </div>
+          )}
+          <div
+            className={styles.languageControls}
+            aria-label={vi ? "Ngôn ngữ" : "Language"}
+          >
+            <button
+              type="button"
+              aria-pressed={language === "vi"}
+              onClick={() => {
+                actions.invalidate();
+                setLanguage("vi");
+              }}
+            >
+              VI
+            </button>
+            <button
+              type="button"
+              aria-pressed={language === "en"}
+              onClick={() => {
+                actions.invalidate();
+                setLanguage("en");
+              }}
+            >
+              EN
+            </button>
+          </div>
+        </div>
+        <div className={styles.workArea} data-task={taskView}>
+          <div
+            className={styles.conversation}
+            ref={conversation}
+            role="log"
+            aria-label={
+              vi ? "Hội thoại với SatsunicGo" : "Conversation with SatsunicGo"
+            }
+          >
+            <ConversationContent
+              turns={turns}
+              phase={phase}
               language={language}
-              hasMessages={turns.length > 0}
+              busy={busy}
+              visible={
+                open && !exiting && historyTurn === null && !accountPending
+              }
+              onRetry={sendMessage}
+              commerce={commerce}
+              onCatalogResults={rememberCatalog}
             />
+            {historyTurn === null &&
+              (import.meta.env.DEV ||
+                import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
+              turns.at(-1)?.status === "answered" &&
+              turns.at(-1)?.question ===
+                commerce.conversation?.turns.at(-1)?.question &&
+              JSON.stringify(turns.at(-1)?.answer) ===
+                JSON.stringify(commerce.conversation?.turns.at(-1)?.answer) && (
+                <AnswerFeedback commerce={commerce} vi={vi} />
+              )}
+          </div>
+          {commerceEnabled && (
+            <ActionWindow
+              title={
+                accountTask === "profile"
+                  ? vi
+                    ? "Hồ sơ và địa chỉ"
+                    : "Profile and addresses"
+                  : accountTask === "membership"
+                    ? "Membership"
+                    : actions.preview
+                      ? actionLabel(actions.preview.command.action, vi)
+                      : commerce.order
+                        ? vi
+                          ? "Đơn hàng"
+                          : "Order"
+                        : vi
+                          ? "Yêu cầu mua hộ"
+                          : "Buying request"
+              }
+              visible={open && !exiting && taskView}
+              vi={vi}
+              preview={actions.preview}
+              status={actions.status}
+              notice={actions.notice}
+              blocked={
+                busy ||
+                commerce.busy ||
+                (accountPending && accountTask === null)
+              }
+              readOnly={historyTurn !== null}
+              pending={!!commerce.pendingOperation}
+              onResume={() => {
+                if (historyTurn === null) void commerce.resume();
+              }}
+              onBack={() => {
+                actions.hideReview();
+                setTaskView(false);
+                chatInput.current?.focus({ preventScroll: true });
+              }}
+              onEdit={() => {
+                actions.invalidate();
+                requestAnimationFrame(() =>
+                  dialog.current
+                    ?.querySelector<HTMLElement>(
+                      'section[aria-labelledby="ask-task-heading"] input:not(:disabled)',
+                    )
+                    ?.focus(),
+                );
+              }}
+              onConfirm={() => {
+                void confirmFromButton();
+              }}
+              onRendered={actions.markRendered}
+            >
+              <CustomerWorkspace
+                key={JSON.stringify([
+                  commerce.user?.uid ?? null,
+                  commerce.conversationId ?? null,
+                  authGeneration.current,
+                ])}
+                user={commerce.user}
+                language={language}
+                task={accountTask}
+                blocked={
+                  !!commerce.pendingOperation ||
+                  commerce.busy ||
+                  !!actions.preview
+                }
+                readOnly={historyTurn !== null}
+                onPendingChange={setAccountPending}
+                onTaskChange={(task) => {
+                  if (
+                    !commerce.pendingOperation &&
+                    !commerce.busy &&
+                    !accountPending
+                  ) {
+                    actions.invalidate();
+                    setAccountTask(task);
+                    setTaskView(true);
+                  }
+                }}
+              />
+              <div
+                hidden={accountTask !== null}
+                onChangeCapture={() => actions.invalidate()}
+                onClickCapture={(event) => {
+                  if (
+                    historyTurn !== null ||
+                    !!commerce.pendingOperation ||
+                    accountPending
+                  ) {
+                    const anchor = (event.target as Element).closest("a");
+                    if (anchor) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                    }
+                  }
+                }}
+              >
+                {!trackedOrderDiffers &&
+                  !commerce.order &&
+                  catalogChoice &&
+                  catalogChoice.ownerId === (auth?.currentUser?.uid ?? null) &&
+                  catalogChoice.conversationId ===
+                    (commerce.conversationId ?? null) && (
+                    <CatalogChat
+                      choice={catalogChoice}
+                      scope={{
+                        ownerId: auth?.currentUser?.uid ?? null,
+                        conversationId: commerce.conversationId ?? null,
+                      }}
+                      commerce={commerce}
+                      vi={vi}
+                      onChange={(choice) => {
+                        if (
+                          historyTurn === null &&
+                          !locked.current &&
+                          !commerce.busy &&
+                          !commerce.pendingOperation &&
+                          !accountPending
+                        ) {
+                          actions.invalidate();
+                          setCatalogChoice(choice);
+                        }
+                      }}
+                      onConfirm={() =>
+                        void sendMessage(
+                          vi
+                            ? "xác nhận lựa chọn và tạo đơn"
+                            : "confirm selection and create order",
+                        )
+                      }
+                    />
+                  )}
+                {!trackedOrderDiffers && (
+                  <CommercePanel
+                    commerce={commerce}
+                    language={language}
+                    hasMessages={turns.length > 0}
+                    catalogFocused={
+                      !!catalogChoice &&
+                      catalogChoice.ownerId ===
+                        (auth?.currentUser?.uid ?? null) &&
+                      catalogChoice.conversationId ===
+                        (commerce.conversationId ?? null)
+                    }
+                  />
+                )}
+              </div>
+            </ActionWindow>
           )}
         </div>
-        {commerceEnabled && <CustomerWorkspace user={commerce.user} language={language} />}
         <div className={styles.dialogBottom}>{composer(true)}</div>
       </dialog>
     </>
@@ -1830,7 +2755,7 @@ function viActionTitle(action: string, language: string) {
   const labels: Record<string, [string, string]> = {
     submitRequest: ["Đã gửi yêu cầu", "Request sent"],
     acceptQuote: ["Đã duyệt báo giá", "Quote accepted"],
-    approveFinal: ["Đã duyệt tổng phí cuối", "Final total approved"],
+    approveFinal: ["Đã xác nhận tổng tiền cuối", "Final total approved"],
     confirmReceipt: ["Đã xác nhận nhận đủ hàng", "Receipt confirmed"],
   };
   return labels[action]?.[language === "vi" ? 0 : 1] ?? action;

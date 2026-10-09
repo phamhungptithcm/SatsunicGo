@@ -57,7 +57,7 @@ export const db = app ? getFirestore(app) : null;
 export const functions = app
   ? getFunctions(app, env.VITE_FIREBASE_REGION ?? "asia-southeast1")
   : null;
-if (app && env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY)
+if (app && !local && env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY)
   initializeAppCheck(app, {
     provider: new ReCaptchaEnterpriseProvider(
       env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY,
@@ -137,6 +137,9 @@ export async function sendCommand(
   }
 }
 const readServices = new Set([
+  "purchaseCheckoutSetup",
+  "purchaseOrderRead",
+  "purchaseReceipt",
   "currentAskConversation",
   "listWork",
   "readOwnerConfiguration",
@@ -172,6 +175,8 @@ export async function callService<T>(name: string, data: unknown): Promise<T> {
     throw Error("Không thể kết nối lúc này. Kiểm tra kết nối và thử lại.");
   const readOnly =
     readServices.has(name) ||
+    (name === "purchaseCheckout" && (data as {action?:string})?.action === "status") ||
+    (name === "purchaseDraftImage" && (data as {action?:string})?.action === "read") ||
     (name === "shippingRatesAdmin" &&
       (data as { action?: string })?.action === "read");
   try {

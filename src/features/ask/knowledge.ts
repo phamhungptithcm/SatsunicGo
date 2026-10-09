@@ -1,4 +1,7 @@
-import { preferredLanguage } from "../../../packages/domain/ask-language-query";
+import {
+  preferredLanguage,
+  searchViews,
+} from "../../../packages/domain/ask-language-query";
 import type { z } from "zod";
 import { requestSchema } from "../../../packages/domain";
 export type AskLanguage = "vi" | "en";
@@ -32,17 +35,29 @@ export function sourceLink(id: string, language: AskLanguage = "vi") {
     label:
       id.startsWith("post:") || id.startsWith("product:")
         ? id.startsWith("product:")
-          ? vi ? "Sản phẩm" : "Product"
-          : vi ? "Bài viết tham khảo" : "Reference article"
+          ? vi
+            ? "Sản phẩm"
+            : "Product"
+          : vi
+            ? "Bài viết tham khảo"
+            : "Reference article"
         : id === "privacy"
-          ? vi ? "Quyền riêng tư" : "Privacy"
+          ? vi
+            ? "Quyền riêng tư"
+            : "Privacy"
           : id === "fees"
-            ? vi ? "Biểu phí" : "Shipping rates"
+            ? vi
+              ? "Biểu phí"
+              : "Shipping rates"
             : id === "membership"
               ? "Membership"
               : id === "request"
-                ? vi ? "Gửi yêu cầu mua hộ" : "Request an item"
-                : vi ? "Cách hoạt động" : "How it works",
+                ? vi
+                  ? "Gửi yêu cầu mua hộ"
+                  : "Request an item"
+                : vi
+                  ? "Cách hoạt động"
+                  : "How it works",
   };
 }
 export function detectLanguage(
@@ -57,15 +72,20 @@ export function retrieveSelection(p: {
   sessionId: string;
   language: AskLanguage;
 }) {
-  const q = p.question.toLowerCase();
+  const q = searchViews(p.question).folded;
   return {
-    topic: /cọc|số dư|deposit|balance|50%/.test(q)
-      ? "deposit"
-      : /link|tên sản phẩm|item/.test(q)
-        ? "request"
-        : /mua hộ|hoạt động|buying|work/.test(q)
-          ? "workflow"
-          : "outside",
+    topic:
+      /\b(?:coc|so du|deposit|balance)\b|50%/.test(q) &&
+      !/\b(?:bank|loan|sheet|network|homework)\b/.test(q)
+        ? "deposit"
+        : /\b(?:chua co link|khong co link|without (?:a |an |the )?(?:product )?link|no (?:product )?link|ten san pham)\b/.test(
+              q,
+            )
+          ? "request"
+          : /\b(?:mua ho|buying assistance|buying service)\b/.test(q) ||
+              /\b(?:how.*buying.*work|satsunicgo.*work)\b/.test(q)
+            ? "workflow"
+            : "outside",
   };
 }
 export function buildAnswer(

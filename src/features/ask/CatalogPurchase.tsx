@@ -217,9 +217,7 @@ export function CatalogPurchase({
           total! > 1e12
         }
       >
-        {vi
-          ? "Xác nhận lựa chọn và tạo đơn"
-          : "Confirm selection and create order"}
+        {vi ? "Kiểm tra lựa chọn" : "Review selection"}
       </button>
       {!c.user && (
         <p>

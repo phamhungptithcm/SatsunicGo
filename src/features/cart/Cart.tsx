@@ -1,14 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { customCartTotal } from "../../../packages/domain/cart";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import { LoadingState } from "../../shared/Loading";
 import { useCart } from "./cart-store";
 import { cartProducts, type ProductResult } from "./cart-cache";
 import { CartIcon } from "./AddToCart";
 import "./cart.css";
+import "./purchase-checkout.css";
+import { PurchaseThumbnail, purchaseMediaSrc } from "./purchase-thumbnail";
 
 const money = (n: number) => `${n.toLocaleString("vi-VN")} ₫`;
 export function CartPage({ signIn }: { signIn: () => void }) {
+  const navigate = useNavigate();
   const {
     cart,
     user,
@@ -32,11 +36,15 @@ export function CartPage({ signIn }: { signIn: () => void }) {
       error: "",
     }),
     [reading, setReading] = useState(true),
-    [retry, setRetry] = useState(0),
-    [review, setReview] = useState(false);
-  const confirmation = useRef<HTMLElement>(null);
+    [retry, setRetry] = useState(0);
   const ids = JSON.stringify(
-    [...new Set(cart.items.map((item) => item.productId))].sort(),
+    [
+      ...new Set(
+        cart.items
+          .filter((item) => item.kind !== "custom")
+          .map((item) => item.productId),
+      ),
+    ].sort(),
   );
   useEffect(() => {
     if (!online || reading) return;
@@ -46,7 +54,6 @@ export function CartPage({ signIn }: { signIn: () => void }) {
   useEffect(() => {
     let live = true;
     setReading(true);
-    setReview(false);
     void cartProducts(JSON.parse(ids) as string[]).then((result) => {
       if (live) {
         setProducts(result);
@@ -58,23 +65,45 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     };
   }, [ids, retry, online]);
   const entries = cart.items.map((item) => {
-    const product = products.rows[item.productId],
+    const product = item.custom
+        ? {
+            title: item.custom.name,
+            slug: "",
+            mediaId: undefined,
+            mediaAlt: "",
+            version: 1,
+            market: item.custom.market,
+            catalogOptions: [] as string[],
+          }
+        : products.rows[item.productId],
       p = catalogProductSchema.safeParse(product);
     const valid =
-      p.success &&
-      (p.data.catalogOptions.length
-        ? p.data.catalogOptions.includes(item.variant)
-        : item.variant === "");
+      item.kind === "custom" ||
+      (p.success &&
+        (p.data.catalogOptions.length
+          ? p.data.catalogOptions.includes(item.variant)
+          : item.variant === ""));
     return {
       item,
       product,
       valid,
-      price: p.success ? p.data.listedPrice : null,
+      price: item.custom
+        ? customCartTotal(item) / item.quantity
+        : p.success
+          ? p.data.listedPrice
+          : null,
     };
   });
   const quantity = cart.items.reduce((sum, item) => sum + item.quantity, 0);
   const total = entries.every((e) => e.valid && e.price !== null)
-    ? entries.reduce((sum, e) => sum + e.price! * e.item.quantity, 0)
+    ? entries.reduce(
+        (sum, e) =>
+          sum +
+          (e.item.custom
+            ? customCartTotal(e.item)
+            : e.price! * e.item.quantity),
+        0,
+      )
     : null;
   const canReview =
     online &&
@@ -83,10 +112,14 @@ export function CartPage({ signIn }: { signIn: () => void }) {
     !pending &&
     !busy &&
     cart.items.length > 0 &&
-    entries.some((entry) => entry.valid) &&
+    entries.every((entry) => entry.valid) &&
     (!user || !cached);
   const disabled =
-    loading || busy || pending || (!!user && (cached || !online));
+    loading ||
+    busy ||
+    pending ||
+    Boolean(cart.activeCheckoutId) ||
+    (!!user && (cached || !online));
   return (
     <section className="page cart107">
       <Link className="cartBack107" to="/products">
@@ -199,9 +232,15 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                 {entries.map(({ item, product, valid, price }) => (
                   <li className="cartItem107" key={item.lineId}>
                     <div className="cartImage107">
-                      {product?.mediaId ? (
+                      {item.custom ? (
+                        <PurchaseThumbnail
+                          key={user?.uid}
+                          draftId={item.custom.draftId}
+                          itemIndex={item.custom.itemIndex}
+                        />
+                      ) : product?.mediaId ? (
                         <img
-                          src={`/media/${product.mediaId}`}
+                          src={purchaseMediaSrc(product.mediaId)}
                           alt={product.mediaAlt || product.title}
                           loading="lazy"
                           onError={(e) => {
@@ -214,7 +253,9 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                     </div>
                     <div className="cartItemBody107">
                       <h2>
-                        {product ? (
+                        {item.custom ? (
+                          item.custom.name
+                        ) : product ? (
                           <Link to={`/products/${product.slug}`}>
                             {product.title}
                           </Link>
@@ -223,12 +264,15 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                         )}
                       </h2>
                       <p className="cartVariant107">
+                        {item.custom ? "Cần tìm mua · " : ""}
                         {item.variant || "Mẫu mặc định"}
                       </p>
                       <p className="cartUnit107">
                         {price === null
                           ? "Chưa xác định giá"
-                          : `${money(price)} / sản phẩm`}
+                          : item.custom
+                            ? "Giá bạn đã nhập và phí mua hộ tạm tính"
+                            : `${money(price)} / sản phẩm`}
                       </p>
                       {!valid && !reading && !products.cached && (
                         <p className="cartUnavailable107" role="status">
@@ -289,31 +333,29 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                         <strong>
                           {price === null
                             ? "Chưa xác định"
-                            : money(price * item.quantity)}
+                            : money(
+                                item.custom
+                                  ? customCartTotal(item)
+                                  : price * item.quantity,
+                              )}
                         </strong>
                       </div>
-                      {review && valid && product && (
-                        <Link
-                          className="cartCheckout107"
-                          to={`/products/${product.slug}/checkout?${new URLSearchParams({ cartLine: item.lineId, quantity: String(item.quantity), variant: item.variant, productVersion: String(product.version) })}`}
-                        >
-                          Đặt mua sản phẩm này →
-                        </Link>
-                      )}
                     </div>
                   </li>
                 ))}
               </ul>
               {user && (cached || busy) && (
                 <p className="cartSaved107" role="status">
-                  {busy ? "Đang lưu…" : "Giỏ chưa được cập nhật. Kết nối để tải lại."}
+                  {busy
+                    ? "Đang lưu…"
+                    : "Giỏ chưa được cập nhật. Kết nối để tải lại."}
                 </p>
               )}
               <Link className="cartBack107" to="/products">
                 ← Tiếp tục chọn sản phẩm
               </Link>
             </div>
-            <aside className="cartSummary107" ref={confirmation}>
+            <aside className="cartSummary107">
               <h2>Tóm tắt</h2>
               <div>
                 <span>Số lượng</span>
@@ -329,27 +371,27 @@ export function CartPage({ signIn }: { signIn: () => void }) {
                 <button
                   type="button"
                   className="primary"
-                  disabled={!canReview}
+                  disabled={
+                    cart.activeCheckoutId
+                      ? loading || !online || busy
+                      : !canReview
+                  }
                   onClick={() => {
-                    setReview(true);
-                    requestAnimationFrame(() =>
-                      document
-                        .querySelector<HTMLAnchorElement>(".cartCheckout107")
-                        ?.focus(),
+                    navigate(
+                      cart.activeCheckoutId
+                        ? `/checkout/payment/${cart.activeCheckoutId}`
+                        : "/checkout",
                     );
                   }}
                 >
-                  Xem lại để đặt mua
+                  {cart.activeCheckoutId
+                    ? "Tiếp tục thanh toán đang chờ"
+                    : "Xem lại để đặt mua"}
                 </button>
               ) : (
                 <button type="button" className="primary" onClick={signIn}>
                   Đăng nhập để đặt mua
                 </button>
-              )}
-              {review && (
-                <p role="status">
-                  Chọn sản phẩm để tạo từng đơn riêng.
-                </p>
               )}
             </aside>
           </div>

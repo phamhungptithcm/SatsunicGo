@@ -1,3 +1,4 @@
+import { AnalyticsConsent } from "../shared/AnalyticsConsent";
 import { RestrictedPage } from "../features/content/RestrictedPage";
 import { PrivacyPage } from "../features/content/PrivacyPage";
 import { TermsPage } from "../features/content/TermsPage";
@@ -45,6 +46,8 @@ import {
   isCrmPath,
   legacyStaffTarget,
 } from "../../packages/domain/staff-route";
+const PurchaseCheckout = lazy(() => import("../features/cart/purchase-checkout").then(m => ({default:m.PurchaseCheckout})));
+const PurchasePayment = lazy(() => import("../features/cart/purchase-payment").then(m => ({default:m.PurchasePayment})));
 const ProductCheckout = lazy(() =>
   import("../features/products/Checkout").then((m) => ({
     default: m.ProductCheckout,
@@ -54,6 +57,7 @@ const Workspace = lazy(() =>
   import("../features/crm/Workspace").then((m) => ({ default: m.Workspace })),
 );
 import "../styles/account.css";
+import "../shared/public-tabs.css";
 import "../styles/security.css";
 import { EmulatorLogin } from "../features/auth/EmulatorLogin";
 import { SiteHeader, SiteFooter } from "./SiteChrome";
@@ -304,6 +308,7 @@ export function App() {
   return (
     <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
     <StaffMfaSetup user={user} signOut={signOut} busy={authBusy}>
+      <AnalyticsConsent account={user?.uid ?? null} ready={authReady} />
       <OneTap user={user} onError={setAuthError} />
       <AuthFeedbackToast
         message={authError || redirectError}
@@ -421,6 +426,8 @@ export function App() {
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
               <Route path="/cart" element={<CartPage signIn={signIn} />} />
+              <Route path="/checkout" element={<PurchaseCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
+              <Route path="/checkout/payment/:id" element={<PurchasePayment key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
               <Route
                 path="/products/:slug/checkout"
                 element={<ProductCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />}
@@ -841,7 +848,11 @@ function Account({
           </header>
         )}
         {user && space === "orders" && !selectedId && (
-          <nav className="customerOrderFilters" aria-label="Lọc đơn hàng">
+          <nav
+            className="customerOrderFilters publicTabs"
+            aria-label="Lọc đơn hàng"
+            aria-describedby="customer-order-count-scope"
+          >
             {customerOrderFilters.map((value) => (
               <Link
                 key={value}
@@ -856,9 +867,23 @@ function Account({
                     cancelled: "Đã hủy",
                   }[value]
                 }
+                {db && !loading && !error && (
+                  <span className="publicTabCount">
+                    {
+                      ownerOrders.filter((order) =>
+                        matchesCustomerOrderFilter(order.stage, value),
+                      ).length
+                    }
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
+        )}
+        {user && space === "orders" && !selectedId && (
+          <p id="customer-order-count-scope" className="listScope">
+            Bộ lọc và số lượng áp dụng cho tối đa 50 đơn đã tải trong tài khoản.
+          </p>
         )}
         <Suspense
           fallback={
@@ -927,9 +952,6 @@ function Account({
                         <Icon />
                       </Link>
                     ))}
-                  <p className="listScope">
-                    Bộ lọc áp dụng cho tối đa 50 đơn đã tải trong tài khoản.
-                  </p>
                 </div>
               )}
             </>
@@ -987,7 +1009,9 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
     }
   }
   const total =
-    o.purchaseKind === "catalog"
+    o.upfront
+      ? o.finalTotal ?? o.upfront.initialTotal
+      : o.purchaseKind === "catalog"
       ? o.finalTotal
       : o.quote
         ? quoteTotal(o.quote)
@@ -1007,7 +1031,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
           Tạm giữ: {o.hold}
         </p>
       )}
-      <nav className="orderSections" aria-label="Thông tin đơn hàng">
+      <nav className="orderSections publicTabs" aria-label="Thông tin đơn hàng">
         {(
           [
             ["overview", "Tổng quan"],
@@ -1135,7 +1159,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
           )}
           {o.deposit !== undefined && (
             <p>
-              Cọc cần xác nhận: <strong>{money(o.deposit)}</strong> · Đã thu
+              {o.upfront ? "Thanh toán ban đầu" : "Cọc cần xác nhận"}: <strong>{money(o.deposit)}</strong> · Đã thu
               ròng: <strong>{money(o.collected - o.refunded)}</strong>
             </p>
           )}
@@ -1171,7 +1195,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
             }
           >
             <CustomerChanges order={o} />
-            <TransferNotice order={o} />
+            {!o.checkoutId && <TransferNotice order={o} />}
             <OrderTools order={o} section="actions" />
             <OrderConversation key={o.id} orderId={o.id} />
           </Suspense>

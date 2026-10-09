@@ -1,3 +1,4 @@
+import { PurchaseAdjustment } from "../orders/purchase-adjustment";
 import { StepForm, StepStage } from "../../shared/StepForm";
 import { OperationsEmpty } from "./OperationsPresentation";
 import "./operations-workbench.css";
@@ -137,7 +138,12 @@ export function Workbench({
             <select
               value={selectedQueue}
               onChange={(e) =>
-                setParams((previous) => { const next = new URLSearchParams(previous); if (e.target.value) next.set("queue", e.target.value); else next.delete("queue"); return next; })
+                setParams((previous) => {
+                  const next = new URLSearchParams(previous);
+                  if (e.target.value) next.set("queue", e.target.value);
+                  else next.delete("queue");
+                  return next;
+                })
               }
             >
               <option value="">Tất cả đơn</option>
@@ -152,9 +158,25 @@ export function Workbench({
           </label>
         )}
         {!queue && !target && selectedQueue && (
-          <button type="button" disabled={busy} onClick={() => setParams((previous) => { const next = new URLSearchParams(previous); next.delete("queue"); return next; })}>Xóa bộ lọc</button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() =>
+              setParams((previous) => {
+                const next = new URLSearchParams(previous);
+                next.delete("queue");
+                return next;
+              })
+            }
+          >
+            Xóa bộ lọc
+          </button>
         )}
-        {queue && <span className="crmFilterScope">{queue === "warehouse" ? "Nhận kho & đóng gói" : "Mua hàng"}</span>}
+        {queue && (
+          <span className="crmFilterScope">
+            {queue === "warehouse" ? "Nhận kho & đóng gói" : "Mua hàng"}
+          </span>
+        )}
         {!busy && !error && orders.length > 0 && (
           <span className="operationsCount">
             {orders.length} đơn trong trang
@@ -320,6 +342,17 @@ export function Workbench({
                 {quoteTotal(selected.quote).toLocaleString("vi-VN")} ₫
               </p>
             )}
+            {selected.upfront &&
+              roles.some((r) =>
+                ["OWNER", "OPERATIONS_MANAGER", "BUYER"].includes(r),
+              ) && (
+                <PurchaseAdjustment
+                  key={selected.id}
+                  order={selected}
+                  staff
+                  onSaved={() => void load()}
+                />
+              )}
             <ActionForm
               key={`action-${selected.id}`}
               order={selected}
@@ -436,7 +469,9 @@ export function claimPurchaseBlockReason(order: Order): string {
     if (available < required)
       return order.purchaseKind === "catalog"
         ? "Chưa đủ tiền để mua hàng. Đơn niêm yết cần thanh toán toàn bộ."
-        : "Chưa đủ tiền cọc để nhận việc mua hàng.";
+        : order.upfront
+          ? "Chưa đủ tiền ban đầu để nhận việc mua hàng."
+          : "Chưa đủ tiền cọc để nhận việc mua hàng.";
     return "";
   } catch {
     return "Chưa đủ thông tin thanh toán để nhận việc mua hàng. Tải lại đơn để kiểm tra.";
@@ -456,8 +491,10 @@ export function ActionForm({
   const actions = Object.keys(actionLabels)
     .filter(
       (a) =>
-        order.purchaseKind !== "catalog" ||
-        !["issueQuote", "finalize"].includes(a),
+        (order.purchaseKind !== "catalog" ||
+          !["issueQuote", "finalize"].includes(a)) &&
+        (!order.upfront || a !== "issueQuote") &&
+        (!order.checkoutId || !["verifyTransfer"].includes(a)),
     )
     .filter(
       (a) =>
