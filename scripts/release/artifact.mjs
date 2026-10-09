@@ -5,10 +5,67 @@ import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, wr
 import { resolve, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SEMVER, SHA } from './release.mjs';
-import { preflight } from './preflight.mjs';
+import { preflight, exactDemoCondition, assertDemoBindings, assertOnlyDemoReferences } from './preflight.mjs';
 import ts from 'typescript';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
+export const REQUIRED_FUNCTION_ASSETS = Object.freeze(['NotoSans-Regular.ttf', 'NotoSans-LICENSE.txt', 'purchase-vn-regions.json']);
+export function copyFunctionAssets(root, deploymentFunctions) {
+  // Fixed allowlist; reject symlinked parents before reading any asset bytes.
+  for (const directory of ['functions', 'functions/assets']) {
+    const stat = lstatSync(join(root, directory));
+    if (stat.isSymbolicLink() || !stat.isDirectory()) throw Error('UNSAFE_FUNCTION_ASSET');
+  }
+  mkdirSync(join(deploymentFunctions, 'assets'), { recursive: true });
+  for (const name of REQUIRED_FUNCTION_ASSETS) {
+    const source = join(root, 'functions/assets', name), stat = lstatSync(source);
+    if (stat.isSymbolicLink() || !stat.isFile() || stat.size < 1 || stat.size > 1024 * 1024) throw Error('UNSAFE_FUNCTION_ASSET');
+    cpSync(source, join(deploymentFunctions, 'assets', name), { errorOnExist: true, force: false });
+  }
+}
+/** Source-bound exact exception. Remove the callable even under a mistaken emulator env. */
+export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
+  if (!Array.isArray(exclusions) || exclusions.length > 1 || exclusions.some(row => row.name !== 'purchaseDemoPayment' || row.kind !== 'onCall' || row.region !== 'asia-southeast1' || row.source !== 'functions/src/purchase-checkout.ts' || Object.keys(row).length !== 4)) throw Error('EMULATOR_EXPORT_METADATA');
+  const ast = ts.createSourceFile('index.js', compiled, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const allowed = new Set(), assignments = [];
+  function visit(node) {
+    if (ts.isIdentifier(node) && node.text === 'purchaseDemoPayment' && ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+      const member = node.parent, assignment = member.parent;
+      if (ts.isIdentifier(member.expression) && member.expression.text === 'exports' && ts.isBinaryExpression(assignment) && assignment.left === member && assignment.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+        let value = assignment.right;
+        while (ts.isBinaryExpression(value) && value.operatorToken.kind === ts.SyntaxKind.EqualsToken) value = value.right;
+        if (ts.isVoidExpression(value) && ts.isNumericLiteral(value.expression) && value.expression.text === '0') allowed.add(node);
+        else if (ts.isConditionalExpression(assignment.right) && ts.isExpressionStatement(assignment.parent) && assignment.parent.parent === ast) {
+          assignments.push(assignment); allowed.add(node);
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(ast);
+  if (assignments.length !== exclusions.length) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+  const spans = [];
+  for (const assignment of assignments) {
+    const conditional = assignment.right;
+    if (!exactDemoCondition(conditional.condition) || !ts.isIdentifier(conditional.whenFalse) || conditional.whenFalse.text !== 'undefined' || !ts.isPropertyAccessExpression(conditional.whenTrue) || conditional.whenTrue.questionDotToken || conditional.whenTrue.name.text !== 'purchaseDemoPayment' || !ts.isIdentifier(conditional.whenTrue.expression)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    const alias = conditional.whenTrue.expression;
+    if (['process', 'undefined', 'require', 'exports', 'module'].includes(alias.text)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    const declarations = ast.statements.filter(ts.isVariableStatement).flatMap(node => node.declarationList.declarations).filter(node => ts.isIdentifier(node.name) && node.name.text === alias.text);
+    const binding = declarations[0], call = binding?.initializer;
+    if (declarations.length !== 1 || !(binding.parent.flags & ts.NodeFlags.Const) || binding.parent.declarations.length !== 1 || !call || !ts.isCallExpression(call) || !ts.isIdentifier(call.expression) || call.expression.text !== 'require' || call.arguments.length !== 1 || !ts.isStringLiteral(call.arguments[0]) || call.arguments[0].text !== './purchase-checkout') throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    assertDemoBindings(ast, new Set(['process', 'undefined', 'require', 'exports', alias.text]), new Set([binding.name]), new Set(['exports']));
+    assertOnlyDemoReferences(ast, alias.text, new Set([binding.name, alias]));
+    allowed.add(conditional.whenTrue.name);
+    spans.push([assignment.parent.getStart(ast), assignment.parent.end], [binding.parent.parent.getStart(ast), binding.parent.parent.end]);
+  }
+  function rejectUnknown(node) {
+    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && node.text === 'purchaseDemoPayment' && !allowed.has(node)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    ts.forEachChild(node, rejectUnknown);
+  }
+  rejectUnknown(ast);
+  for (const [start, end] of spans.sort((a, b) => b[0] - a[0])) compiled = compiled.slice(0, start) + compiled.slice(end);
+  return { compiled, emulatorOnlyExports: exclusions.map(row => row.name) };
+}
 export function files(root, prefix = '') {
   const result = {};
   for (const name of readdirSync(join(root, prefix)).sort()) {
@@ -62,6 +119,10 @@ export function verify(root, expectedSha, expectedTag) {
   if (candidate.sha !== expectedSha || candidate.tag !== expectedTag) throw Error('CANDIDATE_IDENTITY_MISMATCH');
   const config = JSON.parse(readFileSync(join(root, 'deployment/firebase.json'), 'utf8'));
   if (JSON.stringify(config) !== JSON.stringify(deploymentConfig(config))) throw Error('UNSAFE_PROMOTION_CONFIG');
+  const pkg = JSON.parse(readFileSync(join(root, 'deployment/functions/package.json'), 'utf8'));
+  if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
+  // Verification of an already stripped artifact accepts only harmless void0 declarations.
+  excludeEmulatorOnlyExports(readFileSync(join(root, 'deployment/functions', pkg.main), 'utf8'));
   for (const key of ['dist/release-version.json', 'functions/release.json']) {
     const metadata = JSON.parse(readFileSync(join(root, 'deployment', key), 'utf8'));
     if (metadata.tag !== expectedTag || metadata.sha !== expectedSha) throw Error('VERSION_METADATA_MISMATCH');
@@ -75,15 +136,72 @@ export function prepareWorkspace(root, target, expectedSha, expectedTag) {
   cpSync(root, target, { recursive: true, errorOnExist: true, force: false });
   return verify(target, expectedSha, expectedTag);
 }
-// Preserve the explicitly held deployment boundary from the latest production release.
-export const HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail']);
+// Preserve the established release holds; feedback cleanup also awaits retention/rollout approval.
+const BASE_HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail']);
+export const HELD_EXPORTS = Object.freeze([...BASE_HELD_EXPORTS, 'askFeedbackCleanup']);
 export function applyProductionHolds(compiled, inventory) {
   const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name)).map(item => item.name));
-  if (!held.size) return { compiled, inventory, heldExports: [] };
-  if (held.size !== HELD_EXPORTS.length) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
+  const baseHeld = new Set(inventory.filter(item => BASE_HELD_EXPORTS.includes(item.name)).map(item => item.name));
+  if (baseHeld.size && baseHeld.size !== BASE_HELD_EXPORTS.length) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
   const ast = ts.createSourceFile('index.js', compiled, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  // The compiler's void-0 export declarations cannot expose a Function. Other
+  // direct cleanup export shapes are unsupported and must never bypass holds.
+  const unwrap = node => {
+    while (node && ts.isParenthesizedExpression(node)) node = node.expression;
+    return node;
+  };
+  const literalText = node => {
+    node = unwrap(node);
+    return node && ts.isStringLiteralLike(node) ? node.text : undefined;
+  };
+  const staticName = node => {
+    node = unwrap(node);
+    if (!node) return undefined;
+    if (ts.isIdentifier(node)) return node.text;
+    if (ts.isPropertyAccessExpression(node)) {
+      const receiver = staticName(node.expression);
+      return receiver === undefined ? undefined : `${receiver}.${node.name.text}`;
+    }
+    if (ts.isElementAccessExpression(node) && literalText(node.argumentExpression) !== undefined) {
+      const receiver = staticName(node.expression);
+      return receiver === undefined ? undefined : `${receiver}.${literalText(node.argumentExpression)}`;
+    }
+    return undefined;
+  };
+  const exportObject = node => ['exports', 'module.exports'].includes(staticName(node));
+  const cleanupMember = node => ['exports.askFeedbackCleanup', 'module.exports.askFeedbackCleanup'].includes(staticName(node));
+  const cleanupProperties = node => {
+    node = unwrap(node);
+    return node && ts.isObjectLiteralExpression(node) && node.properties.some(property => {
+      if (ts.isSpreadAssignment(property)) return cleanupProperties(property.expression);
+      const name = property.name;
+      return name && ((ts.isIdentifier(name) && name.text === 'askFeedbackCleanup') || literalText(name) === 'askFeedbackCleanup' || ts.isComputedPropertyName(name) && literalText(name.expression) === 'askFeedbackCleanup');
+    });
+  };
+  const emptyDeclaration = node => {
+    node = unwrap(node);
+    while (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) node = unwrap(node.right);
+    const operand = ts.isVoidExpression(node) ? unwrap(node.expression) : undefined;
+    return operand && ts.isNumericLiteral(operand) && operand.text === '0';
+  };
+  const inspectCleanupShape = node => {
+    if (ts.isBinaryExpression(node) && node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment && node.operatorToken.kind <= ts.SyntaxKind.LastAssignment) {
+      if (cleanupMember(node.left) && !(node.operatorToken.kind === ts.SyntaxKind.EqualsToken && emptyDeclaration(node.right))) throw Error('PRODUCTION_HOLD_COMPILED_SHAPE');
+      if (staticName(node.left) === 'module.exports' && cleanupProperties(node.right)) throw Error('PRODUCTION_HOLD_COMPILED_SHAPE');
+    }
+    if (ts.isCallExpression(node)) {
+      const name = staticName(node.expression);
+      if (name === 'Object.defineProperty' && exportObject(node.arguments[0]) && literalText(node.arguments[1]) === 'askFeedbackCleanup') {
+        const statement = node.parent;
+        if (node.expression.getText(ast) !== 'Object.defineProperty' || node.arguments[0].getText(ast) !== 'exports' || !ts.isStringLiteral(node.arguments[1]) || !ts.isExpressionStatement(statement) || statement.expression !== node || !ts.isSourceFile(statement.parent)) throw Error('PRODUCTION_HOLD_COMPILED_SHAPE');
+      }
+      if ((name === 'Object.assign' || name === 'Object.defineProperties') && exportObject(node.arguments[0]) && node.arguments.slice(1).some(cleanupProperties)) throw Error('PRODUCTION_HOLD_COMPILED_SHAPE');
+    }
+    ts.forEachChild(node, inspectCleanupShape);
+  };
+  inspectCleanupShape(ast);
   const removed = new Set(), imports = new Set();
-  const blockedModules = new Set(['./ai/ask-workflow', './payments/payos', './email']);
+  const blockedModules = new Set(baseHeld.size ? ['./ai/ask-workflow', './payments/payos', './email'] : []);
   const spans = [];
   for (const node of ast.statements) {
     if (ts.isVariableStatement(node)) {
@@ -97,7 +215,10 @@ export function applyProductionHolds(compiled, inventory) {
     }
     if (ts.isExpressionStatement(node) && ts.isCallExpression(node.expression)) {
       const call = node.expression;
-      if (call.expression.getText(ast) === 'Object.defineProperty' && call.arguments[0]?.getText(ast) === 'exports' && ts.isStringLiteral(call.arguments[1]) && held.has(call.arguments[1].text)) {
+      if (call.expression.getText(ast) === 'Object.defineProperty' && call.arguments[0]?.getText(ast) === 'exports' && ts.isStringLiteral(call.arguments[1])) {
+        const name = call.arguments[1].text;
+        if (name === 'askFeedbackCleanup' && !held.has(name)) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
+        if (!held.has(name)) continue;
         if (removed.has(call.arguments[1].text)) throw Error('PRODUCTION_HOLD_DUPLICATE');
         removed.add(call.arguments[1].text); spans.push([node.getStart(ast), node.end]);
       }
@@ -120,11 +241,13 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
     mkdirSync(resolve(target, '..'), { recursive: true });
     cpSync(join(root, 'functions', path), target, { recursive: true });
   }
+  copyFunctionAssets(root, join(stage, 'deployment/functions'));
   const packagePath = join(stage, 'deployment/functions/package.json');
   const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
   const entryPath = join(stage, 'deployment/functions', pkg.main);
   if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
-  const promotion = applyProductionHolds(readFileSync(entryPath, 'utf8'), check.inventory);
+  const emulator = excludeEmulatorOnlyExports(readFileSync(entryPath, 'utf8'), check.emulatorOnlyExports);
+  const promotion = applyProductionHolds(emulator.compiled, check.inventory);
   writeFileSync(entryPath, promotion.compiled);
   pkg.version = candidate.tag.slice(1);
   // Deployment package contains precompiled JavaScript; managed Node build must not invoke tsc.
@@ -149,7 +272,7 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   writeFileSync(join(stage, 'deployment/firebase.json'), JSON.stringify(config, null, 2) + '\n');
   cpSync(candidatePath, join(stage, 'candidate.json'));
   cpSync(notesPath, join(stage, 'release-notes.md'));
-  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports,
+  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports, emulatorOnlyExports: emulator.emulatorOnlyExports,
     files: files(stage), sourcePolicy: 'precompiled-package-no-dotenv-no-rebuild' };
   writeFileSync(join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return verify(stage, candidate.sha, candidate.tag);

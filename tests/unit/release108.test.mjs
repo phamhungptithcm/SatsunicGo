@@ -3,13 +3,14 @@ import { Buffer } from 'node:buffer';
 import { createRequire } from 'node:module';
 import process from 'node:process';
 import { URL } from 'node:url';
+import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
-import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace } from '../../scripts/release/artifact.mjs';
+import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace, REQUIRED_FUNCTION_ASSETS, excludeEmulatorOnlyExports } from '../../scripts/release/artifact.mjs';
 import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory } from '../../scripts/release/verify-production.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
@@ -25,7 +26,7 @@ function put(root, file, content) {
   mkdirSync(resolve(path, '..'), { recursive: true });
   writeFileSync(path, typeof content === 'string' ? content : JSON.stringify(content));
 }
-function builtFixture(t) {
+function builtFixture(t, beforeCreate = () => {}) {
   const root = temporary(t);
   const config = JSON.parse(readFileSync(join(repositoryRoot, 'firebase.json'), 'utf8'));
   put(root, 'firebase.json', config);
@@ -46,6 +47,9 @@ function builtFixture(t) {
   put(root, 'functions/src/index.ts', `import { onRequest } from 'firebase-functions/v2/https';\n${['campaignBannersPublic', 'publicDiscovery', 'publicImage', 'publicPage'].map(name => `export const ${name} = onRequest({ region: 'asia-southeast1' }, () => {});`).join('\n')}`);
   put(root, 'candidate.json', { tag: 'v1.2.3', sha, repository: 'owner/repo' });
   put(root, 'release-notes.md', 'Fixture release notes');
+  mkdirSync(join(root,'functions/assets'),{recursive:true});
+  for(const name of REQUIRED_FUNCTION_ASSETS)copyFileSync(join(repositoryRoot,'functions/assets',name),join(root,'functions/assets',name));
+  beforeCreate(root);
   const stage = join(root, 'stage');
   const manifest = create(root, stage, join(root, 'candidate.json'));
   return { root, stage, manifest };
@@ -114,6 +118,104 @@ test('artifact binds frontend/backend version, asset manifest, inventory and dep
   assert.equal(pkg.scripts, undefined);
   assert.equal(JSON.parse(readFileSync(join(stage, 'deployment/functions/package-lock.json'), 'utf8')).packages[''].version, '1.2.3');
   assert.equal(Object.keys(manifest.files).some(f => f.includes('/src/index.ts')), false);
+  for(const name of REQUIRED_FUNCTION_ASSETS)assert.equal(manifest.files[`deployment/functions/assets/${name}`],digest(readFileSync(join(repositoryRoot,'functions/assets',name))));
+});
+
+const demoMetadata=[{name:'purchaseDemoPayment',kind:'onCall',region:'asia-southeast1',source:'functions/src/purchase-checkout.ts'}];
+const demoCompiled=`exports.purchaseDemoPayment = exports.purchaseCheckout = void 0;
+const purchase_checkout_2 = require('./purchase-checkout');
+exports.purchaseDemoPayment = process.env.FUNCTIONS_EMULATOR === 'true' ? purchase_checkout_2.purchaseDemoPayment : undefined;
+const purchase_checkout_1 = require('./purchase-checkout');
+Object.defineProperty(exports,'purchaseCheckout',{enumerable:true,get:function(){return purchase_checkout_1.purchaseCheckout;}});`;
+test('compiled demo exclusion is deterministic even with emulator env and preserves public getter',()=>{
+  const result=excludeEmulatorOnlyExports(demoCompiled,demoMetadata), exports={},loads=[];
+  const checkout=()=>{},demo=()=>{throw Error('MUST_NOT_EXPOSE_DEMO');};
+  runInNewContext(result.compiled,{exports,process:{env:{FUNCTIONS_EMULATOR:'true'}},require:name=>{loads.push(name);return {purchaseCheckout:checkout,purchaseDemoPayment:demo};}});
+  assert.equal(exports.purchaseDemoPayment,undefined);
+  assert.equal(exports.purchaseCheckout,checkout);
+  assert.equal(loads.length,1);
+  assert.deepEqual(result.emulatorOnlyExports,['purchaseDemoPayment']);
+  assert.deepEqual(HELD_EXPORTS,['askWorkflow','currentAskConversation','maintenance','createPaymentLink','payosWebhook','reconcilePayments','deliverEmail','askFeedbackCleanup']);
+  assert.doesNotThrow(()=>excludeEmulatorOnlyExports(result.compiled));
+});
+for(const [label,compiled] of [
+  ['loose comparison',demoCompiled.replace('===','==')],
+  ['inverted comparison',demoCompiled.replace('===','!==')],
+  ['changed condition',demoCompiled.replace('FUNCTIONS_EMULATOR','ENABLE_DEMO')],
+  ['computed condition',demoCompiled.replace('.FUNCTIONS_EMULATOR',"['FUNCTIONS_EMULATOR']")],
+  ['false branch callable',demoCompiled.replace(': undefined',': purchase_checkout_2.purchaseDemoPayment')],
+  ['void branch',demoCompiled.replace(': undefined',': void 0')],
+  ['mutable module alias',demoCompiled.replace('const purchase_checkout_2','let purchase_checkout_2')],
+  ['changed target module',demoCompiled.replace("require('./purchase-checkout')","require('./other')")],
+  ['wrong target member',demoCompiled.replace('? purchase_checkout_2.purchaseDemoPayment','? purchase_checkout_2.purchaseCheckout')],
+  ['escaped alias',`${demoCompiled}\nconst leaked=purchase_checkout_2;`],
+  ['shadowed process',`const process={env:{FUNCTIONS_EMULATOR:'true'}};${demoCompiled}`],
+  ['shadowed undefined',`const undefined=()=>{};${demoCompiled}`],
+  ['shadowed require',`const require=()=>({});${demoCompiled}`],
+  ['shadowed exports',`const exports={};${demoCompiled}`],
+  ['environment mutation',`process.env.FUNCTIONS_EMULATOR='true';${demoCompiled}`],
+  ['duplicated assignment',`${demoCompiled}\nexports.purchaseDemoPayment = process.env.FUNCTIONS_EMULATOR === 'true' ? purchase_checkout_2.purchaseDemoPayment : undefined;`],
+  ['direct getter',`${demoCompiled}\nObject.defineProperty(exports,'purchaseDemoPayment',{get:()=>purchase_checkout_1.purchaseDemoPayment});`],
+  ['computed export',demoCompiled.replace('exports.purchaseDemoPayment = process',"exports['purchaseDemoPayment'] = process")],
+  ['module exports variant',demoCompiled.replace('exports.purchaseDemoPayment = process','module.exports.purchaseDemoPayment = process')],
+  ['object assignment',`${demoCompiled}\nObject.assign(exports,{purchaseDemoPayment:()=>{}});`],
+])test(`compiled emulator export fails closed: ${label}`,()=>assert.throws(()=>excludeEmulatorOnlyExports(compiled,demoMetadata),/EMULATOR_/));
+test('source/compiled emulator disagreement and altered metadata fail closed',()=>{
+  assert.throws(()=>excludeEmulatorOnlyExports(demoCompiled),/COMPILED_SHAPE/);
+  assert.throws(()=>excludeEmulatorOnlyExports('exports.purchaseDemoPayment = void 0;',demoMetadata),/COMPILED_SHAPE/);
+  for(const row of [{...demoMetadata[0],region:'us-central1'},{...demoMetadata[0],kind:'onRequest'},{...demoMetadata[0],source:'functions/src/other.ts'}, {...demoMetadata[0],name:'other'}])assert.throws(()=>excludeEmulatorOnlyExports(demoCompiled,[row]),/METADATA/);
+  assert.throws(()=>excludeEmulatorOnlyExports(demoCompiled,[...demoMetadata,...demoMetadata]),/METADATA/);
+});
+test('artifact source and compiled demo exception remain excluded and separately documented',t=>{
+  const {stage,manifest}=builtFixture(t,root=>{
+    const original=readFileSync(join(root,'functions/src/index.ts'),'utf8');
+    put(root,'functions/src/index.ts',`${original}\nimport {purchaseDemoPayment as guardedPurchaseDemoPayment} from './purchase-checkout';export const purchaseDemoPayment=process.env.FUNCTIONS_EMULATOR === 'true' ? guardedPurchaseDemoPayment : undefined;`);
+    put(root,'functions/src/purchase-checkout.ts',`import {onCall} from 'firebase-functions/v2/https';export const purchaseDemoPayment=onCall({region:'asia-southeast1'},()=>{});`);
+    put(root,'functions/lib/functions/src/index.js',demoCompiled);
+  });
+  assert.equal(manifest.inventory.length,4);
+  assert.deepEqual(manifest.emulatorOnlyExports,['purchaseDemoPayment']);
+  assert.deepEqual(manifest.heldExports,[]);
+  assert.equal(readFileSync(join(stage,'deployment/functions/lib/functions/src/index.js'),'utf8').includes('FUNCTIONS_EMULATOR'),false);
+  assert.equal(verify(stage,sha,'v1.2.3').tag,'v1.2.3');
+});
+test('mandatory runtime assets fail packaging when absent or symlinked',t=>{
+  for(const name of REQUIRED_FUNCTION_ASSETS){
+    assert.throws(()=>builtFixture(t,root=>rmSync(join(root,'functions/assets',name))),/ENOENT/);
+    assert.throws(()=>builtFixture(t,root=>{rmSync(join(root,'functions/assets',name));symlinkSync(join(repositoryRoot,'functions/assets',name),join(root,'functions/assets',name));}),/UNSAFE_FUNCTION_ASSET/);
+  }
+  assert.throws(()=>builtFixture(t,root=>{rmSync(join(root,'functions/assets'),{recursive:true});symlinkSync(join(repositoryRoot,'functions/assets'),join(root,'functions/assets'));}),/UNSAFE_FUNCTION_ASSET/);
+  assert.throws(()=>builtFixture(t,root=>writeFileSync(join(root,'functions/assets/NotoSans-Regular.ttf'),'')),/UNSAFE_FUNCTION_ASSET/);
+  assert.throws(()=>builtFixture(t,root=>writeFileSync(join(root,'functions/assets/purchase-vn-regions.json'),Buffer.alloc(1024*1024+1))),/UNSAFE_FUNCTION_ASSET/);
+  assert.throws(()=>builtFixture(t,root=>{const p=join(root,'functions/assets/NotoSans-LICENSE.txt');rmSync(p);mkdirSync(p);}),/UNSAFE_FUNCTION_ASSET/);
+});
+test('packaged font, license and region bytes are immutable and no extra assets enter',t=>{
+  const {stage,manifest}=builtFixture(t,root=>put(root,'functions/assets/unapproved.txt','fixture'));
+  assert.equal(manifest.files['deployment/functions/assets/unapproved.txt'],undefined);
+  for(const name of REQUIRED_FUNCTION_ASSETS){
+    const file=join(stage,'deployment/functions/assets',name), original=readFileSync(file);
+    writeFileSync(file,'tampered');
+    assert.throws(()=>verify(stage,sha,'v1.2.3'),/HASH/);
+    writeFileSync(file,original);
+  }
+  assert.match(readFileSync(join(stage,'deployment/functions/assets/NotoSans-LICENSE.txt'),'utf8'),/SIL OPEN FONT LICENSE/);
+});
+test('compiled artifact-only PDF renders Unicode without shared source or font fallback',t=>{
+  const ts=createRequire(import.meta.url)('typescript');
+  const {root,stage}=builtFixture(t,root=>{
+    const source=readFileSync(join(repositoryRoot,'functions/src/purchase-pdf.ts'),'utf8');
+    const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
+    put(root,'functions/lib/functions/src/purchase-pdf.js',compiled);
+  });
+  rmSync(join(root,'functions'),{recursive:true});
+  assert.equal(existsSync(join(stage,'deployment/functions/src')),false);
+  const renderer=join(stage,'deployment/functions/lib/functions/src/purchase-pdf.js');
+  const script=join(root,'render.cjs');
+  put(root,'render.cjs',`const assert=require('node:assert/strict');const {renderPurchaseReceipt}=require(process.argv[2]);const receipt={id:'synthetic',ownerId:'synthetic',lines:[{kind:'listed',name:'Cà phê Việt Nam',variant:'Trắng',quantity:1,goods:100000,service:0,total:100000}],total:100000,provider:'demo',reference:'DEMO-SYNTHETIC',paidAt:Date.UTC(2026,9,8),purpose:'initial',previouslyPaid:0,snapshotHash:'synthetic',shipping:{state:'uncollected'}};const a=renderPurchaseReceipt(receipt),b=renderPurchaseReceipt(receipt);assert.equal(a.subarray(0,8).toString(),'%PDF-1.7');assert.ok(a.equals(b));assert.ok(a.length<3000000);const source=a.toString('binary');assert.match(source,/FontFile2/);assert.match(source,/ToUnicode/);const mapping=new Map();for(const [,key,hex] of source.matchAll(/<([0-9a-f]{4})> <([0-9a-f]+)>/g)){const bytes=Buffer.from(hex,'hex');if(bytes.length%2===0)mapping.set(key,bytes.swap16().toString('utf16le'));}const rows=[...source.matchAll(/Tm <([0-9a-f]+)> Tj ET/g)].map(([,hex])=>(hex.match(/.{4}/g)??[]).map(key=>mapping.get(key)??'').join('')).join(' ');assert.ok(rows.includes('Cà phê Việt Nam'));assert.ok(rows.includes('Trắng'));console.log(JSON.stringify({rendered:true,unicode:true,deterministic:true,bytes:a.length}));`);
+  const run=()=>spawnSync(process.execPath,[script,renderer],{cwd:stage,encoding:'utf8'});
+  const result=run();assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).rendered,true);
+  rmSync(join(stage,'deployment/functions/assets/NotoSans-Regular.ttf'));
+  assert.notEqual(run().status,0,'missing bundled font must fail, never find shared fallback');
 });
 test('standalone deployment retains tested workspace resolutions and rejects new dependency versions', () => {
   const rootLock = { lockfileVersion: 3, packages: {
@@ -321,7 +423,7 @@ test('production holds remove only held bindings/imports and reject compiler/inv
   const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...HELD_EXPORTS.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`), 'Object.defineProperty(exports, "readNotification", {get: function(){return jobs.readNotification;}});'].join('\n');
   const result = applyProductionHolds(compiled, inventory);
   assert.deepEqual(result.inventory, [{name:'readNotification'}]);
-  assert.equal(result.heldExports.length, 7);
+  assert.equal(result.heldExports.length, 8);
   assert.match(result.compiled, /require\(".\/jobs"\)/);
   assert.match(result.compiled, /"readNotification"/);
   assert.equal(result.compiled.includes('payments/payos'), false);
@@ -394,4 +496,147 @@ test('provider stabilization waits only for bounded transient deployment states,
   await assert.rejects(() => waitForActiveInventory(manifest, () => {reads++;return active.map(f => ({...f,state:'FAILED'}));}, async () => {throw Error('MUST_NOT_PAUSE');}), /NOT_ACTIVE/);
   assert.equal(reads, 1);
   await assert.rejects(() => waitForActiveInventory(manifest, () => [...active,{name:'functions/unexpected',state:'ACTIVE'}], async () => {throw Error('MUST_NOT_PAUSE');}), /REMOVAL/);
+});
+
+
+const cleanupBinding = 'Object.defineProperty(exports, "askFeedbackCleanup", {get: function(){return lifecycle.askFeedbackCleanup;}});';
+const lifecycleCompiled = [
+  'var lifecycle = require("./ai/feedback-lifecycle");',
+  cleanupBinding,
+  'Object.defineProperty(exports, "askFeedbackWithdraw", {get: function(){return lifecycle.askFeedbackWithdraw;}});',
+].join('\n');
+test('release holds include unapproved cleanup while preserving the original seven holds', () => {
+  assert.deepEqual(HELD_EXPORTS, ['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail', 'askFeedbackCleanup']);
+  assert.equal(Object.isFrozen(HELD_EXPORTS), true);
+});
+test('cleanup-only hold preserves the lifecycle module and noncleanup customer endpoints', () => {
+  const result = applyProductionHolds(lifecycleCompiled, [{name:'askFeedbackCleanup'}, {name:'askFeedbackWithdraw'}]);
+  assert.deepEqual(result.inventory, [{name:'askFeedbackWithdraw'}]);
+  assert.deepEqual(result.heldExports, ['askFeedbackCleanup']);
+  assert.equal(result.compiled.includes(cleanupBinding), false);
+  assert.match(result.compiled, /require\("\.\/ai\/feedback-lifecycle"\)/);
+  assert.match(result.compiled, /"askFeedbackWithdraw"/);
+});
+test('legacy seven-hold inventory remains valid without a cleanup export', () => {
+  const legacy = HELD_EXPORTS.filter(name => name !== 'askFeedbackCleanup');
+  const compiled = ['var workflow = require("./ai/ask-workflow");', 'var payments = require("./payments/payos");', 'var email = require("./email");', 'var jobs = require("./jobs");', ...legacy.map(name => `Object.defineProperty(exports, "${name}", {get: function(){return jobs.${name};}});`)].join('\n');
+  assert.equal(legacy.length, 7);
+  assert.deepEqual(applyProductionHolds(compiled, legacy.map(name => ({name}))).heldExports, [...legacy].sort());
+  assert.throws(() => applyProductionHolds(compiled, legacy.slice(1).map(name => ({name}))), /INVENTORY_DRIFT/);
+});
+test('cleanup inventory mismatch never silently admits its compiled binding', () => {
+  assert.throws(() => applyProductionHolds(lifecycleCompiled, [{name:'askFeedbackWithdraw'}]), /INVENTORY_DRIFT/);
+  assert.throws(() => applyProductionHolds(lifecycleCompiled.replace(cleanupBinding, ''), [{name:'askFeedbackCleanup'}, {name:'askFeedbackWithdraw'}]), /COMPILED_SHAPE/);
+});
+test('duplicate cleanup compiled bindings fail closed', () => {
+  assert.throws(() => applyProductionHolds(lifecycleCompiled + '\n' + cleanupBinding, [{name:'askFeedbackCleanup'}, {name:'askFeedbackWithdraw'}]), /DUPLICATE/);
+});
+test('artifact creation omits cleanup inventory and binding while preserving remaining feedback endpoints', t => {
+  const {root} = builtFixture(t);
+  const currentSource = readFileSync(join(root, 'functions/src/index.ts'), 'utf8');
+  put(root, 'functions/src/index.ts', currentSource + `\nimport { onSchedule } from 'firebase-functions/v2/scheduler';\nexport const askFeedbackCleanup = onSchedule({region:'asia-southeast1', schedule:'every 60 minutes'}, () => {});\nexport const askFeedbackWithdraw = onRequest({region:'asia-southeast1'}, () => {});`);
+  put(root, 'functions/lib/functions/src/index.js', lifecycleCompiled);
+  const stage = join(root, 'feedback-held-stage');
+  const manifest = create(root, stage, join(root, 'candidate.json'));
+  assert.deepEqual(manifest.heldExports, ['askFeedbackCleanup']);
+  assert.equal(manifest.inventory.some(item => item.name === 'askFeedbackCleanup'), false);
+  assert.equal(manifest.inventory.some(item => item.name === 'askFeedbackWithdraw'), true);
+  const packaged = readFileSync(join(stage, 'deployment/functions/lib/functions/src/index.js'), 'utf8');
+  assert.equal(packaged.includes(cleanupBinding), false);
+  assert.match(packaged, /"askFeedbackWithdraw"/);
+  assert.deepEqual(verify(stage, sha, 'v1.2.3'), manifest);
+});
+
+
+test('unsupported direct cleanup export shapes fail closed even with an empty source inventory', () => {
+  const shapes = [
+    'exports.askFeedbackCleanup = lifecycle.askFeedbackCleanup;',
+    'exports["askFeedbackCleanup"] = lifecycle.askFeedbackCleanup;',
+    'module.exports.askFeedbackCleanup = lifecycle.askFeedbackCleanup;',
+    'Object.defineProperty(module.exports, "askFeedbackCleanup", {get: function(){return lifecycle.askFeedbackCleanup;}});',
+    'module.exports = {askFeedbackCleanup: lifecycle.askFeedbackCleanup};',
+    'Object.assign(exports, {askFeedbackCleanup: lifecycle.askFeedbackCleanup});',
+    'Object.defineProperties(exports, {askFeedbackCleanup: {get: function(){return lifecycle.askFeedbackCleanup;}}});',
+    'exports.askFeedbackCleanup = void lifecycle.sideEffect();',
+  ];
+  for (const compiled of shapes) {
+    assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/, compiled);
+    assert.throws(() => applyProductionHolds(compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/, compiled);
+  }
+});
+test('compiler void-zero declarations remain safe and canonical cleanup getter is still withheld', () => {
+  const declaration = 'exports.askFeedbackWithdraw = exports.askFeedbackCleanup = void 0;';
+  assert.deepEqual(applyProductionHolds(declaration, []), {compiled:declaration,inventory:[],heldExports:[]});
+  const result = applyProductionHolds(declaration + '\n' + lifecycleCompiled, [{name:'askFeedbackCleanup'}, {name:'askFeedbackWithdraw'}]);
+  assert.equal(result.compiled.includes(cleanupBinding), false);
+  assert.match(result.compiled, /"askFeedbackWithdraw"/);
+  assert.deepEqual(result.heldExports, ['askFeedbackCleanup']);
+});
+
+
+test('nested canonical cleanup getters cannot survive an empty inventory or reported hold', () => {
+  for (const nested of [`{ ${cleanupBinding} }`, `function install(){ ${cleanupBinding} }`, `if (true) { ${cleanupBinding} }`]) {
+    assert.throws(() => applyProductionHolds(nested, []), /COMPILED_SHAPE/);
+    assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + nested, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+  }
+});
+test('canonical cleanup getter template-literal key is an unsupported compiler shape', () => {
+  const compiled = 'Object.defineProperty(exports, `askFeedbackCleanup`, {get: function(){return lifecycle.askFeedbackCleanup;}});';
+  assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
+  assert.throws(() => applyProductionHolds(compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+});
+
+
+test('template-literal cleanup member and computed object keys reject before packaging', () => {
+  const shapes = ['exports[`askFeedbackCleanup`] = lifecycle.askFeedbackCleanup;', 'Object.assign(exports, {[`askFeedbackCleanup`]: lifecycle.askFeedbackCleanup});', 'module.exports = {[`askFeedbackCleanup`]: lifecycle.askFeedbackCleanup};'];
+  for (const compiled of shapes) {
+    assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
+    assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+  }
+});
+test('literal bracket or parenthesized cleanup export receivers and methods cannot bypass guards', () => {
+  const shapes = [
+    'Object["defineProperty"](exports, "askFeedbackCleanup", {get: function(){return lifecycle.askFeedbackCleanup;}});',
+    'Object[`assign`](exports, {askFeedbackCleanup: lifecycle.askFeedbackCleanup});',
+    'module["exports"].askFeedbackCleanup = lifecycle.askFeedbackCleanup;',
+    '(exports).askFeedbackCleanup = lifecycle.askFeedbackCleanup;',
+    'Object.defineProperty((exports), "askFeedbackCleanup", {get: function(){return lifecycle.askFeedbackCleanup;}});',
+  ];
+  for (const compiled of shapes) {
+    assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
+    assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+  }
+});
+
+
+test('transparent parentheses on cleanup object keys, descriptors and direct export keys cannot bypass holds', () => {
+  const shapes = [
+    'Object.assign(exports, ({askFeedbackCleanup: lifecycle.askFeedbackCleanup}));',
+    'module.exports = ({askFeedbackCleanup: lifecycle.askFeedbackCleanup});',
+    'Object.assign(exports, {[(`askFeedbackCleanup`)]: lifecycle.askFeedbackCleanup});',
+    'Object.defineProperties(exports, ({askFeedbackCleanup: {get: function(){return lifecycle.askFeedbackCleanup;}}}));',
+    'exports[("askFeedbackCleanup")] = lifecycle.askFeedbackCleanup;',
+    'Object.defineProperty(exports, ("askFeedbackCleanup"), {get: function(){return lifecycle.askFeedbackCleanup;}});',
+  ];
+  for (const compiled of shapes) {
+    assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
+    assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+  }
+});
+test('transparent parentheses preserve only harmless void-zero cleanup declarations', () => {
+  const declaration = 'exports[("askFeedbackCleanup")] = (exports.keep = void (0));';
+  assert.deepEqual(applyProductionHolds(declaration, []), {compiled:declaration,inventory:[],heldExports:[]});
+  assert.throws(() => applyProductionHolds('exports.askFeedbackCleanup = (void lifecycle.sideEffect());', []), /COMPILED_SHAPE/);
+});
+
+
+test('literal object spreads containing cleanup are rejected across export object mutation shapes', () => {
+  for (const compiled of [
+    'Object.assign(exports,{...{askFeedbackCleanup:lifecycle.askFeedbackCleanup}});',
+    'module.exports = {...({...{askFeedbackCleanup:lifecycle.askFeedbackCleanup}})};',
+    'Object.defineProperties(exports,{...{askFeedbackCleanup:{get: function(){return lifecycle.askFeedbackCleanup;}}}});',
+  ]) {
+    assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
+    assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
+  }
 });

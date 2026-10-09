@@ -244,6 +244,8 @@ export const purchaseCheckout = onCall(options, async (req) => {
         const cart: Cart = stored.exists
           ? cartSchema.parse(stored.data())
           : { ownerId: uid, revision: 0, updatedAt: 0, items: [] };
+        if (cart.ownerId !== uid)
+          throw new HttpsError("permission-denied", "Chưa mở được giỏ.");
         if (cart.activeCheckoutId)
           throw new HttpsError(
             "failed-precondition",
