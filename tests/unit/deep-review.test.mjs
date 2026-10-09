@@ -4,7 +4,9 @@ import { readFileSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath, URL } from "node:url";
 import { validateReview } from "../../scripts/review/gate.mjs";
+const repoRoot = fileURLToPath(new URL("../../", import.meta.url));
 const base = "a".repeat(40),
   head = "b".repeat(40);
 const preview = { files: [{ path: "src/a.ts", will_review: true }] };
@@ -102,6 +104,7 @@ test("launcher fails clearly before invoking OCR when API key is missing", () =>
   const dir = mkdtempSync(join(tmpdir(), "ocr-missing-key-"));
   try {
     const r = spawnSync("bash", ["scripts/review/run.sh"], {
+      cwd: repoRoot,
       env: { PATH: "/usr/bin:/bin", RUNNER_TEMP: dir },
       encoding: "utf8",
     });
@@ -113,9 +116,15 @@ test("launcher fails clearly before invoking OCR when API key is missing", () =>
 });
 
 test("release quality forwards only Gemini key and build cannot bypass quality", () => {
-  const release = readFileSync(".github/workflows/release.yml", "utf8");
-  const ci = readFileSync(".github/workflows/ci.yml", "utf8");
-  const deep = readFileSync(".github/workflows/deep-review.yml", "utf8");
+  const release = readFileSync(
+    join(repoRoot, ".github/workflows/release.yml"),
+    "utf8",
+  );
+  const ci = readFileSync(join(repoRoot, ".github/workflows/ci.yml"), "utf8");
+  const deep = readFileSync(
+    join(repoRoot, ".github/workflows/deep-review.yml"),
+    "utf8",
+  );
   assert.match(
     release,
     /quality:\s+uses: \.\/\.github\/workflows\/ci.yml\s+secrets:\s+GEMINI_API_KEY:/,
