@@ -13,6 +13,8 @@ defaults:
 jobs:
   quality:
     uses: ./.github/workflows/ci.yml
+    secrets:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
     with:
       build: false
     permissions:

@@ -1,0 +1,71 @@
+name: Deep code review
+on:
+  workflow_call:
+    secrets:
+      GEMINI_API_KEY:
+        required: false
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    concurrency:
+      group: gemini-review-${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - name: Reject fork credential access
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo '::error::External PR deep review is NOT_RUN: no Gemini secret is exposed. A maintainer must review in a trusted branch.'
+          exit 1
+      - name: Checkout trusted integration
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          path: integration
+          persist-credentials: false
+      - name: Checkout review target as data
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: target
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+      - name: Validate gate regressions
+        run: node --test integration/tests/unit/deep-review.test.mjs
+      - name: Resolve exact review range
+        env:
+          EVENT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          cd target
+          HEAD_SHA="$(git rev-parse HEAD)"
+          if [[ -z "$EVENT_BASE" ]]; then EVENT_BASE="$(git rev-parse HEAD^)"; fi
+          [[ "$EVENT_BASE" =~ ^[0-9a-f]{40}$ && "$EVENT_BASE" != '0000000000000000000000000000000000000000' ]] || exit 1
+          BASE_SHA="$(git merge-base "$EVENT_BASE" "$HEAD_SHA")"
+          echo "REVIEW_BASE=$BASE_SHA" >> "$GITHUB_ENV"
+          echo "REVIEW_HEAD=$HEAD_SHA" >> "$GITHUB_ENV"
+      - name: Install pinned checksum-verified OCR
+        run: |
+          curl --fail --silent --show-error --location --retry 2 --max-time 120 https://github.com/alibaba/open-code-review/releases/download/v1.12.13/opencodereview-linux-amd64 -o "$RUNNER_TEMP/ocr"
+          echo "d3d69e374bd1b8c02c1269d5b9c02437632812932f92423d4468bba717c8c328  $RUNNER_TEMP/ocr" | sha256sum --check --status
+          chmod 700 "$RUNNER_TEMP/ocr"
+      - name: Review with Gemini and enforce complete coverage
+        env:
+          OCR_LLM_TOKEN: ${{ secrets.GEMINI_API_KEY }}
+          REVIEW_REPO: ${{ github.workspace }}/target
+          OCR_BIN: ${{ runner.temp }}/ocr
+        run: bash integration/scripts/review/run.sh
+      - name: Preserve review evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: deep-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ocr-report/preview.json
+            ${{ runner.temp }}/ocr-report/result.json
+          if-no-files-found: ignore
+          retention-days: 14
