@@ -1,6 +1,7 @@
 import process from 'node:process';
 import { defineConfig } from 'vitest/config';
 const dedicated = {
+  purchase:'tests/rules/purchase-checkout.test.ts',
   cart:'tests/rules/cart107.test.ts',
   pilot:'tests/rules/ask-pilot106.test.ts',
   delivery:'tests/rules/manual-delivery-estimate064.test.ts',
@@ -10,6 +11,6 @@ if(process.env.GITHUB_ACTIONS !== 'true' || !['baseline',...Object.keys(dedicate
 export default defineConfig({test:{
   include:group === 'baseline' ? ['tests/rules/**/*.test.ts'] : [dedicated[group]],
   exclude:group === 'baseline' ? Object.values(dedicated) : [],
-  setupFiles:[group === 'baseline' ? 'tests/helpers/demo-setup.ts' : 'tests/helpers/ci-emulator-setup.ts'],
+  setupFiles:[['baseline','purchase'].includes(group) ? 'tests/helpers/demo-setup.ts' : 'tests/helpers/ci-emulator-setup.ts'],
   fileParallelism:false,testTimeout:15000,hookTimeout:20000,
 }});

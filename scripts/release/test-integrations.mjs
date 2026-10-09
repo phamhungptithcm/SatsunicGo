@@ -7,6 +7,7 @@ if (process.env.GITHUB_ACTIONS !== 'true' || process.argv[2] !== 'rules') throw 
 const root = process.cwd();
 const groups = [
   ['baseline', 8181, 'demo-satsunicgo'],
+  ['purchase', 18207, 'demo-satsunicgo'],
   ['cart', 18207, 'demo-satsunicgo-cart107'],
   ['pilot', 18207, 'demo-satsunicgo-ask106-ci'],
   ['delivery', 8187, 'demo-satsunicgo'],

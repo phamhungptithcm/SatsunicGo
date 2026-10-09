@@ -2,9 +2,16 @@ import { beforeAll, afterAll, it, expect } from "vitest";
 import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { initializeApp, deleteApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { getFirestore, type DocumentSnapshot } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { demoFirestoreEndpoint } from "../helpers/demo-environment";
+import {
+  checkoutPolicySchema,
+  checkoutRecipientSchema,
+  type CheckoutSnapshot,
+} from "../../packages/domain/purchase-checkout";
+import type { PurchaseReceiptData } from "../../functions/src/purchase-pdf";
 import {
   initializeTestEnvironment,
   assertFails,
@@ -12,10 +19,27 @@ import {
 } from "@firebase/rules-unit-testing";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 const uid = `purchase-race-${randomUUID()}`,
+  receiptUid = `purchase-receipt-${randomUUID()}`,
   productId = `purchase-race-${randomUUID()}`;
+const ownedPaths = new Set<string>(),
+  checkoutIds = new Set<string>(),
+  receiptIds = new Set<string>(),
+  ownedSettings = new Map<string, DocumentSnapshot>();
+const recipient = checkoutRecipientSchema.parse({
+  recipient: "Demo concurrency",
+  phone: "0900000000",
+  country: "VN",
+  provinceCode: "01",
+  communeCode: "00001",
+  province: "Synthetic province",
+  commune: "Synthetic commune",
+  street: "Số 10 đường thử",
+  note: "",
+});
 let app: ReturnType<typeof initializeApp>, rules: RulesTestEnvironment;
 let api: typeof import("../../functions/src/purchase-checkout");
 let receipts: typeof import("../../functions/src/purchase-receipts");
+let receiptSeed: PurchaseReceiptData;
 const req = (data: unknown, owner = uid) =>
   ({
     auth: {
@@ -28,7 +52,79 @@ const req = (data: unknown, owner = uid) =>
     },
     data,
   }) as CallableRequest;
+function trackReceipt(id: string) {
+  receiptIds.add(id);
+  for (const collection of [
+    "purchaseReceipts",
+    "purchaseReceiptJobs",
+    "purchaseEmailOutbox",
+  ])
+    ownedPaths.add(`${collection}/${id}`);
+}
+function trackCheckout(p: CheckoutSnapshot) {
+  checkoutIds.add(p.id);
+  receiptIds.add(p.id);
+  for (const collection of [
+    "purchasePreviews",
+    "purchaseCheckouts",
+    "purchaseReceipts",
+    "purchaseReceiptJobs",
+    "purchaseEmailOutbox",
+  ])
+    ownedPaths.add(`${collection}/${p.id}`);
+  ownedPaths.add(`purchasePaymentEvidence/DEMO-${p.id}`);
+  for (const line of p.lines) {
+    ownedPaths.add(`orders/${line.orderId}`);
+    ownedPaths.add(`orderRecipients/${line.orderId}`);
+    ownedPaths.add(`orders/${line.orderId}/timeline/purchase-${p.id}`);
+    ownedPaths.add(`financialEntries/purchase-${p.id}-${line.orderId}`);
+  }
+}
+async function preview(owner: string) {
+  const db = getFirestore(),
+    operationId = randomUUID();
+  ownedPaths.add(`carts/${owner}`);
+  ownedPaths.add(`users/${owner}`);
+  ownedPaths.add(`idempotencyKeys/purchase-${owner}-${operationId}`);
+  await db.doc(`carts/${owner}`).create({
+    ownerId: owner,
+    revision: 1,
+    updatedAt: 0,
+    items: [{ lineId: randomUUID(), productId, variant: "", quantity: 2 }],
+  });
+  const p = (await api.purchaseCheckout.run(
+    req(
+      { action: "preview", operationId, expectedRevision: 1, recipient },
+      owner,
+    ),
+  )) as CheckoutSnapshot & { previewHash: string };
+  trackCheckout(p);
+  return p;
+}
+function commit(p: CheckoutSnapshot & { previewHash: string }, owner: string) {
+  const operationId = randomUUID();
+  ownedPaths.add(`idempotencyKeys/purchase-${owner}-${operationId}`);
+  return api.purchaseCheckout.run(
+    req(
+      {
+        action: "commit",
+        operationId,
+        previewId: p.id,
+        previewHash: p.previewHash,
+        confirmed: true,
+      },
+      owner,
+    ),
+  );
+}
 beforeAll(async () => {
+  if (
+    demoFirestoreEndpoint(process.env).port !== 18207 ||
+    process.env.FIREBASE_STORAGE_EMULATOR_HOST !== "127.0.0.1:9298"
+  )
+    throw Error(
+      "Purchase fixtures require exact demo Firestore18207 and Storage9298",
+    );
   process.env.FIREBASE_CONFIG = JSON.stringify({
     projectId: "demo-satsunicgo",
   });
@@ -38,6 +134,53 @@ beforeAll(async () => {
   });
   api = await import("../../functions/src/purchase-checkout");
   receipts = await import("../../functions/src/purchase-receipts");
+  const db = getFirestore();
+  if (!api.purchaseDemoEnvironment(db))
+    throw Error("Purchase fixtures require the exact guarded demo identity");
+  const fixtureVersion = Date.now(),
+    settings = {
+      upfrontCheckout: checkoutPolicySchema.parse({
+        enabled: true,
+        approved: true,
+        version: fixtureVersion,
+        serviceBps: 500,
+        termsVersion: productId,
+        effectiveFrom: 0,
+        expiresAt: Date.now() + 86400000,
+        rates: {
+          USD: { numerator: 250, denominator: 1 },
+          JPY: { numerator: 170, denominator: 1 },
+          KRW: { numerator: 20, denominator: 1 },
+        },
+      }),
+      purchaseRegions: {
+        version: fixtureVersion,
+        provinces: [
+          {
+            code: recipient.provinceCode,
+            name: recipient.province,
+            communes: [
+              { code: recipient.communeCode, name: recipient.commune },
+            ],
+          },
+        ],
+      },
+      purchaseDemo: { enabled: true, fixtureId: productId },
+    };
+  await db.runTransaction(async (tx) => {
+    const refs = Object.keys(settings).map((id) => db.doc(`settings/${id}`)),
+      snapshots = await Promise.all(refs.map((ref) => tx.get(ref)));
+    if (snapshots.some((snapshot) => snapshot.exists))
+      throw Error("Purchase fixture refuses preexisting global settings");
+    for (const [id, value] of Object.entries(settings))
+      tx.create(db.doc(`settings/${id}`), value);
+  });
+  for (const [id, value] of Object.entries(settings)) {
+    const snapshot = await db.doc(`settings/${id}`).get();
+    expect(snapshot.data()).toEqual(value);
+    ownedSettings.set(snapshot.ref.path, snapshot);
+  }
+  ownedPaths.add(`products/${productId}`);
   await getFirestore().doc(`products/${productId}`).create({
     title: "Race demo",
     slug: productId,
@@ -56,55 +199,99 @@ beforeAll(async () => {
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });
+  // A real paid business operation supplies receipt fixtures independently of
+  // the race test, with a distinct owner so its financial oracle remains exact.
+  const p = await preview(receiptUid);
+  await commit(p, receiptUid);
+  await api.purchaseDemoPayment.run(
+    req({ id: p.id, outcome: "paid" }, receiptUid),
+  );
+  receiptSeed = (
+    await db.doc(`purchaseReceipts/${p.id}`).get()
+  ).data() as PurchaseReceiptData;
+  await receipts.processPurchaseReceipt(p.id);
+  expect(
+    (await db.doc(`purchaseReceiptJobs/${p.id}`).get()).data()?.state,
+  ).toBe("ready");
 });
 afterAll(async () => {
-  await rules?.cleanup();
-  await getFirestore().terminate();
-  await deleteApp(app);
+  if (!app) return;
+  const db = getFirestore();
+  try {
+    await rules?.cleanup();
+    for (const id of checkoutIds) {
+      const audit = await db
+        .collection("auditEvents")
+        .where("resourceId", "==", id)
+        .get();
+      for (const row of audit.docs) {
+        if (row.data().actor !== "demo-payment-adapter")
+          throw Error("Refuse to remove an unowned purchase audit");
+        ownedPaths.add(row.ref.path);
+      }
+    }
+    const snapshots = await Promise.all(
+      [...ownedPaths].map((path) => db.doc(path).get()),
+    );
+    for (const snapshot of snapshots) {
+      if (!snapshot.exists) continue;
+      const owner = snapshot.data()?.ownerId;
+      if (owner !== undefined && owner !== uid && owner !== receiptUid)
+        throw Error("Refuse to remove an unowned purchase fixture");
+    }
+    for (const id of receiptIds) {
+      const snapshot = snapshots.find(
+        (row) => row.ref.path === `purchaseReceipts/${id}`,
+      );
+      if (!snapshot?.exists) continue;
+      const file = getStorage()
+        .bucket()
+        .file(`private-purchase-receipts/${id}/receipt.pdf`);
+      try {
+        const [metadata] = await file.getMetadata();
+        const generation = Number(metadata.generation);
+        if (
+          !Number.isSafeInteger(generation) ||
+          generation < 1 ||
+          !metadata.metadata?.sha256 ||
+          (snapshot.data()?.pdfSha256 &&
+            metadata.metadata.sha256 !== snapshot.data()?.pdfSha256)
+        )
+          throw Error("Refuse to remove an unowned receipt artifact");
+        await file.delete({ ifGenerationMatch: generation });
+      } catch (error) {
+        if ((error as { code?: number }).code !== 404) throw error;
+      }
+    }
+    const cleanup = db.batch();
+    for (const snapshot of snapshots)
+      if (snapshot.exists)
+        cleanup.delete(snapshot.ref, { lastUpdateTime: snapshot.updateTime! });
+    await cleanup.commit();
+    await db.runTransaction(async (tx) => {
+      const current = await Promise.all(
+        [...ownedSettings.values()].map((snapshot) => tx.get(snapshot.ref)),
+      );
+      for (const snapshot of current) {
+        const original = ownedSettings.get(snapshot.ref.path)!;
+        if (
+          snapshot.exists &&
+          snapshot.updateTime?.isEqual(original.updateTime!)
+        )
+          tx.delete(snapshot.ref);
+        else if (snapshot.exists)
+          throw Error("Refuse to remove changed purchase settings");
+      }
+    });
+  } finally {
+    await db.terminate();
+    await deleteApp(app);
+  }
 });
 it("parallel commit operations reserve one checkout; parallel proof allocates exactly once", async () => {
   const db = getFirestore(),
-    lineId = randomUUID();
-  await db.doc(`carts/${uid}`).create({
-    ownerId: uid,
-    revision: 1,
-    updatedAt: 0,
-    items: [{ lineId, productId, variant: "", quantity: 2 }],
-  });
-  const region = (await db.doc("settings/purchaseRegions").get()).data()!
-      .provinces[0],
-    commune = region.communes[0];
-  const p = (await api.purchaseCheckout.run(
-    req({
-      action: "preview",
-      operationId: randomUUID(),
-      expectedRevision: 1,
-      recipient: {
-        recipient: "Demo concurrency",
-        phone: "0900000000",
-        country: "VN",
-        provinceCode: region.code,
-        communeCode: commune.code,
-        province: region.name,
-        commune: commune.name,
-        street: "Số 10 đường thử",
-        note: "",
-      },
-    }),
-  )) as { id: string; previewHash: string };
-  const commits = await Promise.allSettled(
-    [1, 2].map(() =>
-      api.purchaseCheckout.run(
-        req({
-          action: "commit",
-          operationId: randomUUID(),
-          previewId: p.id,
-          previewHash: p.previewHash,
-          confirmed: true,
-        }),
-      ),
-    ),
-  );
+    p = await preview(uid);
+  const commits = await Promise.allSettled([1, 2].map(() => commit(p, uid)));
   expect(commits.filter((r) => r.status === "fulfilled")).toHaveLength(1);
   const payments = await Promise.all([
     api.purchaseDemoPayment.run(req({ id: p.id, outcome: "paid" })),
@@ -151,10 +338,9 @@ it("demo proof refuses production-like configuration even with emulator flag", a
 });
 it("receipt workers recover expired leases, deduplicate private attachments and never report delivery without a recipient", async () => {
   const db = getFirestore();
-  const original = (
-    await db.collection("purchaseReceipts").where("ownerId", "==", uid).get()
-  ).docs[0].data();
+  const original = receiptSeed;
   const id = randomUUID();
+  trackReceipt(id);
   await db
     .doc(`purchaseReceipts/${id}`)
     .create({ ...original, id, ownerEmail: null, state: "queued" });
@@ -180,9 +366,10 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
   ).toBe(2);
   const before = await db
     .collection("financialEntries")
-    .where("ownerId", "==", uid)
+    .where("ownerId", "==", receiptUid)
     .get();
   const badId = randomUUID();
+  trackReceipt(badId);
   await db.doc(`purchaseReceipts/${badId}`).create({
     ...original,
     id: badId,
@@ -205,15 +392,17 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
     false,
   );
   expect(
-    (await db.collection("financialEntries").where("ownerId", "==", uid).get())
-      .size,
+    (
+      await db
+        .collection("financialEntries")
+        .where("ownerId", "==", receiptUid)
+        .get()
+    ).size,
   ).toBe(before.size);
 });
 it("background recovery reaches expired leases while new work and active leases are present", async () => {
   const db = getFirestore();
-  const original = (
-    await db.collection("purchaseReceipts").where("ownerId", "==", uid).get()
-  ).docs[0].data();
+  const original = receiptSeed;
   const activeIds = Array.from(
     { length: 20 },
     () => `00000000-${randomUUID().slice(9)}`,
@@ -222,6 +411,7 @@ it("background recovery reaches expired leases while new work and active leases 
   const expiredId = `ffffffff-${randomUUID().slice(9)}`;
   const batch = db.batch();
   for (const id of activeIds) {
+    ownedPaths.add(`purchaseReceiptJobs/${id}`);
     batch.create(db.doc(`purchaseReceiptJobs/${id}`), {
       state: "processing",
       attempts: 1,
@@ -229,6 +419,7 @@ it("background recovery reaches expired leases while new work and active leases 
     });
   }
   for (const id of [...queuedIds, expiredId]) {
+    trackReceipt(id);
     batch.create(db.doc(`purchaseReceipts/${id}`), {
       ...original,
       id,
