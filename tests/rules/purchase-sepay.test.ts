@@ -105,8 +105,10 @@ beforeAll(async () => {
   });
 });
 afterAll(async () => {
-  await getFirestore().terminate();
-  await deleteApp(app);
+  if (app) {
+    await getFirestore().terminate();
+    await deleteApp(app);
+  }
 });
 async function readyReceipt(id: string) {
   for (let i = 0; i < 10; i++) {

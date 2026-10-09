@@ -238,7 +238,8 @@ it("approved expiry reminder is delivered once and unknown email is never requeu
       action: "membershipExpiring",
       endsAt,
     });
-    expect((await safe.get()).data()?.emailState).toBe("queued");
+    // Historical rows without immutable customer events never enter delivery.
+    expect((await safe.get()).data()?.emailState).toBe("blocked_external");
     expect((await unknown.get()).data()?.emailState).toBe("unknown");
     expect(
       (

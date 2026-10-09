@@ -1,4 +1,5 @@
-import { initializeApp, deleteApp, getApp } from "firebase-admin/app";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
+import { initializeApp, deleteApp, getApp, getApps } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { randomUUID } from "node:crypto";
@@ -47,8 +48,7 @@ async function state() {
   return [order.data(), p1.data(), p2.data()];
 }
 beforeAll(async () => {
-  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18207")
-    throw Error("Shared emulator required, unique project only");
+  demoFirestoreEndpoint(process.env);
   initializeApp({ projectId: `demo-trackinghard-${randomUUID().slice(0, 8)}` });
   db = getFirestore();
   shipping = await import("../../functions/src/shipping");
@@ -301,5 +301,5 @@ afterAll(async () => {
       await db.recursiveDelete(collection);
     await db.terminate();
   }
-  await deleteApp(getApp());
+  if (getApps().length) await deleteApp(getApp());
 });
