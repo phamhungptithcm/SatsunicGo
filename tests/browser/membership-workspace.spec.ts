@@ -470,16 +470,58 @@ for (const mode of [
       }
       await expect(page.getByText(/chưa rõ kết quả/iu)).toBeVisible();
       await expect(purchase).toBeDisabled();
-      await page
-        .getByRole("button", { name: "Hồ sơ và địa chỉ", exact: true })
-        .click();
-      await expect(page.getByLabel(/Tên hiển thị/)).toBeDisabled();
-      await page
-        .getByRole("button", { name: "Membership", exact: true })
-        .click();
-      await page
-        .getByRole("button", { name: "Thử lại thao tác đang chờ", exact: true })
-        .click();
+      const profileEntry = page.getByRole("button", {
+        name: "Hồ sơ và địa chỉ",
+        exact: true,
+      });
+      await expect(profileEntry).toBeDisabled();
+      await expect(profileEntry).toHaveAttribute("aria-expanded", "false");
+      const membershipEntry = page.getByRole("button", {
+        name: "Membership",
+        exact: true,
+      });
+      await expect(membershipEntry).toBeEnabled();
+      await expect(membershipEntry).toHaveAttribute("aria-expanded", "true");
+      if (mode === "unknown" || mode === "malformed") {
+        await membershipEntry.focus();
+        await page.keyboard.press("Enter");
+        await expect(membershipEntry).toHaveAttribute("aria-expanded", "false");
+        await expect(membershipEntry).toBeEnabled();
+        await expect(profileEntry).toBeDisabled();
+        await expect(
+          page.getByRole("button", {
+            name: "Thử lại thao tác đang chờ",
+            exact: true,
+          }),
+        ).toBeHidden();
+        expect(requests).toHaveLength(1);
+        await membershipEntry.focus();
+        await page.keyboard.press("Enter");
+        await expect(membershipEntry).toHaveAttribute("aria-expanded", "true");
+        await expect(membershipEntry).toBeEnabled();
+        await expect(profileEntry).toBeDisabled();
+        await expect(purchase).toBeDisabled();
+        expect(requests).toHaveLength(1);
+      }
+      await expect(page.locator("#notice")).toHaveText("");
+      expect(
+        await page.evaluate(
+          (key) => JSON.parse(localStorage.getItem(key)!),
+          pendingKey,
+        ),
+      ).toMatchObject({
+        operationId: requests[0].operationId,
+        action: requests[0].action,
+      });
+      expect(requests).toHaveLength(1);
+      const retry = page.getByRole("button", {
+        name: "Thử lại thao tác đang chờ",
+        exact: true,
+      });
+      await expect(retry).toBeVisible();
+      await expect(retry).toBeEnabled();
+      await retry.focus();
+      await page.keyboard.press("Enter");
       await expect.poll(() => requests.length).toBe(2);
       expect(requests[1]).toEqual(requests[0]);
     }
@@ -510,4 +552,18 @@ for (const mode of [
       path: `output/membership-workspace/${mode}.png`,
       fullPage: true,
     });
+    if (mode === "unknown" || mode === "malformed" || mode === "renewal-lost") {
+      const profileEntry = page.getByRole("button", {
+        name: "Hồ sơ và địa chỉ",
+        exact: true,
+      });
+      await expect(profileEntry).toBeEnabled();
+      await profileEntry.focus();
+      await page.keyboard.press("Enter");
+      await expect(profileEntry).toHaveAttribute("aria-expanded", "true");
+      await expect(page.getByLabel(/Tên hiển thị/)).toBeEnabled();
+      expect(requests).toHaveLength(2);
+      expect(requests[1]).toEqual(requests[0]);
+      expect(errors).toEqual([]);
+    }
   });
