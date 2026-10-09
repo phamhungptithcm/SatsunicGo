@@ -2,14 +2,16 @@ import { createHash } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
 import {
-  cartItemSchema,
   cartCommandSchema,
   cartSchema,
   consumeCart,
   mergeCart,
   type CartItem,
 } from "../../packages/domain/cart";
-import { catalogProductSchema } from "../../packages/domain/catalog-checkout";
+import {
+  catalogProductSchema,
+  catalogSelectionSchema,
+} from "../../packages/domain/catalog-checkout";
 import { requireVerifiedGoogle } from "./auth/guards";
 
 export const cartCommand = onCall(
@@ -99,7 +101,7 @@ export const cartCommand = onCall(
             "Chưa xác nhận được đơn để cập nhật giỏ.",
           );
         if (done.exists) return current;
-        const selected = cartItemSchema
+        const selected = catalogSelectionSchema
           .pick({ productId: true, variant: true, quantity: true })
           .strip()
           .safeParse(order.catalogSnapshot);
