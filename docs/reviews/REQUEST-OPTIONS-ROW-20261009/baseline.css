@@ -105,15 +105,8 @@
   margin: 8px 0 16px;
 }
 .quickRequestPage .itemOptions .twoCols {
-  grid-template-columns: 90px minmax(0, 1.6fr) minmax(0, 1fr) minmax(
-      160px,
-      0.9fr
-    );
-  align-items: end;
+  grid-template-columns: 90px minmax(0, 1fr) 190px;
   gap: 14px;
-}
-.quickRequestPage .itemOptions .twoCols label {
-  min-width: 0;
 }
 .quickRequestPage .itemOptions .twoCols label:last-child {
   grid-column: auto;

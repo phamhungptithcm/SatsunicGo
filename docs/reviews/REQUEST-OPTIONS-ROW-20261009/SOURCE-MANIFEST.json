@@ -1,0 +1,23 @@
+{
+  "head": "99822aae502cc75406184ee345e4527c6e0db66d",
+  "files": {
+    "src/features/requests/request-form.css": "599e6860b3238507f76a259e9828e14101d07b92c911a48e60ea67455d833cd6"
+  },
+  "browserWidths": [
+    320,
+    390,
+    640,
+    641,
+    768,
+    1024,
+    1440
+  ],
+  "desktopFourControlsOneRow": "PASSED",
+  "allWidthsNoOverflow": "PASSED",
+  "currencies": [
+    "USD",
+    "JPY",
+    "KRW"
+  ],
+  "keyboardOrder": "PASSED"
+}
