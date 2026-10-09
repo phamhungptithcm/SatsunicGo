@@ -115,7 +115,7 @@ test("launcher fails clearly before invoking OCR when API key is missing", () =>
   }
 });
 
-test("release quality forwards only Gemini key and build cannot bypass quality", () => {
+test("AI review is opt-in and independent from mandatory release quality", () => {
   const release = readFileSync(
     join(repoRoot, ".github/workflows/release.yml"),
     "utf8",
@@ -125,15 +125,13 @@ test("release quality forwards only Gemini key and build cannot bypass quality",
     join(repoRoot, ".github/workflows/deep-review.yml"),
     "utf8",
   );
-  assert.match(
-    release,
-    /quality:\s+uses: \.\/\.github\/workflows\/ci.yml\s+secrets:\s+GEMINI_API_KEY:/,
-  );
+  assert.match(release, /quality:\s+uses: \.\/\.github\/workflows\/ci.yml/);
   assert.match(release, /build:\s+needs: quality/);
-  assert.match(
-    ci,
-    /deep-review:\s+uses: \.\/\.github\/workflows\/deep-review.yml/,
-  );
+  assert.doesNotMatch(ci, /uses:.*deep-review\.yml|GEMINI_API_KEY/);
+  assert.doesNotMatch(release, /deep-review|GEMINI_API_KEY/);
+  assert.match(deep, /workflow_dispatch:/);
+  assert.match(deep, /vars.AI_REVIEW_ENABLED == 'true'/);
+  assert.match(deep, /continue-on-error: true/);
   assert.doesNotMatch(
     deep,
     /pull_request_target|id-token:|contents: write|secrets: inherit/,

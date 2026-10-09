@@ -3,9 +3,6 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
-    secrets:
-      GEMINI_API_KEY:
-        required: false
     inputs:
       build:
         description: Build frontend after validation (release builds its own immutable artifact)
@@ -17,10 +14,6 @@ concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  deep-review:
-    uses: ./.github/workflows/deep-review.yml
-    secrets:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
   local:
     runs-on: ubuntu-latest
     timeout-minutes: 30

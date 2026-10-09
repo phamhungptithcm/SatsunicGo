@@ -1,13 +1,15 @@
-name: Deep code review
+name: Optional AI code review
 on:
-  workflow_call:
-    secrets:
-      GEMINI_API_KEY:
-        required: false
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
 permissions:
   contents: read
 jobs:
   review:
+    if: github.event_name == 'workflow_dispatch' || vars.AI_REVIEW_ENABLED == 'true'
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 25
     concurrency:
