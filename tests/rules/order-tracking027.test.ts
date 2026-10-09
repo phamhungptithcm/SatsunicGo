@@ -49,11 +49,13 @@ it("owner receives only safe fields, no desiredAt ETA, hold detail, address or l
   expect(result.orderId).toBe(id);
   expect(result.estimate).toBeNull();
   expect(result.onHold).toBe(true);
+  expect(result.upfrontPayment).toBe(false);
   expect(Object.keys(result).sort()).toEqual(
     [
       "orderId",
       "stage",
       "purchaseKind",
+      "upfrontPayment",
       "version",
       "onHold",
       "observedAt",

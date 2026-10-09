@@ -1,4 +1,5 @@
 import { beforeAll, afterAll, test, expect } from "vitest";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { randomUUID, createHash } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
@@ -302,7 +303,7 @@ test("clients including OWNER cannot read or write recovery fences/quota directl
   await resolve(uid, pointer(data));
   const env = await initializeTestEnvironment({
     projectId: "demo-satsunicgo",
-    firestore: { host: "127.0.0.1", port: 18207 },
+    firestore: demoFirestoreEndpoint(process.env),
   });
   try {
     const client = env

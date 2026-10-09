@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { initializeApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import {
   initializeTestEnvironment,
   assertFails,
@@ -51,8 +52,7 @@ beforeAll(async () => {
   rules = await initializeTestEnvironment({
     projectId: "demo-satsunicgo-purchase-rules",
     firestore: {
-      host: "127.0.0.1",
-      port: 18207,
+      ...demoFirestoreEndpoint(process.env),
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });

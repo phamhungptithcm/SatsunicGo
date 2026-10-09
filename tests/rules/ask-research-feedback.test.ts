@@ -1,7 +1,9 @@
-import { beforeAll, afterAll, test, expect } from "vitest";
+import { beforeAll, beforeEach, afterAll, test, expect, vi } from "vitest";
 import { randomUUID, createHash } from "node:crypto";
+import { performance } from "node:perf_hooks";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { askAnswerSchema } from "../../packages/domain/ask-stream";
 import { feedbackHash } from "../../functions/src/ai/feedback";
 import { knowledgeSource } from "../../functions/src/ai/approved-knowledge";
@@ -10,11 +12,22 @@ import {
   runWebSelect,
 } from "../../functions/src/ai/research-live";
 import { readServerContext } from "../../functions/src/ai/server-context";
+import { researchGeminiLimits } from "../../functions/src/ai/research-gemini";
 let api: typeof import("../../functions/src/index"),
   db: ReturnType<typeof getFirestore>;
 const paths = new Set<string>(),
   ownedPolicies = new Map<string, unknown>(),
   policyVersion = Date.now();
+// Mocked transport uses the verified historical pricing window; SDK elapsed time
+// still advances. Keep the real, unique policyVersion for fixture ownership.
+const admittedAt = researchGeminiLimits.pricingExpiresAt - 12 * 60 * 60 * 1000;
+let clockBase = admittedAt,
+  clockStartedAt = performance.now();
+function resetAdmissionClock() {
+  clockBase = admittedAt;
+  clockStartedAt = performance.now();
+}
+beforeEach(resetAdmissionClock);
 const auth = (uid: string, data: unknown, mfa = true) =>
   ({
     auth: {
@@ -96,6 +109,10 @@ async function conversation(uid: string) {
   return input;
 }
 beforeAll(async () => {
+  resetAdmissionClock();
+  vi.spyOn(Date, "now").mockImplementation(
+    () => clockBase + Math.floor(performance.now() - clockStartedAt),
+  );
   api = await import("../../functions/src/index");
   db = getFirestore();
   const policies = {
@@ -161,16 +178,20 @@ beforeAll(async () => {
   );
 });
 afterAll(async () => {
-  if (!db) return;
-  for (const path of paths) await db.recursiveDelete(db.doc(path));
-  for (const [path, value] of ownedPolicies) {
-    const ref = db.doc(path);
-    await db.runTransaction(async (tx) => {
-      const now = await tx.get(ref);
-      if (JSON.stringify(now.data()) === JSON.stringify(value)) tx.delete(ref);
-    });
+  try {
+    if (!db) return;
+    for (const path of paths) await db.recursiveDelete(db.doc(path));
+    for (const [path, value] of ownedPolicies) {
+      const ref = db.doc(path);
+      await db.runTransaction(async (tx) => {
+        const now = await tx.get(ref);
+        if (JSON.stringify(now.data()) === JSON.stringify(value)) tx.delete(ref);
+      });
+    }
+    await db.terminate();
+  } finally {
+    vi.restoreAllMocks();
   }
-  await db.terminate();
 });
 test("integration learning: missing frozen holdout blocks; actual approved source passes retrieval, changed publication rejects", async () => {
   const { uid } = await fixture(),
@@ -418,6 +439,64 @@ test("integration web bad: exhausted/missing ledger, private input and stale con
   }
   expect(f.calls).toEqual([]);
 });
+test.each(["policy", "pricing"] as const)(
+  "integration web bad: expired %s denies before provider I/O or reservation",
+  async (expiry) => {
+    const f = await webFixture(),
+      budget = db.doc("askResearchBudget/lifetime"),
+      policy = db.doc("settings/askWebDiscovery"),
+      merchants = db.doc("settings/askResearch"),
+      ledgerBefore = (await budget.get()).data(),
+      policyBefore = (await policy.get()).data(),
+      merchantsBefore = (await merchants.get()).data();
+    if (
+      policyBefore?.version !== policyVersion ||
+      merchantsBefore?.version !== policyVersion
+    )
+      throw Error("Refuse to change an unowned demo policy");
+    try {
+      if (expiry === "policy")
+        await policy.update({ expiresAt: Date.now() - 1 });
+      else {
+        // Isolate the pricing fence: both owned policies remain current when
+        // the synthetic clock crosses the unchanged production price deadline.
+        await Promise.all([
+          policy.update({
+            expiresAt: researchGeminiLimits.pricingExpiresAt + 600000,
+          }),
+          merchants.update({
+            expiresAt: researchGeminiLimits.pricingExpiresAt + 600000,
+          }),
+        ]);
+        clockBase = researchGeminiLimits.pricingExpiresAt;
+        clockStartedAt = performance.now();
+      }
+      await expect(
+        runWebDiscovery(
+          f.uid,
+          f.input,
+          f.transport,
+          AbortSignal.timeout(10000),
+          f.collection,
+        ),
+      ).rejects.toMatchObject({
+        code: expiry === "policy" ? "unavailable" : "resource-exhausted",
+      });
+      expect(f.calls).toEqual([]);
+      expect((await budget.get()).data()).toEqual(ledgerBefore);
+      expect((await db.doc(`askWebDiscovery/${f.key}`).get()).exists).toBe(false);
+    } finally {
+      resetAdmissionClock();
+      if (expiry === "policy")
+        await policy.update({ expiresAt: policyBefore.expiresAt });
+      else
+        await Promise.all([
+          policy.update({ expiresAt: policyBefore.expiresAt }),
+          merchants.update({ expiresAt: merchantsBefore.expiresAt }),
+        ]);
+    }
+  },
+);
 test("integration web bad: unknown outcome remains held and a version change cannot buy a retry", async () => {
   const f = await webFixture();
   const transport = {
@@ -934,7 +1013,7 @@ test("server-only evidence: even OWNER clients cannot read or write research/fee
     { doc, getDoc, setDoc } = await import("firebase/firestore"),
     env = await initializeTestEnvironment({
       projectId: "demo-satsunicgo",
-      firestore: { host: "127.0.0.1", port: 18207 },
+      firestore: demoFirestoreEndpoint(process.env),
     });
   try {
     const client = env.authenticatedContext(uid).firestore();
