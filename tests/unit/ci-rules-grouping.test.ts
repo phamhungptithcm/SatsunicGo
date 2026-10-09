@@ -63,6 +63,8 @@ test("the actual CI groups execute every rules file exactly once", async () => {
     { group: "cart", port: 18207, project: "demo-satsunicgo-cart107" },
     { group: "pilot", port: 18207, project: "demo-satsunicgo-ask106-ci" },
     { group: "delivery", port: 8187, project: "demo-satsunicgo" },
+    { group: "recipient", port: 18207, project: "demo-satsunicgo" },
+    { group: "sepay", port: 18207, project: "demo-satsunicgo" },
   ]);
   for (const { group } of groups) {
     const { test: config } = await configFor(group);
