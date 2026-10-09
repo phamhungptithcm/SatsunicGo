@@ -6,6 +6,7 @@ import console from 'node:console';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 const REGION='asia-southeast1';
+const triggerConstructors=new Map([['firebase-functions/v2/https',new Set(['onCall','onRequest'])],['firebase-functions/v2/scheduler',new Set(['onSchedule'])],['firebase-functions/v2/firestore',new Set(['onDocumentCreated','onDocumentWritten'])]]);
 // One source-owned emulator exception, never a generic conditional-export parser.
 export function exactDemoCondition(node) {
   return ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken &&
@@ -61,7 +62,7 @@ export function preflight({root,project}) {
       if(exported&&ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>!ts.isIdentifier(d.name)))throw Error('UNSUPPORTED_EXPORTED_BINDING');
       if(ts.isExportAssignment(node))throw Error('UNSUPPORTED_EXPORT_ASSIGNMENT');
       if(ts.isExpressionStatement(node)&&ts.isBinaryExpression(node.expression)&&/^(exports\.|module\.exports)/.test(node.expression.left.getText(ast)))throw Error('UNSUPPORTED_COMMONJS_EXPORT');
-      if(ts.isImportDeclaration(node)&&ts.isStringLiteral(node.moduleSpecifier)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)){const allowed={'firebase-functions/v2/https':['onCall','onRequest'],'firebase-functions/v2/scheduler':['onSchedule'],'firebase-functions/v2/firestore':['onDocumentCreated','onDocumentWritten']}[node.moduleSpecifier.text];if(allowed)for(const item of node.importClause.namedBindings.elements){const name=item.propertyName?.text??item.name.text;if(allowed.includes(name))constructors.set(item.name.text,name);}}
+      if(ts.isImportDeclaration(node)&&ts.isStringLiteral(node.moduleSpecifier)&&triggerConstructors.has(node.moduleSpecifier.text)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings))for(const item of node.importClause.namedBindings.elements){const name=item.propertyName?.text??item.name.text;if(triggerConstructors.get(node.moduleSpecifier.text).has(name))constructors.set(item.name.text,name);}
       if(ts.isVariableStatement(node))for(const item of node.declarationList.declarations)if(ts.isIdentifier(item.name)&&item.initializer){variables.set(item.name.text,item.initializer);declarations.set(item.name.text,item);if(node.modifiers?.some(m=>m.kind===ts.SyntaxKind.ExportKeyword))exports.set(item.name.text,{local:item.name.text});}
       if(ts.isExportDeclaration(node)&&node.exportClause&&ts.isNamedExports(node.exportClause))for(const item of node.exportClause.elements)exports.set(item.name.text,{local:item.propertyName?.text??item.name.text,from:node.moduleSpecifier?.text});
       if(ts.isExportDeclaration(node)&&!node.exportClause)fail('UNSUPPORTED_STAR_EXPORT');

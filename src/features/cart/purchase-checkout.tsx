@@ -479,6 +479,9 @@ export function PurchaseCheckout({
                 <div className="purchaseFields">
                   <label>
                     Người nhận
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
                     <input
                       autoComplete="shipping name"
                       value={recipient.recipient}
@@ -489,6 +492,9 @@ export function PurchaseCheckout({
                   </label>
                   <label>
                     Số điện thoại
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
                     <input
                       autoComplete="shipping tel"
                       type="tel"
@@ -506,6 +512,9 @@ export function PurchaseCheckout({
                   </label>
                   <label>
                     Tỉnh / thành phố
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
                     <select
                       required
                       value={recipient.provinceCode}
@@ -531,6 +540,9 @@ export function PurchaseCheckout({
                   </label>
                   <label>
                     Phường / xã
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
                     <select
                       required
                       disabled={!province}
@@ -559,6 +571,9 @@ export function PurchaseCheckout({
                   </label>
                   <label className="purchaseWide">
                     Số nhà, đường, tòa nhà / căn hộ
+                    <span className="requiredMark" aria-hidden="true">
+                      *
+                    </span>
                     <input
                       required
                       autoComplete="shipping street-address"

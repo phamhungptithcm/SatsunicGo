@@ -1,0 +1,1141 @@
+{
+  "scope": "Changed UI text, templates, taxonomy and safe callable errors; operational baseline excluded. Supplemented by in-context review. Release v2a: inventory rebound to isolated source; two existing decorative required markers added to mandatory UTC date labels.",
+  "items": [
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 528,
+      "kind": "StringLiteral",
+      "text": "Số liệu trả về chưa hợp lệ. Thử làm mới.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 543,
+      "kind": "StringLiteral",
+      "text": "Bạn chưa có quyền xem thống kê. Kiểm tra tài khoản đang đăng nhập.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 546,
+      "kind": "StringLiteral",
+      "text": "Chưa tải được thống kê. Kiểm tra kết nối rồi làm mới.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 597,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 600,
+      "kind": "TemplateExpression",
+      "text": "`${new Intl.NumberFormat(\"vi-VN\").format(n)} ₫`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 609,
+      "kind": "StringLiteral",
+      "text": "Tổng quan SatsunicGo",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 612,
+      "kind": "StringLiteral",
+      "text": "Tổng quan",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 621,
+      "kind": "StringLiteral",
+      "text": "Đang tải…",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 621,
+      "kind": "StringLiteral",
+      "text": "Làm mới",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 627,
+      "kind": "JsxText",
+      "text": "HIỆU QUẢ WEBSITE VÀ MUA HÀNG",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 628,
+      "kind": "JsxText",
+      "text": "Hiểu nhu cầu của khách, theo dõi đơn và tiền đã ghi nhận.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 633,
+      "kind": "StringLiteral",
+      "text": "Khoảng thời gian thống kê",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 645,
+      "kind": "StringLiteral",
+      "text": "Hôm nay",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 645,
+      "kind": "TemplateExpression",
+      "text": "`${n} ngày`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 653,
+      "kind": "JsxText",
+      "text": "Tùy chọn",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 667,
+      "kind": "JsxText",
+      "text": "Từ ngày (UTC)",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 681,
+      "kind": "JsxText",
+      "text": "Đến ngày (UTC)",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 693,
+      "kind": "JsxText",
+      "text": "Áp dụng",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 694,
+      "kind": "JsxText",
+      "text": "Chọn tối đa 31 ngày theo UTC.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 700,
+      "kind": "StringLiteral",
+      "text": "Khoảng ngày trong đường dẫn chưa hợp lệ; đang dùng 7 ngày gần nhất.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 705,
+      "kind": "StringLiteral",
+      "text": "Nội dung tổng quan",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 709,
+      "kind": "StringLiteral",
+      "text": "Khách hàng & mua hàng",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 710,
+      "kind": "StringLiteral",
+      "text": "Vận hành",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 716,
+      "kind": "StringLiteral",
+      "text": "Đang hiển thị lần đọc trước ·",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 718,
+      "kind": "TemplateExpression",
+      "text": "`Tổng hợp lúc ${new Date(snapshot.asOf).toLocaleString(\"vi-VN\", { timeZone: \"UTC\" })} UTC`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 720,
+      "kind": "StringLiteral",
+      "text": "Đang đọc dữ liệu…",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 721,
+      "kind": "StringLiteral",
+      "text": "Chưa có số liệu",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 731,
+      "kind": "JsxText",
+      "text": "Thu thập đang tắt. Không có lịch sử truy cập trước khi thu thập được\n          bật.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 737,
+      "kind": "JsxText",
+      "text": "Bắt đầu thu thập:",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 741,
+      "kind": "JsxText",
+      "text": "UTC. Chỉ tính các lượt đã ghi nhận và các nguồn được xử lý sau khi\n          bật.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 747,
+      "kind": "JsxText",
+      "text": "Số liệu chưa bao phủ toàn kỳ",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 749,
+      "kind": "TemplateExpression",
+      "text": "` · ${usable.backlog >= 101 ? \"ít nhất 101\" : usable.backlog} tác vụ đang chờ`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 749,
+      "kind": "StringLiteral",
+      "text": "ít nhất 101",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 752,
+      "kind": "TemplateExpression",
+      "text": "` · ${usable.deadLetters >= 101 ? \"ít nhất 101\" : usable.deadLetters} tác vụ cần kiểm tra`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 749,
+      "kind": "StringLiteral",
+      "text": "ít nhất 101",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 754,
+      "kind": "JsxText",
+      "text": ". Các chỉ số không đủ dữ liệu hiển thị —.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 766,
+      "kind": "StringLiteral",
+      "text": "Phiên truy cập",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 768,
+      "kind": "StringLiteral",
+      "text": "Phiên đã ghi nhận, kết thúc sau 30 phút không hoạt động",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 771,
+      "kind": "StringLiteral",
+      "text": "Trình duyệt truy cập",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 773,
+      "kind": "StringLiteral",
+      "text": "Mã trình duyệt khác nhau; không phải số người chính xác",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 776,
+      "kind": "StringLiteral",
+      "text": "Khách có đơn thanh toán",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 778,
+      "kind": "StringLiteral",
+      "text": "Tài khoản có thanh toán đã xác minh trong kỳ, gồm tiền cọc",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 781,
+      "kind": "StringLiteral",
+      "text": "Phiên có đơn thanh toán",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 783,
+      "kind": "TemplateExpression",
+      "text": "`${value(usable?.convertedSessions)} / ${value(usable?.sessions)} phiên thuộc cùng nhóm thời gian`",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 795,
+      "kind": "StringLiteral",
+      "text": "Lượt truy cập theo ngày",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 798,
+      "kind": "StringLiteral",
+      "text": "Lượt xem trang",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 799,
+      "kind": "StringLiteral",
+      "text": "Phiên mới",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 803,
+      "kind": "JsxText",
+      "text": "Từ truy cập đến mua hàng",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 805,
+      "kind": "JsxText",
+      "text": "Đối chiếu với lần thanh toán đầu tiên trong 7 ngày từ lúc bắt\n                đầu phiên.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 810,
+      "kind": "JsxText",
+      "text": "Phiên đã ghi nhận",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 814,
+      "kind": "JsxText",
+      "text": "Phiên xem sản phẩm",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 818,
+      "kind": "JsxText",
+      "text": "Trong đó có đơn thanh toán",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 823,
+      "kind": "JsxText",
+      "text": "Mua hộ không qua trang sản phẩm vẫn được tính trong tỷ lệ phiên\n                có đơn thanh toán ở trên.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 828,
+      "kind": "JsxText",
+      "text": "Tạm thời: các phiên gần đây chưa đủ 7 ngày theo dõi.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 832,
+      "kind": "JsxText",
+      "text": "Đơn có liên kết phiên / đơn có thanh toán trong kỳ:",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 833,
+      "kind": "JsxText",
+      "text": ".\n                Tài khoản truy cập:",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 851,
+      "kind": "StringLiteral",
+      "text": "Tiền đã ghi nhận",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 855,
+      "kind": "StringLiteral",
+      "text": "Thu đã ghi nhận",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 856,
+      "kind": "StringLiteral",
+      "text": "Hoàn tiền",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 859,
+      "kind": "StringLiteral",
+      "text": "Đảo giao dịch",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 865,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 865,
+      "kind": "JsxText",
+      "text": "· Hoàn",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 865,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 866,
+      "kind": "JsxText",
+      "text": "· Đảo",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 865,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 867,
+      "kind": "JsxText",
+      "text": "· Ròng",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 865,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 871,
+      "kind": "JsxText",
+      "text": ". Đây là biến động tiền trong kỳ, không phải doanh thu hay lợi\n                nhuận.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 890,
+      "kind": "JsxText",
+      "text": "Việc cần xử lý",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 892,
+      "kind": "JsxText",
+      "text": "Các hàng đợi có thể trùng đơn và chỉ đọc tối đa 100 bản ghi mỗi\n            nguồn; không phải tổng số đơn.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "line": 899,
+      "kind": "JsxText",
+      "text": "Quyền thống kê, chặn theo dõi, mất kết nối và thiếu liên kết đơn có thể\n        làm số liệu thấp hơn thực tế. Lượt chọn không đồng nghĩa với mua hàng.",
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 20,
+      "kind": "StringLiteral",
+      "text": "—",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 26,
+      "kind": "StringLiteral",
+      "text": "lượt",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 66,
+      "kind": "TemplateExpression",
+      "text": "`${title}. Dùng phím trái phải chọn ngày.`",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 85,
+      "kind": "TemplateExpression",
+      "text": "`${title}, ${rows.length} ngày. Số liệu chi tiết bên dưới.`",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 177,
+      "kind": "StringLiteral",
+      "text": "Ngày trước",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 181,
+      "kind": "JsxText",
+      "text": "←",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 191,
+      "kind": "StringLiteral",
+      "text": "Ngày sau",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 195,
+      "kind": "JsxText",
+      "text": "→",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 199,
+      "kind": "JsxText",
+      "text": "Xem số liệu theo ngày",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 207,
+      "kind": "JsxText",
+      "text": "Ngày",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 228,
+      "kind": "JsxText",
+      "text": "Chưa có số liệu cho khoảng này.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 245,
+      "kind": "JsxText",
+      "text": "Trạng thái đơn trong kỳ",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 247,
+      "kind": "JsxText",
+      "text": "Trạng thái hiện tại của các đơn được tạo trong khoảng đã chọn.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 255,
+      "kind": "StringLiteral",
+      "text": "Chưa có số liệu trạng thái đơn",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 257,
+      "kind": "TemplateExpression",
+      "text": "`${format(total)} đơn, các trạng thái trong bảng`",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 258,
+      "kind": "StringLiteral",
+      "text": "Chưa có đơn được ghi nhận",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 291,
+      "kind": "JsxText",
+      "text": "đơn được ghi nhận",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 295,
+      "kind": "JsxText",
+      "text": "Trạng thái và số đơn",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 301,
+      "kind": "StringLiteral",
+      "text": "Chưa phân loại",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 312,
+      "kind": "StringLiteral",
+      "text": "Chưa có đơn được ghi nhận trong kỳ.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 313,
+      "kind": "StringLiteral",
+      "text": "Chưa có số liệu trạng thái đơn.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 325,
+      "kind": "StringLiteral",
+      "text": "Mỹ",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 326,
+      "kind": "StringLiteral",
+      "text": "Nhật Bản",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 327,
+      "kind": "StringLiteral",
+      "text": "Hàn Quốc",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 328,
+      "kind": "StringLiteral",
+      "text": "Chưa phân loại",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 336,
+      "kind": "JsxText",
+      "text": "Đơn mới theo nguồn hàng",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 350,
+      "kind": "StringLiteral",
+      "text": "Số đơn mới theo ngày và quốc gia. Xem bảng để đọc giá trị.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 370,
+      "kind": "JsxText",
+      "text": "Xem số liệu theo nguồn hàng",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 373,
+      "kind": "JsxText",
+      "text": "Đơn mới · UTC",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 376,
+      "kind": "JsxText",
+      "text": "Ngày",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 397,
+      "kind": "JsxText",
+      "text": "Chưa có dữ liệu đơn mới.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 434,
+      "kind": "JsxText",
+      "text": "Sản phẩm được quan tâm",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 436,
+      "kind": "JsxText",
+      "text": "Chọn tối đa 10 sản phẩm theo lượt chọn; bấm tiêu đề cột để sắp xếp các\n        dòng. Đơn thanh toán đủ chỉ đếm một lần cho mỗi sản phẩm trong đơn.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 443,
+      "kind": "JsxText",
+      "text": "Lượt xem, lượt chọn và đơn thanh toán đủ",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 449,
+      "kind": "StringLiteral",
+      "text": "Sản phẩm",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 451,
+      "kind": "StringLiteral",
+      "text": "Chọn",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 452,
+      "kind": "StringLiteral",
+      "text": "Đơn đủ tiền",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 468,
+      "kind": "TemplateExpression",
+      "text": "`Sắp xếp theo ${c.label}`",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 483,
+      "kind": "StringLiteral",
+      "text": "↓",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 484,
+      "kind": "StringLiteral",
+      "text": "↑",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 517,
+      "kind": "StringLiteral",
+      "text": "Chưa ghi nhận tương tác sản phẩm trong khoảng này.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 518,
+      "kind": "StringLiteral",
+      "text": "Chưa có dữ liệu sản phẩm đủ phạm vi để thống kê. Thử chọn khoảng ngắn hơn.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 538,
+      "kind": "JsxText",
+      "text": "Chủ đề được hỏi trong Ask",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 540,
+      "kind": "JsxText",
+      "text": "Chỉ hiển thị chủ đề có từ 5 phiên khác nhau. Câu hỏi được phân nhóm,\n        không lưu nguyên văn trong thống kê.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 545,
+      "kind": "JsxText",
+      "text": "Chủ đề, số câu hỏi và phiên",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 548,
+      "kind": "JsxText",
+      "text": "Chủ đề",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 549,
+      "kind": "JsxText",
+      "text": "Câu hỏi",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 550,
+      "kind": "JsxText",
+      "text": "Phiên",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 573,
+      "kind": "StringLiteral",
+      "text": "Chưa có chủ đề đủ số phiên để hiển thị.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/features/crm/DashboardCharts.tsx",
+      "line": 574,
+      "kind": "StringLiteral",
+      "text": "Dữ liệu phiên và chủ đề chưa khả dụng trong khoảng này.",
+      "sha256": "c6d068ecd61ae5838af20e36bccb1c78481086b1572c49ed188ec6ab5ce1a12d"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 92,
+      "kind": "JsxText",
+      "text": "Quyền thống kê",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 101,
+      "kind": "StringLiteral",
+      "text": "Quyền thống kê truy cập",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 103,
+      "kind": "JsxText",
+      "text": "Cho phép thống kê để cải thiện SatsunicGo?",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 105,
+      "kind": "JsxText",
+      "text": "Ghi nhận phiên truy cập, lựa chọn sản phẩm và chủ đề Ask. Không lưu\n          nguyên văn câu hỏi trong thống kê. Bạn vẫn mua hàng bình thường khi từ\n          chối.",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 110,
+      "kind": "JsxText",
+      "text": "Optional analytics. Declining does not affect shopping.",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 112,
+      "kind": "JsxText",
+      "text": "Cách sử dụng dữ liệu",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 116,
+      "kind": "StringLiteral",
+      "text": "Dừng ghi nhận",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 116,
+      "kind": "StringLiteral",
+      "text": "Từ chối",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 119,
+      "kind": "JsxText",
+      "text": "Cho phép thống kê",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/shared/AnalyticsConsent.tsx",
+      "line": 123,
+      "kind": "JsxText",
+      "text": "Đóng",
+      "sha256": "806588a21160a6400852101eb6d4e17ee7fca21caee828bb0c979596c1676323"
+    },
+    {
+      "file": "src/features/content/PrivacyPage.tsx",
+      "line": 6,
+      "kind": "StringLiteral",
+      "text": "Thống kê truy cập tùy chọn",
+      "sha256": "7af303d3bd832c3e2c72c2d7327177632add0c87dac4c08f7e42779862d88ea1"
+    },
+    {
+      "file": "src/features/content/PrivacyPage.tsx",
+      "line": 7,
+      "kind": "StringLiteral",
+      "text": "Chỉ ghi nhận khi bạn chọn Cho phép thống kê và hệ thống đã bật thu thập. Thống kê gồm mã trình duyệt và phiên ngẫu nhiên, nhóm trang đã xem, mã sản phẩm được chọn và chủ đề câu hỏi Ask trong danh sách cố định. Không lưu nguyên văn câu hỏi, địa chỉ, email hoặc thông tin thanh toán vào sự kiện truy cập. Khi đăng nhập, hệ thống có thể liên kết phiên với đơn thuộc tài khoản của bạn để tính số phiên có đơn thanh toán. Mã liên kết vẫn là dữ liệu có thể liên quan đến tài khoản, không được coi là dữ liệu hoàn toàn ẩn danh.\n\nBạn có thể từ chối hoặc chọn Quyền thống kê → Dừng ghi nhận. Việc này không ảnh hưởng đến mua hàng và dừng ghi nhận tiếp theo; số liệu đã tổng hợp không bị xóa ngay.\n\nCấu hình lưu riêng cho thống kê: sự kiện 7 ngày; phiên và dữ liệu liên kết làm việc tối đa 45 ngày; tổng hợp không chứa nội dung cá nhân 365 ngày. Cơ chế xóa tự động chạy nền, không bảo đảm xóa đúng thời điểm hết hạn. Biên nhận chống đếm trùng và đối chiếu nguồn tài chính có thể được giữ 365 ngày. Thời hạn này chỉ áp dụng cho thống kê, không thay đổi thời hạn lưu đơn, giao dịch hoặc hồ sơ hỗ trợ.",
+      "sha256": "7af303d3bd832c3e2c72c2d7327177632add0c87dac4c08f7e42779862d88ea1"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 10,
+      "kind": "StringLiteral",
+      "text": "Vận chuyển",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 11,
+      "kind": "StringLiteral",
+      "text": "Thanh toán",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 12,
+      "kind": "StringLiteral",
+      "text": "Mua hộ",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 13,
+      "kind": "StringLiteral",
+      "text": "Theo dõi đơn",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 14,
+      "kind": "StringLiteral",
+      "text": "Hoàn / đổi hàng",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 15,
+      "kind": "StringLiteral",
+      "text": "Hội viên",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 16,
+      "kind": "StringLiteral",
+      "text": "Giá và phí",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "packages/domain/analytics.ts",
+      "line": 17,
+      "kind": "StringLiteral",
+      "text": "Khác / chưa phân loại",
+      "sha256": "f7e70ebe14350a8bc449fdfc7f8ac6f8216a9d78087ee2ad47fddda1e11287fc"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 45,
+      "kind": "StringLiteral",
+      "text": "Thống kê truy cập chưa được bật.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 63,
+      "kind": "StringLiteral",
+      "text": "Phiên thống kê đã kết thúc.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 79,
+      "kind": "StringLiteral",
+      "text": "Phiên thống kê đã kết thúc.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 87,
+      "kind": "StringLiteral",
+      "text": "Thông tin thống kê không hợp lệ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 120,
+      "kind": "StringLiteral",
+      "text": "Không ghi nhận truy cập nội bộ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 130,
+      "kind": "StringLiteral",
+      "text": "Đã đạt giới hạn phiên thống kê.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 141,
+      "kind": "StringLiteral",
+      "text": "Đã đạt giới hạn thống kê.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 186,
+      "kind": "StringLiteral",
+      "text": "Gói thống kê quá lớn.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 191,
+      "kind": "StringLiteral",
+      "text": "Thông tin thống kê không hợp lệ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 202,
+      "kind": "StringLiteral",
+      "text": "Thời điểm thống kê không hợp lệ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 224,
+      "kind": "StringLiteral",
+      "text": "Không ghi nhận truy cập nội bộ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 248,
+      "kind": "StringLiteral",
+      "text": "Sản phẩm không khả dụng.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 256,
+      "kind": "StringLiteral",
+      "text": "Đã đạt giới hạn phiên thống kê.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 295,
+      "kind": "StringLiteral",
+      "text": "Thông tin thống kê không hợp lệ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 326,
+      "kind": "StringLiteral",
+      "text": "Không thể liên kết phiên thống kê.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/analytics-ingest.ts",
+      "line": 356,
+      "kind": "StringLiteral",
+      "text": "Thông tin thống kê không hợp lệ.",
+      "sha256": "859c0ec93ecec836ed5c15ce3c04ad6a99afea7c3c0933d6b9fc9d6959dec318"
+    },
+    {
+      "file": "functions/src/dashboard-analytics.ts",
+      "line": 41,
+      "kind": "StringLiteral",
+      "text": "Chọn khoảng thời gian tối đa 31 ngày theo UTC.",
+      "sha256": "4f89d279abd5d9dc526afe397e27a603fa63fe506d53fa46be8f1172dd00418b"
+    },
+    {
+      "file": "functions/src/dashboard-analytics.ts",
+      "line": 62,
+      "kind": "StringLiteral",
+      "text": "Cần quyền quản lý vận hành.",
+      "sha256": "4f89d279abd5d9dc526afe397e27a603fa63fe506d53fa46be8f1172dd00418b"
+    },
+    {
+      "file": "functions/src/dashboard-analytics.ts",
+      "line": 128,
+      "kind": "StringLiteral",
+      "text": "Dữ liệu thống kê cần kiểm tra.",
+      "sha256": "4f89d279abd5d9dc526afe397e27a603fa63fe506d53fa46be8f1172dd00418b"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "kind": "JsxText",
+      "text": "*",
+      "line": 669,
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed",
+      "state": "Mandatory date field marker; aria-hidden decorative text"
+    },
+    {
+      "file": "src/features/crm/Dashboard.tsx",
+      "kind": "JsxText",
+      "text": "*",
+      "line": 683,
+      "sha256": "ccca78132db14813cebbbaffc760925cda0bfd628df8760d13c87e1378b510ed",
+      "state": "Mandatory date field marker; aria-hidden decorative text"
+    }
+  ]
+}

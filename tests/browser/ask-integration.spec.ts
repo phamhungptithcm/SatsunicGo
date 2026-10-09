@@ -63,7 +63,13 @@ for (const mode of [
       export const auth={currentUser:${mode === "guest" ? "null" : "{uid:'qa-web-owner'}"}},db={},functions=null,app=null,configured=false,emulatorMode=true;export const login=async()=>{};
       export async function callService(name,data){window.qaCalls=(window.qaCalls||[]).concat({name,data});
         if(name==='currentAskConversation')return {conversationId:'${cid}'};
-        if(name==='askWorkflow')return {version:data.expectedVersion+1};
+        if(name==='askWorkflow'){
+          const patch={version:data.expectedVersion+1};
+          if(data.action==='saveDraft')patch.draft=data.payload;
+          if(data.action==='saveTurn')patch.turns=[...window.qaConversation.turns,data.payload].slice(-24);
+          window.qaEmitConversation(patch);
+          return {version:patch.version};
+        }
         if(name==='askWebDiscovery'){
           if('${mode}'==='web-offline')throw Error('Synthetic unavailable');
           if('${mode}'==='malformed')return {candidates:[]};
@@ -85,7 +91,12 @@ for (const mode of [
     await page.route("**/*firebase_firestore.js*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const doc=(_,kind,id)=>({kind,id}),collection=(_,kind)=>({kind}),query=x=>x,where=()=>null,limit=()=>null,orderBy=()=>null,documentId=()=>null,startAfter=()=>null;export const getDocs=async()=>({docs:[]});export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;queueMicrotask(()=>{if(!live)return;if(ref.kind==='askConversations')ok({metadata:{fromCache:false},data:()=>({ownerId:'qa-web-owner',version:0,updatedAt:Date.now(),turns:[],draft:{}})});else ok({metadata:{fromCache:false},docs:[],data:()=>undefined,exists:()=>false})});return()=>{live=false}}`,
+        body: `export const doc=(_,kind,id)=>({kind,id}),collection=(_,kind)=>({kind}),query=x=>x,where=()=>null,limit=()=>null,orderBy=()=>null,documentId=()=>null,startAfter=()=>null;
+        export const getDocs=async()=>({docs:[]});export const getDoc=async()=>({metadata:{fromCache:false},data:()=>undefined,exists:()=>false});
+        window.qaConversation={ownerId:'qa-web-owner',version:0,updatedAt:Date.now(),turns:[],draft:{}};
+        const listeners=new Set();const snapshot=()=>({metadata:{fromCache:false},data:()=>window.qaConversation});
+        window.qaEmitConversation=patch=>{window.qaConversation={...window.qaConversation,...patch,updatedAt:Date.now()};for(const ok of listeners)ok(snapshot())};
+        export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;if(ref.kind==='askConversations')listeners.add(ok);queueMicrotask(()=>{if(!live)return;if(ref.kind==='askConversations')ok(snapshot());else ok({metadata:{fromCache:false},docs:[],data:()=>undefined,exists:()=>false})});return()=>{live=false;listeners.delete(ok)}}`,
       }),
     );
     await page.route("**/src/features/ask/ImageIntake.tsx*", (r) =>
@@ -171,7 +182,9 @@ for (const mode of [
       );
       if (mode === "chat-selection") {
         await send("chọn nguồn 1, số lượng 2, mẫu Đen");
-        await expect(page.getByText(/Đã điền bản nháp bên dưới/)).toBeVisible();
+        await expect(
+          page.getByText(/Đã điền bản nháp trong tác vụ hiện tại/),
+        ).toBeVisible();
         const calls = await page.evaluate(
           () =>
             (

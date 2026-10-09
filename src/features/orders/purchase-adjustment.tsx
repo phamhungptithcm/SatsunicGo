@@ -140,6 +140,9 @@ export function PurchaseAdjustment({
           <label>
             Tổng giá hàng dự kiến cho toàn bộ món (
             {order.upfront.sourceCurrency})
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
             <input
               inputMode="decimal"
               value={price}
@@ -150,6 +153,9 @@ export function PurchaseAdjustment({
           </label>
           <label>
             Lý do và tham chiếu giá mới
+            <span className="requiredMark" aria-hidden="true">
+              *
+            </span>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}

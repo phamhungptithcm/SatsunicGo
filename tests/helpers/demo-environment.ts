@@ -13,3 +13,12 @@ export function assertDemoTestEnvironment(
     );
   }
 }
+
+/** Client rules checks must target the same validated emulator as Admin fixtures. */
+export function demoFirestoreEndpoint(env: Record<string, string | undefined>) {
+  assertDemoTestEnvironment(env);
+  return {
+    host: "127.0.0.1",
+    port: Number(env.FIRESTORE_EMULATOR_HOST!.split(":")[1]),
+  };
+}

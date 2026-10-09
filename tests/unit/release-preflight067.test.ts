@@ -149,3 +149,26 @@ test.each([
   demoFixture(root,put,demoExport,target);
   expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
 }));
+// Analytics release compatibility: inspect actual declarations, not copies of constructor syntax.
+test('inventory resolves all nine analytics declarations with production region',()=>fixture((root,put)=>{
+  for(const name of ['analytics-ingest','analytics-worker','dashboard-analytics'])
+    put(`functions/src/${name}.ts`,readFileSync(new URL(`../../functions/src/${name}.ts`,import.meta.url),'utf8'));
+  const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',index+`export {analyticsSession,analyticsIngest,analyticsLinkOrder,analyticsWithdraw} from './analytics-ingest';export {analyticsOrderChanged,analyticsPaymentCreated,analyticsJobCreated,analyticsCompact} from './analytics-worker';export {dashboardAnalytics} from './dashboard-analytics';`);
+  const result=preflight({root,project:'satsunicgo'});
+  expect(result.errors).toEqual([]);
+  expect(result.inventory).toHaveLength(17);
+  const expected={analyticsSession:'onCall',analyticsIngest:'onCall',analyticsLinkOrder:'onCall',analyticsWithdraw:'onCall',analyticsOrderChanged:'onDocumentWritten',analyticsPaymentCreated:'onDocumentCreated',analyticsJobCreated:'onDocumentCreated',analyticsCompact:'onSchedule',dashboardAnalytics:'onCall'};
+  for(const [name,kind] of Object.entries(expected))
+    expect(result.inventory.find((item:{name:string})=>item.name===name)).toMatchObject({kind,region:'asia-southeast1'});
+}));
+test('Firestore triggers retain explicit region and trusted constructor import checks',()=>fixture((root,put)=>{
+  const index=readFileSync(path.join(root,'functions/src/index.ts'),'utf8');
+  put('functions/src/index.ts',index+`export { changed } from './analytics-trigger';`);
+  put('functions/src/analytics-trigger.ts',`import {onDocumentWritten as written} from 'firebase-functions/v2/firestore';const options={region:'us-central1'};export const changed=written({...options,document:'orders/{id}'},()=>{});`);
+  expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_REGION_MISMATCH');
+  for(const [name,module] of [['onDocumentUpdated','firebase-functions/v2/firestore'],['onCall','firebase-functions/v2/firestore'],['onDocumentWritten','untrusted']]){
+    put('functions/src/analytics-trigger.ts',`import {${name} as trigger} from '${module}';export const changed=trigger({region:'asia-southeast1',document:'orders/{id}'},()=>{});`);
+    expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
+  }
+}));

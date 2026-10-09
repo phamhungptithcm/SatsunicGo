@@ -54,7 +54,25 @@ for (const mode of [
     await page.route("**/src/shared/firebase.ts*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const auth={currentUser:${mode === "guest" ? "null" : "{uid:'qa-catalog-owner'}"}},db={},functions=null,app=null,configured=false,emulatorMode=true;export const login=async()=>{};export async function callService(name,data){if(name==='currentAskConversation')return {conversationId:'${cid}'};if(name!=='askWorkflow')throw Error('Unexpected API '+name);window.qaCommands=(window.qaCommands||[]).concat(data);if(data.action==='catalogCheckout'){if('${mode}'==='lost')throw Object.assign(Error('Synthetic unknown outcome'),{code:'functions/unavailable'});if(['malformed','malformed-en'].includes('${mode}'))return {version:data.expectedVersion+2};if('${mode}'==='wrong-version')return {id:'qa-order',version:data.expectedVersion+1};await new Promise(r=>setTimeout(r,100));return {id:'qa-order',version:data.expectedVersion+2}}return {version:data.expectedVersion+1};}`,
+        body: `export const auth={currentUser:${mode === "guest" ? "null" : "{uid:'qa-catalog-owner'}"}},db={},functions=null,app=null,configured=false,emulatorMode=true;export const login=async()=>{};
+        export async function callService(name,data){
+          if(name==='currentAskConversation')return {conversationId:'${cid}'};
+          if(name!=='askWorkflow')throw Error('Unexpected API '+name);
+          window.qaCommands=(window.qaCommands||[]).concat(data);
+          if(data.action==='catalogCheckout'){
+            if('${mode}'==='lost')throw Object.assign(Error('Synthetic unknown outcome'),{code:'functions/unavailable'});
+            if(['malformed','malformed-en'].includes('${mode}'))return {version:data.expectedVersion+2};
+            if('${mode}'==='wrong-version')return {id:'qa-order',version:data.expectedVersion+1};
+            await new Promise(r=>setTimeout(r,100));
+            window.qaEmitConversation({version:data.expectedVersion+2});
+            return {id:'qa-order',version:data.expectedVersion+2};
+          }
+          const patch={version:data.expectedVersion+1};
+          if(data.action==='saveDraft')patch.draft=data.payload;
+          if(data.action==='saveTurn')patch.turns=[...window.qaConversation.turns,data.payload].slice(-24);
+          if(['saveDraft','saveTurn'].includes(data.action))window.qaEmitConversation(patch);
+          return {version:patch.version};
+        }`,
       }),
     );
     await page.route("**/*firebase_auth.js*", (r) =>
@@ -66,7 +84,14 @@ for (const mode of [
     await page.route("**/*firebase_firestore.js*", (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export const doc=(_,kind,id)=>({kind,id}),collection=(_,kind)=>({kind}),query=x=>x,where=()=>null,limit=()=>null,orderBy=()=>null,documentId=()=>null,startAfter=()=>null;export const getDocs=async()=>({docs:[]});export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;queueMicrotask(()=>{if(!live)return;if(ref.kind==='askConversations')ok({metadata:{fromCache:false},data:()=>({ownerId:'${mode === "invalid-owner" ? "foreign-owner" : "qa-catalog-owner"}',version:${mode === "snapshot-version" ? "NaN" : "0"},updatedAt:Date.now(),turns:${mode === "invalid-turns" ? "null" : english ? JSON.stringify([{ id: "66666666-1111-4111-8111-111111111111", question: "answer in english", answer: { language: "en", title: "English preference", paragraphs: ["Synthetic preference"], sourceIds: [], bullets: [], action: "home" } }]) : "[]"},draft:{market:'US',items:[{name:'Unrelated custom draft',quantity:1,variant:'M',url:''}]}})});else ok({metadata:{fromCache:false},docs:[],data:()=>undefined,exists:()=>false})});return()=>{live=false}}`,
+        body: `export const doc=(_,kind,id)=>({kind,id}),collection=(_,kind)=>({kind}),query=x=>x,where=()=>null,limit=()=>null,orderBy=()=>null,documentId=()=>null,startAfter=()=>null;
+        export const getDocs=async()=>({docs:[]});
+        export const getDoc=async ref=>({metadata:{fromCache:false},exists:()=>ref.kind==='products'&&ref.id==='qa-product',data:()=>ref.kind==='products'&&ref.id==='qa-product'?${JSON.stringify(product)}:undefined});
+        window.qaConversation={ownerId:'${mode === "invalid-owner" ? "foreign-owner" : "qa-catalog-owner"}',version:${mode === "snapshot-version" ? "NaN" : "0"},updatedAt:Date.now(),turns:${mode === "invalid-turns" ? "null" : english ? JSON.stringify([{ id: "66666666-1111-4111-8111-111111111111", question: "answer in english", answer: { language: "en", title: "English preference", paragraphs: ["Synthetic preference"], sourceIds: [], bullets: [], action: "home" } }]) : "[]"},draft:{market:'US',items:[{name:'Unrelated custom draft',quantity:1,variant:'M',url:''}]}};
+        const listeners=new Set();
+        const snapshot=()=>({metadata:{fromCache:false},data:()=>window.qaConversation});
+        window.qaEmitConversation=patch=>{window.qaConversation={...window.qaConversation,...patch,updatedAt:Date.now()};for(const ok of listeners)ok(snapshot())};
+        export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;if(ref.kind==='askConversations')listeners.add(ok);queueMicrotask(()=>{if(!live)return;if(ref.kind==='askConversations')ok(snapshot());else ok({metadata:{fromCache:false},docs:[],data:()=>undefined,exists:()=>false})});return()=>{live=false;listeners.delete(ok)}}`,
       }),
     );
     await page.route("**/src/features/ask/ImageIntake.tsx*", (r) =>
@@ -251,7 +276,7 @@ for (const mode of [
           ).toBeVisible();
           await expect(
             panel.getByRole("button", {
-              name: "Xác nhận lựa chọn và tạo đơn",
+              name: "Kiểm tra lựa chọn",
               exact: true,
             }),
           ).toBeDisabled();
@@ -266,6 +291,65 @@ for (const mode of [
           "wrong-version",
           "lost",
         ].includes(mode);
+        const bad = [
+          "malformed",
+          "malformed-en",
+          "wrong-version",
+          "lost",
+        ].includes(mode);
+        if (expectedCreate) {
+          expect(
+            await page.evaluate(
+              () =>
+                (
+                  window as unknown as {
+                    qaCommands?: { action: string }[];
+                  }
+                ).qaCommands?.filter((c) => c.action === "catalogCheckout") ?? [],
+            ),
+          ).toHaveLength(0);
+          const review = page.getByLabel(
+            english ? "Details to confirm" : "Nội dung cần xác nhận",
+            { exact: true },
+          );
+          await expect(review).toBeVisible();
+          await expect(review).toContainText("Synthetic sneakers");
+          await expect(review).toContainText("Blue");
+          await expect(
+            review.getByRole("heading", {
+              name: english ? "Create product order" : "Tạo đơn sản phẩm",
+              exact: true,
+            }),
+          ).toBeVisible();
+          await send(english ? "yes" : "đồng ý");
+          if (bad)
+            await expect(
+              page.getByRole("button", {
+                name: english ? "Reconcile action" : "Đối chiếu tác vụ",
+                exact: true,
+              }),
+            ).toBeEnabled();
+          else {
+            await expect(
+              page.getByText(
+                english
+                  ? "The action was recorded. Check the order status for the next step."
+                  : "Tác vụ đã được ghi nhận. Xem trạng thái đơn để tiếp tục.",
+                { exact: true },
+              ),
+            ).toBeVisible();
+            if (mode === "mobile")
+              await page
+                .getByRole("button", { name: "Hội thoại", exact: true })
+                .click();
+            await expect(
+              page.getByRole("heading", {
+                name: english ? "Action recorded" : "Tác vụ đã được ghi nhận",
+                exact: true,
+              }),
+            ).toBeVisible();
+          }
+        }
         const commands = await page.evaluate(
           () =>
             (
@@ -287,12 +371,6 @@ for (const mode of [
             quantity: 2,
             variant: "Blue",
           });
-          const bad = [
-            "malformed",
-            "malformed-en",
-            "wrong-version",
-            "lost",
-          ].includes(mode);
           const pending = await page.evaluate(
             (cid) =>
               sessionStorage.getItem(`ask-pending:qa-catalog-owner:${cid}`),
@@ -305,11 +383,16 @@ for (const mode of [
                 name: /^Đã tạo đơn$|^Order created$/,
               }),
             ).toHaveCount(0);
+            await expect(
+              page.getByRole("heading", {
+                name: /^Tác vụ đã được ghi nhận$|^Action recorded$/,
+              }),
+            ).toHaveCount(0);
             await page
               .getByRole("button", {
                 name: english
-                  ? "Recover pending action"
-                  : "Đối chiếu thao tác đang chờ",
+                  ? "Reconcile action"
+                  : "Đối chiếu tác vụ",
                 exact: true,
               })
               .click();
@@ -332,7 +415,7 @@ for (const mode of [
             expect(pending).toBeNull();
             await expect(
               page.getByRole("heading", {
-                name: english ? "Order created" : "Đã tạo đơn",
+                name: english ? "Action recorded" : "Tác vụ đã được ghi nhận",
               }),
             ).toBeVisible();
             await send(confirmation);

@@ -1,4 +1,5 @@
 import { beforeAll, afterAll, it, expect } from "vitest";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { randomUUID } from "node:crypto";
 import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
@@ -105,11 +106,7 @@ const event = (kind: string, extra = {}) => ({
   ...extra,
 });
 beforeAll(async () => {
-  if (
-    process.env.GCLOUD_PROJECT !== "demo-satsunicgo" ||
-    process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18207"
-  )
-    throw Error("Shared demo only");
+  demoFirestoreEndpoint(process.env);
   await import("../../functions/src/index");
   api = await import("../../functions/src/analytics-ingest");
   worker = await import("../../functions/src/analytics-worker");
@@ -182,7 +179,7 @@ it("concurrent ingest/worker retries count once; timestamps and private rules", 
   ).rejects.toThrow();
   const env = await initializeTestEnvironment({
     projectId: "demo-satsunicgo",
-    firestore: { host: "127.0.0.1", port: 18207 },
+    firestore: demoFirestoreEndpoint(process.env),
   });
   await expect(
     getDoc(
