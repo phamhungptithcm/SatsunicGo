@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-CI-RULES-LEDGER-R3",
+  "at": "2026-10-10T02:50:32.720999+00:00",
+  "status": "BLOCKED",
+  "scoped_source_review": "PASSED",
+  "reviewer": "/root with independent /root/policy_implementation source review",
+  "base_commit": "81b5bc85c108a098667e0a7535b892f130aaf32d",
+  "approval": "PRODUCTION-TEST v1 approved; human authorized CI monitoring and fixing issues; no material scope expansion",
+  "evidence_hashes": {
+    "tests/rules/purchase-checkout.test.ts": "3ed2d77decf49c38aaf9cf584352b9add69afb249499dd6c5d95d1386f6de571",
+    "tests/rules/purchase-crm-recipient.test.ts": "cc61dc577f92ab36d675a0d6a0e5c694e3b9a5f29fbd107fad29bdc0c7da4d35",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/CI-RULES-LEDGER-R3-PLAN.md": "9b00099db95dab938781c28d45b5b38bc80a1c505e013a77c271cc9faf26b5ed",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/CI-RULES-LEDGER-R3-CHECKS.json": "57e759a4114b143bf05d1cd202b0f1a21287bb61c51a7ce1f7047af726325589"
+  },
+  "prior_combined_review_sha256": "ba4d881f4318bb47d3985015b91af5158a49344f1bcaf2d9d7fa5f3f067b439b",
+  "repository_intelligence": "DEGRADED; indexes unavailable; bounded source/Git/compiler evidence",
+  "dimensions": {
+    "requirement_match": "PASSED scoped: demo allocations must be isolated, exact once-only allocation remains asserted",
+    "security": "PASSED scoped: genuine ledger must stay empty, ownership denial and exact owned cleanup preserved",
+    "code_quality": "PASSED scoped: current Node22 strict compiler and targeted lint; no runtime/dependency/config changes",
+    "failure_paths": "PASSED source review: pending/unknown/cancel, projection collision abort and concurrent replay retained; disposable CI execution pending",
+    "error_handling": "PASSED source review: recovery checks compare existing test entry content, no vacuous zero baseline; no swallowed errors or retries added",
+    "product_language": "NOT_APPLICABLE to this test-only delta; prior combined native/zoom/spoken gate remains BLOCKED",
+    "production_readiness": "BLOCKED: current normal CI execution, genuine staff MFA/native acceptance and live provider/artifact checks still required",
+    "trade_offs": "PASSED: use normal disposable CI rather than touch shared services; prior unchanged runtime receipts are explicitly scoped"
+  },
+  "findings": [
+    {
+      "id": "CI-RULES-LEDGER-01",
+      "status": "SOURCE_CORRECTED_EXECUTION_PENDING",
+      "severity": "medium",
+      "location": "tests/rules/purchase-checkout.test.ts:305 at81b5",
+      "summary": "Old demo oracle and related CRM positive/abort/recovery checks were still aimed at the genuine ledger. Both tests now verify isolated evidence and absence of genuine entries."
+    }
+  ],
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "decision": "BLOCKED",
+      "evidence": "Actual normalCI38017810456 rules failure retained; subsequent stages skipped"
+    },
+    {
+      "cycle": 2,
+      "decision": "PASSED_WITHIN_SOURCE_SCOPE",
+      "evidence": "Independent reviewer reports no findings at exact two test hashes; current strict/lint/diff passed",
+      "residual": "Changed emulator test execution still pending; whole task remains BLOCKED"
+    }
+  ],
+  "profiles": [
+    "universal",
+    "typescript-javascript",
+    "database",
+    "concurrency",
+    "web-app"
+  ],
+  "limits": [
+    "No normal CI pass claimed before execution",
+    "No new live, IAM effective capability, real MFA, provider/IPN, screen-reader or delivery proof",
+    "R2 runtime/unit/release freeze624 inputs verified unchanged; not exhaustive whole-repository assurance"
+  ],
+  "quality_gates": {
+    "compilation": "PASSED current frontend strict includes tests",
+    "static_analysis": "PASSED current targeted lint/diff",
+    "unit": "RETAINED_UNCHANGED_RUNTIME_SCOPE; no redundant rerun",
+    "integration": "NOT_RUN_CURRENT; required normalCI",
+    "database": "PASSED source: exact test ledger assertions and owned derivative cleanup; no schema/data operations",
+    "architecture_api": "PASSED scoped: no runtime or public contract delta",
+    "product_content_visual_seo_motion": "NOT_APPLICABLE to this delta; existing combined UI gate incomplete",
+    "observability_rollback": "PASSED source: original failure archived, no release/control change; revert test-only commit if correction is invalid",
+    "final_implementation_review": "BLOCKED whole task; source correction reviewed"
+  },
+  "production_readiness": "NOT_READY",
+  "weighted_progress": "Unavailable; no criterion weights configured",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "runtime_ledger": "CLI unavailable; direct receipts, no fabricated ledger",
+  "memory_candidates": "None"
+}

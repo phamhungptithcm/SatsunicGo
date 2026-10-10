@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T02:49:50.566438+00:00",
+  "base_commit": "81b5bc85c108a098667e0a7535b892f130aaf32d",
+  "approval": "Existing PRODUCTION-TEST v1 and explicit user CI monitor/fix instruction; no runtime scope expansion",
+  "rig": "DEGRADED; missing isolated CodeGraph and CocoIndex indexes",
+  "failed_run": {
+    "id": 38017810456,
+    "head_sha": "81b5bc85c108a098667e0a7535b892f130aaf32d",
+    "step": "rules",
+    "test": "parallel commit operations reserve one checkout; parallel proof allocates exactly once",
+    "failure": "Expected one genuine financial entry; received zero because demo settlements now use isolated test ledger",
+    "log_sha256": "a099d2f99f19eb6756c0fb9e86a323c7811d8691fffb654750e055c65f0ea0d9",
+    "later_steps": "HTTP/restore/audit/build skipped; not passed"
+  },
+  "changed_test_hashes": {
+    "tests/rules/purchase-checkout.test.ts": "3ed2d77decf49c38aaf9cf584352b9add69afb249499dd6c5d95d1386f6de571",
+    "tests/rules/purchase-crm-recipient.test.ts": "cc61dc577f92ab36d675a0d6a0e5c694e3b9a5f29fbd107fad29bdc0c7da4d35"
+  },
+  "verified_contract_hashes": {
+    "functions/src/purchase-settlement.ts": "f9aa113d9c10369fd499d2700410ff29317fbdb69b7f7eaed40bbbd035480531",
+    "functions/src/purchase-test-boundary.ts": "88bc852e3d6d65be5f56dd6df0e3718d44af2c86b5d8d7ebaa29c9947c6a3c6a",
+    "packages/domain/purchase-checkout.ts": "4a4d7823ee98c315b23c7d222cd373ef27f1d6b29c8ee7c8f0c322d93fe7e054"
+  },
+  "retained_runtime_unit_release_freeze": {
+    "count": 624,
+    "digest": "8fb877f191cb46c858d74d7dba20d0add8fad5ac82e436c8188d95ce09ccbb57",
+    "drift": [],
+    "scope": "Bounded runtime/unit/release/config input freeze; generated artifact inputs bound separately after build"
+  },
+  "current_checks": {
+    "frontend_strict": "PASSED; Node22 TypeScript --noEmit includes tests and traversed Functions imports",
+    "targeted_eslint": "PASSED; both changed tests",
+    "diff_check": "PASSED",
+    "affected_emulator_tests": "NOT_RUN_LOCAL; shared runtime preserved, exact disposable normal PR CI required",
+    "new_root_unit_suite": "NOT_RUN; unit/runtime source unchanged, prior file-bound2789 checks retained without representing current emulator coverage"
+  },
+  "scope_exclusions": [
+    "No runtime, Rules, workflow, config, dependency, schema or user-facing text edits",
+    "No local server restart, reseed, provider request or production data operation"
+  ],
+  "production_readiness": "NOT_READY",
+  "manual_gates": "Existing genuine staff MFA login, native selector/zoom/spoken AT remain incomplete",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}
