@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-10-10T02:00:16.444794+00:00",
+  "build_cycle": 3,
+  "html_sha256": "b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394",
+  "bytes": 516185,
+  "source_inputs": 39,
+  "source_drift": [],
+  "inline_scripts": 1,
+  "external_script_tags": 0,
+  "stylesheet_links": 0,
+  "css_imports": 0,
+  "csp_connect_none": true,
+  "process_environment_references": 0,
+  "process_identifier_references": 6,
+  "real_firebase_modules": 0,
+  "compiled_js_syntax": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "focused_tests": {
+    "status": "PASSED",
+    "files": 2,
+    "total": 59,
+    "new_actual_notification_and_preview_guard_tests": 22,
+    "existing_presentation_regressions": 37
+  },
+  "build": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "browser_acceptance": "PASSED_WITHIN_NOTIFICATION_SYNTHETIC_RENDER_SCOPE",
+  "http_readback": "PASSED_EXACT_CYCLE3",
+  "browser_network_observation": "NOT_RUN_NO_NETWORK_TRACE_SUPPLIED",
+  "genuine_role_mfa_backend_provider": "NOT_RUN_BY_THIS_ARTIFACT",
+  "frontend_strict": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "scoped_eslint": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "browser_acceptance_receipt": "../INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json",
+  "native_zoom_spoken_at": "NOT_RUN_MAC_LOCKED",
+  "native_filter_arrow": "NOT_VERIFIED"
+}

@@ -1,0 +1,98 @@
+{
+  "checked_at": "2026-10-10T02:04:05.266Z",
+  "artifact_sha256": "b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394",
+  "http_readback": "/private/tmp/satsunicgo-production-test-http-readback-r3.json",
+  "scope": "Actual Notifications component with synthetic exact read adapter; no auth/backend/provider evidence",
+  "desktop": {
+    "client": 1890,
+    "rows": [
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "link": "/account/orders/10000000-0000-4000-8000-000000000001",
+        "title": "Đã nhận cập nhật thanh toán · dữ liệu giả Test"
+      },
+      {
+        "badges": 0,
+        "link": "/support",
+        "title": "Nhân viên đã trả lời · dữ liệu giả "
+      },
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "link": "/account/orders/10000000-0000-4000-8000-000000000003",
+        "title": "Cập nhật demo cũ · dữ liệu giả Test"
+      },
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "link": "/account/orders/10000000-0000-4000-8000-000000000004",
+        "title": "Cập nhật chưa đầy đủ · dữ liệu giả Test"
+      }
+    ],
+    "scroll": 1890,
+    "width": 1890
+  },
+  "narrow": {
+    "client": 390,
+    "height": 844,
+    "rows": [
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "rowBounds": {
+          "left": 12.6171875,
+          "right": 377.3828125
+        },
+        "title": "Đã nhận cập nhật thanh toán · dữ liệu giả Test"
+      },
+      {
+        "badges": 0,
+        "rowBounds": {
+          "left": 12.6171875,
+          "right": 377.3828125
+        },
+        "title": "Nhân viên đã trả lời · dữ liệu giả "
+      },
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "rowBounds": {
+          "left": 12.6171875,
+          "right": 377.3828125
+        },
+        "title": "Cập nhật demo cũ · dữ liệu giả Test"
+      },
+      {
+        "badges": 1,
+        "label": "Đơn test",
+        "rowBounds": {
+          "left": 12.6171875,
+          "right": 377.3828125
+        },
+        "title": "Cập nhật chưa đầy đủ · dữ liệu giả Test"
+      }
+    ],
+    "scroll": 390,
+    "width": 390
+  },
+  "result": "PASS_WITHIN_SYNTHETIC_RENDER_SCOPE",
+  "screenshots": [
+    "notifications-desktop.png",
+    "notifications-css390.png"
+  ],
+  "native_zoom": "NOT_RUN_MAC_LOCKED",
+  "spoken_at": "NOT_RUN_MAC_LOCKED",
+  "viewport_override": "RESET",
+  "production": "NOT_VERIFIED",
+  "evidence_sha256": {
+    "/private/tmp/satsunicgo-production-test-ui-evidence/NOTIFICATION-BROWSER-CHECKS.json": "752e7a427ea563ad6a599f29a4953f1523f8e3a408c25ddf2f795939828ca421",
+    "/private/tmp/satsunicgo-production-test-http-readback-r3.json": "a63cc26dfdb4dfa7594f0377ec94b0eed36bd6dbefcb04067d7155f154f94010",
+    "/private/tmp/satsunicgo-production-test-ui-evidence/notifications-desktop.png": "e7a22572e6574a2ffa1397d6a6490106e4a0eb70ff7f5b730099d550b1ac5a06",
+    "/private/tmp/satsunicgo-production-test-ui-evidence/notifications-css390.png": "72392313b0ef3944bbd42d9a93f4255b9ebf8f2abe229fdbb1c58e1620ea45f2"
+  },
+  "source_sha256": {
+    "src/features/notifications/Notifications.tsx": "d1362742c33d15aed81f4c5c3e1a77fcec9e5931397b0fb98cd51de969813456",
+    "tests/unit/production-test-notification-ui.test.ts": "ec844c5632b9efdbe17b190f97242155aa573c4a04e52cf147d130342dc85137"
+  }
+}

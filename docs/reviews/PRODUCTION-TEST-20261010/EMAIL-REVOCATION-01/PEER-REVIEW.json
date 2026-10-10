@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-10T01:37:23.025696+00:00",
+  "reviewer": "/root/policy_implementation",
+  "decision": "PASSED_WITHIN_SCOPED_SOURCE_TEST_REVIEW",
+  "source_hashes": {
+    "functions/src/production-test-email-policy.ts": "3e5e28c89f1a77b692b74f09af78a1129453aa510908febc4cc19ef657b841f4",
+    "functions/src/customer-email-job.ts": "5cbdbb45c90c5a3fab3c24df292bdc0b2f10f328ddeb5d176f65f1847c2ce5a5",
+    "functions/src/email.ts": "180d2a7663abae0e21d702918e21e1f17739ea17a9586d38f343e94033a6b4c2",
+    "functions/src/subscription-delivery-service.ts": "dc689efd8788d79cfcc21948169839bb2cb1a89bcfbeed28fdbebc861fb88f1f",
+    "functions/src/subscription-email.ts": "5f3b6e544d3a364baa30266c132ad4dcc868ae3826efe693a3db3edfe48600f3",
+    "tests/unit/production-test-email.test.ts": "a01d238fd7ad26c31f634067fc1adbdda3ed76aa35712362c6132c83418bcbcd"
+  },
+  "summary": "No further actionable boundary findings. Customer final transaction watches global config, profile lock/marketing, applicable promotionsEmail, optional/test orderEmail and destination, current customer/test policies, authoritative entity/run/version and invoice state/owner/number. Subscription real wrapper supplies config; final transaction watches config/profile/current destination/generations/test policies/pins. Reads precede writes and retry sentinels reset. Normal live financial consent semantics and conservative unknown/quota behavior remain.",
+  "limits": "Peer read source/tests only; no suite/provider rerun or production acceptance claim"
+}

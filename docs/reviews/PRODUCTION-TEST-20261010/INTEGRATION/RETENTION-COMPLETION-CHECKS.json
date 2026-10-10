@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task": "PRODUCTION-TEST-v1-retention-completion",
+  "created_at": "2026-10-10T02:19:51.269726+00:00",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "scope": "Bounded source and local verification only; no production readiness claim",
+  "approval": "PRODUCTION-TEST v1 call_5081fd46f74546c08b78d7a095730a9a item 0",
+  "repository_intelligence": "DEGRADED; current bounded source/compiler/tests",
+  "source_hashes": {
+    "functions/src/ai/feedback-lifecycle.ts": "ac06f5d391062be49ab62615c219d0adee5b716f21cf3b0fb8f620ae37781319",
+    "functions/src/ai/feedback-retention-gate.ts": "e79f5c66d31f9206c7be0e62df8821c10d0f63df38c16c085569ee83359f98f3",
+    "scripts/release/feedback-retention.mjs": "fe8c0804227ce80929d76c28bd43aa30845dd19d645173e51fa16d689f10329d",
+    "scripts/release/artifact.mjs": "78a9fbe9dbac3e6316ed654ea6c60cf8a4bc9438d63c2e5ab953a5d341ac6b4a",
+    "scripts/release/reviewed-retries.mjs": "63489c69c66c09f9354cf78ac7d2e032abbd79b2c2835a97a3860c254f707687",
+    "scripts/release/verify-production.mjs": "a9e178d1f25bc6f540e067f74789258eadd5c493c52310e9391d90bbb0e9147d",
+    "scripts/release/release.mjs": "65e3b4b179dfb0cbe1342a12c5b5c3b4d8fef60570a3a7b74cb8ef8cfbd59cd4",
+    "tests/unit/ask-feedback-cleanup.test.ts": "214140b28e7e6a390faca12401b658d186196e00e14f515faf1c9f0de881d1d1",
+    "tests/unit/feedback-retention-gate.test.ts": "54c86a8789be27afd8124be236a24b73a87f429b6680a89559290a7b19b6f87b",
+    "tests/unit/release108.test.mjs": "29c8d77c5649ce1926e7277aa30447f20f7897259716b7086efb3d50e3689e89",
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-IMPACT.md": "28a2b4dbe42ce2bfec2beb2af4d89c08d043e60c76c18dbbe4e4e6480cc443bb"
+  },
+  "evidence_hashes": {
+    "/private/tmp/satsunicgo-retention-focused.log": "eb8e29516fff5d793e3b8cf7112d701af8e06eaf43d4bcd372571b2ab771de16",
+    "/private/tmp/satsunicgo-retention-node.log": "1f35cea68263e75ea64fb1099151184fe5b7b579da518b3b83ea65d056d5c2c5",
+    "/private/tmp/satsunicgo-retention-strict.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-retention-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-retention-preflight.log": "ae75d941551079aca4cd0b6647c92b589d48a3705b15cdd3e43579b6aa814a6a"
+  },
+  "checks": {
+    "focused_runtime_gate": {
+      "status": "PASSED",
+      "tests": 42
+    },
+    "normal_release_node_contracts": {
+      "status": "PASSED",
+      "tests": 144
+    },
+    "backend_strict": {
+      "status": "PASSED"
+    },
+    "scoped_lint": {
+      "status": "PASSED"
+    },
+    "source_preflight": {
+      "status": "PASSED",
+      "inventory": 110,
+      "provider": "NOT_RUN"
+    }
+  },
+  "provider_calls": 0,
+  "index_operations": 0,
+  "policy_activation": 0,
+  "production_deletions": 0,
+  "peer_review": "PENDING",
+  "production": "NOT_READY_FOR_ACTIVATION",
+  "iam": "Root RETENTION-IAM-METADATA.json shows direct deployer role lacks datastore.indexes.list/create; cloudscheduler.jobs.get present; inherited/effective unknown. No role change.",
+  "memory_candidates": "None",
+  "actual_billed_cost": "Unavailable",
+  "token_usage": "Unavailable"
+}

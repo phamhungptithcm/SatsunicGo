@@ -1,0 +1,41 @@
+{
+  "scope": "Historical882canonical capture recheck; no new-path completeness claim",
+  "inputs_checked": 883,
+  "shared_drift": [
+    {
+      "path": "functions/src/analytics-ingest.ts",
+      "shared_latest_sha256": "1f1ebfa1437bdfd454520766e68f9cd9fd8e7bb54412ddf72ffdade911da0624",
+      "candidate_sha256": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+      "match": false,
+      "same_as_verified_v0100": true
+    },
+    {
+      "path": "functions/src/payments/sepay-sandbox.ts",
+      "shared_latest_sha256": "2c60acbf1d9db13ee00a86b69cc4cd459cabf9f3bc626b30fddf417ddbab8548",
+      "candidate_sha256": "6d43b35ad9a55bea6a7a04ffca4794de09b3ae4454e75648f6a1ec21d7c90c00",
+      "match": false,
+      "same_as_verified_v0100": true
+    },
+    {
+      "path": "functions/src/purchase-sepay.ts",
+      "shared_latest_sha256": "4e352fec23171606dcffe616ca40bfa0ba7acc5191754c64b0a1091929815ea5",
+      "candidate_sha256": "16c2da115b93017ad82b2f4a38564426f030f55d9ecf5afb5b76e1ffaff0866e",
+      "match": false,
+      "same_as_verified_v0100": true
+    },
+    {
+      "path": "src/features/cart/purchase-checkout.tsx",
+      "shared_latest_sha256": "34b96ced28ab271a230cf50d6882e41f7dca1c1bb28a5833892a927a1f27de4b",
+      "candidate_sha256": "34b96ced28ab271a230cf50d6882e41f7dca1c1bb28a5833892a927a1f27de4b",
+      "match": true,
+      "same_as_verified_v0100": false
+    },
+    {
+      "path": "src/features/requests/request-form.css",
+      "shared_latest_sha256": "599e6860b3238507f76a259e9828e14101d07b92c911a48e60ea67455d833cd6",
+      "candidate_sha256": "599e6860b3238507f76a259e9828e14101d07b92c911a48e60ea67455d833cd6",
+      "match": true,
+      "same_as_verified_v0100": true
+    }
+  ]
+}

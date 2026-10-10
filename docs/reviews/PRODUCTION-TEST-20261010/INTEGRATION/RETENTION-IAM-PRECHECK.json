@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T02:30:19.895715+00:00",
+  "project": "satsunicgo",
+  "member": "serviceAccount:github-release@satsunicgo.iam.gserviceaccount.com",
+  "role": "projects/satsunicgo/roles/satsunicgoFeedbackRetentionIndexes",
+  "approval": {
+    "call": "call_8592365f0dbb410697c85fd0f25f4c02",
+    "item": 0,
+    "answer": "Duyệt quyền index tối thiểu"
+  },
+  "reviewed_plan_sha256": "d5efcc2ddb395b911e8040e5c5091523283ab67d1c11c95cfc139d00c5648c18",
+  "reviewed_role_sha256": "76f9ded4574acfc73d85de3102b6d3072b1eb56e03b4a35155853f36f9346469",
+  "hierarchy": [
+    {
+      "id": "satsunicgo",
+      "type": "project"
+    }
+  ],
+  "applicable_direct_metadata": [
+    {
+      "role": "projects/satsunicgo/roles/satsunicgoProductionDeployer",
+      "indexPermissions": [],
+      "conditional": false
+    }
+  ],
+  "effective_deny_or_resource_policy": "NOT_VERIFIED; normal release validates actual capability",
+  "role_preexisting": false,
+  "binding_preexisting": false,
+  "role_created": false,
+  "binding_added": false,
+  "mode": "inspect",
+  "before_other_bindings_digest": "bdae027e7b88bc1a947b7fa5d543d52700ae0952330ebcd89fe769d164cdadd2",
+  "status": "EXACT_PROPOSED_GRANT_REVALIDATED",
+  "index_operations": 0,
+  "document_operations": 0,
+  "secret_access": 0,
+  "cleanup_activation": 0,
+  "wif_changes": 0
+}

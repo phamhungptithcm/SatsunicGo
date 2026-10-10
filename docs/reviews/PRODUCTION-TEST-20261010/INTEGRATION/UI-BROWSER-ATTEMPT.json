@@ -1,0 +1,9 @@
+{
+  "status": "NOT_RUN",
+  "attempt": "Chrome file URL for self-contained actual-component synthetic preview",
+  "result": "BROWSER_URL_POLICY_DENIED_FILE_PROTOCOL",
+  "noWorkaround": "No alternate browser/native launch/raw protocol or new server attempted",
+  "artifact": "/private/tmp/satsunicgo-full-local-integration-20261009-jdho247x/repo/docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/production-test-components.html",
+  "safeNextDecision": "Existing-server HTTP delivery of only reviewed synthetic artifact, or human local visual acceptance; browser file action cannot be retried",
+  "MFAProvider": "Not tested by this artifact"
+}
