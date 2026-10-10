@@ -6,7 +6,9 @@ import {
 } from "../../functions/src/ai/research-gemini";
 // Deterministic historical admission for mocked transport; production expiry stays fixed.
 beforeEach(() => {
-  vi.spyOn(Date, "now").mockReturnValue(researchGeminiLimits.pricingExpiresAt - 60000);
+  vi.spyOn(Date, "now").mockReturnValue(
+    researchGeminiLimits.pricingExpiresAt - 60000,
+  );
 });
 afterEach(() => vi.restoreAllMocks());
 
@@ -167,6 +169,30 @@ test("Gemini: failed count/generation never auto-retry or release reservation", 
   ).rejects.toThrow();
   expect(calls).toBe(1);
 });
+test("Gemini: production test policy revoked during count prevents generation after permanent reservation", async () => {
+  let admitted = true;
+  const phases: string[] = [];
+  const reserve = vi.fn(async () => {});
+  await expect(
+    geminiResearch(
+      { query: "Headphones", market: "US" },
+      policy,
+      reserve,
+      async (url) => {
+        phases.push(url.endsWith(":countTokens") ? "count" : "generate");
+        admitted = false;
+        return { totalTokens: 100 };
+      },
+      new AbortController().signal,
+      undefined,
+      async () => {
+        if (!admitted) throw Error("RESEARCH_UNAVAILABLE");
+      },
+    ),
+  ).rejects.toThrow("RESEARCH_UNAVAILABLE");
+  expect(phases).toEqual(["count"]);
+  expect(reserve).toHaveBeenCalledTimes(1);
+});
 
 test("Gemini: expiry during admission/count prevents any later provider dispatch", async () => {
   for (const expiry of ["policy", "pricing"] as const)
@@ -227,8 +253,8 @@ test.each(["policy", "pricing"] as const)(
     ).rejects.toThrow("RESEARCH_UNAVAILABLE");
     expect(reserve).not.toHaveBeenCalled();
     expect(send).not.toHaveBeenCalled();
-    expect(() => researchReservation(0, researchGeminiLimits.pricingExpiresAt)).toThrow(
-      "RESEARCH_BUDGET_UNAVAILABLE",
-    );
+    expect(() =>
+      researchReservation(0, researchGeminiLimits.pricingExpiresAt),
+    ).toThrow("RESEARCH_BUDGET_UNAVAILABLE");
   },
 );

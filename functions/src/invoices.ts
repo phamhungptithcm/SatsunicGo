@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
@@ -95,6 +96,7 @@ export const invoiceCommand = onCall(opts, async (req) => {
     let result: Record<string, unknown> = { id: ref.id },
       data = document.data() as SalesDocument | undefined;
     let tokenToReturn: string | undefined;
+    requireLivePurchaseRecord(data);
     if (d.action === "configure") {
       if (!roles.includes("OWNER") || !d.seller)
         throw new HttpsError(
@@ -128,6 +130,7 @@ export const invoiceCommand = onCall(opts, async (req) => {
       const orderSnap = await tx.get(db.doc(`orders/${orderId}`)),
         order = orderSnap.data() as Order | undefined;
       if (!order) throw new HttpsError("not-found", "Không tìm thấy đơn.");
+      requireLivePurchaseRecord(order);
       const buyer = await tx.get(db.doc(`users/${order.ownerId}`));
       const replacesId =
         d.action === "createDraft" ? d.replacesId : data?.replacesId;
@@ -178,15 +181,20 @@ export const invoiceCommand = onCall(opts, async (req) => {
     } else {
       if (!d.id || !data || data.version !== d.expectedVersion)
         throw new HttpsError("aborted", "Chứng từ đã thay đổi. Tải lại.");
+      // Re-read the authoritative order for every mutation; old documents may
+      // predate execution markers. Test receipts use the purchase PDF path.
+      const sourceOrder = await tx.get(db.doc(`orders/${data.sourceOrderId}`));
+      if (!sourceOrder.exists)
+        throw new HttpsError("not-found", "Không tìm thấy đơn.");
+      requireLivePurchaseRecord(sourceOrder.data());
       if (d.action === "issue") {
         if (data.state !== "draft")
           throw new HttpsError("failed-precondition", "Chỉ xuất bản nháp.");
-        const [order, counter] = await Promise.all([
-          tx.get(db.doc(`orders/${data.sourceOrderId}`)),
-          tx.get(db.doc("documentCounters/internalStatements")),
-        ]);
+        const counter = await tx.get(
+          db.doc("documentCounters/internalStatements"),
+        );
         if (
-          order.data()?.version !== data.sourceVersion ||
+          sourceOrder.data()?.version !== data.sourceVersion ||
           config.data()?.version !== data.sellerVersion
         )
           throw new HttpsError(

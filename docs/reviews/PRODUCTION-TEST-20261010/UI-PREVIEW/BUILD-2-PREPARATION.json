@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-10T01:44:03.838480+00:00",
+  "build_cycle": 2,
+  "html_sha256": "37ba6cf1a81c04e202432be987f472617b79333b6f5dd01fa213e95d55f8b3d0",
+  "bytes": 505895,
+  "inline_scripts": 1,
+  "external_script_tags": 0,
+  "stylesheet_links": 0,
+  "css_imports": 0,
+  "csp_connect_none": true,
+  "process_environment_references": 0,
+  "process_identifier_references": 6,
+  "real_firebase_modules": 0,
+  "actual_shared_firebase_module": "NOT_BUNDLED",
+  "source_drift": [],
+  "owned_UI_drift": [],
+  "build": {
+    "status": "PASSED",
+    "exit_code": 0
+  },
+  "browser_acceptance": "NOT_RUN_NEW_ARTIFACT",
+  "http_readback": "NOT_RUN_NEW_ARTIFACT",
+  "browser_network_observation": "NOT_RUN_NEW_ARTIFACT",
+  "genuine_role_mfa_backend_provider": "NOT_RUN",
+  "static_reverified_at": "2026-10-10T01:47:59.567747+00:00",
+  "compiled_js_syntax": {
+    "status": "PASSED",
+    "exit_code": 0,
+    "runtime": "Node 22.23.3"
+  },
+  "remaining_process_tokens": "Six tokens across two React exception fallback branches; typeof process guard precedes property reads. No unguarded process.env references.",
+  "repository_intelligence": "DEGRADED; existing optional index limitation; bounded source/hash/build/syntax checks only."
+}

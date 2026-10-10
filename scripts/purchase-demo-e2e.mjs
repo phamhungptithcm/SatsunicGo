@@ -284,11 +284,20 @@ assert.equal((await db.doc(`carts/${user.uid}`).get()).data().items.length, 0);
 assert.equal(
   (
     await db
-      .collection("financialEntries")
+      .collection("purchaseTestFinancialEntries")
       .where("ownerId", "==", user.uid)
       .get()
   ).size,
   2,
+);
+assert.equal(
+  (
+    await db
+      .collection("financialEntries")
+      .where("ownerId", "==", user.uid)
+      .get()
+  ).size,
+  0,
 );
 results.push({
   scenario:

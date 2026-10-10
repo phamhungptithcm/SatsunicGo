@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-CI-RULES-LEDGER-R4",
+  "at": "2026-10-10T03:03:07.740590+00:00",
+  "status": "BLOCKED",
+  "scoped_source_review": "PASSED",
+  "reviewer": "/root with independent /root/policy_implementation",
+  "approval": "Existing approved PRODUCTION-TEST v1 plus explicit CI monitor/fix-loop instruction; no material runtime expansion",
+  "repository_intelligence": "DEGRADED; bounded actual source evidence",
+  "evidence_hashes": {
+    "scripts/purchase-sepay-cross-process.mjs": "cc69e0ab991c47e8d9e439c332b9644e999d5cea835d3f19c88c762c137a148c",
+    "scripts/purchase-gateway-cross-process.mjs": "ab4cd72330f33fb9bdf460bdc7c4c8c73fb4fd9d32ddff969064349d33767b58",
+    "scripts/purchase-gateway-shared.rules.test.ts": "e1bbdef74eaf526fa207d348290eeac85d6179a05dcd3126db5ff850424649f1",
+    "scripts/purchase-demo-e2e.mjs": "2caf0715654c5f0fd5d160abe27f8123ac7c026211f23986fa291b8e1d46f7db",
+    "scripts/purchase-gateway-business-e2e.mjs": "eac970843413f49ad5626c043dbfda5dc9fdfd6962b157226a6ae4ea83064751",
+    "scripts/purchase-gateway-scenarios.mjs": "380bec5488722d8b75dbad1f216058857e73d7fb14c5e17f8c5f5927cab36100",
+    "scripts/purchase-crm-http-check.mjs": "51536ea4b45dfd91840c4d1917eb28d87bf2506c27b2145f730eba344b399539",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/CI-RULES-LEDGER-R4-PLAN.md": "0014f6e9b449eea0a56a4efd3566f1ceaaf5c320864bad454866e0d14e0dbb8c",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/CI-RULES-LEDGER-R4-CHECKS.json": "742fb048cc34ec3843ffdde28e75179ee7968392703082528b271925df678baa"
+  },
+  "prior_reviews": {
+    "FINAL-REVIEW-R2.json": "ba4d881f4318bb47d3985015b91af5158a49344f1bcaf2d9d7fa5f3f067b439b",
+    "CI-RULES-LEDGER-R3-REVIEW.json": "b5c39f84a8f2eca5dd313efee3ef7acbcd8ce5626bc91e1f352f246826f64e6b"
+  },
+  "dimensions": {
+    "requirement_match": "PASSED scoped: seven demo helpers now match approved isolated ledger; one/two/thirty entries and aggregate totals retained",
+    "security": "PASSED scoped: each changed positive oracle requires zero genuine ledger entries; exact environment/synthetic-owner guards unchanged",
+    "code_quality": "PASSED scoped: six Node22 syntax checks, standalone TypeScript6 strict, TS lint and diff check; no runtime/Rules/config/workflow/dependency changes",
+    "failure_paths": "PASSED source: cross-process concurrency, replay/recovery/collision and original timeout/lifecycle controls preserved; current CI execution pending",
+    "error_handling": "PASSED source: no suppressed failures, no retry/timeout/threshold changes; failed CI archived; shared recovery nonempty baseline retained",
+    "product_language": "NOT_APPLICABLE to test-tool-only delta; prior combined native/spoken gate remains BLOCKED",
+    "production_readiness": "BLOCKED: new normal CI, manual MFA/native and live release/provider/activation evidence still required",
+    "trade_offs": "PASSED: manually runnable helpers source-corrected but not executed against shared services; internal evidence field rename has no executable consumers found in scripts/tests/.github"
+  },
+  "findings": [
+    {
+      "id": "CI-RULES-LEDGER-01",
+      "status": "FIXED_AND_EXECUTED_WITHIN_R3_EMULATOR_SCOPE",
+      "summary": "Checkout5/CRM12 passed in normal CI38018449918; runtime unchanged"
+    },
+    {
+      "id": "CI-CROSS-PROCESS-LEDGER-02",
+      "status": "SOURCE_CORRECTED_EXECUTION_PENDING",
+      "summary": "SePay helper and six other manual demo tools queried genuine money for test allocations; exact oracles moved to test ledger with explicit genuine-ledger absence"
+    }
+  ],
+  "cycles": [
+    {
+      "cycle": 1,
+      "decision": "BLOCKED",
+      "evidence": "CI38018449918 failed only SePay cross-process among seven Rules groups; later CI stages skipped"
+    },
+    {
+      "cycle": 2,
+      "decision": "PASSED_WITHIN_SOURCE_SCOPE",
+      "evidence": "Independent review PASS at exact seven hashes; static checks pass; full task remains BLOCKED"
+    }
+  ],
+  "profiles": [
+    "universal",
+    "typescript-javascript",
+    "database",
+    "concurrency",
+    "web-app"
+  ],
+  "quality_gates": {
+    "syntax_compilation": "PASSED scoped Node22/TS6 strict",
+    "static_analysis": "PASSED scoped TS lint/diff",
+    "runtime_unit": "Unchanged624 input digest, prior file-bound2789/179 receipts retained; not current full integration PASS",
+    "integration": "NOT_RUN_CURRENT; actual SePay helper execution required in disposable PR CI",
+    "architecture_api_data": "PASSED scoped source: no public contract/schema/runtime changes, no production data operations",
+    "product_visual_seo_motion": "NOT_APPLICABLE to this delta; existing combined manual gate remains",
+    "observability_rollback": "PASSED scoped: failure histories and source hashes bound; test-only revert if wrong; no gate weakening",
+    "final_review": "BLOCKED whole task"
+  },
+  "limits": [
+    "Manual helper source review is not execution evidence",
+    "No live latency/load/absence-of-leaks, secret binding, delivered email, MFA or IPN proof",
+    "Normal current PR and immutable main artifact checks still required"
+  ],
+  "production_readiness": "NOT_READY",
+  "weighted_progress": "Unavailable; no criterion weights configured",
+  "runtime_ledger": "CLI unavailable; direct receipts used without fabricated ledger",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

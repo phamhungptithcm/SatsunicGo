@@ -1,0 +1,9 @@
+{
+  "ownerThread": "01a120df-2ef2-79b2-a108-1bc1f32012a7",
+  "file": "src/features/cart/purchase-checkout.tsx",
+  "sha256": "34b96ced28ab271a230cf50d6882e41f7dca1c1bb28a5833892a927a1f27de4b",
+  "patchSha256": "0656c0c65d55c5475c08c3ac19559fc107edbbff0974d395607998fbf88701d5",
+  "applied": "exacthunkonly",
+  "localBrowserEvidence": "owner source-bound cart, second-tab stale guard,390px, receipt; not genuineprovider",
+  "rootCombinedCI": "NOT_RUN"
+}

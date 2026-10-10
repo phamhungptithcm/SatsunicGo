@@ -12,6 +12,11 @@ import {
   utcDay,
 } from "../../packages/domain/analytics";
 import { requireVerifiedGoogle } from "./auth/guards";
+import {
+  admitProductionTestPolicy,
+  productionTestEnvironment,
+} from "./production-test-policy";
+import { isPurchaseTestRecord } from "./purchase-test-boundary";
 
 export const analyticsOptions = {
   region: "asia-southeast1",
@@ -45,6 +50,21 @@ export async function enabledPolicy(
       "Thống kê truy cập chưa được bật.",
     );
   return policy;
+}
+/** Exclude admitted test customers as well as existing internal staff traffic. */
+async function requireExternalAnalytics(
+  tx: FirebaseFirestore.Transaction,
+  db: FirebaseFirestore.Firestore,
+  uid: string | undefined,
+  now: number,
+) {
+  if (!uid || !productionTestEnvironment(db)) return;
+  const policy = (await tx.get(db.doc("settings/productionTest"))).data();
+  if (admitProductionTestPolicy(policy, uid, now))
+    throw new HttpsError(
+      "permission-denied",
+      "Không ghi nhận truy cập nội bộ.",
+    );
 }
 export function validSession(
   data: FirebaseFirestore.DocumentData | undefined,
@@ -102,6 +122,7 @@ export const analyticsSession = onCall(analyticsOptions, async (req) => {
       `analyticsSubjects/${utcDay(now)}-${digest(p.data.browserId)}`,
     );
     await enabledPolicy(tx, db);
+    await requireExternalAnalytics(tx, db, req.auth?.uid, now);
     const accountQuota = subject
       ? db.doc(`analyticsSubjects/${utcDay(now)}-${subject}`)
       : null;
@@ -206,6 +227,7 @@ export const analyticsIngest = onCall(analyticsOptions, async (req) => {
     );
   return db.runTransaction(async (tx) => {
     await enabledPolicy(tx, db);
+    await requireExternalAnalytics(tx, db, req.auth?.uid, now);
     const sref = await resolveAnalyticsSession(tx, db, p.data.session, now);
     const session = await tx.get(sref);
     validSession(session.data(), subject, now);
@@ -321,6 +343,7 @@ export const analyticsLinkOrder = onCall(analyticsOptions, async (req) => {
       data.revoked ||
       now - data.startedAt > WORKING_RETENTION ||
       order.data()?.ownerId !== req.auth!.uid ||
+      isPurchaseTestRecord(order.data()) ||
       order.data()?.createdAt < data.startedAt ||
       order.data()?.createdAt > data.startedAt + 7 * DAY
     )

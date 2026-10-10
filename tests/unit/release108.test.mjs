@@ -9,10 +9,12 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
+import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity, releaseDeploymentScope } from '../../scripts/release/release.mjs';
 import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace, REQUIRED_FUNCTION_ASSETS, excludeEmulatorOnlyExports } from '../../scripts/release/artifact.mjs';
-import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory, verifyRetryReadback } from '../../scripts/release/verify-production.mjs';
+import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory, verifyRetryReadback, verifyRuntimeEnvironment } from '../../scripts/release/verify-production.mjs';
 import { retryAdmission, installReviewedRetryPrompt, deploymentArguments } from '../../scripts/release/reviewed-retries.mjs';
+import { assertCompiledProductionTestExports, PRODUCTION_TEST_ENVIRONMENT, PRODUCTION_TEST_ENV_BYTES, PRODUCTION_TEST_ENV_FILE } from '../../scripts/release/production-test.mjs';
+import { RETENTION_INDEXES, RETENTION_INDEX_DIGEST, RETENTION_FILE, RETENTION_SCHEDULER, retentionMetadata, assertRetentionSourceIndexes, assertRetentionWorkflow, retentionRequest, ensureRetentionIndexes, verifyRetentionScheduler, readRetentionReadiness, retentionReadinessDigest } from '../../scripts/release/feedback-retention.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -894,4 +896,233 @@ test('provider readback binds retry configuration to the same artifact and exact
   assert.throws(()=>verifyRetryReadback(retryManifest,[{...deployed[0],eventTrigger:{retryPolicy:'RETRY_POLICY_DO_NOT_RETRY'}}],admission),/POLICY_MISMATCH/);
   assert.throws(()=>verifyRetryReadback(retryManifest,[...deployed,{name:'functions/unexpected',eventTrigger:{retryPolicy:'RETRY_POLICY_RETRY'}}],admission),/POLICY_MISMATCH/);
   assert.throws(()=>verifyRetryReadback(retryManifest,deployed,{...admission,sha:'b'.repeat(40)}),/BINDING/);
+});
+
+const productionTestRows = allDemoMetadata.filter(row=>row.name.startsWith('purchaseSePay'));
+const productionTestCompiled = allDemoCompiled.replace(/const purchase_checkout_1[^;]*;\s*Object.defineProperty\(exports,'purchaseCheckout'[^\n]*\);/,'').replace("const localSePay = process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';", "const production_test_policy_1=require('./production-test-policy');const productionSePay=(0,production_test_policy_1.sepayArtifactEnvironment)();").replace(/localSePay \?/g,'productionSePay ?');
+function addProductionTestFixture(root) {
+  addAllDemoSource(root);
+  let source=readFileSync(join(root,'functions/src/index.ts'),'utf8');
+  source=source.replace("const localSePay=process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';", "import {sepayArtifactEnvironment} from './production-test-policy';const productionSePay=sepayArtifactEnvironment();").replace(/localSePay \?/g,'productionSePay ?');
+  source += `\nexport {askFeedbackCleanup} from './ai/feedback-lifecycle';`;
+  put(root,'functions/src/ai/feedback-lifecycle.ts',`import {onSchedule} from 'firebase-functions/v2/scheduler';export const askFeedbackCleanup=onSchedule({region:'asia-southeast1',schedule:'every 60 minutes',timeZone:'UTC',retryCount:0},()=>{});`);
+  put(root,'functions/lib/functions/src/ai/feedback-lifecycle.js',`const {onSchedule}=require('firebase-functions/v2/scheduler');exports.askFeedbackCleanup=onSchedule({region:'asia-southeast1',schedule:'every 60 minutes',timeZone:'UTC',retryCount:0},()=>{});`);
+  put(root,'firestore.indexes.json',{indexes:RETENTION_INDEXES});
+  put(root,'functions/src/index.ts',source);
+  put(root,'functions/src/production-test-policy.ts',readFileSync(join(repositoryRoot,'functions/src/production-test-policy.ts'),'utf8'));
+  const ts=firebaseRequire('typescript');
+  const compile=(source,target)=>put(root,target,ts.transpileModule(readFileSync(join(repositoryRoot,source),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);
+  compile('functions/src/production-test-policy.ts','functions/lib/functions/src/production-test-policy.js');
+  compile('functions/src/ai/feedback-retention-gate.ts','functions/lib/functions/src/ai/feedback-retention-gate.js');
+  compile('functions/src/purchase-environment.ts','functions/lib/functions/src/purchase-environment.js');
+  for (const name of readdirSync(join(repositoryRoot,'packages/domain')).filter(name=>name.endsWith('.ts'))) compile('packages/domain/'+name,'functions/lib/packages/domain/'+name.replace(/\.ts$/,'.js'));
+  put(root,'functions/lib/functions/src/purchase-sepay.js',`const {onCall,onRequest}=require('firebase-functions/v2/https');const {onDocumentCreated}=require('firebase-functions/v2/firestore');const options={region:'asia-southeast1'};exports.purchaseSePayPayment=onCall(options,()=>{});exports.purchaseSePayIpn=onRequest(options,()=>{});exports.purchaseSePayInboxWorker=onDocumentCreated({...options,document:'purchaseSePayInbox/{id}',retry:true},()=>{});`);
+  const names=['campaignBannersPublic','publicDiscovery','publicImage','publicPage'];
+  put(root,'functions/lib/functions/src/index.js',productionTestCompiled+`\nconst feedback=require('./ai/feedback-lifecycle');Object.defineProperty(exports,"askFeedbackCleanup",{enumerable:true,get:function(){return feedback.askFeedbackCleanup;}});`+`\nconst {onRequest}=require('firebase-functions/v2/https');\n`+names.map(name=>`exports.${name}=onRequest({region:'asia-southeast1'},()=>{});`).join('\n'));
+}
+test('approved production-test artifact retains authentic handlers, always strips client-outcome demos and binds public runtime env',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  assert.equal(manifest.inventory.length,8);
+  assert.deepEqual(manifest.productionTestExports,productionTestRows);
+  assert.deepEqual(manifest.emulatorOnlyExports,['purchaseDemoPayment','purchaseDemoWebhook']);
+  assert.deepEqual(manifest.runtimeEnvironment,PRODUCTION_TEST_ENVIRONMENT);
+  assert.equal(readFileSync(join(stage,PRODUCTION_TEST_ENV_FILE),'utf8'),PRODUCTION_TEST_ENV_BYTES);
+  const script=`const net=require('node:net'),tls=require('node:tls');let calls=0;const deny=()=>{calls++;throw Error('NETWORK_FORBIDDEN');};net.connect=net.createConnection=net.Socket.prototype.connect=tls.connect=deny;globalThis.fetch=async()=>deny();require(process.argv[1]).loadStack(process.argv[2]).then(stack=>console.log(JSON.stringify({names:Object.keys(stack.endpoints).sort(),calls}))).catch(()=>{process.exitCode=1;});`;
+  const publicNames=['campaignBannersPublic','publicDiscovery','publicImage','publicPage','askFeedbackCleanup'];
+  for (const [environment,expected] of [[{GCLOUD_PROJECT:'satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'satsunicgo'}),...PRODUCTION_TEST_ENVIRONMENT},[...publicNames,...productionTestRows.map(row=>row.name)]],[{GCLOUD_PROJECT:'satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'satsunicgo'})},publicNames],[{GCLOUD_PROJECT:'demo-satsunicgo',FUNCTIONS_EMULATOR:'true',FIREBASE_CONFIG:JSON.stringify({projectId:'demo-satsunicgo'})},[...publicNames,...productionTestRows.map(row=>row.name)]]]){
+    const result=spawnSync(process.execPath,['-e',script,join(repositoryRoot,'node_modules/firebase-functions/lib/runtime/loader.js'),join(stage,'deployment/functions')],{env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules'),...environment},encoding:'utf8',timeout:15000});
+    assert.equal(result.status,0,result.stderr);const response=JSON.parse(result.stdout.trim());assert.equal(response.calls,0);assert.deepEqual(response.names,expected.sort());
+  }
+  assert.equal(verify(stage,sha,'v1.2.3').sha,sha);
+});
+test('public runtime dotenv permits only the exact code-owned nonsecret bytes and rejects arbitrary dotenv additions',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  put(stage,PRODUCTION_TEST_ENV_FILE,PRODUCTION_TEST_ENV_BYTES+'SECRET_KEY=forbidden\n');
+  manifest.files[PRODUCTION_TEST_ENV_FILE]=digest(readFileSync(join(stage,PRODUCTION_TEST_ENV_FILE)));put(stage,'manifest.json',manifest);
+  assert.throws(()=>verify(stage,sha,'v1.2.3'),/ENVIRONMENT_MISMATCH/);
+  put(stage,PRODUCTION_TEST_ENV_FILE,PRODUCTION_TEST_ENV_BYTES);put(stage,'deployment/functions/.env.other','OTHER=true');
+  assert.throws(()=>verify(stage,sha,'v1.2.3'),/UNSAFE_ARTIFACT_PATH/);
+});
+for(const [label,compiled] of [
+  ['unguarded true',productionTestCompiled.replace('(0,production_test_policy_1.sepayArtifactEnvironment)()','true')],
+  ['foreign policy module',productionTestCompiled.replace("require('./production-test-policy')","require('./other')")],
+  ['mutable guard',productionTestCompiled.replace('const productionSePay','let productionSePay')],
+  ['escaped guard',productionTestCompiled+'\nconst leaked=productionSePay;'],
+  ['false branch callable',productionTestCompiled.replace(': undefined',': purchase_checkout_2.purchaseDemoPayment')],
+  ['escaped target alias',productionTestCompiled+'\nconst leaked=purchase_sepay_1;'],
+  ['duplicate export',productionTestCompiled+'\nexports.purchaseSePayPayment=productionSePay ? purchase_sepay_1.purchaseSePayPayment : undefined;'],
+  ['computed export',productionTestCompiled.replace('exports.purchaseSePayPayment = productionSePay',"exports['purchaseSePayPayment'] = productionSePay")],
+])test(`production-test compiler contract rejects ${label}`,()=>assert.throws(()=>excludeEmulatorOnlyExports(compiled,allDemoMetadata.slice(0,2),productionTestRows),/PRODUCTION_TEST_|EMULATOR_/));
+test('production-test metadata cannot partially admit handlers or change source/kind',()=>{
+  assert.throws(()=>assertCompiledProductionTestExports(productionTestCompiled,productionTestRows.slice(0,2)),/EXPORT_SET/);
+  assert.throws(()=>assertCompiledProductionTestExports(productionTestCompiled,productionTestRows.map(row=>({...row,source:'functions/src/other.ts'}))),/METADATA/);
+});
+test('production-test Ask and gated cleanup exports are retained while PayOS and mixed maintenance stay held',()=>{
+  const compiled=['var workflow=require("./ai/ask-workflow");','var payments=require("./payments/payos");','var jobs=require("./jobs");',...HELD_EXPORTS.map(name=>`Object.defineProperty(exports,"${name}",{get:function(){return jobs.${name};}});`)].join('\n');
+  const result=applyProductionHolds(compiled,HELD_EXPORTS.map(name=>({name})),true);
+  assert.deepEqual(result.inventory.map(row=>row.name),['askWorkflow','currentAskConversation','askFeedbackCleanup']);
+  assert.deepEqual(result.heldExports,['createPaymentLink','maintenance','payosWebhook','reconcilePayments']);
+  assert.match(result.compiled,/require\(".\/ai\/ask-workflow"\)/);assert.equal(result.compiled.includes('require("./payments/payos")'),false);
+});
+test('runtime provider readback requires exact public artifact flags and rejects all emulator contamination',()=>{
+  const manifest={runtimeEnvironment:PRODUCTION_TEST_ENVIRONMENT};
+  assert.doesNotThrow(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:PRODUCTION_TEST_ENVIRONMENT}}]));
+  assert.throws(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:{...PRODUCTION_TEST_ENVIRONMENT,PURCHASE_PRODUCTION_TEST_ARTIFACT:'wrong'}}}]),/MISMATCH/);
+  assert.throws(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:{...PRODUCTION_TEST_ENVIRONMENT,FIRESTORE_EMULATOR_HOST:'127.0.0.1:18207'}}}]),/MISMATCH/);
+});
+
+for(const [label,mutation] of [
+  ['missing policy helper import',source=>source.replace("import {sepayArtifactEnvironment} from './production-test-policy';",'')],
+  ['true guard',source=>source.replace('productionSePay=sepayArtifactEnvironment()','productionSePay=true')],
+  ['partial production set',source=>source.replace('purchaseSePayPayment=productionSePay ?','purchaseSePayPayment=process.env.FUNCTIONS_EMULATOR === \'true\' ?')],
+  ['foreign policy helper',source=>source.replace("from './production-test-policy'","from './other-policy'")],
+])test(`production-test source preflight rejects ${label}`,t=>assert.throws(()=>builtFixture(t,root=>{addProductionTestFixture(root);put(root,'functions/src/index.ts',mutation(readFileSync(join(root,'functions/src/index.ts'),'utf8')));}),/RELEASE_PREFLIGHT_FAILED/));
+test('provider source ZIP ignores only fixed public runtime dotenv, with digest and env contract bound',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  const archive=join(stage,'source.zip');
+  const script=`import json,zipfile,sys,pathlib\nroot=pathlib.Path(sys.argv[1]);manifest=json.load(open(root/'manifest.json'));prefix='deployment/functions/'\nwith zipfile.ZipFile(sys.argv[2],'w') as z:\n for name in manifest['files']:\n  if name.startswith(prefix) and name!=prefix+'.env.satsunicgo':z.write(root/name,name[len(prefix):])`;
+  execFileSync('python3',['-c',script,stage,archive]);
+  // ZIP is outside the immutable function package and verified without extraction.
+  execFileSync('python3',[join(repositoryRoot,'scripts/release/verify-source.py'),archive,join(stage,'manifest.json')]);
+  const altered={...manifest,files:{...manifest.files,[PRODUCTION_TEST_ENV_FILE]:digest('ARBITRARY=true\n')}};put(stage,'altered-manifest.json',altered);
+  assert.notEqual(spawnSync('python3',[join(repositoryRoot,'scripts/release/verify-source.py'),archive,join(stage,'altered-manifest.json')]).status,0);
+});
+
+const retentionManifest={sha,tag:'v1.2.3',project:'satsunicgo'};
+const retentionPlan=retentionMetadata(retentionManifest);
+const indexRow=(spec,state='READY')=>({name:`projects/satsunicgo/databases/(default)/collectionGroups/${spec.collectionGroup}/indexes/synthetic`,queryScope:'COLLECTION',fields:[...spec.fields,{fieldPath:'__name__',order:'ASCENDING'}],state});
+const cleanupFunction={name:'projects/satsunicgo/locations/asia-southeast1/functions/askFeedbackCleanup',state:'ACTIVE',serviceConfig:{uri:'https://askfeedbackcleanup-synthetic.a.run.app',revision:'askfeedbackcleanup-00001',serviceAccountEmail:'278913913091-compute@developer.gserviceaccount.com'}};
+const cleanupJob={name:RETENTION_SCHEDULER,state:'ENABLED',schedule:'every 60 minutes',timeZone:'UTC',httpTarget:{uri:cleanupFunction.serviceConfig.uri,httpMethod:'POST',oidcToken:{serviceAccountEmail:cleanupFunction.serviceConfig.serviceAccountEmail}},retryConfig:{retryCount:0}};
+test('retention artifact is inside deployed source and immutable TAR, exact three indexes and digest',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  assert.deepEqual(manifest.feedbackRetention,retentionPlan);assert.ok(manifest.files[RETENTION_FILE]);
+  assert.equal(RETENTION_INDEX_DIGEST,digest(JSON.stringify(RETENTION_INDEXES)));
+  const metadata={...retentionPlan,indexes:RETENTION_INDEXES.slice(0,2)};
+  put(stage,RETENTION_FILE,metadata);manifest.files[RETENTION_FILE]=digest(readFileSync(join(stage,RETENTION_FILE)));manifest.feedbackRetention=metadata;put(stage,'manifest.json',manifest);
+  assert.throws(()=>verify(stage,sha,'v1.2.3'),/RETENTION_ARTIFACT_CONTRACT/);
+});
+test('retention source requires exact additive specs without touching other indexes or TTL',()=>{
+  assert.doesNotThrow(()=>assertRetentionSourceIndexes({indexes:[{collectionGroup:'other',fields:[]},...RETENTION_INDEXES],fieldOverrides:[{collectionGroup:'analyticsEvents',ttl:true}]}));
+  assert.throws(()=>assertRetentionSourceIndexes({indexes:RETENTION_INDEXES.slice(0,2)}),/SOURCE_INDEX/);
+  assert.throws(()=>assertRetentionSourceIndexes({indexes:[...RETENTION_INDEXES,RETENTION_INDEXES[0]]}),/SOURCE_INDEX/);
+  assert.throws(()=>assertRetentionSourceIndexes({indexes:RETENTION_INDEXES,fieldOverrides:[{collectionGroup:'askFeedback',ttl:true}]}),/TTL_OUT_OF_SCOPE/);
+});
+test('index delivery requires normal exact main workflow, artifact SHA/tag and verified deployer identity',()=>{
+  const env={GITHUB_ACTIONS:'true',GITHUB_REPOSITORY:'phamhungptithcm/SatsunicGo',GITHUB_REF:'refs/heads/main',GITHUB_WORKFLOW_REF:'phamhungptithcm/SatsunicGo/.github/workflows/release.yml@refs/heads/main',GITHUB_SHA:sha,RELEASE_TAG:'v1.2.3'};
+  assert.doesNotThrow(()=>assertRetentionWorkflow(env,retentionManifest,'github-release@satsunicgo.iam.gserviceaccount.com'));
+  for(const delta of [{GITHUB_ACTIONS:'false'},{GITHUB_REF:'refs/heads/other'},{GITHUB_SHA:'b'.repeat(40)},{GITHUB_WORKFLOW_REF:'phamhungptithcm/SatsunicGo/.github/workflows/other.yml@refs/heads/main'}])assert.throws(()=>assertRetentionWorkflow({...env,...delta},retentionManifest,'github-release@satsunicgo.iam.gserviceaccount.com'),/TRUSTED_WORKFLOW/);
+  assert.throws(()=>assertRetentionWorkflow(env,retentionManifest,'user@example.test'),/TRUSTED_WORKFLOW/);
+});
+test('existing READY indexes are idempotent and read-only across all three fixed groups',async()=>{
+  const calls=[];const result=await ensureRetentionIndexes(retentionPlan,async(method,path)=>{calls.push({method,path});return {indexes:[indexRow(RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/')))]};},{create:true});
+  assert.equal(result.indexes.length,3);assert.deepEqual(result.created,[]);assert.equal(calls.length,3);assert.ok(calls.every(row=>row.method==='GET'));
+});
+test('missing exact indexes create only the reviewed spec, then poll READY; no unrelated deletion/reconcile',async()=>{
+  const calls=[],created=new Set();
+  const result=await ensureRetentionIndexes(retentionPlan,async(method,path,body)=>{
+    const spec=RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/'));calls.push({method,path,body});
+    if(method==='POST'){assert.deepEqual(body,{queryScope:spec.queryScope,fields:spec.fields});created.add(spec.collectionGroup);return {name:'operation'};}
+    return {indexes:created.has(spec.collectionGroup)?[indexRow(spec)]:[]};
+  },{create:true,pause:async()=>{}});
+  assert.deepEqual(result.created,RETENTION_INDEXES.map(row=>row.collectionGroup));assert.equal(calls.filter(row=>row.method==='POST').length,3);assert.ok(calls.every(row=>['GET','POST'].includes(row.method)));
+});
+test('concurrent 409 create is resolved by exact READY list readback',async()=>{
+  let posted=false;
+  const result=await ensureRetentionIndexes(retentionPlan,async(method,path)=>{
+    const spec=RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/'));
+    if(method==='POST'){posted=true;return {alreadyExists:true};}
+    return {indexes:spec===RETENTION_INDEXES[0]&&!posted?[]:[indexRow(spec)]};
+  },{create:true,pause:async()=>{}});
+  assert.equal(result.indexes.length,3);assert.equal(result.created.length,0);assert.deepEqual(result.creationAttempted,[RETENTION_INDEXES[0].collectionGroup]);assert.deepEqual(result.racingExisting,[RETENTION_INDEXES[0].collectionGroup]);
+});
+test('readback missing, NEEDS_REPAIR and CREATING never claim READY; retry budget is bounded',async()=>{
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[]})),/NOT_READY/);
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[indexRow(RETENTION_INDEXES[0],'NEEDS_REPAIR')]}),{create:true}),/NOT_READY/);
+  let reads=0,pauses=0;
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>{reads++;return {indexes:[indexRow(RETENTION_INDEXES[0],'CREATING')]};},{create:true,pause:async()=>{pauses++;}}),/NOT_READY/);
+  assert.equal(reads,12);assert.equal(pauses,11);
+});
+test('index mismatch does not admit wrong direction/scope; list pagination is bounded',async()=>{
+  const mismatch={...indexRow(RETENTION_INDEXES[0]),queryScope:'COLLECTION_GROUP'};
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[mismatch]})),/NOT_READY/);
+  let calls=0;
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[],nextPageToken:String(++calls)})),/PAGINATION_BUDGET/);assert.equal(calls,10);
+});
+test('pagination follows only encoded token under the same fixed collection and selects exact READY spec',async()=>{
+  const paths=[];
+  const result=await ensureRetentionIndexes(retentionPlan,async(_method,path)=>{
+    paths.push(path);const spec=RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/'));
+    return path.includes('pageToken')?{indexes:[indexRow(spec)]}:{indexes:[],nextPageToken:'opaque /token?'};
+  });assert.equal(result.indexes.length,3);assert.ok(paths[1].endsWith('pageToken=opaque%20%2Ftoken%3F'));
+});
+test('provider transport denies deletion, TTL, foreign groups, arbitrary POST and opaque errors',async()=>{
+  let calls=0;const request=retentionRequest('synthetic-token',async()=>{calls++;throw Error('must not call');});
+  for(const [method,path,body] of [['DELETE',`projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes`],['PATCH',`projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/fields/expiresAt`],['GET',`projects/other/databases/(default)/collectionGroups/askFeedback/indexes`],['POST',`projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes`,{}]])await assert.rejects(()=>request(method,path,body),/OUT_OF_SCOPE/);
+  assert.equal(calls,0);
+});
+test('provider transport exposes precise missing IAM capability without printing token/provider payload',async()=>{
+  const request=retentionRequest('synthetic-token',async()=>({status:403}));
+  await assert.rejects(()=>request('GET','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes?pageSize=100'),/RETENTION_INDEX_IAM_DENIED/);
+  await assert.rejects(()=>request('GET',RETENTION_SCHEDULER),/RETENTION_SCHEDULER_IAM_DENIED/);
+});
+test('provider 409 handling applies only to create and respects fixed JSON/body bounds',async()=>{
+  const request=retentionRequest('synthetic-token',async()=>({status:409}));
+  assert.deepEqual(await request('POST','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes',{queryScope:'COLLECTION',fields:RETENTION_INDEXES[0].fields}),{alreadyExists:true});
+  await assert.rejects(()=>request('GET',RETENTION_SCHEDULER),/HTTP_FAILURE/);
+});
+test('Scheduler readback binds exact hourly active POST/OIDC target and Function revision',()=>{
+  assert.deepEqual(verifyRetentionScheduler(cleanupJob,cleanupFunction),{name:RETENTION_SCHEDULER,state:'ENABLED',uri:cleanupFunction.serviceConfig.uri,revision:cleanupFunction.serviceConfig.revision});
+  for(const delta of [{state:'PAUSED'},{schedule:'every 30 minutes'},{timeZone:'America/Chicago'},{retryConfig:{retryCount:1}},{httpTarget:{...cleanupJob.httpTarget,uri:'https://other.example.test'}},{httpTarget:{...cleanupJob.httpTarget,oidcToken:{serviceAccountEmail:'other@example.test'}}},{httpTarget:{...cleanupJob.httpTarget,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:'https://other.example.test'}}}])assert.throws(()=>verifyRetentionScheduler({...cleanupJob,...delta},cleanupFunction),/SCHEDULER_READBACK/);
+});
+test('readiness receipt is bound to artifact and READY index names without writing activation policy',async()=>{
+  const calls=[];const now=1791597600000;
+  const ready=await readRetentionReadiness(retentionPlan,[cleanupFunction],async(method,path)=>{calls.push({method,path});return path===RETENTION_SCHEDULER?cleanupJob:{indexes:[indexRow(RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/')))]};},now);
+  assert.equal(ready.artifactSha,sha);assert.equal(ready.indexState,'READY');assert.equal(ready.indexNames.length,3);assert.equal(ready.verifiedAt,now);assert.equal(ready.expiresAt,now+86400000);assert.ok(calls.every(row=>row.method==='GET'));
+});
+test('release notes accurately describe conditional exact-three index delivery and excluded migrations',()=>{
+  const scope=releaseDeploymentScope();assert.match(scope,/Database rules and business-data migrations are excluded/);assert.match(scope,/production-test v1 artifact.*three additive feedback-retention indexes/);assert.match(scope,/other artifacts make no index changes/);
+  assert.equal(readFileSync(join(repositoryRoot,'scripts/release/release.mjs'),'utf8').includes('No database rules/indexes'),false);
+});
+
+test('compiled real retention helper reads immutable metadata from actual lib/functions/src/ai layout',t=>{
+  const {stage}=builtFixture(t,addProductionTestFixture);
+  const compiled=join(stage,'deployment/functions/lib/functions/src/ai/feedback-retention-gate.js');
+  const script=`const gate=require(process.argv[1]);console.log(JSON.stringify(gate.readFeedbackRetentionArtifact()));`;
+  const options={env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules')},encoding:'utf8',timeout:15000};
+  const first=spawnSync(process.execPath,['-e',script,compiled],options);assert.equal(first.status,0,first.stderr);assert.deepEqual(JSON.parse(first.stdout.trim()),retentionPlan);
+  put(stage,'deployment/functions/release.json',{schemaVersion:1,project:'satsunicgo',sha:'b'.repeat(40),tag:'v1.2.3'});
+  const wrong=spawnSync(process.execPath,['-e',script,compiled],options);assert.equal(wrong.status,0,wrong.stderr);assert.equal(JSON.parse(wrong.stdout.trim()),null);
+});
+test('Scheduler omitted protobuf zero defaults are effective zero while malformed or nonzero retries remain blocked',()=>{
+  for(const retryConfig of [undefined,{}, {retryCount:0},{maxRetryDuration:'0s'},{maxRetryDuration:'0.000000000s'}])assert.doesNotThrow(()=>verifyRetentionScheduler({...cleanupJob,retryConfig},cleanupFunction));
+  for(const retryConfig of [null,[],{retryCount:null},{retryCount:'0'},{retryCount:1},{maxRetryDuration:'1s'},{maxRetryDuration:null}])assert.throws(()=>verifyRetentionScheduler({...cleanupJob,retryConfig},cleanupFunction),/SCHEDULER_READBACK/);
+});
+
+test('Scheduler rejects a different Run endpoint even when provider metadata is internally consistent',()=>{
+  const uri='https://otherfunction-synthetic.a.run.app';
+  assert.throws(()=>verifyRetentionScheduler({...cleanupJob,httpTarget:{...cleanupJob.httpTarget,uri}},{...cleanupFunction,serviceConfig:{...cleanupFunction.serviceConfig,uri}}),/SCHEDULER_READBACK/);
+});
+test('bounded provider request parses JSON and preserves exact POST/auth/no-redirect contract',async()=>{
+  let seen;
+  const request=retentionRequest('synthetic-token',async(url,options)=>{seen={url,options};return {ok:true,status:200,body:(async function*(){yield Buffer.from('{"name":"synthetic-operation"}');})()};});
+  const response=await request('POST','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes',{queryScope:'COLLECTION',fields:RETENTION_INDEXES[0].fields});
+  assert.equal(response.name,'synthetic-operation');assert.equal(seen.options.redirect,'error');assert.equal(seen.options.headers.Authorization,'Bearer synthetic-token');assert.ok(seen.options.signal);assert.equal(seen.url,'https://firestore.googleapis.com/v1/projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes');
+});
+test('provider malformed JSON and oversized body fail closed without opaque response details',async()=>{
+  for(const [bytes,code] of [[Buffer.from('{opaque-malformed'),'RESPONSE_INVALID'],[Buffer.alloc(1024*1024+1),'RESPONSE_BUDGET']]){
+    const request=retentionRequest('synthetic-token',async()=>({ok:true,status:200,body:(async function*(){yield bytes;})()}));
+    await assert.rejects(()=>request('GET',RETENTION_SCHEDULER),new RegExp(code));
+  }
+});
+
+test('real compiled runtime checksum matches release producer and accepts Firestore map order',t=>{
+  const {stage}=builtFixture(t,addProductionTestFixture);
+  const now=1791597600000;
+  const row={schemaVersion:1,artifactSha:sha,artifactTag:'v1.2.3',indexDigest:RETENTION_INDEX_DIGEST,verifiedAt:now-1,expiresAt:now+86400000,indexNames:RETENTION_INDEXES.map(spec=>indexRow(spec).name),indexState:'READY',scheduler:verifyRetentionScheduler(cleanupJob,cleanupFunction)};
+  const receipt={...row,receiptSha256:retentionReadinessDigest(row)};
+  const reordered=Object.fromEntries(Object.entries(receipt).toReversed());reordered.scheduler=Object.fromEntries(Object.entries(receipt.scheduler).toReversed());
+  const policy={schemaVersion:1,enabled:true,approved:true,version:1,artifactSha:sha,artifactTag:'v1.2.3',indexDigest:RETENTION_INDEX_DIGEST,effectiveFrom:now-1,expiresAt:now+86400000,feedbackMaxDays:30,quotaMaxHours:48};
+  const script=`const gate=require(process.argv[1]),input=JSON.parse(process.argv[2]);console.log(JSON.stringify({digest:gate.feedbackRetentionReadinessDigest(input.receipt),allowed:gate.admitFeedbackRetention(input.policy,input.receipt,gate.readFeedbackRetentionArtifact(),input.now)}));`;
+  const response=spawnSync(process.execPath,['-e',script,join(stage,'deployment/functions/lib/functions/src/ai/feedback-retention-gate.js'),JSON.stringify({receipt:reordered,policy,now})],{env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules')},encoding:'utf8',timeout:15000});
+  assert.equal(response.status,0,response.stderr);assert.deepEqual(JSON.parse(response.stdout.trim()),{digest:receipt.receiptSha256,allowed:true});
 });

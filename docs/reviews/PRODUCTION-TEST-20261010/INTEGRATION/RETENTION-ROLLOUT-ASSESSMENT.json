@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-RETENTION-ROLLOUT-ASSESSMENT",
+  "created_at": "2026-10-10T02:00:43.508280+00:00",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "status": "BLOCKED_OPERATIONAL_COMPLETENESS",
+  "scope": "Read-only assessment of existing approved class-scoped feedback retention, packaging and activation boundaries",
+  "source_hashes": {
+    "docs/reviews/PRODUCTION-TEST-20261010/PLAN.md": "c0a5ff83047d05aec86e78505139c94debd4d3ec831906e823cfb925302c7275",
+    "docs/reviews/PRODUCTION-TEST-20261010/APPROVAL.json": "d08af16bbe5ae3bd3f7e459a15fd8c5c60053e882fc02022826f24f6d7dbd560",
+    "docs/reviews/PRODUCTION-TEST-20261010/ASK/IMPACT.md": "6b7222faa1eaa2604f7412673c26404d6573a9100a73f01c89293facc1eaf393",
+    "docs/reviews/PRODUCTION-TEST-20261010/ASK/REPORT.md": "3bd149fe04a1017cc83e356a7c9e40eab6e39a65b6ac62ca8d8d9c513f5b3fe2",
+    "docs/reviews/PRODUCTION-TEST-20261010/ASK/HANDOFF.json": "0aae531481047115c4fe06b1e4ff01048627a29e283611fb4ff4b1706ea4b098",
+    "functions/src/ai/feedback-lifecycle.ts": "aa8a7bc2254ffc42df69b8f763493fa271ab6f5812837b0bc0ba77a52b7bb454",
+    "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+    "functions/src/ai/feedback.ts": "7a9c653c5584d70401554ddbf0685240b9d31dbd2b4593844913cfb5966dbdd3",
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "scripts/release/artifact.mjs": "f3e6f410fc508bceae1d1a87eaf8feba01c345ddb8837caebce66af93e46bad4",
+    "scripts/release/reviewed-retries.mjs": "85cdef79b47f62be04e8417084f94500eb16d880a2be010e56a3e5b88a9311c0",
+    "scripts/release/verify-production.mjs": "40696429ed4ab33d9a744e76e3b520c28e34731498f268aa46fdeeb4e8c0c905",
+    "functions/src/provider-release-gate.ts": "7abf20487e70a78e1ced85ca430f3e66a5b7385a8d06fa7266d9b6b4128c2889"
+  },
+  "approval_trace": [
+    {
+      "ref": "docs/reviews/PRODUCTION-TEST-20261010/PLAN.md:27",
+      "fact": "Approved v1 permits only explicitly approved class/duration retention cleanup; no payment/audit deletion."
+    },
+    {
+      "ref": "docs/reviews/PRODUCTION-TEST-20261010/APPROVAL.json",
+      "fact": "Human approved PLAN.md production-test implementation and release with normal immutable workflow and preserved data/auth controls."
+    },
+    {
+      "ref": "docs/reviews/PRODUCTION-TEST-20261010/ASK/IMPACT.md",
+      "fact": "Ask implementation scope specifies an explicit 30-day test feedback class, original legacy policy unchanged, bounded deletion with version preconditions."
+    },
+    {
+      "ref": "docs/reviews/PRODUCTION-TEST-20261010/ASK/REPORT.md",
+      "fact": "Ask handoff requires three additive retention indexes through normal workflow and cleanup inactive until provider READY readback."
+    }
+  ],
+  "observed": {
+    "producer_retention": {
+      "test_feedback": "1..30 days, bounded by the shorter current consented feedback policy",
+      "test_review_operations": "inherit original test feedback expiry",
+      "technical_quota": "48 hours",
+      "legacy": "not relabeled or admitted to new cleanup classes"
+    },
+    "cleanup_data_boundary": {
+      "collections": [
+        "askFeedback",
+        "askFeedbackReviewOperations",
+        "askFeedbackQuota"
+      ],
+      "classes": [
+        "ask_feedback_production_test_v1",
+        "ask_feedback_test_review_v1",
+        "ask_feedback_quota_v1"
+      ],
+      "query": "class equality + expiresAt<=now, limit100 per collection",
+      "delete": "batch with snapshot lastUpdateTime precondition",
+      "legacy_finance_audit": "never admitted by these helpers"
+    },
+    "scheduler": {
+      "schedule": "every 60 minutes",
+      "region": "asia-southeast1",
+      "maxInstances": 1,
+      "retryCount": 0,
+      "handler": "directly calls purgeExpiredFeedback()",
+      "production_environment_gate": "ABSENT",
+      "explicit_activation_policy": "ABSENT",
+      "index_ready_gate": "ABSENT"
+    },
+    "artifact": {
+      "held_export": "askFeedbackCleanup",
+      "comment": "Retention/rollout approval comment is historical; do not reinterpret current v1 approval as absent. Runtime/index rollout evidence is still missing.",
+      "deployment_config": "Functions and Hosting only; Firestore configuration is not packaged",
+      "deployment_selector": "Explicit manifest Functions and Hosting only",
+      "index_delivery": "ABSENT",
+      "index_ready_provider_verification": "ABSENT",
+      "cloud_scheduler_provider_verification": "ABSENT"
+    },
+    "indexes": {
+      "source": "exact three composite indexes are present",
+      "fields": [
+        "retentionClass ASCENDING",
+        "expiresAt ASCENDING"
+      ],
+      "groups": [
+        "askFeedback",
+        "askFeedbackReviewOperations",
+        "askFeedbackQuota"
+      ],
+      "deployed_ready": "NOT_VERIFIED; no provider calls performed"
+    },
+    "logical_vs_physical_retention": "expiresAt is producer metadata and retrieval eligibility; it does not physically erase these feedback records. No feedback TTL field override is present."
+  },
+  "decision": {
+    "current_hold": "REQUIRED_UNTIL_GUARDED_ROLLOUT",
+    "forgotten_packaging": "The existing hold is explicit, not an accidental missing export. However leaving it indefinitely is incomplete against the approved operational retention acceptance.",
+    "inclusion_inactive_now": "NOT_SAFE_WITH_CURRENT_HANDLER: inclusion alone would create an active hourly deletion scheduler with no activation guard. Missing indexes only cause query errors; they are not an intentional activation policy.",
+    "same_v1_completion_required": true,
+    "new_class_or_duration_approval_needed": false,
+    "new_capability_authority": "Existing v1 covers the precise existing classes/durations and additive indexes; any broader deletion, migration, TTL enablement or changed classes/durations requires separate scope."
+  },
+  "bounded_completion_plan": [
+    "Add an exact production-test artifact/database identity guard and strict independent retention activation policy that defaults inactive. Do not couple expiry deletion to NEW tester admission, because approved test feedback must still expire after new test activity is disabled.",
+    "Carry only the three approved composite index definitions/digests in the immutable artifact and normal release pipeline. Use reviewed create-only/idempotent index operations; never deploy a partial index file in a way that deletes unrelated indexes, enables TTL, or requires global force.",
+    "Read back all three exact index specs in satsunicgo/(default) as READY and bind the receipt to the current immutable artifact/source. Keep cleanup inactive while any spec/state is missing or mismatched.",
+    "Include askFeedbackCleanup only under the reviewed v1 artifact contract after its default-inactive gate is verified; preserve the legacy artifact hold and all other held capabilities.",
+    "Read back Function environment, exact Scheduler target/schedule/auth/state and retention policy. Activate only the exact existing classes/durations after index readiness and targeted safety tests pass.",
+    "Test no-op before activation/wrong environment/missing or expired policy, legacy/financial/audit rejection, exact boundary/update-time race, policy-off/new-test-off behavior and rollback disablement. Do not perform unapproved production deletion fixtures.",
+    "If retention cannot be operationally enabled in this release, preserve the hold, explicitly report retention NOT_READY and keep new feedback collection inactive instead of claiming completed 30-day erasure."
+  ],
+  "trade_offs": [
+    "Physical deletion is bounded asynchronous work; expiresAt alone must not be presented as proof that erasure occurred exactly at the nominal deadline.",
+    "Current class-first queries avoid legacy starvation; sustained backlog and scheduler failures require bounded operational monitoring before an erasure SLA claim."
+  ],
+  "actions": {
+    "implementation_edits": 0,
+    "provider_calls": 0,
+    "index_deploy": 0,
+    "production_deletions": 0,
+    "secret_access": 0,
+    "tests_rerun": 0
+  },
+  "repository_intelligence": "DEGRADED; bounded source and recorded owner acceptance used",
+  "production": "NOT_READY_FOR_RETENTION_ACTIVATION",
+  "memory_candidates": "None",
+  "provider_tokens": "Unavailable",
+  "actual_billed_cost": "Unavailable"
+}

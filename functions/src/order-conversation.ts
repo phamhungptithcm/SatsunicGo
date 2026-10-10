@@ -7,6 +7,7 @@ import { getFirestore, type Transaction } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { z } from "zod";
 import { requireVerifiedGoogle } from "./auth/guards";
+import { purchaseExecutionFields } from "./purchase-test-boundary";
 import {
   canHandleConversation,
   conversationCommandSchema,
@@ -47,6 +48,7 @@ async function authorize(tx: Transaction, uid: string, orderId: string) {
   return {
     ownerId: order.data()!.ownerId as string,
     staff: handler && !customer,
+    order: order.data()!,
   };
 }
 
@@ -199,6 +201,11 @@ export const orderConversationCommand = onCall(opts, async (req) => {
         "aborted",
         "Có cập nhật mới. Tải lại cuộc trao đổi trước khi gửi.",
       );
+    // Only the authorized source order can pin a reply's execution mode.
+    const replyExecution =
+      d.action === "message" && access.staff
+        ? purchaseExecutionFields(access.order)
+        : {};
     const version = d.expectedVersion + 1;
     let staffRecipient: string | null =
       d.action === "assign" ? d.assigneeId : null;
@@ -251,6 +258,7 @@ export const orderConversationCommand = onCall(opts, async (req) => {
         action: "orderConversationReply",
         state: "queued",
         createdAt: now,
+        ...replyExecution,
         ...customerEventFields(() =>
           customerEvent(
             "order_reply",

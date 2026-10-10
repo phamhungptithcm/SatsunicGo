@@ -240,13 +240,18 @@ export function PurchaseCheckout({
       navigate(`/checkout/payment/${cart.activeCheckoutId}`, { replace: true });
   }, [cart.activeCheckoutId, navigate, balance]);
   useEffect(() => {
-    if (preview && !balance && preview.cartRevision !== cart.revision) {
+    if (
+      preview &&
+      !balance &&
+      !cart.activeCheckoutId &&
+      preview.cartRevision !== cart.revision
+    ) {
       setPreview(null);
       setConfirmed(false);
       setStep(1);
       setError("Giỏ đã đổi. Xem lại tổng quan trước khi thanh toán.");
     }
-  }, [cart.revision, preview, balance]);
+  }, [cart.revision, cart.activeCheckoutId, preview, balance]);
   useEffect(() => {
     if (!balance || !user) return;
     let active = true;

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-RETENTION-COMPLETION",
+  "created_at": "2026-10-10T02:26:17.123529+00:00",
+  "status": "PASSED",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "approval": "PRODUCTION-TEST v1 call_5081fd46f74546c08b78d7a095730a9a item 0",
+  "source_hashes": {
+    "functions/src/ai/feedback-lifecycle.ts": "ac06f5d391062be49ab62615c219d0adee5b716f21cf3b0fb8f620ae37781319",
+    "functions/src/ai/feedback-retention-gate.ts": "7f94f35c5066f001b86dcb5d14138236dd37ff6f77a545620539df5edc6d77e7",
+    "scripts/release/feedback-retention.mjs": "c149b912f353195e83062aa99ff8b0176cf7d4822c5acfecb7c2f4cfab0a39a4",
+    "scripts/release/artifact.mjs": "78a9fbe9dbac3e6316ed654ea6c60cf8a4bc9438d63c2e5ab953a5d341ac6b4a",
+    "scripts/release/reviewed-retries.mjs": "63489c69c66c09f9354cf78ac7d2e032abbd79b2c2835a97a3860c254f707687",
+    "scripts/release/verify-production.mjs": "28f79a4afa1b880538842eea170cc03c94694998f2a6d03b53e28a82f8bd6d52",
+    "scripts/release/release.mjs": "65e3b4b179dfb0cbe1342a12c5b5c3b4d8fef60570a3a7b74cb8ef8cfbd59cd4",
+    "tests/unit/ask-feedback-cleanup.test.ts": "ed92429e0df9785b89ba9700ebcd3460d2552b284b360226c5d93e2ffe8ced61",
+    "tests/unit/feedback-retention-gate.test.ts": "55da0315b84480105eda0d477e4571e5d0c8b60ef3cf18def283803615129341",
+    "tests/unit/release108.test.mjs": "63c493a466fe0deb6f059d6c9342d7a76d15c904ff49e6cca89695c5d3ba638d",
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-IMPACT.md": "28a2b4dbe42ce2bfec2beb2af4d89c08d043e60c76c18dbbe4e4e6480cc443bb",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-ROLLOUT-RUNBOOK.md": "0f7f8d5c592d77117eac60bf69846f482a744c5031f03243279f77a9be921027"
+  },
+  "checks_receipt": "RETENTION-COMPLETION-R2-CHECKS.json",
+  "checks_receipt_sha256": "6e78ddd2578b4320de9a488423a1e83eaf163850e584aab3503b029dbcf7be40",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Exact existing30day test feedback/review and48h quota classes only; gated v1 export and precise additive index delivery, legacy holds remain."
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Strict independent protected policy/readiness with exact artifact/environment/default DB; canonical content checksum; per-delete transaction revocation; no new client writes, secret access, global force, TTL, index deletion or IAM change."
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Small dependency-free source/release helpers, pinned SDK contract, backend strict/scoped lint passed; actual compiled metadata path and producer/runtime parity tested."
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Missing/expired/foreign/malformed policy, artifact, READY receipt; revocation and record races; fixed bounded create409/pagination/IAM/time/response failures; wrong Scheduler and zero-default semantics covered."
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Unsafe/missing authority no-ops before query; provider errors emit stable codes without payload/token; failed index readiness blocks promotion. No automatic activation or destructive recovery."
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Source default-inactive and normal immutable pipeline ready for root combined verification; actual IAM/index/Scheduler/provider/activation remainNOT_RUN and operational readinessNOT_READY."
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "At most300 rows/invocation; malformed-class backlog and admitted-commit expiry are bounded operational limits.24h readiness needs reviewed renewal; no erasure SLA or continuous authority claim."
+    }
+  },
+  "product_content": "NOT_APPLICABLE; no customer-facing UI/text change; release/operator docs reviewed against actual behavior",
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "status": "CHANGES_REQUESTED",
+      "findings": [
+        "RETENTION-READINESS-DIGEST-01"
+      ],
+      "notes": "409 ownership and URI parity corrected within initial focused loop; runtime checksum still needed content binding."
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "fixed": [
+        "RETENTION-READINESS-DIGEST-01"
+      ],
+      "evidence": "48 runtime/gate +145 release Node, strict/lint/preflight all exit0; independent file-bound peer review PASSED with matching current source/log hashes."
+    }
+  ],
+  "open_findings": [],
+  "remaining": [
+    "Root fresh combined verification/build/package/normal CI",
+    "Separately approved minimal IAM delta and actual effective permission evidence",
+    "Exact provider index READY/Scheduler/Function IAM and immutable source readback",
+    "Protected deletion activation/renewal authority and live operational evidence"
+  ],
+  "production_readiness": "NOT_READY_FOR_ACTIVATION",
+  "provider_calls": 0,
+  "policy_activation": 0,
+  "production_deletions": 0,
+  "git": "Local candidate contains concurrent approved changes; no push/commit/deploy by this agent",
+  "runtime_report": "ai-agent-kit executable unavailable; hash-bound receipts used, no runtime-ledger claim",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None",
+  "scope": "Source and local verification only; rollout/provider activation not certified",
+  "peer_review": "RETENTION-COMPLETION-PEER-REVIEW.json",
+  "peer_review_sha256": "fb81906b31df1857d324cd4d744d5b94067505f9947bbf2d781ea2f42b23b75e"
+}

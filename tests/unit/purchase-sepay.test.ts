@@ -66,6 +66,25 @@ const ipn = () =>
     customer: { customer_id: "UNWANTED_PII" },
   });
 
+it("preserves exact production-test provenance in authoritative sandbox proof", () => {
+  const provenance = {
+    executionMode: "production_test" as const,
+    executionPolicyVersion: 1,
+    testRunId: id,
+  };
+  expect(
+    verifySePayReadback(raw(), { ...intent, ...provenance }, ipn(), now),
+  ).toMatchObject(provenance);
+  expect(() =>
+    verifySePayReadback(
+      raw(),
+      { ...intent, executionMode: "production_test" },
+      ipn(),
+      now,
+    ),
+  ).toThrow();
+});
+
 describe("exact VND and Vietnam provider dates", () => {
   it.each(["1", "125000", "125000.0", "125000.00", "1000000000000"])(
     "accepts whole VND %s",

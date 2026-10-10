@@ -1,0 +1,38 @@
+{
+  "base": "f675ea3a7c94eca8aec88009b1e20eecb5d4822c",
+  "integrationCommit": "5ac7f95ac2b10bb7a77977aed2b60ad1575f995b",
+  "upstreamMain": "b5c0a1c285c07faeacf1d3b8ba544f76d885ceb6",
+  "sourceFiles": {
+    "functions/generated/public-assets.json": "82400bed1528dfec917c58735ff1d91f548206878888fe3b715268fa40369f56",
+    "functions/src/ai/ask-pilot-answer.ts": "09dc29ec5481e13e0bd1c030d1681785703c4a0705ae8d45b23ae2315d9f42e5",
+    "functions/src/ai/ask-production.ts": "c958c4fbbeb2724ab9004b54a1d505d4639c0889b9ea884155c2344bcdfdfcd5",
+    "functions/src/ai/ask.ts": "f8a500eea41fd36adcd968371ba9cec45d5df6a2f68f678f9464c01783d9aa45",
+    "functions/src/ai/server-context.ts": "d474dc49f409b6de915293555824a36787a10ce3bec54e959f4db0beafc2bc91",
+    "functions/src/index.ts": "e4ef11674d2c536700638ebee9f27a6aac6e4393e85d869a519f4ab70a9e85be",
+    "functions/src/public-order-tracking.ts": "61b852e6d7d6cf8370690dc8af3118a56effef9dacbc9f130f1de4ed02f52e57",
+    "functions/src/workspace.ts": "8a00d5b884e6ecdbfab0dde68c9a84b6bbba86259370e84585cc4ae12ce2e8d9",
+    "packages/domain/public-order-tracking.ts": "7004b237eff95761729604a3001cc206b1ba9f4652936e3ff96a8c137e2c5ebc",
+    "src/features/ask/Ask.module.css": "9757779a84116759880ff791e412685af886df61468df28a23cf7b96607ff089",
+    "src/features/ask/Ask.tsx": "7b6a74a219053b90c6cb80a57fb26dc46096e64d27e3674ba8ed59d46bea5f4f",
+    "src/features/ask/GuestOrderTracking.tsx": "d235a7a85be8e63ab67f28fefc63f202f731ccb8860deb64faf83505ad8d2fbf",
+    "src/features/ask/guest-tracking-request.ts": "77f398825069bb43697eea7069780afb23d6fd94e65926c3bf975499aba5d29c",
+    "src/features/ask/order-tracking.css": "480931c44f02a977b8693896cb5b5fac3edee5c33d182f231776b6618f8efa58",
+    "src/features/orders/AccountTracking.tsx": "538ef7e022c48ee98abf448f7c613f3ad03d362e6aa6fbe02942338ee66de84c",
+    "src/features/orders/PublicTrackingCode.tsx": "7a616e0db90f49816c5e6efea1b61ce9b0726426bdacec963f43a527020896a2",
+    "src/features/settings/AskPilot.tsx": "a281291ab7ea76895c3117dfdcd89389ea2e9edfb3be4a59e6a0577b457df00e",
+    "tests/rules/guest-order-tracking.test.ts": "99fa76dcf580c5cf57c5a0fda02a5ee0911db779e8c60cdb309b8413dde50c43",
+    "tests/unit/ask-production-admission.test.ts": "08646a819de18ca36c380cd5ce1bbcdbceedbeeec2996b6f13aba6226731f740",
+    "tests/unit/guest-order-tracking.test.ts": "d8845a4c96e353128082e35eaec8102012993fbf4c6285c5488a2246e1704a41",
+    "tests/unit/notification-subscriptions.test.ts": "0d77d8adbfaa1d23266d4b3fc693dcfa42f5ba54dcca7151dbba88fbf6b6d02e"
+  },
+  "digest": "79617d7b1e2ba51ad223d5bafb3c9e1792ad9bc87d26df8659181278f28f6a25",
+  "outsideAllowlistDrift": [],
+  "sharedWritesByRoot": 0,
+  "upstreamExactFiles": 15,
+  "workspaceMerge": "Only candidate purchaseTestProjection import and two projection calls differ from origin/main; both behaviors retained",
+  "candidateIndexInverseExact": true,
+  "preexistingWipPreserved": [
+    ".ai/scripts/__pycache__/repository_intelligence_lib.cpython-314.pyc",
+    "node_modules symlink"
+  ]
+}

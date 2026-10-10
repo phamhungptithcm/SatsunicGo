@@ -187,11 +187,20 @@ try {
   const outcomes = await Promise.all(processes.map((entry) => entry.result));
   assert.deepEqual(outcomes, [{ state: "paid" }, { state: "paid" }]);
   const entries = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("checkoutId", "==", checkout.id)
     .get();
   assert.equal(entries.size, 1);
   assert.equal(entries.docs[0].data().amount, preview.total);
+  assert.equal(
+    (
+      await db
+        .collection("financialEntries")
+        .where("checkoutId", "==", checkout.id)
+        .get()
+    ).size,
+    0,
+  );
   assert.equal(
     (await db.collection("orders").where("checkoutId", "==", checkout.id).get())
       .size,
@@ -216,7 +225,7 @@ try {
       "Two separate Node processes allocate the same valid signed callback exactly once",
     processes: 2,
     elapsedMs: Math.round(performance.now() - started),
-    financialEntries: 1,
+    testFinancialEntries: 1,
     orders: 1,
     receipts: 1,
     scope:

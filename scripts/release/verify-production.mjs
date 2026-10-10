@@ -9,8 +9,9 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest, verify } from './artifact.mjs';
+import { readRetentionReadiness, retentionRequest, retentionReadinessDigest } from './feedback-retention.mjs';
 
-const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,labels,eventTrigger.retryPolicy)';
+const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,serviceConfig.uri,serviceConfig.serviceAccountEmail,labels,eventTrigger.retryPolicy)';
 function inventory() {
   return JSON.parse(execFileSync('gcloud', ['functions', 'list', '--v2', '--project=satsunicgo', '--regions=asia-southeast1', `--format=${projection}`], {
     encoding: 'utf8', timeout: 120_000,
@@ -27,6 +28,15 @@ export function checkInventory(manifest, deployed, allowMissing) {
     if (!allowMissing && (fn.state !== 'ACTIVE' || !fn.serviceConfig?.revision || !fn.buildConfig?.source?.storageSource)) throw Error('FUNCTION_NOT_ACTIVE_OR_SOURCE_UNAVAILABLE');
   }
   if (!allowMissing && actual.size !== names.size) throw Error('MISSING_DEPLOYED_FUNCTION');
+}
+export function verifyRuntimeEnvironment(manifest, deployed) {
+  const expected = manifest.runtimeEnvironment;
+  if (!expected) return;
+  if (JSON.stringify(expected) !== JSON.stringify({ PURCHASE_PRODUCTION_TEST_ARTIFACT: 'v1', PURCHASE_SEPAY_SANDBOX_ENABLED: 'true' })) throw Error('UNSAFE_RUNTIME_ENVIRONMENT');
+  for (const fn of deployed) {
+    const environment = fn.serviceConfig?.environmentVariables;
+    if (!environment || Object.entries(expected).some(([key, value]) => environment[key] !== value) || Object.keys(environment).some(key => /EMULATOR/.test(key))) throw Error('DEPLOYED_RUNTIME_ENVIRONMENT_MISMATCH');
+  }
 }
 export function verifyRetryReadback(manifest, deployed, admission) {
   if (admission?.schemaVersion !== 1 || admission.sha !== manifest.sha || admission.tag !== manifest.tag || admission.project !== 'satsunicgo' || !Array.isArray(admission.retryEndpoints) || !Array.isArray(admission.newRetries)) throw Error('RETRY_ADMISSION_BINDING_MISMATCH');
@@ -109,6 +119,7 @@ export async function verifyProduction() {
     }
   }
   const deployed = await waitForActiveInventory(manifest);
+  verifyRuntimeEnvironment(manifest, deployed);
   const retryPolicies = verifyRetryReadback(manifest, deployed, JSON.parse(readFileSync('retry-policy-admission.json', 'utf8')));
   const directory = mkdtempSync(join(tmpdir(), 'release-source-'));
   const sources = new Set(), functions = [];
@@ -128,6 +139,7 @@ export async function verifyProduction() {
   } finally { rmSync(directory, { recursive: true, force: true }); }
   const after = inventory();
   checkInventory(manifest, after, false);
+  verifyRuntimeEnvironment(manifest, after);
   verifyRetryReadback(manifest, after, JSON.parse(readFileSync('retry-policy-admission.json', 'utf8')));
   if (deployed.some(fn => {
     const current = after.find(f => f.name === fn.name);
@@ -135,9 +147,13 @@ export async function verifyProduction() {
   })) throw Error('FUNCTION_CHANGED_DURING_VERIFICATION');
   const latest = await readHostingRelease(token);
   assertStableHostingRelease(initialHostingRelease, latest);
+  const retentionEvidence = manifest.feedbackRetention ? await readRetentionReadiness(manifest.feedbackRetention, after, retentionRequest(token)) : undefined;
+  const feedbackRetention = retentionEvidence ? {...retentionEvidence,receiptSha256:retentionReadinessDigest(retentionEvidence)} : undefined;
+  // Receipt is evidence only: activation/readiness settings are never written by release CI.
+  if (feedbackRetention) writeFileSync('retention-readiness.json', JSON.stringify(feedbackRetention,null,2)+'\n');
   writeFileSync('deployment.json', JSON.stringify({ schemaVersion: 1, status: 'VERIFIED', project: 'satsunicgo',
     tag: manifest.tag, sha: manifest.sha, bundleSha256, verifiedAt: new Date().toISOString(),
-    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions, retryPolicies }, null, 2) + '\n');
+    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions, retryPolicies, ...(feedbackRetention ? {feedbackRetention} : {}) }, null, 2) + '\n');
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {

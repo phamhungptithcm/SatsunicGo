@@ -2,7 +2,7 @@ import {
   optionalOrderEmailTemplates,
   optionalOrderNotificationAllowed,
 } from "./notification-order-policy";
-import type { Firestore } from "firebase-admin/firestore";
+import type { Firestore, Transaction } from "firebase-admin/firestore";
 import {
   customerEmailEligible,
   parseCustomerEvent,
@@ -10,6 +10,8 @@ import {
 } from "../../packages/domain/customer-notification";
 import { customerSnapshotHash } from "./customer-notification-events";
 import { renderCustomerEmail } from "./email-content";
+import { productionTestEmailAllowed } from "./production-test-email-policy";
+import { isPurchaseTestRecord } from "./purchase-test-boundary";
 export function customerEntityPath(event: CustomerEvent) {
   if (event.templateId.startsWith("membership_"))
     return `membershipSubscriptions/${event.entityId}`;
@@ -27,7 +29,12 @@ export async function prepareCustomerEmail(
   job: Record<string, unknown>,
   now: number,
   verifiedRecipient?: string,
+  transaction?: Transaction,
 ) {
+  const read = (path: string) => {
+    const ref = db.doc(path);
+    return transaction ? transaction.get(ref) : ref.get();
+  };
   const event = parseCustomerEvent(job.customerEvent);
   if (
     event.ownerId !== job.ownerId ||
@@ -36,8 +43,8 @@ export async function prepareCustomerEmail(
   )
     throw Error("blocked_policy");
   const [config, resource] = await Promise.all([
-    db.doc("settings/customerNotifications").get(),
-    db.doc(customerEntityPath(event)).get(),
+    read("settings/customerNotifications"),
+    read(customerEntityPath(event)),
   ]);
   const policy = config.data(),
     entity = resource.data();
@@ -50,6 +57,22 @@ export async function prepareCustomerEmail(
     throw Error("blocked_policy");
   if (!entity || entity.ownerId !== event.ownerId)
     throw Error("blocked_recipient");
+  if (
+    !(await productionTestEmailAllowed(
+      db,
+      {
+        ownerId: event.ownerId,
+        recipient: verifiedRecipient ?? "",
+        createdAt: event.occurredAt,
+        now,
+        kind: "order",
+        resource: entity,
+        job,
+      },
+      transaction,
+    ))
+  )
+    throw Error("blocked_policy");
   if (event.templateId.startsWith("membership_")) {
     if (
       entity.endsAt !== (event.payload as { endsAt: number }).endsAt ||
@@ -95,7 +118,7 @@ export async function prepareCustomerEmail(
     event.entityId !== event.orderId
   ) {
     const parcel = (
-      await db.doc(`customerShipments/${event.ownerId}-${event.entityId}`).get()
+      await read(`customerShipments/${event.ownerId}-${event.entityId}`)
     ).data();
     if (
       !parcel ||
@@ -106,7 +129,7 @@ export async function prepareCustomerEmail(
   }
   if (optionalOrderEmailTemplates.has(event.templateId)) {
     const prefs = (
-      await db.doc(`notificationPreferences/${event.ownerId}`).get()
+      await read(`notificationPreferences/${event.ownerId}`)
     ).data();
     // Only explicit current preferences authorize optional updates. Never import legacy consent.
     if (
@@ -114,5 +137,8 @@ export async function prepareCustomerEmail(
     )
       throw Error("suppressed_preference");
   }
-  return renderCustomerEmail(event);
+  const content = renderCustomerEmail(event);
+  return isPurchaseTestRecord(entity)
+    ? { ...content, subject: `[Test] ${content.subject}` }
+    : content;
 }

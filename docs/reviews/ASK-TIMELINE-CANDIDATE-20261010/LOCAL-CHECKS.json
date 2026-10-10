@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-10-10T14:04:34.345692+00:00",
+  "sourceDigest": "fcee8a3e880553d9bdc7d86e3f610aea6ad9ec2c8b6784e3c73e21e2fb9ba194",
+  "component": {
+    "status": "PASSED",
+    "files": 1,
+    "tests": 26,
+    "log": "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/COMPONENT.log",
+    "limits": "controlledSDK/auth/HappyDOM;real15000msdeadline;not physicaloffline/realMFA/AppCheck/zoom/spokenAT"
+  },
+  "focusedUnit": {
+    "status": "PASSED",
+    "files": 3,
+    "tests": 57,
+    "logs": [
+      "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/UNIT.log",
+      "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/RENDERER.log"
+    ],
+    "detail": "47 tests/2files plus10renderer/1file;one nonexistent runner filter matched nothing,not credited as executed"
+  },
+  "scopedLint": "PASSED",
+  "frontendStrictBuildAssets": "PASSED",
+  "normalExactHeadCI": "PENDING_NEW_COMMIT",
+  "baselineTrackedChecked": 3571,
+  "unapprovedDrift": 0,
+  "logHashes": {
+    "COMPONENT.log": "1a5a82bb06cf4ca81075a359319ce98fabb4a374f871da26c1269744601af84d",
+    "UNIT.log": "d3822ad4003cd068f65b1e707e7cf84f0754578e7ce656b203adbdd8142dc78b",
+    "RENDERER.log": "f325ac78f13cb996c57ce13355d39e87268470e2f71d284352c6a428160f1a64",
+    "LINT.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "BUILD.log": "874184f4570c3215f75efc38f7be02e311c0f2f3068d355df5541d717ba06447"
+  },
+  "backendSource": "UNCHANGED;no redundant local emulators;normalCI remains required",
+  "productLanguage": "BLOCKED",
+  "productionReadiness": "NOT_READY"
+}

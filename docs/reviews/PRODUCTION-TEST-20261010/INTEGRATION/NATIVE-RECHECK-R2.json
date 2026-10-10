@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-10T02:34:00.133295+00:00",
+  "status": "BLOCKED_MAC_LOCKED",
+  "attempt": "One fresh native Chrome observation after new human activity; no repeated retry",
+  "native_select": "NOT_VERIFIED",
+  "genuine_200_percent_zoom": "NOT_RUN",
+  "spoken_AT": "NOT_RUN",
+  "VoiceOver_toggled": false,
+  "screen_lock_bypass": false,
+  "existing_permissions": "Preserved; no repeated permission/unlock question",
+  "scope": "Current production-test UI native gates only; prior spoken checkout acceptance remains historical unchanged"
+}

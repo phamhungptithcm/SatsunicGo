@@ -1,0 +1,9 @@
+{
+  "title": "SatsunicGo feedback retention index creator",
+  "description": "List and create Firestore indexes for immutable approved feedback retention rollout. No index deletion/update, document access, TTL, IAM writes, or secrets. Release tooling independently allows only three exact retention specifications.",
+  "stage": "GA",
+  "includedPermissions": [
+    "datastore.indexes.list",
+    "datastore.indexes.create"
+  ]
+}

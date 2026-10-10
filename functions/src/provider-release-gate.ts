@@ -1,9 +1,12 @@
+import { productionTestArtifactEnvironmentAllowed } from "./production-test-policy";
 /** Release holds are code-owned. Firestore settings cannot enable a capability. */
 export const releaseCapabilities = Object.freeze({
   ai: false,
   email: true,
   payments: false,
   scheduledMaintenance: false,
+  scheduledPublication: true,
+  notificationRecovery: true,
 });
 export type ReleaseCapability = keyof typeof releaseCapabilities;
 export type ReleaseEnvironment = Readonly<Record<string, string | undefined>>;
@@ -48,6 +51,8 @@ export function releaseCapabilityAllowed(
   environment: ReleaseEnvironment,
   actualDatabaseProjectId?: unknown,
 ): boolean {
+  if (capability === "scheduledPublication" || capability === "notificationRecovery")
+    return releaseCapabilities[capability] && actualDatabaseProjectId === "satsunicgo" && productionTestArtifactEnvironmentAllowed(environment);
   if (capability === "email")
     return (
       releaseCapabilities.email &&

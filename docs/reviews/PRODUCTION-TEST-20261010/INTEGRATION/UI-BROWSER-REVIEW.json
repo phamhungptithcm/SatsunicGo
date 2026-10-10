@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "review_id": "PRODUCTION-TEST-UI-BROWSER-SUPPLEMENT-1",
+  "reviewed_at": "2026-10-10T01:54:13.613599+00:00",
+  "reviewer": "/root/test_mode_ui",
+  "mode": "REVIEW_AND_EVIDENCE_ONLY",
+  "candidate_root": "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo",
+  "candidate_head": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "approval_ref": "PRODUCTION-TEST v1; call_5081fd46f74546c08b78d7a095730a9a item0; APPROVAL.json",
+  "repository_intelligence": {
+    "status": "DEGRADED",
+    "check_exit": 0,
+    "codegraph": "Project index/config missing; health failed",
+    "cocoindex": "Project index/config missing; health failed",
+    "fallback": "Bounded source reads, candidate hashes and root-supplied actual HTTP/browser/image receipts. No new indexing/network operation."
+  },
+  "decision": {
+    "component_browser_checks": "PASSED_WITHIN_RECORDED_SCOPE",
+    "product_language_gate": "BLOCKED",
+    "final_ui_review": "BLOCKED",
+    "production_readiness": "NOT_READY_FROM_THIS_SUPPLEMENT"
+  },
+  "scope": {
+    "surface": "Read-only synthetic actual Workbench/ActionForm/OrderTools/TestOrderBadge components with actual candidate CSS; compact Test marker, loaded-page kind filter and hidden real actions.",
+    "audience": "Vietnamese customer/staff evaluating approved test records; no public marketing change",
+    "platform": "React web, Vietnamese LTR, existing blue/white/navy design system",
+    "application_edits": "NONE",
+    "browser_provider_runtime_actions_by_subagent": "NONE",
+    "old_reviews": "UI-PRODUCT-CONTENT.md, UI-FINAL-REVIEW.json and prior cycles retained unchanged; this supplement updates only supported acceptance claims.",
+    "preview_controls": "Synthetic controls/labels are scaffolding, not product copy or release UI."
+  },
+  "skills_and_profiles": {
+    "composed": [
+      "repository-intelligence",
+      "start-task",
+      "marketing-growth-website",
+      "design-taste-website",
+      "animation-design-engineering",
+      "seo-geo-website",
+      "governed-action-gateway",
+      "implement-feature",
+      "code-quality-review",
+      "test-strategy",
+      "write-product-content",
+      "final-implementation-review"
+    ],
+    "applicable_profiles": [
+      "product-content",
+      "web-app",
+      "frontend-html-css",
+      "visual-design"
+    ],
+    "reviewed_not_applicable": [
+      "marketing-growth: no public claim, experiment, tracking or conversion change",
+      "seo-geo: no discovery/metadata/crawler change",
+      "animation-motion: no motion introduced or changed"
+    ],
+    "apple_reference": "Bundled human-interface principles used as non-Apple web quality reference; no current Apple-platform HIG compliance claim or external browsing."
+  },
+  "artifact": {
+    "path": "/private/tmp/satsunicgo-full-local-integration-20261009-jdho247x/repo/docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/production-test-components.html",
+    "sha256": "37ba6cf1a81c04e202432be987f472617b79333b6f5dd01fa213e95d55f8b3d0",
+    "bytes": 505895,
+    "build_cycle": 2,
+    "http": {
+      "url": "http://127.0.0.1:5207/docs/previews/PRODUCTION-TEST-COMPONENTS-20261010.htm",
+      "status": 200,
+      "content_type": "text/html;charset=utf-8",
+      "bytes": 505895,
+      "sha256": "37ba6cf1a81c04e202432be987f472617b79333b6f5dd01fa213e95d55f8b3d0"
+    },
+    "manifest": "/private/tmp/satsunicgo-full-local-integration-20261009-jdho247x/repo/docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/MANIFEST.json",
+    "manifest_sha256": "b72b4a393d9210b679ae5f454216af2721352f7aa8ec20e2079899227fe89add",
+    "candidate_input_count": 34,
+    "candidate_exact_input_count": 33,
+    "candidate_drift": [
+      {
+        "path": "docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/build.mjs",
+        "preview_hash": "870ecfd40b42f475a5557af1f9372e2e9cf1a259207f1e39f87c4fe4b18f6455",
+        "candidate_hash": "7fcaf5a0f547b87f44e1d5b811e072a1036f5e8bff9312e90477c35bbf8c0d26"
+      }
+    ],
+    "drift_explanation": "Only generated preview scaffold in new candidate is still old; root owns copying cycle-2 preview docs. All bundled product/CSS/domain/lock/fixture inputs match.",
+    "ui_source_hashes": {
+      "src/app/App.tsx": "3f63be8e4fccb14acfb56602e83f9a1ac5b104530403355f1e1b34512c3543ab",
+      "src/features/orders/TestOrderBadge.tsx": "bbe0e68d3f3f462bf6b08913bc2f6d1348e5e012b478e109b8a59df9772acbaf",
+      "src/features/orders/test-order.css": "5654988698c45e7fff461bd2f139449fff8a5c5e7991d772b998c2170d31703c",
+      "src/features/orders/OrderTools.tsx": "009c777846a527e9c3c28efab0b37b4e0a336dc0aae1a76854ce96a372ecb632",
+      "src/features/crm/Customer.tsx": "5537a8b82d9fd0b36bfb7b879ea4d118b513d0e03116675137d33aff9857ba18",
+      "src/features/operations/OperationsDetails.tsx": "24bd57125e13ae773f2a79b8e0aa07be4b2601005778e5a6af79c10ca1291613",
+      "src/features/operations/Workbench.tsx": "1bf2798e400017f221dbbdb10fcae646eaa3a620e3fbcac49cb864167265c789",
+      "src/features/settings/FeedbackReview.tsx": "2e63626ea35eb5f9e9bf4e15a4974bf79da031decc7fb8045bbf0cabb2e2c0ac",
+      "functions/src/purchase-test-projection.ts": "1dce34d128d9b1497880c96d453fb5e1028214136d0110552d21c68e0e79f257",
+      "functions/src/purchase-pdf.ts": "4c42d93bd5f5b219cc36240e4f24fea8258904deaa574bbdce4828eeb2543d8e",
+      "functions/src/purchase-receipts.ts": "2ff491eb2bce27d684487f4a42eea63b6c553381687abadd67d357ee3633b61b",
+      "functions/src/workspace.ts": "9c86ab9c21cfa24f5c080e397a813a3bbf893e177affa3397e90fc19f40c1d2b",
+      "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+      "tests/unit/production-test-presentation.test.ts": "5f0a85056de373abfa140903cbe2fb96e3dbf81ea8cde09cc45b8192f8645952",
+      "tests/unit/production-test-pdf.test.ts": "b933050d805fa9630fe9e18bbe12b47ada95a78f75a9c8c1a09f01d38a7e31da"
+    },
+    "ui_source_drift": []
+  },
+  "evidence": {
+    "browser_checks": {
+      "path": "/private/tmp/satsunicgo-production-test-ui-evidence/BROWSER-CHECKS.json",
+      "sha256": "212f6b948b2eb3ab858ad97afaa6c32081b9d396342794362f18409309e50de2"
+    },
+    "http_readback": {
+      "path": "/private/tmp/satsunicgo-production-test-http-readback-r2.json",
+      "sha256": "77735273d2b24c8e903d6d3dcb6a0e2f7d6765f177d958bafad80859708eb669"
+    },
+    "screenshots": [
+      {
+        "path": "/private/tmp/satsunicgo-production-test-ui-evidence/css390-list.png",
+        "sha256": "95cdeb3f6648f126bba35a96b45d6007776ae42cf03171c845be9e10862e1441",
+        "pixels": [
+          65536,
+          4293001752
+        ],
+        "reviewed_by": "/root/test_mode_ui",
+        "inspection": "Actual image pixels inspected; screenshot physical dimensions are not the DOM CSS viewport claim."
+      },
+      {
+        "path": "/private/tmp/satsunicgo-production-test-ui-evidence/css320-legacy-detail.png",
+        "sha256": "ea6287b2a2da0f74edd58a8de724afc148a8a45a6eb3fd4a19906d27fe5b7b1b",
+        "pixels": [
+          65536,
+          4293001752
+        ],
+        "reviewed_by": "/root/test_mode_ui",
+        "inspection": "Actual image pixels inspected; screenshot physical dimensions are not the DOM CSS viewport claim."
+      },
+      {
+        "path": "/private/tmp/satsunicgo-production-test-ui-evidence/desktop-test-detail.png",
+        "sha256": "5e4581563b679ba1617f2b1e32238d3b95ae22cd14b320a81c729040c53af363",
+        "pixels": [
+          65536,
+          4292542531
+        ],
+        "reviewed_by": "/root/test_mode_ui",
+        "inspection": "Actual image pixels inspected; screenshot physical dimensions are not the DOM CSS viewport claim."
+      }
+    ],
+    "prior_pdf": "UI-CHECKS.json and UI-PRODUCT-CONTENT.md actual six-page render/extraction; not rerun because PDF source unchanged"
+  },
+  "observed_checks": [
+    {
+      "check": "test_filter",
+      "count": 3,
+      "summary": "3/4 đơn trong trang"
+    },
+    {
+      "check": "live_filter",
+      "count": 1,
+      "summary": "1/4 đơn trong trang"
+    },
+    {
+      "check": "test_detail",
+      "focus": {
+        "tag": "H2",
+        "text": "Đơn test · dữ liệu giả"
+      },
+      "testNotice": true,
+      "pdfLink": true
+    },
+    {
+      "check": "live_detail",
+      "actionFormVisible": true
+    },
+    {
+      "check": "loaded_page_empty",
+      "summary": "0/1 đơn trong trang",
+      "empty": true
+    },
+    {
+      "check": "load_error",
+      "dom": "- complementary \"Điều khiển kiểm tra UI\":\n  - strong: Preview · dữ liệu giả, chỉ đọc\n  - generic: Component/CSS của candidate. Không xác minh MFA, backend hay provider.\n  - text: Trạng thái\n  - combobox \"Trạng thái\":\n    - option \"Đủ loại đơn\"\n    - option \"Chỉ có đơn test\"\n    - option \"Chỉ có đơn thật\"\n    - option \"Trang trống\"\n    - option \"Lỗi tải\" [selected]\n    - option \"Đang tải 3 giây\"\n  - button \"Ngữ cảnh marker / PDF\"\n- main \"Danh sách đơn từ component thật\":\n  - heading \"Yêu cầu & báo giá\" [level=1]\n  - button \"Tải lại\":\n    - text: Tải lại\n  - text: Loại đơn\n  - combobox \"Loại đơn\":\n    - option \"Tất cả\" [selected]\n    - option \"Đơn thật\"\n    - option \"Đơn test\"\n  - text: Hàng đợi\n  - combobox \"Hàng đợi\":\n    - option \"Tất cả đơn\" [selected]\n    - option \"Yêu cầu mới\"\n    - option \"Chờ duyệt báo giá\"\n    - option \"Chờ thanh toán / cần mua\"\n    - option \"Nhận kho & đóng gói\"\n    - option \"Đã đóng gói\"\n    - option \"Sẵn sàng xuất gửi\"\n    - option \"Đang tạm giữ\"\n  - alert:\n    - strong: Chưa tải hoặc lưu được đơn\n    - generic: \"Dữ liệu giả: chưa tải được danh sách. Chọn trạng thái khác để thử lại.\"\n    - button \"Tải lại\":\n      - text: Tải lại"
+    },
+    {
+      "check": "true_empty",
+      "dom": "- complementary \"Điều khiển kiểm tra UI\":\n  - strong: Preview · dữ liệu giả, chỉ đọc\n  - generic: Component/CSS của candidate. Không xác minh MFA, backend hay provider.\n  - text: Trạng thái\n  - combobox \"Trạng thái\":\n    - option \"Đủ loại đơn\"\n    - option \"Chỉ có đơn test\"\n    - option \"Chỉ có đơn thật\"\n    - option \"Trang trống\" [selected]\n    - option \"Lỗi tải\"\n    - option \"Đang tải 3 giây\"\n  - button \"Ngữ cảnh marker / PDF\"\n- main \"Danh sách đơn từ component thật\":\n  - heading \"Yêu cầu & báo giá\" [level=1]\n  - button \"Tải lại\":\n    - text: Tải lại\n  - text: Loại đơn\n  - combobox \"Loại đơn\":\n    - option \"Tất cả\" [selected]\n    - option \"Đơn thật\"\n    - option \"Đơn test\"\n  - text: Hàng đợi\n  - combobox \"Hàng đợi\":\n    - option \"Tất cả đơn\" [selected]\n    - option \"Yêu cầu mới\"\n    - option \"Chờ duyệt báo giá\"\n    - option \"Chờ thanh toán / cần mua\"\n    - option \"Nhận kho & đóng gói\"\n    - option \"Đã đóng gói\"\n    - option \"Sẵn sàng xuất gửi\"\n    - option \"Đang tạm giữ\"\n  - status:\n    - heading \"Chưa có đơn trong hàng đợi này\" [level=2]\n    - paragraph: Chỉ hiển thị đơn trong phạm vi bạn được phân công. Bạn có thể tải lại để kiểm tra dữ liệu mới."
+    },
+    {
+      "check": "loading",
+      "dom": "- complementary \"Điều khiển kiểm tra UI\":\n  - strong: Preview · dữ liệu giả, chỉ đọc\n  - generic: Component/CSS của candidate. Không xác minh MFA, backend hay provider.\n  - text: Trạng thái\n  - combobox \"Trạng thái\":\n    - option \"Đủ loại đơn\"\n    - option \"Chỉ có đơn test\"\n    - option \"Chỉ có đơn thật\"\n    - option \"Trang trống\"\n    - option \"Lỗi tải\"\n    - option \"Đang tải 3 giây\" [selected]\n  - button \"Ngữ cảnh marker / PDF\"\n- main \"Danh sách đơn từ component thật\":\n  - heading \"Yêu cầu & báo giá\" [level=1]\n  - button \"Tải lại\" [disabled]:\n    - text: Tải lại\n  - text: Loại đơn\n  - combobox \"Loại đơn\":\n    - option \"Tất cả\" [selected]\n    - option \"Đơn thật\"\n    - option \"Đơn test\"\n  - text: Hàng đợi\n  - combobox \"Hàng đợi\":\n    - option \"Tất cả đơn\" [selected]\n    - option \"Yêu cầu mới\"\n    - option \"Chờ duyệt báo giá\"\n    - option \"Chờ thanh toán / cần mua\"\n    - option \"Nhận kho & đóng gói\"\n    - option \"Đã đóng gói\"\n    - option \"Sẵn sàng xuất gửi\"\n    - option \"Đang tạm giữ\"\n  - status:\n    - strong: Đang tải hàng đợi…"
+    },
+    {
+      "check": "context_marker",
+      "feedbackMarker": true
+    },
+    {
+      "check": "css390_back_keyboard",
+      "geometry": {
+        "activeText": "Đơn test · dữ liệu giả",
+        "body": 390,
+        "document": 390,
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "check": "native_filter_arrow_keyboard",
+      "dom": "- complementary \"Điều khiển kiểm tra UI\":\n  - strong: Preview · dữ liệu giả, chỉ đọc\n  - generic: Component/CSS của candidate. Không xác minh MFA, backend hay provider.\n  - text: Trạng thái\n  - combobox \"Trạng thái\":\n    - option \"Đủ loại đơn\" [selected]\n    - option \"Chỉ có đơn test\"\n    - option \"Chỉ có đơn thật\"\n    - option \"Trang trống\"\n    - option \"Lỗi tải\"\n    - option \"Đang tải 3 giây\"\n  - button \"Ngữ cảnh marker / PDF\"\n- main \"Danh sách đơn từ component thật\":\n  - heading \"Yêu cầu & báo giá\" [level=1]\n  - button \"Tải lại\":\n    - text: Tải lại\n  - text: Loại đơn\n  - combobox \"Loại đơn\" [active]:\n    - option \"Tất cả\"\n    - option \"Đơn thật\"\n    - option \"Đơn test\" [selected]\n  - text: Hàng đợi\n  - combobox \"Hàng đợi\":\n    - option \"Tất cả đơn\" [selected]\n    - option \"Yêu cầu mới\"\n    - option \"Chờ duyệt báo giá\"\n    - option \"Chờ thanh toán / cần mua\"\n    - option \"Nhận kho & đóng gói\"\n    - option \"Đã đóng gói\"\n    - option \"Sẵn sàng xuất gửi\"\n    - option \"Đang tạm giữ\"\n  - generic: 3/4 đơn trong trang\n  - article:\n    - button \"Đơn test · dữ liệu giả\" [pressed]\n    - generic: US\n    - generic: Chờ xác nhận cọc\n    - note \"Đơn test\": Test\n    - paragraph: \"Thanh toán test: 490.000 ₫\"\n    - generic: Đơn\n    - code: 10000000-0000-4000-8000-000000000001\n  - article:\n    - button \"Demo cũ · dữ liệu giả\"\n    - generic: US\n    - generic: Chờ xác nhận cọc\n    - note \"Đơn test\": Test\n    - paragraph: \"Thanh toán test: 490.000 ₫\"\n    - generic: Đơn\n    - code: 10000000-0000-4000-8000-000000000003\n  - article:\n    - button \"Metadata chưa đầy đủ · dữ liệu giả\"\n    - generic: US\n    - generic: Chờ xác nhận cọc\n    - note \"Đơn test\": Test\n    - paragraph: \"Thanh toán test: 490.000 ₫\"\n    - generic: Đơn\n    - code: 10000000-0000-4000-8000-000000000004"
+    },
+    {
+      "check": "css320_legacy_detail",
+      "geometry": {
+        "activeTag": "H2",
+        "activeText": "Demo cũ · dữ liệu giả",
+        "body": 320,
+        "document": 320,
+        "height": 844,
+        "width": 320
+      },
+      "testNotice": true
+    },
+    {
+      "check": "css320_partial_detail",
+      "geometry": {
+        "activeText": "Metadata chưa đầy đủ · dữ liệu giả",
+        "body": 320,
+        "document": 320,
+        "height": 844,
+        "width": 320
+      },
+      "testNotice": true
+    }
+  ],
+  "image_review": [
+    {
+      "image": "desktop-test-detail.png",
+      "finding": "Small Test badge fits beside inherited status; test amount explicit; focused H2 visible; live form replaced by one note; existing tools/disclosures remain.",
+      "status": "PASSED"
+    },
+    {
+      "image": "css390-list.png",
+      "finding": "Selectors stack within panel; count says 3/4; selected row has visible keyboard focus; compact Test marker does not collide with status. DOM reports body=document=390.",
+      "status": "PASSED"
+    },
+    {
+      "image": "css320-legacy-detail.png",
+      "finding": "Legacy record remains Test; heading focus visible; long UUID wraps; disabled-fulfillment note and history label readable; vertical scroll is present, no horizontal overflow in recorded DOM geometry.",
+      "status": "PASSED"
+    }
+  ],
+  "native": {
+    "status": "BLOCKED_MAC_LOCKED",
+    "VoiceOverToggled": false,
+    "browserZoom200": "NOT_RUN",
+    "nativeArrowSelect": "NOT_VERIFIED; first ArrowUp kept selection; no repeat/bypass"
+  },
+  "viewport_override_restored": true,
+  "limits": [
+    "Component synthetic OWNER context, not genuine staff MFA",
+    "CSS viewport dimensions measured from DOM; initial physical390 override yielded487CSS, adjusted override312/256 yielded390/320CSS; actual browser zoom not verified",
+    "No backend/provider/secret/production data actions"
+  ],
+  "string_state_inventory": [
+    {
+      "location": "marker",
+      "current_content": "Test; accessible Đơn test",
+      "state": "test/default/legacy/partial",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Desktop/390/320 screenshots; source TestOrderBadge"
+    },
+    {
+      "location": "feedback marker",
+      "current_content": "Test · {existing option}; Test; accessible Góp ý test",
+      "state": "test feedback",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Actual marker rendered inside synthetic context; full FeedbackReview inbox not rendered"
+    },
+    {
+      "location": "kind selector",
+      "current_content": "Loại đơn; Tất cả; Đơn thật; Đơn test",
+      "state": "default/selected",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Pointer/selection API filter results 3/4 and 1/4; native ArrowUp NOT_VERIFIED"
+    },
+    {
+      "location": "loaded page count",
+      "current_content": "{visible}/{loaded} đơn trong trang",
+      "state": "filtered/empty",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "3/4,1/4,0/1; page limited, no server-total claim"
+    },
+    {
+      "location": "filtered empty",
+      "current_content": "Không có loại đơn này trong trang đã tải.",
+      "state": "loaded page with no matching kind",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "loaded_page_empty summary 0/1 and empty true"
+    },
+    {
+      "location": "test amount",
+      "current_content": "Thanh toán test",
+      "state": "list/detail/history",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "490.000 ₫ synthetic integer-VND snapshot; no durable real bank/payment outcome"
+    },
+    {
+      "location": "test action state",
+      "current_content": "Đơn test. Các thao tác mua và giao hàng đang tắt.",
+      "state": "test/legacy/partial action form",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Actual ActionForm test branch plus testNotice and desktop/320 screenshot; genuine fixture ActionForm visible"
+    },
+    {
+      "location": "history",
+      "current_content": "Lịch sử và thanh toán test; Các khoản thanh toán trong lần test này.; Thanh toán test",
+      "state": "test ledger/history",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Actual OrderTools context and screenshot heading; no provider ledger read"
+    },
+    {
+      "location": "account paid state",
+      "current_content": "Đã xác nhận thanh toán test.",
+      "state": "test paid account",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Current source/unit evidence retained; full account screen not included in browser artifact"
+    },
+    {
+      "location": "PDF",
+      "current_content": "CHỨNG TỪ TEST; Thanh toán test; Thanh toán test - tiếp theo; Chứng từ test · Không thay thế hóa đơn thuế.",
+      "state": "first/continuation/every-page/footer",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Prior actual six-page PDF evidence bound to unchanged UI source; current browser verifies PDF link presence, not new download/delivery"
+    },
+    {
+      "location": "receipt email",
+      "current_content": "SatsunicGo · Chứng từ test {id}; Thanh toán test {amount} ₫. Chứng từ PDF được đính kèm.",
+      "state": "receipt job",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Source/unit inventory only; not sent by this acceptance"
+    },
+    {
+      "location": "customer email",
+      "current_content": "[Test] {existing localized subject}",
+      "state": "authoritatively matched test email",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Root-owned email scope; no inbox or provider result in preview"
+    },
+    {
+      "location": "policy denial",
+      "current_content": "Kênh thử chưa khả dụng.",
+      "state": "unavailable/mixed policy",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Policy handler evidence remains owner-owned; synthetic list error does not exercise this denial"
+    },
+    {
+      "location": "unsupported action",
+      "current_content": "Đơn thử không dùng cho thao tác này.",
+      "state": "forbidden live test operation",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Finance handler evidence remains owner-owned"
+    },
+    {
+      "location": "provenance mismatch",
+      "current_content": "Đơn và lượt thanh toán chưa khớp.",
+      "state": "order/payment mismatch",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Finance handler evidence remains owner-owned"
+    },
+    {
+      "location": "catalog denial",
+      "current_content": "Không thể đặt mua lúc này.",
+      "state": "PRODUCTION_TEST_NOT_ADMITTED",
+      "browser_or_carried_evidence_status": "NOT_RUN",
+      "evidence_and_limits": "Policy producer handler evidence remains owner-owned"
+    },
+    {
+      "location": "existing loading",
+      "current_content": "Đang tải hàng đợi…",
+      "state": "pending/disabled retry",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "loading DOM status; Tải lại disabled"
+    },
+    {
+      "location": "existing true-empty",
+      "current_content": "Chưa có đơn trong hàng đợi này; existing assigned-scope explanatory paragraph",
+      "state": "true-empty",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "true_empty DOM status; distinct from 0/1 filtered page"
+    },
+    {
+      "location": "existing load failure",
+      "current_content": "Chưa tải hoặc lưu được đơn; Tải lại",
+      "state": "error/recovery",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "load_error alert DOM; synthetic error message is fixture text, not a new backend denial"
+    },
+    {
+      "location": "inherited order status",
+      "current_content": "Chờ xác nhận cọc",
+      "state": "existing synthetic order state",
+      "browser_or_carried_evidence_status": "PASSED",
+      "evidence_and_limits": "Visible inherited status retained. This is not verification of full-payment production wording or real checkout; no new status copy change in this task."
+    }
+  ],
+  "state_coverage": {
+    "default_selected_focus": "PASSED for recorded actual components; native select arrow selection NOT_VERIFIED",
+    "loading_pending_disabled": "PASSED synthetic list status; backend latency/performance not measured",
+    "filtered_empty_true_empty": "PASSED distinct recorded states; no dataset-wide total claim",
+    "error_recovery": "PASSED synthetic load error/available retry; production policy/finance denial rendering NOT_RUN",
+    "legacy_partial": "PASSED Test notice at320CSS; strict settlement authorization not exercised",
+    "success_pdf": "PDF link presence PASSED; prior multipage PDF retained; actual checkout/provider persistence NOT_RUN",
+    "offline_stale": "NOT_RUN; no claim from malformed partial metadata case",
+    "unauthorized_forbidden": "NOT_RUN genuine role/MFA/AppCheck; synthetic OWNER is not auth evidence",
+    "confirmation_destructive": "Real ActionForm hidden for test and visible for live fixture; no side effect submitted; backend mutation gates separate"
+  },
+  "principles": [
+    {
+      "principle": "Purpose",
+      "status": "PASSED",
+      "evidence": "Test badge, simulated money label and test/live filtering are visible beside the relevant order in desktop/390/320 captures.",
+      "limits": "Component presentation only; no business effectiveness or full Ask journey claim."
+    },
+    {
+      "principle": "Agency",
+      "status": "PASSED",
+      "evidence": "Recorded filter choices change visible counts; row Enter moves focus to detail H2 and Back restores the originating row. Test detail offers inspection/private PDF context while live ActionForm remains in the genuine fixture.",
+      "limits": "Native select ArrowUp did not verify changed selection. No real form was submitted."
+    },
+    {
+      "principle": "Responsibility",
+      "status": "PASSED",
+      "evidence": "Test/Thanh toán test and one local disabled-fulfillment sentence distinguish simulated data; 3/4, 1/4 and 0/1 are explicitly page counts. Synthetic adapter denies mutations; no new PII or provider access.",
+      "limits": "Server authorization, finance isolation, consent and provider checks remain separate gates."
+    },
+    {
+      "principle": "Familiarity",
+      "status": "PASSED",
+      "evidence": "Existing blue/navy/white components and native select labels retained; marker uses visible Test plus Vietnamese accessible name. Screenshots preserve existing order/CRM hierarchy.",
+      "limits": "No Apple compliance claim; this is a React web surface."
+    },
+    {
+      "principle": "Flexibility",
+      "status": "NOT_RUN",
+      "evidence": "CSS widths 390 and 320 measured equal document/body widths; Vietnamese long UUID wraps. Enter/detail/back focus recorded.",
+      "limits": "Genuine 200% browser zoom and spoken AT NOT_RUN; native select arrow selection NOT_VERIFIED. Narrow CSS simulation is not physical mobile-device proof."
+    },
+    {
+      "principle": "Simplicity",
+      "status": "PASSED",
+      "evidence": "One small noninteractive Test badge fits next to status; existing filter row stacks at narrow width; no new dialog, onboarding, repeated purchase explanation or animation.",
+      "limits": "Preview controls at top are evidence scaffolding and are not shipping product UI."
+    },
+    {
+      "principle": "Craft",
+      "status": "NOT_RUN",
+      "evidence": "Observed desktop and narrow screenshot typography, wrapping, focus outline, partial/legacy labels and no CSS horizontal overflow; loading/error/true-empty/filter-empty captured. Existing multipage PDF visual evidence remains scoped.",
+      "limits": "Full zoom/spoken AT and native select keyboard acceptance remain incomplete; no exhaustive contrast/cross-browser/performance claim."
+    },
+    {
+      "principle": "Delight",
+      "status": "PASSED",
+      "evidence": "Recorded focus return avoids losing the selected order; concise inline status and recovery states keep context without a new interruption.",
+      "limits": "This is a bounded interaction review, not measured customer satisfaction or comfort."
+    }
+  ],
+  "remaining_gates": [
+    {
+      "id": "UI-NATIVE-SELECT",
+      "status": "NOT_VERIFIED",
+      "need": "Actual native keyboard selection for Loại đơn; first ArrowUp retained selected option. Do not treat this as a proven product bug or repeat a blocked native action."
+    },
+    {
+      "id": "UI-ZOOM-AT",
+      "status": "NOT_RUN",
+      "need": "Genuine browser200% zoom/text scaling and spoken assistive-technology evidence for changed controls and Test marker. Mac locked in root native attempt; VoiceOver not toggled."
+    },
+    {
+      "id": "INTEGRATION-REAL",
+      "status": "NOT_RUN_BY_THIS_ARTIFACT",
+      "need": "Root/owner genuine authentication/MFA, actual producer→reader, AppCheck/IAM, sandbox provider/secret binding, finance isolation, consent/email activation and immutable release verification remain their own gates."
+    },
+    {
+      "id": "PREVIEW-DOC-SYNC",
+      "status": "PENDING_ROOT_COPY",
+      "need": "Copy cycle-2 canonical preview docs from old assigned repo into new candidate; generator is the sole current preview-input difference. Recheck source bindings after owner fixes."
+    },
+    {
+      "id": "TEMP-CLEANUP",
+      "status": "PENDING_ROOT",
+      "need": "Remove only root-owned temporary HTTP copy if exact37ba... hash matches; do not restart shared5207 or alter shared account/data."
+    }
+  ],
+  "findings": [
+    {
+      "id": "UI-BROWSER-1",
+      "severity": "medium",
+      "status": "BLOCKED_EVIDENCE",
+      "location": "Changed filter/accessibility/zoom acceptance",
+      "evidence": "Native ArrowUp NOT_VERIFIED; genuine200%zoom and spokenAT NOT_RUN",
+      "impact": "Full Product Language/UI gate cannot pass from CSS geometry and DOM labels alone.",
+      "correction": "Complete only changed-control native evidence when allowed conditions are available; no automatic retest of unrelated unchanged views."
+    }
+  ],
+  "review_cycle": {
+    "prior_failure": "Cycle1 exactHTTP passed but process undefined runtime failure; cycle2 build correction archived in UI-PREVIEW/BUILD-1-FAILURE.json and BUILD-2-VERIFY.md",
+    "current_result": "New exactHTTP and actual component render/interaction observed; no blanket accessibility, provider or production pass",
+    "fixes_in_this_supplement": "None; documentation only",
+    "checks": "JSON parsing, evidence hashes, 15 UI source hashes and preview-input binding verified"
+  },
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

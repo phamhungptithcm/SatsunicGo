@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T03:03:07.740590+00:00",
+  "base_commit": "11abe33c3db4e9a3a82866dd33e7a3e1555a818b",
+  "failed_run": 38018449918,
+  "failed_log_sha256": "9abf36160e5bbdd54d95773179e3a1305175259866948d4545956804378d88e3",
+  "remote_groups": {
+    "baseline": "644/644 PASSED",
+    "purchase": "5/5 PASSED; R3 correction executed",
+    "cart": "4/4 PASSED",
+    "pilot": "3/3 PASSED",
+    "delivery": "15/15 PASSED",
+    "recipient": "12/12 PASSED; R3 correction executed",
+    "sepay": "30/31 PASSED; cross-process helper stale genuine-ledger oracle failed",
+    "http_restore_audit_build": "SKIPPED, not passed"
+  },
+  "current_test_tool_hashes": {
+    "scripts/purchase-sepay-cross-process.mjs": "cc69e0ab991c47e8d9e439c332b9644e999d5cea835d3f19c88c762c137a148c",
+    "scripts/purchase-gateway-cross-process.mjs": "ab4cd72330f33fb9bdf460bdc7c4c8c73fb4fd9d32ddff969064349d33767b58",
+    "scripts/purchase-gateway-shared.rules.test.ts": "e1bbdef74eaf526fa207d348290eeac85d6179a05dcd3126db5ff850424649f1",
+    "scripts/purchase-demo-e2e.mjs": "2caf0715654c5f0fd5d160abe27f8123ac7c026211f23986fa291b8e1d46f7db",
+    "scripts/purchase-gateway-business-e2e.mjs": "eac970843413f49ad5626c043dbfda5dc9fdfd6962b157226a6ae4ea83064751",
+    "scripts/purchase-gateway-scenarios.mjs": "380bec5488722d8b75dbad1f216058857e73d7fb14c5e17f8c5f5927cab36100",
+    "scripts/purchase-crm-http-check.mjs": "51536ea4b45dfd91840c4d1917eb28d87bf2506c27b2145f730eba344b399539"
+  },
+  "checks": {
+    "six_mjs_node22_syntax": "PASSED",
+    "standalone_typescript6_strict": "PASSED for scripts/purchase-gateway-shared.rules.test.ts and imported source",
+    "targeted_typescript_eslint": "PASSED",
+    "git_diff_check": "PASSED",
+    "normal_current_ci": "NOT_RUN_YET; new commit required",
+    "manual_demo_helpers_execution": "NOT_RUN; shared runtime preserved"
+  },
+  "compiler_attempt_history": [
+    "Initial standalone files invocation rejected by TypeScript6 TS5112; supplied documented --ignoreConfig for explicitly specified standalone files, same strict flags; exit0"
+  ],
+  "retained_runtime_unit_release_freeze": {
+    "inputs": 624,
+    "digest": "8fb877f191cb46c858d74d7dba20d0add8fad5ac82e436c8188d95ce09ccbb57",
+    "drift": []
+  },
+  "performance_notes": "Adds bounded oracle reads only in test tooling; no production runtime change. Historical CI MaxListenersExceeded warnings retained; no warning threshold suppression or leak-free claim.",
+  "production_readiness": "NOT_READY",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

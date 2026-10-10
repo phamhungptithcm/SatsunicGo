@@ -8,26 +8,30 @@ import {
   discoverWebCandidates,
   resolveGroundingRedirect,
 } from "./research-discovery";
+import {
+  askCostPolicy,
+  askPriceReady,
+  askWorstCaseVnd,
+} from "./ask-cost-policy";
 
-/** 2026-10-08 verified official Vertex standard rates. Test-only envelope;
- * this model retires 2026-10-20, never silently substitute another model.
- * Full input window + 800 output + grounding, even at priority rates < $0.25.
- * 100,000 VND/USD is a conservative reservation ceiling, not an FX quote.
+/** Standard text rates plus paid grounding: no shared-free-allowance assumption.
+ * Full billed input window is reserved even though request input is capped10k.
+ *25000VND exceeds the reviewed worst case (14018VND), with no refund/retry.
  */
 export const researchGeminiLimits = {
   project: "satsunicgo",
   location: "us-central1",
-  model: "gemini-2.5-flash-lite",
+  model: askCostPolicy.model,
   inputTokens: 10000,
   outputTokens: 800,
   reserveVnd: 25000,
   maxBudgetVnd: 50000,
-  pricingExpiresAt: Date.parse("2026-10-09T00:00:00Z"),
+  pricingExpiresAt: askCostPolicy.expiresAt,
 } as const;
 export function researchReservation(reserved: unknown, now = Date.now()) {
   if (
-    !Number.isSafeInteger(now) ||
-    now >= researchGeminiLimits.pricingExpiresAt ||
+    !askPriceReady(now) ||
+    researchGeminiLimits.reserveVnd < askWorstCaseVnd(1048576, 800, true) ||
     !Number.isSafeInteger(reserved) ||
     Number(reserved) < 0 ||
     Number(reserved) + researchGeminiLimits.reserveVnd >
@@ -54,11 +58,12 @@ export async function geminiResearch(
     uri: string,
     signal: AbortSignal,
   ) => Promise<string | null>,
+  admit?: () => Promise<void>,
 ) {
   const query = researchSearchSchema.parse(input),
     p = researchPolicySchema.parse(policy);
   if (
-    Date.now() >= researchGeminiLimits.pricingExpiresAt ||
+    !askPriceReady(Date.now()) ||
     !p.enabled ||
     p.expiresAt <= Date.now() ||
     redactChat(query.query) !== query.query ||
@@ -110,14 +115,12 @@ export async function geminiResearch(
   const base = `https://${researchGeminiLimits.location}-aiplatform.googleapis.com/v1/projects/${researchGeminiLimits.project}/locations/${researchGeminiLimits.location}/publishers/google/models/${researchGeminiLimits.model}`;
   const currentAdmission = () => {
     signal.throwIfAborted();
-    if (
-      Date.now() >= researchGeminiLimits.pricingExpiresAt ||
-      Date.now() >= p.expiresAt
-    )
+    if (!askPriceReady(Date.now()) || Date.now() >= p.expiresAt)
       throw Error("RESEARCH_UNAVAILABLE");
   };
   signal.throwIfAborted();
   await reserve();
+  await admit?.();
   currentAdmission();
   const count = z
     .object({
@@ -129,6 +132,8 @@ export async function geminiResearch(
     })
     .passthrough()
     .parse(await send(`${base}:countTokens`, serialized, signal));
+  currentAdmission();
+  await admit?.();
   currentAdmission();
   const response = await send(`${base}:generateContent`, serialized, signal);
   currentAdmission();

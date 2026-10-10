@@ -1,4 +1,7 @@
-import { emailPreferenceAllowed } from "./notification-order-policy";
+import {
+  emailPreferenceAllowed,
+  notificationTopicAllowed,
+} from "./notification-order-policy";
 import { createHash } from "node:crypto";
 import { prepareCustomerEmail } from "./customer-email-job";
 import { customerEvent } from "./customer-notification-events";
@@ -19,6 +22,11 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import { warn } from "firebase-functions/logger";
 import { getFirestore } from "firebase-admin/firestore";
 import { renderCustomerEmail } from "./email-content";
+import { productionTestEmailAllowed } from "./production-test-email-policy";
+import {
+  isPurchaseTestRecord,
+  purchaseExecutionFields,
+} from "./purchase-test-boundary";
 const password = defineSecret("SFTP_PASSWORD");
 export const deliverEmail = onSchedule(
   {
@@ -147,6 +155,8 @@ export const deliverEmail = onSchedule(
             claimedAt: Date.now(),
           });
           return {
+            ...purchaseExecutionFields(data),
+            ...(isPurchaseTestRecord(data) ? { testMode: true } : {}),
             customerEvent: data.customerEvent,
             customerSnapshotHash: data.customerSnapshotHash,
             recipientHash: data.recipientHash,
@@ -262,6 +272,20 @@ export const deliverEmail = onSchedule(
             await finish({ emailState: "blocked_document" });
             continue;
           }
+          if (
+            !(await productionTestEmailAllowed(db, {
+              ownerId: claimed.ownerId,
+              recipient,
+              createdAt: claimed.createdAt,
+              now: Date.now(),
+              kind: "invoice",
+              resource: document,
+              job: claimed,
+            }))
+          ) {
+            await finish({ emailState: "blocked_policy" });
+            continue;
+          }
         }
         let content;
         try {
@@ -374,36 +398,8 @@ export const deliverEmail = onSchedule(
             preIoBlocked = "suppressed_preference";
             return false;
           }
-          if (claimed.action !== "invoiceIssued") {
-            try {
-              await prepareCustomerEmail(db, claimed, Date.now(), recipient);
-            } catch (error) {
-              if (
-                error instanceof Error &&
-                [
-                  "blocked_policy",
-                  "blocked_recipient",
-                  "suppressed_obsolete",
-                  "suppressed_preference",
-                ].includes(error.message)
-              )
-                preIoBlocked = error.message;
-              return false;
-            }
-          } else {
-            const invoice = (
-              await db.doc(`salesDocuments/${claimed.documentId}`).get()
-            ).data();
-            if (
-              invoice?.state !== "issued" ||
-              invoice.ownerId !== claimed.ownerId ||
-              invoice.issueNumber !== claimed.documentNumber
-            ) {
-              preIoBlocked = "blocked_document";
-              return false;
-            }
-          }
           return db.runTransaction(async (tx) => {
+            preIoBlocked = undefined;
             const latest = (await tx.get(d.ref)).data();
             if (
               latest?.emailState !== "sending" ||
@@ -412,6 +408,11 @@ export const deliverEmail = onSchedule(
               latest.ownerId !== claimed.ownerId ||
               latest.action !== claimed.action ||
               latest.marketing !== claimed.marketing ||
+              isPurchaseTestRecord(latest) !== isPurchaseTestRecord(claimed) ||
+              !isDeepStrictEqual(
+                purchaseExecutionFields(latest),
+                purchaseExecutionFields(claimed),
+              ) ||
               latest.providerFrom !== config.from ||
               latest.recipientHash !== recipientHash ||
               latest.contentHash !== contentHash ||
@@ -423,6 +424,97 @@ export const deliverEmail = onSchedule(
               (latest.emailAttempts ?? 0) >= 3
             )
               return false;
+            const currentConfig = parseEmailProviderConfig(
+              (await tx.get(db.doc("settings/email"))).data(),
+            );
+            if (
+              !emailProviderReady(currentConfig) ||
+              currentConfig.from !== config.from ||
+              currentConfig.cutoverAt !== config.cutoverAt ||
+              currentConfig.dailyAttemptLimit !== config.dailyAttemptLimit
+            )
+              return false;
+            const currentUser = (
+              await tx.get(db.doc(`users/${claimed.ownerId}`))
+            ).data();
+            if (
+              currentUser?.locked ||
+              (claimed.marketing === true &&
+                currentUser?.marketingConsent !== true)
+            ) {
+              preIoBlocked = "blocked_recipient";
+              return false;
+            }
+            if (
+              claimed.marketing === true &&
+              !notificationTopicAllowed(
+                (
+                  await tx.get(
+                    db.doc(`notificationPreferences/${claimed.ownerId}`),
+                  )
+                ).data(),
+                "promotionsEmail",
+                recipient,
+              )
+            ) {
+              preIoBlocked = "suppressed_preference";
+              return false;
+            }
+            // This is the Firestore authorization point: resource, test policy
+            // and consent are watched by the same transaction as the attempt.
+            if (claimed.action !== "invoiceIssued") {
+              try {
+                await prepareCustomerEmail(
+                  db,
+                  claimed,
+                  Date.now(),
+                  recipient,
+                  tx,
+                );
+              } catch (error) {
+                if (
+                  error instanceof Error &&
+                  [
+                    "blocked_policy",
+                    "blocked_recipient",
+                    "suppressed_obsolete",
+                    "suppressed_preference",
+                  ].includes(error.message)
+                )
+                  preIoBlocked = error.message;
+                return false;
+              }
+            } else {
+              const invoice = (
+                await tx.get(db.doc(`salesDocuments/${claimed.documentId}`))
+              ).data();
+              if (
+                invoice?.state !== "issued" ||
+                invoice.ownerId !== claimed.ownerId ||
+                invoice.issueNumber !== claimed.documentNumber
+              ) {
+                preIoBlocked = "blocked_document";
+                return false;
+              }
+              if (
+                !(await productionTestEmailAllowed(
+                  db,
+                  {
+                    ownerId: claimed.ownerId,
+                    recipient,
+                    createdAt: claimed.createdAt,
+                    now: Date.now(),
+                    kind: "invoice",
+                    resource: invoice,
+                    job: claimed,
+                  },
+                  tx,
+                ))
+              ) {
+                preIoBlocked = "blocked_policy";
+                return false;
+              }
+            }
             if (
               latest.firstClaimedAt !== undefined &&
               (!Number.isSafeInteger(latest.firstClaimedAt) ||

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-PREFLIGHT-CORRECTION",
+  "status": "PASSED",
+  "scope": "Three-file same-v1 source packaging compatibility correction only",
+  "created_at": "2026-10-10T01:41:11.609895+00:00",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "approval": "PRODUCTION-TEST v1; parent explicitly assigned same-scope correction",
+  "impact": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/PREFLIGHT-CORRECTION-IMPACT.md",
+  "source_hashes": {
+    "functions/src/index.ts": "ccaf558cc6da84f29d9ef273325229bdff6af7ab72658683b6fda03f0b4aa125",
+    "functions/src/production-test-commands.ts": "be93b7667f35bd7554c4ec0f72f7359e3a5ed2799a9ecf26632ff65c5d0a96f5",
+    "tests/unit/release-preflight067.test.ts": "7360afbea32409f70c2d13dba2840f2830df8b2b1c89fadf38630df66dcd573b"
+  },
+  "evidence_hashes": {
+    "/private/tmp/satsunicgo-preflight-correction-red.log": "5bfa11432a1c6432ef243de97809c1cf8c57db054fb9c51bd610a2de35e33f0a",
+    "/private/tmp/satsunicgo-preflight-correction-tests.log": "843f7587c5ae74d69785cd34ea3c99e000d64b8b39df5345c77072f14ca96778",
+    "/private/tmp/satsunicgo-preflight-correction-strict.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-preflight-correction-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-preflight-correction-source.json": "b2deb081805de47d4de6c962d7462f34fcefd6e4c36700f3aa65445abf0a41e4"
+  },
+  "checks": {
+    "regression_before_fix": {
+      "status": "FAILED_AS_EXPECTED",
+      "failure": "FUNCTION_INVENTORY_INVALID with the actual command prelude"
+    },
+    "focused_unit": {
+      "status": "PASSED",
+      "tests": 233,
+      "files": 3,
+      "actual_producer_cases": 10,
+      "source_preflight_cases": 200
+    },
+    "backend_strict": {
+      "status": "PASSED",
+      "exit": 0
+    },
+    "owned_lint": {
+      "status": "PASSED",
+      "exit": 0
+    },
+    "actual_source_preflight": {
+      "status": "PASSED",
+      "errors": [],
+      "inventory": 110,
+      "production_test_exports": 3,
+      "excluded_client_outcome_demos": 2,
+      "readiness": "NOT_READY"
+    },
+    "diff_whitespace": {
+      "status": "PASSED"
+    }
+  },
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "status": "FAILED",
+      "finding": "The raw v1 environment read in the actual index command prelude violated the intentionally strict demo environment parser; a regression reproduces the failure."
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "finding": "The imported helper preserves the exact comparison and default process environment. The parser, auth, admission, replay and transaction behavior remain unchanged. Current focused checks and actual source preflight pass."
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Moves only the exact v1 marker comparison into an imported helper; retains malformed runtime and null-admission fences."
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No parser relaxation, CI/security gate change, global force, secret access or new capability."
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "The helper is pure for a supplied environment and preserves the original default process.env behavior; compiler and lint pass."
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Ten actual producer tests preserve null-admission zero-write rejection, malformed runtime rejection, policy-off replay and legacy behavior. Real prelude regression prevents this packaging incompatibility recurring unnoticed."
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No customer-facing copy or exception behavior changed."
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "The source packaging contract now passes with regenerated assets; no deployment/provider/live readiness is claimed. Root owns normal combined validation and release."
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "The environment read moves modules without modifying its semantics. The strict parser remains unchanged rather than broadening its accepted syntax."
+    }
+  },
+  "product_content": {
+    "status": "NOT_APPLICABLE",
+    "reason": "No user-facing string, UI, localization or displayed-data meaning changes in this correction."
+  },
+  "limits": [
+    "RIG DEGRADED; bounded canonical source/compiler/tests used.",
+    "Only three assigned files were edited; concurrent email source/doc/test changes were preserved.",
+    "Full combined CI/artifact/audit/provider/live checks remain root-owned and are not certified by this scoped review.",
+    "No push, deployment, provider, runtime or secret payload action.",
+    "ai-agent-kit executable unavailable; file-based hash receipt substitutes for unavailable local runtime adapter only."
+  ],
+  "production": "NOT_READY",
+  "provider_tokens": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

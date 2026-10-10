@@ -116,11 +116,15 @@ it("parallel commit operations reserve one checkout; parallel proof allocates ex
   originalReceiptId = p.id;
   expect(payments[0]).toEqual(payments[1]);
   const entries = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("ownerId", "==", uid)
     .get();
   expect(entries.size).toBe(1);
   expect(entries.docs[0].data().amount).toBe(200000);
+  expect(
+    (await db.collection("financialEntries").where("ownerId", "==", uid).get())
+      .empty,
+  ).toBe(true);
   expect((await db.doc(`carts/${uid}`).get()).data()!.items).toEqual([]);
   await expect(
     api.purchaseCheckout.run(req({ action: "status", id: p.id }, "other")),
@@ -183,9 +187,10 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
     (await db.doc(`purchaseReceiptJobs/${id}`).get()).data()!.attempts,
   ).toBe(2);
   const before = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("ownerId", "==", uid)
     .get();
+  expect(before.size).toBe(1);
   const badId = randomUUID();
   await db.doc(`purchaseReceipts/${badId}`).create({
     ...original,
@@ -209,9 +214,17 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
     false,
   );
   expect(
-    (await db.collection("financialEntries").where("ownerId", "==", uid).get())
-      .size,
+    (
+      await db
+        .collection("purchaseTestFinancialEntries")
+        .where("ownerId", "==", uid)
+        .get()
+    ).size,
   ).toBe(before.size);
+  expect(
+    (await db.collection("financialEntries").where("ownerId", "==", uid).get())
+      .empty,
+  ).toBe(true);
 });
 it("background recovery reaches expired leases while new work and active leases are present", async () => {
   const db = getFirestore();

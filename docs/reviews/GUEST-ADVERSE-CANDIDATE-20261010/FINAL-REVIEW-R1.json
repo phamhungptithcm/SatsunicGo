@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task_id": "GUEST-ADVERSE-CANDIDATE-20261010",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved scoped guest client fixes integrated;unrelated WIP and no-deploy boundary preserved.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Bounded current component privacy/auth/late-response guards plus unchanged backend policy;provider unverified.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Types/lint/build pass;Product Language BLOCKED genuinezoom/spokenAT missing.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "25 current component and117focusedunit pass;offlineSDK/deadline/auth/requestABA/cancel/unmount exercised.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Guest re-entry instruction and removed masked retry verifiedVIEN;Stop focus/log accessibility regression pass.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Exact-head CI pending;manual/product/immutable/provider/live gates remain;no deploy authorized.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "No app deps/CI/backend/runtime expansion;test-only tooling external;component local-only evidence disclosed.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ADVERSE-INTEGRATION-1",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "recovery-accessibility",
+      "location": "src/features/ask/Ask.tsx",
+      "summary": "Additional owner fixes missing from d704:guest masked retry,Stop focus,keyboard log/group.",
+      "resolution": "Six scoped hunks with reverse proof;25component and117unit pass. Prior null-safe/asyncfocus fixes retained.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo/docs/reviews/GUEST-ADVERSE-CANDIDATE-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Physical offline/real auth/provider security/performance unverified",
+    "Existing bundle/import warnings preserved;current audit pendingCI"
+  ],
+  "limitations": [
+    "DEGRADED optional indexes;self-review only",
+    "genuine200%zoom/spokenVoiceOver andPRE001/MFA missing",
+    "Owner browser evidence matching-component proxy;no new candidate browser run",
+    "Component suite25local is not normal mandatoryCI coverage",
+    "Token usage/actualcostUnavailable;memorycandidatesNone"
+  ]
+}

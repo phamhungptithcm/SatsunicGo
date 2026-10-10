@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "task_id": "GUEST-ASK-CANDIDATE-20261010",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Bounded source/diff/local checks; preservation proven.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Bounded source/diff/local checks; preservation proven.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Types/lint/source checks pass; Product Language remains BLOCKED because genuine200%zoom/spokenAT are missing.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "NOT_RUN",
+      "summary": "Local237 unit cases pass;63 guest backend cases await normal CI.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Bounded source/diff/local checks; preservation proven.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No deploy authorized; manual, immutable artifact, secret/provider/TTL/live gates remain.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Bounded source/diff/local checks; preservation proven.",
+      "evidence_refs": [
+        "SOURCE-FREEZE.json",
+        "LOCAL-CHECKS.json",
+        "CODE-QUALITY-REVIEW.md",
+        "PRODUCT-CONTENT-REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "INT-01",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "test-integration",
+      "location": "tests/rules/guest-order-tracking.test.ts beforeAll",
+      "summary": "Hardcoded18207 rejected normal CI baseline8181. Source fixed using guarded existing endpoint helper.",
+      "resolution": "Await exact-SHA CI execution of63 guest backend cases before marking FIXED.",
+      "evidence_refs": [
+        "tests/rules/guest-order-tracking.test.ts",
+        "docs/reviews/GUEST-ASK-CANDIDATE-20261010/LOCAL-CHECKS.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Historical dependency/warning residuals preserved; new CI audit pending",
+    "New secret/proxy trust/AppCheck/TTL/load/redaction provider evidence missing"
+  ],
+  "limitations": [
+    "RIG DEGRADED; self-review only",
+    "genuine200%zoom/spokenAT NOT_RUN; Product Language BLOCKED",
+    "PRE001/MFA/immutable release/live remain blocked"
+  ]
+}

@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import {
   customerEvent,
   customerEventFields,
@@ -86,6 +87,8 @@ export const refundCommand = onCall(
           "aborted",
           "Đơn đã thay đổi. Tải lại để đối soát.",
         );
+      requireLivePurchaseRecord(o);
+      requireLivePurchaseRecord(refund.data());
       let reserved = o.refundReserved ?? 0;
       if (d.action === "request") {
         if (

@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-COMBINED-R2",
+  "at": "2026-10-10T02:35:55.937138+00:00",
+  "status": "BLOCKED",
+  "scoped_source_review": "PASSED",
+  "production_readiness": "NOT_READY",
+  "source_commit": "fdbbda017a324befce93e6a3fac2ee882c6de795",
+  "source_digest": "8fb877f191cb46c858d74d7dba20d0add8fad5ac82e436c8188d95ce09ccbb57",
+  "repository_intelligence": "DEGRADED; missing isolated CodeGraph/CocoIndex indexes, bounded current source/Git/compiler/tests/SDK checks",
+  "approval": "PRODUCTION-TEST v1 approved; RETENTION-IAM v1 separately approved and exact grant read back",
+  "reviewer": "/root, with independent file-bound owner reviews",
+  "evidence_hashes": {
+    "APPROVAL.json": "d08af16bbe5ae3bd3f7e459a15fd8c5c60053e882fc02022826f24f6d7dbd560",
+    "INTEGRATION/COMBINED-R2-CHECKS.json": "80a69cac4e2b01319115644b1dbacfde8b9fe4f3423ee60a460a8f8e168f16b7",
+    "INTEGRATION/SOURCE-FREEZE-R2.json": "4dd8ed195a5dc3d6bd5d545e38fb0c3aa0be8bebb68af8010942094788ed3938",
+    "INTEGRATION/ARTIFACT-SDK-R2.json": "8a42fffeddbaf54b81d83ecfd75a6e97d2c85b74c9a76e50b58d860a7b3a76b1",
+    "INTEGRATION/BACKEND-FINAL-REVIEW.json": "ba137f8db19e3b619224e6ef773ce9da41efc4ab6260b3645dfdee1bfaf4ab3f",
+    "INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.json": "fb81906b31df1857d324cd4d744d5b94067505f9947bbf2d781ea2f42b23b75e",
+    "INTEGRATION/REPLY-PROVENANCE-REVIEW.json": "efc5960bdc7317f49e8197cffae7001a07a48933544b672107f0b9058be7e093",
+    "EMAIL-REVOCATION-01/PEER-REVIEW.json": "695cdcb959443eca92dcbaa53821b7af79a34a23c062d1b4e214e4ace9d3661b",
+    "INTEGRATION/ANALYTICS-PEER-REVIEW.json": "f993dcab0d77db7efefbf1a12b0f2c7caa4693dfa0bbcef1931d530f2847ce09",
+    "INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json": "b6e0944504d81091fdf45fa2428361626be4a0cedcb912b7743f64fca28c6db1",
+    "INTEGRATION/UI-NOTIFICATION-REVIEW.json": "b979069cc9585dd7a767bb2034d8a2b5fc45ab2d3c4047e9806ef13709ff4224",
+    "INTEGRATION/UI-BROWSER-REVIEW.json": "2c001e8773ab631a7571baf0478a6d43ff7d220e4cd91c32391a54b576d33f43",
+    "INTEGRATION/NATIVE-RECHECK-R2.json": "cc151f77031a4f916b6727b39de6c68baf0cd9ca9387258c263b155b6a9d3d41",
+    "INTEGRATION/RETENTION-IAM-EXECUTION.json": "ccdf8ae1bb8010f31413cf4f96a24ca72a58f85ed1734704649464132bf55185",
+    "INTEGRATION/TEST-ACCOUNT-CONSENT.json": "467668f8b4dd7788f1851866f6cb4d3406a94d13b9be30d0070424129ccff91a",
+    "INTEGRATION/LATEST-LOCAL-DRIFT.json": "1528b0a0c5f26680a3209925d11b4e66c496f40a6451f6f43990a628e8d6bb3e",
+    "INTEGRATION/LATEST-PATH-INVENTORY.json": "3a43fd2f64eae43da42c45566ce92af909aa4f98b6f3da4dd1ea27951ee1b5c1",
+    "INTEGRATION/SCENARIO-COVERAGE.json": "0272fbb9acbcbfe121350a55668235eaa852be91a67ae6cab949f0cd978dba05",
+    "INTEGRATION/SCENARIO-COVERAGE.md": "d9efba13d629f336c18e5d844bdf746082c759c533da088284532f5d3abef65e",
+    "INTEGRATION/LATEST-LOCAL-R2-RECHECK.json": "9596c0acb88f809c0f2d886c254e0157930afbe3fa2c9569eb668a53d8e9386f"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED_WITHIN_SOURCE_SCOPE",
+      "summary": "Latest known canonical local inputs accounted for; original all-local integration and reviewed CI repair retained; source-derived production-test commerce/provenance isolated, current cart guard included. Deployment and acceptance remain incomplete."
+    },
+    "security": {
+      "status": "PASSED_WITHIN_SOURCE_SCOPE",
+      "summary": "Auth/MFA/AppCheck, immutable provenance, consent/current identity, financial/stock/fulfillment isolation, unknown/idempotency and quotas preserved. Exact index role granted with other project bindings unchanged; actual release capability still unverified."
+    },
+    "code_quality": {
+      "status": "PASSED_WITHIN_LOCAL_SCOPE",
+      "summary": "Node22.23.3; frontend/backend strict, lint,2789unit/180files,179Node contracts, CI-tuple build/preflight and106actual SDK endpoints pass at zero source drift."
+    },
+    "failure_paths": {
+      "status": "PASSED_WITHIN_LOCAL_SCOPE",
+      "summary": "Owner scenario/handler regressions cover malformed/forged/partial provenance, policy/identity/consent revocation, retries/concurrency/unknown, mixed real/test denial, budget and retention bounds. No absolute all-flow correctness or live provider proof."
+    },
+    "error_handling": {
+      "status": "PASSED_WITHIN_SOURCE_SCOPE",
+      "summary": "Fail-closed policy/readiness, bounded worker retries and default-inactive cleanup; preserve accepted/unknown/finance states on rollback. Historical failures and stale evidence retained."
+    },
+    "product_language": {
+      "status": "BLOCKED",
+      "summary": "Current real-component synthetic desktop/390/320 state/focus evidence and PDF visual evidence; full native selection/200%zoom/spokenAT incomplete. Latest native observation Mac locked. Eight principles mapped in UI reviews; Flexibility/Craft remain NOT_RUN."
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Normal current candidate PR CI/rules/HTTP/restore/audit pending; genuine staff MFA user-login pending; production-test exact artifact/provider/IPN/secret-version/IAM/index READY/Scheduler/settings/domain readback and owner canary not yet executed. No main promotion or activation."
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Sandbox-only BANK_TRANSFER, no SMS provider or PayOS activation; learning requires reviewed knowledge; historical research import floor may consume50000VND allocation; no budget reset/paid fallback. Hourly bounded retention and24h readiness renewal are not an unconditional physical-erasure SLA."
+    }
+  },
+  "findings": [
+    {
+      "id": "EMAIL-CURRENT-AUTHORITY-01",
+      "status": "FIXED_AND_VERIFIED",
+      "evidence": "EMAIL-REVOCATION-01/PEER-REVIEW.json",
+      "summary": "Current tester/settings/orderEmail/promotionsEmail/marketingConsent/destination generations fenced in final transaction; cross-service atomicity limitation disclosed."
+    },
+    {
+      "id": "BACKEND-REPLY-PROVENANCE-01",
+      "status": "FIXED_AND_VERIFIED",
+      "evidence": "INTEGRATION/REPLY-PROVENANCE-REVIEW.json",
+      "summary": "Reply producer and inbox projector preserve authoritative mode/run/version; order_reply email-if-unread remains excluded."
+    },
+    {
+      "id": "PRODUCT-INBOX-TEST-MARKER-01",
+      "status": "FIXED_AND_VERIFIED_WITHIN_COMPONENT_SCOPE",
+      "evidence": "INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json"
+    },
+    {
+      "id": "ASK-AGGREGATE-001",
+      "status": "FIXED_AND_VERIFIED_WITHIN_SOURCE_SCOPE",
+      "evidence": "INTEGRATION/PREFLIGHT-CORRECTION.json",
+      "summary": "Actual submitRequest and command producers pin server-derived test provenance; historical ASK report open finding superseded by current source/preflight/combined tests."
+    },
+    {
+      "id": "RETENTION-READINESS-DIGEST-01",
+      "status": "FIXED_AND_VERIFIED",
+      "evidence": "INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.json",
+      "summary": "Canonical validated content digest recomputed by runtime, producer compiled parity/map-order/tamper tests pass; cycle1 retained."
+    }
+  ],
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "decision": "BLOCKED",
+      "summary": "Current aggregate source corrections reviewed after owner fix loops; source/local checks pass, required manual/live and normal CI dimensions remain incomplete. Owner historical cycles preserved at referenced receipts."
+    }
+  ],
+  "git": {
+    "candidate_branch": "hunpeolabs/production-test-v1-20261010",
+    "push": "NOT_RUN",
+    "main": "c4230014959389c3c23b44cdb11c5fe846f815fe",
+    "shared_worktree": "Preserved; never reset/staged all",
+    "excluded_nonrelease_changes": [
+      "tracked Python __pycache__ generated by earlier RIG; untracked node_modules symlink"
+    ]
+  },
+  "limits": [
+    "No whole indexed graph assurance",
+    "Offline SDK discovery is not deployed inventory or runtime invocation",
+    "Synthetic browser props are not staff authorization/MFA",
+    "Npm scan patterns are limited; normal CI audit remains required",
+    "No verified remaining Gemini balance or actual billing"
+  ],
+  "runtime_ledger": "ai-agent-kit runtime unavailable; direct immutable receipts used, no fabricated runtime ledger",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "weighted_acceptance_progress": "Unavailable; no approved criterion weights configured, completed and pending criteria listed explicitly",
+  "memory_candidates": "None",
+  "quality_gates": {
+    "compilation": "PASSED: both strict TypeScript compilers Node22.23.3",
+    "unit_tests": "PASSED:2789/2789,180files",
+    "integration": "NOT_RUN_CURRENT_REMOTE: normal PR CI rules/HTTP/restore required; shared services untouched",
+    "static_analysis": "PASSED: current scoped repository lint and source preflight110inventory",
+    "architecture": "PASSED_WITHIN_BOUNDED_SOURCE_SCOPE: independent producer/consumer/provenance reviews; RIG DEGRADED",
+    "database": "PASSED_WITHIN_METADATA_SOURCE_SCOPE: exact3additive indexes and default-inactive transaction gate; effective index READY/Scheduler/invocation NOT_VERIFIED",
+    "api_compatibility": "PASSED_WITHIN_SOURCE_SDK_SCOPE:106actual endpoint discovery;2demo excluded,4holds; no live contract acceptance",
+    "observability_rollback": "PASSED_WITHIN_SOURCE_SCOPE: concise denial codes, bounded leases/retries and preserved unknown/financial/consent states; live readback NOT_RUN",
+    "product_content": "BLOCKED: current rendered synthetic/PDF evidence; native/zoom/spoken AT incomplete; eight principles mapped in bound UI reviews",
+    "public_seo_geo": "NOT_APPLICABLE: no new marketing/discovery/SEO changes in this delta; prior verified homepage retained",
+    "animation_motion": "NOT_APPLICABLE: no new animation or motion behavior",
+    "current_root_packaged_audit": "NOT_RUN_CURRENT_CI: unchanged lock, no redundant local external audit; user audit authorization persists",
+    "final_implementation_review": "BLOCKED: manual/live/current normal CI required; not a successful final handoff"
+  },
+  "scoped_profiles": [
+    "universal.yaml",
+    "typescript-javascript.yaml",
+    "database.yaml",
+    "product-content.yaml",
+    "web-app.yaml",
+    "frontend-html-css.yaml",
+    "visual-design.yaml"
+  ],
+  "risk": "HIGH: money/stock/PII/auth/persistent provenance and release metadata boundaries; sandbox isolation/default-inactive activation required",
+  "compatibility": {
+    "runtime": "Node22.23.3 matches Functions nodejs22/CI22; TypeScript6 strict and React19 existing versions",
+    "dependencies": "No new dependency/lock delta; normal CI immutable install and audit required",
+    "moduleInterop": "Existing frontend ESM/backendCommonJS; actual packaged Firebase loader verified",
+    "performance": "Bounded30line checkout,100rows/class cleanup/max300,3transaction attempts,60s timeout; source/mocked checks only, no live latency/leak/load certification"
+  },
+  "scenario_coverage": {
+    "scenarios": 53,
+    "literal_test_families": 148,
+    "source_config_inputs": 78,
+    "receipts": 21,
+    "unexplained_drift": 0,
+    "note": "53 originally catalogued scenarios,148family mappings; not all are live accepted"
+  }
+}

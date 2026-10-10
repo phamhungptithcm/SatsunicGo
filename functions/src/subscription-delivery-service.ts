@@ -13,6 +13,12 @@ import {
 } from "./notification-preferences-service";
 import type { SubscriptionIdentity } from "./notification-token-service";
 import { subscriptionContent } from "./subscription-content";
+import { productionTestEmailAllowed } from "./production-test-email-policy";
+import {
+  emailProviderReady,
+  parseEmailProviderConfig,
+  type EmailProviderConfig,
+} from "./email/provider-config";
 const jobSchema = z.object({
   ownerId: z
     .string()
@@ -67,6 +73,7 @@ export async function deliverSubscriptionJob(
   sender: SubscriptionSender,
   resolveIdentity: SubscriptionIdentityReader,
   minimumCreatedAt = 0,
+  expectedEmailConfig?: EmailProviderConfig,
 ) {
   if (!sender.available(channel)) return "unavailable";
   const site = new URL(origin);
@@ -134,6 +141,18 @@ export async function deliverSubscriptionJob(
     (channel === "email" && (!identity.verified || !identity.email))
   )
     return retireQueued("blocked_recipient");
+  if (
+    channel === "email" &&
+    !(await productionTestEmailAllowed(db, {
+      ownerId: initial.data.ownerId,
+      recipient: identity.email ?? "",
+      createdAt: initial.data.createdAt,
+      now,
+      kind: "subscription",
+      job: initialData,
+    }))
+  )
+    return retireQueued("blocked_policy");
   const raw = randomBytes(32).toString("hex"),
     hash = subscriptionHash(raw),
     claimId = randomUUID();
@@ -225,6 +244,7 @@ export async function deliverSubscriptionJob(
       return false;
     }
     return db.runTransaction(async (tx) => {
+      preIoState = undefined;
       const [row, prefs, user] = await tx.getAll(
         ref,
         db.doc(`notificationPreferences/${initial.data.ownerId}`),
@@ -233,6 +253,43 @@ export async function deliverSubscriptionJob(
       const current = row.data();
       if (current?.state !== "sending" || current.claimId !== claimId)
         return false;
+      if (channel === "email" && expectedEmailConfig) {
+        const currentConfig = parseEmailProviderConfig(
+          (await tx.get(db.doc("settings/email"))).data(),
+        );
+        if (
+          !emailProviderReady(currentConfig) ||
+          !currentConfig.subscriptionsEnabled ||
+          currentConfig.from !== expectedEmailConfig.from ||
+          from !== expectedEmailConfig.from ||
+          currentConfig.cutoverAt !== expectedEmailConfig.cutoverAt ||
+          currentConfig.dailyAttemptLimit !==
+            expectedEmailConfig.dailyAttemptLimit
+        ) {
+          preIoState = "suppressed";
+          return false;
+        }
+      }
+      // Policy admission shares the attempt commit's read set. Revocation or
+      // expiry observed on a transaction retry cannot authorize provider I/O.
+      if (
+        channel === "email" &&
+        !(await productionTestEmailAllowed(
+          db,
+          {
+            ownerId: initial.data.ownerId,
+            recipient: liveIdentity.email ?? "",
+            createdAt: initial.data.createdAt,
+            now: Date.now(),
+            kind: "subscription",
+            job: current,
+          },
+          tx,
+        ))
+      ) {
+        preIoState = "suppressed";
+        return false;
+      }
       if (
         current.createdAt > Date.now() ||
         Date.now() - current.createdAt >=
@@ -287,6 +344,10 @@ export async function deliverSubscriptionJob(
         "scopes",
         "destinationHash",
         "createdAt",
+        "testMode",
+        "executionMode",
+        "executionPolicyVersion",
+        "testRunId",
       ])
         if (!isDeepStrictEqual(current[field], initialData[field])) {
           preIoState = "suppressed";

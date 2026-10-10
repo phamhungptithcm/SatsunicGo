@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { askConversationSchema } from "../../../packages/domain/ask-workflow";
@@ -14,6 +14,15 @@ import {
   recentMfa,
 } from "../auth/guards";
 import { knowledgeSource } from "./approved-knowledge";
+import {
+  productionTestEnvironment,
+  admitProductionTestPolicy,
+  productionTestProvenance,
+} from "../production-test-policy";
+import {
+  feedbackExecution,
+  testFeedbackRetention,
+} from "./feedback-provenance";
 const config = {
   region: "asia-southeast1",
   maxInstances: 2,
@@ -30,10 +39,11 @@ export const askFeedbackPolicy = onCall(config, async (req) => {
     );
   return db.runTransaction(
     async (tx) => {
-      const [user, access, settings] = await Promise.all([
+      const [user, access, settings, testSettings] = await Promise.all([
         tx.get(db.doc(`users/${uid}`)),
         tx.get(db.doc(`staffAccess/${uid}`)),
         tx.get(db.doc("settings/askFeedback")),
+        tx.get(db.doc("settings/productionTest")),
       ]);
       if (user.data()?.locked || access.data()?.locked)
         throw new HttpsError(
@@ -47,7 +57,18 @@ export const askFeedbackPolicy = onCall(config, async (req) => {
         policy.data.expiresAt <= Date.now()
       )
         throw new HttpsError("unavailable", "Góp ý hiện chưa sẵn sàng.");
-      return policy.data;
+      const testPolicy = productionTestEnvironment(db)
+        ? admitProductionTestPolicy(testSettings.data(), uid, Date.now())
+        : null;
+      return testPolicy
+        ? {
+            ...policy.data,
+            retentionDays: Math.min(
+              policy.data.retentionDays,
+              testFeedbackRetention.maxDays,
+            ),
+          }
+        : policy.data;
     },
     { readOnly: true },
   );
@@ -64,21 +85,28 @@ export const askFeedback = onCall(config, async (req) => {
     );
   const input = parsed.data,
     db = getFirestore(),
-    now = Date.now(),
-    ref = db.doc(`askFeedback/${uid}-${input.operationId}`);
+    ref = db.doc(`askFeedback/${uid}-${input.operationId}`),
+    testRunId = randomUUID();
   return db.runTransaction(async (tx) => {
-    const quota = db.doc(
-      `askFeedbackQuota/${uid}-${Math.floor(now / 86400000)}`,
-    );
-    const [user, access, settings, conversation, previous, usage] =
-      await Promise.all([
-        tx.get(db.doc(`users/${uid}`)),
-        tx.get(db.doc(`staffAccess/${uid}`)),
-        tx.get(db.doc("settings/askFeedback")),
-        tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
-        tx.get(ref),
-        tx.get(quota),
-      ]);
+    const now = Date.now(),
+      quota = db.doc(`askFeedbackQuota/${uid}-${Math.floor(now / 86400000)}`);
+    const [
+      user,
+      access,
+      settings,
+      conversation,
+      previous,
+      usage,
+      testSettings,
+    ] = await Promise.all([
+      tx.get(db.doc(`users/${uid}`)),
+      tx.get(db.doc(`staffAccess/${uid}`)),
+      tx.get(db.doc("settings/askFeedback")),
+      tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
+      tx.get(ref),
+      tx.get(quota),
+      tx.get(db.doc("settings/productionTest")),
+    ]);
     if (user.data()?.locked || access.data()?.locked)
       throw new HttpsError(
         "permission-denied",
@@ -133,6 +161,42 @@ export const askFeedback = onCall(config, async (req) => {
         "resource-exhausted",
         "Anh/chị thử gửi góp ý vào lần sau nhé.",
       );
+    const testPolicy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testSettings.data(), uid, now)
+      : null;
+    const map = conversation.data()?.turnProvenance;
+    let pinned;
+    if (map && typeof map === "object" && !Array.isArray(map)) {
+      for (const turn of c.data.turns.filter(
+        (turn) => feedbackHash(turn.answer) === input.answerHash,
+      )) {
+        const saved = (map as Record<string, Record<string, unknown>>)[turn.id];
+        if (!saved) continue;
+        try {
+          if (saved.answerHash !== input.answerHash)
+            throw Error("FEEDBACK_TURN_CHANGED");
+          pinned = feedbackExecution(saved);
+        } catch {
+          throw new HttpsError(
+            "failed-precondition",
+            "Hội thoại đã thay đổi. Mở lại câu trả lời trước khi góp ý.",
+          );
+        }
+        if (pinned) break;
+      }
+    }
+    const provenance =
+      pinned ??
+      (testPolicy
+        ? {
+            ...productionTestProvenance(testPolicy, testRunId),
+            testMode: true as const,
+            analyticsEligible: false as const,
+          }
+        : undefined);
+    const retentionDays = provenance
+      ? Math.min(policy.data.retentionDays, testFeedbackRetention.maxDays)
+      : policy.data.retentionDays;
     // No question, answer, profile, address or free-text feedback is copied.
     tx.create(ref, {
       hash,
@@ -144,10 +208,19 @@ export const askFeedback = onCall(config, async (req) => {
       policyVersion: policy.data.version,
       consent: true,
       createdAt: now,
-      expiresAt: new Date(now + policy.data.retentionDays * 86400000),
+      expiresAt: new Date(now + retentionDays * 86400000),
       disposition: "unreviewed",
+      ...(provenance ?? {}),
+      ...(provenance
+        ? { retentionDays, retentionClass: testFeedbackRetention.recordClass }
+        : {}),
     });
-    tx.set(quota, { count: count + 1, expiresAt: new Date(now + 172800000) });
+    tx.set(quota, {
+      count: count + 1,
+      createdAt: now,
+      retentionClass: testFeedbackRetention.quotaClass,
+      expiresAt: new Date(now + 172800000),
+    });
     return { id: input.operationId, version: 1 };
   });
 });
@@ -161,11 +234,11 @@ export const askFeedbackReview = onCall(config, async (req) => {
     );
   const input = parsed.data,
     db = getFirestore(),
-    now = Date.now(),
     ref = db.doc(`askFeedback/${input.ownerId}-${input.feedbackId}`),
     op = db.doc(`askFeedbackReviewOperations/${uid}-${input.operationId}`);
   return db.runTransaction(async (tx) => {
-    const parts = input.source?.key.match(/^(posts|blogPublished)-(.+)$/);
+    const now = Date.now(),
+      parts = input.source?.key.match(/^(posts|blogPublished)-(.+)$/);
     const [user, staff, current, previous, source, publication] =
       await Promise.all([
         tx.get(db.doc(`users/${uid}`)),
@@ -208,6 +281,15 @@ export const askFeedbackReview = onCall(config, async (req) => {
       expiry.toMillis() <= now
     )
       throw new HttpsError("not-found", "Góp ý hiện không còn khả dụng.");
+    let provenance;
+    try {
+      provenance = feedbackExecution(row);
+    } catch {
+      throw new HttpsError(
+        "failed-precondition",
+        "Góp ý hiện không còn khả dụng.",
+      );
+    }
     if (
       row.reviewVersion !== input.expectedVersion ||
       !Number.isSafeInteger(row.reviewVersion) ||
@@ -244,7 +326,19 @@ export const askFeedbackReview = onCall(config, async (req) => {
       reviewedBy: uid,
       reviewedAt: now,
     });
-    tx.create(op, { hash, result, expiresAt: expiry });
+    tx.create(op, {
+      hash,
+      result,
+      expiresAt: expiry,
+      ...(provenance
+        ? {
+            ...provenance,
+            createdAt: now,
+            retentionDays: row.retentionDays,
+            retentionClass: testFeedbackRetention.operationClass,
+          }
+        : {}),
+    });
     // Disposition records review only. It never edits knowledge, prompts or models.
     return result;
   });

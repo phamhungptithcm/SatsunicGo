@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "task_id": "RETENTION-IAM-v1-INDEPENDENT-DELTA-REVIEW",
+  "at": "2026-10-10T02:12:23.207669+00:00",
+  "reviewer": "/root/policy_implementation",
+  "status": "PASSED",
+  "scope": "Independent proposed-plan review only; human approval and provider/IAM execution remain separate, not performed",
+  "repository_intelligence": "DEGRADED; exact local plan/role/metadata review",
+  "input_hashes": {
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-DELTA-PLAN.md": "d5efcc2ddb395b911e8040e5c5091523283ab67d1c11c95cfc139d00c5648c18",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-DELTA-ROLE.json": "76f9ded4574acfc73d85de3102b6d3072b1eb56e03b4a35155853f36f9346469",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-METADATA.json": "a78b46a820f0a88a3ec281ebef372a01f8850b5148021186a6ef1a7c09524d40"
+  },
+  "role_permissions": [
+    "datastore.indexes.list",
+    "datastore.indexes.create"
+  ],
+  "reviewed_allow_boundary": "Separate project custom role and one release-SA binding; no alteration to existing deployer role/WIF. New role has no document, secret, IAM-write, index update/delete or TTL permission. This describes the delta only; existing effective union of SA grants is not proved or restricted by this role.",
+  "findings": [
+    {
+      "id": "RETENTION-IAM-CONDITION-01",
+      "priority": "P2",
+      "status": "FIXED_AND_INDEPENDENTLY_REVIEWED",
+      "location": "RETENTION-IAM-DELTA-PLAN.md Exact proposed diff and rollback",
+      "finding": "Collision stop checks different permissions/unexpected principals but does not explicitly preserve an existing conditional binding for the same SA. An additive unconditional binding could widen a pre-existing conditional grant; rollback member-only wording could remove unrelated conditional authority.",
+      "required_change": "Before asking human approval, specify exact expected binding shape/condition and collision stop on any unmatched existing condition. Never silently replace/widen a conditional grant. Rollback must target only root-added member+role+condition; delete owned role only after project/resource references proven absent, otherwise retain unused role.",
+      "resolution": "Fresh plan requires exact existing permission set and member/condition/binding shape, stops on mismatches and forbids unconditional grant over a conditional binding. Rollback targets only root-added exact tuple; owned role deletion requires absence of all project/resource bindings or retains unused role."
+    }
+  ],
+  "dimensions": {
+    "privilege_description": {
+      "status": "PASSED",
+      "summary": "Exact two permissions constrain new role to index metadata listing/creation; project scope allows other index definitions and cannot be described as IAM collection confinement. Immutable launcher limits are an independent application control."
+    },
+    "metadata_applicability": {
+      "status": "PASSED",
+      "summary": "Fresh metadata records only direct project custom-role permission presence and etag. It correctly disclaims inherited/deny/resource-effective access. Role availability, support and effective permission must be rechecked; no redundant grant if access already exists."
+    },
+    "concurrency_and_rollback": {
+      "status": "PASSED",
+      "summary": "Fresh plan preserves all conditions and uses exact shape collision stop plus etag/additive mutation; rollback removes only root-added exact tuple and retains unused role if all references cannot be proven absent."
+    },
+    "deployment_readiness": {
+      "status": "BLOCKED",
+      "summary": "Human IAM approval and effective provider readback are absent by design. No IAM change performed; retention rollout still requires source gate, immutable indexes READY and exact Scheduler settings."
+    }
+  },
+  "api_permission_limit": "Release helper must use index list/create only. Individual index GET or operation GET must not be assumed covered; a changed permission need requires a new exact plan/effective-access review.",
+  "checks": {
+    "role_json": {
+      "status": "PASSED",
+      "result": "Exactly datastore.indexes.list and datastore.indexes.create; no other permission"
+    },
+    "provider_or_effective_access": {
+      "status": "NOT_RUN",
+      "reason": "Read-only review assigned; metadata supplied by root, no independent provider query"
+    },
+    "iam_execution": {
+      "status": "NOT_RUN",
+      "reason": "Plan still proposed and needs human approval after review"
+    },
+    "human_approval": {
+      "status": "NOT_RUN",
+      "reason": "Root will ask approval only after this concrete plan review; this receipt authorizes no IAM execution."
+    }
+  },
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "status": "CHANGES_REQUESTED",
+      "finding_ids": [
+        "RETENTION-IAM-CONDITION-01"
+      ],
+      "root_notified": true,
+      "original_plan_sha256": "NOT_CAPTURED_BEFORE_CONCURRENT_ROOT_EDIT",
+      "temporal_limit": "Initial finding came from a source read before root correction. First persisted input hashes were captured after that concurrent correction; they are not claimed as the pre-fix immutable artifact. Cycle2 freshly reread and verified exact current bytes."
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "findings": [],
+      "evidence": "Fresh exact plan reread resolves condition/rollback ambiguity; role remains exactly list/create; metadata unchanged; release owner confirms only LIST+POST index and LIST readiness operations."
+    }
+  ],
+  "limitations": [
+    "This review does not prove permission support or all effective SA grants.",
+    "Project-scope create permits creation of other index specs if trusted tooling/identity were independently compromised.",
+    "Role rollback deletion must not harm other resource-level/concurrent bindings; retain role if absence cannot be proved."
+  ],
+  "production_status": "NOT_READY_FROM_THIS_REVIEW",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None",
+  "previous_input_hashes": {
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-DELTA-PLAN.md": "d5efcc2ddb395b911e8040e5c5091523283ab67d1c11c95cfc139d00c5648c18",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-DELTA-ROLE.json": "76f9ded4574acfc73d85de3102b6d3072b1eb56e03b4a35155853f36f9346469",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-IAM-METADATA.json": "a78b46a820f0a88a3ec281ebef372a01f8850b5148021186a6ef1a7c09524d40"
+  },
+  "approval_readiness": "PLAN_READY_FOR_HUMAN_REVIEW_ONLY",
+  "provider_permission_contract": "Release implementation owner confirms fixed index LIST+POST and polls LIST for READY, no individual index or operation GET. Scheduler GET permission observed in direct deployer role; effective access remains unverified."
+}

@@ -552,3 +552,70 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Chat density only: Account keeps the approved full-size surface. */
+.orderTracking.ot.ot-compact .ot-hero {
+  padding: 18px;
+  gap: 14px;
+}
+.orderTracking.ot.ot-compact h2 {
+  font-size: 21px;
+  margin: 6px 0 8px;
+}
+.orderTracking.ot.ot-compact .ot-eta {
+  padding: 12px;
+}
+.orderTracking.ot.ot-compact .deliveryEstimateRange {
+  font-size: 19px;
+  letter-spacing: -0.3px;
+}
+.orderTracking.ot.ot-compact .ot-timeline-heading {
+  padding: 12px 18px 0;
+}
+.orderTracking.ot.ot-compact .ot-steps {
+  padding: 18px;
+}
+.orderTracking.ot.ot-compact .ot-history,
+.orderTracking.ot.ot-compact .ot-parcels {
+  padding: 16px;
+}
+.orderTracking.ot.ot-compact .ot-readtime {
+  margin: 8px 2px 10px;
+}
+@container (min-width: 480px) {
+  .ot.ot-compact .ot-steps[data-public="true"] {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    padding-top: 30px;
+  }
+  .ot.ot-compact .ot-steps[data-public="true"] li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 82px;
+    text-align: center;
+  }
+  .ot.ot-compact .ot-steps[data-public="true"] li:not(:last-child)::before {
+    left: calc(50% + 15px);
+    right: calc(-50% + 15px);
+    top: 14px;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+  }
+  .ot.ot-compact .ot-steps[data-public="true"] .ot-step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+  }
+  .ot.ot-compact .ot-steps[data-public="true"] .ot-step-tag {
+    position: absolute;
+    top: -20px;
+  }
+}
+
+/* Preserve Account capability-code controls outside the compact Ask delta. */
+.publicTrackingCode{margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:12px}.publicTrackingCode code{display:block;overflow-wrap:anywhere;margin:8px 0}.publicTrackingCode button{margin:4px 8px 4px 0}.publicTrackingCode p{font-size:13px;color:#64748b}

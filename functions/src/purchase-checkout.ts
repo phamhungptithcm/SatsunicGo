@@ -16,6 +16,7 @@ import {
   type ResearchedRequest,
   type CheckoutSnapshot,
   type PurchaseCheckout,
+  purchaseExecutionProvenance,
 } from "../../packages/domain/purchase-checkout";
 import {
   shippingQuoteInputSchema,
@@ -34,12 +35,17 @@ import {
   paymentCapabilities,
 } from "../../packages/domain/purchase-sepay";
 import { sandboxPaymentReady, sepaySecrets } from "./payments/sepay-sandbox";
+import {
+  productionTestEnvironment,
+  admitProductionTestPolicy,
+  productionTestProvenance,
+} from "./production-test-policy";
 
 const options = {
   region: "asia-southeast1",
   maxInstances: 3,
   concurrency: 10,
-  secrets: process.env.FUNCTIONS_EMULATOR === "true" ? sepaySecrets : [],
+  secrets: sepaySecrets,
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
 };
 const hash = (value: unknown) =>
@@ -92,11 +98,12 @@ async function unlocked(tx: Transaction, uid: string) {
 }
 async function dependencies(tx: Transaction, uid: string) {
   const db = getFirestore();
-  const [stored, policy, tariff, regions] = await tx.getAll(
+  const [stored, policy, tariff, regions, testPolicy] = await tx.getAll(
     db.doc(`carts/${uid}`),
     db.doc("settings/upfrontCheckout"),
     db.doc("shippingRatePublic/current"),
     db.doc("settings/purchaseRegions"),
+    db.doc("settings/productionTest"),
   );
   const cart: Cart = stored.exists
     ? cartSchema.parse(stored.data())
@@ -131,6 +138,9 @@ async function dependencies(tx: Transaction, uid: string) {
     );
   return {
     cart,
+    testPolicy: productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testPolicy.data(), uid)
+      : null,
     policy: policy.data(),
     tariff: tariff.data(),
     regions: regions.data(),
@@ -333,6 +343,17 @@ export const purchaseCheckout = onCall(options, async (req) => {
               orderIds: dep.cart.items.map(() => randomUUID()),
               shipping: shippingSnapshot(dep, input.shipping),
             });
+          if (productionTestEnvironment(db)) {
+            if (!dep.testPolicy)
+              throw new HttpsError(
+                "failed-precondition",
+                "Kênh thử chưa khả dụng.",
+              );
+            Object.assign(
+              built.snapshot,
+              productionTestProvenance(dep.testPolicy, id),
+            );
+          }
           const previewHash = hash(built.snapshot),
             result = { ...built.snapshot, previewHash };
           tx.create(db.doc(`purchasePreviews/${id}`), {
@@ -374,6 +395,21 @@ export const purchaseCheckout = onCall(options, async (req) => {
               : undefined,
           ),
         });
+        const provenance = purchaseExecutionProvenance(p);
+        if (productionTestEnvironment(db)) {
+          if (
+            !provenance ||
+            !dep.testPolicy ||
+            provenance.executionPolicyVersion !== dep.testPolicy.version
+          )
+            throw new HttpsError(
+              "failed-precondition",
+              "Kênh thử chưa khả dụng.",
+            );
+          Object.assign(built.snapshot, provenance);
+        } else if (provenance) {
+          throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
+        }
         if (
           hash(built.snapshot) !== input.previewHash ||
           dep.policy!.expiresAt <= now
@@ -383,11 +419,13 @@ export const purchaseCheckout = onCall(options, async (req) => {
             "Giá hoặc điều khoản đã thay đổi. Xem tổng quan mới.",
           );
         const demo = await tx.get(db.doc("settings/purchaseDemo"));
-        const provider = sandboxPaymentReady()
-          ? "sepay_sandbox"
-          : purchaseDemoEnvironment(db) && demo.data()?.enabled === true
-            ? "demo"
-            : "payos_unavailable";
+        const provider =
+          sandboxPaymentReady() &&
+          (!productionTestEnvironment(db) || !!dep.testPolicy)
+            ? "sepay_sandbox"
+            : purchaseDemoEnvironment(db) && demo.data()?.enabled === true
+              ? "demo"
+              : "payos_unavailable";
         if (
           provider === "payos_unavailable" ||
           (input.paymentMethod && input.paymentMethod !== "BANK_TRANSFER") ||
@@ -424,6 +462,7 @@ export const purchaseCheckout = onCall(options, async (req) => {
           total: p.total,
           provider,
           paymentMethod: "BANK_TRANSFER",
+          ...(provenance ?? {}),
         };
         tx.create(operation, { hash: inputHash, result, createdAt: now });
         return result;
@@ -526,9 +565,10 @@ export const purchaseBalanceCheckout = onCall(options, async (req) => {
       );
     const orderId =
       input.action === "preview" ? input.orderId : preview!.sourceOrderId;
-    const [stored, demo] = await Promise.all([
+    const [stored, demo, testPolicyDoc] = await Promise.all([
       tx.get(db.doc(`orders/${orderId}`)),
       tx.get(db.doc("settings/purchaseDemo")),
+      tx.get(db.doc("settings/productionTest")),
     ]);
     const order = stored.data() as Order | undefined;
     if (!order || order.ownerId !== uid || !order.upfront || !order.checkoutId)
@@ -544,6 +584,14 @@ export const purchaseBalanceCheckout = onCall(options, async (req) => {
         "failed-precondition",
         "Chi phí cuối cần được duyệt trước khi thanh toán thêm.",
       );
+    const testPolicy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testPolicyDoc.data(), uid)
+      : null;
+    const orderProvenance = purchaseExecutionProvenance(order);
+    if (productionTestEnvironment(db) && (!testPolicy || !orderProvenance))
+      throw new HttpsError("failed-precondition", "Kênh thử chưa khả dụng.");
+    if (orderProvenance && !productionTestEnvironment(db))
+      throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
     const target = purchaseBalanceTarget(order);
     const due = Math.max(0, target.total - order.collected + order.refunded);
     if (!due)
@@ -562,11 +610,22 @@ export const purchaseBalanceCheckout = onCall(options, async (req) => {
           "failed-precondition",
           "Thanh toán ban đầu chưa được xác minh.",
         );
+      const originalProvenance = purchaseExecutionProvenance(original);
+      if (
+        productionTestEnvironment(db) &&
+        (!originalProvenance ||
+          !orderProvenance ||
+          original.provider !== "sepay_sandbox" ||
+          JSON.stringify(originalProvenance) !==
+            JSON.stringify(orderProvenance))
+      )
+        throw new HttpsError("failed-precondition", "Chưa khớp phân bổ đơn.");
       const line = original.lines.find((l) => l.orderId === orderId);
       if (!line)
         throw new HttpsError("failed-precondition", "Chưa khớp phân bổ đơn.");
       const id = randomUUID();
       const snapshot: CheckoutSnapshot = {
+        ...(orderProvenance ?? {}),
         id,
         ownerId: uid,
         version: 1,
@@ -622,11 +681,20 @@ export const purchaseBalanceCheckout = onCall(options, async (req) => {
         "aborted",
         "Chi phí hoặc tổng quan đã thay đổi. Xem lại trước khi thanh toán.",
       );
-    const provider = sandboxPaymentReady()
-      ? "sepay_sandbox"
-      : purchaseDemoEnvironment(db) && demo.data()?.enabled === true
-        ? "demo"
-        : "payos_unavailable";
+    const provenance = purchaseExecutionProvenance(preview);
+    if (
+      productionTestEnvironment(db) &&
+      (!provenance ||
+        !testPolicy ||
+        JSON.stringify(provenance) !== JSON.stringify(orderProvenance))
+    )
+      throw new HttpsError("failed-precondition", "Kênh thử chưa khả dụng.");
+    const provider =
+      sandboxPaymentReady() && (!productionTestEnvironment(db) || !!testPolicy)
+        ? "sepay_sandbox"
+        : purchaseDemoEnvironment(db) && demo.data()?.enabled === true
+          ? "demo"
+          : "payos_unavailable";
     if (
       provider === "payos_unavailable" ||
       (input.paymentMethod && input.paymentMethod !== "BANK_TRANSFER") ||
@@ -659,6 +727,7 @@ export const purchaseBalanceCheckout = onCall(options, async (req) => {
       total: due,
       provider,
       paymentMethod: "BANK_TRANSFER",
+      ...(provenance ?? {}),
     };
     tx.create(op, { hash: inputHash, result, createdAt: now });
     return result;
@@ -670,24 +739,35 @@ export const purchaseCheckoutSetup = onCall(options, async (req) => {
     db = getFirestore();
   return db.runTransaction(async (tx) => {
     await unlocked(tx, uid);
-    const [regions, policy, tariff, demo] = await Promise.all([
+    const [regions, policy, tariff, demo, testPolicyDoc] = await Promise.all([
       tx.get(db.doc("settings/purchaseRegions")),
       tx.get(db.doc("settings/upfrontCheckout")),
       tx.get(db.doc("shippingRatePublic/current")),
       tx.get(db.doc("settings/purchaseDemo")),
+      tx.get(db.doc("settings/productionTest")),
     ]);
     const parsed = checkoutPolicySchema.safeParse(policy.data()),
       now = Date.now(),
       rate = shippingRateConfigSchema.safeParse(tariff.data()?.config),
-      reference = !tariff.exists && purchaseDemoEnvironment(db);
+      reference = !tariff.exists && purchaseDemoEnvironment(db),
+      testPolicy = productionTestEnvironment(db)
+        ? admitProductionTestPolicy(testPolicyDoc.data(), uid)
+        : null;
     return {
       paymentCapabilities: paymentCapabilities(
-        sandboxPaymentReady()
+        sandboxPaymentReady() &&
+          (!productionTestEnvironment(db) || !!testPolicy)
           ? "sepay_sandbox"
           : purchaseDemoEnvironment(db) && demo.data()?.enabled === true
             ? "demo"
             : "unavailable",
       ),
+      ...(testPolicy
+        ? {
+            executionMode: "production_test",
+            executionPolicyVersion: testPolicy.version,
+          }
+        : {}),
       regions: regions.data()?.provinces ?? [],
       pricing:
         parsed.success &&

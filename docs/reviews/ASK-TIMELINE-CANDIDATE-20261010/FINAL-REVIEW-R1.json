@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK-TIMELINE-CANDIDATE-20261010",
+  "status": "BLOCKED",
+  "sourceDigest": "fcee8a3e880553d9bdc7d86e3f610aea6ad9ec2c8b6784e3c73e21e2fb9ba194",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved VI/EN removal/compactsharedtimeline integrated,currentlocalchecks,WIPpreserved;normalCIpending.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Strictpublicprojection/ownerfences/privacycanaries retained,no backend/request/policychange.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "code_quality": {
+      "status": "NOT_RUN",
+      "summary": "Types/lint/build pass,Accountdefault/style exact;Product Language BLOCKED genuinezoom/spokenAT.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "26controlledReactcomponent and57focusedunit passed;notrealMFA/physicaloffline/live.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Englishautoquery/re-entry/redaction/Stop/focus/log guards retained andverified.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No deployauthorization;newexactheadCIpending,PRE001/MFA/genuinezoom/spokenAT/immutablemain/provider/live missing.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "CompactAsk only,Accountdefaultpreserved,guest4/private6separate,no appdeps/workflows/fixtureservers.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-FREEZE.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/CODE-QUALITY-REVIEW.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "TL-CSS-01",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "compatibility",
+      "location": "src/features/ask/order-tracking.css",
+      "summary": "OwnerdeltaaccidentallyremovesAccountcapabilitycodeCSSwithobsoletegueststyles.",
+      "resolution": "Preservedexact4preimagerules;Accountdefaultinverse/CSSprefix exact;build/lint/component/unitpass.",
+      "evidence_refs": [
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/SOURCE-INTEGRATION.json",
+        "/private/tmp/satsunicgo-ask-timeline-candidate-20261010/LOCAL-CHECKS.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Roothistoricalomitdev13Moderate2Low/allinstall7High14Moderate2Low,currentnormalCIpending;no newauditfix.",
+    "Buildchunk/ineffectivedynamicimportwarningsretained,no productionperformanceclaim."
+  ],
+  "limitations": [
+    "DEGRADEDindexes,selfreviewonly",
+    "OwnerlocalProductPASSnotadopted;hardwareAT/genuinezoomNOT_RUN",
+    "26componentlocal-only,notnormalCIinclude",
+    "OwnercontrolledSDKbrowserproxy,no newrootbrowser/fixtures/server",
+    "PRE001/MFA/manual/mainimmutableartifact/packageaudit/providersecretTTLAppCheckproxytrust/live remain missing",
+    "Tokenusage/actualcostUnavailable;memorycandidatesNone"
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "review_id": "PRODUCTION-TEST-NOTIFICATION-UI",
+  "reviewed_at": "2026-10-10T02:02:12.281511+00:00",
+  "candidate_head": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "worktree": "Concurrent approved changes retained; scoped ownership only",
+  "status": "BLOCKED",
+  "engineering_checks": "PASSED_WITHIN_EXECUTED_SCOPE",
+  "product_language_gate": "BLOCKED",
+  "repository_intelligence": "DEGRADED; missing optional CodeGraph/CocoIndex indexes, bounded direct source/hash/test evidence",
+  "approval_ref": "PRODUCTION-TEST v1; call_5081fd46f74546c08b78d7a095730a9a item0; root scoped notification omission assignment",
+  "impact_plan": "INTEGRATION/UI-NOTIFICATION-IMPACT.md",
+  "source_sha256": {
+    "src/features/notifications/Notifications.tsx": "d1362742c33d15aed81f4c5c3e1a77fcec9e5931397b0fb98cd51de969813456",
+    "tests/unit/production-test-notification-ui.test.ts": "ec844c5632b9efdbe17b190f97242155aa573c4a04e52cf147d130342dc85137"
+  },
+  "preview_manifest_sha256": "5fbb1b063130df1390e44da1481d3226fdd113594509b2c1a32f4bfd3560feb2",
+  "preview_artifact": {
+    "sha256": "b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394",
+    "bytes": 516185,
+    "cycle": 3,
+    "inputs": 39,
+    "source_drift": [],
+    "actual_components": [
+      "Workbench",
+      "TestOrderBadge",
+      "ActionForm",
+      "OrderTools",
+      "Notifications"
+    ],
+    "real_firebase_modules": 0,
+    "external_script_style_imports": 0,
+    "process_env_references": 0,
+    "http_browser_acceptance": "NOT_RUN_CYCLE3"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "finding": "Notifications consumer rendered persisted test payment/reply notifications without the Test badge.",
+      "impact": "Synthetic notification could look genuine.",
+      "fix": "Reuse existing TestOrderBadge in existing title, expose optional unknown provenance fields in local read-row type; no query/auth/style/copy/navigation/read-state behavior changed.",
+      "verification": "Actual Notifications component rendering covers 9 canonical/legacy/partial test tags, 3 genuine/absent cases and read reply disclosure; fields are not printed."
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "finding": "New notification rendering not yet inspected in browser; native filter/zoom/spoken AT acceptance remains incomplete in original component supplement.",
+      "fix": "Source-bound cycle3 includes actual Notifications with narrow exact synthetic Firestore adapter; no SDK init or network; adapter unsubscribe and invalid query/read paths covered.",
+      "verification": "22 new meaningful notification/preview guard tests plus 37 existing presentation tests pass; frontend strict, scoped lint, preview build, syntax and all39 hashes pass.",
+      "remaining": "Root must inspect notification-specific desktop/narrow render on exact new artifact. Unchanged Workbench evidence may be rebound; no blanket rerun needed."
+    }
+  ],
+  "dimensions": {
+    "requirements": "PASSED marker omission fixed within approved v1 scope; no broader product changes",
+    "security": "PASSED scoped display metadata only; no mutation/query/auth change; actual SDK absent from preview, out-of-scope adapter reads denied",
+    "correctness_quality": "PASSED focused tests/strict/lint; conservative existing classifier reused",
+    "failure_paths": "PASSED canonical, sandbox, demo, partial and unknown tags marked; genuine rows unmarked; preview wrong owner/database/collection/order/limit and cancellation denied/exercised",
+    "error_cleanup": "PASSED existing subscription/read lifecycle preserved; local adapter honors unsubscribe; no shared runtime or account changes",
+    "product_language": "BLOCKED pending current notification in-context browser and remaining native zoom/AT evidence; no new product string",
+    "production": "NOT_RUN no deployment/provider/real data checks in this subtask",
+    "tradeoffs": "PASSED badge is display-only and inherited accessible Đơn test; synthetic browser reader is not Firestore/auth proof"
+  },
+  "string_state_inventory": [
+    {
+      "visible": "Test",
+      "accessible": "Đơn test",
+      "location": "Existing notification title h3",
+      "states": [
+        "canonical production_test",
+        "legacy demo/sandbox",
+        "partial or unknown provenance"
+      ],
+      "meaning": "This notification belongs to a conservatively classified test record.",
+      "evidence": "Actual-component rendering; exact browser notification render still NOT_RUN"
+    },
+    {
+      "visible": "Existing notification title/time/target/read labels",
+      "change": "Unchanged",
+      "states": [
+        "read",
+        "unread",
+        "genuine",
+        "disclosure/expanded"
+      ],
+      "evidence": "Actual consumer tests retain title, existing order/support destination and read-state control; no backend read mutation called"
+    }
+  ],
+  "principles": {
+    "Purpose": "PASSED source/actual-component test: identify simulated notification beside its title",
+    "Agency": "PASSED source/test: existing destination, disclosure and read control retained; marker is not interactive",
+    "Responsibility": "PASSED source/test: no raw provenance/token/PII fields exposed, no authorization granted",
+    "Familiarity": "PASSED reused existing compact blue Test badge and local Vietnamese accessible name",
+    "Flexibility": "NOT_RUN new notification narrow/zoom/spoken AT current evidence pending",
+    "Simplicity": "PASSED one reused marker, no panel/control/explanation added",
+    "Craft": "NOT_RUN current notification layout/wrapping/focus requires root render; compile and tests pass",
+    "Delight": "NOT_RUN existing restraint retained, new in-context notification interaction not inspected"
+  },
+  "remaining": [
+    {
+      "gate": "NOTIFICATION-BROWSER",
+      "status": "NOT_RUN_CYCLE3",
+      "scope": "Only new notification row marker desktop/narrow, canonical/legacy/partial versus genuine, existing title/date/target, no overflow; parent handles actual browser."
+    },
+    {
+      "gate": "NATIVE-ACCESSIBILITY",
+      "status": "NOT_RUN",
+      "scope": "Native filter selection remains NOT_VERIFIED; genuine200% zoom/spoken AT pending as recorded UI-BROWSER-REVIEW."
+    },
+    {
+      "gate": "RELEASE-LIVE",
+      "status": "NOT_RUN_BY_THIS_SUBTASK",
+      "scope": "Parent combines exact candidate CI/artifact/provider/rollback evidence; do not infer from local checks."
+    }
+  ],
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

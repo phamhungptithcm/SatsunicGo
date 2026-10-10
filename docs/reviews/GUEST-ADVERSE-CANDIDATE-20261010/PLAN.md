@@ -1,0 +1,14 @@
+# Guest adverse candidate integration v1
+
+Authority: current root direct human instruction authorizes guest tracking integration, normal PR CI and in-scope fixes, preserving WIP and no deploy. Verified owner continuation request in tracking chat01a12113-3f9a-70f3-a031-fa88365f61a4 turn01a125e0-3666-7a40-aaf2-9655cf1a3784 explicitly covers offline/timeout/auth changes/ABA/accessibility and discovered scoped fixes, no deploy. This is execution within the approved guest/Ask scope, not a release waiver.
+
+Candidate d704a405 has earlier null-safe rejection/focus-preservation fixes. Fresh source diff proves six scoped hunks only: guestLookup turn marker; guest stopped/error recovery requiring code re-entry without replay of masked question; composer focus after Stop; pending guest marker; named language group; keyboard-focusable scroll log. No backend/auth/consent/quota/model/projection policy change. RIG DEGRADED: candidate CodeGraph/CocoIndex missing; bounded diff/source/compiler/tests evidence. Medium client recovery/accessibility risk.
+
+1. Apply only these six reviewed hunks, inverse-check exact candidate preimage, bind result to current owner Ask manifest. Preserve all unrelated source and shared root read-only.
+2. Add owner25case component suite plus config/DOM setup; retain assertions. Test-only HappyDOM/axe already installed outside app, no application/package/workflow change. Minimal reproduction README; optional owner browser fixture remains shared WIP and is excluded from candidate, no fixture/server recreation.
+3. Run current candidate component suite, focused existing guest/preview unit regression, scoped lint and frontend strict/build. Regenerate public-assets manifest from existing npm build; do not edit generated content by hand. No backend change, let normal mandatory PR CI execute full checks after explicit-path commit/push.
+4. Record current source freeze, preservation proof, new exact-head CI receipt and Product/final reviews. Do not reuse d704 CI as current proof; it becomes historical after source change. No unchanged browser/emulator/offline SDK repetition.
+
+Product content: four new VI/EN stopped/unavailable messages explain code re-entry because codes are deliberately redacted. Generic answer retry/request links retained for non-guest turns. Existing Language/Ngon ngu accessible names preserved with group semantics; scroll log adds keyboard stop. Inventory all changed strings and states; all8principles required. Genuine200%browserzoom/spokenVoiceOver remainNOT_RUN; root Product/final review staysBLOCKED despite owner's scoped localPASS.
+
+Rollback: normal revert of this scoped candidate commit, no reset/forcepush. Preserve original pyc/node_modules dirt; no gitaddA, shared edits/restart/reseed, mainpush/PRmerge, deploy, provider/secret/TTL/IAM activation, paidAI, or fake/manual-gate substitutes.

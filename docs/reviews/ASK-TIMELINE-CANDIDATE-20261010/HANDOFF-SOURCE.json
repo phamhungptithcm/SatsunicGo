@@ -1,0 +1,31 @@
+{
+  "threadId": "01a12113-3f9a-70f3-a031-fa88365f61a4",
+  "turn": "01a1260c-3df0-7450-bbde-bed561111f90",
+  "cursor": "231e8f9d-ce22-4e5c-8819-3b09fb4bdb99:11",
+  "sourceManifest": {
+    "src/features/ask/Ask.tsx": "a966655139e456621e8e09fd96ae8f0242ed253e80aad149d3a82334d64e4b27",
+    "src/features/ask/OrderTracking.tsx": "8497d8666d2c272a832560f638beafba5563193e0eff79d9373d862db4642f5e",
+    "src/features/ask/GuestOrderTracking.tsx": "d337e76edd4244e528344ceb162852f46c4a8270b433af4124cdf63b4f61dd86",
+    "src/features/ask/TrackingIcon.tsx": "1a07582e54277f89adfa537b22fb8b4228ff32a3b9fe1fcd2f291feda8b1eb70",
+    "src/features/ask/order-tracking.css": "33d8e408fb6082470715b902aab15472f0651004a2acdc1844b7a9de7d2c4581",
+    "tests/component/guest-tracking-adverse.test.ts": "cb6d55ae134a039c422a11677bb961181dd6eabf00047cd59d6a16c0303c895f",
+    "tests/component/guest-browser-state.ts": "50941757e5f03b27df43ecb9f560abfea766fa0a2dc5aeda9d0bb2e7c567b1a7",
+    "tests/component/guest-browser-harness.tsx": "ba110974089e28bfe26ab4b3d257400ac87ca559684f85305a70c0e27ce78d2b"
+  },
+  "selectedSourceFiles": [
+    "src/features/ask/Ask.tsx",
+    "src/features/ask/OrderTracking.tsx",
+    "src/features/ask/GuestOrderTracking.tsx",
+    "src/features/ask/TrackingIcon.tsx",
+    "src/features/ask/order-tracking.css",
+    "tests/component/guest-tracking-adverse.test.ts"
+  ],
+  "excludedBrowserFixtures": [
+    "tests/component/guest-browser-state.ts",
+    "tests/component/guest-browser-harness.tsx"
+  ],
+  "ownerReview": "PASSED local,not adopted as rootProduct/finalPASS",
+  "publicTrackingCodeStyles": "retain exact candidate preimage rules",
+  "genuine200Zoom": "NOT_RUN",
+  "spokenVoiceOver": "NOT_RUN"
+}

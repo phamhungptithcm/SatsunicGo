@@ -1,0 +1,112 @@
+[
+  {
+    "fontSize": "70px",
+    "headerFits": true,
+    "headlineHeight": 152.59375,
+    "hero": [
+      {
+        "height": 50,
+        "href": "/products",
+        "text": "Xem sản phẩm",
+        "width": 180.8203125
+      },
+      {
+        "height": 50,
+        "href": "/request",
+        "text": "Gửi yêu cầu mua hộ",
+        "width": 180.6171875
+      }
+    ],
+    "overflow": false,
+    "route": "/",
+    "width": 1440
+  },
+  {
+    "fontSize": "64px",
+    "headerFits": true,
+    "headlineHeight": 139.515625,
+    "hero": [
+      {
+        "height": 50,
+        "href": "/products",
+        "text": "Xem sản phẩm",
+        "width": 180.8203125
+      },
+      {
+        "height": 50,
+        "href": "/request",
+        "text": "Gửi yêu cầu mua hộ",
+        "width": 180.6171875
+      }
+    ],
+    "overflow": false,
+    "route": "/",
+    "width": 1280
+  },
+  {
+    "fontSize": "51.2px",
+    "headerFits": true,
+    "headlineHeight": 111.609375,
+    "hero": [
+      {
+        "height": 50,
+        "href": "/products",
+        "text": "Xem sản phẩm",
+        "width": 180.8203125
+      },
+      {
+        "height": 50,
+        "href": "/request",
+        "text": "Gửi yêu cầu mua hộ",
+        "width": 180.6171875
+      }
+    ],
+    "overflow": false,
+    "route": "/",
+    "width": 1024
+  },
+  {
+    "fontSize": "42.12px",
+    "headerFits": true,
+    "headlineHeight": 96.015625,
+    "hero": [
+      {
+        "height": 49,
+        "href": "/products",
+        "text": "Xem sản phẩm",
+        "width": 346
+      },
+      {
+        "height": 49,
+        "href": "/request",
+        "text": "Gửi yêu cầu mua hộ",
+        "width": 346
+      }
+    ],
+    "overflow": false,
+    "route": "/",
+    "width": 390
+  },
+  {
+    "fontSize": "34px",
+    "headerFits": true,
+    "headlineHeight": 77.515625,
+    "hero": [
+      {
+        "height": 49,
+        "href": "/products",
+        "text": "Xem sản phẩm",
+        "width": 276
+      },
+      {
+        "height": 49,
+        "href": "/request",
+        "text": "Gửi yêu cầu mua hộ",
+        "width": 276
+      }
+    ],
+    "overflow": false,
+    "route": "/",
+    "width": 320
+  }
+]

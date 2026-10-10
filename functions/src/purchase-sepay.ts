@@ -22,7 +22,15 @@ import {
   type SePayProof,
   type SePayIpn,
 } from "../../packages/domain/purchase-sepay";
-import type { PurchaseCheckout } from "../../packages/domain/purchase-checkout";
+import {
+  purchaseExecutionProvenance,
+  type PurchaseCheckout,
+} from "../../packages/domain/purchase-checkout";
+import {
+  productionTestEnvironment,
+  assertPurchaseExecutionEnvironment,
+  admitProductionTestPolicy,
+} from "./production-test-policy";
 import {
   authenticSePayIpn,
   sandboxAdapter,
@@ -51,7 +59,7 @@ const command = z
   })
   .strict();
 function guard() {
-  if (!purchaseDemoEnvironment())
+  if (!purchaseDemoEnvironment() && !productionTestEnvironment())
     throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
 }
 
@@ -60,6 +68,8 @@ export async function handleSePayPayment(
   adapter?: SePayAdapter,
 ) {
   guard();
+  if (adapter && !purchaseDemoEnvironment())
+    throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
   const uid = requireVerifiedGoogle(req.auth),
     parsed = command.safeParse(req.data),
     db = getFirestore();
@@ -82,6 +92,7 @@ export async function handleSePayPayment(
       checkout.provider !== "sepay_sandbox"
     )
       throw new HttpsError("permission-denied", "Chưa mở được thanh toán.");
+    const provenance = assertPurchaseExecutionEnvironment(checkout, db);
     if (profile.data()?.locked || access.data()?.locked)
       throw new HttpsError(
         "permission-denied",
@@ -90,10 +101,16 @@ export async function handleSePayPayment(
     if (existing.exists) {
       const prior = existing.data() as SePayIntent;
       if (
+        prior.checkoutId !== id ||
+        prior.provider !== "sepay_sandbox" ||
+        prior.merchant !== SEPAY_MERCHANT ||
+        prior.invoice !== sepayInvoice(id) ||
         prior.ownerId !== uid ||
         prior.amount !== checkout.total ||
         prior.checkoutHash !== checkout.hash ||
-        prior.paymentMethod !== checkout.paymentMethod
+        prior.paymentMethod !== checkout.paymentMethod ||
+        JSON.stringify(purchaseExecutionProvenance(prior)) !==
+          JSON.stringify(provenance)
       )
         throw new HttpsError(
           "failed-precondition",
@@ -111,6 +128,14 @@ export async function handleSePayPayment(
       return prior;
     }
     if (action !== "createCheckout") return null;
+    if (provenance) {
+      const policy = admitProductionTestPolicy(
+        (await tx.get(db.doc("settings/productionTest"))).data(),
+        uid,
+      );
+      if (!policy)
+        throw new HttpsError("failed-precondition", "Kênh thử chưa khả dụng.");
+    }
     if (!adapter && !sandboxPaymentReady())
       throw new HttpsError(
         "failed-precondition",
@@ -134,6 +159,7 @@ export async function handleSePayPayment(
         "Mã thanh toán cần đối chiếu.",
       );
     const created: SePayIntent = {
+      ...(provenance ?? {}),
       checkoutId: id,
       ownerId: uid,
       invoice,
@@ -148,6 +174,7 @@ export async function handleSePayPayment(
     };
     tx.create(ref, created);
     tx.create(indexRef, {
+      ...(provenance ?? {}),
       checkoutId: id,
       ownerId: uid,
       invoice,
@@ -202,11 +229,19 @@ export async function admitSePayIpn(body: unknown) {
       intent = intentDoc.data() as SePayIntent | undefined;
     if (
       !intent ||
+      intent.provider !== "sepay_sandbox" ||
+      intent.checkoutId !== id ||
       intent.invoice !== payload.order.order_invoice_number ||
       intent.merchant !== SEPAY_MERCHANT ||
       (intent.providerOrderId &&
         (intent.providerOrderId !== payload.order.order_id ||
           intent.providerInternalId !== payload.order.id))
+    )
+      throw Error("SEPAY_BINDING_MISMATCH");
+    const provenance = assertPurchaseExecutionEnvironment(intent, db);
+    if (
+      JSON.stringify(purchaseExecutionProvenance(index.data())) !==
+      JSON.stringify(provenance)
     )
       throw Error("SEPAY_BINDING_MISMATCH");
     if (inbox.exists) {
@@ -222,6 +257,7 @@ export async function admitSePayIpn(body: unknown) {
       providerInternalId: payload.order.id,
     });
     tx.create(inboxRef, {
+      ...(provenance ?? {}),
       checkoutId: id,
       payload,
       payloadHash: digest(JSON.stringify({ ...payload, timestamp: 0 })),
@@ -233,7 +269,10 @@ export async function admitSePayIpn(body: unknown) {
   return key;
 }
 export async function handleSePayIpn(req: Request, res: Response) {
-  if (!purchaseDemoEnvironment() || !sandboxPaymentReady()) {
+  if (
+    (!purchaseDemoEnvironment() && !productionTestEnvironment()) ||
+    !sandboxPaymentReady()
+  ) {
     res.status(503).json({ received: false });
     return;
   }
@@ -284,6 +323,8 @@ export async function reconcileSePayIntent(
   notification?: SePayIpn,
 ) {
   guard();
+  if (adapter && !purchaseDemoEnvironment())
+    throw Error("SEPAY_TEST_ADAPTER_FORBIDDEN");
   z.string().uuid().parse(id);
   const db = getFirestore(),
     ref = db.doc(`purchaseSePayIntents/${id}`),
@@ -298,6 +339,14 @@ export async function reconcileSePayIntent(
       data.nextReadAt > now
     )
       return null;
+    assertPurchaseExecutionEnvironment(data, db);
+    if (
+      data.provider !== "sepay_sandbox" ||
+      data.merchant !== SEPAY_MERCHANT ||
+      data.checkoutId !== id ||
+      data.invoice !== sepayInvoice(id)
+    )
+      throw Error("SEPAY_BINDING_MISMATCH");
     tx.update(ref, { claim, leaseUntil: now + 30000, nextReadAt: now + 2000 });
     return data as SePayIntent;
   });
@@ -314,7 +363,9 @@ export async function reconcileSePayIntent(
         !previous ||
         previous.checkoutId !== id ||
         previous.ownerId !== intent.ownerId ||
-        previous.invoice !== intent.invoice
+        previous.invoice !== intent.invoice ||
+        JSON.stringify(purchaseExecutionProvenance(previous)) !==
+          JSON.stringify(purchaseExecutionProvenance(intent))
       )
         throw Error("SEPAY_BINDING_MISMATCH");
       if (
@@ -341,6 +392,22 @@ export async function reconcileSePayIntent(
         db.doc(`purchaseCheckouts/${id}`),
       );
       if (current.data()?.claim !== claim) throw Error("SEPAY_LEASE_LOST");
+      const provenance = assertPurchaseExecutionEnvironment(
+        checkout.data(),
+        db,
+      );
+      if (
+        checkout.data()?.provider !== "sepay_sandbox" ||
+        checkout.data()?.ownerId !== proof.ownerId ||
+        checkout.data()?.hash !== proof.checkoutHash ||
+        current.data()?.ownerId !== proof.ownerId ||
+        current.data()?.checkoutHash !== proof.checkoutHash ||
+        JSON.stringify(provenance) !==
+          JSON.stringify(purchaseExecutionProvenance(proof)) ||
+        JSON.stringify(provenance) !==
+          JSON.stringify(purchaseExecutionProvenance(current.data()))
+      )
+        throw Error("SEPAY_BINDING_MISMATCH");
       if (previous.exists) {
         const prior = previous.data() as SePayProof;
         if (
@@ -350,7 +417,9 @@ export async function reconcileSePayIntent(
           prior.paidAt !== proof.paidAt ||
           prior.invoice !== proof.invoice ||
           prior.providerOrderId !== proof.providerOrderId ||
-          prior.checkoutHash !== proof.checkoutHash
+          prior.checkoutHash !== proof.checkoutHash ||
+          JSON.stringify(purchaseExecutionProvenance(prior)) !==
+            JSON.stringify(purchaseExecutionProvenance(proof))
         ) {
           tx.update(ref, {
             conflictingProof: proof,
@@ -384,6 +453,8 @@ export async function reconcileSePayIntent(
 }
 export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
   guard();
+  if (adapter && !purchaseDemoEnvironment())
+    throw Error("SEPAY_TEST_ADAPTER_FORBIDDEN");
   if (!adapter && !sandboxPaymentReady()) return; // Keep queued without burning retries while configuration is absent.
   if (!/^[a-f0-9]{64}$/.test(key)) throw Error("SEPAY_INBOX_INVALID");
   const db = getFirestore(),
@@ -400,6 +471,7 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
       data.leaseUntil > now
     )
       return null;
+    assertPurchaseExecutionEnvironment(data, db);
     if (data.attempts >= 5) {
       tx.update(ref, {
         state: "review_required",
@@ -424,6 +496,16 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
           ref,
           db.doc(`purchaseCheckouts/${item.checkoutId}`),
         );
+        const provenance = assertPurchaseExecutionEnvironment(
+          checkout.data(),
+          db,
+        );
+        if (
+          checkout.data()?.provider !== "sepay_sandbox" ||
+          JSON.stringify(provenance) !==
+            JSON.stringify(purchaseExecutionProvenance(item))
+        )
+          throw Error("SEPAY_BINDING_MISMATCH");
         const orderRefs: FirebaseFirestore.DocumentReference[] = (
           checkout.data()?.lines ?? []
         ).map((line: { orderId: string }) => db.doc(`orders/${line.orderId}`));
@@ -437,11 +519,17 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
         // An authenticated reversal notice freezes fulfillment for human review.
         // Collected amounts and ledger entries are never automatically reversed.
         for (const order of orders)
-          if (order.exists)
+          if (order.exists) {
+            if (
+              JSON.stringify(purchaseExecutionProvenance(order.data())) !==
+              JSON.stringify(provenance)
+            )
+              throw Error("SEPAY_BINDING_MISMATCH");
             tx.update(order.ref, {
               hold: "Giao dịch thanh toán cần đối chiếu",
               version: order.data()!.version + 1,
             });
+          }
         if (checkout.exists && checkout.data()?.state !== "paid")
           tx.update(checkout.ref, {
             state: "review_required",
@@ -452,7 +540,7 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
     }
     const reconciliation = await reconcileSePayIntent(
       item.checkoutId,
-      adapter ?? sandboxAdapter(),
+      adapter,
       item.payload,
     );
     if (
@@ -482,6 +570,19 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
         ref,
         db.doc(`purchaseCheckouts/${item.checkoutId}`),
       );
+      let matchingExecution = false;
+      try {
+        const provenance = assertPurchaseExecutionEnvironment(
+          checkout.data(),
+          db,
+        );
+        matchingExecution =
+          checkout.data()?.provider === "sepay_sandbox" &&
+          JSON.stringify(provenance) ===
+            JSON.stringify(purchaseExecutionProvenance(item));
+      } catch {
+        /* Malformed or live targets are never mutated by sandbox recovery. */
+      }
       if (current.data()?.claim === claim)
         tx.update(ref, {
           state: "queued",
@@ -490,7 +591,8 @@ export async function processSePayInbox(key: string, adapter?: SePayAdapter) {
         });
       if (
         current.data()?.claim === claim &&
-        checkout.data()?.state === "pending"
+        checkout.data()?.state === "pending" &&
+        matchingExecution
       )
         tx.update(checkout.ref, {
           state: "unknown",
