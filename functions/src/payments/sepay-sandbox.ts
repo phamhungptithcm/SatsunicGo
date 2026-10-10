@@ -9,14 +9,26 @@ import {
 } from "../../../packages/domain/purchase-sepay";
 import { purchaseDemoEnvironment } from "../purchase-environment";
 
-export const sepaySandboxSecret = defineSecret("SEPAY_SANDBOX_SECRET_KEY");
+// defineSecret registers deploy-time params even when no endpoint binds them.
+const localSecrets =
+  process.env.FUNCTIONS_EMULATOR === "true" &&
+  process.env.GCLOUD_PROJECT === "demo-satsunicgo" &&
+  (process.env.GOOGLE_CLOUD_PROJECT === undefined ||
+    process.env.GOOGLE_CLOUD_PROJECT === "demo-satsunicgo");
+export const sepaySandboxSecret = localSecrets
+  ? defineSecret("SEPAY_SANDBOX_SECRET_KEY")
+  : undefined;
 // IPN authentication is independently configured in the merchant dashboard.
-export const sepaySandboxIpnSecret = defineSecret(
-  "SEPAY_SANDBOX_IPN_SECRET_KEY",
+export const sepaySandboxIpnSecret = localSecrets
+  ? defineSecret("SEPAY_SANDBOX_IPN_SECRET_KEY")
+  : undefined;
+export const sepaySecrets = [sepaySandboxSecret, sepaySandboxIpnSecret].filter(
+  (secret) => secret !== undefined,
 );
-export const sepaySecrets = [sepaySandboxSecret, sepaySandboxIpnSecret];
 export function sandboxPaymentReady() {
   return (
+    !!sepaySandboxSecret &&
+    !!sepaySandboxIpnSecret &&
     purchaseDemoEnvironment() &&
     process.env.PURCHASE_SEPAY_SANDBOX_ENABLED === "true" &&
     Boolean(process.env.SEPAY_SANDBOX_SECRET_KEY) &&
@@ -36,7 +48,8 @@ export interface SePayAdapter {
   readback(orderId: string): Promise<unknown>;
 }
 export function sandboxAdapter(): SePayAdapter {
-  if (!sandboxPaymentReady()) throw Error("SEPAY_NOT_CONFIGURED");
+  if (!sepaySandboxSecret || !sandboxPaymentReady())
+    throw Error("SEPAY_NOT_CONFIGURED");
   // SDK is used only for signing. Its axios API has no default timeout and
   // shares static base URLs, so all readback uses the fixed, bounded client below.
   return createSandboxAdapter(sepaySandboxSecret.value());

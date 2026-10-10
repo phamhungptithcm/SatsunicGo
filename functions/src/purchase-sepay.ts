@@ -242,7 +242,10 @@ export async function handleSePayIpn(req: Request, res: Response) {
     return;
   }
   if (
-    !authenticSePayIpn(req.get("X-Secret-Key"), sepaySandboxIpnSecret.value())
+    !authenticSePayIpn(
+      req.get("X-Secret-Key"),
+      sepaySandboxIpnSecret?.value() ?? "",
+    )
   ) {
     res.status(401).end();
     return;
