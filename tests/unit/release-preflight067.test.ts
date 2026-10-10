@@ -248,8 +248,11 @@ test('unknown conditional endpoints never inherit a demo exception',()=>fixture(
   put('functions/src/index.ts',index+`export const unapprovedDemo=localSePay ? sandboxSePayPayment : undefined;`);
   expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
 }));
-test('canonical production-test SePay handlers are retained while client-outcome demos remain excluded',()=>fixture((root,put)=>{
+test.each([false,true])('canonical production-test exports remain isolated with actual command prelude=%s',includeCommand=>fixture((root,put)=>{
   const index=readFileSync(new URL('../../functions/src/index.ts',import.meta.url),'utf8');
+  const boundary=index.indexOf('export { ask } from "./ai/ask";');
+  expect(boundary).toBeGreaterThan(0);
+  const prelude=includeCommand?index.slice(0,boundary):'';
   const ast=ts.createSourceFile('index.ts',index,ts.ScriptTarget.Latest,true);
   const names=new Set(['purchaseDemoPayment','productionSePay',...additionalDemoSpecs.map(spec=>spec.name)]);
   const aliases=new Set(['guardedPurchaseDemoPayment','sepayArtifactEnvironment',...additionalDemoSpecs.map(spec=>spec.binding)]);
@@ -258,10 +261,10 @@ test('canonical production-test SePay handlers are retained while client-outcome
     ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)&&node.importClause.namedBindings.elements.some(binding=>aliases.has(binding.name.text))
   ).map(node=>node.getText(ast)).join('\n');
   for(const file of ['purchase-checkout','purchase-demo-gateway','purchase-sepay','production-test-policy'])put(`functions/src/${file}.ts`,readFileSync(new URL(`../../functions/src/${file}.ts`,import.meta.url),'utf8'));
-  put('functions/src/index.ts',readFileSync(path.join(root,'functions/src/index.ts'),'utf8')+'\n'+declarations);
+  put('functions/src/index.ts',readFileSync(path.join(root,'functions/src/index.ts'),'utf8')+'\n'+prelude+'\n'+declarations);
   const result=preflight({root,project:'satsunicgo'});
   expect(result.errors).toEqual([]);
-  expect(result.inventory).toHaveLength(11);
+  expect(result.inventory).toHaveLength(includeCommand?12:11);
   expect(result.emulatorOnlyExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseDemoPayment','purchaseDemoWebhook']);
   expect(result.productionTestExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseSePayInboxWorker','purchaseSePayIpn','purchaseSePayPayment']);
   expect(result.inventory.every((row:{name:string})=>!['purchaseDemoPayment','purchaseDemoWebhook'].includes(row.name))).toBe(true);

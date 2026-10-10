@@ -1,4 +1,7 @@
-import { emailPreferenceAllowed } from "./notification-order-policy";
+import {
+  emailPreferenceAllowed,
+  notificationTopicAllowed,
+} from "./notification-order-policy";
 import { createHash } from "node:crypto";
 import { prepareCustomerEmail } from "./customer-email-job";
 import { customerEvent } from "./customer-notification-events";
@@ -440,6 +443,21 @@ export const deliverEmail = onSchedule(
                 currentUser?.marketingConsent !== true)
             ) {
               preIoBlocked = "blocked_recipient";
+              return false;
+            }
+            if (
+              claimed.marketing === true &&
+              !notificationTopicAllowed(
+                (
+                  await tx.get(
+                    db.doc(`notificationPreferences/${claimed.ownerId}`),
+                  )
+                ).data(),
+                "promotionsEmail",
+                recipient,
+              )
+            ) {
+              preIoBlocked = "suppressed_preference";
               return false;
             }
             // This is the Firestore authorization point: resource, test policy

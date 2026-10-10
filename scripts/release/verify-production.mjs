@@ -9,8 +9,9 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest, verify } from './artifact.mjs';
+import { readRetentionReadiness, retentionRequest, retentionReadinessDigest } from './feedback-retention.mjs';
 
-const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,labels,eventTrigger.retryPolicy)';
+const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,serviceConfig.uri,serviceConfig.serviceAccountEmail,labels,eventTrigger.retryPolicy)';
 function inventory() {
   return JSON.parse(execFileSync('gcloud', ['functions', 'list', '--v2', '--project=satsunicgo', '--regions=asia-southeast1', `--format=${projection}`], {
     encoding: 'utf8', timeout: 120_000,
@@ -146,9 +147,13 @@ export async function verifyProduction() {
   })) throw Error('FUNCTION_CHANGED_DURING_VERIFICATION');
   const latest = await readHostingRelease(token);
   assertStableHostingRelease(initialHostingRelease, latest);
+  const retentionEvidence = manifest.feedbackRetention ? await readRetentionReadiness(manifest.feedbackRetention, after, retentionRequest(token)) : undefined;
+  const feedbackRetention = retentionEvidence ? {...retentionEvidence,receiptSha256:retentionReadinessDigest(retentionEvidence)} : undefined;
+  // Receipt is evidence only: activation/readiness settings are never written by release CI.
+  if (feedbackRetention) writeFileSync('retention-readiness.json', JSON.stringify(feedbackRetention,null,2)+'\n');
   writeFileSync('deployment.json', JSON.stringify({ schemaVersion: 1, status: 'VERIFIED', project: 'satsunicgo',
     tag: manifest.tag, sha: manifest.sha, bundleSha256, verifiedAt: new Date().toISOString(),
-    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions, retryPolicies }, null, 2) + '\n');
+    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions, retryPolicies, ...(feedbackRetention ? {feedbackRetention} : {}) }, null, 2) + '\n');
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {

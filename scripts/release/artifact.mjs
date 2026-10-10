@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { SEMVER, SHA } from './release.mjs';
 import { preflight, exactDemoCondition, assertDemoBindings, assertOnlyDemoReferences } from './preflight.mjs';
 import ts from 'typescript';
+import { retentionMetadata, assertRetentionSourceIndexes, verifyRetentionArtifact, RETENTION_FILE } from './feedback-retention.mjs';
 import { assertCompiledProductionTestExports, verifyProductionTestEnvironment, PRODUCTION_TEST_ENV_FILE, PRODUCTION_TEST_ENVIRONMENT, PRODUCTION_TEST_ENV_BYTES } from './production-test.mjs';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
@@ -181,6 +182,7 @@ export function verify(root, expectedSha, expectedTag) {
   if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
   // Verification of an already stripped artifact accepts only harmless void0 declarations.
   verifyProductionTestEnvironment(root, manifest);
+  verifyRetentionArtifact(root, manifest);
   excludeEmulatorOnlyExports(readFileSync(join(root, 'deployment/functions', pkg.main), 'utf8'), [], manifest.productionTestExports ?? []);
   for (const key of ['dist/release-version.json', 'functions/release.json']) {
     const metadata = JSON.parse(readFileSync(join(root, 'deployment', key), 'utf8'));
@@ -195,11 +197,11 @@ export function prepareWorkspace(root, target, expectedSha, expectedTag) {
   cpSync(root, target, { recursive: true, errorOnExist: true, force: false });
   return verify(target, expectedSha, expectedTag);
 }
-// Preserve the established release holds; feedback cleanup also awaits retention/rollout approval.
+// Preserve legacy holds; v1 cleanup is packaged with an independent default-inactive gate.
 const BASE_HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments']);
 export const HELD_EXPORTS = Object.freeze([...BASE_HELD_EXPORTS, 'askFeedbackCleanup']);
 export function applyProductionHolds(compiled, inventory, productionTest = false) {
-  const retained = new Set(productionTest ? ['askWorkflow', 'currentAskConversation'] : []);
+  const retained = new Set(productionTest ? ['askWorkflow', 'currentAskConversation', 'askFeedbackCleanup'] : []);
   const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name) && !retained.has(item.name)).map(item => item.name));
   const baseHeld = new Set(inventory.filter(item => BASE_HELD_EXPORTS.includes(item.name)).map(item => item.name));
   if (baseHeld.size && baseHeld.size !== BASE_HELD_EXPORTS.length) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
@@ -260,7 +262,7 @@ export function applyProductionHolds(compiled, inventory, productionTest = false
     ts.forEachChild(node, inspectCleanupShape);
   };
   inspectCleanupShape(ast);
-  const removed = new Set(), imports = new Set();
+  const removed = new Set(), imports = new Set(), retainedSeen = new Set();
   const blockedModules = new Set(baseHeld.size ? [...(productionTest ? [] : ['./ai/ask-workflow']), './payments/payos'] : []);
   const spans = [];
   for (const node of ast.statements) {
@@ -277,7 +279,11 @@ export function applyProductionHolds(compiled, inventory, productionTest = false
       const call = node.expression;
       if (call.expression.getText(ast) === 'Object.defineProperty' && call.arguments[0]?.getText(ast) === 'exports' && ts.isStringLiteral(call.arguments[1])) {
         const name = call.arguments[1].text;
-        if (name === 'askFeedbackCleanup' && !held.has(name)) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
+        if (name === 'askFeedbackCleanup' && !held.has(name)) {
+          if (!retained.has(name) || !inventory.some(row => row.name === name)) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
+          if (retainedSeen.has(name)) throw Error('PRODUCTION_HOLD_DUPLICATE');
+          retainedSeen.add(name);
+        }
         if (!held.has(name)) continue;
         if (removed.has(call.arguments[1].text)) throw Error('PRODUCTION_HOLD_DUPLICATE');
         removed.add(call.arguments[1].text); spans.push([node.getStart(ast), node.end]);
@@ -330,11 +336,16 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   const metadata = { schemaVersion: 1, tag: candidate.tag, sha: candidate.sha, project: 'satsunicgo',
     runId: process.env.GITHUB_RUN_ID ?? null };
   for (const path of ['dist/release-version.json', 'functions/release.json']) writeFileSync(join(stage, 'deployment', path), JSON.stringify(metadata, null, 2) + '\n');
+  const feedbackRetention = productionTestExports.length ? retentionMetadata(metadata) : undefined;
+  if (feedbackRetention) {
+    assertRetentionSourceIndexes(JSON.parse(readFileSync(join(root, 'firestore.indexes.json'), 'utf8')));
+    writeFileSync(join(stage, RETENTION_FILE), JSON.stringify(feedbackRetention, null, 2) + '\n');
+  }
   const config = deploymentConfig(JSON.parse(readFileSync(join(root, 'firebase.json'), 'utf8')));
   writeFileSync(join(stage, 'deployment/firebase.json'), JSON.stringify(config, null, 2) + '\n');
   cpSync(candidatePath, join(stage, 'candidate.json'));
   cpSync(notesPath, join(stage, 'release-notes.md'));
-  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports, emulatorOnlyExports: emulator.emulatorOnlyExports, productionTestExports, ...(productionTestExports.length ? { runtimeEnvironment: PRODUCTION_TEST_ENVIRONMENT } : {}),
+  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports, emulatorOnlyExports: emulator.emulatorOnlyExports, productionTestExports, ...(productionTestExports.length ? { runtimeEnvironment: PRODUCTION_TEST_ENVIRONMENT, feedbackRetention } : {}),
     files: files(stage), sourcePolicy: 'precompiled-package-no-dotenv-no-rebuild' };
   writeFileSync(join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return verify(stage, candidate.sha, candidate.tag);

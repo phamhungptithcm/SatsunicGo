@@ -1,5 +1,5 @@
 import { purchaseExecutionFields } from "./purchase-test-boundary";
-import { assertProductionTestCommand } from "./production-test-commands";
+import { assertProductionTestCommand, productionTestCommandAdmissionRequired } from "./production-test-commands";
 import { productionTestEnvironment, admitProductionTestPolicy, productionTestProvenance } from "./production-test-policy";
 import { orderCustomerFields } from "./customer-notification-events";
 import {
@@ -153,7 +153,7 @@ export const command = onCall(config, async (req) => {
         const testPolicy = testEnvironment
           ? admitProductionTestPolicy((await tx.get(db.doc("settings/productionTest"))).data(), uid)
           : null;
-        if (process.env.PURCHASE_PRODUCTION_TEST_ARTIFACT === "v1" && (!testEnvironment || !testPolicy))
+        if (productionTestCommandAdmissionRequired() && (!testEnvironment || !testPolicy))
           throw new HttpsError("failed-precondition", "Kiểm tra thông tin, quyền và trạng thái hiện tại.", { reason: "PRODUCTION_TEST_NOT_ADMITTED" });
         o = {
           ...p,

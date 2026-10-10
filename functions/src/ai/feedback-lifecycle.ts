@@ -15,6 +15,12 @@ import {
   testFeedbackRetention,
 } from "./feedback-provenance";
 import { z } from "zod";
+import { productionTestArtifactEnvironmentAllowed } from "../production-test-policy";
+import {
+  admitFeedbackRetention,
+  feedbackRetentionEnvironment,
+  readFeedbackRetentionArtifact,
+} from "./feedback-retention-gate";
 import {
   requireVerifiedGoogle,
   isStringRoleArray,
@@ -226,33 +232,69 @@ export const askFeedbackEvaluation = onCall(config, async (req) => {
     { readOnly: true },
   );
 });
-/** Bounded deletion uses update-time preconditions, so a changed record is never deleted from an old read. */
+/** Policy/readiness and each selected record share one serializable read-set.
+ * A concurrent disable/revocation must retry and pass admission again.
+ */
 export async function purgeExpiredFeedback(now = Date.now()) {
   if (!Number.isSafeInteger(now) || now <= 0) throw Error("INVALID_PURGE_TIME");
+  if (!productionTestArtifactEnvironmentAllowed(process.env))
+    return { deleted: 0 };
+  const artifact = readFeedbackRetentionArtifact();
+  if (!artifact) return { deleted: 0 };
   const db = getFirestore();
+  if (!feedbackRetentionEnvironment(db)) return { deleted: 0 };
   let deleted = 0;
   for (const [collection, recordClass] of [
     ["askFeedback", testFeedbackRetention.recordClass],
     ["askFeedbackReviewOperations", testFeedbackRetention.operationClass],
     ["askFeedbackQuota", testFeedbackRetention.quotaClass],
   ]) {
-    const records = await db
-      .collection(collection)
-      .where("retentionClass", "==", recordClass)
-      .where("expiresAt", "<=", new Date(now))
-      .limit(100)
-      .get();
-    if (!records.size) continue;
-    const batch = db.batch();
-    let count = 0;
-    for (const doc of records.docs) {
-      if (!feedbackCleanupEligible(collection, doc.data(), now)) continue;
-      batch.delete(doc.ref, { lastUpdateTime: doc.updateTime! });
-      count++;
-    }
-    if (!count) continue;
-    await batch.commit();
-    deleted += count;
+    deleted += await db.runTransaction(
+      async (tx) => {
+        const [policy, readiness] = await Promise.all([
+          tx.get(db.doc("settings/askFeedbackRetention")),
+          tx.get(db.doc("settings/askFeedbackRetentionReadiness")),
+        ]);
+        if (
+          !admitFeedbackRetention(
+            policy.data(),
+            readiness.data(),
+            artifact,
+            Date.now(),
+          )
+        )
+          return 0;
+        const records = await tx.get(
+          db
+            .collection(collection)
+            .where("retentionClass", "==", recordClass)
+            .where("expiresAt", "<=", new Date(now))
+            .limit(100),
+        );
+        // Recheck wall-clock expiry after the query, before enqueuing any delete.
+        if (
+          !admitFeedbackRetention(
+            policy.data(),
+            readiness.data(),
+            artifact,
+            Date.now(),
+          )
+        )
+          return 0;
+        let count = 0;
+        for (const doc of records.docs) {
+          if (
+            !doc.updateTime ||
+            !feedbackCleanupEligible(collection, doc.data(), now)
+          )
+            continue;
+          tx.delete(doc.ref, { lastUpdateTime: doc.updateTime });
+          count++;
+        }
+        return count;
+      },
+      { maxAttempts: 3 },
+    );
   }
   return { deleted };
 }
@@ -260,9 +302,12 @@ export async function purgeExpiredFeedback(now = Date.now()) {
 export const askFeedbackCleanup = onSchedule(
   {
     schedule: "every 60 minutes",
+    timeZone: "UTC",
+    timeoutSeconds: 60,
     region: "asia-southeast1",
     maxInstances: 1,
     retryCount: 0,
+    maxRetrySeconds: 0,
   },
   async () => {
     await purgeExpiredFeedback();

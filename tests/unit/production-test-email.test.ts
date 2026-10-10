@@ -528,6 +528,17 @@ function revoke(h: ReturnType<typeof harness>, scenario: string) {
     h.rows[`users/${uid}`] = { locked: true, marketingConsent: true };
   if (scenario === "marketing")
     h.rows[`users/${uid}`] = { marketingConsent: false };
+  if (scenario === "marketing-preference") {
+    const prefs = row(h, `notificationPreferences/${uid}`);
+    prefs.topics = {
+      ...(prefs.topics as Record<string, unknown>),
+      promotionsEmail: {
+        requested: false,
+        generation: 2,
+        confirmedGeneration: null,
+      },
+    };
+  }
 }
 
 describe("actual customer worker authorization transaction", () => {
@@ -611,6 +622,67 @@ describe("actual customer worker authorization transaction", () => {
       ),
     ).toBe(true);
   });
+  it("allows a current promotional preference with the compatibility flag", async () => {
+    const h = customerWorkerFixture();
+    h.rows[`users/${uid}`] = { marketingConsent: true };
+    row(h, "outboxJobs/test").marketing = true;
+    h.rows[`notificationPreferences/${uid}`] = {
+      ...h.prefs,
+      topics: {
+        ...h.prefs.topics,
+        promotionsEmail: {
+          requested: true,
+          generation: 1,
+          confirmedGeneration: 1,
+        },
+      },
+    };
+    await runWorker();
+    expect(mail.io).toHaveBeenCalledOnce();
+    expect(row(h, "outboxJobs/test")).toMatchObject({
+      emailState: "sent",
+      emailAttempts: 1,
+    });
+  });
+  it("preserves optional live-order consent when it changes during attempt commit", async () => {
+    vi.stubEnv("PURCHASE_PRODUCTION_TEST_ARTIFACT", undefined);
+    const h = customerWorkerFixture();
+    const event = customerEvent(
+      "order_received",
+      {
+        ownerId: uid,
+        entityId: "order",
+        orderId: "order",
+        entityVersion: 1,
+        occurredAt: now - 10,
+      },
+      { orderRef: "SG-LIVE", itemSummary: "Áo cotton" },
+    );
+    h.rows["orders/order"] = { ownerId: uid, version: 1 };
+    h.rows["outboxJobs/test"] = {
+      ownerId: uid,
+      action: "verifyTransfer",
+      customerEvent: event,
+      customerSnapshotHash: customerSnapshotHash(event),
+      createdAt: now - 10,
+      emailState: "queued",
+      version: 0,
+    };
+    let changed = false;
+    h.hooks.beforeCommit = (paths) => {
+      if (!changed && paths.includes(`notificationPreferences/${uid}`)) {
+        changed = true;
+        revoke(h, "consent");
+      }
+    };
+    await runWorker();
+    expect(h.retries()).toBe(1);
+    expect(mail.io).not.toHaveBeenCalled();
+    expect(row(h, "outboxJobs/test")).toMatchObject({
+      emailState: "suppressed_preference",
+    });
+    expect(row(h, "outboxJobs/test").emailAttempts ?? 0).toBe(0);
+  });
   it.each(
     [
       "config-disable",
@@ -619,6 +691,7 @@ describe("actual customer worker authorization transaction", () => {
       "config-quota",
       "lock",
       "marketing",
+      "marketing-preference",
     ].flatMap((scenario) =>
       ["before-final-read", "before-commit"].map(
         (timing) => [scenario, timing] as const,
@@ -629,7 +702,7 @@ describe("actual customer worker authorization transaction", () => {
     async (scenario, timing) => {
       const h = customerWorkerFixture();
       h.rows[`users/${uid}`] = { marketingConsent: true };
-      if (scenario === "marketing") {
+      if (scenario === "marketing" || scenario === "marketing-preference") {
         row(h, "outboxJobs/test").marketing = true;
         h.rows[`notificationPreferences/${uid}`] = {
           ...h.prefs,
@@ -667,7 +740,11 @@ describe("actual customer worker authorization transaction", () => {
       expect(mail.io).not.toHaveBeenCalled();
       expect(row(h, "outboxJobs/test").emailAttempts ?? 0).toBe(0);
       expect(row(h, "outboxJobs/test").emailState).toBe(
-        scenario.startsWith("config-") ? "queued" : "blocked_recipient",
+        scenario.startsWith("config-")
+          ? "queued"
+          : scenario === "marketing-preference"
+            ? "suppressed_preference"
+            : "blocked_recipient",
       );
       if (timing === "before-commit") expect(h.retries()).toBe(1);
     },
