@@ -258,7 +258,11 @@ function AiBudget({ customer = false }: { customer?: boolean }) {
               " Tổng giới hạn 50.000 ₫, mỗi tài khoản tối đa 5.000 ₫."}
           </p>
           <p className="muted">
-            {pilot.ready ? "AI sẵn sàng" : "Chưa kết nối được AI"}
+            {pilot.ready
+              ? customer
+                ? "Đã kiểm tra kết nối AI"
+                : "AI sẵn sàng"
+              : "Chưa kết nối được AI"}
             {pilot.expiresAt
               ? ` · Hết hạn ${new Date(pilot.expiresAt).toLocaleString("vi-VN")}`
               : ""}

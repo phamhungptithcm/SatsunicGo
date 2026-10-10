@@ -91,7 +91,7 @@ export function customerAiReservation(value: unknown, ceiling: number) {
   )
     throw new HttpsError(
       "resource-exhausted",
-      "Đã đạt giới hạn tư vấn. Thử lại sau.",
+      "Đã đạt giới hạn ngân sách tư vấn.",
     );
   return Number(value) + customerAiLimits.reserveVnd;
 }
@@ -190,7 +190,10 @@ export function customerAiRequest(
     maximumBytes > 100000 ||
     Buffer.byteLength(body) > maximumBytes
   )
-    throw new HttpsError("invalid-argument", "Nội dung thử Ask quá dài.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Nội dung quá dài. Anh/chị vui lòng rút gọn câu hỏi.",
+    );
   return body;
 }
 export async function customerAiConfigured() {
@@ -262,7 +265,10 @@ export async function generateCustomerAi(
   const body = await build(count);
   if (countedBody !== body) await count(body, signal);
   if (totalTokens > customerAiLimits.maxInputTokens)
-    throw new HttpsError("invalid-argument", "Nội dung thử Ask quá dài.");
+    throw new HttpsError(
+      "invalid-argument",
+      "Nội dung quá dài. Anh/chị vui lòng rút gọn câu hỏi.",
+    );
   // Stable opaque identity makes transport replay of an identical turn fail closed.
   const operation = createHash("sha256")
     .update(JSON.stringify([uid, sessionId, body]))

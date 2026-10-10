@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "task_id": "ASK-PRODUCTION-AI-20261010",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Diff follows approved text-only, verified-customer, canary-first and 50000 VND admission scope.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google and App Check retained; OWNER recent MFA controls; foreign conversation/order rejection; runtime project fence; no secrets or prompts in ledger.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Typecheck and changed-file ESLint passed; fixed constants, atomic reservation and bounded network responses reviewed.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "47 focused admission/context/policy tests; replay, lock, expiry, rate/budget concurrency, cancellation, unknown provider outcome, fabricated citations and stale context covered.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Unknown reservations retained; one paid attempt; read failures close UI admission; explicit source/context validation before proof.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Latest production baseline has six notification unit failures caused by a real-clock/fixed-fixture mismatch. Test-only delta approval pending. Rules/HTTP/restore CI, immutable deployment and real canary/customer acceptance remain required.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Conservative 1000 VND reservation, 5000 VND per user and finite code pricing expiry constrain capacity. Text only, no anonymous model generation. No ledger reset or automatic retry.",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK-REVIEW-1",
+      "severity": "low",
+      "location": "src/features/settings/AskPilot.tsx",
+      "status": "FIXED",
+      "summary": "countTokens connectivity was described as AI readiness; changed customer label to connection checked and reran actual component browser fixture."
+    },
+    {
+      "id": "ASK-REVIEW-2",
+      "severity": "medium",
+      "location": "functions/src/ai/ask-production.ts",
+      "status": "FIXED",
+      "summary": "Lifetime budget exhaustion suggested retry later; separated exhaustion wording from transient rate denial and reran focused tests."
+    },
+    {
+      "id": "ASK-REVIEW-3",
+      "severity": "high",
+      "location": "tests/unit/notification-subscriptions.test.ts",
+      "status": "BLOCKED",
+      "summary": "Latest production test baseline has six fixed-date versus real-clock failures; out-of-scope test-only delta awaits human approval."
+    }
+  ],
+  "residual_risks": [
+    "No deployed-source/artifact equivalence or successful hosted generation for this candidate yet.",
+    "No authenticated non-OWNER customer canary yet.",
+    "Provider retirement and short pricing expiry require a separate reviewed update after this trial."
+  ],
+  "limitations": [
+    "Repository intelligence DEGRADED; bounded source checks used.",
+    "Local validation uses Node 25; required release CI uses Node 22.",
+    "Synthetic browser component calls are mocked; not production proof.",
+    "No independent agent spawned; user did not authorize delegation."
+  ]
+}

@@ -35,12 +35,14 @@ vi.mock("firebase-admin/firestore", () => {
       doc,
       collection: (name: string) => ({
         doc: (id = "audit-fixture") => doc(`${name}/${id}`),
+        where: () => ({ limit: () => ({ query: name }) }),
       }),
       runTransaction: (work: (tx: unknown) => Promise<unknown>) => {
         const result = state.serial.then(async () => {
           const writes: (() => void)[] = [];
           const result = await work({
-            get: async (ref: { path: string }) => snapshot(ref.path),
+            get: async (ref: { path: string; query?: string }) =>
+              ref.query ? { docs: [], size: 0 } : snapshot(ref.path),
             set: (
               ref: { path: string },
               data: Record<string, unknown>,
@@ -488,3 +490,124 @@ test("configuration read returns sanitized customer authority and unknown corrup
   expect(result.customerAi.maxBudgetVnd).toBe(50000);
   expect(result.customerAi).not.toHaveProperty("canaryUid");
 });
+
+import { readServerContext } from "../../functions/src/ai/server-context";
+import { pilotAnswer } from "../../functions/src/ai/ask-pilot-answer";
+const questionInput = {
+  question: "Which fabric is easier to care for?",
+  language: "en" as const,
+  history: [],
+  images: [],
+};
+test("customer server context needs no staff role; legacy pilot still requires OWNER", async () => {
+  const context = await readServerContext(
+    "customer",
+    questionInput,
+    "customer",
+  );
+  expect(context.currentFacts.order).toBeNull();
+  await expect(readServerContext("customer", questionInput)).rejects.toThrow();
+});
+test("customer context cannot read a foreign conversation or order", async () => {
+  const conversationId = "22222222-2222-4222-8222-222222222222";
+  const ref = `askConversations/customer-${conversationId}`;
+  state.docs.set(ref, {
+    ownerId: "other",
+    version: 1,
+    updatedAt: Date.now(),
+    turns: [],
+  });
+  await expect(
+    readServerContext(
+      "customer",
+      { ...questionInput, conversationId },
+      "customer",
+    ),
+  ).rejects.toThrow();
+  state.docs.set(ref, {
+    ownerId: "customer",
+    version: 1,
+    updatedAt: Date.now(),
+    turns: [],
+    orderId: "order-1",
+  });
+  state.docs.set("orders/order-1", {
+    ownerId: "other",
+    version: 1,
+    stage: "REQUESTED",
+  });
+  await expect(
+    readServerContext(
+      "customer",
+      { ...questionInput, conversationId, orderId: "order-1" },
+      "customer",
+    ),
+  ).rejects.toThrow();
+});
+test.each(["valid", "invented-citation", "malformed", "changed-context"])(
+  "real customer answer path validates %s before canary proof",
+  async (kind) => {
+    state.docs.set(policyPath, policy("owner-canary"));
+    state.docs.set("staffAccess/owner", { active: true, roles: ["OWNER"] });
+    const conversationId = "22222222-2222-4222-8222-222222222222";
+    const conversationRef = `askConversations/owner-${conversationId}`;
+    state.docs.set(conversationRef, {
+      ownerId: "owner",
+      version: 1,
+      updatedAt: Date.now(),
+      turns: [],
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, options: RequestInit) => {
+        if (url.endsWith(":countTokens"))
+          return Response.json({ totalTokens: 100 });
+        paid.push(String(options.body));
+        if (kind === "changed-context")
+          state.docs.set(conversationRef, {
+            ...state.docs.get(conversationRef),
+            version: 2,
+          });
+        const value = {
+          language: "en",
+          title: "Fabric care",
+          paragraphs: ["Check the care label before washing."],
+          bullets: [],
+          sourceIds: kind === "invented-citation" ? ["post:unapproved"] : [],
+          action: "workflow",
+        };
+        return Response.json({
+          ...answer,
+          candidates: [
+            {
+              finishReason: "STOP",
+              content: {
+                parts: [
+                  { text: JSON.stringify(kind === "malformed" ? {} : value) },
+                ],
+              },
+            },
+          ],
+        });
+      }),
+    );
+    const result = pilotAnswer(
+      "owner",
+      { ...questionInput, conversationId },
+      new AbortController().signal,
+      "session-id",
+    );
+    if (kind === "valid") {
+      expect((await result).title).toBe("Fabric care");
+      expect(
+        customerAiCanPromote(state.docs.get(budgetPath), "owner", Date.now()),
+      ).toBe(true);
+    } else {
+      await expect(result).rejects.toThrow();
+      expect(
+        customerAiCanPromote(state.docs.get(budgetPath), "owner", Date.now()),
+      ).toBe(false);
+    }
+    expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
+  },
+);
