@@ -388,6 +388,8 @@ export function evolve(
   action: Action,
   payload: unknown,
   now: number,
+  // Internal server evidence only; never populated from a customer payload.
+  context?: { parcelDeliveryConfirmed?: true },
 ): Order {
   const o = { ...input };
   const guard = (ok: unknown) => {
@@ -602,7 +604,7 @@ export function evolve(
         .parse(payload);
       guard(
         o.stage === "DELIVERED" &&
-          !!o.tracking &&
+          (!!o.tracking || context?.parcelDeliveryConfirmed === true) &&
           canDispatch({ ...o, stage: "READY_TO_SHIP" }),
       );
       o.stage = "COMPLETED";

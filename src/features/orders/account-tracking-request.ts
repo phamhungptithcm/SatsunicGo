@@ -13,7 +13,7 @@ const estimate = z
     freshness: z.enum(["current", "expired", "needs_update"]),
   })
   .strict();
-const dto = z
+export const customerTrackingSchema = z
   .object({
     orderId: z.string(),
     stage: z.enum(trackingStages),
@@ -91,7 +91,7 @@ export class AccountTrackingRequest {
     const current = () => generation === this.generation && input.owns();
     if (!current()) return;
     try {
-      const result = dto.safeParse(await input.read());
+      const result = customerTrackingSchema.safeParse(await input.read());
       if (!current()) return;
       if (
         !result.success ||

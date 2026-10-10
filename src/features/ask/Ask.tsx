@@ -1,6 +1,14 @@
 "use client";
 import "../../shared/public-tabs.css";
 import { isCrmPath } from "../../../packages/domain/staff-route";
+import { readGuestTracking } from "./guest-tracking-request";
+import { TrackingRefresh } from "./TrackingRefresh";
+import { GuestOrderTracking } from "./GuestOrderTracking";
+import {
+  guestTrackingQuery,
+  useGuestTracking,
+  type PublicOrderTracking,
+} from "../../../packages/domain/public-order-tracking";
 import { trackAsk } from "../../shared/analytics";
 import { chatDraftChange } from "../../../packages/domain/chat-draft";
 import {
@@ -145,6 +153,9 @@ type Turn = {
   webDiscovery?: WebDiscoveryResult;
   webQuery?: string;
   tracking?: CustomerOrderTracking;
+  guestTracking?: PublicOrderTracking;
+  trackingRefreshFailed?: boolean;
+  guestLookup?: boolean;
   shipping?: {
     snapshot: ShippingRatesPublicSnapshot;
     direction: "VN_US" | "US_VN";
@@ -316,8 +327,17 @@ const ConversationContent = memo(function ConversationContent({
                     : "Checking the remaining information…"}
                 </p>
               )}
+              {turn.guestTracking && (
+                <GuestOrderTracking
+                  tracking={turn.guestTracking}
+                  language={
+                    turn.answer?.language ?? turn.mixed?.language ?? "vi"
+                  }
+                />
+              )}
               {turn.tracking && (
                 <OrderTracking
+                  compact
                   tracking={turn.tracking}
                   language={turn.mixed.language}
                 />
@@ -422,8 +442,15 @@ const ConversationContent = memo(function ConversationContent({
                   vi={turn.answer.language === "vi"}
                 />
               )}
+              {turn.guestTracking && (
+                <GuestOrderTracking
+                  tracking={turn.guestTracking}
+                  language={turn.answer.language}
+                />
+              )}
               {turn.tracking && (
                 <OrderTracking
+                  compact
                   tracking={turn.tracking}
                   language={turn.answer.language}
                 />
@@ -453,28 +480,40 @@ const ConversationContent = memo(function ConversationContent({
               role={turn.status === "error" ? "alert" : "status"}
             >
               <p>
-                {turn.status === "stopped"
-                  ? vi
-                    ? "Đã dừng câu trả lời."
-                    : "Response stopped."
-                  : turn.rateLimited
+                {turn.guestLookup
+                  ? turn.status === "stopped"
                     ? vi
-                      ? "Chưa thể trả lời lúc này. Hãy thử lại sau."
-                      : "We can’t answer right now. Please try again later."
+                      ? "Đã dừng tra cứu. Nhập lại mã để thử lại."
+                      : "Tracking stopped. Enter the code again to retry."
                     : vi
-                      ? "Em chưa thể trả lời lúc này. Câu hỏi của anh/chị vẫn được giữ lại."
-                      : "We couldn’t answer just now. Your question is still here."}
+                      ? "Chưa thể tra cứu lúc này. Nhập lại mã để thử lại."
+                      : "Tracking is unavailable. Enter the code again to retry."
+                  : turn.status === "stopped"
+                    ? vi
+                      ? "Đã dừng câu trả lời."
+                      : "Response stopped."
+                    : turn.rateLimited
+                      ? vi
+                        ? "Chưa thể trả lời lúc này. Hãy thử lại sau."
+                        : "We can’t answer right now. Please try again later."
+                      : vi
+                        ? "Em chưa thể trả lời lúc này. Câu hỏi của anh/chị vẫn được giữ lại."
+                        : "We couldn’t answer just now. Your question is still here."}
               </p>
-              <button
-                type="button"
-                disabled={busy || !visible}
-                onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
-              >
-                {vi ? "Thử lại" : "Try again"}
-              </button>
-              <Link href="/request">
-                {vi ? "Gửi yêu cầu mua hộ" : "Request an item"} ↗
-              </Link>
+              {!turn.guestLookup && (
+                <>
+                  <button
+                    type="button"
+                    disabled={busy || !visible}
+                    onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
+                  >
+                    {vi ? "Thử lại" : "Try again"}
+                  </button>
+                  <Link href="/request">
+                    {vi ? "Gửi yêu cầu mua hộ" : "Request an item"} ↗
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </section>
@@ -545,6 +584,7 @@ export function Ask({
   const authGeneration = useRef(0);
   const preparationSequence = useRef(0);
   const preparing = useRef<number | null>(null);
+  const selectedGuestTracking = useRef<string | null>(null);
   const selectedTracking = useRef<{ uid: string; orderId: string } | null>(
     null,
   );
@@ -566,6 +606,7 @@ export function Ask({
     setInput("");
     preparing.current = null;
     selectedTracking.current = null;
+    selectedGuestTracking.current = null;
     setLanguage(saved.turns.at(-1)?.answer.language === "en" ? "en" : "vi");
     ++activeId.current;
     abort.current?.abort();
@@ -643,6 +684,7 @@ export function Ask({
       operationMode.current = null;
       locked.current = false;
       selectedTracking.current = null;
+      selectedGuestTracking.current = null;
       catalogContext.current = null;
       setCatalogChoice(null);
       setInput("");
@@ -719,6 +761,12 @@ export function Ask({
       document.body.style.overflow = previousOverflow;
     };
   }, [open]);
+
+  useEffect(() => {
+    // The collapsed composer is remounted when the dialog closes, so native
+    // dialog focus restoration can otherwise land on the document body.
+    if (!open && returned) idleInput.current?.focus({ preventScroll: true });
+  }, [open, returned]);
 
   const newestTurnId = turns.at(-1)?.id;
   useEffect(() => {
@@ -831,6 +879,12 @@ export function Ask({
     operationMode.current = null;
     locked.current = false;
     setBusy(false);
+    if (
+      turns.at(-1)?.guestLookup &&
+      !closing.current &&
+      dialog.current?.contains(document.activeElement)
+    )
+      chatInput.current?.focus({ preventScroll: true });
     setTurns((current) =>
       current.map((turn) =>
         turn.id === id && turn.status === "pending"
@@ -1024,6 +1078,17 @@ export function Ask({
         authGeneration.current === requestGeneration &&
         (auth?.currentUser?.uid ?? null) === requestUid &&
         latestConversation.current === requestCid;
+      const publicQuery = guestTrackingQuery(
+        text,
+        selectedGuestTracking.current,
+      );
+      const explicitTracking = extractOrderTrackingIntent(text);
+      const guestLookup = useGuestTracking(
+        publicQuery,
+        !!requestUid,
+        explicitTracking.kind !== "none",
+        /SGT-/i.test(text),
+      );
       const history = turns
         .filter((turn) => turn.status === "answered")
         .slice(-6)
@@ -1036,7 +1101,17 @@ export function Ask({
         };
       setTurns((current) => [
         ...current.slice(-11),
-        { id, question: suppliedText, status: "pending", analyticsTurn },
+        {
+          id,
+          question: guestLookup
+            ? detectLanguage(text, language) === "vi"
+              ? "Tra cứu tiến độ"
+              : "Track progress"
+            : suppliedText,
+          status: "pending",
+          ...(guestLookup ? { guestLookup: true } : {}),
+          analyticsTurn,
+        },
       ]);
       setInput((current) => (current.trim() === suppliedText ? "" : current));
       setBusy(true);
@@ -1045,6 +1120,81 @@ export function Ask({
       setOpen(true);
       if (!session.current) session.current = crypto.randomUUID();
       try {
+        if (guestLookup) {
+          const nextLanguage = detectLanguage(text, language),
+            vi = nextLanguage === "vi";
+          let guestTracking: PublicOrderTracking | undefined;
+          let message = vi
+            ? "Nhập mã tra cứu để xem tiến độ và thời gian giao dự kiến."
+            : "Enter a tracking code to see progress and estimated delivery.";
+          const code =
+            publicQuery.kind === "tracking" && !publicQuery.ambiguous
+              ? publicQuery.code
+              : null;
+          const ambiguous =
+            (publicQuery.kind === "tracking" && publicQuery.ambiguous) ||
+            explicitTracking.kind === "ambiguous";
+          selectedGuestTracking.current = null;
+          if (ambiguous)
+            message = vi
+              ? "Nhập một mã tra cứu mỗi lần."
+              : "Enter one tracking code at a time.";
+          else if (code) {
+            try {
+              guestTracking = await readGuestTracking(
+                () => callService<unknown>("publicOrderTracking", { code }),
+                requestSignal,
+              );
+              if (!ownsRequest() || requestSignal.aborted) return false;
+              selectedGuestTracking.current = code;
+              message = vi
+                ? "Tiến độ và ETA theo các cập nhật đã ghi nhận."
+                : "Progress and ETA from recorded updates.";
+            } catch (error) {
+              if (!ownsRequest()) return false;
+              const errorCode =
+                error && typeof error === "object" && "code" in error
+                  ? error.code
+                  : undefined;
+              message = requestSignal.aborted
+                ? vi
+                  ? "Tra cứu mất nhiều thời gian. Thử lại nhé."
+                  : "Tracking took too long. Please try again."
+                : errorCode === "functions/resource-exhausted"
+                  ? vi
+                    ? "Bạn đang tra cứu quá nhanh. Thử lại sau một phút."
+                    : "Too many lookups. Try again in a minute."
+                  : errorCode === "functions/not-found"
+                    ? vi
+                      ? "Chưa tra cứu được đơn này. Kiểm tra mã hoặc đăng nhập để xem đơn của bạn."
+                      : "This order could not be looked up. Check the code or sign in to view your orders."
+                    : vi
+                      ? "Tra cứu đang tạm gián đoạn. Kiểm tra kết nối và thử lại."
+                      : "Tracking is temporarily unavailable. Check your connection and try again.";
+            }
+          } else if (explicitTracking.kind !== "none")
+            message = vi
+              ? "Cần mã tra cứu bắt đầu bằng SGT-. Chủ đơn có thể lấy mã trong Account, hoặc đăng nhập để xem đơn của bạn."
+              : "Use the tracking code starting with SGT-. The owner can get it in Account, or sign in to view your orders.";
+          if (!ownsRequest()) return false;
+          const answer: AskAnswer = {
+            language: nextLanguage,
+            title: vi ? "Tra cứu tiến độ" : "Track progress",
+            paragraphs: [message],
+            bullets: [],
+            sourceIds: [],
+            action: "home",
+          };
+          setLanguage(nextLanguage);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id
+                ? { ...turn, answer, guestTracking, status: "answered" }
+                : turn,
+            ),
+          );
+          return true;
+        }
         const references = [...turns]
           .reverse()
           .find((turn) => turn.webDiscovery)?.webDiscovery;
@@ -1348,6 +1498,7 @@ export function Ask({
             };
             if (!ownsRequest() || requestSignal.aborted) return false;
             selectedTracking.current = null;
+            selectedGuestTracking.current = null;
             setLanguage(nextLanguage);
             setTurns((current) =>
               ownsRequest() && !requestSignal.aborted
@@ -1474,6 +1625,7 @@ export function Ask({
             : "Enter one order ID to view its progress.";
           if (trackingIntent.kind !== "ambiguous" && trackingId) {
             selectedTracking.current = null;
+            selectedGuestTracking.current = null;
             if (!uid)
               description = vi
                 ? "Đăng nhập tài khoản đã đặt đơn để xem tiến độ trong chat."
@@ -1966,7 +2118,15 @@ export function Ask({
           setPhase("retrieving");
           abort.current = null;
           setBusy(false);
-          chatInput.current?.focus({ preventScroll: true });
+          // Guest results are announced by the log. Keep the visitor's focus
+          // when they have moved to another control while waiting.
+          if (
+            !guestLookup ||
+            document.activeElement === composerInput ||
+            document.activeElement === chatInput.current ||
+            document.activeElement === document.body
+          )
+            chatInput.current?.focus({ preventScroll: true });
         }
       }
     },
@@ -2051,6 +2211,18 @@ export function Ask({
     )
       return;
     if (historyTurn !== null) return;
+    // Public lookups must precede image preparation, action context and transcript writes.
+    if (
+      useGuestTracking(
+        guestTrackingQuery(question, selectedGuestTracking.current),
+        !!auth?.currentUser,
+        extractOrderTrackingIntent(question).kind !== "none",
+        /SGT-/i.test(question),
+      )
+    ) {
+      await ask(question, [], analyticsRetry);
+      return;
+    }
     const reply = !images.photos.length ? contextualReply(question) : null;
     if (reply) {
       setInput("");
@@ -2535,37 +2707,13 @@ export function Ask({
               </button>
             </div>
           )}
-          <div
-            className={styles.languageControls}
-            aria-label={vi ? "Ngôn ngữ" : "Language"}
-          >
-            <button
-              type="button"
-              aria-pressed={language === "vi"}
-              onClick={() => {
-                actions.invalidate();
-                setLanguage("vi");
-              }}
-            >
-              VI
-            </button>
-            <button
-              type="button"
-              aria-pressed={language === "en"}
-              onClick={() => {
-                actions.invalidate();
-                setLanguage("en");
-              }}
-            >
-              EN
-            </button>
-          </div>
         </div>
         <div className={styles.workArea} data-task={taskView}>
           <div
             className={styles.conversation}
             ref={conversation}
             role="log"
+            tabIndex={0}
             aria-label={
               vi ? "Hội thoại với SatsunicGo" : "Conversation with SatsunicGo"
             }
@@ -2582,9 +2730,15 @@ export function Ask({
               commerce={commerce}
               onCatalogResults={rememberCatalog}
             />
+            {turns.at(-1)?.trackingRefreshFailed && <p role="status">{vi ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản." : "Tracking is unavailable. Re-enter the code or check your account."}</p>}
+            {open && !exiting && historyTurn === null && !busy && !accountPending && turns.at(-1)?.status === "answered" && (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
+              <TrackingRefresh key={`${turns.at(-1)!.id}:${authGeneration.current}`} uid={auth?.currentUser?.uid ?? null} order={turns.at(-1)?.tracking} code={turns.at(-1)?.guestTracking ? selectedGuestTracking.current ?? undefined : undefined} language={language}
+                update={value => { const id = turns.at(-1)!.id; setTurns(current => current.map(turn => turn.id === id ? "publicStatus" in value ? {...turn, guestTracking: value} : {...turn, tracking: value} : turn)); }}
+                clear={() => { const id = turns.at(-1)!.id; selectedGuestTracking.current = null; setTurns(current => current.map(turn => turn.id === id ? {...turn, tracking: undefined, guestTracking: undefined, trackingRefreshFailed: true} : turn)); }} />
+            )}
             {historyTurn === null &&
               (import.meta.env.DEV ||
-                import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
+              import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
               turns.at(-1)?.status === "answered" &&
               turns.at(-1)?.question ===
                 commerce.conversation?.turns.at(-1)?.question &&
