@@ -1,0 +1,48 @@
+{
+  "status": "PASSED",
+  "scope": "Fresh scoped integration review after legacy revision fixture corrections",
+  "at": "2026-10-10T18:50:52.990503+00:00",
+  "sourceDigest": "255a8f93002d687d7393a32f622e409ffd7bb82624b0c50e4ec2944a314c283f",
+  "finding": {
+    "id": "CI-REVISION-ORACLES",
+    "severity": "MEDIUM",
+    "status": "FIXED",
+    "summary": "Server split-parcel and dedicated ETA064 fixtures expected old order revision/no timeline effects, contradicting approved atomic revisions.",
+    "resolution": "Explicit version sequence and exact single history/common timestamp assertions. Keep full order state except approved version; allocation/money/outbox/privacy/replay/negative assertions retained. Newly created owned timeline data cleaned."
+  },
+  "validation": {
+    "status": "PASSED affected scope",
+    "static": [
+      {
+        "name": "revision-types",
+        "exitCode": 0,
+        "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-types.log"
+      },
+      {
+        "name": "revision-lint",
+        "exitCode": 0,
+        "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-lint.log"
+      }
+    ],
+    "serverAffected": {
+      "tests": 1,
+      "status": "PASSED",
+      "otherTestsSkipped": 26,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-focused-server.log"
+    },
+    "manualDelivery": {
+      "tests": 15,
+      "status": "PASSED",
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-local-adapter-full.log",
+      "deduction": "Two files42tests; server27had exactly2maintenance failures, manual15file passed.",
+      "cleanup": "Per-case timeline/owned path cleanup assertions passed"
+    },
+    "fullLocalAdapter": "NOT_ACCEPTED:40passed2maintenancefail; preserved log. Actual project fence in functions/src/provider-release-gate.ts requires demo-satsunicgo, intentionally rejects disposable demo-server-crm UUID. No gate weakened.",
+    "adapter": "Only server test configuration host/project and exact owned project cleanup transformed in memory. Actual production modules and assertions unchanged.",
+    "sharedWrites": 0,
+    "newServers": 0
+  },
+  "prior41InputsUnchanged": true,
+  "wholeCandidateFinalReview": "BLOCKED pending new exact-head CI and broader gates",
+  "noDeploy": true
+}
