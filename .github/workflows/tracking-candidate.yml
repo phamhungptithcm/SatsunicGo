@@ -1,0 +1,71 @@
+name: Tracking candidate verification (no deploy)
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: tracking-candidate-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  quality:
+    if: (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/hunpeolabs/tracking-release-')) || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'hunpeolabs/tracking-release-'))
+    uses: ./.github/workflows/ci.yml
+    with:
+      build: false
+    permissions:
+      contents: read
+  artifact:
+    needs: quality
+    if: (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/hunpeolabs/tracking-release-')) || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'hunpeolabs/tracking-release-'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Build unreserved candidate artifact from exact source
+        env:
+          VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_PROJECT_ID: satsunicgo
+          VITE_FIREBASE_APP_ID: '1:278913913091:web:e40355cd8ad5abe00f9936'
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_REGION: asia-southeast1
+          VITE_RECAPTCHA_ENTERPRISE_SITE_KEY: ${{ vars.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY }}
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_USE_EMULATORS: 'false'
+          VITE_BETA_RELEASE: 'false'
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          node --input-type=module - <<'JS'
+          import { writeFileSync } from 'node:fs';
+          const candidate={tag:'v0.12.0',sha:process.env.CANDIDATE_SHA,releaseIntent:'unreserved-candidate-only'};
+          writeFileSync('candidate.json',JSON.stringify(candidate,null,2)+'\n');
+          writeFileSync('release-notes.md','# Tracking candidate\n\nExact SHA: '+candidate.sha+'\n\nUNRESERVED VERSION. NOT APPROVED FOR DEPLOYMENT. Human review and production prerequisites remain required.\n');
+          JS
+          npm run release:build
+          node scripts/release/artifact.mjs create
+          node --input-type=module -e "import {verify} from './scripts/release/artifact.mjs'; verify('release-stage',process.env.CANDIDATE_SHA,'v0.12.0')"
+          npm audit --omit=dev --audit-level=high --prefix release-stage/deployment/functions
+          tar -czf "tracking-candidate-$CANDIDATE_SHA.tar.gz" -C release-stage deployment candidate.json manifest.json release-notes.md
+          sha256sum "tracking-candidate-$CANDIDATE_SHA.tar.gz" > bundle.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: tracking-candidate-${{ env.CANDIDATE_SHA }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            tracking-candidate-${{ env.CANDIDATE_SHA }}.tar.gz
+            bundle.sha256
+          if-no-files-found: error
+          retention-days: 30
