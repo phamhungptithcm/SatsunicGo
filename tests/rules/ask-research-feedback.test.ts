@@ -163,6 +163,13 @@ beforeAll(async () => {
   };
   await db.doc(budgetPath).create(demoLedger);
   paths.add(budgetPath);
+  const pilotBudgetPath = "aiPilotBudget/lifetime";
+  if ((await db.doc(pilotBudgetPath).get()).exists)
+    throw Error("Shared pilot ledger exists; refuse to overwrite");
+  await db
+    .doc(pilotBudgetPath)
+    .create({ reservedVnd: 0, fixture: policyVersion });
+  paths.add(pilotBudgetPath);
   // This quota namespace belongs only to our freshly-created synthetic policy.
   paths.add(
     `askResearchQuota/global-${policyVersion}-${Math.floor(Date.now() / 86400000)}`,
@@ -185,7 +192,8 @@ afterAll(async () => {
       const ref = db.doc(path);
       await db.runTransaction(async (tx) => {
         const now = await tx.get(ref);
-        if (JSON.stringify(now.data()) === JSON.stringify(value)) tx.delete(ref);
+        if (JSON.stringify(now.data()) === JSON.stringify(value))
+          tx.delete(ref);
       });
     }
     await db.terminate();
@@ -439,6 +447,28 @@ test("integration web bad: exhausted/missing ledger, private input and stale con
   }
   expect(f.calls).toEqual([]);
 });
+test("integration web budget cannot spend the pilot's shared allocation", async () => {
+  const f = await webFixture(25000),
+    pilot = db.doc("aiPilotBudget/lifetime");
+  await pilot.update({ reservedVnd: 10000 });
+  try {
+    await expect(
+      runWebDiscovery(
+        f.uid,
+        f.input,
+        f.transport,
+        AbortSignal.timeout(10000),
+        f.collection,
+      ),
+    ).rejects.toMatchObject({ code: "resource-exhausted" });
+    expect(f.calls).toEqual([]);
+    expect(
+      (await db.doc("askResearchBudget/lifetime").get()).data()?.reservedVnd,
+    ).toBe(25000);
+  } finally {
+    await pilot.update({ reservedVnd: 0 });
+  }
+});
 test.each(["policy", "pricing"] as const)(
   "integration web bad: expired %s denies before provider I/O or reservation",
   async (expiry) => {
@@ -484,7 +514,9 @@ test.each(["policy", "pricing"] as const)(
       });
       expect(f.calls).toEqual([]);
       expect((await budget.get()).data()).toEqual(ledgerBefore);
-      expect((await db.doc(`askWebDiscovery/${f.key}`).get()).exists).toBe(false);
+      expect((await db.doc(`askWebDiscovery/${f.key}`).get()).exists).toBe(
+        false,
+      );
     } finally {
       resetAdmissionClock();
       if (expiry === "policy")

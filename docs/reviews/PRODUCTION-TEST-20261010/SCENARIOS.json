@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "plan": "PRODUCTION-TEST-v1",
+  "createdAt": "2026-10-10T00:37:07.785119+00:00",
+  "scope": "New production-test delta; all cases NOT_RUN for this mode until implemented and verified",
+  "cases": [
+    {
+      "id": "CHAT-01",
+      "kind": "happy",
+      "scenario": "Ask tìm sản phẩm có sẵn bằng câu tự nhiên",
+      "expected": "Kết quả đúng catalog, còn hàng và giá server; không tạo đơn khi chỉ hỏi",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "CHAT-02",
+      "kind": "happy",
+      "scenario": "Không có hàng sẵn, tìm web và so sánh",
+      "expected": "Nguồn allowlist/giá và thời điểm rõ; chọn rồi điền nháp; chưa gửi khi chưa xác nhận",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "CHAT-03",
+      "kind": "happy",
+      "scenario": "Sửa màu, size, số lượng bằng chat rồi đồng ý",
+      "expected": "Nháp mới thay đúng trường, confirm gắn version hiện tại; gửi một lần",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "CHAT-04",
+      "kind": "negative",
+      "scenario": "Trả lời đồng ý cho nháp đã cũ hoặc đổi account",
+      "expected": "Không thực hiện action của nháp/account trước; giữ trạng thái hiện tại",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "CHAT-05",
+      "kind": "negative",
+      "scenario": "Trang sản phẩm chứa prompt injection/PII",
+      "expected": "Nội dung nguồn là dữ liệu; không thay quyền, giá hay gửi PII vào nguồn/model",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-01",
+      "kind": "happy",
+      "scenario": "Catalog checkout BANK_TRANSFER sandbox từ domain thật",
+      "expected": "Giá server, HTTPS callback allowlist, mode test pin từ đầu; hosted SePay đúng merchant",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-02",
+      "kind": "happy",
+      "scenario": "Custom request đã chọn giá nghiên cứu và service fee",
+      "expected": "Snapshot đúng cấu hình, source link và số lượng; không dùng tổng client",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-03",
+      "kind": "happy",
+      "scenario": "Mixed cart catalog và custom",
+      "expected": "Tổng đúng từng dòng, tách đơn đúng, test inventory độc lập",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-04",
+      "kind": "happy",
+      "scenario": "Nhân viên duyệt chênh lệch và thanh toán bổ sung thử",
+      "expected": "Chỉ đúng order test/target/version; không đổi order thật",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-05",
+      "kind": "negative",
+      "scenario": "Không auth/Google chưa verified/AppCheck thiếu",
+      "expected": "Từ chối trước tạo intent hoặc ghi dữ liệu",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-06",
+      "kind": "negative",
+      "scenario": "Sai owner/locked user/role hoặc MFA hết hạn",
+      "expected": "Không đọc hay thực hiện action vượt quyền",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-07",
+      "kind": "negative",
+      "scenario": "Client giả mode test/provider/tổng tiền/callback",
+      "expected": "Schema và server policy từ chối; không nhận mode từ client",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-08",
+      "kind": "negative",
+      "scenario": "Policy test tắt/hết hạn/project sai/emulator variable trên production",
+      "expected": "Không tạo attempt mới; không đổi mode attempt đang có",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-09",
+      "kind": "negative",
+      "scenario": "Key thiếu/binding sai/IPN secret khác dashboard",
+      "expected": "Không báo sẵn sàng giả; IPN không authentic không được nhận",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-10",
+      "kind": "negative",
+      "scenario": "CARD/NAPAS gửi trực tiếp khi chưa hỗ trợ",
+      "expected": "Server từ chối; UI không giả báo phương thức có sẵn",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-11",
+      "kind": "recovery",
+      "scenario": "Gửi commit/create intent đồng thời cùng operation",
+      "expected": "Một checkout/invoice/reservation; replay trả cùng dữ liệu",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PAY-12",
+      "kind": "recovery",
+      "scenario": "Mất response sau commit hoặc return browser",
+      "expected": "Resume đúng checkout/invoice; không charge lại hay tạo bản thay thế",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-01",
+      "kind": "happy",
+      "scenario": "IPN authentic và sandbox readback khớp",
+      "expected": "Lưu normalized proof rồi settlement test một lần",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-02",
+      "kind": "negative",
+      "scenario": "GET/non-JSON/body lớn/thiếu header/key sai",
+      "expected": "405/400/401 phù hợp, không ghi financial evidence hợp lệ",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-03",
+      "kind": "negative",
+      "scenario": "Sai invoice/merchant/order/currency/method",
+      "expected": "Reject hoặc review theo contract; không chuyển paid",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-04",
+      "kind": "negative",
+      "scenario": "Thiếu tiền/thừa tiền/số thập phân không hợp lệ",
+      "expected": "Không tự làm tròn/accept đủ tiền; lưu bằng chứng để review",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-05",
+      "kind": "recovery",
+      "scenario": "Lặp cùng IPN/khác timestamp/đổi payload cùng id",
+      "expected": "Exact duplicate idempotent; conflicting replay không ghi đè proof",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-06",
+      "kind": "negative",
+      "scenario": "Giao dịch thứ hai cùng invoice",
+      "expected": "Giữ bằng chứng transaction riêng, không settle/release hai lần",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-07",
+      "kind": "recovery",
+      "scenario": "Provider timeout/429/5xx/network loss",
+      "expected": "Bounded retry và unknown state; không suy đoán đã thanh toán",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-08",
+      "kind": "negative",
+      "scenario": "Browser ?success hoặc ?cancel bị tự sửa",
+      "expected": "Query chỉ gợi ý đọc trạng thái; không làm money proof",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-09",
+      "kind": "recovery",
+      "scenario": "Thanh toán muộn sau cancel/expiry/locked account",
+      "expected": "Giữ proof/review, không tự fulfillment hoặc xóa giao dịch",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "IPN-10",
+      "kind": "negative",
+      "scenario": "Authenticated VOID sau đã paid",
+      "expected": "Hold xử lý tiếp, không tự hoàn tiền/đảo ledger",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REC-01",
+      "kind": "recovery",
+      "scenario": "Worker chết trước/sau claim/settle/PDF",
+      "expected": "Lease và dedup phục hồi; settlement không lặp khi PDF retry",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REC-02",
+      "kind": "negative",
+      "scenario": "Balance test trỏ order thật hoặc ngược lại",
+      "expected": "Reject mixed provenance trước thay đổi funds/reservation",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REC-03",
+      "kind": "happy",
+      "scenario": "PDF test có tên/ảnh/số lượng/phương thức",
+      "expected": "Nội dung khớp snapshot, Test rõ, giới hạn size/font/layout giữ nguyên",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REC-04",
+      "kind": "negative",
+      "scenario": "Mở receipt người khác/stale share/token",
+      "expected": "Không lộ PII hoặc PDF; quyền kiểm tra lại mỗi lần",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "ISO-01",
+      "kind": "negative",
+      "scenario": "Sandbox success chạm tồn kho thật",
+      "expected": "Test reservation/stock riêng; stock thật không đổi",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "ISO-02",
+      "kind": "negative",
+      "scenario": "Test order đi vào doanh thu/financialEntries/refund/payout thật",
+      "expected": "Phân luồng test; tổng tiền thật không tăng/giảm",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "ISO-03",
+      "kind": "negative",
+      "scenario": "Test event chạy vendor purchase/shipping dispatch thật",
+      "expected": "Deny hoặc operation giả lập được đánh dấu; không side effect thật",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "ISO-04",
+      "kind": "negative",
+      "scenario": "Record cũ bị policy hiện tại đổi thành test",
+      "expected": "Mode pin bất biến; không migration/relabel tự động",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "ISO-05",
+      "kind": "happy",
+      "scenario": "CRM nhân viên xem và thao tác đơn test",
+      "expected": "MFA thật/role hợp lệ; filter/test provenance rõ, không giả auth",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "MAIL-01",
+      "kind": "happy",
+      "scenario": "Owner opt-in nhận email thử Resend",
+      "expected": "From verified, current identity/consent/cutover đúng; phân biệt accepted/delivered",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "MAIL-02",
+      "kind": "negative",
+      "scenario": "Không consent/optout sau enqueue/đổi email",
+      "expected": "Recheck trước network; không gửi địa chỉ cũ hoặc khách ngoài test",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "MAIL-03",
+      "kind": "recovery",
+      "scenario": "Resend timeout sau có thể accepted",
+      "expected": "Giữ unknown và dedup; không tự retry tạo email trùng",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "MAIL-04",
+      "kind": "negative",
+      "scenario": "Vượt100attempt/day hoặc event cũ trước cutover",
+      "expected": "Không gửi quá giới hạn/đào lại queue lịch sử",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "AI-01",
+      "kind": "happy",
+      "scenario": "Knowledge/context đầy đủ câu không dấu/typo/multi-turn",
+      "expected": "Dùng state/source đúng hiện hành, hỏi rõ khi còn mơ hồ",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "AI-02",
+      "kind": "negative",
+      "scenario": "Pricing policy/model/budget hết hạn",
+      "expected": "Không gọi paid model; không tự gia hạn ngày hay đổi provider",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "AI-03",
+      "kind": "negative",
+      "scenario": "Context quá dài/LLM output sai schema/tool request vượt quyền",
+      "expected": "Chunk bounded, giữ active work/source, validate output/tool args và auth server",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "AI-04",
+      "kind": "recovery",
+      "scenario": "Hai request cuối cùng tranh budget hoặc timeout provider",
+      "expected": "Atomic reservation, một network attempt, giữ uncertain charge reservation",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "LEARN-01",
+      "kind": "happy",
+      "scenario": "Feedback đã consent → staff review → holdout → publish",
+      "expected": "Chỉ approved knowledge; raw feedback không thành policy ngay",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "LEARN-02",
+      "kind": "negative",
+      "scenario": "Feedback poisoning/PII/withdrawal/expired retention",
+      "expected": "Không promote dữ liệu độc hại; withdrawal/retention scoped; không xóa audit/payment",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "OPS-01",
+      "kind": "negative",
+      "scenario": "Enable maintenance làm chạy deletion/financial jobs chưa duyệt",
+      "expected": "Tách job và từng capability; không blanket enable",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "OPS-02",
+      "kind": "recovery",
+      "scenario": "Tắt test mode giữa lúc payment pending",
+      "expected": "Chặn attempt mới; pinned attempts/evidence vẫn reconcile an toàn",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PERF-01",
+      "kind": "performance",
+      "scenario": "Checkout tối đa30dòng và cùng invoice đồng thời",
+      "expected": "Write/query bound, không HTTP trong transaction, settle đúng một lần",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PERF-02",
+      "kind": "performance",
+      "scenario": "Provider response lớn/chậm và retry worker",
+      "expected": "Timeout10s, response256KiB, lease/backoff hữu hạn",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "PERF-03",
+      "kind": "performance",
+      "scenario": "Nhiều chat/feedback/search liên tiếp",
+      "expected": "Rate/quota/context/output bounds; không log raw PII/secret/signed form",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REL-01",
+      "kind": "release",
+      "scenario": "Normal main CI → immutable artifact → provider readback",
+      "expected": "Đúng source/hash/Function set/SDK params/revision/Hosting/IAM/secret version",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    },
+    {
+      "id": "REL-02",
+      "kind": "recovery",
+      "scenario": "Rollback sau provider accepted hoặc attempt unknown",
+      "expected": "Tắt new sending/attempts trước; giữ dedup/consent/mode/cutover/quota/financial proof",
+      "status": "NOT_RUN",
+      "reason": "NEW_MODE_NOT_IMPLEMENTED_PENDING_REVIEWED_PLAN_APPROVAL"
+    }
+  ]
+}

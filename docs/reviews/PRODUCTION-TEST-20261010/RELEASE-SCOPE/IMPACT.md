@@ -1,0 +1,7 @@
+# Release implementation impact
+
+Approved PRODUCTION-TEST v1 and root integration authorization apply. Repository intelligence is DEGRADED; source, the pinned Firebase CLI15.32.1, immutable-package contracts and focused executable tests are authoritative for this bounded change.
+
+The existing608d2e0 release stopped before promotion because customerNotificationCreated newly enables retry=true. Its transaction consumes only queued jobs and commits notification projection/state together, so removing retry would weaken recovery. Firebase's global --force also accepts deletion and unsafe migrations, and Function selectors use prefix matching. The change therefore wraps only the pinned CLI retry-confirmation function: validate the real discovered backend against the immutable manifest and approve only the reviewed new retry endpoints. Keep original deployment force=false/nonInteractive=true and untouched deletion/migration prompts. Read back enabled retry policies with the provider receipt. No new deployment permissions or provider mutation outside the existing workflow.
+
+The separate approved production-test delta admits the three authentic SePay handlers and Ask commerce, while client-controlled demo payment/webhook, legacy PayOS, mixed maintenance and cleanup remain held until their own contracts are ready. A fixed non-secret artifact environment marker must be digest-bound and consistent in SDK discovery, deployment and actual runtime. Publication/recovery jobs must be split from deletion. No production secret value is read by an agent.

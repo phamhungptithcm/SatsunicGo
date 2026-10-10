@@ -4,18 +4,28 @@ import { HttpsError } from "firebase-functions/v2/https";
 import { randomUUID } from "node:crypto";
 import { warn } from "firebase-functions/logger";
 import { z } from "zod";
+import {
+  askCostPolicy,
+  askPriceReady,
+  admitSharedAskReservation,
+} from "./ask-cost-policy";
+import {
+  productionTestEnvironment,
+  admitProductionTestPolicy,
+  productionTestProvenance,
+} from "../production-test-policy";
 
 // Reviewed text-only price envelope. No rate or endpoint is client-configurable.
 // $0.10/M input, $0.40/M output incl reasoning; 100,000 VND/USD envelope.
 // Reserve 1,000 VND per attempt, never release uncertain/failed reservations.
 export const pilotLimits = {
-  model: "gemini-2.5-flash-lite",
+  model: askCostPolicy.model,
   location: "us-central1",
   maxInputTokens: 10000,
   maxOutputTokens: 800,
   reserveVnd: 1000,
   maxBudgetVnd: 10000,
-  pricingExpiresAt: Date.parse("2026-10-08T00:00:00Z"),
+  pricingExpiresAt: askCostPolicy.expiresAt,
 } as const;
 export const pilotPolicySchema = z
   .object({
@@ -27,7 +37,7 @@ export const pilotPolicySchema = z
   })
   .passthrough();
 export function pilotReady(now: number) {
-  return Number.isSafeInteger(now) && now < pilotLimits.pricingExpiresAt;
+  return askPriceReady(now);
 }
 export function checkPilot(policy: unknown, uid: string, now: number) {
   const parsed = pilotPolicySchema.safeParse(policy);
@@ -127,6 +137,23 @@ export async function generatePilot(
   if (process.env.GCLOUD_PROJECT !== "satsunicgo")
     throw new HttpsError("unavailable", "Provider thử Ask chưa sẵn sàng.");
   const db = getFirestore();
+  const assertTestAdmission = async (expectedVersion?: number) => {
+    const policy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(
+          (await db.doc("settings/productionTest").get()).data(),
+          uid,
+        )
+      : null;
+    if (
+      !policy ||
+      (expectedVersion !== undefined && policy.version !== expectedVersion)
+    )
+      throw new HttpsError(
+        "unavailable",
+        "Thử Ask chưa được bật cho tài khoản này.",
+      );
+  };
+  await assertTestAdmission();
   checkPilot(
     (await db.doc("settings/askPaidPilot").get()).data(),
     uid,
@@ -154,6 +181,7 @@ export async function generatePilot(
       uid,
       Date.now(),
     );
+    await assertTestAdmission();
     const count = await fetch(`${endpoint}:countTokens`, {
       method: "POST",
       headers,
@@ -176,16 +204,27 @@ export async function generatePilot(
   if (totalTokens > pilotLimits.maxInputTokens)
     throw new HttpsError("invalid-argument", "Nội dung thử Ask quá dài.");
   const operation = randomUUID();
-  await db.runTransaction(async (tx) => {
+  const executionPolicyVersion = await db.runTransaction(async (tx) => {
     const policyRef = db.doc("settings/askPaidPilot"),
       budget = db.doc("aiPilotBudget/lifetime");
-    const [policy, ledger, user, access] = await Promise.all([
-      tx.get(policyRef),
-      tx.get(budget),
-      tx.get(db.doc(`users/${uid}`)),
-      tx.get(db.doc(`staffAccess/${uid}`)),
-    ]);
+    const [policy, ledger, research, user, access, testSettings] =
+      await Promise.all([
+        tx.get(policyRef),
+        tx.get(budget),
+        tx.get(db.doc("askResearchBudget/lifetime")),
+        tx.get(db.doc(`users/${uid}`)),
+        tx.get(db.doc(`staffAccess/${uid}`)),
+        tx.get(db.doc("settings/productionTest")),
+      ]);
     checkPilot(policy.data(), uid, Date.now());
+    const testPolicy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testSettings.data(), uid)
+      : null;
+    if (!testPolicy)
+      throw new HttpsError(
+        "unavailable",
+        "Thử Ask chưa được bật cho tài khoản này.",
+      );
     if (
       user.data()?.locked ||
       access.data()?.locked ||
@@ -200,7 +239,22 @@ export async function generatePilot(
     const reservedVnd = nextReservation(
       ledger.exists ? ledger.data()?.reservedVnd : 0,
     );
-    tx.set(budget, { reservedVnd, maxBudgetVnd: 10000, updatedAt: Date.now() });
+    try {
+      // Read dependency on both counters serializes mixed research/text races.
+      admitSharedAskReservation(
+        ledger.data(),
+        research.data(),
+        pilotLimits.reserveVnd,
+        Date.now(),
+      );
+    } catch {
+      throw new HttpsError("resource-exhausted", "Đã hết ngân sách thử Ask.");
+    }
+    tx.set(
+      budget,
+      { reservedVnd, maxBudgetVnd: 10000, updatedAt: Date.now() },
+      { merge: true },
+    );
     tx.create(budget.collection("attempts").doc(operation), {
       reserveVnd: 1000,
       inputTokens: totalTokens,
@@ -208,9 +262,13 @@ export async function generatePilot(
       model: pilotLimits.model,
       createdAt: Date.now(),
       state: "reserved",
+      costPolicyId: askCostPolicy.id,
+      ...productionTestProvenance(testPolicy, operation),
     });
+    return testPolicy.version;
   });
   signal.throwIfAborted();
+  await assertTestAdmission(executionPolicyVersion);
   checkPilot(
     (await db.doc("settings/askPaidPilot").get()).data(),
     uid,

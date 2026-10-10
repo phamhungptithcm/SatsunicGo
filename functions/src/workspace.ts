@@ -19,6 +19,7 @@ import { randomUUID, createHash } from "node:crypto";
 import { roles, money, type Role } from "../../packages/domain";
 import { normalizeCustomerName } from "../../packages/domain/crm";
 import { pilotReady, pilotLimits, verifyPilotProvider } from "./ai/ask-pilot";
+import { purchaseTestProjection } from "./purchase-test-projection";
 const opts = {
   region: "asia-southeast1",
   maxInstances: 4,
@@ -257,6 +258,7 @@ export const listWork = onCall(opts, async (req) => {
             packedQuantity: data.packedQuantity ?? 0,
             hold: data.hold ?? "",
             createdAt: data.createdAt,
+            ...purchaseTestProjection(data),
           };
         }
         return { ...data, id: d.id };
@@ -1001,6 +1003,7 @@ export const readOrderOperations = onCall(opts, async (req) => {
       );
     const data = operations.data();
     return {
+      ...purchaseTestProjection(order.data()),
       recipient:
         manager || rs.includes("WAREHOUSE") ? (data?.recipient ?? null) : null,
       receiving: data?.receive

@@ -1,3 +1,4 @@
+import { isPurchaseTestRecord } from "./purchase-test-boundary";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onDocumentCreated,
@@ -39,6 +40,20 @@ export async function enqueueAnalytics(
   const db = getFirestore();
   if ((await db.doc("analyticsConfig/current").get()).data()?.enabled !== true)
     return;
+  const sourceRecord = (
+    await db
+      .doc(`${type === "order" ? "orders" : "financialEntries"}/${source}`)
+      .get()
+  ).data();
+  if (isPurchaseTestRecord(sourceRecord)) return;
+  if (
+    type === "ledger" &&
+    refId(sourceRecord?.orderId) &&
+    isPurchaseTestRecord(
+      (await db.doc(`orders/${sourceRecord.orderId}`).get()).data(),
+    )
+  )
+    return;
   const now = Date.now();
   try {
     await db
@@ -56,7 +71,7 @@ export async function enqueueAnalytics(
 export const analyticsOrderChanged = onDocumentWritten(
   { ...triggerOptions, document: "orders/{id}" },
   async (e) => {
-    if (e.data?.after.exists)
+    if (e.data?.after.exists && !isPurchaseTestRecord(e.data.after.data()))
       await enqueueAnalytics(
         "order",
         e.params.id,
@@ -67,7 +82,7 @@ export const analyticsOrderChanged = onDocumentWritten(
 export const analyticsPaymentCreated = onDocumentCreated(
   { ...triggerOptions, document: "financialEntries/{id}" },
   async (e) => {
-    if (e.data?.exists)
+    if (e.data?.exists && !isPurchaseTestRecord(e.data.data()))
       await enqueueAnalytics("ledger", e.params.id, e.params.id);
   },
 );
@@ -215,6 +230,15 @@ export async function processAnalyticsJob(jobId: string, now = Date.now()) {
       const order = refId(oid)
         ? ((await tx.get(db.doc(`orders/${oid}`))).data() as Order | undefined)
         : undefined;
+      if (isPurchaseTestRecord(entry) || isPurchaseTestRecord(order)) {
+        tx.update(jobRef, {
+          state: "done",
+          reason: "test_record_excluded",
+          expireAt: expiry(now, 7),
+        });
+        tx.create(receiptRef, { createdAt: now, expireAt: expiry(now, 365) });
+        return;
+      }
       const pref = db.doc(`analyticsOrderProjections/${digest(String(oid))}`),
         projection = (await tx.get(pref)).data() ?? {};
       const attrRef = refId(oid)
@@ -342,15 +366,17 @@ export async function processAnalyticsJob(jobId: string, now = Date.now()) {
                 .limit(101),
             );
             const paidAt = firstCatalogPaidAt(
-              sourceEntries.docs.map(
-                (d) =>
-                  d.data() as {
-                    kind: string;
-                    currency: string;
-                    amount: number;
-                    createdAt: number;
-                  },
-              ),
+              sourceEntries.docs
+                .filter((d) => !isPurchaseTestRecord(d.data()))
+                .map(
+                  (d) =>
+                    d.data() as {
+                      kind: string;
+                      currency: string;
+                      amount: number;
+                      createdAt: number;
+                    },
+                ),
               payable,
             );
             if (paidAt !== null) {

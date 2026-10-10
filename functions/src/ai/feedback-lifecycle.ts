@@ -9,6 +9,11 @@ import {
 import { activeKnowledge } from "../../../packages/domain/ask-knowledge";
 import { knowledgeSource } from "./approved-knowledge";
 import { evaluateRetrievalHoldout } from "./feedback-evaluation";
+import {
+  feedbackExecution,
+  feedbackCleanupEligible,
+  testFeedbackRetention,
+} from "./feedback-provenance";
 import { z } from "zod";
 import {
   requireVerifiedGoogle,
@@ -56,8 +61,30 @@ export const askFeedbackWithdraw = onCall(config, async (req) => {
         ? Math.min(expiry.toMillis(), now + 90 * 86400000)
         : now + 310001,
     );
-    tx.set(ref, { withdrawn: true, expiresAt });
-    tx.set(quota, { count: count + 1, expiresAt: new Date(now + 172800000) });
+    let provenance;
+    try {
+      provenance = feedbackExecution(previous.data() ?? {});
+    } catch {
+      provenance = undefined;
+    }
+    tx.set(ref, {
+      withdrawn: true,
+      expiresAt,
+      ...(provenance
+        ? {
+            ...provenance,
+            createdAt: now,
+            retentionDays: testFeedbackRetention.maxDays,
+            retentionClass: testFeedbackRetention.recordClass,
+          }
+        : {}),
+    });
+    tx.set(quota, {
+      count: count + 1,
+      createdAt: now,
+      retentionClass: testFeedbackRetention.quotaClass,
+      expiresAt: new Date(now + 172800000),
+    });
   });
   return { id: parsed.data.feedbackId, withdrawn: true as const };
 });
@@ -75,6 +102,12 @@ export function inboxRow(
     row.expiresAt.toMillis() <= now
   )
     return null;
+  let provenance;
+  try {
+    provenance = feedbackExecution(row);
+  } catch {
+    return null;
+  }
   const parsed = feedbackInboxSchema.shape.rows.element.safeParse({
     ownerId: match[1],
     feedbackId: match[2],
@@ -83,6 +116,7 @@ export function inboxRow(
     createdAt: row.createdAt,
     expiresAt: row.expiresAt.toMillis(),
     disposition: row.disposition,
+    ...(provenance ? { testMode: true } : {}),
   });
   return parsed.success ? parsed.data : null;
 }
@@ -197,26 +231,32 @@ export async function purgeExpiredFeedback(now = Date.now()) {
   if (!Number.isSafeInteger(now) || now <= 0) throw Error("INVALID_PURGE_TIME");
   const db = getFirestore();
   let deleted = 0;
-  for (const collection of [
-    "askFeedback",
-    "askFeedbackReviewOperations",
-    "askFeedbackQuota",
+  for (const [collection, recordClass] of [
+    ["askFeedback", testFeedbackRetention.recordClass],
+    ["askFeedbackReviewOperations", testFeedbackRetention.operationClass],
+    ["askFeedbackQuota", testFeedbackRetention.quotaClass],
   ]) {
     const records = await db
       .collection(collection)
+      .where("retentionClass", "==", recordClass)
       .where("expiresAt", "<=", new Date(now))
       .limit(100)
       .get();
     if (!records.size) continue;
     const batch = db.batch();
-    for (const doc of records.docs)
+    let count = 0;
+    for (const doc of records.docs) {
+      if (!feedbackCleanupEligible(collection, doc.data(), now)) continue;
       batch.delete(doc.ref, { lastUpdateTime: doc.updateTime! });
+      count++;
+    }
+    if (!count) continue;
     await batch.commit();
-    deleted += records.size;
+    deleted += count;
   }
   return { deleted };
 }
-// No production invocation in this task. Deployment and retention approval remain separate gates.
+// Only explicitly stamped production-test/short operational classes are deleted.
 export const askFeedbackCleanup = onSchedule(
   {
     schedule: "every 60 minutes",

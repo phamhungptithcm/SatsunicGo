@@ -9,24 +9,45 @@ const state = vi.hoisted(() => ({
   deletes: [] as { ref: string; precondition: unknown }[],
   commits: 0,
   changed: false,
+  legacy: false,
 }));
 vi.mock("firebase-admin/firestore", () => ({
   getFirestore: () => ({
     collection: (collection: string) => ({
-      where: (field: string, _operator: string, value: Date) => ({
-        limit: (limit: number) => ({
-          get: async () => {
-            state.reads.push({ collection, field, value, limit });
-            return {
-              size: 1,
-              docs: [
-                {
-                  ref: `synthetic/${collection}`,
-                  updateTime: "immutable-snapshot-time",
-                },
-              ],
-            };
-          },
+      where: (
+        _classField: string,
+        _classOperator: string,
+        recordClass: string,
+      ) => ({
+        where: (field: string, _operator: string, value: Date) => ({
+          limit: (limit: number) => ({
+            get: async () => {
+              state.reads.push({ collection, field, value, limit });
+              return {
+                size: 1,
+                docs: [
+                  {
+                    ref: `synthetic/${collection}`,
+                    updateTime: "immutable-snapshot-time",
+                    data: () =>
+                      state.legacy
+                        ? {}
+                        : {
+                            createdAt: value.getTime() - 86400000,
+                            expiresAt: { toMillis: () => value.getTime() },
+                            retentionClass: recordClass,
+                            retentionDays: 1,
+                            executionMode: "production_test",
+                            executionPolicyVersion: 1,
+                            testRunId: "11111111-1111-4111-8111-111111111111",
+                            testMode: true,
+                            analyticsEligible: false,
+                          },
+                  },
+                ],
+              };
+            },
+          }),
         }),
       }),
     }),
@@ -46,6 +67,13 @@ beforeEach(() => {
   state.deletes = [];
   state.commits = 0;
   state.changed = false;
+  state.legacy = false;
+});
+test("cleanup never deletes unclassified legacy feedback under the test retention approval", async () => {
+  state.legacy = true;
+  expect(await purgeExpiredFeedback()).toEqual({ deleted: 0 });
+  expect(state.commits).toBe(0);
+  expect(state.deletes).toEqual([]);
 });
 test("cleanup bounds each expiry query and deletes only the exact read version", async () => {
   const now = Date.now();

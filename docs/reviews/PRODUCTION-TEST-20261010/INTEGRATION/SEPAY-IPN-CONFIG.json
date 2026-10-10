@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-10T01:12:07.020034+00:00",
+  "source": "Actual Chrome SePay page DOM non-secret settings after reload",
+  "url": "https://asia-southeast1-satsunicgo.cloudfunctions.net/purchaseSePayIpn",
+  "auth": "Secret Key checked",
+  "active": true,
+  "merchantTestMode": true,
+  "secretPayload": "NOT_READ",
+  "secretMatch": "NOT_VERIFIED; authentic IPN/readback required",
+  "firstVersionMetadataRead": "EMPTY before user save; subsequent user reply and metadata read confirm version1enabled",
+  "enabledSecretVersion": {
+    "resource": "projects/278913913091/secrets/SEPAY_SANDBOX_IPN_SECRET_KEY/versions/1",
+    "state": "ENABLED",
+    "createTime": "2026-10-10T01:10:46.260471Z"
+  },
+  "rootReleaseRepair": {
+    "commit": "c4230014959389c3c23b44cdb11c5fe846f815fe",
+    "run": "38012012422",
+    "status": "IN_PROGRESS",
+    "scope": "Full existing combined feature main plus reviewed retry prompt repair; new production-test implementation still separate WIP"
+  }
+}

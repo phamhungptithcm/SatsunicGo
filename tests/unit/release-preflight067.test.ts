@@ -248,22 +248,23 @@ test('unknown conditional endpoints never inherit a demo exception',()=>fixture(
   put('functions/src/index.ts',index+`export const unapprovedDemo=localSePay ? sandboxSePayPayment : undefined;`);
   expect(preflight({root,project:'satsunicgo'}).errors).toContain('FUNCTION_INVENTORY_INVALID');
 }));
-test('current canonical five demo declarations and target sources remain outside production inventory',()=>fixture((root,put)=>{
+test('canonical production-test SePay handlers are retained while client-outcome demos remain excluded',()=>fixture((root,put)=>{
   const index=readFileSync(new URL('../../functions/src/index.ts',import.meta.url),'utf8');
   const ast=ts.createSourceFile('index.ts',index,ts.ScriptTarget.Latest,true);
-  const names=new Set(['purchaseDemoPayment','localSePay',...additionalDemoSpecs.map(spec=>spec.name)]);
-  const aliases=new Set(['guardedPurchaseDemoPayment',...additionalDemoSpecs.map(spec=>spec.binding)]);
+  const names=new Set(['purchaseDemoPayment','productionSePay',...additionalDemoSpecs.map(spec=>spec.name)]);
+  const aliases=new Set(['guardedPurchaseDemoPayment','sepayArtifactEnvironment',...additionalDemoSpecs.map(spec=>spec.binding)]);
   const declarations=ast.statements.filter(node=>
     ts.isVariableStatement(node)&&node.declarationList.declarations.some(declaration=>ts.isIdentifier(declaration.name)&&names.has(declaration.name.text))||
     ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)&&node.importClause.namedBindings.elements.some(binding=>aliases.has(binding.name.text))
   ).map(node=>node.getText(ast)).join('\n');
-  for(const file of ['purchase-checkout','purchase-demo-gateway','purchase-sepay'])put(`functions/src/${file}.ts`,readFileSync(new URL(`../../functions/src/${file}.ts`,import.meta.url),'utf8'));
+  for(const file of ['purchase-checkout','purchase-demo-gateway','purchase-sepay','production-test-policy'])put(`functions/src/${file}.ts`,readFileSync(new URL(`../../functions/src/${file}.ts`,import.meta.url),'utf8'));
   put('functions/src/index.ts',readFileSync(path.join(root,'functions/src/index.ts'),'utf8')+'\n'+declarations);
   const result=preflight({root,project:'satsunicgo'});
   expect(result.errors).toEqual([]);
-  expect(result.inventory).toHaveLength(8);
-  expect(result.emulatorOnlyExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseDemoPayment',...additionalDemoSpecs.map(spec=>spec.name)].sort());
-  expect(result.inventory.every((row:{name:string})=>!names.has(row.name))).toBe(true);
+  expect(result.inventory).toHaveLength(11);
+  expect(result.emulatorOnlyExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseDemoPayment','purchaseDemoWebhook']);
+  expect(result.productionTestExports.map((row:{name:string})=>row.name).sort()).toEqual(['purchaseSePayInboxWorker','purchaseSePayIpn','purchaseSePayPayment']);
+  expect(result.inventory.every((row:{name:string})=>!['purchaseDemoPayment','purchaseDemoWebhook'].includes(row.name))).toBe(true);
   expect(result.cloud).toBe('NOT_CHECKED');
 }));
 test('original demo payment rejects environment aliases and mutator calls',()=>fixture((root,put)=>{

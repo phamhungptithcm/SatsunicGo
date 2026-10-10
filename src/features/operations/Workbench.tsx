@@ -22,6 +22,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { OrderImages } from "../orders/OrderImages";
 import { OrderTools } from "../orders/OrderTools";
 import { OrderConversation } from "../support/OrderConversation";
+import { purchaseTestRecord } from "../../../packages/domain/purchase-checkout";
+import { matchesOrderKind, TestOrderBadge } from "../orders/TestOrderBadge";
 export function Workbench({
   roles,
   queue,
@@ -32,6 +34,9 @@ export function Workbench({
   const [params, setParams] = useSearchParams();
   const target = params.get("order");
   const selectedQueue = queue ?? params.get("queue") ?? "";
+  const orderKind = ["live", "test"].includes(params.get("mode") ?? "")
+    ? params.get("mode")!
+    : "all";
   const showMoney = roles.some((r) =>
     ["OWNER", "OPERATIONS_MANAGER", "FINANCE", "SUPPORT", "BUYER"].includes(r),
   );
@@ -49,6 +54,9 @@ export function Workbench({
   const selectionTrigger = useRef<HTMLButtonElement | null>(null);
   const listScroll = useRef(0);
   const focusSelection = useRef(false);
+  const visibleOrders = orders.filter((order) =>
+    matchesOrderKind(order, orderKind),
+  );
   useEffect(() => {
     if (!detailOpen || !selected || !focusSelection.current) return;
     focusSelection.current = false;
@@ -132,6 +140,29 @@ export function Workbench({
         }
       />
       <div className="operationsToolbar">
+        {!target && (
+          <label className="testOrderKindFilter">
+            Loại đơn
+            <select
+              value={orderKind}
+              onChange={(event) => {
+                const value = event.target.value;
+                setParams((previous) => {
+                  const next = new URLSearchParams(previous);
+                  if (value === "all") next.delete("mode");
+                  else next.set("mode", value);
+                  return next;
+                });
+                setSelected(null);
+                setDetailOpen(false);
+              }}
+            >
+              <option value="all">Tất cả</option>
+              <option value="live">Đơn thật</option>
+              <option value="test">Đơn test</option>
+            </select>
+          </label>
+        )}
         {!queue && !target && (
           <label className="crmQueueFilter">
             Hàng đợi
@@ -179,16 +210,18 @@ export function Workbench({
         )}
         {!busy && !error && orders.length > 0 && (
           <span className="operationsCount">
-            {orders.length} đơn trong trang
+            {visibleOrders.length}/{orders.length} đơn trong trang
           </span>
         )}
       </div>
       {target && (
         <div className="workbenchLinks">
           <Link to="/crm/orders">← Tất cả đơn</Link>
-          <Link to={`/crm/documents?order=${encodeURIComponent(target)}`}>
-            Chứng từ của đơn
-          </Link>
+          {!purchaseTestRecord(selected) && (
+            <Link to={`/crm/documents?order=${encodeURIComponent(target)}`}>
+              Chứng từ của đơn
+            </Link>
+          )}
         </div>
       )}
       {busy && <CrmState kind="loading" title="Đang tải hàng đợi…" />}
@@ -210,7 +243,7 @@ export function Workbench({
         data-detail-open={Boolean(selected && detailOpen)}
       >
         <div className="crmList operationsList">
-          {orders.map((o) => (
+          {visibleOrders.map((o) => (
             <article className="crmItem" key={o.id}>
               <div className="crmItemMain">
                 <button
@@ -224,6 +257,7 @@ export function Workbench({
                 <div className="crmItemMeta">
                   <span>{o.market}</span>
                   <span className="crmBadge">{orderStageLabel(o)}</span>
+                  <TestOrderBadge record={o} />
                 </div>
                 {o.hold && (
                   <p className="notice">
@@ -232,7 +266,7 @@ export function Workbench({
                 )}
                 {showMoney && (
                   <p>
-                    Đã thu ròng:{" "}
+                    {purchaseTestRecord(o) ? "Thanh toán test" : "Đã thu ròng"}:{" "}
                     {(o.collected - o.refunded).toLocaleString("vi-VN")} ₫
                   </p>
                 )}
@@ -240,6 +274,11 @@ export function Workbench({
               </div>
             </article>
           ))}
+          {orders.length > 0 && !visibleOrders.length && !busy && !error && (
+            <p className="testOrderNote">
+              Không có loại đơn này trong trang đã tải.
+            </p>
+          )}
           {!orders.length && !busy && !error && (
             <OperationsEmpty title="Chưa có đơn trong hàng đợi này">
               Chỉ hiển thị đơn trong phạm vi bạn được phân công. Bạn có thể tải
@@ -252,7 +291,7 @@ export function Workbench({
             </button>
           )}
         </div>
-        {!selected && !busy && orders.length > 0 && (
+        {!selected && !busy && visibleOrders.length > 0 && (
           <div className="crmWorkbenchPrompt028">
             <CrmIcon name="search" />
             <h2>Chọn một đơn để xem chi tiết</h2>
@@ -285,6 +324,7 @@ export function Workbench({
             )}
             <div className="crmFacts">
               <span className="crmBadge">{orderStageLabel(selected)}</span>
+              <TestOrderBadge record={selected} />
               <span>
                 Tổng số lượng:{" "}
                 {selected.items.reduce((sum, item) => sum + item.quantity, 0)}
@@ -297,7 +337,10 @@ export function Workbench({
               )}
               {showMoney && (
                 <span>
-                  Đã thu ròng:{" "}
+                  {purchaseTestRecord(selected)
+                    ? "Thanh toán test"
+                    : "Đã thu ròng"}
+                  :{" "}
                   {(selected.collected - selected.refunded).toLocaleString(
                     "vi-VN",
                   )}{" "}
@@ -395,15 +438,16 @@ export function Workbench({
                   staff
                 />
               )}
-              {roles.some((r) =>
-                ["OWNER", "OPERATIONS_MANAGER"].includes(r),
-              ) && (
-                <ProposeChange
-                  key={`change-${selected.id}`}
-                  order={selected}
-                  onChanged={() => void load()}
-                />
-              )}
+              {!purchaseTestRecord(selected) &&
+                roles.some((r) =>
+                  ["OWNER", "OPERATIONS_MANAGER"].includes(r),
+                ) && (
+                  <ProposeChange
+                    key={`change-${selected.id}`}
+                    order={selected}
+                    onChanged={() => void load()}
+                  />
+                )}
               {roles.some((role) =>
                 ["OWNER", "OPERATIONS_MANAGER", "BUYER", "WAREHOUSE"].includes(
                   role,
@@ -452,6 +496,8 @@ const actionLabels: Record<string, string> = {
 };
 /** Presentation prerequisite only; the command still authorizes current server state. */
 export function claimPurchaseBlockReason(order: Order): string {
+  if (purchaseTestRecord(order))
+    return "Đơn test. Các thao tác mua và giao hàng đang tắt.";
   if (order.hold)
     return "Đơn đang tạm giữ. Cần xử lý lý do tạm giữ trước khi nhận việc mua hàng.";
   if (order.stage !== "QUOTE_ACCEPTED")
@@ -514,7 +560,13 @@ export function ActionForm({
     action === "claimPurchase" ? claimPurchaseBlockReason(order) : "";
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (busy || prerequisite || !actions.includes(action)) return;
+    if (
+      busy ||
+      purchaseTestRecord(order) ||
+      prerequisite ||
+      !actions.includes(action)
+    )
+      return;
     const f = new FormData(e.currentTarget);
     const n = (s: string) => Number(f.get(s)),
       t = (s: string) => String(f.get(s) ?? "");
@@ -591,6 +643,12 @@ export function ActionForm({
     await submit(action, p);
   }
   if (!actions.length) return null;
+  if (purchaseTestRecord(order))
+    return (
+      <p className="testOrderNote">
+        Đơn test. Các thao tác mua và giao hàng đang tắt.
+      </p>
+    );
   return (
     <StepForm
       enabled={[

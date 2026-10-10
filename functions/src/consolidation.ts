@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import {
   parcelCustomerEvent,
   customerEventFields,
@@ -150,6 +151,9 @@ export const consolidationCommand = onCall(
           )
         )
           throw Error("STALE_ORDER");
+        requireLivePurchaseRecord(batch);
+        parcels.forEach(requireLivePurchaseRecord);
+        orders.forEach(requireLivePurchaseRecord);
         if (sealPayload) {
           const allocationRecords = await Promise.all(
             orderIds.map((orderId) =>

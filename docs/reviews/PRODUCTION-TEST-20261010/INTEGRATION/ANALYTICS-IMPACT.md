@@ -1,0 +1,5 @@
+# Test traffic isolation
+
+Approved v1 excludes test operations from customer analytics. Bounded consumer review found that finance order/ledger events were excluded, but an admitted non-staff tester could still start/ingest a customer analytics session; only staff traffic was previously excluded. This would add test views/questions to real customer counters.
+
+Use the existing analytics transaction and exact central environment to read current tester admission before session/event writes, reusing the existing internal-traffic rejection. Anonymous and non-admitted real visitor consent/quota behavior remains. Reject linking a classified test order to any live analytics session. No new analytics store, retained identifiers, client flags, production writes, migration, or tracking feature. Current explicit owner/tester policies remain authoritative; UI does not grant test status. Verify actual handlers with zero-write test admission cases and real/anonymous controls. Repository intelligence DEGRADED; current source and executable checks used.

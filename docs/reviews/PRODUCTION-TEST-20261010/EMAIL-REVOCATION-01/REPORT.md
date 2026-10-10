@@ -1,0 +1,9 @@
+# Email authorization correction
+
+EMAIL-REVOCATION-01 and the peer-discovered config/profile gap are fixed within approved PRODUCTION-TEST v1. Both real workers now watch current global email settings and applicable test policies, consent, authoritative resource and profile eligibility in the transaction that records a provider attempt. Concurrent disable, tester removal, opt-out, lock or provenance/config change invalidates that transaction. Its retry re-admits the current state before counting an attempt.
+
+The correction uses optional Transaction readers. The real subscription sender additionally supplies its validated provider config; default provider-agnostic service callers keep their existing behavior. Retry result classification resets on each callback. Shared dispatch/quota implementation and unknown-state handling were not changed.
+
+Validation: 289 tests across four focused suites passed. The test-email file contains 61 cases, including 40 new actual worker/service timing, conflict-retry and happy cases. Fresh backend strict, frontend strict, targeted ESLint and diff checks passed. TESTS.json and REVIEW.json bind evidence to six exact file hashes. Peer review was requested against the completed source.
+
+The fake transaction records read documents and retries a conflicting commit. This is local actual-handler evidence, not Firestore emulator or deployed provider proof. Dispatch is mocked in the worker tests; shared quota reset behavior is unchanged by source inspection. Auth remains a cross-service snapshot, and external I/O cannot be atomic with the final Firestore authorization commit. Combined production readiness remains NOT_READY pending root-owned CI/artifact/provider/live checks. No provider requests, secret payload reads, production writes, push or deployment occurred.

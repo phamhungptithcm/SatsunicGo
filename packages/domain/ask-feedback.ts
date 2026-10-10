@@ -1,5 +1,14 @@
 import { z } from "zod";
 const hash = z.string().regex(/^[a-f0-9]{64}$/);
+export const feedbackExecutionSchema = z
+  .object({
+    executionMode: z.literal("production_test"),
+    executionPolicyVersion: z.number().int().positive().safe(),
+    testRunId: z.string().uuid(),
+    testMode: z.literal(true),
+    analyticsEligible: z.literal(false),
+  })
+  .strict();
 export const feedbackPolicySchema = z
   .object({
     enabled: z.boolean(),
@@ -65,6 +74,7 @@ export const feedbackInboxSchema = z
               "needs_source_review",
               "resolved",
             ]),
+            testMode: z.literal(true).optional(),
           })
           .strict(),
       )

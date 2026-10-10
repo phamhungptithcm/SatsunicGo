@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-UI-20261010",
+  "captured_at": "2026-10-10T01:10:04.081152+00:00",
+  "base_commit": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "dirty_worktree": true,
+  "repository_intelligence": {
+    "status": "DEGRADED",
+    "reason": "Optional CodeGraph/CocoIndex unavailable in isolated checkout; bounded source/compiler/tests used."
+  },
+  "approval": "APPROVAL.json / call_5081fd46f74546c08b78d7a095730a9a item0 / PRODUCTION-TEST v1",
+  "ownership_note": "crm.ts hash includes finance-owned operationalDashboard changes. Other dependency paths belong to root/finance/policy, not UI.",
+  "source_sha256": {
+    "src/app/App.tsx": "3f63be8e4fccb14acfb56602e83f9a1ac5b104530403355f1e1b34512c3543ab",
+    "src/features/orders/TestOrderBadge.tsx": "bbe0e68d3f3f462bf6b08913bc2f6d1348e5e012b478e109b8a59df9772acbaf",
+    "src/features/orders/test-order.css": "5654988698c45e7fff461bd2f139449fff8a5c5e7991d772b998c2170d31703c",
+    "src/features/orders/OrderTools.tsx": "009c777846a527e9c3c28efab0b37b4e0a336dc0aae1a76854ce96a372ecb632",
+    "src/features/crm/Customer.tsx": "5537a8b82d9fd0b36bfb7b879ea4d118b513d0e03116675137d33aff9857ba18",
+    "src/features/operations/OperationsDetails.tsx": "24bd57125e13ae773f2a79b8e0aa07be4b2601005778e5a6af79c10ca1291613",
+    "src/features/operations/Workbench.tsx": "1bf2798e400017f221dbbdb10fcae646eaa3a620e3fbcac49cb864167265c789",
+    "src/features/settings/FeedbackReview.tsx": "2e63626ea35eb5f9e9bf4e15a4974bf79da031decc7fb8045bbf0cabb2e2c0ac",
+    "functions/src/purchase-test-projection.ts": "1dce34d128d9b1497880c96d453fb5e1028214136d0110552d21c68e0e79f257",
+    "functions/src/purchase-pdf.ts": "4c42d93bd5f5b219cc36240e4f24fea8258904deaa574bbdce4828eeb2543d8e",
+    "functions/src/purchase-receipts.ts": "2ff491eb2bce27d684487f4a42eea63b6c553381687abadd67d357ee3633b61b",
+    "functions/src/workspace.ts": "9c86ab9c21cfa24f5c080e397a813a3bbf893e177affa3397e90fc19f40c1d2b",
+    "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+    "tests/unit/production-test-presentation.test.ts": "5f0a85056de373abfa140903cbe2fb96e3dbf81ea8cde09cc45b8192f8645952",
+    "tests/unit/production-test-pdf.test.ts": "b933050d805fa9630fe9e18bbe12b47ada95a78f75a9c8c1a09f01d38a7e31da"
+  },
+  "dependency_sha256": {
+    "packages/domain/purchase-checkout.ts": "4a4d7823ee98c315b23c7d222cd373ef27f1d6b29c8ee7c8f0c322d93fe7e054",
+    "packages/domain/index.ts": "5d1f9d25daa786fb7e96944751cf6380ce077ff97c0fa97d0240e912db54f7eb",
+    "packages/domain/ask-feedback.ts": "0ed34d68d5d0614ef9aeff12d3cce796d78ec72f36bc860baa445470424b7ed2",
+    "functions/src/customer-email-job.ts": "ae400b41e35a9cd0b6aed5380fcbc4390573facc7341943ab8077d15a020b394",
+    "functions/src/production-test-email-policy.ts": "1ab16da7f5cad7043e7050160e34a7ddd07621201bcdfd406e463a713544f340",
+    "functions/src/purchase-test-boundary.ts": "88bc852e3d6d65be5f56dd6df0e3718d44af2c86b5d8d7ebaa29c9947c6a3c6a",
+    "functions/src/invoices.ts": "11914e999ff1f1da51c9e5995b3641e61ca1986d001c683c2cef99a78a29c8d2",
+    "tests/unit/production-test-email.test.ts": "09305ad3e15e2744d5a62fe26737a5f872a5e741123be3eea1061535830a69c9"
+  },
+  "checks": [
+    {
+      "name": "scoped UI/PDF/workbench regressions",
+      "status": "PASSED",
+      "exit_code": 0,
+      "tests": 57,
+      "files": 5,
+      "command": "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node node_modules/vitest/vitest.mjs run tests/unit/production-test-presentation.test.ts tests/unit/production-test-pdf.test.ts tests/unit/purchase-pdf.test.ts tests/unit/workbench-ui.test.ts tests/unit/crm-ux028-eligibility.test.ts",
+      "execution_local": "2026-10-09 20:04:02 America/Chicago"
+    },
+    {
+      "name": "affected presentation/email integration rerun",
+      "status": "PASSED",
+      "exit_code": 0,
+      "tests": 58,
+      "files": 2,
+      "overlaps_previous": true,
+      "command": "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node node_modules/vitest/vitest.mjs run tests/unit/production-test-presentation.test.ts tests/unit/production-test-email.test.ts",
+      "execution_local": "2026-10-09 20:08:29 America/Chicago"
+    },
+    {
+      "name": "frontend strict",
+      "status": "PASSED",
+      "exit_code": 0,
+      "command": "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node node_modules/typescript/bin/tsc --noEmit"
+    },
+    {
+      "name": "backend strict after root email parser correction",
+      "status": "PASSED",
+      "exit_code": 0,
+      "command": "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node node_modules/typescript/bin/tsc -p functions/tsconfig.json --noEmit",
+      "limitation": "Concurrent owner edits; parent must bind full combined candidate at its final freeze."
+    },
+    {
+      "name": "scoped ESLint",
+      "status": "PASSED",
+      "exit_code": 0,
+      "command": "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node node_modules/eslint/bin/eslint.js src/app/App.tsx src/features/orders/TestOrderBadge.tsx src/features/orders/OrderTools.tsx src/features/crm/Customer.tsx src/features/operations/OperationsDetails.tsx src/features/operations/Workbench.tsx src/features/settings/FeedbackReview.tsx functions/src/purchase-test-projection.ts functions/src/purchase-pdf.ts functions/src/purchase-receipts.ts functions/src/workspace.ts functions/src/crm.ts tests/unit/production-test-presentation.test.ts tests/unit/production-test-pdf.test.ts"
+    },
+    {
+      "name": "scoped tracked diff whitespace",
+      "status": "PASSED",
+      "exit_code": 0,
+      "command": "git diff --check -- src/app/App.tsx src/features/orders/TestOrderBadge.tsx src/features/orders/test-order.css src/features/orders/OrderTools.tsx src/features/crm/Customer.tsx src/features/operations/OperationsDetails.tsx src/features/operations/Workbench.tsx src/features/settings/FeedbackReview.tsx functions/src/purchase-test-projection.ts functions/src/purchase-pdf.ts functions/src/purchase-receipts.ts functions/src/workspace.ts functions/src/crm.ts tests/unit/production-test-presentation.test.ts tests/unit/production-test-pdf.test.ts"
+    },
+    {
+      "name": "current synthetic PDF rendering",
+      "status": "PASSED",
+      "exit_code": 0,
+      "pages": 6,
+      "lines": 30,
+      "rendered_width": 990,
+      "rendered_height": 1400,
+      "inspected": [
+        "page1",
+        "page6-header",
+        "page6-footer"
+      ],
+      "source": "functions/src/purchase-pdf.ts",
+      "private_artifacts": {
+        "/private/tmp/satsunicgo-production-test-ui-evidence/render-pdf.cjs": {
+          "sha256": "d00f37c0243a63206c09ba3f7bfa483a443db9631caf08cc2d3526b21bf400c7",
+          "bytes": 1781
+        },
+        "/private/tmp/satsunicgo-production-test-ui-evidence/test-receipt.pdf": {
+          "sha256": "13ba074936c8cc1c9b33023fbe58bbd1dbf386a2a065e66e0275c4a0bc08690f",
+          "bytes": 654701
+        },
+        "/private/tmp/satsunicgo-production-test-ui-evidence/test-receipt-page1.png": {
+          "sha256": "4dcf84a6a682582bd38fd7d11934aa2132ce0a18595e06b498f85d935e434b98",
+          "bytes": 150732
+        },
+        "/private/tmp/satsunicgo-production-test-ui-evidence/test-receipt-page6-header.png": {
+          "sha256": "b46a45c30be0b8a03ecf96f27ba3efa50bcb5e98c1c2c05895134d035768c36e",
+          "bytes": 18822
+        },
+        "/private/tmp/satsunicgo-production-test-ui-evidence/test-receipt-page6-footer.png": {
+          "sha256": "9f78de44bd6b656b19817d2b4c3fabfbaf0366c7d3cde2fd0497ec331397b261",
+          "bytes": 5310
+        },
+        "/private/tmp/satsunicgo-production-test-ui-evidence/test-receipt-page6.png": {
+          "sha256": "4cdbfab112ef58e62e34c26f0b820965ed4c849264aaba98245650ae163c3646",
+          "bytes": 109812
+        }
+      }
+    },
+    {
+      "name": "account/CRM real-browser viewport, focus, keyboard, spoken AT",
+      "status": "NOT_RUN",
+      "reason": "Subagent scope forbids runtime/reseed/account mutations; candidate UI browser acceptance must be supplied by root."
+    },
+    {
+      "name": "deployed/provider/inbox acceptance",
+      "status": "NOT_RUN",
+      "reason": "No push, deployment, external call, secret access or provider operation in this contribution."
+    }
+  ],
+  "runtime_ledger": {
+    "status": "NOT_RUN",
+    "reason": "ai-agent-kit executable not available via command -v; manual evidence report provided; no synthetic runtime receipt claimed."
+  },
+  "cost": {
+    "provider_tokens": "Unavailable",
+    "actual_billed_cost": "Unavailable",
+    "model_or_network_calls_by_this_contribution": false
+  },
+  "production_readiness": "NOT_READY",
+  "product_language_gate": "BLOCKED"
+}

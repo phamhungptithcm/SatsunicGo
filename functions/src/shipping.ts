@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import { parcelCustomerEvent, customerEventFields } from "./customer-notification-events";
 import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
@@ -126,6 +127,8 @@ export const shippingCommand = onCall(options, async (req) => {
           "Đơn đã thay đổi. Tải lại để tiếp tục.",
         );
       // Order-level allocation records serialize competing parcel creation.
+      requireLivePurchaseRecord(parcel);
+      orders.forEach(requireLivePurchaseRecord);
       if (new Set(orders.map((o) => o.market)).size !== 1)
         throw Error("INCOMPATIBLE_ORIGINS");
       const allocationRecords = await Promise.all(

@@ -1,3 +1,6 @@
+import { purchaseExecutionFields } from "./purchase-test-boundary";
+import { assertProductionTestCommand } from "./production-test-commands";
+import { productionTestEnvironment, admitProductionTestPolicy, productionTestProvenance } from "./production-test-policy";
 import { orderCustomerFields } from "./customer-notification-events";
 import {
   isStringRoleArray,
@@ -137,6 +140,7 @@ export const command = onCall(config, async (req) => {
           "aborted",
           "Dữ liệu đã thay đổi. Tải lại để tiếp tục.",
         );
+      assertProductionTestCommand(o, d.action);
     }
     if (d.action === "submitRequest" && previous.exists)
       return previous.data()?.result;
@@ -145,8 +149,15 @@ export const command = onCall(config, async (req) => {
         if (snapshot.exists)
           throw new HttpsError("already-exists", "Yêu cầu đã tồn tại.");
         const p = requestSchema.parse(d.payload);
+        const testEnvironment = productionTestEnvironment(db);
+        const testPolicy = testEnvironment
+          ? admitProductionTestPolicy((await tx.get(db.doc("settings/productionTest"))).data(), uid)
+          : null;
+        if (process.env.PURCHASE_PRODUCTION_TEST_ARTIFACT === "v1" && (!testEnvironment || !testPolicy))
+          throw new HttpsError("failed-precondition", "Kiểm tra thông tin, quyền và trạng thái hiện tại.", { reason: "PRODUCTION_TEST_NOT_ADMITTED" });
         o = {
           ...p,
+          ...(testPolicy ? { ...productionTestProvenance(testPolicy, d.operationId), testMode: true } : {}),
           id,
           ownerId: uid,
           purchaseKind: "custom",
@@ -339,13 +350,13 @@ export const command = onCall(config, async (req) => {
         )
           tx.set(
             db.doc(`orderOperations/${id}`),
-            { [d.action]: d.payload, changedBy: uid, changedAt: now },
+            { ...purchaseExecutionFields(o), [d.action]: d.payload, changedBy: uid, changedAt: now },
             { merge: true },
           );
         if (d.action === "claimPurchase")
           tx.set(
             db.doc(`orderOperations/${id}`),
-            { buyerId: uid, claimedAt: now },
+            { ...purchaseExecutionFields(o), buyerId: uid, claimedAt: now },
             { merge: true },
           );
       }
@@ -358,6 +369,7 @@ export const command = onCall(config, async (req) => {
     }
     if (d.action === "issueQuote") {
       tx.create(ref.collection("quotes").doc(String(o.quoteVersion)), {
+        ...purchaseExecutionFields(o),
         quote: o.quote,
         quoteVersion: o.quoteVersion,
         membershipSnapshot: o.membershipSnapshot ?? null,
@@ -369,6 +381,7 @@ export const command = onCall(config, async (req) => {
       tx.create(
         ref.collection("acceptances").doc(String(o.acceptedQuoteVersion)),
         {
+          ...purchaseExecutionFields(o),
           quoteVersion: o.acceptedQuoteVersion,
           deposit: o.deposit,
           acceptedAt: now,
@@ -378,7 +391,7 @@ export const command = onCall(config, async (req) => {
         },
       );
     }
-    const result = { id, version: o.version };
+    const result = { id, version: o.version, ...purchaseExecutionFields(o) };
     if (d.action === "submitRequest" && !profile.exists) {
       const displayName =
         typeof req.auth!.token.name === "string"
@@ -403,14 +416,16 @@ export const command = onCall(config, async (req) => {
         confirmedBy: uid,
       });
     tx.set(ref, o);
-    tx.create(op, { hash, result, createdAt: now });
+    tx.create(op, { ...purchaseExecutionFields(o), hash, result, createdAt: now });
     tx.create(db.collection("auditEvents").doc(), {
+      ...purchaseExecutionFields(o),
       actor: uid,
       action: d.action,
       resourceId: id,
       createdAt: now,
     });
     tx.create(ref.collection("timeline").doc(), {
+      ...purchaseExecutionFields(o),
       action: d.action,
       createdAt: now,
     });
@@ -426,6 +441,7 @@ export const command = onCall(config, async (req) => {
         });
     }
     tx.create(db.collection("outboxJobs").doc(), {
+      ...purchaseExecutionFields(o),
       ownerId: o.ownerId,
       orderId: id,
       action: d.action,
@@ -446,7 +462,7 @@ export {
 } from "./workspace";
 export { membershipCommand } from "./membership";
 export { publicPage, publicDiscovery } from "./public";
-export { maintenance, readNotification } from "./jobs";
+export { maintenance, readNotification, scheduledPublication, customerNotificationRecovery } from "./jobs";
 export {
   createPaymentLink,
   payosWebhook,
@@ -562,12 +578,13 @@ export { purchaseReceipt, purchaseReceiptWorker, purchaseReceiptRecovery } from 
 
 export { purchaseSourcingChange } from "./purchase-adjustment";
 
-// SePay sandbox endpoints are never part of a production release.
+// Production-test registration is explicit; handlers still enforce server policy and provenance.
+import { sepayArtifactEnvironment } from "./production-test-policy";
 import { purchaseSePayPayment as sandboxSePayPayment, purchaseSePayIpn as sandboxSePayIpn, purchaseSePayInboxWorker as sandboxSePayInboxWorker } from "./purchase-sepay";
-const localSePay = process.env.FUNCTIONS_EMULATOR === "true" && process.env.GCLOUD_PROJECT === "demo-satsunicgo";
-export const purchaseSePayPayment = localSePay ? sandboxSePayPayment : undefined;
-export const purchaseSePayIpn = localSePay ? sandboxSePayIpn : undefined;
-export const purchaseSePayInboxWorker = localSePay ? sandboxSePayInboxWorker : undefined;
+const productionSePay = sepayArtifactEnvironment();
+export const purchaseSePayPayment = productionSePay ? sandboxSePayPayment : undefined;
+export const purchaseSePayIpn = productionSePay ? sandboxSePayIpn : undefined;
+export const purchaseSePayInboxWorker = productionSePay ? sandboxSePayInboxWorker : undefined;
 
 export { customerNotificationCreated } from "./customer-notification-delivery";
 

@@ -1,3 +1,4 @@
+import { purchaseExecutionFields } from "./purchase-test-boundary";
 import {
   customerEvent,
   customerEventFields,
@@ -92,6 +93,7 @@ export const purchaseSourcingChange = onCall(
           "permission-denied",
           "Chưa thể cập nhật giá mua của đơn.",
         );
+      const execution = purchaseExecutionFields(order);
       const hash = createHash("sha256").update(JSON.stringify(d)).digest("hex");
       if (op.exists) {
         if (op.data()?.hash !== hash)
@@ -156,15 +158,18 @@ export const purchaseSourcingChange = onCall(
       }
       const result = { id: order.id, version: order.version + 1 };
       tx.update(stored.ref, {
+        ...execution,
         purchaseAdjustment: adjustment,
         version: result.version,
       });
       tx.create(db.doc(`idempotencyKeys/sourcing-${uid}-${d.operationId}`), {
+        ...execution,
         hash,
         result,
         createdAt: Date.now(),
       });
       tx.create(stored.ref.collection("timeline").doc(d.operationId), {
+        ...execution,
         action:
           d.action === "propose"
             ? "proposePurchasePrice"
@@ -173,6 +178,7 @@ export const purchaseSourcingChange = onCall(
       });
       const occurredAt = Date.now();
       tx.create(db.doc(`outboxJobs/sourcing-${uid}-${d.operationId}`), {
+        ...execution,
         ownerId: order.ownerId,
         orderId: order.id,
         resourceId: order.id,

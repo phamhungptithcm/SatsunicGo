@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-10T01:30:26.220435+00:00",
+  "approval": "../APPROVAL.json",
+  "scope": "Actual analytics callable admission and order-attribution boundary",
+  "source_hashes": {
+    "functions/src/analytics-ingest.ts": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+    "tests/unit/production-test-analytics.test.ts": "59f43bbf1bae925beeba7244242982f43458a84b4ba3a430bb07c8f74f21bf8d"
+  },
+  "checks": {
+    "unit": {
+      "status": "PASSED",
+      "tests": 25,
+      "files": 3,
+      "analytics_new_cases": 9,
+      "log": "/private/tmp/satsunicgo-production-test-analytics-check.log"
+    },
+    "lint": {
+      "status": "PASSED",
+      "exit": 0,
+      "log": "/private/tmp/satsunicgo-production-test-analytics-lint.log"
+    },
+    "backendStrict": {
+      "status": "PASSED",
+      "exit": 0,
+      "log": "/private/tmp/satsunicgo-production-test-current-backend.log"
+    }
+  },
+  "evidence_hashes": {
+    "/private/tmp/satsunicgo-production-test-analytics-check.log": "7781b6de6fd2535c5a31091217054a3b4dd768f9a99af70239388522cd67e071",
+    "/private/tmp/satsunicgo-production-test-analytics-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-production-test-current-backend.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "independentReview": "PENDING_RELEASE_OWNER",
+  "limitations": [
+    "Actual handlers with in-memory transaction adapter; not emulator/provider/live or load acceptance",
+    "Anonymous/non-admitted traffic preserves existing consent/quota behavior",
+    "One watched productionTest policy read per authenticated session/ingest in exact test artifact; no new tracking or production writes"
+  ],
+  "repositoryIntelligence": "DEGRADED"
+}

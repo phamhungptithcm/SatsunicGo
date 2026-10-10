@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { SEMVER, SHA } from './release.mjs';
 import { preflight, exactDemoCondition, assertDemoBindings, assertOnlyDemoReferences } from './preflight.mjs';
 import ts from 'typescript';
+import { assertCompiledProductionTestExports, verifyProductionTestEnvironment, PRODUCTION_TEST_ENV_FILE, PRODUCTION_TEST_ENVIRONMENT, PRODUCTION_TEST_ENV_BYTES } from './production-test.mjs';
 
 export const digest = value => createHash('sha256').update(value).digest('hex');
 export const REQUIRED_FUNCTION_ASSETS = Object.freeze(['NotoSans-Regular.ttf', 'NotoSans-LICENSE.txt', 'purchase-vn-regions.json']);
@@ -55,12 +56,14 @@ function assertCompiledDemoEnvironment(ast) {
   visit(ast);
 }
 /** Source-bound exact exceptions. Remove demo bindings even under a mistaken emulator env. */
-export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
-  if(!Array.isArray(exclusions)||exclusions.length>emulatorExportMetadata.size)throw Error('EMULATOR_EXPORT_METADATA');
+export function excludeEmulatorOnlyExports(compiled, exclusions = [], productionTestExports = []) {
+  const retainedProductionTest = assertCompiledProductionTestExports(compiled, productionTestExports);
+  const activeMetadata = new Map([...emulatorExportMetadata].filter(([name])=>!retainedProductionTest.has(name)));
+  if(!Array.isArray(exclusions)||exclusions.length>activeMetadata.size)throw Error('EMULATOR_EXPORT_METADATA');
   const expected=new Map();
   for(const row of exclusions){
     if(!row||typeof row!=='object'||Array.isArray(row)||Object.keys(row).sort().join(',')!=='kind,name,region,source')throw Error('EMULATOR_EXPORT_METADATA');
-    const spec=emulatorExportMetadata.get(row.name);
+    const spec=activeMetadata.get(row.name);
     if(!spec||expected.has(row.name)||row.kind!==spec.kind||row.region!=='asia-southeast1'||row.source!=='functions/src/'+spec.from.slice(2)+'.ts')throw Error('EMULATOR_EXPORT_METADATA');
     expected.set(row.name,spec);
   }
@@ -68,7 +71,7 @@ export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
   if(ast.parseDiagnostics.length)throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
   const allowed = new Set(), assignments = [];
   function visit(node) {
-    if (ts.isIdentifier(node) && emulatorExportMetadata.has(node.text) && ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+    if (ts.isIdentifier(node) && activeMetadata.has(node.text) && ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
       const member = node.parent, assignment = member.parent;
       if (ts.isIdentifier(member.expression) && member.expression.text === 'exports' && ts.isBinaryExpression(assignment) && assignment.left === member && assignment.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
         let value = assignment.right;
@@ -114,7 +117,7 @@ export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
     for(const [name,alias] of aliases)assertOnlyDemoReferences(ast,name,alias.references);
   }
   function rejectUnknown(node) {
-    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && emulatorExportMetadata.has(node.text) && !allowed.has(node)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && activeMetadata.has(node.text) && !allowed.has(node)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
     ts.forEachChild(node, rejectUnknown);
   }
   rejectUnknown(ast);
@@ -127,7 +130,7 @@ export function files(root, prefix = '') {
     const file = prefix ? `${prefix}/${name}` : name;
     if (!/^[\w./-]+$/.test(file) || name.startsWith('.') && file !== 'deployment/dist/.vite') {
       // Vite's generated manifest is the sole allowed hidden directory.
-      if (!file.startsWith('deployment/dist/.vite/')) throw Error('UNSAFE_ARTIFACT_PATH');
+      if (!file.startsWith('deployment/dist/.vite/') && file !== PRODUCTION_TEST_ENV_FILE) throw Error('UNSAFE_ARTIFACT_PATH');
     }
     const stat = lstatSync(join(root, file));
     if (stat.isSymbolicLink()) throw Error('ARTIFACT_SYMLINK');
@@ -177,7 +180,8 @@ export function verify(root, expectedSha, expectedTag) {
   const pkg = JSON.parse(readFileSync(join(root, 'deployment/functions/package.json'), 'utf8'));
   if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
   // Verification of an already stripped artifact accepts only harmless void0 declarations.
-  excludeEmulatorOnlyExports(readFileSync(join(root, 'deployment/functions', pkg.main), 'utf8'));
+  verifyProductionTestEnvironment(root, manifest);
+  excludeEmulatorOnlyExports(readFileSync(join(root, 'deployment/functions', pkg.main), 'utf8'), [], manifest.productionTestExports ?? []);
   for (const key of ['dist/release-version.json', 'functions/release.json']) {
     const metadata = JSON.parse(readFileSync(join(root, 'deployment', key), 'utf8'));
     if (metadata.tag !== expectedTag || metadata.sha !== expectedSha) throw Error('VERSION_METADATA_MISMATCH');
@@ -194,8 +198,9 @@ export function prepareWorkspace(root, target, expectedSha, expectedTag) {
 // Preserve the established release holds; feedback cleanup also awaits retention/rollout approval.
 const BASE_HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments']);
 export const HELD_EXPORTS = Object.freeze([...BASE_HELD_EXPORTS, 'askFeedbackCleanup']);
-export function applyProductionHolds(compiled, inventory) {
-  const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name)).map(item => item.name));
+export function applyProductionHolds(compiled, inventory, productionTest = false) {
+  const retained = new Set(productionTest ? ['askWorkflow', 'currentAskConversation'] : []);
+  const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name) && !retained.has(item.name)).map(item => item.name));
   const baseHeld = new Set(inventory.filter(item => BASE_HELD_EXPORTS.includes(item.name)).map(item => item.name));
   if (baseHeld.size && baseHeld.size !== BASE_HELD_EXPORTS.length) throw Error('PRODUCTION_HOLD_INVENTORY_DRIFT');
   const ast = ts.createSourceFile('index.js', compiled, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -256,7 +261,7 @@ export function applyProductionHolds(compiled, inventory) {
   };
   inspectCleanupShape(ast);
   const removed = new Set(), imports = new Set();
-  const blockedModules = new Set(baseHeld.size ? ['./ai/ask-workflow', './payments/payos'] : []);
+  const blockedModules = new Set(baseHeld.size ? [...(productionTest ? [] : ['./ai/ask-workflow']), './payments/payos'] : []);
   const spans = [];
   for (const node of ast.statements) {
     if (ts.isVariableStatement(node)) {
@@ -301,8 +306,10 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   const pkg = JSON.parse(readFileSync(packagePath, 'utf8'));
   const entryPath = join(stage, 'deployment/functions', pkg.main);
   if (!/^lib\/[\w./-]+\.js$/.test(pkg.main) || pkg.main.split('/').includes('..')) throw Error('UNSAFE_FUNCTION_ENTRY');
-  const emulator = excludeEmulatorOnlyExports(readFileSync(entryPath, 'utf8'), check.emulatorOnlyExports);
-  const promotion = applyProductionHolds(emulator.compiled, check.inventory);
+  const productionTestExports = check.productionTestExports ?? [];
+  const emulator = excludeEmulatorOnlyExports(readFileSync(entryPath, 'utf8'), check.emulatorOnlyExports, productionTestExports);
+  if (productionTestExports.length) writeFileSync(join(stage, PRODUCTION_TEST_ENV_FILE), PRODUCTION_TEST_ENV_BYTES);
+  const promotion = applyProductionHolds(emulator.compiled, check.inventory, productionTestExports.length > 0);
   writeFileSync(entryPath, promotion.compiled);
   pkg.version = candidate.tag.slice(1);
   // Deployment package contains precompiled JavaScript; managed Node build must not invoke tsc.
@@ -327,7 +334,7 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   writeFileSync(join(stage, 'deployment/firebase.json'), JSON.stringify(config, null, 2) + '\n');
   cpSync(candidatePath, join(stage, 'candidate.json'));
   cpSync(notesPath, join(stage, 'release-notes.md'));
-  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports, emulatorOnlyExports: emulator.emulatorOnlyExports,
+  const manifest = { schemaVersion: 1, ...metadata, region: 'asia-southeast1', inventory: promotion.inventory, heldExports: promotion.heldExports, emulatorOnlyExports: emulator.emulatorOnlyExports, productionTestExports, ...(productionTestExports.length ? { runtimeEnvironment: PRODUCTION_TEST_ENVIRONMENT } : {}),
     files: files(stage), sourcePolicy: 'precompiled-package-no-dotenv-no-rebuild' };
   writeFileSync(join(stage, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
   return verify(stage, candidate.sha, candidate.tag);

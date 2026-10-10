@@ -1,0 +1,129 @@
+{
+  "at": "2026-10-10T01:07:39.677553+00:00",
+  "scope": "Approved PRODUCTION-TEST v1 finance isolation",
+  "approval": "../APPROVAL.json",
+  "repository_intelligence": "DEGRADED bounded source/Git/compiler/handler tests; no index recovery attempted",
+  "status": "BLOCKED_PENDING_COMBINED_PRODUCT_AND_RELEASE_ACCEPTANCE",
+  "engineering_checks": {
+    "focused_tests": "PASSED 167 tests / 8 files Node22; current finance suite48 cases",
+    "backend_strict": "PASSED exit0 after invoice fences",
+    "frontend_strict": "PASSED exit0 after invoice fences",
+    "targeted_lint": "PASSED exit0 after invoice fences",
+    "diff_check": "PASSED exit0"
+  },
+  "findings": [
+    {
+      "cycle": 1,
+      "severity": "High",
+      "location": "purchase-settlement.ts mixed balance review branch",
+      "problem": "Existing sandbox proof could place hold on differently-mode source order",
+      "resolution": "Reject mode/run/policy mismatch before any source mutation",
+      "verification": "3 mixed-mode actual-handler tests assert zero writes"
+    },
+    {
+      "cycle": 2,
+      "severity": "Medium",
+      "location": "purchase-test-boundary.ts provenance propagation",
+      "problem": "Legacy tagged sandbox order sourcing outbox could lose test marker",
+      "resolution": "Conservative legacy classification propagates testMode true; unknown/partial parser throws safe HttpsError",
+      "verification": "legacy test marker and simulated sourcing approval/outbox tests pass"
+    },
+    {
+      "cycle": 3,
+      "severity": "High",
+      "location": "functions/src/invoices.ts",
+      "problem": "Separate generic invoice draft/issue/share/email accepts sandbox order; real statement numbering remains unfenced",
+      "status": "FIXED",
+      "resolution": "Parent assigned bounded minimal invoice fences under v1. Source/document guarded before draft/refresh/issue/number/share/email; missing source fails closed.",
+      "verification": "5 action negatives +3 tagged/partial doc negatives zero writes; real draft issue share queueEmail happy path PASS"
+    },
+    {
+      "cycle": 4,
+      "status": "PASSED",
+      "scope": "Complete owned backend diff including invoices; no known remaining engineering defects in executed checks",
+      "evidence": "167focusedtests,bothstrict,scopedlint,diffcheck,sourcehashes",
+      "limitations": "Combined index/content/browser/rules/provider acceptance remains root-owned and unclaimed"
+    }
+  ],
+  "production_readiness": "NOT_READY: combined current index boundaries and source freeze, fresh full CI/rules, product content in-context browser and provider/live acceptance remain root-owned",
+  "limitations": [
+    "In-memory transaction handler tests do not prove Firestore transaction retry/network/provider behavior",
+    "Updated9 SePay emulator ledger assertions NOT_RUN here; shared runtime untouched",
+    "Backend no stock/reservation mutation found in bounded checkout/settlement trace; no test-stock writer invented",
+    "No provider requests, secret payload reads, production writes, pushes or deploys",
+    "Genuine MFA/browser/Sepay hosted/PDF production acceptance not claimed"
+  ],
+  "source_hashes": {
+    "functions/src/purchase-test-boundary.ts": "88bc852e3d6d65be5f56dd6df0e3718d44af2c86b5d8d7ebaa29c9947c6a3c6a",
+    "functions/src/purchase-settlement.ts": "f9aa113d9c10369fd499d2700410ff29317fbdb69b7f7eaed40bbbd035480531",
+    "functions/src/purchase-adjustment.ts": "5c21d41c88fb4f8868c1d871a6ebe25dfb94728925c71dcb8687bc762386773f",
+    "functions/src/finance-review.ts": "f2d185d4d071736afd8bf21e3000cf04fd52c5b81eab8dfcf0196c5061b72733",
+    "functions/src/refunds.ts": "3aa6ad108d642b0b20956daffb4543b716e74ce855072424ba9660a5521d6131",
+    "functions/src/analytics-worker.ts": "c3e085f40507d0cb0f7f9e7384bb71fb752fccb0760486a981581d83d447438e",
+    "functions/src/order-history.ts": "34e1f163b3bb81e719834ef187a3a14a1bad3f30af3760ef57187b6822ed7269",
+    "functions/src/shipping.ts": "5e1f5c2f8a06a2b5189edd8f3ce9c2e8410564b461908594f42fe45e38145ba4",
+    "functions/src/consolidation.ts": "bfeffd22ed813a2279557bc9fc655fdf48646385332968448a58a6dd7eae0b27",
+    "functions/src/changes.ts": "c335d518e53b734b4ce2281e3546eea1308371918a6c33f07adcc5edf100f5df",
+    "functions/src/returns.ts": "b291411cc591177e56f69e35dae50c7ee38829d139576b19d7ded9ca7dff651d",
+    "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+    "packages/domain/index.ts": "5d1f9d25daa786fb7e96944751cf6380ce077ff97c0fa97d0240e912db54f7eb",
+    "tests/unit/purchase-test-finance-boundary.test.ts": "77490730bfa087b345aa2b614fb220244f5fc0c0e5fe0f594457b56e357b11e2",
+    "tests/rules/purchase-sepay.test.ts": "6b8b425c3fa048106fdea0a9536ddc7c1ba65d67eba544134b22156efc3bb5f1",
+    "functions/src/invoices.ts": "11914e999ff1f1da51c9e5995b3641e61ca1986d001c683c2cef99a78a29c8d2"
+  },
+  "memory_candidates": "None",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "scoped_backend_engineering": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped v1 financial isolation and discovered invoice consumer addressed"
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Auth/MFA/AppCheck retained, conservative malformed test classification, no secret/PII access"
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript6/Node22 strict + targeted ESLint; centralized narrow helpers"
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Mixed modes/runs/policies, corrupt proof, foreign owner, late/underpaid/locked, retries covered"
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Malformed provenance raises safe HttpsError; no raw secret/provider payload"
+    },
+    "database": {
+      "status": "PASSED",
+      "summary": "Additive backend-only collection, catch-all client deny, no migration/datafix, bounded same-transaction allocation"
+    },
+    "performance": {
+      "status": "PASSED",
+      "summary": "30-line allocation below500writes; existing bounded reads; analytics adds at most2source reads"
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Legacy real flow retained; test fiscal documents blocked rather than creating second fiscal system; missing invoice source fails closed"
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Two denial strings and live-only displayed counts inventoried with UI owner; actual handler states verified, combined browser/product principles acceptance pending"
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Root owns full combined CI/rules/artifact/provider/live activation. No deployment claims."
+    }
+  },
+  "quality_profiles": [
+    "universal",
+    "typescript-javascript",
+    "api",
+    "database",
+    "concurrency",
+    "memory"
+  ],
+  "runtime_ledger": "ai-agent-kit command not available; no fabricated ledger receipt. Evidence persisted directly."
+}

@@ -6,12 +6,14 @@ import { URL } from 'node:url';
 import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
 import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace, REQUIRED_FUNCTION_ASSETS, excludeEmulatorOnlyExports } from '../../scripts/release/artifact.mjs';
-import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory } from '../../scripts/release/verify-production.mjs';
+import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory, verifyRetryReadback, verifyRuntimeEnvironment } from '../../scripts/release/verify-production.mjs';
+import { retryAdmission, installReviewedRetryPrompt, deploymentArguments } from '../../scripts/release/reviewed-retries.mjs';
+import { assertCompiledProductionTestExports, PRODUCTION_TEST_ENVIRONMENT, PRODUCTION_TEST_ENV_BYTES, PRODUCTION_TEST_ENV_FILE } from '../../scripts/release/production-test.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -391,13 +393,17 @@ test('compiled artifact-only PDF renders Unicode without shared source or font f
     const source=readFileSync(join(repositoryRoot,'functions/src/purchase-pdf.ts'),'utf8');
     const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
     put(root,'functions/lib/functions/src/purchase-pdf.js',compiled);
+    for (const name of readdirSync(join(repositoryRoot,'packages/domain')).filter(name=>name.endsWith('.ts'))) {
+      const domain = readFileSync(join(repositoryRoot,'packages/domain',name),'utf8');
+      put(root,'functions/lib/packages/domain/'+name.replace(/\.ts$/,'.js'),ts.transpileModule(domain,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);
+    }
   });
   rmSync(join(root,'functions'),{recursive:true});
   assert.equal(existsSync(join(stage,'deployment/functions/src')),false);
   const renderer=join(stage,'deployment/functions/lib/functions/src/purchase-pdf.js');
   const script=join(root,'render.cjs');
   put(root,'render.cjs',`const assert=require('node:assert/strict');const {renderPurchaseReceipt}=require(process.argv[2]);const receipt={id:'synthetic',ownerId:'synthetic',lines:[{kind:'listed',name:'Cà phê Việt Nam',variant:'Trắng',quantity:1,goods:100000,service:0,total:100000}],total:100000,provider:'demo',reference:'DEMO-SYNTHETIC',paidAt:Date.UTC(2026,9,8),purpose:'initial',previouslyPaid:0,snapshotHash:'synthetic',shipping:{state:'uncollected'}};const a=renderPurchaseReceipt(receipt),b=renderPurchaseReceipt(receipt);assert.equal(a.subarray(0,8).toString(),'%PDF-1.7');assert.ok(a.equals(b));assert.ok(a.length<3000000);const source=a.toString('binary');assert.match(source,/FontFile2/);assert.match(source,/ToUnicode/);const mapping=new Map();for(const [,key,hex] of source.matchAll(/<([0-9a-f]{4})> <([0-9a-f]+)>/g)){const bytes=Buffer.from(hex,'hex');if(bytes.length%2===0)mapping.set(key,bytes.swap16().toString('utf16le'));}const rows=[...source.matchAll(/Tm <([0-9a-f]+)> Tj ET/g)].map(([,hex])=>(hex.match(/.{4}/g)??[]).map(key=>mapping.get(key)??'').join('')).join(' ');assert.ok(rows.includes('Cà phê Việt Nam'));assert.ok(rows.includes('Trắng'));console.log(JSON.stringify({rendered:true,unicode:true,deterministic:true,bytes:a.length}));`);
-  const run=()=>spawnSync(process.execPath,[script,renderer],{cwd:stage,encoding:'utf8'});
+  const run=()=>spawnSync(process.execPath,[script,renderer],{cwd:stage,encoding:'utf8',env:{...process.env,NODE_PATH:join(repositoryRoot,'node_modules')}});
   const result=run();assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).rendered,true);
   rmSync(join(stage,'deployment/functions/assets/NotoSans-Regular.ttf'));
   assert.notEqual(run().status,0,'missing bundled font must fail, never find shared fallback');
@@ -829,4 +835,149 @@ test('literal object spreads containing cleanup are rejected across export objec
     assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
     assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
   }
+});
+
+
+// Real pinned CLI policy tests: approval is confined to the retry prompt.
+const firebaseRequire = createRequire(import.meta.url);
+const retryBackend = firebaseRequire('firebase-tools/lib/deploy/functions/backend.js');
+const retryPrompts = firebaseRequire('firebase-tools/lib/deploy/functions/prompts.js');
+const retryRow = {name:'customerNotificationCreated',kind:'onDocumentCreated',region:'asia-southeast1',source:'functions/src/customer-notification-delivery.ts'};
+const retryManifest = {sha,tag:'v1.2.3',project:'satsunicgo',inventory:[retryRow]};
+const retryEndpoint = {id:retryRow.name,region:'asia-southeast1',project:'satsunicgo',codebase:'satsunicgo',platform:'gcfv2',eventTrigger:{retry:true,eventType:'google.cloud.firestore.document.v1.created',eventFilterPathPatterns:{document:'outboxJobs/{jobId}'}}};
+const backendOf = endpoint => retryBackend.of(endpoint);
+test('reviewed retry confirmation approves only its copied options and preserves the real deletion rejection',async()=>{
+  const options={nonInteractive:true,force:false};
+  const untouchedDeletion=retryPrompts.promptForFunctionDeletion;
+  let record;
+  const restore=installReviewedRetryPrompt(retryPrompts,retryBackend,retryManifest,value=>{record=value;});
+  try{
+    await retryPrompts.promptForFailurePolicies(options,backendOf(retryEndpoint),retryBackend.empty());
+    assert.deepEqual(options,{nonInteractive:true,force:false});
+    assert.deepEqual(record.newRetries,['customerNotificationCreated']);
+    assert.equal(retryPrompts.promptForFunctionDeletion,untouchedDeletion);
+    await assert.rejects(()=>retryPrompts.promptForFunctionDeletion([retryEndpoint],options),/deletion cannot proceed/);
+  }finally{restore();}
+});
+test('reviewed retry cannot approve a new unreviewed consumer or changed document binding',()=>{
+  for(const endpoint of [{...retryEndpoint,id:'unreviewed'}, {...retryEndpoint,eventTrigger:{...retryEndpoint.eventTrigger,eventFilterPathPatterns:{document:'users/{id}'}}}]){
+    const manifest={...retryManifest,inventory:[{...retryRow,name:endpoint.id}]};
+    assert.throws(()=>retryAdmission(manifest,backendOf(endpoint),retryBackend.empty(),retryBackend),/UNREVIEWED/);
+  }
+});
+test('retry admission rejects source, inventory, project, region and codebase drift',()=>{
+  assert.throws(()=>retryAdmission({...retryManifest,inventory:[{...retryRow,source:'functions/src/other.ts'}]},backendOf(retryEndpoint),retryBackend.empty(),retryBackend),/UNREVIEWED/);
+  assert.throws(()=>retryAdmission({...retryManifest,inventory:[]},backendOf(retryEndpoint),retryBackend.empty(),retryBackend),/INVENTORY/);
+  for(const patch of [{project:'other'},{region:'us-central1'},{codebase:'default'},{platform:'gcfv1'}])assert.throws(()=>retryAdmission(retryManifest,backendOf({...retryEndpoint,...patch}),retryBackend.empty(),retryBackend),/ENDPOINT/);
+});
+test('an existing retry policy does not request newly enabled authority',()=>{
+  assert.deepEqual(retryAdmission(retryManifest,backendOf(retryEndpoint),backendOf(retryEndpoint),retryBackend).newRetries,[]);
+});
+test('unsafe deployment options are rejected before any CLI retry prompt',async()=>{
+  let calls=0;const prompts={promptForFailurePolicies:async()=>{calls++;}};
+  const restore=installReviewedRetryPrompt(prompts,retryBackend,retryManifest);
+  try{for(const options of [{force:true,nonInteractive:true},{force:false,nonInteractive:false}])await assert.rejects(()=>prompts.promptForFailurePolicies(options,backendOf(retryEndpoint),retryBackend.empty()),/UNSAFE/);}
+  finally{restore();}
+  assert.equal(calls,0);
+});
+test('deployment arguments use manifest-only selectors and never global force',()=>{
+  const args=deploymentArguments(retryManifest,sha,'v1.2.3');
+  assert.equal(args.includes('--force'),false);
+  assert.equal(args[args.indexOf('--only')+1],'functions:satsunicgo:customerNotificationCreated,hosting');
+  assert.equal(args.includes('--non-interactive'),true);
+  assert.throws(()=>deploymentArguments({...retryManifest,inventory:[{name:'name-unsafe'}]},sha,'v1.2.3'),/UNSAFE/);
+  assert.throws(()=>deploymentArguments(retryManifest,'b'.repeat(40),'v1.2.3'),/IDENTITY/);
+});
+test('provider readback binds retry configuration to the same artifact and exact enabled endpoint set',()=>{
+  const admission=retryAdmission(retryManifest,backendOf(retryEndpoint),retryBackend.empty(),retryBackend);
+  const deployed=[{name:'functions/customerNotificationCreated',eventTrigger:{retryPolicy:'RETRY_POLICY_RETRY'}}];
+  assert.deepEqual(verifyRetryReadback(retryManifest,deployed,admission),['customerNotificationCreated']);
+  assert.throws(()=>verifyRetryReadback(retryManifest,[{...deployed[0],eventTrigger:{retryPolicy:'RETRY_POLICY_DO_NOT_RETRY'}}],admission),/POLICY_MISMATCH/);
+  assert.throws(()=>verifyRetryReadback(retryManifest,[...deployed,{name:'functions/unexpected',eventTrigger:{retryPolicy:'RETRY_POLICY_RETRY'}}],admission),/POLICY_MISMATCH/);
+  assert.throws(()=>verifyRetryReadback(retryManifest,deployed,{...admission,sha:'b'.repeat(40)}),/BINDING/);
+});
+
+const productionTestRows = allDemoMetadata.filter(row=>row.name.startsWith('purchaseSePay'));
+const productionTestCompiled = allDemoCompiled.replace(/const purchase_checkout_1[^;]*;\s*Object.defineProperty\(exports,'purchaseCheckout'[^\n]*\);/,'').replace("const localSePay = process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';", "const production_test_policy_1=require('./production-test-policy');const productionSePay=(0,production_test_policy_1.sepayArtifactEnvironment)();").replace(/localSePay \?/g,'productionSePay ?');
+function addProductionTestFixture(root) {
+  addAllDemoSource(root);
+  let source=readFileSync(join(root,'functions/src/index.ts'),'utf8');
+  source=source.replace("const localSePay=process.env.FUNCTIONS_EMULATOR === 'true' && process.env.GCLOUD_PROJECT === 'demo-satsunicgo';", "import {sepayArtifactEnvironment} from './production-test-policy';const productionSePay=sepayArtifactEnvironment();").replace(/localSePay \?/g,'productionSePay ?');
+  put(root,'functions/src/index.ts',source);
+  put(root,'functions/src/production-test-policy.ts',readFileSync(join(repositoryRoot,'functions/src/production-test-policy.ts'),'utf8'));
+  const ts=firebaseRequire('typescript');
+  const compile=(source,target)=>put(root,target,ts.transpileModule(readFileSync(join(repositoryRoot,source),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);
+  compile('functions/src/production-test-policy.ts','functions/lib/functions/src/production-test-policy.js');
+  compile('functions/src/purchase-environment.ts','functions/lib/functions/src/purchase-environment.js');
+  for (const name of readdirSync(join(repositoryRoot,'packages/domain')).filter(name=>name.endsWith('.ts'))) compile('packages/domain/'+name,'functions/lib/packages/domain/'+name.replace(/\.ts$/,'.js'));
+  put(root,'functions/lib/functions/src/purchase-sepay.js',`const {onCall,onRequest}=require('firebase-functions/v2/https');const {onDocumentCreated}=require('firebase-functions/v2/firestore');const options={region:'asia-southeast1'};exports.purchaseSePayPayment=onCall(options,()=>{});exports.purchaseSePayIpn=onRequest(options,()=>{});exports.purchaseSePayInboxWorker=onDocumentCreated({...options,document:'purchaseSePayInbox/{id}',retry:true},()=>{});`);
+  const names=['campaignBannersPublic','publicDiscovery','publicImage','publicPage'];
+  put(root,'functions/lib/functions/src/index.js',productionTestCompiled+`\nconst {onRequest}=require('firebase-functions/v2/https');\n`+names.map(name=>`exports.${name}=onRequest({region:'asia-southeast1'},()=>{});`).join('\n'));
+}
+test('approved production-test artifact retains authentic handlers, always strips client-outcome demos and binds public runtime env',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  assert.equal(manifest.inventory.length,7);
+  assert.deepEqual(manifest.productionTestExports,productionTestRows);
+  assert.deepEqual(manifest.emulatorOnlyExports,['purchaseDemoPayment','purchaseDemoWebhook']);
+  assert.deepEqual(manifest.runtimeEnvironment,PRODUCTION_TEST_ENVIRONMENT);
+  assert.equal(readFileSync(join(stage,PRODUCTION_TEST_ENV_FILE),'utf8'),PRODUCTION_TEST_ENV_BYTES);
+  const script=`const net=require('node:net'),tls=require('node:tls');let calls=0;const deny=()=>{calls++;throw Error('NETWORK_FORBIDDEN');};net.connect=net.createConnection=net.Socket.prototype.connect=tls.connect=deny;globalThis.fetch=async()=>deny();require(process.argv[1]).loadStack(process.argv[2]).then(stack=>console.log(JSON.stringify({names:Object.keys(stack.endpoints).sort(),calls}))).catch(()=>{process.exitCode=1;});`;
+  const publicNames=['campaignBannersPublic','publicDiscovery','publicImage','publicPage'];
+  for (const [environment,expected] of [[{GCLOUD_PROJECT:'satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'satsunicgo'}),...PRODUCTION_TEST_ENVIRONMENT},[...publicNames,...productionTestRows.map(row=>row.name)]],[{GCLOUD_PROJECT:'satsunicgo',FIREBASE_CONFIG:JSON.stringify({projectId:'satsunicgo'})},publicNames],[{GCLOUD_PROJECT:'demo-satsunicgo',FUNCTIONS_EMULATOR:'true',FIREBASE_CONFIG:JSON.stringify({projectId:'demo-satsunicgo'})},[...publicNames,...productionTestRows.map(row=>row.name)]]]){
+    const result=spawnSync(process.execPath,['-e',script,join(repositoryRoot,'node_modules/firebase-functions/lib/runtime/loader.js'),join(stage,'deployment/functions')],{env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules'),...environment},encoding:'utf8',timeout:15000});
+    assert.equal(result.status,0,result.stderr);const response=JSON.parse(result.stdout.trim());assert.equal(response.calls,0);assert.deepEqual(response.names,expected.sort());
+  }
+  assert.equal(verify(stage,sha,'v1.2.3').sha,sha);
+});
+test('public runtime dotenv permits only the exact code-owned nonsecret bytes and rejects arbitrary dotenv additions',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  put(stage,PRODUCTION_TEST_ENV_FILE,PRODUCTION_TEST_ENV_BYTES+'SECRET_KEY=forbidden\n');
+  manifest.files[PRODUCTION_TEST_ENV_FILE]=digest(readFileSync(join(stage,PRODUCTION_TEST_ENV_FILE)));put(stage,'manifest.json',manifest);
+  assert.throws(()=>verify(stage,sha,'v1.2.3'),/ENVIRONMENT_MISMATCH/);
+  put(stage,PRODUCTION_TEST_ENV_FILE,PRODUCTION_TEST_ENV_BYTES);put(stage,'deployment/functions/.env.other','OTHER=true');
+  assert.throws(()=>verify(stage,sha,'v1.2.3'),/UNSAFE_ARTIFACT_PATH/);
+});
+for(const [label,compiled] of [
+  ['unguarded true',productionTestCompiled.replace('(0,production_test_policy_1.sepayArtifactEnvironment)()','true')],
+  ['foreign policy module',productionTestCompiled.replace("require('./production-test-policy')","require('./other')")],
+  ['mutable guard',productionTestCompiled.replace('const productionSePay','let productionSePay')],
+  ['escaped guard',productionTestCompiled+'\nconst leaked=productionSePay;'],
+  ['false branch callable',productionTestCompiled.replace(': undefined',': purchase_checkout_2.purchaseDemoPayment')],
+  ['escaped target alias',productionTestCompiled+'\nconst leaked=purchase_sepay_1;'],
+  ['duplicate export',productionTestCompiled+'\nexports.purchaseSePayPayment=productionSePay ? purchase_sepay_1.purchaseSePayPayment : undefined;'],
+  ['computed export',productionTestCompiled.replace('exports.purchaseSePayPayment = productionSePay',"exports['purchaseSePayPayment'] = productionSePay")],
+])test(`production-test compiler contract rejects ${label}`,()=>assert.throws(()=>excludeEmulatorOnlyExports(compiled,allDemoMetadata.slice(0,2),productionTestRows),/PRODUCTION_TEST_|EMULATOR_/));
+test('production-test metadata cannot partially admit handlers or change source/kind',()=>{
+  assert.throws(()=>assertCompiledProductionTestExports(productionTestCompiled,productionTestRows.slice(0,2)),/EXPORT_SET/);
+  assert.throws(()=>assertCompiledProductionTestExports(productionTestCompiled,productionTestRows.map(row=>({...row,source:'functions/src/other.ts'}))),/METADATA/);
+});
+test('production-test Ask exports are retained while PayOS, mixed maintenance and cleanup stay held',()=>{
+  const compiled=['var workflow=require("./ai/ask-workflow");','var payments=require("./payments/payos");','var jobs=require("./jobs");',...HELD_EXPORTS.map(name=>`Object.defineProperty(exports,"${name}",{get:function(){return jobs.${name};}});`)].join('\n');
+  const result=applyProductionHolds(compiled,HELD_EXPORTS.map(name=>({name})),true);
+  assert.deepEqual(result.inventory.map(row=>row.name),['askWorkflow','currentAskConversation']);
+  assert.deepEqual(result.heldExports,['askFeedbackCleanup','createPaymentLink','maintenance','payosWebhook','reconcilePayments']);
+  assert.match(result.compiled,/require\(".\/ai\/ask-workflow"\)/);assert.equal(result.compiled.includes('require("./payments/payos")'),false);
+});
+test('runtime provider readback requires exact public artifact flags and rejects all emulator contamination',()=>{
+  const manifest={runtimeEnvironment:PRODUCTION_TEST_ENVIRONMENT};
+  assert.doesNotThrow(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:PRODUCTION_TEST_ENVIRONMENT}}]));
+  assert.throws(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:{...PRODUCTION_TEST_ENVIRONMENT,PURCHASE_PRODUCTION_TEST_ARTIFACT:'wrong'}}}]),/MISMATCH/);
+  assert.throws(()=>verifyRuntimeEnvironment(manifest,[{serviceConfig:{environmentVariables:{...PRODUCTION_TEST_ENVIRONMENT,FIRESTORE_EMULATOR_HOST:'127.0.0.1:18207'}}}]),/MISMATCH/);
+});
+
+for(const [label,mutation] of [
+  ['missing policy helper import',source=>source.replace("import {sepayArtifactEnvironment} from './production-test-policy';",'')],
+  ['true guard',source=>source.replace('productionSePay=sepayArtifactEnvironment()','productionSePay=true')],
+  ['partial production set',source=>source.replace('purchaseSePayPayment=productionSePay ?','purchaseSePayPayment=process.env.FUNCTIONS_EMULATOR === \'true\' ?')],
+  ['foreign policy helper',source=>source.replace("from './production-test-policy'","from './other-policy'")],
+])test(`production-test source preflight rejects ${label}`,t=>assert.throws(()=>builtFixture(t,root=>{addProductionTestFixture(root);put(root,'functions/src/index.ts',mutation(readFileSync(join(root,'functions/src/index.ts'),'utf8')));}),/RELEASE_PREFLIGHT_FAILED/));
+test('provider source ZIP ignores only fixed public runtime dotenv, with digest and env contract bound',t=>{
+  const {stage,manifest}=builtFixture(t,addProductionTestFixture);
+  const archive=join(stage,'source.zip');
+  const script=`import json,zipfile,sys,pathlib\nroot=pathlib.Path(sys.argv[1]);manifest=json.load(open(root/'manifest.json'));prefix='deployment/functions/'\nwith zipfile.ZipFile(sys.argv[2],'w') as z:\n for name in manifest['files']:\n  if name.startswith(prefix) and name!=prefix+'.env.satsunicgo':z.write(root/name,name[len(prefix):])`;
+  execFileSync('python3',['-c',script,stage,archive]);
+  // ZIP is outside the immutable function package and verified without extraction.
+  execFileSync('python3',[join(repositoryRoot,'scripts/release/verify-source.py'),archive,join(stage,'manifest.json')]);
+  const altered={...manifest,files:{...manifest.files,[PRODUCTION_TEST_ENV_FILE]:digest('ARBITRARY=true\n')}};put(stage,'altered-manifest.json',altered);
+  assert.notEqual(spawnSync('python3',[join(repositoryRoot,'scripts/release/verify-source.py'),archive,join(stage,'altered-manifest.json')]).status,0);
 });

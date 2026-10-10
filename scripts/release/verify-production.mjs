@@ -10,7 +10,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest, verify } from './artifact.mjs';
 
-const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,labels)';
+const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,labels,eventTrigger.retryPolicy)';
 function inventory() {
   return JSON.parse(execFileSync('gcloud', ['functions', 'list', '--v2', '--project=satsunicgo', '--regions=asia-southeast1', `--format=${projection}`], {
     encoding: 'utf8', timeout: 120_000,
@@ -27,6 +27,24 @@ export function checkInventory(manifest, deployed, allowMissing) {
     if (!allowMissing && (fn.state !== 'ACTIVE' || !fn.serviceConfig?.revision || !fn.buildConfig?.source?.storageSource)) throw Error('FUNCTION_NOT_ACTIVE_OR_SOURCE_UNAVAILABLE');
   }
   if (!allowMissing && actual.size !== names.size) throw Error('MISSING_DEPLOYED_FUNCTION');
+}
+export function verifyRuntimeEnvironment(manifest, deployed) {
+  const expected = manifest.runtimeEnvironment;
+  if (!expected) return;
+  if (JSON.stringify(expected) !== JSON.stringify({ PURCHASE_PRODUCTION_TEST_ARTIFACT: 'v1', PURCHASE_SEPAY_SANDBOX_ENABLED: 'true' })) throw Error('UNSAFE_RUNTIME_ENVIRONMENT');
+  for (const fn of deployed) {
+    const environment = fn.serviceConfig?.environmentVariables;
+    if (!environment || Object.entries(expected).some(([key, value]) => environment[key] !== value) || Object.keys(environment).some(key => /EMULATOR/.test(key))) throw Error('DEPLOYED_RUNTIME_ENVIRONMENT_MISMATCH');
+  }
+}
+export function verifyRetryReadback(manifest, deployed, admission) {
+  if (admission?.schemaVersion !== 1 || admission.sha !== manifest.sha || admission.tag !== manifest.tag || admission.project !== 'satsunicgo' || !Array.isArray(admission.retryEndpoints) || !Array.isArray(admission.newRetries)) throw Error('RETRY_ADMISSION_BINDING_MISMATCH');
+  const names = new Set(manifest.inventory.map(row => row.name));
+  const expected = new Set(admission.retryEndpoints);
+  if (expected.size !== admission.retryEndpoints.length || admission.retryEndpoints.some(name => !names.has(name)) || admission.newRetries.some(name => !expected.has(name))) throw Error('RETRY_ADMISSION_BINDING_MISMATCH');
+  const actual = new Set(deployed.filter(row => row.eventTrigger?.retryPolicy === 'RETRY_POLICY_RETRY').map(row => row.name.split('/').at(-1)));
+  if (actual.size !== expected.size || [...expected].some(name => !actual.has(name))) throw Error('DEPLOYED_RETRY_POLICY_MISMATCH');
+  return [...expected].sort();
 }
 export async function waitForActiveInventory(manifest, read = inventory, pause = () => new Promise(done => setTimeout(done, 10_000))) {
   for (let attempt = 0; attempt < 6; attempt++) {
@@ -100,6 +118,8 @@ export async function verifyProduction() {
     }
   }
   const deployed = await waitForActiveInventory(manifest);
+  verifyRuntimeEnvironment(manifest, deployed);
+  const retryPolicies = verifyRetryReadback(manifest, deployed, JSON.parse(readFileSync('retry-policy-admission.json', 'utf8')));
   const directory = mkdtempSync(join(tmpdir(), 'release-source-'));
   const sources = new Set(), functions = [];
   try {
@@ -118,6 +138,8 @@ export async function verifyProduction() {
   } finally { rmSync(directory, { recursive: true, force: true }); }
   const after = inventory();
   checkInventory(manifest, after, false);
+  verifyRuntimeEnvironment(manifest, after);
+  verifyRetryReadback(manifest, after, JSON.parse(readFileSync('retry-policy-admission.json', 'utf8')));
   if (deployed.some(fn => {
     const current = after.find(f => f.name === fn.name);
     return current.serviceConfig.revision !== fn.serviceConfig.revision || JSON.stringify(current.buildConfig.source) !== JSON.stringify(fn.buildConfig.source);
@@ -126,7 +148,7 @@ export async function verifyProduction() {
   assertStableHostingRelease(initialHostingRelease, latest);
   writeFileSync('deployment.json', JSON.stringify({ schemaVersion: 1, status: 'VERIFIED', project: 'satsunicgo',
     tag: manifest.tag, sha: manifest.sha, bundleSha256, verifiedAt: new Date().toISOString(),
-    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions }, null, 2) + '\n');
+    hosting: { ...hosting, version: latest.version.name, releaseTime: latest.releaseTime }, functions, retryPolicies }, null, 2) + '\n');
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {

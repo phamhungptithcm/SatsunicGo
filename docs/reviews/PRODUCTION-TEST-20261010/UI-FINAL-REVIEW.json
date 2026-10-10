@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-UI-20261010",
+  "reviewed_at": "2026-10-10T01:10:04.081152+00:00",
+  "base_commit": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "status": "BLOCKED",
+  "source_binding": "UI-CHECKS.json",
+  "cycles": [
+    {
+      "cycle": 1,
+      "status": "BLOCKED",
+      "findings": [
+        "Legacy demo provider omitted by initial classifier (7 negative regressions).",
+        "Synthetic testRunId collided with an order ID in PDF fixture.",
+        "Concurrent provenance declaration/import WIP and receipt response union caused strict failures."
+      ],
+      "fixes": [
+        "Policy owner added demo provider classification.",
+        "UI fixture uses a separate execution identifier.",
+        "Policy/finance owners closed their contract imports; UI explicit receipt reply type preserves optional download fields."
+      ]
+    },
+    {
+      "cycle": 2,
+      "status": "BLOCKED",
+      "findings": [
+        "Separate sales-document route was still offered on known test orders; invoiceCommand lacked its server fence.",
+        "Full account/CRM browser/AT acceptance unavailable."
+      ],
+      "fixes": [
+        "UI hid generic sales-document route on test orders; purchase receipt PDF remains.",
+        "Finance owner added actual invoice source/doc fences and reports handler regressions.",
+        "Submit-time UI check added; 57 focused tests pass."
+      ]
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "findings": [
+        "New root email policy accessed inferred display projection union without narrowing.",
+        "Required browser interaction and hosted release evidence still unavailable."
+      ],
+      "fixes": [
+        "Root uses strict validated purchaseExecutionProvenance for authorization instead of display projection. UI helper retained unchanged.",
+        "Affected 58-test run, strict compilation and scoped lint pass."
+      ],
+      "remaining": [
+        "Root must supply current account/CRM viewport/keyboard/AT acceptance and exact release/provider verification."
+      ]
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Compact Test marker/filter, safe provenance projection, test PDF on every page, no actual fulfillment affordance, live behavior retained. No excluded cart/payment edits.",
+      "evidence_refs": [
+        "UI-IMPACT.md",
+        "UI-CHECKS.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Display classification is conservative; safe projection does not authorize or expose PII; strict server fences remain separate. Negative legacy/partial provenance cases exercised. Scoped source/test review only.",
+      "evidence_refs": [
+        "tests/unit/production-test-presentation.test.ts",
+        "functions/src/purchase-test-projection.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Frontend/backend strict, scoped lint, whitespace and focused regressions pass. Existing role-filtered readers retained.",
+      "evidence_refs": [
+        "UI-CHECKS.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Partial/malformed/legacy provenance remains marked test; no extra metadata for genuine records; real ActionForm and real history retained; multipage/genuine PDF regression.",
+      "evidence_refs": [
+        "tests/unit/production-test-presentation.test.ts",
+        "tests/unit/production-test-pdf.test.ts"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe presentation projection does not throw on malformed metadata. Existing loading/error/retry behavior retained; owner denial strings inventoried.",
+      "evidence_refs": [
+        "UI-PRODUCT-CONTENT.md"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Actual six-page PDF context and SSR verified; required full account/CRM browser interaction, responsive, zoom and spoken AT evidence missing. Product Language Gate BLOCKED.",
+      "evidence_refs": [
+        "UI-PRODUCT-CONTENT.md",
+        "UI-CHECKS.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Subagent made no deployment/provider/account changes. Root combined CI/artifact/live verification still required.",
+      "evidence_refs": [
+        "UI-CHECKS.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Client-side kind filtering is deliberately limited to loaded page, explicitly X/Y. Test vs live classification is display-only; native controls preserve density.",
+      "evidence_refs": [
+        "UI-PRODUCT-CONTENT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "UI-ACCEPTANCE-001",
+      "severity": "medium",
+      "status": "OPEN",
+      "location": "Account/CRM changed views",
+      "evidence": "Browser viewport/zoom/focus/keyboard/AT NOT_RUN",
+      "impact": "A compact source/SSR layout can still fail on actual browser or AT.",
+      "correction": "Root supplies exact-candidate rendered acceptance before successful UI handoff."
+    }
+  ],
+  "residual_risks": [
+    "Concurrent edits require parent final candidate source freeze; hashes above are scoped capture, not whole-release certification.",
+    "PurchaseReceipt PDF accessibility tagging was not expanded; Unicode text extraction verified, spoken PDF AT NOT_RUN."
+  ],
+  "limitations": [
+    "RIG DEGRADED optional indexes.",
+    "No model/network/secret/provider calls.",
+    "No shared runtime, emulator, real account or production data changes.",
+    "Runtime CLI unavailable; no formal runtime receipt claimed."
+  ],
+  "memory_candidates": "None",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable"
+}

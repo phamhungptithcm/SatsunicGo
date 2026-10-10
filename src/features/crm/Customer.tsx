@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { callService } from "../../shared/firebase";
 import { stageLabels, type Order } from "../../../packages/domain";
+import { TestOrderBadge } from "../orders/TestOrderBadge";
+import type { PurchaseExecutionProvenance } from "../../../packages/domain/purchase-checkout";
 import {
   localDateTime,
   appointmentTimestamp,
@@ -26,14 +28,15 @@ type CustomerData = {
     followUpAt: number;
   } | null;
   membership: { state: string; endsAt: number } | null;
-  orders: {
+  orders: (Partial<PurchaseExecutionProvenance> & {
     id: string;
     name: string;
     stage: Order["stage"];
     createdAt: number;
     hold: boolean;
     remaining: number | null;
-  }[];
+    testMode?: boolean;
+  })[];
   tickets: { id: string; subject: string; status: string }[];
   ordersNext: Cursor | null;
   ticketsNext: Cursor | null;
@@ -493,7 +496,8 @@ export function Customer() {
                     <Link to={`/crm/orders?order=${o.id}`}>{o.name}</Link>
                     <p>
                       {stageLabels[o.stage]}
-                      {o.hold ? " · Đang tạm giữ" : ""}
+                      {o.hold ? " · Đang tạm giữ" : ""}{" "}
+                      <TestOrderBadge record={o} />
                     </p>
                     <small>
                       {o.remaining === null
