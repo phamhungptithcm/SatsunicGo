@@ -23,13 +23,52 @@ export function copyFunctionAssets(root, deploymentFunctions) {
     cpSync(source, join(deploymentFunctions, 'assets', name), { errorOnExist: true, force: false });
   }
 }
-/** Source-bound exact exception. Remove the callable even under a mistaken emulator env. */
+const emulatorExportMetadata=new Map([
+  ['purchaseDemoPayment',{kind:'onCall',from:'./purchase-checkout'}],
+  ['purchaseDemoWebhook',{kind:'onRequest',from:'./purchase-demo-gateway'}],
+  ['purchaseSePayPayment',{kind:'onCall',from:'./purchase-sepay',guard:'localSePay'}],
+  ['purchaseSePayIpn',{kind:'onRequest',from:'./purchase-sepay',guard:'localSePay'}],
+  ['purchaseSePayInboxWorker',{kind:'onDocumentCreated',from:'./purchase-sepay',guard:'localSePay'}],
+]);
+function exactSePayCompiledCondition(node) {
+  if(!ts.isBinaryExpression(node)||node.operatorToken.kind!==ts.SyntaxKind.AmpersandAmpersandToken||!exactDemoCondition(node.left))return false;
+  const project=node.right;
+  return ts.isBinaryExpression(project)&&project.operatorToken.kind===ts.SyntaxKind.EqualsEqualsEqualsToken&&
+    ts.isStringLiteral(project.right)&&project.right.text==='demo-satsunicgo'&&
+    ts.isPropertyAccessExpression(project.left)&&!project.left.questionDotToken&&project.left.name.text==='GCLOUD_PROJECT'&&
+    ts.isPropertyAccessExpression(project.left.expression)&&!project.left.expression.questionDotToken&&project.left.expression.name.text==='env'&&
+    ts.isIdentifier(project.left.expression.expression)&&project.left.expression.expression.text==='process';
+}
+function assertCompiledDemoEnvironment(ast) {
+  function visit(node) {
+    if(ts.isIdentifier(node)&&node.text==='process'){
+      const env=node.parent,property=env?.parent,comparison=property?.parent;
+      if(!env||!ts.isPropertyAccessExpression(env)||env.expression!==node||env.questionDotToken||env.name.text!=='env'||
+        !property||!ts.isPropertyAccessExpression(property)||property.expression!==env||property.questionDotToken||
+        !comparison||!ts.isBinaryExpression(comparison)||comparison.left!==property||
+        ![ts.SyntaxKind.EqualsEqualsEqualsToken,ts.SyntaxKind.ExclamationEqualsEqualsToken].includes(comparison.operatorToken.kind)||
+        !ts.isStringLiteral(comparison.right)||
+        !(property.name.text==='FUNCTIONS_EMULATOR'&&comparison.right.text==='true'||property.name.text==='GCLOUD_PROJECT'&&comparison.right.text==='demo-satsunicgo'))throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    }
+    ts.forEachChild(node,visit);
+  }
+  visit(ast);
+}
+/** Source-bound exact exceptions. Remove demo bindings even under a mistaken emulator env. */
 export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
-  if (!Array.isArray(exclusions) || exclusions.length > 1 || exclusions.some(row => row.name !== 'purchaseDemoPayment' || row.kind !== 'onCall' || row.region !== 'asia-southeast1' || row.source !== 'functions/src/purchase-checkout.ts' || Object.keys(row).length !== 4)) throw Error('EMULATOR_EXPORT_METADATA');
+  if(!Array.isArray(exclusions)||exclusions.length>emulatorExportMetadata.size)throw Error('EMULATOR_EXPORT_METADATA');
+  const expected=new Map();
+  for(const row of exclusions){
+    if(!row||typeof row!=='object'||Array.isArray(row)||Object.keys(row).sort().join(',')!=='kind,name,region,source')throw Error('EMULATOR_EXPORT_METADATA');
+    const spec=emulatorExportMetadata.get(row.name);
+    if(!spec||expected.has(row.name)||row.kind!==spec.kind||row.region!=='asia-southeast1'||row.source!=='functions/src/'+spec.from.slice(2)+'.ts')throw Error('EMULATOR_EXPORT_METADATA');
+    expected.set(row.name,spec);
+  }
   const ast = ts.createSourceFile('index.js', compiled, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  if(ast.parseDiagnostics.length)throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
   const allowed = new Set(), assignments = [];
   function visit(node) {
-    if (ts.isIdentifier(node) && node.text === 'purchaseDemoPayment' && ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+    if (ts.isIdentifier(node) && emulatorExportMetadata.has(node.text) && ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) {
       const member = node.parent, assignment = member.parent;
       if (ts.isIdentifier(member.expression) && member.expression.text === 'exports' && ts.isBinaryExpression(assignment) && assignment.left === member && assignment.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
         let value = assignment.right;
@@ -44,26 +83,42 @@ export function excludeEmulatorOnlyExports(compiled, exclusions = []) {
   }
   visit(ast);
   if (assignments.length !== exclusions.length) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
-  const spans = [];
+  const spans=new Map(),aliases=new Map(),seen=new Set(),guardReferences=new Set();
+  const remove=statement=>spans.set(statement.getStart(ast)+':'+statement.end,[statement.getStart(ast),statement.end]);
+  const declarations=ast.statements.filter(ts.isVariableStatement).flatMap(node=>node.declarationList.declarations);
   for (const assignment of assignments) {
-    const conditional = assignment.right;
-    if (!exactDemoCondition(conditional.condition) || !ts.isIdentifier(conditional.whenFalse) || conditional.whenFalse.text !== 'undefined' || !ts.isPropertyAccessExpression(conditional.whenTrue) || conditional.whenTrue.questionDotToken || conditional.whenTrue.name.text !== 'purchaseDemoPayment' || !ts.isIdentifier(conditional.whenTrue.expression)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    const name=assignment.left.name.text,spec=expected.get(name),conditional=assignment.right;
+    if(!spec||seen.has(name)||!(spec.guard?ts.isIdentifier(conditional.condition)&&conditional.condition.text===spec.guard:exactDemoCondition(conditional.condition))||!ts.isIdentifier(conditional.whenFalse)||conditional.whenFalse.text!=='undefined'||!ts.isPropertyAccessExpression(conditional.whenTrue)||conditional.whenTrue.questionDotToken||conditional.whenTrue.name.text!==name||!ts.isIdentifier(conditional.whenTrue.expression))throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    seen.add(name);
     const alias = conditional.whenTrue.expression;
-    if (['process', 'undefined', 'require', 'exports', 'module'].includes(alias.text)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
-    const declarations = ast.statements.filter(ts.isVariableStatement).flatMap(node => node.declarationList.declarations).filter(node => ts.isIdentifier(node.name) && node.name.text === alias.text);
-    const binding = declarations[0], call = binding?.initializer;
-    if (declarations.length !== 1 || !(binding.parent.flags & ts.NodeFlags.Const) || binding.parent.declarations.length !== 1 || !call || !ts.isCallExpression(call) || !ts.isIdentifier(call.expression) || call.expression.text !== 'require' || call.arguments.length !== 1 || !ts.isStringLiteral(call.arguments[0]) || call.arguments[0].text !== './purchase-checkout') throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
-    assertDemoBindings(ast, new Set(['process', 'undefined', 'require', 'exports', alias.text]), new Set([binding.name]), new Set(['exports']));
-    assertOnlyDemoReferences(ast, alias.text, new Set([binding.name, alias]));
+    if (['process', 'undefined', 'require', 'exports', 'module', 'localSePay'].includes(alias.text)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    const matches=declarations.filter(node=>ts.isIdentifier(node.name)&&node.name.text===alias.text),binding=matches[0],call=binding?.initializer;
+    if(matches.length!==1||!(binding.parent.flags&ts.NodeFlags.Const)||binding.parent.declarations.length!==1||!call||!ts.isCallExpression(call)||!ts.isIdentifier(call.expression)||call.expression.text!=='require'||call.arguments.length!==1||!ts.isStringLiteral(call.arguments[0])||call.arguments[0].text!==spec.from)throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    if(!aliases.has(alias.text))aliases.set(alias.text,{binding,references:new Set([binding.name])});
+    aliases.get(alias.text).references.add(alias);
+    if(spec.guard)guardReferences.add(conditional.condition);
     allowed.add(conditional.whenTrue.name);
-    spans.push([assignment.parent.getStart(ast), assignment.parent.end], [binding.parent.parent.getStart(ast), binding.parent.parent.end]);
+    remove(assignment.parent);remove(binding.parent.parent);
+  }
+  if(assignments.length){
+    const names=new Set(['process','undefined','require','exports','module',...aliases.keys()]),bindings=new Set([...aliases.values()].map(alias=>alias.binding.name));
+    if(guardReferences.size){
+      const matches=declarations.filter(node=>ts.isIdentifier(node.name)&&node.name.text==='localSePay'),binding=matches[0];
+      if(matches.length!==1||!(binding.parent.flags&ts.NodeFlags.Const)||binding.parent.declarations.length!==1||!binding.initializer||!exactSePayCompiledCondition(binding.initializer))throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+      names.add('localSePay');bindings.add(binding.name);guardReferences.add(binding.name);
+      assertOnlyDemoReferences(ast,'localSePay',guardReferences);
+      remove(binding.parent.parent);
+    }
+    assertDemoBindings(ast,names,bindings,new Set(['exports']));
+    assertCompiledDemoEnvironment(ast);
+    for(const [name,alias] of aliases)assertOnlyDemoReferences(ast,name,alias.references);
   }
   function rejectUnknown(node) {
-    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && node.text === 'purchaseDemoPayment' && !allowed.has(node)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
+    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && emulatorExportMetadata.has(node.text) && !allowed.has(node)) throw Error('EMULATOR_EXPORT_COMPILED_SHAPE');
     ts.forEachChild(node, rejectUnknown);
   }
   rejectUnknown(ast);
-  for (const [start, end] of spans.sort((a, b) => b[0] - a[0])) compiled = compiled.slice(0, start) + compiled.slice(end);
+  for (const [start, end] of [...spans.values()].sort((a, b) => b[0] - a[0])) compiled = compiled.slice(0, start) + compiled.slice(end);
   return { compiled, emulatorOnlyExports: exclusions.map(row => row.name) };
 }
 export function files(root, prefix = '') {
@@ -137,7 +192,7 @@ export function prepareWorkspace(root, target, expectedSha, expectedTag) {
   return verify(target, expectedSha, expectedTag);
 }
 // Preserve the established release holds; feedback cleanup also awaits retention/rollout approval.
-const BASE_HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments', 'deliverEmail']);
+const BASE_HELD_EXPORTS = Object.freeze(['askWorkflow', 'currentAskConversation', 'maintenance', 'createPaymentLink', 'payosWebhook', 'reconcilePayments']);
 export const HELD_EXPORTS = Object.freeze([...BASE_HELD_EXPORTS, 'askFeedbackCleanup']);
 export function applyProductionHolds(compiled, inventory) {
   const held = new Set(inventory.filter(item => HELD_EXPORTS.includes(item.name)).map(item => item.name));
@@ -201,7 +256,7 @@ export function applyProductionHolds(compiled, inventory) {
   };
   inspectCleanupShape(ast);
   const removed = new Set(), imports = new Set();
-  const blockedModules = new Set(baseHeld.size ? ['./ai/ask-workflow', './payments/payos', './email'] : []);
+  const blockedModules = new Set(baseHeld.size ? ['./ai/ask-workflow', './payments/payos'] : []);
   const spans = [];
   for (const node of ast.statements) {
     if (ts.isVariableStatement(node)) {

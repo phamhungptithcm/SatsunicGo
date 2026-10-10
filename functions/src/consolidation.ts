@@ -1,3 +1,7 @@
+import {
+  parcelCustomerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { randomUUID, createHash } from "node:crypto";
@@ -226,6 +230,12 @@ export const consolidationCommand = onCall(
             orders[i].stage = "IN_TRANSIT";
             orders[i].version++;
             tx.set(orderSnapshots[i].ref, orders[i]);
+            tx.create(
+              orderSnapshots[i].ref
+                .collection("timeline")
+                .doc(`batch-${input.operationId}`),
+              { action: "parcelDispatch", createdAt: now },
+            );
           }
           for (let i = 0; i < parcels.length; i++) {
             const parcel = {
@@ -242,11 +252,49 @@ export const consolidationCommand = onCall(
                   parcel.allocations.some((a) => a.orderId === o.id),
                 )
                 .map((o) => o.ownerId),
+            )) {
+              const order = orders.find(
+                (o) =>
+                  o.ownerId === ownerId &&
+                  parcel.allocations.some((a) => a.orderId === o.id),
+              )!;
+              tx.create(
+                db.doc(
+                  `outboxJobs/parcel-${parcel.id}-${parcel.version}-${ownerId}`,
+                ),
+                {
+                  ownerId,
+                  orderId: order.id,
+                  resourceId: parcel.id,
+                  action: "dispatchParcel",
+                  state: "queued",
+                  createdAt: now,
+                  ...customerEventFields(() => {
+                    const event = parcelCustomerEvent(
+                      parcel,
+                      orders,
+                      ownerId,
+                      "dispatchParcel",
+                      now,
+                    );
+                    if (!event) throw Error("NO_CUSTOMER_EVENT");
+                    return event;
+                  }),
+                },
+              );
+            }
+            for (const ownerId of new Set(
+              orders
+                .filter((o) =>
+                  parcel.allocations.some((a) => a.orderId === o.id),
+                )
+                .map((o) => o.ownerId),
             ))
               tx.set(db.doc(`customerShipments/${ownerId}-${parcel.id}`), {
                 id: parcel.id,
                 version: parcel.version,
                 state: parcel.state,
+                updatedAt: now,
                 ...(readManualDeliveryEstimate(parcel.deliveryEstimate, now)
                   ? {
                       deliveryEstimate: readManualDeliveryEstimate(
@@ -288,6 +336,8 @@ export const consolidationCommand = onCall(
             orderId: order.id,
             resourceId: id,
             action: `batch-${input.action}`,
+            customerContentState: "internal_batch_event",
+            emailState: "blocked_policy",
             state: "queued",
             createdAt: now,
           });

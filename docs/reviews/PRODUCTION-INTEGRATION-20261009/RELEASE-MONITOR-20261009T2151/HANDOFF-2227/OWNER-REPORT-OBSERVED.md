@@ -1,0 +1,31 @@
+# Release candidate and CI — current report
+
+Commit/push COMPLETE on da9369f602474b57e96482e43bd889ead7b096f4. [Draft PR#1](https://github.com/phamhungptithcm/SatsunicGo/pull/1) remains draft. Shared main0d6e721 and concurrent WIP/runtime preserved. CI-REPAIR-20261009/v1 directly approved by user; no app/dependency/workflow YAML/production-policy change in the repair delta. The967-file frozen snapshot has no unexpected drift outside13approved runner/test/doc changes.
+
+[Exact-head LinuxCI37995622318](https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37995622318) SUCCESS: clean install, strict frontend/backend TypeScript, lint,2353unit tests,99release contracts,13public-config tests,all55rules files/713tests in7groups,HTTP,restore,production-dependency audit and build. No dropped/skipped rules suites. Production audit0High/Critical;13Moderate/2Low remain. Full npm install reports7High development findings; no all-dependency clean claim. Fresh CI proves these automated checks, not live provider or production behavior.
+
+CI hardening cycles: cycle1 retained PRE001;cycle2 found actual fixture failures;cycle3 applied approved exact CI groups/validated endpoints/disposable settings/guarded Resend consent+cutover fixture, then fixed stale group unit expectation;cycle4 reviewed full current repair diff and exact-head greenCI. CI001/CI002/CI003 FIXED_VERIFIED. Scoped CI repair review PASSED; whole-release review BLOCKED solely by remaining required PRE001 acceptance and subsequent production stages. Evidence:FINAL-REVIEW.json and private CI log/source-readback receipt referenced there.
+
+PRE001 OPEN_REQUIRED_ACCEPTANCE: actual candidate recipient producer-to-existingCRM under legitimate staffMFA and spoken custom-combobox acceptance. Emulator lacks required TOTP; synthetic/DOM evidence cannot close it. Mac observed unlocked, VoiceOver off; spoken test NOT_RUN. No authorization bypass, production financial fixtures, secret payload access, live provider send, shared server restart or reseed performed.
+
+[RELEASE-ROLLOUT-v1](ROLLOUT-DECISION.md) offers concrete owner decision: complete acceptance before promotion, or explicitly accept deferring those two checks to controlled postdeployment verification for this exact candidate with recorded integration/accessibility risk. Conditional path keeps email inactive through deployment/artifact/provider readback, then only eligible forward cutover/opted-in canary after required gates. Payments/AI/SMS/global maintenance/backlog drain excluded. No such decision inferred from CI repair approval. Main push auto-deploys; current production promotion/activation NOT_RUN and NOT_READY.
+
+Acceptance progress: source selection/commit/push COMPLETE; approved CI repair COMPLETE; exact-head CIgreen COMPLETE; PRE001 OPEN;production deployment/readback NOT_RUN;eligible activation/live verification NOT_RUN. No percentage inferred from missing weights. Review dimensions covered:requirements,security,quality,failure paths,error handling,product-content applicability,production readiness and tradeoffs. Product-content application strings unchanged by repair; inherited PRE001 remains explicit. No new independent audit claimed. Untracked node_modules symlink and3browser-output JSON files excluded from commits; shared app WIP preserved.
+
+Token usage/API-equivalent cost/actual billed cost:Unavailable. Memory candidates:None. Native runtime review CLI unavailable; manual report and review retained.
+
+## Owner decision and PRE001 continuation
+
+Owner chose “Hoàn tất PRE-001 trước khi deploy”. Conditional rollout is not approved. Review cycle5: source hashes for actual checkout/combobox/search/CSS/MFA UI match candidate da9369f. Shared5207 reused without restart/reseed. Current local synthetic CustomerA session has no genuine MFA. No candidate staging URL with genuine MFA established; production old revision is insufficient. Fresh native SystemSettings call reports Mac locked, automatic unlock unavailable. No VoiceOver toggle or spoken acceptance. User unlock, audible acceptance and candidate MFA environment requested; secrets/OTPs must remain outside chat.
+
+Actual application checkout prepared in Chrome559926487, marked handoff. Initial synthetic cart empty; added only gateway-5884c940-f7ee-45ab-b8ce-744abd9c85d3-happy qty1 through catalog UI. No order or payment submitted. This single test cart item requires cleanup after acceptance (or cancellation). Offline file fixture rejected by browser URL policy; no workaround attempted. Whole release remains BLOCKED_PRE001/NOT_READY, PR draft and production unchanged.
+
+## PRE001 VoiceOver completion
+
+Actual VoiceOverenabled test performed on source-matching candidate checkout5207:province HàNội,commune BaĐình,noresults zzqvpre001,Escape/Tab and disabled commune. Human directly confirms “Đọc rõ đầy đủ, thao tác được”. Spoken acceptance PASSED_WITHIN_LOCAL_CHECKOUT_SCOPE;assistant has no audio recording. VoiceOver restoredoff;owned synthetic cartline removed and empty cart verified. Receipt:PRE001-VOICEOVER.json.
+
+User confirms only production environment. CRM/MFA portion remains OPEN: actual recipientproducer requires exactdemo-satsunicgo/FunctionsEmulator/Firestore18207; cloudstaging alone cannot run it while preserving candidate fences. No production order data or secretpayload accessed;new genuineMFA localintegration proposal pending approval. Production still unchanged;reviewcycle6 BLOCKED_CRM_MFA_ONLY.
+
+## CRM genuineMFA plan prepared
+
+PRE001-MFA-20261009/v1 proposes a task-local isolated frontend5208 and verification/actual-handler bridge15209, genuine existing production staff login/MFA and only own authorization metadata read, actual candidate producer/handler/renderer against owned synthetic demo18207 records. Token use restricted to localhost/Firebase verification, no persistence/logging. Exact verifiedUID retained; demo role/user docs create-if-absent only, collision stops. No production writes or auth/project policy change. This is bounded local integration instrumentation, not deployed AppCheck/provider evidence; final review must assess applicability. Explicit approval pending for new test wiring, token/own-metadata path and isolated-server exception. No harness created or new server started. Newest reviewcycle7 BLOCKED_PENDING_SCOPED_PLAN_APPROVAL.

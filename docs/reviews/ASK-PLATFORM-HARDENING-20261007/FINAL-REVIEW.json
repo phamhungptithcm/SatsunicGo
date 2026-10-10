@@ -5,69 +5,92 @@
   "dimensions": {
     "security": {
       "status": "PASSED",
-      "summary": "Verified Google, account lock, owner fences, privileged action rejection remain enforced. No secrets or production data accessed.",
+      "summary": "Scoped identity/permissions/quota/ledger/import floor/no retries/sandbox/retention/current source checks verified; no production certification.",
       "evidence_refs": [
-        "SCENARIOS.md",
+        "QUALITY-GATES-INTEGRATION.json",
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "output/ask-hardening/2026-10-08T13-14-25-858Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-23-550Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/summary.json",
+        "output/ask-hardening/integration-current-recheck/summary.json",
         "SOURCE_MANIFEST.json"
       ]
     },
     "code_quality": {
       "status": "PASSED",
-      "summary": "Scoped ESLint and frontend/backend TypeScript checks passed. No new dependencies.",
+      "summary": "Current compilers/scoped lint/whitespace/build pass. Historical full1220/1221unit failures remain scoped to Dashboard; current affected check repeats667/676, current97unit and18final integration pass.",
       "evidence_refs": [
-        "SCENARIOS.md",
+        "QUALITY-GATES-INTEGRATION.json",
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "output/ask-hardening/2026-10-08T13-14-25-858Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-23-550Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/summary.json",
+        "output/ask-hardening/integration-current-recheck/summary.json",
         "SOURCE_MANIFEST.json"
       ]
     },
     "failure_paths": {
       "status": "PASSED",
-      "summary": "Invalid streams, stalled cancellation, version conflict, replay tampering, recovery corruption, unauthorized operations exercised.",
+      "summary": "Actual scoped happy/bad unit/demo/browser cases; unknown calls remain held, late context/identity discarded, withdrawal/source races fenced.",
       "evidence_refs": [
-        "SCENARIOS.md",
+        "QUALITY-GATES-INTEGRATION.json",
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "output/ask-hardening/2026-10-08T13-14-25-858Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-23-550Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/summary.json",
+        "output/ask-hardening/integration-current-recheck/summary.json",
         "SOURCE_MANIFEST.json"
       ]
     },
     "error_handling": {
       "status": "PASSED",
-      "summary": "No answer event before successful validated final data; malformed recovery fails closed.",
+      "summary": "Safe natural VI/EN statuses; canonical unknown event retry, source expiry, current-state/byte limits fail closed.",
       "evidence_refs": [
-        "SCENARIOS.md",
+        "QUALITY-GATES-INTEGRATION.json",
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "output/ask-hardening/2026-10-08T13-14-25-858Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-23-550Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/summary.json",
+        "output/ask-hardening/integration-current-recheck/summary.json",
         "SOURCE_MANIFEST.json"
       ]
     },
     "trade_offs": {
       "status": "PASSED",
-      "summary": "Lexical retrieval remains bounded/partial; character bounds do not claim token bounds. Stream success waits for final envelope.",
+      "summary": "Bounded lexical corpus/catalog and OWNER pilot, no semantic completeness, no verified web prices/reviews, no auto model/source promotion; physical retention and throughput pending.",
       "evidence_refs": [
-        "SCENARIOS.md",
+        "QUALITY-GATES-INTEGRATION.json",
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "output/ask-hardening/2026-10-08T13-14-25-858Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-23-550Z/summary.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/summary.json",
+        "output/ask-hardening/integration-current-recheck/summary.json",
         "SOURCE_MANIFEST.json"
       ]
     },
     "requirement_match": {
       "status": "BLOCKED",
-      "summary": "Full approved platform plan has remaining slices; scope of this implementation iteration is explicitly recorded.",
+      "summary": "Three requested source integrations implemented, including explicit chat source selection; broad/live/production Ask acceptance remains incomplete.",
       "evidence_refs": [
-        "REPORT.md"
+        "INTEGRATION-PLAN.md",
+        "FEEDBACK-POLICY-PROPOSAL.md",
+        "QUALITY-GATES-INTEGRATION.json"
       ]
     },
     "production_readiness": {
       "status": "BLOCKED",
-      "summary": "BLOCKED: candidate not deployed; current Ask IAM rejects SDK traffic; real authenticated/App Check acceptance missing; pricing window expired; full platform plan incomplete. Full Node22 unit suite passed 954 tests.",
+      "summary": "Not deployed; official corpus/retention, current pricing/provider proof, IAM/AppCheck/MFA/customer lifecycle/scheduler/rollback-artifact/physical retention not verified.",
       "evidence_refs": [
-        "REPORT.md",
-        "../../../functions/src/ai/ask-paid-gate.ts",
-        "PRODUCTION-SOURCE-COMPARISON.json",
-        "PRODUCTION-ASK-IAM.json"
+        "QUALITY-GATES-INTEGRATION.json"
       ]
     },
     "product_content": {
-      "status": "PASSED",
-      "summary": "Owner approval UI and VI/EN quoted-guidance answer semantics reviewed in source and real rendered fixture; mobile label corrected. Full customer locale/product flow remains incomplete.",
+      "status": "BLOCKED",
+      "summary": "Scoped copy/current VIEN/native/mobile/keyboard states and8principles reviewed; official business policy/real Suggestions/AT/provider/live acceptance incomplete.",
       "evidence_refs": [
-        "PRODUCT-CONTENT.md",
-        "tests/browser/ask-platform.spec.ts",
-        "PRODUCT-CONTENT-KNOWLEDGE.md",
-        "PRODUCT-CONTENT-PROFILE.md"
+        "PRODUCT-CONTENT-INTEGRATION.md",
+        "PRODUCT-CONTENT-INTEGRATION.json",
+        "output/ask-hardening/2026-10-08T13-14-25-346Z/browser.json"
       ]
     }
   },
@@ -124,15 +147,17 @@
       "id": "B01",
       "severity": "high",
       "location": "docs/plans/ASK-PLATFORM-20261007/PLAN.md",
-      "summary": "Full architecture implementation remains incomplete; this change only hardens existing retrieval/model-loop/stream/recovery paths.",
-      "status": "OPEN"
+      "summary": "Full architecture/service/web research/model-context/learning implementation and production acceptance remain incomplete; verified foundations do not satisfy broad Ask Anything objective.",
+      "status": "OPEN",
+      "evidence": "Three integrations now in source and local tests; official corpus/holdout/retention decision, provider post-fix live/cost reconciliation and production lifecycle remain NOT_VERIFIED. Existing owner-only expired pilot remains closed."
     },
     {
       "id": "B02",
       "severity": "medium",
       "location": "src/features/membership/PlanEditor.tsx:343",
       "summary": "Full unit suite has missing required marker in concurrent Membership work, outside Ask edit set.",
-      "status": "OPEN"
+      "status": "RESOLVED",
+      "evidence": "Current full Node22 suite: 112 files / 959 tests passed. Historical concurrent failure no longer reproduces."
     },
     {
       "id": "F08",
@@ -155,8 +180,8 @@
       "severity": "high",
       "location": "src/features/profile/Profile.tsx",
       "summary": "Unknown save outcome retried with new operation ID could duplicate address creation.",
-      "status": "FIXED_WITHIN_MOUNTED_SESSION",
-      "evidence": "Retained immutable command; 5 backend and 8 browser cases including profile expectedVersion and inline collapse/reopen; reload durability remains outstanding."
+      "status": "FIXED",
+      "evidence": "Durable metadata pointer, explicit server resolution, transactional late-save fence; 12 demo backend and 12 browser cases including reload/races/storage failures."
     },
     {
       "id": "F11",
@@ -173,27 +198,599 @@
       "summary": "Reused page/panel Profile instances would duplicate IDs and accessibility references.",
       "status": "FIXED",
       "evidence": "useId scopes every heading/step reference; source inspected and browser regression passed."
+    },
+    {
+      "id": "F13",
+      "severity": "high",
+      "location": "functions/src/ai/customer-save.ts",
+      "summary": "Missing-save resolution must prevent a late original request committing after a not-saved answer.",
+      "status": "FIXED",
+      "evidence": "Transactional dedicated fence, workspace transaction read, race and late-dispatch demo tests."
+    },
+    {
+      "id": "F14",
+      "severity": "medium",
+      "location": "src/features/membership/Membership.tsx",
+      "summary": "Changed renewal snapshot could turn retry into a different action; private snapshot failures or invalid values could expose stale state.",
+      "status": "FIXED",
+      "evidence": "Exact pending-command retry, owner/read failure latch, strict price/date/state/result validation; 12 browser scenarios."
+    },
+    {
+      "id": "F15",
+      "severity": "medium",
+      "location": "functions/src/ai/knowledge-retrieval.ts",
+      "summary": "Per-field typo expansion admitted competing near spellings despite exact corpus evidence.",
+      "status": "FIXED",
+      "evidence": "Single bounded non-conflicting corpus vocabulary; exact term excludes fuzzy expansion, multiple candidate spellings reject correction; 3 regression scenarios and full 964-test suite."
+    },
+    {
+      "id": "F16",
+      "severity": "medium",
+      "location": "functions/src/ai/knowledge-retrieval.ts",
+      "summary": "ASCII-only numeric guard allowed Unicode numeric identifier typo matches.",
+      "status": "FIXED",
+      "evidence": "3 Unicode scripts reproduced then passed with Unicode number-category exclusion."
+    },
+    {
+      "id": "F17",
+      "severity": "medium",
+      "location": "functions/src/ai/knowledge-retrieval.ts",
+      "summary": "Overlap after paragraph boundary introduced orphaned table row tails without units/header.",
+      "status": "FIXED",
+      "evidence": "Actual rich-text table flattened to source -> chunk regression failed before fix; paragraph-boundary overlap disabled; current suite passed."
+    },
+    {
+      "id": "F18",
+      "severity": "high",
+      "location": "packages/domain/chat-action.ts",
+      "summary": "Question punctuation was discarded and question could execute a confirmation action.",
+      "status": "FIXED",
+      "evidence": "Question consent regressions failed before fix; bounded explicit commands/no-accent supported with stage guards preserved; 31 scenarios and full regression passed."
+    },
+    {
+      "id": "F19",
+      "severity": "medium",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Already-open inputs retained old value after chat filled the draft.",
+      "status": "FIXED",
+      "evidence": "Actual form open-form/manual-other browser cases failed before fix and passed after field-specific keys; manual notes retained."
+    },
+    {
+      "id": "F20",
+      "severity": "medium",
+      "location": "packages/domain/chat-draft.ts",
+      "summary": "Greedy variant parsing could retain compound price/field instructions as variant text; explicit multi-field natural formats unsupported.",
+      "status": "FIXED",
+      "evidence": "11 failing unit regressions -> atomic validate-all-clauses parser; 39 current parser tests passed, no partial update for invalid/mixed/repeated fields."
+    },
+    {
+      "id": "F21",
+      "severity": "medium",
+      "location": "src/features/ask/Ask.tsx",
+      "summary": "Earlier mixed-read routing intercepted explicit compound draft edits before their handler.",
+      "status": "FIXED",
+      "evidence": "Actual VI/EN compound browser cases failed before fix; guarded precompute/exemption passed current 12 chat-fill cases and full 55-case browser suite; actual demo persists all fields before one explicit custom submit."
+    },
+    {
+      "id": "F22",
+      "severity": "high",
+      "location": "src/features/ask/Commerce.tsx",
+      "summary": "Successful transport could clear pending and report command success without a valid order ID or correct conversation version.",
+      "status": "FIXED",
+      "evidence": "Strict original-envelope result admission; 35 admission/envelope tests, malformed/wrong-version VI/EN actual-hook cases and actual catalog handler contracts passed."
+    },
+    {
+      "id": "F23",
+      "severity": "high",
+      "location": "src/features/ask/Commerce.tsx:resume",
+      "summary": "Recovery accepted raw replies before retiring the pending identity.",
+      "status": "FIXED",
+      "evidence": "Strict no-operation/completed-result schema and original action/version/order binding; invalid recovery retains pending in actual hook; actual handler completed recovery checked."
+    },
+    {
+      "id": "F24",
+      "severity": "high",
+      "location": "src/features/ask/Commerce.tsx:onSnapshot",
+      "summary": "Conversation owner/version/turns were cast before hydration; malformed or foreign snapshots could restore unsafe context.",
+      "status": "FIXED",
+      "evidence": "Read-side existing-shape schema; owner check, blocked hydration/cleared display, visible idle recovery alert; 13 schema cases and 3 actual-hook browser failure cases passed."
+    },
+    {
+      "id": "F25",
+      "severity": "high",
+      "location": "src/features/ask/Commerce.tsx:mutate",
+      "summary": "Persisted metadata was not scope validated; non-catalog retries could reconstruct a changed private payload.",
+      "status": "FIXED",
+      "evidence": "Strict conversation/operation/action/version/catalog-envelope admission. Private-payload-free commands require server resume; corrupted storage retained and never dispatched. Envelope unit and corrupt-pending browser cases passed."
+    },
+    {
+      "id": "F26",
+      "severity": "medium",
+      "location": "src/features/ask/Ask.tsx:mixed read router",
+      "summary": "New mixed catalog/fee searches could leave the prior selection active if their catalog read failed.",
+      "status": "FIXED",
+      "evidence": "Invalidate choice/context before mixed catalog dispatch; mixed-search-failure and standalone new-search browser regressions passed."
+    },
+    {
+      "id": "F27",
+      "severity": "high",
+      "location": "src/features/membership/Membership.tsx",
+      "summary": "Unknown Membership operation was held only in a ref and lost on full reload, allowing a fresh operation and duplicate request.",
+      "status": "FIXED",
+      "evidence": "Strict durable envelope before dispatch, exact reload/replay cases, parallel tab reservation, actual-handler one-invoice replay. Full source-bound run pending newest snapshot. Current frozen output/ask-hardening/2026-10-08T05-10-24-184Z passes 1177 unit / 50 demo / 96 browser tests; frontend TS/lint exit 0; sourceStable=true and current hashes verified."
+    },
+    {
+      "id": "F28",
+      "severity": "high",
+      "location": "src/features/membership/Membership.tsx command catch",
+      "summary": "A later permission or precondition rejection cleared the original uncertain operation even though the earlier call may already have committed.",
+      "status": "FIXED",
+      "evidence": "All unknown/rejected/malformed outcomes retain the saved operation; denied-replay and wrong-owner/clear-storage-failure cases keep controls blocked and original ID. Current frozen output/ask-hardening/2026-10-08T05-10-24-184Z passes 1177 unit / 50 demo / 96 browser tests; frontend TS/lint exit 0; sourceStable=true and current hashes verified."
+    },
+    {
+      "id": "F29",
+      "severity": "medium",
+      "location": "tests/browser/membership-workspace.spec.ts reload-plan-changed",
+      "summary": "Initial changed-plan scenario refreshed the same paid plan rather than changing its identity/price, and the new count assertion expected two rows after the fixture removed one.",
+      "status": "FIXED",
+      "evidence": "Fixture now changes ID/name/price to replacement-plan/Changed PLUS/900000; original retry request asserted unchanged, replacement controls disabled. Focused test passed. Current frozen output/ask-hardening/2026-10-08T05-10-24-184Z passes 1177 unit / 50 demo / 96 browser tests; frontend TS/lint exit 0; sourceStable=true and current hashes verified."
+    },
+    {
+      "id": "F30",
+      "severity": "medium",
+      "location": "tests/browser/membership-workspace.spec.ts scaled-recovery",
+      "summary": "Screenshot review showed CSS zoom was reset on reload, so the recovery state was not actually exercised at the advertised 200 percent.",
+      "status": "FIXED",
+      "evidence": "Restore CSS zoom after reload, assert computed zoom=2 and horizontal overflow; focused case passed and new screenshot visually reviewed. Fresh frozen all-local rerun pending. Current frozen output/ask-hardening/2026-10-08T05-10-24-184Z passes 1177 unit / 50 demo / 96 browser tests; frontend TS/lint exit 0; sourceStable=true and current hashes verified."
+    },
+    {
+      "id": "F31",
+      "severity": "medium",
+      "location": "tests/browser/membership-workspace.spec.ts clear-storage-failure",
+      "summary": "The post-reload zoom patch also inserted a scaled-mode check inside the branch already narrowed to clear-storage-failure; TS2367 correctly rejected the impossible comparison.",
+      "status": "FIXED",
+      "evidence": "Removed only the unreachable zoom check; the scaled-recovery branch retains computed zoom=2 and overflow assertions. Current frontend compiler and frozen regression rerun required. Current frozen output/ask-hardening/2026-10-08T05-10-24-184Z passes 1177 unit / 50 demo / 96 browser tests; frontend TS/lint exit 0; sourceStable=true and current hashes verified."
+    },
+    {
+      "id": "F32",
+      "severity": "medium",
+      "location": "functions/src/ai/research-discovery.ts",
+      "summary": "Valid Google web metadata contains domain and was rejected by an overly strict nested response schema.",
+      "status": "FIXED",
+      "evidence": "Bounded passthrough web metadata; fixed endpoint/schema tests pass. Second actual receipt validated at333tokens, before later redirect/expiry fixes."
+    },
+    {
+      "id": "F33",
+      "severity": "medium",
+      "location": "functions/src/ai/research.ts",
+      "summary": "Interim duplicate catalog scan bounds blocked legitimate reviewed-source selection in a shared 2100-published-product corpus.",
+      "status": "FIXED",
+      "evidence": "Bounded title projection <=4096; account/policy/owner/global admission before scan; rejected heavy scans commit quota before throwing. Actual-handler happy and known-listed denial cases pass. Scalable indexed absence still not certified."
+    },
+    {
+      "id": "F34",
+      "severity": "medium",
+      "location": "src/features/ask/Research.module.css",
+      "summary": "Mobile action width, detached required marker and inherited full-width checkbox reduced clarity and control usability.",
+      "status": "FIXED",
+      "evidence": "Owned scoped CSS/markup only; actual VI/EN320/390px/zoom2 native-control evidence inspected; current23browsercases pass."
+    },
+    {
+      "id": "F35",
+      "severity": "medium",
+      "location": "functions/src/ai/knowledge-context.ts and research-discovery.ts",
+      "summary": "Byte budget omitted JSON array overhead; discovery could continue after policy expired while awaiting transport.",
+      "status": "FIXED",
+      "evidence": "Full UTF-8 serialized array bound; policy recheck after response/redirect await. Exact-bound and delayed-expiry unit cases pass."
+    },
+    {
+      "id": "F36",
+      "severity": "high",
+      "location": "functions/src/ai/research-budget.ts",
+      "summary": "A ledger write without durable directory creation/rename could leave uncertain reservation persistence after crash.",
+      "status": "FIXED",
+      "evidence": "Exclusive same-directory temporary file, fsync file, atomic rename and parent-directory fsync before dispatch; bounded filesystem tests and reserve failure sends zero calls. Unknown reservations retained."
+    },
+    {
+      "id": "F37",
+      "severity": "low",
+      "location": "tests/browser/ask-research-feedback.spec.ts",
+      "summary": "Headless native select popup ArrowDown/Enter did not commit its selected category, so keyboard fixture was invalid.",
+      "status": "FIXED",
+      "evidence": "Closed-select Vietnamese type-ahead plus Tab; focus/category/consent/submit exact assertions retained and current keyboard case passes; no skip or reduced expectation."
+    },
+    {
+      "id": "F38",
+      "severity": "medium",
+      "location": "functions/src/ai/research.ts",
+      "summary": "Polite free-text words prevented expected reviewed-product retrieval.",
+      "status": "FIXED",
+      "evidence": "Existing productQuery/candidateScore reused; actual-handler polite VI/EN queries pass while numeric/negation/comparison and exact revision selection remain authoritative."
+    },
+    {
+      "id": "F39",
+      "severity": "high",
+      "location": "src/features/membership/Membership.tsx:command",
+      "summary": "A storage event could hydrate a saved operation before a stale fresh purchase click and turn that click into an implicit retry.",
+      "status": "FIXED",
+      "evidence": "Explicit original-envelope argument only from recovery button; fresh controls reject any saved attempt. Six repeated two-tab contention cases and all29Membership/current119browser cases pass."
+    },
+    {
+      "id": "F40",
+      "severity": "medium",
+      "location": "scripts/ask-research-live.mjs",
+      "summary": "Best Buy Marketplace shares the same host, contradicting a first-party-only host assumption.",
+      "status": "FIXED",
+      "evidence": "Official Marketplace FAQ readback; remove host from local test policy. No new live call; source snapshot freezes restriction. No inferred real merchant certification."
+    },
+    {
+      "id": "F41",
+      "severity": "high",
+      "location": "functions/src/ai/research-gemini.ts",
+      "summary": "Policy/pricing could expire during reservation or countTokens and still dispatch paid generation.",
+      "status": "FIXED",
+      "evidence": "Recheck expiry/cancellation after reserve/count/generation before next dispatch/admission; four policy/pricing x reserve/count combinations pass in current5Geminiunitcases."
+    },
+    {
+      "id": "B04",
+      "severity": "medium",
+      "location": "src/features/crm/Dashboard.tsx:667",
+      "summary": "Full required-label test fails for two concurrent Dashboard date fields outside approved Ask path.",
+      "status": "BLOCKED",
+      "evidence": "output/ask-hardening/integration-current-recheck/unit.json; current affected25checks yield24pass/1fail, only labels667/676; proposed patch remains NOT_APPLIED."
+    },
+    {
+      "id": "B05",
+      "severity": "medium",
+      "location": ".ai/scripts/validate_agent_config.py:validate_root_links",
+      "summary": "Repository agent-configuration validator cannot complete because it assumes root CLAUDE.md exists.",
+      "status": "BLOCKED",
+      "evidence": "python3 .ai/scripts/validate_agent_config.py exits1 FileNotFoundError; no Ask source defect inferred, no generated/policy stub introduced."
+    },
+    {
+      "id": "F42",
+      "severity": "medium",
+      "location": "packages/domain/ask-web.ts",
+      "summary": "English my could be inferred as US market.",
+      "status": "FIXED",
+      "evidence": "Explicit-market pattern corrected; unit case my headphones→null, Mỹ→US and conflict→clarify."
+    },
+    {
+      "id": "F43",
+      "severity": "high",
+      "location": "functions/src/ai/research-live.ts",
+      "summary": "Conversation version changes could re-buy an unknown query.",
+      "status": "FIXED",
+      "evidence": "Dedup keyed by owner/cid/queryHash without version; transaction validates current version and cache echo rebinds it. Concurrent/unknown-version replay demo passes."
+    },
+    {
+      "id": "F44",
+      "severity": "high",
+      "location": "functions/src/ai/research-live.ts",
+      "summary": "Fresh server ledger might ignore prior local50k reservations.",
+      "status": "FIXED",
+      "evidence": "Existing ledger only; fixed50k imported floor outside explicit synthetic emulator; missing/exhausted/corrupt ledger zero-provider-I/O tests pass, no actual allowance reset."
+    },
+    {
+      "id": "F45",
+      "severity": "medium",
+      "location": "functions/src/ai/feedback-lifecycle.ts",
+      "summary": "Missing-feedback withdrawal tombstones could be abused without quota.",
+      "status": "FIXED",
+      "evidence": "20withdrawals/day with same-ref idempotency and expiry; event timestamp prevents delayed replay recreation after cleanup. Demo withdrawal race/review no revival pass."
+    },
+    {
+      "id": "F46",
+      "severity": "high",
+      "location": "src/features/ask/AnswerFeedback.tsx",
+      "summary": "Consent previously did not show actual retention or bind current policy version.",
+      "status": "FIXED",
+      "evidence": "Server read policy before opt-in; actual days displayed, disabled unavailable/expired policy, send binds version. Same pending event can recover without starting a new policy action."
+    },
+    {
+      "id": "F47",
+      "severity": "medium",
+      "location": "src/features/ask/Ask.tsx",
+      "summary": "Automatic replacement also inserted discovery rendering into mixed reads with optional answer.",
+      "status": "FIXED",
+      "evidence": "Removed unintended mixed renderer; backend/frontend TypeScript and all138browser scenarios pass."
+    },
+    {
+      "id": "F48",
+      "severity": "medium",
+      "location": "src/features/ask/WebDiscovery.tsx; src/features/settings/FeedbackReview.tsx",
+      "summary": "New form fields lacked canonical requiredMark and rendered input/button separation was weak.",
+      "status": "FIXED",
+      "evidence": "Own3markers fixed with existing named marker/shared form styles; spacing/native controls corrected and mobile snapshots reviewed. Current affected marker check still finds only Dashboard667/676."
+    },
+    {
+      "id": "F49",
+      "severity": "high",
+      "location": "functions/src/ai/knowledge-context.ts",
+      "summary": "Initial optional context could overflow provider byte cap before it could be compacted.",
+      "status": "FIXED",
+      "evidence": "Byte admission before native count, trim optional turns/evidence, protected overflow denies. Full native request counts exact final body; UTF8 and fake native counter tests pass."
+    },
+    {
+      "id": "F50",
+      "severity": "medium",
+      "location": "tests/browser/membership-workspace.spec.ts",
+      "summary": "Cross-tab regression locator matched uppercase Chưa only; actual safe recovered message contained lowercase chưa.",
+      "status": "FIXED",
+      "evidence": "Case-insensitive text locator only; same one-request/disabled-controls/exact retry assertions. Three focused repeats and final full138browser pass, no Membership application edit."
+    },
+    {
+      "id": "F51",
+      "severity": "medium",
+      "location": "src/features/ask/WebDiscovery.tsx",
+      "summary": "A newly supplied valid discovery could retain the previous discovery expired state.",
+      "status": "FIXED",
+      "evidence": "Actual-component same-instance expired→renewed scenario reproduced failure, then passed after resetting expiry from new result. Final18integration scenarios and frontend/backend compiler/lint/build pass."
+    },
+    {
+      "id": "B06",
+      "severity": "medium",
+      "location": "shared demo products",
+      "summary": "One of2100published demo products lacks title; default full catalog absence remains unverified, so native web discovery is correctly blocked.",
+      "status": "BLOCKED",
+      "evidence": "Read-only aggregate count missing1; no shared product edit. Web happy uses gated owned qa-askweb collection on same emulator, synthetic transport."
+    },
+    {
+      "id": "B07",
+      "severity": "medium",
+      "location": "shared runtime and tests",
+      "summary": "Entire current-tree acceptance is not established after concurrent Analytics runtime/test changes; shared Ask question-only analytics instrumentation and final expiry fix have separately verified scoped evidence.",
+      "status": "BLOCKED",
+      "evidence": "output/ask-hardening/integration-current-recheck/summary.json; historical676-file full run preserved, current97unit/78pre-fix browser/18final integration and compiler/lint/build evidence bound separately."
     }
   ],
   "residual_risks": [
-    "No semantic/vector retrieval or approved-corpus lifecycle implemented.",
+    "No semantic/vector retrieval or general multi-turn resolution; approved-source lifecycle exists locally/demo, authoritative production corpus/provider acceptance still pending.",
     "Genkit run guard is not evidence that gated provider dispatch is enabled.",
-    "Browser tests use real consumer/component with synthetic provider and mocked commerce/auth; integration invokes actual server handlers on demo Firestore, not deployed HTTP/App Check."
+    "Browser tests use real consumer/component with synthetic provider and mocked commerce/auth; integration invokes actual server handlers on demo Firestore, not deployed HTTP/App Check.",
+    "Browser recovery depends on Web Locks and working local storage; unsupported or corrupt storage fails closed.",
+    "Fence must deploy before resolver/frontend; rollback must retain fence enforcement and records.",
+    "Sparse commerce words preserve existing locale preference; English acceptance tests restore an explicit EN preference, not arbitrary language guessing.",
+    "Current VI/EN chat-fill keyboard/roles verified; full-platform locale, Safari, screen-reader and production acceptance incomplete.",
+    "Catalog chat supports bounded explicit displayed-list selection and field clauses, not general free-form offer resolution.",
+    "Read-side conversation validation is not certification of every existing current-conversation pointer/order snapshot/financial display path. Full live service and data-admission acceptance remains pending.",
+    "Guest VI and EN normal/recovery journeys exercised; not every locale/state/browser/assistive-technology combination is certified.",
+    "Membership pending survives reload with working localStorage/Web Locks. Manual full browser-storage deletion cannot establish recovery; live idempotency retention remains NOT_VERIFIED.",
+    "Originally uncommitted Membership retry uses current backend plan terms; expected price/revision binding and a read-only result resolver are not part of this existing contract.",
+    "Profile/Membership cross-tab workspace fencing and recovery before opening the Membership subpanel are not certified; full English Membership, Safari/AT and live acceptance remain incomplete.",
+    "Gemini discovery remains a public test-only seam; automatic customer app dispatch and compliant Suggestions integration absent.",
+    "No real merchant/variant/stock/price/review validation; host approval alone is not seller proof, and Best Buy was removed from first-party-only probe.",
+    "Bounded <=4096 title projection/catalog duplicate check is neither scalable nor semantic absence certification; global scan quota namespace resets with approved policy version.",
+    "Knowledge context active path bounds bytes, not model tokens. Exact full-request counter, semantic source benchmark, compaction and opt-in memory are foundations/unimplemented in production loop.",
+    "Feedback expiry field does not enforce physical deletion without configured TTL/privacy lifecycle; staff inbox/withdrawal/deletion/authoritative corpus update not complete.",
+    "Offline holdout comparison uses caller-supplied scores and synthetic tests, not a real independent business holdout or verified learning improvement.",
+    "First provider outcome/usage unknown; reserve retained. Current50kreservation is not actual billed50k. Later redirect/expiry/budget/currenthost fixes not live-retested.",
+    "Current full-unit gate fails two Dashboard required markers; pending narrowly scoped reviewable delta is unapplied."
   ],
   "limitations": [
     "Repository intelligence DEGRADED.",
     "ai-agent-kit executable unavailable; review JSON saved but no runtime review receipt claimed.",
-    "Full plan remains NOT_DONE."
+    "Full plan remains NOT_DONE.",
+    "No subagents used; fresh review is a separate root review cycle, not claimed external independent reviewer.",
+    "Initial full run failed because of observed EAGAIN/EPIPE process exhaustion and could not finish its snapshot; not counted as passed. Current one-thread-worker runner completed all three frozen phases.",
+    "Early browser failures were incorrect model-dispatch expectation and hidden-dialog duplicate locator; corrected without loosening no-mutation or admission assertions. Snapshot unit expected canonical empty notes default; corrected to existing domain normalization.",
+    "Earlier 1074/55 and 1156/78 evidence are historical; current final candidate includes guest case and 79 browser cases.",
+    "S19-R1 historical all-local runs before F30/F31 corrections are superseded by the final 632-file snapshot, 120 unit files/1177 tests, 4 demo files/50 tests and 96 browser scenarios. No stale compiler/test candidate promoted.",
+    "Latest repository gate: both tools healthy but index metadata stale; DEGRADED. Earlier failed CocoIndex health did not certify current freshness.",
+    "Current phase snapshots are separate runner modes with identical source, not a claim all-local runner passed its required full unit gate.",
+    "664-file current snapshot includes concurrent analytics work preserved without adopting its release scope. Historical632-file evidence is superseded for current candidate.",
+    "No actual customer/staff/payment/AppCheck/provider post-fix or comprehensive AT/Safari acceptance; no deployment or runtime review receipt."
   ],
   "source_manifest": "SOURCE_MANIFEST.json",
-  "review_cycles": 4,
-  "reviewed_head": "08302e0ae7c440a70c10316de43c86e69aec05fe",
-  "source_manifest_sha256": "bde43eee79da906aec363281456992e839039f9ca23f3d8f2f618ad2c065f884",
+  "review_cycles": 33,
+  "reviewed_head": "53d59bd88fa7da9d1243692336ecd09b6540ea31",
+  "source_manifest_sha256": "a92b646cab9d6c6e1f2fa7f145a085e4e16d075dfb7215025274f6e4a2b284fe",
   "latest_cycle": {
-    "cycle": 7,
+    "cycle": 33,
     "status": "BLOCKED",
-    "scoped_checks": "S18: 5 actual backend demo tests, 8 actual-component synthetic backend browser scenarios, 15 affected unit regressions, 5 Ask browser regressions; TypeScript/ESLint/whitespace passed.",
-    "remaining": "Full platform and production acceptance remain incomplete. Pending profile recovery does not survive full reload/unmount; general durable reconciliation is not implemented. English Profile form not implemented.",
-    "runtime_receipt": "NOT_RUN: ai-agent-kit unavailable"
+    "scoped_status": "PASSED",
+    "scoped_checks": "Fresh current root manual review after expiry regression fix. Current97Askunit,78affectedbrowser before expiry fix and18finalintegrationpass; actual affected25unit yields24pass/1Dashboard marker failure. Current Node22 frontend/backend compilation/scoped lint/whitespace/buildpass. Source stable during current checks; whole shared-tree final acceptance NOT_VERIFIED, no production proof.",
+    "evidence_dirs": [
+      "output/ask-hardening/integration-current-recheck",
+      "output/ask-hardening/2026-10-08T13-14-25-858Z",
+      "output/ask-hardening/2026-10-08T13-14-23-550Z",
+      "output/ask-hardening/2026-10-08T13-14-25-346Z"
+    ],
+    "remaining": "Official corpus/holdout/retention approval; held Gemini budget/cost; shared catalog incompleteness; whole shared-tree/Dashboard/agent-config gates; live auth/AppCheck/provider/deploy/physical retention acceptance.",
+    "runtime_receipt": "NOT_RUN: ai-agent-kit unavailable",
+    "findings": [
+      "F51",
+      "B01",
+      "B04",
+      "B05",
+      "B06",
+      "B07"
+    ]
+  },
+  "cycle_history_continuation": [
+    {
+      "cycle": 19,
+      "status": "BLOCKED",
+      "findings": [
+        "F22"
+      ],
+      "action": "Implement scoped catalog selection and strict command completion admission; focused 88 tests and actual handler catalog cases pass."
+    },
+    {
+      "cycle": 20,
+      "status": "BLOCKED",
+      "findings": [
+        "F23",
+        "F24",
+        "F25"
+      ],
+      "action": "Harden recovery, snapshots and pending envelopes; add current VI/EN failure cases and guest/reload checks; focused 121 tests pass."
+    },
+    {
+      "cycle": 21,
+      "status": "BLOCKED",
+      "findings": [
+        "F26"
+      ],
+      "action": "Clear mixed-search old selection; regression passes. Full fork-worker runner hit EAGAIN/EPIPE, not application assertion failure; scheduling moved to one thread worker and incomplete snapshot summarized fail closed."
+    },
+    {
+      "cycle": 22,
+      "status": "BLOCKED",
+      "scoped_status": "PASSED",
+      "findings": [],
+      "action": "Fresh frozen full verification and root final review after fixes; full feature/production gates still blocked."
+    },
+    {
+      "cycle": 23,
+      "status": "BLOCKED",
+      "findings": [
+        "F27",
+        "F28"
+      ],
+      "action": "Source-verified durable-reload and unsafe-retirement defects; S19-R1 plan recorded before edits. Implement exact metadata recovery and never retire uncertain prior outcome from later rejection. Initial unit helper import failed before implementation; 17 focused unit and 26 browser cases subsequently passed. Missing-env demo attempt was blocked before Firebase import, corrected to explicit demo environment and 7 actual-handler cases passed."
+    },
+    {
+      "cycle": 24,
+      "status": "BLOCKED",
+      "findings": [
+        "F29",
+        "F30",
+        "F31"
+      ],
+      "action": "Review found changed-plan scenario did not truly change plan; fixed fixture and count to assert original operation even with replaced plan, focused test passed. First frozen all-local passed 1177/50/96 but screenshot review found zoom reset on reload; this earlier candidate is historical after test correction. Corrected actual zoom and assertion, focused case and rendered screenshot passed; newest frozen run pending. Fresh compiler caught TS2367 in unreachable zoom check inside clear-storage-only branch. Removed this dead comparison without weakening scale/recovery assertions. Second frozen 1177/50/96 run is historical after compiler correction."
+    },
+    {
+      "cycle": 25,
+      "status": "BLOCKED",
+      "scoped_status": "PASSED",
+      "findings": [],
+      "action": "Fresh mandatory final-implementation-review with code-review/code-quality-review/security-review/write-product-content after all in-scope corrections and source-bound verification. Full target and production gates remain blocked."
+    },
+    {
+      "cycle": 26,
+      "status": "BLOCKED",
+      "findings": [
+        "F32",
+        "F33"
+      ],
+      "action": "Implement reviewed-offer contracts, context/feedback foundations and bounded Gemini probe; live parser evidence corrected, catalogue guard/quota verified without resetting shared2100products. Broad capability/provider terms/production gates remain."
+    },
+    {
+      "cycle": 27,
+      "status": "BLOCKED",
+      "findings": [
+        "F34",
+        "F35",
+        "F36"
+      ],
+      "action": "Review rendered/mobile/byte/async-expiry/crash durability; scoped CSS and whole-array/expiry checks and atomic ledger persistence fixed; current affected unit/UI/filesystem checks pass."
+    },
+    {
+      "cycle": 28,
+      "status": "BLOCKED",
+      "findings": [
+        "F37",
+        "F38",
+        "F39"
+      ],
+      "action": "Correct native select keyboard fixture while retaining exact assertions; reuse natural product query; fix real implicit Membership replay race; six contention repeats and 60demo/119browser verified. Initial ordinary-sandbox HTTPunitfailure environment-only; corrected permitted-loopback run passes telemetry."
+    },
+    {
+      "cycle": 29,
+      "status": "BLOCKED",
+      "findings": [
+        "F40",
+        "F41"
+      ],
+      "action": "Official merchant readback restricts first-party-only probe; expiry checked before further paid dispatch. Focused5Geminiunit and current full snapshot rerun pass scoped assertions; no additional paid calls."
+    },
+    {
+      "cycle": 30,
+      "status": "BLOCKED",
+      "scoped_status": "PASSED",
+      "findings": [
+        "B01",
+        "B04",
+        "B05"
+      ],
+      "action": "Fresh root final-implementation-review/source/callers/contracts/security/code/failure/error/product/tradeoffs review after all owned fixes. Same664-file source hashes currently match;1206of1207unitpass(oneconcurrentDashboardfailure),60demo and119browserpass, TypeScript/lint/whitespacepass. Full capabilities/live/production/privacy gates remain; pending business-input and optionalDashboarddelta cannot be inferred. Additional local isolated Vite build and public release-config pass. Agent-config validator cannot finish due missing CLAUDE.md (B05); scoped source unchanged, full governance not certified."
+    },
+    {
+      "cycle": 31,
+      "status": "BLOCKED",
+      "findings": [
+        "F42",
+        "F43",
+        "F44",
+        "F45",
+        "F46",
+        "F47",
+        "F48",
+        "F49",
+        "F50"
+      ],
+      "action": "Implementation/review found market, unknown-retry budget, retention consent, withdrawal quota, mixed-read typing, visual/markers, optional byte compaction and fixture-case issues. Corrected approved paths; initial unit/demo/browser failures recorded as historical, not promoted."
+    },
+    {
+      "cycle": 32,
+      "status": "BLOCKED",
+      "scoped_status": "PASSED",
+      "findings": [
+        "B01",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "action": "Fresh root manual final/code/code-quality/security/product review after fixes. Three current identical676-file snapshots;1220of1221unitpass(only Dashboard),69demo and138browserpass. Compiler/lint/whitespace/buildpass; no new source defect within executed scope. Official/live/production/governance gates remain blocked; no external/runtime receipt."
+    },
+    {
+      "cycle": 33,
+      "status": "BLOCKED",
+      "scoped_status": "PASSED",
+      "findings": [
+        "F51",
+        "B01",
+        "B04",
+        "B05",
+        "B06",
+        "B07"
+      ],
+      "action": "Fresh current root manual review after expiry regression fix. Current97Askunit,78affectedbrowser before expiry fix and18finalintegrationpass; actual affected25unit yields24pass/1Dashboard marker failure. Current Node22 frontend/backend compilation/scoped lint/whitespace/buildpass. Source stable during current checks; whole shared-tree final acceptance NOT_VERIFIED, no production proof."
+    }
+  ],
+  "cycle_numbering_note": "Sequential manual review labels1–33; historical cycles retained, no external reviewer/runtime receipt.",
+  "reviewed_at": "2026-10-08T13:46:11.403983+00:00",
+  "current_source_binding": {
+    "head": "53d59bd88fa7da9d1243692336ecd09b6540ea31",
+    "snapshot": "output/ask-hardening/integration-current-recheck/source-final.json",
+    "summary": "output/ask-hardening/integration-current-recheck/summary.json",
+    "files": 676,
+    "owned_files": 29,
+    "current_owned_hashes_match": true,
+    "whole_current_acceptance": "NOT_VERIFIED",
+    "whole_tree_changes_since_historical_candidate": [
+      "functions/src/analytics-worker.ts",
+      "functions/src/dashboard-analytics.ts",
+      "src/features/ask/Ask.tsx",
+      "src/features/ask/WebDiscovery.tsx",
+      "src/features/crm/Dashboard.tsx",
+      "src/features/crm/DashboardCharts.tsx",
+      "tests/browser/analytics-dashboard.spec.ts",
+      "tests/browser/ask-integration.spec.ts",
+      "tests/rules/analytics.test.ts"
+    ],
+    "after_checks_unexecuted_test_drift": [
+      "tests/browser/analytics-dashboard.spec.ts"
+    ]
+  },
+  "historical_full_acceptance_matches_entire_current_tree": false,
+  "final_document_validation": {
+    "artifact_hashes_match": true,
+    "owned_integration_hashes_match": true,
+    "consumer_hash_bound_to_latest_scoped_snapshot": "src/features/ask/CatalogSearch.tsx",
+    "status": "PASSED_SCOPED",
+    "full_acceptance": "BLOCKED",
+    "runtime_receipt": "NOT_RUN"
   }
 }

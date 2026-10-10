@@ -1,0 +1,35 @@
+.googleLoginDialog {
+  inset: 0;
+  margin: auto;
+  box-sizing: border-box;
+  width: min(400px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 28px;
+  border: 1px solid #e3e7ef;
+  border-radius: 20px;
+  background: #fff;
+  color: #111c35;
+  box-shadow: 0 16px 64px #111c3529;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.googleLoginDialog::backdrop {
+  background: #111c3538;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.googleLoginDialog h2 { margin: 0 0 20px; font-size: 1.25rem; font-weight: 650; line-height: 1.4; }
+.googleLoginDialog p { margin: 12px 0; font-size: .9375rem; line-height: 1.6; }
+.googleLoginStatus .loadingBar { margin-inline: auto; }
+.googleLoginDialog #google-login-description { color: #647087; font-size: .875rem; }
+.googleLoginActions { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.googleLoginActions button { min-height: 44px; padding: 10px 16px; border-radius: 10px; font-size: .875rem; font-weight: 600; white-space: normal; }
+.googleLoginActions button.primary { border: 1px solid #163cff; background: #163cff; color: #fff; }
+.googleLoginActions button:focus-visible { outline: 3px solid #163cff; outline-offset: 3px; }
+.googleLoginActions button:not(.primary) {
+  border: 1px solid #dfe5ef;
+  border-radius: 8px;
+  background: #fff;
+  color: #111c35;
+}

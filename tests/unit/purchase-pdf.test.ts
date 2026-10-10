@@ -60,6 +60,23 @@ const receipt: PurchaseReceiptData = {
     },
   ],
 };
+it("identifies SePay sandbox, exact bank method and provider invoice without claiming real funds", () => {
+  const lines = readable(
+    renderPurchaseReceipt({
+      ...receipt,
+      provider: "sepay_sandbox",
+      paymentMethod: "BANK_TRANSFER",
+      merchant: "SP-TEST-HL5339A9",
+      invoice: "SSG-SBX-00000000000040008000000000000099",
+      testMode: true,
+    }),
+  );
+  const content = lines.join(" ");
+  expect(content).toContain("QR chuyển khoản · SePay sandbox");
+  expect(content).not.toContain("Không thu tiền thật");
+  expect(content).toContain("SP-TEST-HL5339A9");
+  expect(content).toContain("SSG-SBX-00000000000040008000000000000099");
+});
 function balance(reason: "sourcing" | "final"): PurchaseReceiptData {
   return {
     ...receipt,
@@ -104,6 +121,15 @@ describe("purchase PDF customer presentation", () => {
     expect(rows).toContain("1");
     expect(all).toContain(receipt.lines[0].orderId);
     expect(all).toContain(receipt.lines[1].orderId);
+    expect(rows.join(" ")).toContain("của hàng cần tìm mua chưa thu.");
+    expect(rows.join(" ")).toContain("Hàng niêm yết giữ giá trọn gói.");
+    expect(
+      rows.filter(
+        (row) =>
+          row ===
+          "Cảm ơn bạn đã tin tưởng và chọn dịch vụ mua hộ của SatsunicGo.",
+      ),
+    ).toHaveLength(1);
   });
   it("identifies actual demo method, exact Vietnam time and reference without inventing bank or recipient facts", () => {
     const all = readable(renderPurchaseReceipt(receipt)).join("\n");
@@ -138,6 +164,9 @@ describe("purchase PDF customer presentation", () => {
       expect(all).not.toContain("Đơn giá");
       expect(all).not.toContain("127.500");
       expect(all).not.toContain("Bổ sung chi phí ·");
+      expect(all).toContain(
+        "Cảm ơn bạn đã tin tưởng và chọn dịch vụ mua hộ của SatsunicGo.",
+      );
     },
   );
   it("keeps a fractional derived unit amount as an exact row total rather than rounding a price", () => {
@@ -193,6 +222,13 @@ describe("purchase PDF customer presentation", () => {
     expect(pdf.length).toBeLessThan(3000000);
     expect(rows.filter((r) => r === "Sản phẩm").length).toBeGreaterThan(1);
     expect(rows.filter((r) => r.startsWith("Trang "))).toHaveLength(pages);
+    expect(
+      rows.filter(
+        (row) =>
+          row ===
+          "Cảm ơn bạn đã tin tưởng và chọn dịch vụ mua hộ của SatsunicGo.",
+      ),
+    ).toHaveLength(1);
     for (let i = 1; i <= 30; i++) expect(rows).toContain(`Mã đơn: #ORDER-${i}`);
   });
 });

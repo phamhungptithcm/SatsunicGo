@@ -1,0 +1,18 @@
+# Google checkout sign-in — 2026-10-09
+
+Plan ID/version: PAYMENT-UPFRONT Google sign-in v1. Approval status: APPROVED continuation of APPROVAL-V3.md; current human request explicitly asks to make the payment sign-in button compact and attractive with the official Google icon. No new confirmation is needed for this exact presentation refinement. Approver: human user in this chat. Task reference: 2026-10-09 message “nút đăng nhập quá thô ... login với google có icon google chuẩn”.
+
+Intelligence: DEGRADED, stale healthy CodeGraph/CocoIndex indexes. Queried CodeGraph first and CocoIndex second; verified current payment/checkout returns, CRM existing icon, global styles, App.signIn in source. HEAD 0d6e721698608eebb36b0b2f68021c3054d97d1c. Reuse shared frontend5207/PID33570; preserve unrelated dirty worktree and demo data.
+
+Observed: Payment and Checkout signed-out branches use blue `.primary` buttons labelled “Đăng nhập để tiếp tục”. Both already call App.signIn, which guards concurrent attempts, shows progress and reports failures. Existing CRM icon uses the older four solid colors; current official Google branding specifies the gradient G. Native Google Identity rendering would change integration and is unnecessary for this task.
+
+Smallest approved implementation:
+1. Add checkout-local purchase-sign-in.tsx/css with a native type=button, unchanged signIn callback, visible/accessibility label “Đăng nhập với Google”, decorative official G, light surface #fff, 1px #747775 border, Google Sans Medium14/20, 12px side padding, 10px icon gap, 44px minimum target, pill corners and visible keyboard focus. No motion or heavy shadow.
+2. Vendor the unmodified official Google G PNG and a 7.7KB Google Fonts subset covering the fixed Vietnamese label, plus OFL license/provenance under purchase-sign-in-assets. Import assets through Vite; no new dependency, runtime third-party requests or OAuth configuration changes. Preserve the logo aspect ratio via contain.
+3. Replace only the two signed-out buttons in purchase-checkout.tsx/purchase-payment.tsx with that shared local component. No account/CRM global UI redesign.
+4. Scoped lint/format/TypeScript/build. Browser verify actual signed-out route on existing5207 using a separate localhost origin if the shared127.0.0.1 auth session is signed in; do not sign out that session. Check desktop,320/390CSS widths, accessible label, image/font loaded, keyboard focus, no horizontal overflow. Authentication/provider behavior is source-reviewed; do not claim live OAuth verification. Existing auth progress/error paths remain authoritative.
+5. Product content review of the one changed label and eight principles, fresh final implementation review and current source/evidence manifest/report. No extra implementation-mirroring tests for a presentational-only reversible change.
+
+Risk/impact: low, two signed-out frontend branches; no payment/cart/backend/schema/API/security/privacy/permissions/release change. Assets add approximately41KB raw, font scoped solely to this label. Font/image failure retains readable text and fallback type. Pending, cancellation and error continue through existing App handler. Layout variance1/10, motion1/10, density7/10: compact recognizable provider button within existing checkout layout. Production/OAuth acceptance and deployment remain unverified/out of scope.
+
+Official references: https://developers.google.com/identity/branding-guidelines ; https://developers.google.com/static/identity/images/g-logo.png ; https://fonts.googleapis.com/css2?family=Google+Sans:wght@500&display=swap (fixed-label subset); https://github.com/googlefonts/googlesans/blob/main/OFL.txt .

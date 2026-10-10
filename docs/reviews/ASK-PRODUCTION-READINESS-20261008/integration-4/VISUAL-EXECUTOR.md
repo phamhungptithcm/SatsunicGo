@@ -1,0 +1,5 @@
+# Ask · Current rendered review
+
+Root executor, 2026-10-08. Reviewed SOURCE-final and the fresh BROWSER-r15 captures: workcell-390, mobile-quote-en, review-confirmReceipt-initial and independently scrolled review-confirmReceipt. The task window, its own scroller/footer and composer remain distinct; mobile quote target, quoted total and deposit are visible before prose. Initial receipt capture shows exact order and completion consequence; item/variant/quantity are confirmed in the separately scrolled capture. Long forms require task-body scrolling. No claim that all details initially fit, or native AT/zoom/real-device/production testing occurred.
+
+350 focused logic tests and 59 current browser cases passed (34 current integration, 25 retained consumer regressions). All 33 scoped source hashes, source ZIP members and isolated build-file hashes match their frozen manifests. The source ZIP and dirty-workspace build remain LOCAL_REVIEW_ONLY / NOT_DEPLOYABLE. Formal UX and final-review decisions remain separate receipts.

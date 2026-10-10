@@ -2,7 +2,7 @@
 
 ## Start and checks
 
-`npm ci`, `npm run dev`, then http://127.0.0.1:5173. Functions target Node 22. Node 22.23.3 has passed compilation and unit tests; run the complete suite using Node 22. Firebase CLI is pinned to 15.32.1. The emulator runner locates an installed JDK 21+; this host uses Homebrew JDK 24. No global runtime replacement is required.
+Reuse the shared frontend at http://127.0.0.1:5207. Inspect the existing listener before any start; coordinate runtime ownership and preserve demo data. A coordinated startup uses `npm run dev -- --port 5207 --strictPort`. Do not start another frontend, restart or reseed shared emulators to run these checks. Current shared demo backend ports are Auth19207, Firestore18207, Functions15207 and Storage19208; use exact `demo-satsunicgo` emulator settings from `AGENTS.md`. Functions target Node22; Node22.23.3 is available for compilation and tests. Firebase CLI is pinned to15.32.1. No global runtime replacement is required.
 
 Commands: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run test:rules`, `npm run test:http`, `npm run test:restore`. Rules/direct-handler tests use fixture auth. HTTP tests use real emulator-issued ID tokens but cannot prove Google signatures, real OAuth, App Check or MFA. Every emulator runner forces `demo-satsunicgo` and fixed isolated ports. Do not change that target to a real project.
 
@@ -22,7 +22,9 @@ payOS needs approved beneficiary and return-origin settings plus three Secret Ma
 
 Genkit/Gemini require approved model/settings and IAM. Application quotas, timeouts, output/tool limits and current order ownership are implemented. Tools can retrieve published content, read authorized context and prepare a reviewed request draft. They cannot purchase, verify money, refund or grant roles. AI stays disabled by default. Runtime audit contains unresolved Genkit/OpenTelemetry advisories; do not certify or enable the production AI path until these are resolved or reviewed through the required release process.
 
-Email is queued only with enabled configuration. Recipients are Firebase Auth identities. Marketing jobs require current opt-in; unknown SMTP outcomes and abandoned sends are marked unknown for reconciliation, not blindly resent. Real SMTP delivery is NOT_TESTED. Campaigns store captions, editorial approval, planned dates and UTM links; copying a caption is not automatic posting. Social posting is disabled.
+Customer and subscription email now use the server-only Resend adapter. Queue admission requires the strict approved `settings/email` configuration, the exact production runtime/database, authenticated domain-verification evidence and a nonfuture forward cutover. Only new eligible events are admitted; historical jobs are not drained. Recipients are current verified Firebase Auth identities; optional notifications also require current scoped consent. Both workers share a maximum100 reserved attempts per UTC day; reservations are conservative and never refunded after uncertainty. The final dispatch cadence hardening is tracked in `reviews/PRODUCTION-INTEGRATION-20261009/EMAIL-VERIFICATION-LEDGER.json` until its current tests/review pass. Unknown/abandoned sends require reconciliation and are not blindly resent; no automatic retry occurs outside the24-hour provider window. Provider accepted is not inbox delivered.
+
+The runtime secret alias is `SFTP_PASSWORD`, confirmed by the owner for Resend; do not read its payload locally. Deployment must read back the approved version1 binding. The selected From is `contact@hunpeolabs.com`; authenticated Resend verified `hunpeolabs.com` on2026-10-09 after three dedicated sending DNS additions; all28 existing website/mail records were preserved. Customer activation is NOT_READY. Approved delta v1.2 retains both email schedules in SDK discovery; the full candidate, production configuration and live verification remain pending. See the integration plan, approval and verification ledger before release. Campaigns store captions, editorial approval, planned dates and UTM links; copying a caption is not automatic posting. Social posting is disabled.
 
 ## Public build and release
 
@@ -30,11 +32,11 @@ Email is queued only with enabled configuration. Recipients are Firebase Auth id
 
 Staff features use dynamic chunks; the main Firebase-containing chunk remains large. Current release021 native demo checks cover responsive keyboard/reduced-motion, actual200% zoom and print pagination. Actual assistive technology, full-product parity and production providers remain NOT_RUN. See reviews/release021/READINESS.md; historical browser restriction is not current acceptance evidence.
 
-No deployment, push, IAM/billing change, secret setup, real money/purchase/refund, external email or social posting occurred. Only the approved Web app registration changed cloud state. Before launch complete all matrix details, the 12 acceptance scenarios, current rendered UI/content review, live provider checks, production backups/restore/retention, monitoring, rollout/rollback and a passing mandatory final review. Production readiness remains NOT_READY.
+The earlier bootstrap and release021 observations in this runbook are historical. Current integration/release actions and evidence belong to `reviews/PRODUCTION-INTEGRATION-20261009/REPORT.md` and its verification ledger; do not infer a current deployment or provider result from these older notes. Before launch complete current acceptance scenarios, rendered UI/content review, live provider checks, production backups/restore/retention, monitoring, rollout/rollback and a passing mandatory final review. Production readiness remains NOT_READY.
 
 UI-002 cache: public catalog snapshots are shared briefly in memory and revalidated, with stale/offline labels; no private data cache was added. Local Hosting config revalidates HTML and long-caches generated hashed assets. These header settings are not deployed. Current slice evidence: reviews/UI-002-TASK_REPORT.md.
 
-## E2E-005 isolated demo (current entry point)
+## E2E-005 isolated demo (historical setup)
 
 Run `npm run typecheck`, then `npm run dev:demo`. Open http://127.0.0.1:5173/account and use **Tài khoản thử nghiệm** to choose a fixture role. This starts Auth9198, Firestore8181, Functions5101 and Storage9298 on loopback, seeds deterministic e2e005 data and overrides browser config to exact `demo-satsunicgo`. AI, Google One Tap and external email stay disabled in this environment. It does not reuse the production browser project. Historical E2E005 used host Node25. Current release021 runs Node22 on dedicated Auth9197/Firestore8187/Functions5107/Storage9297 and UI5187, separate from shared services; never restart or reseed a shared emulator.
 

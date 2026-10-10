@@ -2,6 +2,10 @@
 export function loginFeedback(cause: unknown): string {
   const code = String((cause as { code?: unknown } | null)?.code ?? "");
   switch (code) {
+    case "auth/popup-blocked":
+      return "Trình duyệt đã chặn cửa sổ Google. Cho phép cửa sổ bật lên cho trang này rồi thử lại.";
+    case "auth/operation-not-supported-in-this-environment":
+      return "Trình duyệt này chưa hỗ trợ đăng nhập Google. Sao chép liên kết rồi mở bằng Safari hoặc trình duyệt trên điện thoại.";
     case "auth/popup-closed-by-user":
       return "Đã đóng cửa sổ đăng nhập. Bạn có thể thử lại.";
     case "auth/cancelled-popup-request":

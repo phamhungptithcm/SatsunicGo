@@ -66,6 +66,7 @@ export async function readServerContext(
     question: string;
     language: "vi" | "en";
   },
+  audience: "pilot" | "customer" = "pilot",
 ) {
   const db = getFirestore();
   return db.runTransaction(
@@ -89,9 +90,10 @@ export async function readServerContext(
       if (
         user.data()?.locked ||
         access.data()?.locked ||
-        access.data()?.active !== true ||
-        !Array.isArray(access.data()?.roles) ||
-        !access.data()!.roles.includes("OWNER")
+        (audience === "pilot" &&
+          (access.data()?.active !== true ||
+            !Array.isArray(access.data()?.roles) ||
+            !access.data()!.roles.includes("OWNER")))
       )
         throw new HttpsError(
           "permission-denied",

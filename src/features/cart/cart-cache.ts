@@ -4,6 +4,8 @@ import {
   getDocsFromServer,
   query,
   where,
+  type QueryDocumentSnapshot,
+  type DocumentData,
 } from "firebase/firestore";
 import { app, db } from "../../shared/firebase";
 import type { ContentRow } from "../../shared/public-content";
@@ -37,10 +39,39 @@ function hydrate() {
     /* Product previews remain optional. */
   }
 }
+async function readProducts(
+  database: NonNullable<typeof db>,
+  ids: string[],
+): Promise<QueryDocumentSnapshot<DocumentData>[]> {
+  try {
+    const snapshot = await getDocsFromServer(
+      query(
+        collection(database, "products"),
+        where("status", "==", "published"),
+        where(documentId(), "in", ids),
+      ),
+    );
+    return snapshot.docs;
+  } catch (e) {
+    if ((e as { code?: string }).code !== "permission-denied") throw e;
+    // A removed/private ID can reject a whole public query. Isolate unreadable
+    // rows without inferring private details or hiding other current prices.
+    if (ids.length === 1) return [];
+    const docs = [];
+    for (let offset = 0; offset < ids.length; offset += 4) {
+      const rows = await Promise.all(
+        ids.slice(offset, offset + 4).map((id) => readProducts(database, [id])),
+      );
+      docs.push(...rows.flat());
+    }
+    return docs;
+  }
+}
 export async function cartProducts(ids: string[]): Promise<ProductResult> {
-  hydrate();
-  const bounded = [...new Set(ids)].sort().slice(0, 30);
+  // Account and not-yet-transferred guest carts can each contain30 choices.
+  const bounded = [...new Set(ids)].sort().slice(0, 60);
   if (!bounded.length) return { rows: {}, cached: false, error: "" };
+  hydrate();
   const signature = JSON.stringify(bounded);
   const existing = flights.get(signature);
   if (existing) return existing;
@@ -52,15 +83,15 @@ export async function cartProducts(ids: string[]): Promise<ProductResult> {
     );
     try {
       if (!db || !navigator.onLine) throw Error("OFFLINE");
-      const snapshot = await getDocsFromServer(
-        query(
-          collection(db, "products"),
-          where("status", "==", "published"),
-          where(documentId(), "in", bounded),
-        ),
+      const database = db;
+      const batches = [bounded.slice(0, 30), bounded.slice(30)].filter(
+        (batch) => batch.length,
+      );
+      const snapshots = await Promise.all(
+        batches.map((batch) => readProducts(database, batch)),
       );
       const rows: Record<string, ContentRow> = {};
-      snapshot.docs.forEach((d) => {
+      snapshots.flat().forEach((d) => {
         const data = d.data();
         // Cache only public fields used by the cart; never retain arbitrary records.
         const row = {
@@ -96,7 +127,9 @@ export async function cartProducts(ids: string[]): Promise<ProductResult> {
       return {
         rows: old,
         cached: true,
-        error: "Chưa kiểm tra được sản phẩm và giá. Kết nối rồi tải lại.",
+        error: navigator.onLine
+          ? "Chưa tải được giá mới. Thử lại để tiếp tục."
+          : "Kết nối mạng để cập nhật giá.",
       };
     }
   })();

@@ -1,0 +1,91 @@
+.imageFixture {
+  max-width: 1100px;
+  margin: auto;
+  padding: 24px;
+  color: #111c35;
+}
+.imageFixture > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e7ecf5;
+  padding-bottom: 20px;
+  gap: 20px;
+}
+.imageFixture > header strong {
+  font-size: 24px;
+}
+.imageFixture > header strong span {
+  color: #163cff;
+}
+.imageFixture > header p,
+.imageFixture #askFixture > p {
+  font-size: 12px;
+  color: #627089;
+}
+.imageFixture h1 {
+  font-size: 26px;
+}
+.imageFixture .casePicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0;
+}
+.imageFixture .casePicker select {
+  min-height: 44px;
+}
+.imageFixture > section {
+  margin: 28px 0;
+}
+.imageFixture .productsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.imageFixture .productsPage {
+  padding: 0;
+}
+.imageFixture .productDetail {
+  padding: 0;
+}
+.imageFixture .cart107 {
+  padding: 0;
+}
+.imageFixture .purchaseCheckout {
+  margin-bottom: 36px;
+}
+#askFixture > div {
+  position: static;
+  margin: 12px 0;
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 100%;
+  border: 1px solid #e7ecf5;
+  border-radius: 12px;
+}
+#askFixture label {
+  display: grid;
+  gap: 8px;
+  max-width: 100%;
+}
+#askFixture input {
+  max-width: 100%;
+}
+@media (max-width: 650px) {
+  .imageFixture {
+    padding: 16px;
+  }
+  .imageFixture > header {
+    align-items: start;
+  }
+  .imageFixture .productsGrid {
+    grid-template-columns: 1fr;
+  }
+  .imageFixture > header p {
+    max-width: 150px;
+    text-align: right;
+  }
+}

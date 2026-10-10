@@ -54,12 +54,163 @@
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  background: #163cff;
-  color: white;
-  padding: 9px 13px;
+  min-height: 44px;
+  border: 1px solid #c9d2ff;
+  background: #f8f9ff;
+  color: var(--blue);
+  padding: 9px 16px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
+}
+.headerRequest:hover {
+  background: #eef1ff;
+  border-color: #9aacff;
+}
+.topbar .navShell {
+  gap: 24px;
+}
+.topbar .primaryNavigation {
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+.topbar .primaryNavigation a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 0;
+  color: #43516a;
+  font-size: 14px;
+  font-weight: 550;
+}
+.topbar .primaryNavigation .catalogNav {
+  color: var(--blue);
+  font-weight: 650;
+}
+.primaryNavigation svg {
+  flex: none;
+}
+.topbar .primaryNavigation a:is(:hover, :focus-visible, .active) {
+  color: var(--blue);
+}
+.topbar .primaryNavigation a:is(:hover, :focus-visible)::after {
+  transform: scaleX(1);
+}
+.topbar .primaryNavigation .requestNav {
+  display: none;
+}
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.heroActions > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 22px;
+  margin: 0;
+  border-radius: 11px;
+  gap: 16px;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.heroActions .secondary {
+  border: 1px solid #dce2ef;
+  background: white;
+  color: #233352;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+.heroActions .secondary:hover {
+  background: #f7f9ff;
+  border-color: #b8c6f8;
+}
+.journeyMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 4px 0 0 64px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+}
+.journeyMore svg {
+  width: 15px;
+  height: 15px;
+}
+/* Keep the existing menu breakpoint for signed-in and staff navigation. */
+@media (min-width: 1201px) and (max-width: 1360px) {
+  .topbar .navShell {
+    gap: 16px;
+  }
+  .topbar .primaryNavigation {
+    gap: 16px;
+  }
+  .topbar .primaryNavigation a {
+    font-size: 13px;
+  }
+  .headerActions {
+    gap: 10px;
+  }
+  .headerRequest {
+    padding-inline: 12px;
+    font-size: 12px;
+  }
+  .accountProfileName {
+    max-width: 100px;
+  }
+}
+@media (max-width: 1200px) {
+  .topbar .primaryNavigation {
+    align-items: stretch;
+    gap: 0;
+  }
+  .topbar .primaryNavigation a {
+    min-height: 48px;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+  .topbar .primaryNavigation .requestNav {
+    display: flex;
+  }
+  .headerRequest {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .hero h1 {
+    font-size: clamp(34px, 10.8vw, 43px);
+    line-height: 1.14;
+    letter-spacing: -1.8px;
+  }
+  .heroActions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .heroActions > a {
+    width: 100%;
+    min-height: 49px;
+  }
+}
+@media (max-width: 480px) {
+  .journeyMore {
+    margin-left: 56px;
+  }
+}
+@media (max-width: 359px) {
+  .hero h1 {
+    font-size: 34px;
+    letter-spacing: -1.4px;
+  }
 }
 .compactFooter {
   padding: 0 max(32px, calc((100vw - 1280px) / 2 + 32px));
@@ -1104,4 +1255,34 @@
 }
 @media (max-width: 600px) {
   .siteFooter.compactFooter { padding-inline: 15px; }
+}
+
+/* HOME-CATALOG-NAV: keep account, cart and menu reachable on narrow screens. */
+@media (max-width: 600px) {
+  .topbar .accountProfileName,
+  .topbar .accountChevron {
+    display: none;
+  }
+  .topbar .accountProfileTrigger {
+    width: 44px;
+    min-width: 44px;
+    padding: 4px;
+    justify-content: center;
+  }
+  .topbar .headerCart107 {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+  .topbar .headerActions {
+    gap: 6px;
+  }
+}
+@media (max-width: 359px) {
+  .topbar {
+    padding-inline: 12px;
+  }
+  .topbar .navShell {
+    gap: 6px;
+  }
 }

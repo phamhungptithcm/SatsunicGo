@@ -1,0 +1,154 @@
+.subscriptionChoices {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #53627b;
+  line-height: 1.6;
+}
+.subscriptionChoices > label {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 28px;
+  cursor: pointer;
+  font-weight: 400 !important;
+}
+.subscriptionChoices input[type="checkbox"] {
+  appearance: auto;
+  width: 13px !important;
+  height: 13px !important;
+  min-height: 0 !important;
+  margin: 3px 0 0;
+  padding: 0;
+  accent-color: #163cff;
+  flex: none;
+}
+.subscriptionChoices .subscriptionPhone,
+.subscriptionPhone {
+  display: grid !important;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.subscriptionPhone input[type="tel"] {
+  font: inherit;
+  max-width: 300px;
+  min-height: 36px;
+  border: 1px solid #dce2ec;
+  border-radius: 5px;
+  padding: 7px 10px;
+  background: #fff;
+  color: #111c35;
+  width: 100%;
+  box-sizing: border-box;
+}
+.subscriptionPhone small,
+.subscriptionMuted,
+.subscriptionRow small {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #667086;
+  font-weight: 400;
+}
+.subscriptionStatus:empty {
+  display: none;
+}
+.subscriptionStatus {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.subscriptionStatus p {
+  margin: 5px 0;
+}
+.subscriptionStatus button {
+  font: inherit;
+  color: #163cff;
+}
+.subscriptionPanel fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+.subscriptionPanel h2 {
+  font-weight: 500;
+}
+.subscriptionPanel .profileCardHeading p {
+  font-size: 12px;
+}
+.subscriptionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f5;
+}
+.subscriptionRow > div {
+  display: grid;
+  gap: 3px;
+}
+.subscriptionRow label {
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+.subscriptionRow input[role="switch"] {
+  appearance: none;
+  flex: none;
+  width: 30px;
+  height: 18px;
+  border: 1px solid #c8d1df;
+  border-radius: 20px;
+  background: #e9edf4;
+  position: relative;
+  cursor: pointer;
+  margin: 0;
+}
+.subscriptionRow input[role="switch"]:before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px #111c3520;
+}
+.subscriptionRow input[role="switch"]:checked {
+  background: #163cff;
+  border-color: #163cff;
+}
+.subscriptionRow input[role="switch"]:checked:before {
+  left: 14px;
+}
+.subscriptionPanel input:focus-visible,
+.subscriptionChoices input:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 3px;
+}
+.subscriptionPanel input:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.profileStepper.profileStepperNotifications {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.profileStepperNotifications:before {
+  left: 16.67%;
+  right: 16.67%;
+}
+@media (max-width: 480px) {
+  .profileStepperNotifications button {
+    font-size: 11px;
+    gap: 6px;
+  }
+  .subscriptionPanel {
+    padding: 16px;
+  }
+}

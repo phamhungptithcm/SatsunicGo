@@ -1,3 +1,7 @@
+import {
+  NotificationPreferences,
+  NotificationLinkAction,
+} from "../notifications/NotificationPreferences";
 import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import "./profile.css";
@@ -55,7 +59,7 @@ export function Profile({
   const [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [retry, setRetry] = useState(0);
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [resolutionMessage, setResolutionMessage] = useState("");
   const [uncertain, setUncertain] = useState(false);
   const pending = useRef<{ owner: string; command: SaveCommand } | null>(null);
@@ -212,7 +216,7 @@ export function Profile({
               ? {
                   displayName: String(f.get("displayName") ?? ""),
                   businessName: String(f.get("businessName") ?? ""),
-                  marketingConsent: f.get("marketingConsent") === "on",
+                  marketingConsent: read.profile.marketingConsent,
                 }
               : {
                   recipient: String(f.get("recipient") ?? ""),
@@ -396,12 +400,16 @@ export function Profile({
           </Link>
         )}
       </header>
+      <NotificationLinkAction />
       {!user ? (
         <p className="profileNotice">Đăng nhập để quản lý thông tin của bạn.</p>
       ) : (
         <div className="profileFlow">
-          <nav className="profileStepper" aria-label="Các bước quản lý hồ sơ">
-            {([1, 2] as const).map((number) => (
+          <nav
+            className="profileStepper profileStepperNotifications"
+            aria-label="Các bước quản lý hồ sơ"
+          >
+            {([1, 2, 3] as const).map((number) => (
               <button
                 type="button"
                 key={number}
@@ -410,7 +418,9 @@ export function Profile({
                 aria-controls={
                   number === 1
                     ? `${instanceId}-profilePersonalPanel`
-                    : `${instanceId}-profileAddressPanel`
+                    : number === 2
+                      ? `${instanceId}-profileAddressPanel`
+                      : `${instanceId}-profileNotificationPanel`
                 }
                 onClick={() => setStep(number)}
               >
@@ -418,11 +428,28 @@ export function Profile({
                   {number}
                 </span>
                 <span>
-                  {number === 1 ? "Thông tin cá nhân" : "Địa chỉ nhận hàng"}
+                  {number === 1
+                    ? "Thông tin cá nhân"
+                    : number === 2
+                      ? "Địa chỉ nhận hàng"
+                      : "Thông báo"}
                 </span>
               </button>
             ))}
           </nav>
+          <div
+            id={`${instanceId}-profileNotificationPanel`}
+            hidden={step !== 3}
+          >
+            {step === 3 && (
+              <NotificationPreferences
+                key={user.uid}
+                user={user}
+                blocked={blocked || busy || uncertain || visible.locked}
+                onPendingChange={onPendingChange}
+              />
+            )}
+          </div>
           <form
             id={`${instanceId}-profilePersonalPanel`}
             hidden={step !== 1}
@@ -433,7 +460,7 @@ export function Profile({
             <header className="profileCardHeading">
               <div>
                 <h2 id={`${instanceId}-personalTitle`}>Thông tin cá nhân</h2>
-                <p>Cập nhật tên và tùy chọn nhận thông tin.</p>
+                <p>Cập nhật thông tin cá nhân của bạn.</p>
               </div>
             </header>
             {readStatus("profile", step === 1)}
@@ -477,20 +504,9 @@ export function Profile({
                   }
                 />
               </label>
-              <label className="profileConsent">
-                <input
-                  type="checkbox"
-                  name="marketingConsent"
-                  checked={profile.marketingConsent}
-                  onChange={(e) =>
-                    setProfile({
-                      ...profile,
-                      marketingConsent: e.target.checked,
-                    })
-                  }
-                />
-                <span>Nhận thông tin ưu đãi từ SatsunicGo</span>
-              </label>
+              <button type="button" onClick={() => setStep(3)}>
+                Quản lý thông báo →
+              </button>
               <div className="profileFormFooter">
                 <button className="primary" disabled={busy}>
                   Lưu hồ sơ

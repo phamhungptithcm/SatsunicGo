@@ -1,0 +1,2330 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>SatsunicGo · giỏ hàng và thanh toán thống nhất</title>
+    <link rel="stylesheet" href="/src/styles/global.css?direct" />
+    <link rel="stylesheet" href="/src/styles/public-ux.css?direct" />
+    <link
+      rel="stylesheet"
+      href="/src/features/requests/request-form.css?direct"
+    />
+    <link rel="stylesheet" href="/src/shared/page-tabs.css?direct" />
+    <link rel="stylesheet" href="/src/features/invoices/documents.css?direct" />
+    <style>
+      .previewNotice {
+        padding: 12px 28px;
+        border-bottom: 1px solid #e1e7ff;
+        background: #f1f4ff;
+        color: #36477b;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewNotice strong {
+        color: #111c35;
+      }
+      .previewMain {
+        padding-top: 32px;
+      }
+      .previewContext {
+        font-size: 12px;
+        color: #68758d;
+        margin: 0 0 18px;
+      }
+      .previewMain [hidden] {
+        display: none !important;
+      }
+      .previewMain p {
+        line-height: 1.6;
+      }
+      .previewMain button,
+      .previewMain input,
+      .previewMain select {
+        font: inherit;
+      }
+      .previewMain button:focus-visible,
+      .previewMain a:focus-visible,
+      .previewMain input:focus-visible,
+      .previewMain textarea:focus-visible,
+      .previewMain select:focus-visible {
+        outline: 3px solid #163cff;
+        outline-offset: 3px;
+      }
+      .previewPanel {
+        min-width: 0;
+        outline-offset: 5px;
+      }
+      .previewPanel h2 {
+        font-size: 20px;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+      }
+      .previewPanel h3 {
+        font-size: 15px;
+        margin: 0 0 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      .card {
+        border: 1px solid #e6eaf2;
+        border-radius: 14px;
+        padding: 20px;
+        min-width: 0;
+      }
+      .muted,
+      .hint {
+        color: #68758d;
+      }
+      .hint,
+      .small {
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .hint {
+        margin: 8px 0 16px;
+      }
+      .field label,
+      .requestPrice label {
+        display: grid;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .previewMain input:not([type="checkbox"]),
+      .previewMain select,
+      .previewMain textarea:not(.productComposer textarea) {
+        border: 1px solid #dce2ed;
+        border-radius: 10px;
+        padding: 11px 12px;
+        background: #fff;
+        color: #111c35;
+        min-height: 44px;
+        min-width: 0;
+        width: 100%;
+      }
+      .requestProducts .productComposer textarea {
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+      }
+      .requestPrice {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 140px;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .requestPrice input[readonly] {
+        background: #f5f7fb;
+      }
+      .previewMain .itemOptions label {
+        display: grid;
+        gap: 7px;
+        font-weight: 500;
+      }
+      .requestExtras {
+        display: grid;
+      }
+      .requestExtras label {
+        display: grid;
+        gap: 7px;
+      }
+      .requestItem {
+        border: 1px solid #e6eaf2;
+      }
+      .stepSummary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      .stepSummary .requestReview {
+        min-width: 0;
+      }
+      .stepSummary .requestReview p {
+        margin: 8px 0;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: baseline;
+        padding: 8px 0;
+        font-size: 13px;
+      }
+      .row span:first-child {
+        min-width: 0;
+      }
+      .row strong,
+      .row span:last-child {
+        white-space: nowrap;
+      }
+      .total {
+        border-top: 1px solid #e6eaf2;
+        margin-top: 12px;
+        padding-top: 16px;
+        font-size: 13px;
+      }
+      .large {
+        font-size: 28px;
+        font-weight: 600;
+        color: #163cff;
+        letter-spacing: -0.035em;
+        line-height: 1.25 !important;
+        margin: 6px 0 18px;
+      }
+      .note {
+        padding: 12px 14px;
+        border: 1px solid #d5defb;
+        border-radius: 10px;
+        background: #f2f5ff;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+      .neutral {
+        background: #f5f7fb;
+        border-color: #e6eaf2;
+      }
+      .previewMain .primary {
+        width: 100%;
+        font-size: 14px;
+        min-height: 48px;
+      }
+      .previewMain .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #e2e6ef;
+        border-radius: 10px;
+        background: #fff;
+        color: #111c35;
+        padding: 12px 16px;
+        margin: 0;
+        min-height: 44px;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .quickRequestPage.previewMain label.consent {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 18px 0;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewMain .consent input {
+        width: 18px !important;
+        height: 18px;
+        flex: 0 0 18px;
+        margin: 2px 0;
+        accent-color: #163cff;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .status {
+        padding: 12px 14px;
+        border: 1px solid #e0e6ef;
+        border-radius: 10px;
+        background: #f5f7fb;
+        font-size: 13px;
+        margin-top: 16px;
+        line-height: 1.6;
+      }
+      .tag {
+        display: inline-flex;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: #f4f6fa;
+        color: #53627b;
+        font-size: 11px;
+      }
+      .tagblue {
+        background: #eef2ff;
+        color: #253987;
+      }
+      .scroll {
+        overflow-x: auto;
+        max-width: 100%;
+      }
+      .previewMain table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .previewMain th,
+      .previewMain td {
+        text-align: left;
+        padding: 12px 8px;
+        border-bottom: 1px solid #e6eaf2;
+        vertical-align: top;
+      }
+      .previewMain th:last-child,
+      .previewMain td:last-child {
+        text-align: right;
+      }
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+      .product {
+        padding: 14px 0;
+        border-top: 1px solid #e6eaf2;
+        border-bottom: 1px solid #e6eaf2;
+        margin: 16px 0;
+      }
+      .product small {
+        display: block;
+        color: #68758d;
+        font-size: 12px;
+        margin-top: 6px;
+      }
+      .receiptBrand {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -1px;
+      }
+      .receiptBrand span {
+        color: #163cff;
+      }
+      .salesStatement.card {
+        margin: 0;
+      }
+      .footer {
+        border-top: 1px solid #e6eaf2;
+        padding-top: 20px;
+        margin-top: 32px;
+        color: #68758d;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewMain .textbutton {
+        min-height: 44px;
+      }
+      .catalogChoices {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 100px;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .catalogChoices label {
+        display: grid;
+        gap: 7px;
+        font-size: 12px;
+      }
+      .receiptLinks {
+        margin-top: 18px;
+      }
+      @media (max-width: 760px) {
+        .grid,
+        .stepSummary {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .previewNotice {
+          padding: 10px 20px;
+        }
+        .quickRequestPage.previewMain {
+          padding: 24px 16px 40px;
+        }
+        .previewMain .requestHeading h1 {
+          font-size: 26px;
+        }
+        .previewMain .card {
+          padding: 16px;
+        }
+      }
+      @media (max-width: 640px) {
+        .requestPrice,
+        .catalogChoices {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .quickRequestPage .requestStageTitle {
+          line-height: 1.4;
+        }
+        .previewMain .requestHeading {
+          margin-bottom: 20px;
+        }
+        .row {
+          gap: 8px;
+          font-size: 12px;
+        }
+        .row span:last-child {
+          white-space: normal;
+          text-align: right;
+        }
+        .large {
+          font-size: 25px;
+        }
+        .quickRequestPage .requestInformation {
+          padding: 12px;
+        }
+        .previewMain .secondary {
+          width: 100%;
+        }
+        .previewMain .quickRequestForm {
+          gap: 16px 12px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .previewMain * {
+          transition: none !important;
+          animation: none !important;
+          scroll-behavior: auto;
+        }
+      }
+
+      .unifiedFields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .unifiedFields label {
+        display: grid;
+        gap: 7px;
+        font-size: 13px;
+      }
+      .unifiedFields .wide {
+        grid-column: 1/-1;
+      }
+      .cartLine {
+        padding: 20px 0;
+        border-bottom: 1px solid #e2e6ef;
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr);
+        gap: 12px;
+      }
+      .cartLine h3 {
+        margin: 8px 0;
+        overflow-wrap: anywhere;
+      }
+      .cartLine p {
+        margin: 6px 0;
+      }
+      .cartLine input[type="checkbox"],
+      .previewMain .consent input {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin: 3px 0;
+      }
+      .cartLine .lineControls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .cartLine .lineControls label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 12px;
+      }
+      .cartLine .lineControls input {
+        width: 74px;
+      }
+      .cartLine .lineControls strong {
+        margin-left: auto;
+      }
+      .previewMain .consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        line-height: 1.6;
+        font-size: 13px;
+      }
+      .quickRequestPage .checkoutSteps {
+        margin: 16px 0 24px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-column: auto;
+        grid-row: auto;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid #e6eaf2;
+        padding: 0 0 18px;
+        gap: 4px;
+      }
+      .quickRequestPage .checkoutSteps button {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-size: 12px;
+      }
+      .quickRequestPage .checkoutSteps button:not(:last-child)::after {
+        top: 21px;
+        left: 50%;
+        width: calc(100% + 4px);
+        height: 2px;
+      }
+      .allocationLine {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e6ef;
+        font-size: 13px;
+      }
+      .allocationLine span {
+        overflow-wrap: anywhere;
+        min-width: 0;
+      }
+      .staffItem {
+        border-bottom: 1px solid #e2e6ef;
+        padding: 18px 0;
+        overflow-wrap: anywhere;
+      }
+      .staffItem p {
+        margin: 8px 0;
+      }
+      #recipientSummary {
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+      }
+      .checkoutFooter {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .checkoutFooter button {
+        min-height: 44px;
+      }
+      .checkoutAside {
+        position: sticky;
+        top: 120px;
+      }
+      .previewMain .card .row {
+        flex-wrap: wrap;
+      }
+      .previewMain .card .row span:last-child {
+        white-space: normal;
+        text-align: right;
+      }
+      @media (max-width: 700px) {
+        .unifiedFields {
+          grid-template-columns: 1fr;
+        }
+        .checkoutSteps button {
+          padding: 10px 5px;
+          font-size: 12px;
+        }
+        .checkoutAside {
+          position: static;
+        }
+        .checkoutSteps {
+          gap: 4px;
+        }
+        .checkoutFooter {
+          flex-wrap: wrap;
+        }
+        .lineControls strong {
+          width: 100%;
+          margin-left: 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Đến nội dung chính</a>
+    <header class="topbar" data-menu-open="false">
+      <div class="navShell">
+        <a class="brand" href="/" aria-label="SatsunicGo — Trang chủ"
+          ><svg
+            class="brandMark"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m16 3 12 7-12 7-12-7 12-7Z" />
+            <path d="M4 10v13l12 7 12-7V10M16 17v13M10 6l12 7" /></svg
+          ><span class="brandWord">Satsunic<span>Go</span></span></a
+        >
+        <nav
+          id="primary-navigation"
+          aria-label="Điều hướng chính"
+          data-open="false"
+        >
+          <a href="#catalog" data-go="catalog">Sản phẩm</a
+          ><a class="active" href="#initial" data-go="initial">Mua hộ</a
+          ><a href="/fees">Biểu phí</a><a href="/membership">Membership</a
+          ><a href="/posts">Bài viết</a><a href="/support">Hỗ trợ</a>
+        </nav>
+        <div class="headerActions">
+          <button class="login" type="button" id="headerCart">
+            Giỏ hàng <span id="cartCount">0</span></button
+          ><button
+            class="menuToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Mở điều hướng"
+          >
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <div class="previewNotice">
+      <strong>BẢN THIẾT KẾ r3 · GIỎ HÀNG THỐNG NHẤT</strong> · Dữ liệu minh họa.
+      Chưa kết nối backend hoặc PayOS; không chuyển tiền thật.
+    </div>
+    <main class="page quickRequestPage previewMain" id="main" tabindex="-1">
+      <p class="previewContext">
+        Các màn hình mẫu để xem thiết kế. Thanh bên dưới không phải tiến độ mua
+        hàng.
+      </p>
+      <div
+        class="pageTabs"
+        role="tablist"
+        aria-label="Màn hình thiết kế thanh toán"
+      >
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-initial"
+          aria-controls="initial"
+          aria-selected="true"
+          tabindex="0"
+          data-panel="initial"
+        >
+          Yêu cầu mua hộ
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-catalog"
+          aria-controls="catalog"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="catalog"
+        >
+          Sản phẩm niêm yết
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-cart"
+          aria-controls="cart"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="cart"
+        >
+          Giỏ &amp; checkout
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-payment"
+          aria-controls="payment"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="payment"
+        >
+          Thanh toán
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-additional"
+          aria-controls="additional"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="additional"
+        >
+          Chi phí phát sinh
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-document"
+          aria-controls="document"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="document"
+        >
+          Phiếu PDF
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-staff"
+          aria-controls="staff"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="staff"
+        >
+          Nhân viên tìm mua
+        </button>
+      </div>
+
+      <section
+        class="previewPanel"
+        id="initial"
+        role="tabpanel"
+        aria-labelledby="preview-tab-initial"
+        tabindex="0"
+      >
+        <header class="requestHeading">
+          <div class="requestHeadingRow">
+            <h1 id="heading" tabindex="-1">Bạn muốn mua gì?</h1>
+            <div
+              class="requestMarkets"
+              role="group"
+              aria-label="Quốc gia mua hàng"
+            >
+              <button type="button" aria-pressed="true">Mỹ</button
+              ><button type="button" aria-pressed="false" disabled>
+                Nhật Bản</button
+              ><button type="button" aria-pressed="false" disabled>
+                Hàn Quốc
+              </button>
+            </div>
+          </div>
+          <p>
+            Giữ thông tin món bạn muốn mua. Thêm yêu cầu vào giỏ, rồi nhập địa
+            chỉ và thanh toán cùng các sản phẩm khác.
+          </p>
+          <a class="requestCatalogLink" href="#catalog" id="catalogLink"
+            >Chọn sản phẩm niêm yết để thêm vào cùng giỏ →</a
+          >
+          <p class="hint">
+            Mẫu tương tác này dùng USD; các thị trường còn lại sẽ dùng tiền
+            nguồn tương ứng khi triển khai.
+          </p>
+        </header>
+        <form class="quickRequestForm" id="requestDraft" novalidate>
+          <nav class="requestStepper" aria-label="Các bước tạo yêu cầu">
+            <button
+              type="button"
+              data-step="0"
+              class="isCurrent"
+              aria-current="step"
+            >
+              <span aria-hidden="true">1</span
+              ><span>Món hàng<small>Đang nhập</small></span>
+            </button>
+            <button type="button" data-step="1" disabled>
+              <span aria-hidden="true">2</span
+              ><span>Thông tin thêm<small></small></span>
+            </button>
+            <button type="button" data-step="2" disabled>
+              <span aria-hidden="true">3</span
+              ><span>Kiểm tra<small></small></span>
+            </button>
+          </nav>
+          <h2 class="requestStageTitle" id="stageTitle" tabindex="-1">
+            Món hàng
+          </h2>
+          <div class="requestProducts" data-stage="0">
+            <div class="requestItem">
+              <label class="requestFieldLabel" for="product"
+                >Tên hoặc link sản phẩm
+                <span class="requiredMark" aria-hidden="true">*</span></label
+              >
+              <div class="productComposer">
+                <textarea
+                  id="product"
+                  required
+                  maxlength="2400"
+                  rows="2"
+                  aria-describedby="producterror"
+                >
+Tai nghe không dây</textarea>
+                <div class="composerBar">
+                  <span>Nhập tên hoặc link tại nơi bán</span>
+                </div>
+              </div>
+              <p id="producterror" class="error" role="alert" hidden>
+                Nhập tên hoặc link sản phẩm để tiếp tục.
+              </p>
+              <div class="itemOptions">
+                <div class="twoCols">
+                  <label
+                    >Số lượng
+                    <input
+                      id="quantity"
+                      type="number"
+                      min="1"
+                      max="100"
+                      step="1"
+                      value="2"
+                      required
+                      aria-describedby="quantityerror"
+                  /></label>
+                  <label
+                    >Mẫu, màu, kích cỡ
+                    <input id="variant" maxlength="200" value="Màu trắng"
+                  /></label>
+                  <label
+                    >Tình trạng
+                    <select id="condition">
+                      <option value="new">Hàng mới</option>
+                      <option value="used">Hàng đã qua sử dụng</option>
+                      <option value="any">Có thể xem cả hai</option>
+                    </select></label
+                  >
+                </div>
+              </div>
+              <p id="quantityerror" class="error" role="alert" hidden>
+                Nhập số lượng nguyên từ 1 đến 100.
+              </p>
+              <div class="requestPrice">
+                <label
+                  >Giá bạn đã tìm hiểu / mỗi món
+                  <input
+                    id="price"
+                    type="number"
+                    min="0.01"
+                    max="1000000"
+                    step="0.01"
+                    value="58"
+                    required
+                    aria-describedby="pricehelp priceerror" /></label
+                ><label
+                  >Tiền nguồn
+                  <input
+                    id="currency"
+                    value="USD"
+                    readonly
+                    aria-describedby="pricehelp"
+                /></label>
+              </div>
+              <p id="pricehelp" class="hint">
+                Giá dự kiến bạn tìm thấy tại nơi bán. Giá mua thực tế sẽ được
+                nhân viên xác nhận.
+              </p>
+              <p id="priceerror" class="error" role="alert" hidden>
+                Nhập giá USD lớn hơn 0, tối đa 1.000.000, với tối đa 2 chữ số
+                thập phân.
+              </p>
+              <p id="totalerror" class="error" role="alert" hidden>
+                Tổng số tiền vượt giới hạn của mẫu. Kiểm tra giá và số lượng.
+              </p>
+            </div>
+            <p class="hint">
+              Form trong ứng dụng sẽ giữ chức năng thêm món, ảnh và bản nháp
+              đang có. Mẫu này chỉ minh họa một món hàng.
+            </p>
+          </div>
+          <aside class="requestInformation" data-stage="1" hidden>
+            <span class="requestOptional">Không bắt buộc</span>
+            <div class="requestExtras">
+              <label class="requestNotes"
+                >Ghi chú
+                <textarea
+                  id="notes"
+                  rows="3"
+                  maxlength="2400"
+                  placeholder="Điều cần lưu ý khi mua…"
+                ></textarea>
+              </label>
+              <label>Cửa hàng <input id="store" maxlength="160" /></label
+              ><label
+                >Ngân sách tham khảo (₫)
+                <input
+                  id="budget"
+                  type="number"
+                  min="0"
+                  max="1000000000000"
+                /><small
+                  >Thông tin tham khảo; không thay thế số tiền thanh
+                  toán.</small
+                ></label
+              ><label
+                >Ngày mong muốn <input id="desired" type="date" /><small
+                  >Cần nhân viên xác nhận.</small
+                ></label
+              >
+            </div>
+          </aside>
+          <div class="stepSummary" data-stage="2" hidden>
+            <section class="requestReview" aria-label="Tóm tắt yêu cầu">
+              <div class="requestReviewHeading">
+                <h3>Mỹ · 1 món hàng</h3>
+                <button class="textbutton" type="button" data-edit="0">
+                  Chỉnh sửa món
+                </button>
+              </div>
+              <ul>
+                <li>
+                  <strong id="reviewProduct">Tai nghe không dây</strong
+                  ><span id="reviewChoice">2 chiếc · Màu trắng · Hàng mới</span
+                  ><span id="reviewPrice">58 USD / chiếc</span>
+                </li>
+              </ul>
+              <div class="requestReviewHeading">
+                <h3>Thông tin thêm</h3>
+                <button class="textbutton" type="button" data-edit="1">
+                  Chỉnh sửa thông tin
+                </button>
+              </div>
+              <p id="reviewExtras">Không có thông tin thêm.</p>
+              <p class="note neutral">
+                Tỷ giá mẫu: 25.000 VND/USD. Phí mua hộ mẫu: 5%. Khi triển khai,
+                backend tính theo chính sách đã duyệt và khóa phiên bản khi bạn
+                xác nhận.
+              </p>
+            </section>
+            <aside class="card">
+              <h3>Số tiền ban đầu</h3>
+              <div class="row">
+                <span>Giá hàng dự kiến</span
+                ><strong id="goods">2.900.000 ₫</strong>
+              </div>
+              <div class="row">
+                <span>Phí mua hộ mẫu</span><span id="fee">145.000 ₫</span>
+              </div>
+              <div class="row">
+                <span>Vận chuyển</span><span class="muted">Chưa chốt</span>
+              </div>
+              <div class="total">Tạm tính để thêm vào giỏ</div>
+              <p class="large" id="initialtotal">3.045.000 ₫</p>
+              <p class="note">
+                Cước vận chuyển chưa nằm trong số tiền này. Bạn sẽ xem và duyệt
+                khoản trả thêm sau khi giá thực tế và cước được chốt.
+              </p>
+              <p class="hint">
+                <strong>Cần tìm mua</strong> · Nhân viên sẽ tìm nơi bán và kiểm
+                tra giá sau khi khoản thanh toán ban đầu được xác nhận. Bạn xem
+                tổng và xác nhận thanh toán tại giỏ.
+              </p>
+            </aside>
+          </div>
+          <div class="requestFinalActions">
+            <button type="button" class="requestBack" id="back" hidden>
+              Quay lại</button
+            ><button type="button" class="primary requestSubmit" id="next">
+              Thông tin thêm →</button
+            ><button
+              type="button"
+              class="primary requestSubmit"
+              id="start"
+              disabled
+              hidden
+            >
+              Thêm vào giỏ hàng
+            </button>
+            <p class="hint" id="draftStatus" role="status">
+              Bản thiết kế; thao tác không tạo đơn hoặc ghi nhận tiền.
+            </p>
+          </div>
+        </form>
+      </section>
+      <section
+        class="previewPanel"
+        id="catalog"
+        role="tabpanel"
+        aria-labelledby="preview-tab-catalog"
+        tabindex="0"
+        hidden
+      >
+        <h2 tabindex="-1">Đặt mua sản phẩm niêm yết</h2>
+        <div class="grid">
+          <div class="card">
+            <span class="tag">Listing mẫu · giá trọn gói</span>
+            <h3 style="margin-top: 16px">
+              Tai nghe không dây · phiên bản niêm yết
+            </h3>
+            <p class="muted small">Giá niêm yết: 1.650.000 ₫ / chiếc</p>
+            <div class="catalogChoices">
+              <label
+                >Mẫu sản phẩm
+                <select id="catalogVariant">
+                  <option>Màu trắng</option>
+                  <option>Màu đen</option>
+                </select></label
+              ><label
+                >Số lượng
+                <input
+                  id="catalogQty"
+                  type="number"
+                  value="1"
+                  min="1"
+                  max="100"
+                  step="1"
+                  aria-describedby="catalogerror"
+              /></label>
+            </div>
+            <p id="catalogerror" class="error" role="alert" hidden>
+              Nhập số lượng nguyên từ 1 đến 100.
+            </p>
+            <p class="note neutral">
+              Thanh toán toàn bộ một lần. Nhân viên mua hộ sau khi tiền được xác
+              nhận. Giá trọn gói đã xác nhận không tạo khoản thu thứ hai.
+            </p>
+            <p class="hint">
+              Mẫu dùng bố cục lựa chọn và tổng thanh toán của Checkout đang có.
+              Ảnh, nội dung, giá và điều khoản thật sẽ đọc từ listing.
+            </p>
+          </div>
+          <aside class="card">
+            <h3>Tổng thanh toán</h3>
+            <div class="row">
+              <span id="catalogSummary">1 chiếc · Màu trắng</span
+              ><strong id="catalogtotal">1.650.000 ₫</strong>
+            </div>
+            <p class="hint">
+              Không dùng giá người mua tự nhập cho sản phẩm niêm yết.
+            </p>
+            <button type="button" id="catalogPay" class="primary">
+              Thêm vào giỏ hàng
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        id="cart"
+        class="previewPanel"
+        role="tabpanel"
+        aria-labelledby="preview-tab-cart"
+        tabindex="0"
+        hidden
+      >
+        <header class="requestHeading">
+          <h1>Giỏ hàng</h1>
+          <p>
+            Chọn món bạn muốn mua trong lần này. Các món chưa chọn vẫn ở trong
+            giỏ.
+          </p>
+        </header>
+        <nav
+          class="requestStepper checkoutSteps"
+          aria-label="Các bước checkout"
+        >
+          <button
+            type="button"
+            data-checkout="0"
+            class="isCurrent"
+            aria-current="step"
+          >
+            <span>1</span><span>Giỏ hàng</span>
+          </button>
+          <button type="button" data-checkout="1" disabled>
+            <span>2</span><span>Nhận hàng</span>
+          </button>
+          <button type="button" data-checkout="2" disabled>
+            <span>3</span><span>Kiểm tra &amp; trả tiền</span>
+          </button>
+        </nav>
+        <h2 id="checkoutHeading" tabindex="-1">Món trong giỏ</h2>
+        <div class="grid">
+          <div>
+            <section data-checkout-stage="0">
+              <p id="emptyCart" class="note neutral">
+                Giỏ chưa có món. Thêm sản phẩm niêm yết hoặc yêu cầu mua hộ để
+                bắt đầu.
+              </p>
+              <div id="cartLines"></div>
+              <div class="actions">
+                <button type="button" class="secondary" data-go="catalog">
+                  Thêm sản phẩm niêm yết</button
+                ><button type="button" class="secondary" data-go="initial">
+                  Thêm yêu cầu mua hộ
+                </button>
+              </div>
+              <p id="cartMessage" role="status" class="hint"></p>
+            </section>
+            <section data-checkout-stage="1" hidden>
+              <form id="recipientForm" class="card" novalidate>
+                <h3>Thông tin nhận hàng</h3>
+                <label class="field"
+                  >Địa chỉ đã lưu<select id="savedAddress">
+                    <option value="">Nhập địa chỉ mới</option>
+                    <option value="sample">
+                      Địa chỉ mẫu · TP. Hồ Chí Minh
+                    </option>
+                  </select></label
+                >
+                <p class="hint">Địa chỉ này dùng cho tất cả món bạn đã chọn.</p>
+                <div class="unifiedFields">
+                  <label
+                    >Người nhận<input
+                      id="recipientName"
+                      autocomplete="shipping name"
+                      minlength="2"
+                      maxlength="120"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label
+                    >Số điện thoại<input
+                      id="recipientPhone"
+                      type="tel"
+                      autocomplete="shipping tel"
+                      maxlength="20"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label
+                    >Quốc gia<input
+                      value="Việt Nam"
+                      readonly
+                      autocomplete="shipping country-name"
+                  /></label>
+                  <label
+                    >Tỉnh / thành phố<select
+                      id="province"
+                      required
+                      aria-describedby="recipientError regionHelp"
+                    >
+                      <option value="">Chọn tỉnh / thành phố</option>
+                      <option value="hcm">TP. Hồ Chí Minh</option>
+                      <option value="hanoi">Hà Nội</option>
+                    </select></label
+                  >
+                  <label
+                    >Phường / xã<select
+                      id="ward"
+                      required
+                      disabled
+                      aria-describedby="recipientError regionHelp"
+                    >
+                      <option value="">Chọn tỉnh / thành phố trước</option>
+                    </select></label
+                  >
+                  <label
+                    >Số nhà, đường, tòa nhà / căn hộ<input
+                      id="street"
+                      autocomplete="shipping street-address"
+                      minlength="5"
+                      maxlength="300"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label class="wide"
+                    >Ghi chú giao hàng <span class="hint">Không bắt buộc</span
+                    ><textarea
+                      id="deliveryNote"
+                      rows="2"
+                      maxlength="500"
+                    ></textarea>
+                  </label>
+                </div>
+                <p id="regionHelp" class="hint">
+                  Bản mẫu có 2 thành phố và một số phường để thử thao tác. Bản
+                  triển khai sẽ dùng danh mục hành chính đầy đủ và có tìm kiếm.
+                </p>
+                <p class="note neutral">
+                  Google Maps chưa được kết nối trong bản mẫu. Bạn vẫn nhập địa
+                  chỉ và chọn khu vực tại đây.
+                </p>
+                <p id="recipientError" class="error" role="alert" hidden></p>
+              </form>
+            </section>
+            <section data-checkout-stage="2" hidden>
+              <div class="card">
+                <h3>Món đã chọn</h3>
+                <div id="reviewLines"></div>
+                <button type="button" class="textbutton" data-checkout-back="0">
+                  Sửa giỏ hàng
+                </button>
+              </div>
+              <div class="card" style="margin-top: 16px">
+                <h3>Giao đến</h3>
+                <p id="recipientSummary"></p>
+                <button type="button" class="textbutton" data-checkout-back="1">
+                  Sửa thông tin nhận hàng
+                </button>
+              </div>
+              <p class="note">
+                Sản phẩm niêm yết giữ giá trọn gói. Món cần tìm mua có thể phát
+                sinh chênh lệch giá và cước; bạn xem và duyệt trước khi thanh
+                toán thêm.
+              </p>
+              <label class="consent"
+                ><input id="checkoutConsent" type="checkbox" /><span
+                  >Tôi đã kiểm tra món, địa chỉ và số tiền cần thanh toán ban
+                  đầu.</span
+                ></label
+              >
+              <p class="hint">
+                Thao tác thanh toán trong bản thiết kế chỉ mô phỏng, không tạo
+                đơn thật.
+              </p>
+            </section>
+            <div class="checkoutFooter">
+              <button id="checkoutBack" type="button" class="secondary" hidden>
+                Quay lại</button
+              ><button id="checkoutNext" type="button" class="primary" disabled>
+                Thông tin nhận hàng →
+              </button>
+            </div>
+          </div>
+          <aside class="card checkoutAside">
+            <h3>Tóm tắt lần mua này</h3>
+            <div class="row">
+              <span>Món đã chọn</span><strong id="selectedCount">0</strong>
+            </div>
+            <div class="row">
+              <span>Sản phẩm niêm yết</span
+              ><strong id="listedTotal">0 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Giá hàng cần tìm mua</span
+              ><strong id="customGoods">0 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Phí mua hộ mẫu</span><strong id="customFee">0 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Cước món cần tìm mua</span
+              ><span id="shippingStatus">Không áp dụng</span>
+            </div>
+            <div class="total">Thanh toán toàn bộ ban đầu</div>
+            <p id="cartTotal" class="large">0 ₫</p>
+            <p class="hint">
+              Tỷ giá USD mẫu 25.000 ₫; phí mua hộ mẫu 5%. Đây là dữ liệu thiết
+              kế, không phải biểu phí đang áp dụng.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <section
+        id="staff"
+        class="previewPanel"
+        role="tabpanel"
+        aria-labelledby="preview-tab-staff"
+        tabindex="0"
+        hidden
+      >
+        <header class="requestHeading">
+          <h1>Nhân viên · tìm mua</h1>
+          <p>
+            Mẫu hàng việc sau khi thanh toán được xác nhận. Yêu cầu còn trong
+            giỏ chưa giao việc cho nhân viên.
+          </p>
+        </header>
+        <div class="grid">
+          <div class="card">
+            <h2>Cần tìm mua</h2>
+            <div id="staffLines">
+              <p class="muted">
+                Chưa có yêu cầu đã thanh toán trong phiên mẫu này.
+              </p>
+            </div>
+          </div>
+          <aside class="card">
+            <h3>Trước khi mua</h3>
+            <p>
+              Kiểm tra nơi bán, đúng mẫu và giá thực tế. Nếu vượt số tiền đã
+              được khách chấp thuận, gửi khách duyệt trước khi mua.
+            </p>
+            <p class="hint">
+              Trạng thái tìm mua đi theo từng món. Sản phẩm niêm yết xử lý trong
+              hàng việc riêng theo điều kiện đã chốt.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-additional"
+        id="additional"
+        hidden
+        aria-label="Chi phí phát sinh"
+      >
+        <div class="grid">
+          <div class="card">
+            <span class="tag tagblue">Đơn mẫu SG-DEMO-20261008</span>
+            <h2 tabindex="-1" style="margin-top: 16px">
+              Xem chi phí phát sinh
+            </h2>
+            <p class="muted">
+              Giá tại nơi bán tăng từ 58 USD lên 62 USD/món. Cước vận chuyển đã
+              được chốt trong mẫu này.
+            </p>
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Khoản chi</th>
+                    <th>Chênh lệch</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Giá hàng · 2 món</td>
+                    <td>+200.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <td>Phí mua hộ · theo quy tắc 5% mẫu</td>
+                    <td>+10.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <td>Cước mới chốt</td>
+                    <td>+240.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <th>Tổng cần trả thêm</th>
+                    <th>450.000 ₫</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="hint">
+              Bản chi phí demo-02 · Tỷ giá đã khóa 25.000 VND/USD. Giá thực tế
+              và cước cần có bằng chứng của nhân viên trong ứng dụng.
+            </p>
+            <div class="note neutral">
+              Nếu chưa đồng ý, bạn có thể yêu cầu nhân viên kiểm tra. Đơn sẽ
+              được giữ để xử lý; không tự thu thêm hoặc tự gửi hàng.
+            </div>
+            <button class="secondary" id="reviewcost" style="margin-top: 16px">
+              Yêu cầu kiểm tra trong mẫu
+            </button>
+            <p id="costreview" class="status" role="status" hidden>
+              Trạng thái mẫu: chờ nhân viên kiểm tra chi phí. Chưa thu khoản trả
+              thêm.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Đối chiếu tiền</h2>
+            <div class="row">
+              <span>Tổng chi phí đã chốt</span><strong>3.495.000 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Đã thanh toán</span><span>3.045.000 ₫</span>
+            </div>
+            <div class="total">Còn cần thanh toán</div>
+            <p class="large">450.000 ₫</p>
+            <label class="consent"
+              ><input type="checkbox" id="additionalconsent" /><span
+                >Tôi đồng ý bản chi phí demo-02 và số tiền thanh toán thêm
+                450.000 ₫.</span
+              ></label
+            ><button class="primary" id="payadditional" disabled>
+              Xem thanh toán thêm demo
+            </button>
+            <p class="hint">
+              Sau khi thanh toán đủ, đơn còn cần qua kiểm tra đóng gói và bàn
+              giao gửi hàng.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-payment"
+        id="payment"
+        hidden
+        aria-label="Thanh toán demo"
+      >
+        <div class="grid">
+          <div class="card">
+            <span class="tag tagblue"
+              >Cổng mô phỏng · không chuyển tiền thật</span
+            >
+            <h2 tabindex="-1" style="margin-top: 16px">Thanh toán demo</h2>
+            <p id="paymentContext">Chưa có lượt checkout trong mẫu này.</p>
+            <div id="paymentAllocation"></div>
+            <p id="purpose">Thanh toán toàn bộ số tiền ban đầu</p>
+            <p class="large" id="payamount">3.045.000 ₫</p>
+            <div class="note neutral">
+              Khi được triển khai, nút xác nhận demo gọi backend demo. UI chỉ
+              hiển thị “Đã thanh toán” sau khi server xác minh và ghi sổ. Trở về
+              từ PayOS không tự xác nhận tiền vào.
+            </div>
+            <div class="actions" style="margin-top: 20px">
+              <button class="secondary" data-result="pending">
+                Mô phỏng đang xác minh</button
+              ><button class="secondary" data-result="unknown">
+                Mô phỏng kết quả chưa rõ</button
+              ><button class="secondary" data-result="paid">
+                Mô phỏng đã xác nhận tiền
+              </button>
+            </div>
+            <div class="status" id="paystatus" role="status">
+              Chờ xác nhận thanh toán mẫu.
+            </div>
+            <p class="hint">
+              Hủy trang thanh toán không tự hủy đơn. Không tạo yêu cầu thu mới
+              khi lần trước chưa có kết quả rõ ràng.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Tiếp tục đơn mua hộ</h2>
+            <p id="nextstep" class="muted">
+              Nhân viên chỉ nhận việc mua khi đã đủ số tiền ban đầu.
+            </p>
+            <button class="primary" id="showreceipt" disabled>
+              Xem phiếu của giỏ
+            </button>
+            <p class="hint">
+              Trong app: tiền đã xác nhận và PDF đang xử lý là hai trạng thái
+              riêng; PDF lỗi không làm mất thanh toán.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-document"
+        id="document"
+        hidden
+        aria-label="Phiếu PDF"
+      >
+        <div class="grid">
+          <div class="card receiptpreview salesStatement">
+            <div class="receiptBrand">Satsunic<span>Go</span></div>
+            <span class="tag">Chứng từ mẫu · chưa phải hóa đơn thuế</span>
+            <h2 tabindex="-1" style="margin-top: 16px">
+              Phiếu xác nhận thanh toán
+            </h2>
+            <div class="product">
+              <strong id="receiptpurpose"
+                >Thanh toán toàn bộ số tiền ban đầu</strong
+              ><small>SG-DEMO-20261008 · Khách hàng minh họa</small>
+            </div>
+            <p class="muted">Số tiền xác nhận trong lần này</p>
+            <p class="large" id="receiptamount">3.045.000 ₫</p>
+            <div class="tableWrap scroll">
+              <table aria-label="Sản phẩm trong phiếu mẫu cố định">
+                <thead>
+                  <tr>
+                    <th>Sản phẩm trong đơn</th>
+                    <th>Mẫu</th>
+                    <th>Số lượng theo đơn</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tai nghe không dây</td>
+                    <td>Màu trắng</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <dl class="statementTotals">
+              <dt>Giá hàng dự kiến</dt>
+              <dd>2.900.000 ₫</dd>
+              <dt>Phí mua hộ mẫu</dt>
+              <dd>145.000 ₫</dd>
+              <dt>Vận chuyển</dt>
+              <dd>Chưa chốt</dd>
+              <dt>Tiền nhận trong lần này</dt>
+              <dd>3.045.000 ₫</dd>
+            </dl>
+            <p class="small muted">
+              Phiếu giữ thông tin tại thời điểm nhận tiền: món, số lượng, giá,
+              phí, tỷ giá và điều khoản. Mỗi lần thanh toán thêm có phiếu riêng
+              để đối chiếu.
+            </p>
+            <p class="note neutral">
+              PDF cố định dùng ví dụ 2 món × 58 USD, trả ban đầu 3.045.000 ₫,
+              trả thêm 450.000 ₫. Thay giá trong màn hình tính thử không đổi các
+              PDF mẫu. Chưa xác nhận tiền thật, chưa gửi email, chưa phát hành
+              hóa đơn VAT.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Tải mẫu PDF</h2>
+            <div id="checkoutReceipt" hidden>
+              <h3>Khoản nhận của giỏ trong phiên mẫu</h3>
+              <p id="checkoutReceiptTotal" class="large"></p>
+              <div id="checkoutReceiptLines"></div>
+              <p class="hint">
+                Chi tiết này theo giỏ vừa mô phỏng; các PDF tải xuống bên dưới
+                là ví dụ cố định riêng, không thay đổi theo giỏ.
+              </p>
+            </div>
+            <div class="stack">
+              <a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/01-thanh-toan-ban-dau.pdf"
+                target="_blank"
+                rel="noopener"
+                >Phiếu thanh toán ban đầu</a
+              ><a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/02-thanh-toan-them.pdf"
+                target="_blank"
+                rel="noopener"
+                >Phiếu thanh toán thêm</a
+              ><a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/03-kiem-tra-30-mon.pdf"
+                target="_blank"
+                rel="noopener"
+                >Mẫu 30 món · 3 trang</a
+              >
+            </div>
+            <p class="hint">
+              Ứng dụng sẽ có tải riêng tư trong tài khoản và email đính kèm PDF;
+              demo sẽ có hộp thư mô phỏng.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <div class="footer">
+        Thiết kế r3 bám SiteChrome, RequestForm, Checkout, PageTabs và Documents
+        hiện có. Các trạng thái trên trang là minh họa; PDF tải xuống dùng bộ số
+        liệu cố định. Đơn cũ giữ điều khoản đã chấp thuận, listing giữ giá trọn
+        gói.
+      </div>
+    </main>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const money = (v) => new Intl.NumberFormat("vi-VN").format(v) + " ₫";
+      let valid = true,
+        step = 0,
+        reached = 0,
+        amount = 3045000,
+        catalogAmount = 1650000;
+      let checkoutStep = 0,
+        checkoutReached = 0,
+        additionalHeld = false,
+        mode = "initial";
+      let cart = [],
+        serial = 0,
+        attempt = null;
+      const wards = {
+        hcm: ["Phường Bến Thành", "Phường Sài Gòn"],
+        hanoi: ["Phường Hoàn Kiếm", "Phường Cửa Nam"],
+      };
+      function node(tag, text, className) {
+        const el = document.createElement(tag);
+        if (text !== undefined) el.textContent = text;
+        if (className) el.className = className;
+        return el;
+      }
+      function show(id, focusPanel = false) {
+        document
+          .querySelectorAll(".previewPanel")
+          .forEach((el) => (el.hidden = el.id !== id));
+        document.querySelectorAll("[data-panel]").forEach((el) => {
+          el.setAttribute("aria-selected", String(el.dataset.panel === id));
+          el.tabIndex = el.dataset.panel === id ? 0 : -1;
+        });
+        if (focusPanel) {
+          const title = $(id).querySelector("h1,h2") ?? $(id);
+          title.tabIndex = -1;
+          title.focus();
+        }
+      }
+      const tabs = [...document.querySelectorAll("[data-panel]")];
+      tabs.forEach((b, i) => {
+        b.addEventListener("click", () => show(b.dataset.panel));
+        b.addEventListener("keydown", (event) => {
+          let target;
+          if (event.key === "ArrowRight") target = (i + 1) % tabs.length;
+          if (event.key === "ArrowLeft")
+            target = (i - 1 + tabs.length) % tabs.length;
+          if (event.key === "Home") target = 0;
+          if (event.key === "End") target = tabs.length - 1;
+          if (target !== undefined) {
+            event.preventDefault();
+            tabs[target].focus();
+            tabs[target].scrollIntoView({
+              block: "nearest",
+              inline: "nearest",
+            });
+          }
+        });
+      });
+      document.querySelectorAll("[data-go]").forEach((b) =>
+        b.addEventListener("click", (e) => {
+          e.preventDefault();
+          show(b.dataset.go, true);
+          closeMenu();
+        }),
+      );
+      $("headerCart").addEventListener("click", () => {
+        renderCart();
+        show("cart", true);
+      });
+      function update() {
+        const value = $("price").value,
+          q = Number($("quantity").value);
+        const priceOk =
+          /^\d+(\.\d{1,2})?$/.test(value) &&
+          Number(value) > 0 &&
+          Number(value) <= 1000000;
+        const quantityOk = Number.isSafeInteger(q) && q >= 1 && q <= 100;
+        const productOk = $("product").value.trim().length > 0;
+        valid = priceOk && quantityOk && productOk;
+        [
+          ["product", productOk],
+          ["price", priceOk],
+          ["quantity", quantityOk],
+        ].forEach(([id, ok]) => {
+          $(id + "error").hidden = ok;
+          $(id).setAttribute("aria-invalid", String(!ok));
+        });
+        $("totalerror").hidden = true;
+        if (valid) {
+          const [whole, fraction = ""] = value.split(".");
+          const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, "0"));
+          const goods = Number((cents * BigInt(q) * 25000n + 99n) / 100n),
+            fee = Math.ceil(goods / 20);
+          amount = goods + fee;
+          if (amount > 1000000000000) {
+            valid = false;
+            $("totalerror").hidden = false;
+          } else {
+            $("goods").textContent = money(goods);
+            $("fee").textContent = money(fee);
+            $("initialtotal").textContent = money(amount);
+          }
+        }
+        if (!valid)
+          ["goods", "fee", "initialtotal"].forEach(
+            (id) => ($(id).textContent = "Chưa tính được"),
+          );
+        $("start").disabled = !valid;
+        $("next").disabled = !valid;
+      }
+      function moveStep(target) {
+        if (target > step && !valid) {
+          $("draftStatus").textContent =
+            "Kiểm tra tên sản phẩm, giá và số lượng trước khi tiếp tục.";
+          return;
+        }
+        step = target;
+        reached = Math.max(reached, target);
+        document
+          .querySelectorAll("[data-stage]")
+          .forEach((el) => (el.hidden = Number(el.dataset.stage) !== step));
+        document.querySelectorAll("[data-step]").forEach((el) => {
+          const n = Number(el.dataset.step);
+          el.disabled = n > reached;
+          el.className =
+            n === step ? "isCurrent" : n < step ? "isComplete" : "";
+          if (n === step) el.setAttribute("aria-current", "step");
+          else el.removeAttribute("aria-current");
+          el.querySelector("small").textContent =
+            n === step ? "Đang nhập" : n < step ? "Đã kiểm tra bước" : "";
+        });
+        $("stageTitle").textContent = [
+          "Món hàng",
+          "Thông tin thêm",
+          "Kiểm tra trước khi thêm vào giỏ",
+        ][step];
+        $("back").hidden = step === 0;
+        $("next").hidden = step === 2;
+        $("start").hidden = step !== 2;
+        $("next").textContent =
+          step === 0 ? "Thông tin thêm →" : "Kiểm tra yêu cầu →";
+        $("reviewProduct").textContent = $("product").value.trim();
+        $("reviewChoice").textContent =
+          $("quantity").value +
+          " chiếc · " +
+          ($("variant").value || "Chưa ghi mẫu") +
+          " · " +
+          $("condition").selectedOptions[0].text;
+        $("reviewPrice").textContent = $("price").value + " USD / chiếc";
+        const extras = [];
+        if ($("notes").value.trim())
+          extras.push("Ghi chú: " + $("notes").value.trim());
+        if ($("store").value.trim())
+          extras.push("Cửa hàng: " + $("store").value.trim());
+        if ($("budget").value)
+          extras.push(
+            "Ngân sách tham khảo: " + money(Number($("budget").value)),
+          );
+        if ($("desired").value)
+          extras.push(
+            "Ngày mong muốn: " +
+              $("desired").value +
+              " · Cần nhân viên xác nhận.",
+          );
+        $("reviewExtras").textContent =
+          extras.join(" · ") || "Không có thông tin thêm.";
+        $("stageTitle").focus();
+      }
+      $("requestDraft").addEventListener("submit", (e) => e.preventDefault());
+      $("next").addEventListener("click", () => moveStep(step + 1));
+      $("back").addEventListener("click", () => moveStep(step - 1));
+      document
+        .querySelectorAll("[data-step]")
+        .forEach((b) =>
+          b.addEventListener("click", () => moveStep(Number(b.dataset.step))),
+        );
+      document
+        .querySelectorAll("[data-edit]")
+        .forEach((b) =>
+          b.addEventListener("click", () => moveStep(Number(b.dataset.edit))),
+        );
+      [
+        "price",
+        "quantity",
+        "product",
+        "variant",
+        "condition",
+        "notes",
+        "store",
+        "budget",
+        "desired",
+      ].forEach((id) => $(id).addEventListener("input", update));
+      $("catalogLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        show("catalog", true);
+      });
+      const menu = document.querySelector(".menuToggle");
+      function closeMenu() {
+        menu.setAttribute("aria-expanded", "false");
+        menu.setAttribute("aria-label", "Mở điều hướng");
+        $("primary-navigation").dataset.open = "false";
+      }
+      menu.addEventListener("click", () => {
+        const open = menu.getAttribute("aria-expanded") !== "true";
+        menu.setAttribute("aria-expanded", String(open));
+        menu.setAttribute(
+          "aria-label",
+          open ? "Đóng điều hướng" : "Mở điều hướng",
+        );
+        $("primary-navigation").dataset.open = String(open);
+      });
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "Escape" &&
+          menu.getAttribute("aria-expanded") === "true"
+        ) {
+          closeMenu();
+          menu.focus();
+        }
+      });
+      document.addEventListener("pointerdown", (e) => {
+        if (!e.target.closest(".topbar")) closeMenu();
+      });
+      function priceLine(line) {
+        if (line.kind === "catalog")
+          return {
+            goods: line.unit * line.quantity,
+            fee: 0,
+            total: line.unit * line.quantity,
+          };
+        const goods = Number(
+            (BigInt(line.cents) * BigInt(line.quantity) * 25000n + 99n) / 100n,
+          ),
+          fee = Math.ceil(goods / 20);
+        return { goods, fee, total: goods + fee };
+      }
+      function selected() {
+        return cart.filter((x) => x.selected);
+      }
+      function sums() {
+        return selected().reduce(
+          (s, x) => {
+            const p = priceLine(x);
+            s.total += p.total;
+            s.listed += x.kind === "catalog" ? p.total : 0;
+            s.goods += x.kind === "custom" ? p.goods : 0;
+            s.fee += p.fee;
+            s.qty += x.quantity;
+            return s;
+          },
+          { total: 0, listed: 0, goods: 0, fee: 0, qty: 0 },
+        );
+      }
+      function invalidate() {
+        $("checkoutConsent").checked = false;
+        checkoutReached = 0;
+        checkoutStep = 0;
+        renderCart();
+        renderCheckout(false);
+      }
+      function addLine(line) {
+        const same = cart.find(
+          (x) =>
+            x.kind === line.kind &&
+            x.name === line.name &&
+            x.variant === line.variant &&
+            x.cents === line.cents &&
+            x.notes === line.notes &&
+            x.condition === line.condition &&
+            x.store === line.store &&
+            x.budget === line.budget &&
+            x.desired === line.desired,
+        );
+        if (
+          same &&
+          attempt &&
+          ["pending", "unknown"].includes(attempt.state) &&
+          attempt.lines.some((x) => x.id === same.id)
+        ) {
+          show("cart", true);
+          $("cartMessage").textContent =
+            "Món này đang chờ xác minh thanh toán. Kiểm tra lần đã tạo trước khi thêm cùng món.";
+          return;
+        }
+        if (
+          (same && same.quantity + line.quantity > 100) ||
+          (!same && cart.length >= 30)
+        ) {
+          show("cart", true);
+          $("cartMessage").textContent =
+            "Giỏ tối đa 30 dòng, mỗi dòng tối đa 100 món. Giảm số lượng hoặc chỉnh giỏ để thêm.";
+          return;
+        }
+        if (same) {
+          same.quantity += line.quantity;
+          same.selected = true;
+        } else cart.push({ ...line, id: ++serial, selected: true });
+        invalidate();
+        show("cart", true);
+        $("cartMessage").textContent =
+          "Đã thêm vào giỏ mẫu. Chọn các món để tiếp tục nhận hàng và checkout.";
+      }
+      $("start").addEventListener("click", () => {
+        if (!valid || step !== 2) return;
+        const [whole, frac = ""] = $("price").value.split(".");
+        addLine({
+          kind: "custom",
+          requiresSourcing: true,
+          name: $("product").value.trim(),
+          variant: $("variant").value,
+          quantity: Number($("quantity").value),
+          cents: Number(BigInt(whole) * 100n + BigInt(frac.padEnd(2, "0"))),
+          condition: $("condition").value,
+          notes: $("notes").value,
+          store: $("store").value,
+          budget: $("budget").value,
+          desired: $("desired").value,
+        });
+      });
+      function updateCatalog() {
+        const q = Number($("catalogQty").value),
+          ok = Number.isSafeInteger(q) && q >= 1 && q <= 100;
+        $("catalogQty").setAttribute("aria-invalid", String(!ok));
+        $("catalogerror").hidden = ok;
+        $("catalogPay").disabled = !ok;
+        catalogAmount = ok ? q * 1650000 : null;
+        $("catalogtotal").textContent = ok
+          ? money(catalogAmount)
+          : "Chưa tính được";
+        $("catalogSummary").textContent = ok
+          ? q + " chiếc · " + $("catalogVariant").value
+          : "Chưa xác định số lượng";
+      }
+      $("catalogQty").addEventListener("input", updateCatalog);
+      $("catalogVariant").addEventListener("change", updateCatalog);
+      $("catalogPay").addEventListener("click", () => {
+        if (catalogAmount !== null)
+          addLine({
+            kind: "catalog",
+            requiresSourcing: false,
+            name: "Tai nghe không dây · phiên bản niêm yết",
+            variant: $("catalogVariant").value,
+            quantity: Number($("catalogQty").value),
+            unit: 1650000,
+          });
+      });
+      function allocation(container, lines) {
+        container.replaceChildren();
+        lines.forEach((x) => {
+          const row = node("div", undefined, "allocationLine");
+          row.append(
+            node(
+              "span",
+              x.name +
+                " · " +
+                x.quantity +
+                " chiếc · " +
+                (x.kind === "custom" ? "Cần tìm mua" : "Giá niêm yết"),
+            ),
+            node("strong", money(priceLine(x).total)),
+          );
+          container.append(row);
+        });
+      }
+      function renderCart() {
+        $("cartLines").replaceChildren();
+        $("emptyCart").hidden = cart.length > 0;
+        $("cartCount").textContent = String(
+          cart.reduce((n, x) => n + x.quantity, 0),
+        );
+        cart.forEach((line) => {
+          const reserved =
+            attempt &&
+            ["pending", "unknown"].includes(attempt.state) &&
+            attempt.lines.some((x) => x.id === line.id);
+          const row = node("article", undefined, "cartLine");
+          row.dataset.line = String(line.id);
+          const choose = node("input");
+          choose.type = "checkbox";
+          choose.checked = line.selected;
+          choose.disabled = !!reserved;
+          choose.setAttribute("aria-label", "Chọn " + line.name);
+          choose.addEventListener("change", () => {
+            line.selected = choose.checked;
+            invalidate();
+          });
+          const body = node("div"),
+            label = node(
+              "span",
+              line.requiresSourcing ? "Cần tìm mua" : "Giá niêm yết",
+              line.requiresSourcing ? "tag tagblue" : "tag",
+            );
+          body.append(
+            label,
+            node("h3", line.name),
+            node("p", line.variant || "Không ghi mẫu", "hint"),
+            node(
+              "p",
+              line.kind === "custom"
+                ? "Giá bạn tìm hiểu: " +
+                    new Intl.NumberFormat("vi-VN").format(line.cents / 100) +
+                    " USD / món · Vận chuyển chưa chốt"
+                : "Giá trọn gói: " + money(line.unit) + " / món",
+              "hint",
+            ),
+          );
+          if (reserved) {
+            body.append(
+              node("p", "Đang chờ xác minh thanh toán · món tạm khóa", "hint"),
+            );
+            const resume = node(
+              "button",
+              "Tiếp tục kiểm tra thanh toán",
+              "textbutton",
+            );
+            resume.type = "button";
+            resume.addEventListener("click", () => show("payment", true));
+            body.append(resume);
+          }
+          const controls = node("div", undefined, "lineControls"),
+            qtyLabel = node("label", "Số lượng"),
+            qty = node("input");
+          qty.type = "number";
+          qty.min = "1";
+          qty.max = "100";
+          qty.step = "1";
+          qty.value = String(line.quantity);
+          qty.setAttribute("aria-label", "Số lượng " + line.name);
+          qty.disabled = !!reserved;
+          qty.addEventListener("change", () => {
+            const n = Number(qty.value);
+            if (!Number.isSafeInteger(n) || n < 1 || n > 100) {
+              qty.value = String(line.quantity);
+              $("cartMessage").textContent =
+                "Số lượng cần là số nguyên từ 1 đến 100. Giỏ giữ số lượng trước đó.";
+              return;
+            }
+            line.quantity = n;
+            invalidate();
+          });
+          qtyLabel.append(qty);
+          const remove = node("button", "Xóa", "textbutton");
+          remove.type = "button";
+          remove.setAttribute("aria-label", "Xóa " + line.name);
+          remove.addEventListener("click", () => {
+            cart = cart.filter((x) => x.id !== line.id);
+            invalidate();
+            $("cartMessage").textContent = "Đã xóa món khỏi giỏ mẫu.";
+            $("checkoutHeading").focus();
+          });
+          remove.disabled = !!reserved;
+          controls.append(
+            qtyLabel,
+            remove,
+            node("strong", money(priceLine(line).total)),
+          );
+          body.append(controls);
+          row.append(choose, body);
+          $("cartLines").append(row);
+        });
+        renderTotals();
+      }
+      function renderTotals() {
+        const s = sums();
+        $("selectedCount").textContent =
+          selected().length + " dòng · " + s.qty + " món";
+        $("listedTotal").textContent = money(s.listed);
+        $("customGoods").textContent = money(s.goods);
+        $("customFee").textContent = money(s.fee);
+        $("shippingStatus").textContent =
+          selected().length === 0
+            ? "Chưa chọn món"
+            : selected().some((x) => x.kind === "custom")
+              ? "Chưa chốt"
+              : "Đã gồm trong giá niêm yết";
+        $("cartTotal").textContent = money(s.total);
+      }
+      function populateWards() {
+        const p = $("province").value;
+        $("ward").replaceChildren(
+          new Option(
+            p ? "Chọn phường / xã" : "Chọn tỉnh / thành phố trước",
+            "",
+          ),
+        );
+        (wards[p] ?? []).forEach((w) => $("ward").append(new Option(w, w)));
+        $("ward").disabled = !p;
+      }
+      $("province").addEventListener("change", () => {
+        populateWards();
+        $("checkoutConsent").checked = false;
+      });
+      $("savedAddress").addEventListener("change", () => {
+        if ($("savedAddress").value !== "sample") return;
+        $("recipientName").value = "Khách hàng minh họa";
+        $("recipientPhone").value = "0900000000";
+        $("province").value = "hcm";
+        populateWards();
+        $("ward").value = "Phường Bến Thành";
+        $("street").value = "Địa chỉ minh họa · số 10, đường mẫu";
+        $("deliveryNote").value = "";
+        $("checkoutConsent").checked = false;
+      });
+      $("recipientForm").addEventListener("submit", (e) => e.preventDefault());
+      $("recipientForm").addEventListener("input", () => {
+        $("checkoutConsent").checked = false;
+      });
+      function recipient(check = true) {
+        const data = {
+          name: $("recipientName").value.trim(),
+          phone: $("recipientPhone").value.trim(),
+          province: $("province").value,
+          ward: $("ward").value,
+          street: $("street").value.trim(),
+          note: $("deliveryNote").value.trim(),
+        };
+        const errors = [];
+        if (data.name.length < 2) errors.push("Nhập tên người nhận.");
+        if (!/^(0[0-9]{9}|\+84[0-9]{9})$/.test(data.phone))
+          errors.push(
+            "Nhập số điện thoại Việt Nam dạng 0xxxxxxxxx hoặc +84xxxxxxxxx.",
+          );
+        if (!data.province || !wards[data.province]?.includes(data.ward))
+          errors.push("Chọn tỉnh / thành phố và phường / xã tương ứng.");
+        if (data.street.length < 5)
+          errors.push("Nhập số nhà và đường hoặc thông tin tòa nhà / căn hộ.");
+        if (check) {
+          $("recipientError").hidden = errors.length === 0;
+          $("recipientError").textContent = errors.join(" ");
+          [
+            ["recipientName", data.name.length >= 2],
+            ["recipientPhone", /^(0[0-9]{9}|\+84[0-9]{9})$/.test(data.phone)],
+            ["province", !!data.province],
+            ["ward", !!wards[data.province]?.includes(data.ward)],
+            ["street", data.street.length >= 5],
+          ].forEach(([id, ok]) =>
+            $(id).setAttribute("aria-invalid", String(!ok)),
+          );
+        }
+        return errors.length ? null : data;
+      }
+      function renderCheckout(focus = true) {
+        document
+          .querySelectorAll("[data-checkout-stage]")
+          .forEach(
+            (el) =>
+              (el.hidden = Number(el.dataset.checkoutStage) !== checkoutStep),
+          );
+        document.querySelectorAll("[data-checkout]").forEach((el) => {
+          const n = Number(el.dataset.checkout);
+          el.disabled = n > checkoutReached;
+          el.className =
+            n === checkoutStep
+              ? "isCurrent"
+              : n < checkoutStep
+                ? "isComplete"
+                : "";
+          if (n === checkoutStep) el.setAttribute("aria-current", "step");
+          else el.removeAttribute("aria-current");
+        });
+        $("checkoutHeading").textContent = [
+          "Món trong giỏ",
+          "Thông tin nhận hàng",
+          "Kiểm tra trước khi thanh toán",
+        ][checkoutStep];
+        $("checkoutBack").hidden = checkoutStep === 0;
+        $("checkoutNext").textContent = [
+          "Thông tin nhận hàng →",
+          "Kiểm tra tổng tiền →",
+          "Thanh toán " + money(sums().total),
+        ][checkoutStep];
+        $("checkoutNext").disabled =
+          selected().length === 0 ||
+          (checkoutStep === 2 && !$("checkoutConsent").checked) ||
+          (attempt && ["pending", "unknown"].includes(attempt.state));
+        if (focus) $("checkoutHeading").focus();
+      }
+      function moveCheckout(target) {
+        if (target > checkoutStep && selected().length === 0) return;
+        if (target === 2) {
+          const r = recipient();
+          if (!r) {
+            $("recipientForm").querySelector('[aria-invalid="true"]')?.focus();
+            return;
+          }
+          $("recipientSummary").textContent =
+            r.name +
+            " · " +
+            r.phone +
+            "\n" +
+            r.street +
+            ", " +
+            r.ward +
+            ", " +
+            $("province").selectedOptions[0].text +
+            ", Việt Nam" +
+            (r.note ? "\nGhi chú: " + r.note : "");
+          allocation($("reviewLines"), selected());
+        }
+        checkoutStep = target;
+        checkoutReached = Math.max(checkoutReached, target);
+        renderCheckout();
+      }
+      document
+        .querySelectorAll("[data-checkout]")
+        .forEach((b) =>
+          b.addEventListener("click", () =>
+            moveCheckout(Number(b.dataset.checkout)),
+          ),
+        );
+      document
+        .querySelectorAll("[data-checkout-back]")
+        .forEach((b) =>
+          b.addEventListener("click", () =>
+            moveCheckout(Number(b.dataset.checkoutBack)),
+          ),
+        );
+      $("checkoutBack").addEventListener("click", () =>
+        moveCheckout(checkoutStep - 1),
+      );
+      $("checkoutConsent").addEventListener("change", () =>
+        renderCheckout(false),
+      );
+      $("checkoutNext").addEventListener("click", () => {
+        if (checkoutStep < 2) moveCheckout(checkoutStep + 1);
+        else startCheckout();
+      });
+      function startCheckout() {
+        if (
+          !$("checkoutConsent").checked ||
+          !recipient(false) ||
+          !selected().length ||
+          (attempt && ["pending", "unknown"].includes(attempt.state))
+        )
+          return;
+        mode = "initial";
+        attempt = {
+          id: "GIỎ-MẪU-" + (serial + 1),
+          state: "pending",
+          total: sums().total,
+          lines: structuredClone(selected()),
+          recipient: structuredClone(recipient(false)),
+        };
+        $("paymentContext").textContent =
+          attempt.id +
+          " · Một khoản thanh toán cho " +
+          attempt.lines.length +
+          " dòng đã chọn";
+        $("purpose").textContent = "Thanh toán toàn bộ số tiền ban đầu của giỏ";
+        $("payamount").textContent = money(attempt.total);
+        allocation($("paymentAllocation"), attempt.lines);
+        $("paystatus").textContent =
+          "Trạng thái mẫu: đang chờ xác minh. Chưa ghi nhận tiền.";
+        $("showreceipt").disabled = true;
+        $("nextstep").textContent =
+          "Sau khi xác nhận tiền, món cần tìm mua vào hàng việc của nhân viên. Các món chưa chọn vẫn ở giỏ.";
+        renderCheckout(false);
+        show("payment", true);
+      }
+      document.querySelectorAll("[data-result]").forEach((b) =>
+        b.addEventListener("click", () => {
+          if (!attempt || attempt.state === "paid") {
+            if (!attempt)
+              $("paystatus").textContent =
+                "Thêm món và hoàn tất checkout trước khi thử thanh toán mẫu.";
+            return;
+          }
+          attempt.state = b.dataset.result;
+          $("paystatus").textContent = {
+            pending: "Trạng thái mẫu: đang xác minh. Chưa ghi nhận tiền.",
+            unknown:
+              "Trạng thái mẫu: chưa rõ kết quả. Tiếp tục kiểm tra lần đang chờ; không thanh toán lại.",
+            paid: "Trạng thái mẫu: đã xác nhận tiền. Phiếu và email thật chưa được tạo trong bản thiết kế.",
+          }[attempt.state];
+          if (attempt.state === "paid") {
+            if (mode === "initial") {
+              // Remove only the accepted quantities; later additions stay in the cart.
+              cart = cart.flatMap((x) => {
+                const paid = attempt.lines.find((y) => y.id === x.id);
+                if (!paid) return [x];
+                return x.quantity > paid.quantity
+                  ? [{ ...x, quantity: x.quantity - paid.quantity }]
+                  : [];
+              });
+              renderCart();
+              renderStaff();
+            }
+            $("showreceipt").disabled = false;
+          }
+          renderCheckout(false);
+        }),
+      );
+      function renderStaff() {
+        const rows = attempt?.lines.filter((x) => x.requiresSourcing) ?? [];
+        $("staffLines").replaceChildren();
+        if (!rows.length) {
+          $("staffLines").append(
+            node(
+              "p",
+              "Không có món cần tìm mua trong lượt checkout mẫu vừa xác nhận.",
+              "muted",
+            ),
+          );
+          return;
+        }
+        rows.forEach((x) => {
+          const el = node("article", undefined, "staffItem");
+          el.append(
+            node("span", "Cần tìm mua · Đã trả đủ ban đầu", "tag tagblue"),
+            node("h3", x.name),
+            node("p", x.quantity + " chiếc · " + (x.variant || "Chưa ghi mẫu")),
+            node("p", "Giá khách tìm hiểu: " + x.cents / 100 + " USD / món"),
+            node("p", "Đã phân bổ ban đầu: " + money(priceLine(x).total)),
+            node(
+              "p",
+              x.notes ? "Ghi chú: " + x.notes : "Chưa có ghi chú thêm.",
+              "hint",
+            ),
+          );
+          $("staffLines").append(el);
+        });
+      }
+      $("showreceipt").addEventListener("click", () => {
+        if (attempt?.state !== "paid") return;
+        $("receiptpurpose").textContent =
+          mode === "initial"
+            ? "Mẫu giỏ · thanh toán toàn bộ ban đầu"
+            : "Ví dụ độc lập · khoản thanh toán thêm";
+        $("receiptamount").textContent = money(attempt.total);
+        $("document").querySelector(".product small").textContent =
+          attempt.id + " · Khách hàng minh họa";
+        const table = $("document").querySelector("table"),
+          body = table.querySelector("tbody");
+        table.setAttribute("aria-label", "Món trong khoản thanh toán mẫu");
+        body.replaceChildren();
+        attempt.lines.forEach((x) => {
+          const row = node("tr");
+          row.append(
+            node(
+              "td",
+              x.name +
+                " · " +
+                (x.requiresSourcing ? "Cần tìm mua" : "Giá niêm yết"),
+            ),
+            node("td", x.variant || "Không ghi mẫu"),
+            node("td", String(x.quantity)),
+          );
+          body.append(row);
+        });
+        if (!attempt.lines.length) {
+          const row = node("tr");
+          row.append(
+            node("td", "Chênh lệch giá, phí mua hộ và cước theo bản demo-02"),
+            node("td", "Khoản bổ sung"),
+            node("td", "—"),
+          );
+          body.append(row);
+        }
+        const totals = $("document").querySelector(".statementTotals");
+        totals.replaceChildren();
+        const parts = attempt.lines.reduce(
+          (s, x) => {
+            const p = priceLine(x);
+            s.listed += x.kind === "catalog" ? p.total : 0;
+            s.goods += x.kind === "custom" ? p.goods : 0;
+            s.fee += p.fee;
+            return s;
+          },
+          { listed: 0, goods: 0, fee: 0 },
+        );
+        const rows =
+          mode === "initial"
+            ? [
+                ["Giá niêm yết trọn gói", money(parts.listed)],
+                ["Giá hàng cần tìm mua", money(parts.goods)],
+                ["Phí mua hộ mẫu", money(parts.fee)],
+                [
+                  "Cước món cần tìm mua",
+                  attempt.lines.some((x) => x.kind === "custom")
+                    ? "Chưa chốt"
+                    : "Không áp dụng",
+                ],
+              ]
+            : [["Khoản trả thêm đã duyệt mẫu", money(attempt.total)]];
+        rows.push(["Tiền nhận trong lần này", money(attempt.total)]);
+        rows.forEach(([k, v]) => totals.append(node("dt", k), node("dd", v)));
+        $("checkoutReceipt").hidden = false;
+        $("checkoutReceiptTotal").textContent = money(attempt.total);
+        allocation($("checkoutReceiptLines"), attempt.lines);
+        show("document", true);
+      });
+      $("additionalconsent").addEventListener("change", () => {
+        $("payadditional").disabled =
+          additionalHeld || !$("additionalconsent").checked;
+      });
+      $("reviewcost").addEventListener("click", () => {
+        additionalHeld = true;
+        $("costreview").hidden = false;
+        $("additionalconsent").checked = false;
+        $("additionalconsent").disabled = true;
+        $("reviewcost").disabled = true;
+        $("payadditional").disabled = true;
+      });
+      $("payadditional").addEventListener("click", () => {
+        if (additionalHeld || !$("additionalconsent").checked) return;
+        if (attempt && ["pending", "unknown"].includes(attempt.state)) {
+          $("costreview").hidden = false;
+          $("costreview").textContent =
+            "Lượt checkout mẫu trước chưa rõ kết quả. Kiểm tra lượt đó trước khi thử khoản khác.";
+          return;
+        }
+        mode = "additional";
+        attempt = {
+          state: "pending",
+          total: 450000,
+          lines: [],
+          id: "TRẢ-THÊM-MẪU",
+        };
+        $("paymentContext").textContent =
+          "Ví dụ độc lập · đơn mua hộ mẫu, bản chi phí demo-02";
+        $("purpose").textContent = "Thanh toán thêm sau khi duyệt chênh lệch";
+        $("payamount").textContent = money(450000);
+        $("paymentAllocation").replaceChildren();
+        $("showreceipt").disabled = true;
+        $("paystatus").textContent = "Chờ xác minh khoản trả thêm mẫu.";
+        show("payment", true);
+      });
+      update();
+      updateCatalog();
+      renderCart();
+      renderCheckout(false);
+    </script>
+  </body>
+</html>

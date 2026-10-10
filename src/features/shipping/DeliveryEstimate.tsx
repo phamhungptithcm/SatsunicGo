@@ -21,12 +21,14 @@ export function DeliveryEstimate({
   observedAt,
   language = "vi",
   aggregate = false,
+  compact = false,
 }: {
   value: unknown;
   state?: Parcel["state"];
   observedAt: number;
   language?: "vi" | "en";
   aggregate?: boolean;
+  compact?: boolean;
 }) {
   const vi = language === "vi",
     zone = deviceTimeZone();
@@ -91,6 +93,63 @@ export function DeliveryEstimate({
             : "No delivery estimate is available."}
       </p>
     );
+  if (compact && aggregate) {
+    const day = new Intl.DateTimeFormat(vi ? "vi-VN" : "en-GB", {
+      day: "numeric",
+      month: "short",
+      timeZone: zone,
+    });
+    const year = new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      timeZone: zone,
+    });
+    const month = new Intl.DateTimeFormat("en", {
+      month: "numeric",
+      year: "numeric",
+      timeZone: zone,
+    });
+    const firstDay =
+      month.format(current.startAt) === month.format(current.endAt)
+        ? new Intl.DateTimeFormat("en", {
+            day: "numeric",
+            timeZone: zone,
+          }).format(current.startAt)
+        : day.format(current.startAt);
+    return (
+      <div className="deliveryEstimateCompact">
+        <span>{vi ? "Dự kiến nhận hàng" : "Estimated delivery"}</span>
+        <p className="deliveryEstimateRange">
+          <time dateTime={new Date(current.startAt).toISOString()}>
+            {firstDay}
+          </time>
+          {" – "}
+          <time dateTime={new Date(current.endAt).toISOString()}>
+            {day.format(current.endAt)}
+          </time>
+        </p>
+        <span>
+          {year.format(current.startAt)}
+          {year.format(current.endAt) !== year.format(current.startAt)
+            ? " – " + year.format(current.endAt)
+            : ""}
+        </span>
+        <p className="quietNote">
+          {vi
+            ? "Ước tính của nhân viên, có thể thay đổi."
+            : "Staff estimate; dates may change."}
+        </p>
+        <details>
+          <summary>{vi ? "Chi tiết thời gian" : "Time details"}</summary>
+          <DeliveryEstimate
+            aggregate
+            value={value}
+            observedAt={observedAt}
+            language={language}
+          />
+        </details>
+      </div>
+    );
+  }
   return (
     <div style={{ minWidth: 0, overflowWrap: "anywhere" }}>
       <p>

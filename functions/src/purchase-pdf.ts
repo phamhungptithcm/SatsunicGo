@@ -7,6 +7,10 @@ export type PurchaseReceiptData = {
   lines: CheckoutLine[];
   total: number;
   provider: string;
+  paymentMethod?: "BANK_TRANSFER";
+  merchant?: string;
+  invoice?: string;
+  testMode?: boolean;
   reference: string;
   paidAt: number;
   purpose: "initial" | "balance";
@@ -116,11 +120,12 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   const pages: string[][] = [[]];
   let page = pages[0],
     y = 786;
-  const navy = "0.067 0.11 0.208",
-    blue = "0.086 0.235 1",
-    muted = "0.35 0.4 0.48",
-    border = "0.88 0.9 0.94",
-    paper = "0.97 0.98 0.99",
+  // Match the website palette in src/styles/global.css without a runtime CSS dependency.
+  const navy = "0.066667 0.109804 0.207843", // #111c35
+    blue = "0.086275 0.235294 1", // #163cff
+    muted = "0.392157 0.439216 0.529412", // #647087
+    border = "0.886275 0.901961 0.937255", // #e2e6ef
+    paper = "0.968627 0.972549 0.988235", // #f7f8fc
     green = "0.16 0.40 0.29";
   function text(
     s: string,
@@ -185,8 +190,13 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   const balance = receipt.purpose === "balance";
   const money = (n: number) => `${n.toLocaleString("vi-VN")} ₫`;
   function header() {
-    text("SatsunicGo", 44, 787, 22, blue, true);
-    text("MUA HỘ QUỐC TẾ", 44, 770, 7.5, muted);
+    // Fixed vector equivalent of SiteChrome's 32x32 parcel mark; no image fetch.
+    page.push(
+      `q 0.9375 0 0 -0.9375 44 811 cm ${blue} RG 1.8 w 1 j 16 3 m 28 10 l 16 17 l 4 10 l h S 4 10 m 4 23 l 16 30 l 28 23 l 28 10 l S 16 17 m 16 30 l S 10 6 m 22 13 l S Q`,
+    );
+    text("Satsunic", 82, 787, 22, navy, true);
+    text("Go", 82 + width("Satsunic", 22), 787, 22, blue, true);
+    text("MUA HỘ QUỐC TẾ", 82, 770, 7.5, muted);
     right("CHỨNG TỪ THANH TOÁN", 551, 784, 9, navy, true);
     line(752);
     y = 724;
@@ -241,9 +251,11 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
     methodRows = wrap(
       receipt.provider === "demo"
         ? "Thanh toán demo"
-        : receipt.provider === "payos"
-          ? "PayOS"
-          : receipt.provider,
+        : receipt.provider === "sepay_sandbox"
+          ? "QR chuyển khoản · SePay sandbox"
+          : receipt.provider === "payos"
+            ? "PayOS"
+            : receipt.provider,
       229,
       9,
     );
@@ -256,7 +268,8 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
         14,
         methodRows.length * 13 + (receipt.provider === "demo" ? 12 : 0),
       ) -
-      12;
+      12 -
+      (receipt.provider === "sepay_sandbox" ? 38 : 0);
   panel(44, 683, 507, 683 - metadataBottom);
   text("Mã chứng từ", 58, 665, 7.5, muted);
   receiptRows.forEach((row, i) => text(row, 58, 651 - i * 12, 8.5));
@@ -290,6 +303,12 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
     true,
   );
   text("Giờ Việt Nam (GMT+7)", 313, methodValueY - 14, 7.5, muted);
+  if (receipt.provider === "sepay_sandbox") {
+    text("Mã thanh toán SePay", 58, methodValueY - 36, 7.5, muted);
+    text(receipt.invoice ?? "Chưa có mã", 58, methodValueY - 50, 8);
+    text("Mã đơn vị SePay", 313, methodValueY - 36, 7.5, muted);
+    text(receipt.merchant ?? "Chưa có mã", 313, methodValueY - 50, 8);
+  }
   y = metadataBottom - 25;
   tableHeading();
   for (const item of receipt.lines) {
@@ -366,11 +385,14 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   const hasCustom = receipt.lines.some((l) => l.kind === "custom");
   const note = balance
     ? receipt.balanceReason === "sourcing"
-      ? "Khoản chênh lệch giá mua bạn đã duyệt. Cước và các chi phí còn lại được chốt trước khi gửi."
-      : "Khoản bổ sung theo tổng chi phí cuối bạn đã duyệt. Chứng từ này ghi nhận số tiền thanh toán thêm lần này."
+      ? "Bạn đã trả phần chênh lệch giá mua. Cước và phí còn lại sẽ được chốt trước khi gửi hàng."
+      : "Bạn đã thanh toán phần chi phí còn lại theo tổng tiền đã duyệt."
     : hasCustom
-      ? "Giá hàng cần tìm mua và phí mua hộ đã được trả đủ. Cước vận chuyển, thông quan và giao nội địa chưa thu trong khoản này; bạn duyệt chi phí còn lại trước khi gửi. Giá niêm yết giữ trọn gói."
-      : "Giá niêm yết là giá trọn gói. Chứng từ ghi nhận khoản thanh toán cho các sản phẩm trên.";
+      ? "Cước vận chuyển, thông quan và giao nội địa của hàng cần tìm mua chưa thu. Bạn duyệt các phí này trước khi gửi hàng." +
+        (receipt.lines.some((item) => item.kind === "catalog")
+          ? " Hàng niêm yết giữ giá trọn gói."
+          : "")
+      : "Giá niêm yết là giá trọn gói.";
   const noteRows = wrap(note, 252, 8.5);
   const previousRows =
     balance && receipt.previousReceiptId
@@ -444,14 +466,13 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   right(money(receipt.total), 537, y - 105, 21, blue, true, 201);
   for (let i = 0; i < pages.length; i++) {
     page = pages[i];
+    if (i === pages.length - 1) {
+      const thanks =
+        "Cảm ơn bạn đã tin tưởng và chọn dịch vụ mua hộ của SatsunicGo.";
+      text(thanks, (595.28 - width(thanks, 8.5)) / 2, 74, 8.5);
+    }
     line(58);
-    text(
-      "Chứng từ xác nhận khoản đã thu. Không thay thế hóa đơn thuế.",
-      44,
-      42,
-      7,
-      muted,
-    );
+    text("Không thay thế hóa đơn thuế.", 44, 42, 7, muted);
     right(`Trang ${i + 1}/${pages.length}`, 551, 42, 7, muted);
   }
   if (pages.length > 12) throw Error("PDF_TOO_LARGE");

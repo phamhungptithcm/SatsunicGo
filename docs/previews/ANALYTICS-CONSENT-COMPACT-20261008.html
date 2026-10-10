@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xem trước hộp quyền thống kê</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fafbfe;color:#111c35;font-family:Inter,system-ui,-apple-system,sans-serif}header{height:72px;border-bottom:1px solid #e8edf5;background:#fff;padding:24px 6vw;font-weight:700;letter-spacing:-.4px}main{max-width:1120px;margin:70px auto;padding:0 24px}main p{color:#667085;font-size:14px}h1{font-size:30px;letter-spacing:-1px}.placeholder{height:180px;border:1px solid #e8edf5;border-radius:16px;background:#fff;margin-top:32px}.consent{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));width:320px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);overflow:auto;padding:16px;border:1px solid #e0e6ef;border-radius:14px;background:#fff;box-shadow:0 8px 32px #111c3514;z-index:40}.consentHeading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap}.consent h2{margin:0;font-size:14px;line-height:1.4;letter-spacing:-.2px;font-weight:650;white-space:nowrap}.consent p{margin:6px 0 8px;color:#526078;font-size:13px;line-height:1.5}.consent a{font-size:12px;color:#365274;text-underline-offset:3px}.actions{display:flex;gap:8px;margin-top:12px}button{font:inherit;font-size:13px;font-weight:600;cursor:pointer} .actions button{flex:1;min-height:40px;padding:10px 12px;border:1px solid #d9e1ec;border-radius:9px;background:white;color:#152443}.actions button:last-child{color:white;background:#163cff;border-color:#163cff}button:focus-visible,a:focus-visible{outline:3px solid #163cff;outline-offset:3px}.settings{position:fixed;right:20px;bottom:20px;background:white;border:1px solid #d9e1ec;border-radius:9px;padding:10px 14px;color:#526078}.close{display:grid;place-items:center;width:32px;height:32px;flex-shrink:0;margin:-4px -4px -4px 0;border:0;border-radius:8px;background:transparent;color:#667085;padding:0}.close:hover{background:#f2f5fa;color:#111c35}.close svg{width:16px;height:16px}.consent[hidden],.settings[hidden]{display:none}@media(max-width:480px){.consent{right:16px;bottom:max(16px,env(safe-area-inset-bottom));padding:16px}.settings{right:16px;bottom:16px}main{margin-top:40px}}
+</style>
+<header>SatsunicGo</header>
+<main><h1>Hộp quyền thống kê</h1><p>Bản xem trước giao diện · chưa áp dụng vào ứng dụng</p><div class="placeholder" aria-hidden="true"></div></main>
+<aside class="consent" role="dialog" aria-labelledby="title" aria-describedby="description">
+  <div class="consentHeading"><h2 id="title">Tôn trọng riêng tư của bạn</h2><button type="button" class="close" aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+  <p id="description">Khi chọn “Đồng ý”, bạn cho phép lưu dữ liệu trên trình duyệt để chúng mình hiểu cách bạn dùng website và cải thiện trải nghiệm mua sắm. Bạn có thể đổi lựa chọn bất cứ lúc nào tại trang “Quyền riêng tư”.</p>
+  <a href="/privacy" target="_blank" rel="noopener">Cách dùng dữ liệu</a>
+  <div class="actions"><button type="button" id="decline">Từ chối</button><button type="button" id="allow">Đồng ý</button></div>
+</aside>
+
+<script>
+// Prototype interactions only: no storage and no analytics requests.
+const panel=document.querySelector('.consent');
+function dismiss(){panel.hidden=true;document.querySelector('main').setAttribute('tabindex','-1');document.querySelector('main').focus()}
+panel.querySelector('.close').onclick=dismiss;document.querySelector('#decline').onclick=dismiss;document.querySelector('#allow').onclick=dismiss;
+</script>
+</html>

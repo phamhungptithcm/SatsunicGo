@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -245,6 +249,37 @@ export const changeCommand = onCall(
           action: `change-${d.action}`,
           state: "queued",
           createdAt: now,
+          ...customerEventFields(() => {
+            const proposal =
+              d.action === "propose"
+                ? proposalSchema.parse(d.payload)
+                : ps.data()!.proposal;
+            const context = {
+              ownerId: order.ownerId,
+              entityId: order.id,
+              orderId: order.id,
+              entityVersion: order.version,
+              occurredAt: now,
+            };
+            const summary = {
+              orderRef: order.id,
+              changeSummary: proposal.reason,
+            };
+            if (d.action === "propose")
+              return customerEvent("change_proposed", context, {
+                ...summary,
+                costImpact: `Tổng theo phương án: ${new Intl.NumberFormat("vi-VN").format(proposal.finalPayable)} ₫`,
+              });
+            return customerEvent(
+              d.action === "accept"
+                ? "change_accepted"
+                : d.action === "reject"
+                  ? "change_rejected"
+                  : "change_applied",
+              context,
+              summary,
+            );
+          }),
         });
         tx.create(op, { hash, result, createdAt: now });
         return result;

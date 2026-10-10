@@ -1,3 +1,7 @@
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { createHash } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
@@ -166,6 +170,45 @@ export const purchaseSourcingChange = onCall(
             ? "proposePurchasePrice"
             : "approvePurchasePrice",
         createdAt: Date.now(),
+      });
+      const occurredAt = Date.now();
+      tx.create(db.doc(`outboxJobs/sourcing-${uid}-${d.operationId}`), {
+        ownerId: order.ownerId,
+        orderId: order.id,
+        resourceId: order.id,
+        action:
+          d.action === "propose"
+            ? "proposePurchasePrice"
+            : "approvePurchasePrice",
+        state: "queued",
+        createdAt: occurredAt,
+        ...customerEventFields(() =>
+          customerEvent(
+            d.action === "propose"
+              ? "price_change_proposed"
+              : "change_accepted",
+            {
+              ownerId: order.ownerId,
+              entityId: order.id,
+              orderId: order.id,
+              entityVersion: result.version,
+              occurredAt,
+            },
+            d.action === "propose"
+              ? {
+                  orderRef: order.id,
+                  customerReason: "Giá mua hiện tại cao hơn giá ban đầu",
+                  previousTotal: order.upfront!.initialTotal,
+                  proposedTotal: adjustment!.total,
+                  differenceAmount:
+                    adjustment!.total - order.upfront!.initialTotal,
+                }
+              : {
+                  orderRef: order.id,
+                  changeSummary: "Giá mua mới đã được bạn đồng ý",
+                },
+          ),
+        ),
       });
       return result;
     });

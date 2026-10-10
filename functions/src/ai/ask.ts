@@ -24,6 +24,7 @@ import { askAnswerSchema } from "../../../packages/domain/ask-stream";
 import { requireVerifiedGoogle } from "../auth/guards";
 import { assertPaidAskReadiness } from "./ask-paid-gate";
 import { pilotAnswer } from "./ask-pilot-answer";
+import { customerAiConfigured } from "./ask-production";
 import {
   redactChat,
   redactDraft,
@@ -85,6 +86,7 @@ export const ask = onCall(
         response
           ? AbortSignal.any([AbortSignal.timeout(20000), response.signal])
           : AbortSignal.timeout(20000),
+        (await customerAiConfigured()) ? p.data.sessionId : undefined,
       );
       await response?.sendChunk({ type: "answer", answer: result });
       return result;

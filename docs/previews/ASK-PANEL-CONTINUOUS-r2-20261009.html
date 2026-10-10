@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Ask · SatsunicGo</title>
+<style>
+
+ :root{--text-scale:1;--blue:#163cff;--ink:#111c35;--muted:#59657a;--line:#e5e9f0;--quiet:#f3f5f9;--paper:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f5f7fb;font-size:calc(16px * var(--text-scale));line-height:1.6}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:default;color:#68748b;background:#eef1f6;border-color:#eef1f6}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--blue);outline-offset:4px}button,textarea,input,select{max-width:100%}button{color:inherit}button svg{width:19px;height:19px;flex:none}p{margin:0 0 14px}p:last-child{margin-bottom:0}[hidden]{display:none!important}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.top{padding:16px 30px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;flex-wrap:wrap;border-bottom:1px solid var(--line)}.brand{font-size:calc(18px * var(--text-scale));letter-spacing:-.6px;font-weight:750;min-width:0;overflow-wrap:anywhere}.brand span{color:var(--blue)}.top nav{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}.icon,.lang{display:inline-flex;justify-content:center;align-items:center;min-height:44px;min-width:44px;padding:8px;border:0;background:transparent;border-radius:8px}.icon:hover,.lang:hover{background:var(--quiet)}.lang{font-size:calc(12px * var(--text-scale));font-weight:650;color:var(--muted);min-width:38px}.lang[aria-pressed=true]{color:var(--ink);background:var(--quiet)}.language{display:flex;margin-inline:4px}.history h2{font-size:calc(14px * var(--text-scale));font-weight:650;margin:0 10px 7px}.history-list button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:11px 10px;border-radius:7px;font-size:calc(14px * var(--text-scale));line-height:1.5}.history-list button:hover{background:var(--quiet)}.history small{display:block;color:var(--muted);font-size:calc(12px * var(--text-scale));margin-top:2px}
+.stream{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:32px 30px 26px;overflow-wrap:anywhere}.reading{max-width:680px;margin:auto}.turn{margin-bottom:24px;padding-top:8px}.question{display:flex;justify-content:flex-end;margin-bottom:22px}.question p{padding:11px 17px;background:var(--quiet);border-radius:16px 16px 4px 16px;max-width:88%;font-size:calc(15px * var(--text-scale));line-height:1.6}.answer{font-size:calc(16px * var(--text-scale));line-height:1.75;max-width:640px}.answer strong{font-weight:650}.intro{color:var(--muted);font-size:calc(12px * var(--text-scale));letter-spacing:.035em;margin-bottom:11px}.review{margin:20px 0 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;max-width:640px}.review h2{font-size:calc(17px * var(--text-scale));font-weight:650;line-height:1.5;letter-spacing:-.2px;margin:0 0 5px}.variant{font-size:calc(14px * var(--text-scale));color:var(--muted)}.detail-row{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-top:15px;font-size:calc(14px * var(--text-scale))}.detail-row span:first-child{color:var(--muted)}.detail-row strong{font-weight:600;text-align:right}.detail-row.total{font-size:calc(16px * var(--text-scale));margin-top:8px}.detail-row.total span:first-child{color:var(--ink)}.detail-row.total strong{font-size:calc(20px * var(--text-scale));font-weight:700;letter-spacing:-.5px}.review details{margin-top:13px;font-size:calc(12px * var(--text-scale));color:var(--muted)}.review summary{cursor:pointer;width:fit-content}.review details p{margin-top:7px}.consequence{font-size:calc(13px * var(--text-scale));line-height:1.65;color:var(--muted);margin-top:17px;max-width:560px}.review-actions{display:flex;align-items:center;gap:15px;margin-top:18px;flex-wrap:wrap}.primary{min-height:44px;padding:9px 16px;border:1px solid var(--blue);border-radius:9px;background:var(--blue);color:white;font-weight:600;font-size:calc(14px * var(--text-scale));line-height:1.5}.primary:hover:not(:disabled){background:#102ed6}.text-button{border:0;background:transparent;min-height:44px;padding:8px 2px;font-size:calc(14px * var(--text-scale));color:var(--muted);text-decoration:underline;text-decoration-color:#a7b0c0;text-underline-offset:4px}.text-button:hover{color:var(--ink)}.review-status{font-size:calc(14px * var(--text-scale));line-height:1.7;margin-top:17px}.review-status:empty{display:none}.reply-hint{font-size:calc(12px * var(--text-scale));color:var(--muted);margin-top:11px}.history-note{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-bottom:26px;font-size:calc(13px * var(--text-scale));color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line)}.history-note .text-button{font-size:calc(13px * var(--text-scale));padding:0;min-height:35px}.history-turn h2{font-size:calc(16px * var(--text-scale));margin:0 0 12px}.history-turn{margin-bottom:30px}.followup{margin-top:26px}.thinking{color:var(--muted);font-size:calc(14px * var(--text-scale))}
+.bottom{flex:none;padding:12px 30px 21px;background:#fff}.composer{max-width:680px;margin:auto;border:1px solid #dce2ec;border-radius:13px;display:flex;align-items:flex-end;padding:10px 11px 10px 15px;background:white;box-shadow:0 2px 9px #111c3505;gap:10px}.composer:focus-within{border-color:#9daecb}.composer:focus-within:has(textarea:focus-visible){outline:2px solid var(--blue);outline-offset:3px}.composer textarea{resize:none;flex:1;min-width:0;width:100%;border:0;outline:none!important;padding:5px 0;min-height:35px;max-height:96px;line-height:1.55;font-size:calc(15px * var(--text-scale));background:transparent;color:var(--ink)}.composer .send{border:0;min-height:38px;min-width:38px;border-radius:9px;display:grid;place-items:center;background:var(--ink);color:white}.composer .send:disabled{background:var(--quiet);color:#99a3b3}.privacy{max-width:680px;margin:8px auto 0;font-size:calc(11px * var(--text-scale));line-height:1.55;color:var(--muted)}.privacy[hidden]{display:none}.privacy a{color:inherit}.return-shell button{padding:12px 20px;font-size:calc(15px * var(--text-scale))}
+.sheet form{height:100%;display:flex;flex-direction:column;min-height:0}.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding:17px 23px;flex:none}.sheet-head h2{font-size:calc(17px * var(--text-scale));margin:0;font-weight:650}.sheet-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:24px;overflow-wrap:anywhere}.sheet-body>p{font-size:calc(13px * var(--text-scale));line-height:1.65;color:var(--muted);margin-bottom:25px}.field{display:block;margin-bottom:21px}.field>span{display:block;font-size:calc(13px * var(--text-scale));font-weight:600;margin-bottom:8px}.field input,.field select,.field textarea{border:1px solid #dce2ec;background:white;color:var(--ink);border-radius:8px;width:100%;padding:10px 11px;min-height:44px;font-size:calc(15px * var(--text-scale));line-height:1.5}.field textarea{resize:vertical;min-height:110px}.field small{display:block;font-size:calc(12px * var(--text-scale));color:var(--muted);margin-top:6px}.field input[readonly]{background:#f8f9fc;color:var(--muted)}.sheet-footer{flex:none;border-top:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:white}.draft-notice{font-size:calc(12px * var(--text-scale));color:var(--muted);line-height:1.6;padding-top:4px}.review .notes{font-size:calc(13px * var(--text-scale));color:var(--muted);margin-top:12px;white-space:pre-wrap}
+
+@media(max-width:600px){.top{padding:9px 15px}.brand{font-size:calc(17px * var(--text-scale))}.top nav{gap:0}.language{margin-inline:0}.icon{min-width:40px}.lang{min-width:34px}.stream{padding:27px 20px 24px}.bottom{padding:10px 16px 16px}.question p{max-width:94%;font-size:calc(14px * var(--text-scale))}.answer{font-size:calc(15px * var(--text-scale))}.turn{margin-bottom:25px}.review{padding:18px 0}.review h2{font-size:calc(16px * var(--text-scale))}.detail-row{gap:12px}.detail-row.total strong{font-size:calc(19px * var(--text-scale))}.sheet-body{padding:20px}.sheet-head{padding:12px 18px}.sheet-footer{padding:12px 20px}}
+@media(max-height:500px){.top{padding-block:4px}.stream{padding-top:18px}.bottom{padding-block:8px}.sheet-head{padding-block:7px}.sheet-footer{padding-block:8px}}
+@container ask-middle (max-height:360px) or (max-height:24em){.sheet form{display:block;height:100%;overflow:auto;overscroll-behavior:contain}.sheet-body{overflow:visible}.sheet-footer{position:static}}
+@media(prefers-reduced-motion:no-preference){.primary,.icon,.lang{transition:background .12s ease}@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}}
+
+/* Source-derived public framing and the existing Ask outer footprint. */
+:root{--header-height:82px;background:#fff}
+.public-shell{min-height:100dvh;background:#fff}.public-topbar{height:var(--header-height);padding:0 28px;border-bottom:1px solid #e2e6ef;background:#fff}.public-nav{height:100%;width:100%;max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}.public-brand{display:flex;align-items:center;gap:9px;font-size:calc(25px * var(--text-scale));font-weight:750;letter-spacing:-1px;white-space:nowrap}.public-brand svg{width:29px;height:29px}.public-brand em{font-style:normal;color:var(--blue)}.public-links{display:flex;gap:23px;font-size:calc(13px * var(--text-scale))}.public-actions{display:flex;align-items:center;gap:16px;font-size:calc(13px * var(--text-scale))}.public-actions svg{width:22px;height:22px}.public-menu{display:none;width:44px;height:44px;border:1px solid #e2e6ef;border-radius:50%;padding:13px 11px}.public-menu i{display:block;height:2px;background:var(--ink);margin:5px 0}.public-page{min-height:calc(100dvh - var(--header-height));background:linear-gradient(#fff,#fbfcfe)}
+.veil{position:fixed;inset:0;z-index:2;background:rgb(247 249 253 /32%);backdrop-filter:blur(4px)}
+.panel{position:fixed;z-index:3;inset:auto 0 max(20px,env(safe-area-inset-bottom));width:min(1180px,calc(100% - 40px));height:min(920px,calc(100dvh - 40px));margin:0 auto;border:1px solid #e2e6f0;border-radius:28px;background:var(--paper);box-shadow:0 24px 80px rgb(17 28 53 /16%);overflow:hidden;display:flex;flex-direction:column;isolation:isolate}
+.top{padding:12px 28px;border-bottom:0;gap:6px 12px}.panel-body{position:relative;flex:1;min-height:0;overflow:hidden;container-name:ask-middle;container-type:size}.stream{height:100%;padding:14px 28px 20px}.turn{margin-bottom:20px;padding-top:0}.question{margin-bottom:14px}.question p{padding:9px 15px}.answer{line-height:1.65}.review{margin:14px 0 6px;border:0;padding:0}.review h2{margin-bottom:3px}.detail-row{margin-top:12px}.detail-row.total{margin-top:5px}.detail-row.total strong{font-size:calc(19px * var(--text-scale))}.review details{margin-top:10px}.consequence{margin-top:12px;line-height:1.6}.review-actions{margin-top:12px}.review-status{margin-top:12px;line-height:1.6}.reply-hint{margin-top:8px}.bottom{padding:9px 28px 20px}.composer{padding:9px 10px 9px 14px}.composer textarea:disabled{color:var(--muted);-webkit-text-fill-color:var(--muted);opacity:1}.editing-note{max-width:680px;margin:7px auto 0;font-size:calc(11px * var(--text-scale));line-height:1.5;color:var(--muted)}.return-shell{position:fixed;z-index:4;bottom:max(20px,env(safe-area-inset-bottom));right:20px}
+.sheet,.history{position:absolute;inset:0;background:#fff;color:var(--ink);overflow:hidden;min-height:0;width:100%;height:100%;margin:0;border:0;border-radius:0;box-shadow:none}.sheet-head,.history-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;padding:10px 28px 12px;border:0}.sheet-head>div,.history-head>div{width:100%;max-width:680px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.sheet-head h2,.history-head h2{font-size:calc(17px * var(--text-scale));margin:0;font-weight:650;overflow-wrap:anywhere}.sheet-body{padding:10px 28px 18px;scrollbar-gutter:stable}.form-reading{max-width:680px;margin:auto}.form-reading>p{font-size:calc(13px * var(--text-scale));line-height:1.6;color:var(--muted);margin-bottom:18px}.field{margin-bottom:17px}.field>span{margin-bottom:6px}.field textarea{min-height:96px}.sheet-footer{padding:10px 28px;border:0;display:block}.sheet-footer>div{max-width:680px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.history{display:flex;flex-direction:column;padding:0}.history-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:4px 28px 20px;scrollbar-gutter:stable}.history-list>div{max-width:680px;margin:auto}.history h2{margin:0;font-size:calc(17px * var(--text-scale))}.history-list button{padding:12px;font-size:calc(14px * var(--text-scale))}.history-note{margin-bottom:18px;border:0;padding:0}
+@media(max-width:1200px){:root{--header-height:76px}.public-topbar{padding:0 20px}.public-links{display:none}.public-menu{display:block}}
+@media(max-width:600px){.panel{width:calc(100% - 28px);height:min(760px,calc(100dvh - 32px));bottom:max(16px,env(safe-area-inset-bottom));border-radius:24px}.top{padding:8px 16px}.stream{padding:12px 18px 18px}.bottom{padding:8px 16px 15px}.review{padding:0}.detail-row.total strong{font-size:calc(18px * var(--text-scale))}.sheet-head,.history-head{padding:6px 18px 9px}.sheet-body{padding:8px 18px 15px}.sheet-footer{padding:8px 18px}.history-list{padding:4px 18px 18px}.public-actions{gap:8px}.public-request{display:none}.public-topbar{padding:0 12px}.public-brand{font-size:calc(21px * var(--text-scale));gap:7px}.public-brand svg{width:25px;height:25px}}
+@media(max-height:500px){.top{padding-block:3px}.stream{padding-top:8px}.bottom{padding-block:7px}.sheet-head,.history-head{padding-block:5px}.sheet-footer{padding-block:6px}}
+@container ask-middle (max-height:360px) or (max-height:24em){.sheet form{display:block;height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}.sheet-body{overflow:visible}.sheet-head,.sheet-footer{position:static}.history{overflow:auto}.history-list{flex:none;overflow:visible}}
+.variant-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:17px}.variant-fields .field{margin-bottom:0}@media(max-width:600px){.variant-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.variant-fields .field:last-child{grid-column:1/-1}.field input,.field select,.field textarea{font-size:calc(16px * var(--text-scale))}}
+</style>
+</head>
+<body>
+<div class="public-shell" id="public-shell" aria-hidden="true" inert>
+<header class="public-topbar"><div class="public-nav">
+<div class="public-brand"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m16 3 12 7-12 7-12-7 12-7Z"/><path d="M4 10v13l12 7 12-7V10M16 17v13M10 6l12 7"/></svg><span>Satsunic<em>Go</em></span></div>
+<div class="public-links"><span>Sản phẩm</span><span>Mua hộ</span><span>Biểu phí</span><span>Membership</span><span>Bài viết</span><span>Hỗ trợ</span></div>
+<div class="public-actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2 11h11l2-8H6M9 20h.01M17 20h.01" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="public-request">Mua hộ ↗</span><span class="public-menu"><i></i><i></i></span></div>
+</div></header><div class="public-page"></div></div>
+<div class="veil" id="veil" aria-hidden="true"></div>
+<section class="panel" id="shell" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+  <header class="top">
+    <div class="brand" id="panel-title">Satsunic<span>Go</span></div>
+    <nav aria-label="Điều khiển hội thoại" id="controls">
+      <button type="button" class="icon" id="history-toggle" aria-label="Lịch sử hội thoại" title="Lịch sử hội thoại" aria-expanded="false" aria-controls="history">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3.5 10a8.5 8.5 0 1 1 1.2 6.5M3.5 4.5V10H9M12 7v5l3.3 2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="language" id="languages" aria-label="Ngôn ngữ">
+        <button class="lang" type="button" data-lang="vi" aria-pressed="true" aria-label="Tiếng Việt">VI</button>
+        <button class="lang" type="button" data-lang="en" aria-pressed="false" aria-label="English">EN</button>
+      </div>
+      <button type="button" class="icon" id="close-chat" aria-label="Đóng hội thoại" title="Đóng hội thoại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke-linecap="round"/></svg></button>
+    </nav>
+  </header>
+  <div class="panel-body" id="panel-body">
+  <div class="stream" id="stream" tabindex="-1">
+    <div class="reading">
+      <div class="history-note" id="history-note" hidden><span id="history-notice"></span><button class="text-button" id="return-current" type="button"></button></div>
+      <div id="current-view">
+        <section class="turn" id="selection-turn">
+          <div class="question"><p id="selection-question"></p></div>
+          <div class="answer"><p id="selection-answer"></p></div>
+          <section class="review" id="review" aria-labelledby="product-title">
+            <h2 id="product-title">Áo thun AIRism</h2>
+            <p class="variant" id="variant-line"></p>
+            <div class="detail-row"><span id="unit-label"></span><strong id="unit-value"></strong></div>
+            <div class="detail-row total"><span id="total-label"></span><strong id="total-value"></strong></div>
+            <details><summary id="terms-label"></summary><p id="terms-value"></p></details>
+            <p class="consequence" id="consequence"></p>
+            <p class="review-status" id="review-status" role="status" aria-live="polite"></p>
+            <div class="review-actions"><button type="button" class="primary" id="confirm"></button><button type="button" class="text-button" id="edit"></button></div>
+            <p class="reply-hint" id="reply-hint"></p>
+          </section>
+        </section>
+        <div id="followups" role="log" aria-label="Tin nhắn mới" aria-live="polite" aria-relevant="additions"></div>
+      </div>
+      <section class="history-turn" id="old-view" hidden tabindex="-1"><h2 id="old-title"></h2><div class="question"><p id="old-question"></p></div><div class="answer"><p id="old-answer"></p></div></section>
+    </div>
+  </div>
+<section class="sheet" id="sheet" hidden aria-labelledby="sheet-title" aria-describedby="sheet-help">
+  <form id="edit-form">
+    <header class="sheet-head"><div><h2 id="sheet-title" tabindex="-1"></h2><button class="icon" type="button" id="close-sheet" aria-label="Về hội thoại"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke-linecap="round"/></svg></button></div></header>
+    <div class="sheet-body"><div class="form-reading">
+      <p id="sheet-help"></p>
+      <label class="field"><span id="product-label"></span><input id="product" readonly value="Áo thun AIRism"></label>
+      <div class="variant-fields">
+      <label class="field"><span id="colour-label"></span><select id="colour"><option value="white"></option><option value="black"></option></select></label>
+      <label class="field"><span id="size-label"></span><select id="size"><option>M</option><option>L</option><option>XL</option></select></label>
+      <label class="field"><span id="quantity-label"></span><input id="quantity" type="number" inputmode="numeric" min="1" max="100" step="1" required value="2" aria-describedby="quantity-help"><small id="quantity-help"></small></label>
+      </div>
+      <p class="draft-notice" id="draft-notice" role="status"></p>
+    </div></div>
+    <footer class="sheet-footer"><div><button type="button" class="text-button" id="back-chat"></button><button type="submit" class="primary" id="review-again"></button></div></footer>
+  </form>
+</section>
+<section class="history" id="history" aria-labelledby="history-title" hidden>
+<header class="history-head"><div><h2 id="history-title" tabindex="-1"></h2><button type="button" class="icon" id="close-history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke-linecap="round"/></svg></button></div></header>
+<div class="history-list"><div><button type="button" id="history-current">Áo thun AIRism<small id="history-current-detail"></small></button><button type="button" id="history-old">Phí vận chuyển từ Nhật<small id="history-old-detail"></small></button></div></div>
+</section>
+  </div>
+  <footer class="bottom">
+    <form class="composer" id="composer"><label for="message" class="sr" id="message-label"></label><textarea id="message" rows="1" maxlength="1200" aria-describedby="privacy editing-note"></textarea><button class="send" type="submit" id="send" disabled aria-label="Gửi tin nhắn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 18V5m-5 5 5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form>
+    <p class="privacy" id="privacy" hidden></p>
+    <p class="editing-note" id="editing-note" hidden></p>
+  </footer>
+</section>
+<div class="return-shell" id="closed" hidden><button type="button" class="primary" id="reopen"></button></div>
+
+<script>
+(() => {
+  'use strict';
+  if(new URLSearchParams(location.search).get('text')==='200')document.documentElement.style.setProperty('--text-scale','2');
+  const $ = id => document.getElementById(id);
+  const copy = {
+    vi: {
+      shell:'Hỏi SatsunicGo',controls:'Điều khiển hội thoại',history:'Lịch sử hội thoại',historyTitle:'Tin nhắn trước',currentItem:'Áo thun AIRism',currentDetail:'Lựa chọn hiện tại',oldItem:'Phí vận chuyển từ Nhật',oldDetail:'Chỉ xem lại',language:'Ngôn ngữ',close:'Đóng hội thoại',reopen:'Hỏi SatsunicGo',
+      selectionQuestion:'Tôi muốn đặt 2 áo AIRism màu trắng, size M.',selectionAnswer:'Bạn xem lại mẫu và tổng tiền trước khi tạo đơn.',product:'Áo thun AIRism',unit:'Đơn giá trọn gói',total:'Tổng thanh toán',terms:'Điều khoản mua hàng',termsValue:'Phiên bản 1.2 · Áp dụng cho sản phẩm và lựa chọn đang hiển thị.',consequence:'Tạo đơn theo lựa chọn này. Bạn sẽ kiểm tra thông tin nhận hàng trước khi thanh toán toàn bộ. Bước này chưa thu tiền.',confirm:'Tạo đơn sản phẩm',edit:'Sửa',editName:'Sửa lựa chọn',hint:'Bạn cũng có thể nhắn “đồng ý”, hoặc “chưa” nếu muốn kiểm tra thêm.',
+      message:'Nhắn SatsunicGo',placeholder:'Nhắn SatsunicGo…',editingPlaceholder:'Về hội thoại để nhắn tiếp…',editingPrompt:'Bạn có thể nhắn tiếp sau khi về hội thoại.',send:'Gửi tin nhắn',privacy:'Khi dùng AI, câu hỏi có thể được Google xử lý. Không chia sẻ thông tin nhạy cảm.',log:'Tin nhắn mới',
+      sheetTitle:'Chỉnh lựa chọn',sheetHelp:'Thay đổi tại đây được giữ trong hội thoại. Kiểm tra lại trước khi tạo đơn.',productLabel:'Sản phẩm',colourLabel:'Màu',white:'Trắng',black:'Đen',sizeLabel:'Size',quantityLabel:'Số lượng (bắt buộc)',quantityHelp:'Từ 1 đến 100 áo.',draftNotice:'Chưa tạo đơn hoặc thanh toán.',back:'Về hội thoại',reviewAgain:'Kiểm tra lựa chọn',
+      stale:'Kiểm tra lại lựa chọn trước khi xác nhận.',invalidQuantity:'Số lượng cần kiểm tra lại',unknownTotal:'Chưa tính được',declined:'Lựa chọn vẫn được giữ. Bạn có thể sửa hoặc kiểm tra lại khi sẵn sàng.',firstReview:'Xem lựa chọn và tổng tiền bên trên trước khi xác nhận.',notSent:'Xác nhận chưa được gửi. Đơn hàng chưa được tạo.',notSentButton:'Chưa gửi',unknown:'Chưa xác minh được kết quả tạo đơn. Kiểm tra kết quả trước khi gửi lại.',reconcile:'Kiểm tra kết quả',reconciling:'Đang kiểm tra kết quả…',stillUnknown:'Chưa xác minh được kết quả. Yêu cầu đang chờ vẫn được giữ. Liên hệ hỗ trợ nếu cần.',loading:'Đang kiểm tra lựa chọn…',unavailable:'Chưa tải được thông tin để xác nhận. Lựa chọn của bạn vẫn được giữ.',retryLoad:'Thử tải lại',signedOut:'Đăng nhập để kiểm tra lựa chọn trước khi tạo đơn.',signIn:'Đăng nhập',signInUnavailable:'Chưa đăng nhập được. Lựa chọn của bạn vẫn được giữ.',empty:'Bạn muốn hỏi về sản phẩm hay theo dõi đơn hàng?',
+      historyNotice:'Bạn đang xem lịch sử. Không thể xác nhận tại đây.',returnCurrent:'Về hội thoại hiện tại',oldTitle:'Phí vận chuyển từ Nhật',oldQuestion:'Phí vận chuyển từ Nhật tính thế nào?',oldAnswer:'Sản phẩm trong danh mục dùng giá trọn gói. Với yêu cầu mua hộ riêng, xem báo giá của đơn để biết chi phí áp dụng.',historyBlocked:'Về hội thoại hiện tại để chỉnh lựa chọn hoặc xác nhận.',clarifyEdit:'Bạn muốn đổi sang bao nhiêu áo? Lựa chọn hiện tại vẫn được giữ.',mixed:'Đã chỉnh lựa chọn. Kiểm tra lại nội dung và tổng tiền trước khi xác nhận.',generic:'Bạn có thể hỏi tiếp, hoặc chọn “Sửa” để chỉnh mẫu và số lượng.',pendingReply:'Chưa xác minh được kết quả yêu cầu trước. Kiểm tra kết quả trước khi gửi yêu cầu khác.'
+    },
+    en: {
+      shell:'Ask SatsunicGo',controls:'Conversation controls',history:'Conversation history',historyTitle:'Earlier messages',currentItem:'AIRism T-shirt',currentDetail:'Current selection',oldItem:'Shipping from Japan',oldDetail:'Read only',language:'Language',close:'Close conversation',reopen:'Ask SatsunicGo',
+      selectionQuestion:'I’d like 2 white AIRism T-shirts in size M.',selectionAnswer:'Check the variant and total before creating your order.',product:'AIRism T-shirt',unit:'All-inclusive unit price',total:'Total',terms:'Purchase terms',termsValue:'Version 1.2 · Applies to the product and selection shown here.',consequence:'Create an order for this selection. Review delivery details before paying in full. This step does not collect payment.',confirm:'Create product order',edit:'Edit',editName:'Edit selection',hint:'You can also reply “yes”, or “not yet” if you want to review further.',
+      message:'Message SatsunicGo',placeholder:'Message SatsunicGo…',editingPlaceholder:'Return to chat to continue…',editingPrompt:'Return to chat to continue the conversation.',send:'Send message',privacy:'When AI is used, questions may be processed by Google. Avoid sharing sensitive information.',log:'New messages',
+      sheetTitle:'Edit selection',sheetHelp:'Changes here stay in the conversation. Review them again before creating an order.',productLabel:'Product',colourLabel:'Colour',white:'White',black:'Black',sizeLabel:'Size',quantityLabel:'Quantity (required)',quantityHelp:'From 1 to 100 shirts.',draftNotice:'No order or payment yet.',back:'Back to chat',reviewAgain:'Review selection',
+      stale:'Review your selection again before confirming.',invalidQuantity:'Quantity needs review',unknownTotal:'Not available',declined:'Your selection is kept. Edit or review it when you are ready.',firstReview:'Review the selection and total above before confirming.',notSent:'Confirmation has not been sent. No order has been created.',notSentButton:'Not sent',unknown:'The order outcome has not been verified. Check the outcome before retrying.',reconcile:'Check outcome',reconciling:'Checking the outcome…',stillUnknown:'The outcome could not be verified. Your pending action is kept. Contact support if needed.',loading:'Checking your selection…',unavailable:'Details could not be loaded for confirmation. Your selection is kept.',retryLoad:'Retry loading',signedOut:'Sign in to review this selection before creating an order.',signIn:'Sign in',signInUnavailable:'Sign-in did not finish. Your selection is kept.',empty:'Would you like to ask about a product or track an order?',
+      historyNotice:'You are reading history. Confirmation is unavailable here.',returnCurrent:'Return to current conversation',oldTitle:'Shipping from Japan',oldQuestion:'How is shipping from Japan calculated?',oldAnswer:'Catalog products use an all-inclusive price. For a custom buying request, check the order’s quote for applicable costs.',historyBlocked:'Return to the current conversation to edit or confirm.',clarifyEdit:'How many shirts would you like instead? Your current selection is unchanged.',mixed:'Your selection changed. Review the details and total again before confirming.',generic:'Ask another question, or choose “Edit” to change the variant and quantity.',pendingReply:'The earlier outcome has not been verified. Check it before sending another request.'
+    }
+  };
+  const state = {lang:new URLSearchParams(location.search).get('lang') === 'en'?'en':'vi',mode:'review',readiness:'ready',history:false,revision:1,rendered:0,editing:false,listing:false,listReturn:null,listPosition:0,selection:{colour:'white',size:'M',quantity:2},preview:null,messages:[],operation:null,attempts:0,sheetReturn:null,readingPosition:0};
+  const seenDetails = new Set();
+  const seenRanges = new Map();
+  let loadTicket=0;
+  const t = key => copy[state.lang][key];
+  const money = value => new Intl.NumberFormat(state.lang==='vi'?'vi-VN':'en-US',{style:'currency',currency:'VND',maximumFractionDigits:0}).format(value);
+  const setText = (id,key) => {$(id).textContent=t(key);};
+  const validQuantity = selection => Number.isInteger(selection.quantity)&&selection.quantity>=1&&selection.quantity<=100;
+  function previewQuantityEdit(text){
+    const match=text.match(/(?:đổi|chon|chọn|change|make|quantity|số lượng)([^\d]{0,15})(\d+)([^\s]*)/iu);
+    if(!match)return null;
+    const [,prefix,digits,suffix]=match,remainder=text.slice(match.index+match[0].length);
+    // Consume the whole numeric scalar, never a signed/decimal substring.
+    if(/[+\-−.,\u2010-\u2015]/u.test(prefix)||/(?:minus|negative|âm|trừ)/iu.test(prefix)||!/^[.!]?$/u.test(suffix)||/\d/u.test(remainder))return {valid:false};
+    const value=Number(digits);
+    return Number.isSafeInteger(value)&&value>=1&&value<=100?{valid:true,value}:{valid:false};
+  }
+  function snapshot(){return Object.freeze({...state.selection,unit:490000,total:490000*state.selection.quantity,revision:state.revision});}
+  function review(){if(state.operation||state.history||state.editing||state.listing||state.readiness!=='ready')return false;if(!validQuantity(state.selection)){openSheet();return false;}state.mode='review';state.preview=snapshot();state.rendered=0;seenDetails.clear();seenRanges.clear();render();const captured=state.preview;requestAnimationFrame(()=>requestAnimationFrame(()=>{if(state.preview===captured)updateRendered();}));return true;}
+  function invalidate(){state.revision++;state.rendered=0;seenDetails.clear();seenRanges.clear();state.preview=null;if(!state.operation)state.mode=state.readiness==='ready'?'stale':state.readiness;}
+  function visible(node){const r=node.getBoundingClientRect(),pane=$('stream').getBoundingClientRect();if(!r.width||!r.height)return false;const width=Math.max(0,Math.min(r.right,pane.right)-Math.max(r.left,pane.left)),height=Math.max(0,Math.min(r.bottom,pane.bottom)-Math.max(r.top,pane.top));return width*height/(r.width*r.height)>=.95;}
+  function updateRendered(){
+    if(!state.preview||state.preview.revision!==state.revision||state.mode!=='review'||state.readiness!=='ready'||state.history||state.editing||state.listing||$('shell').hidden){state.rendered=0;return;}
+    const required=['product-title','variant-line','unit-value','total-value','terms-label','consequence','confirm'];
+    required.forEach(id=>{
+      const node=$(id);if(visible(node)){seenDetails.add(id);return;}
+      // A long disclosure may be reviewed in bounded consecutive scrolls.
+      // Coverage belongs only to this unchanged review identity.
+      const r=node.getBoundingClientRect(),pane=$('stream').getBoundingClientRect();
+      const w=Math.max(0,Math.min(r.right,pane.right)-Math.max(r.left,pane.left));
+      const start=Math.max(0,pane.top-r.top),end=Math.min(r.height,pane.bottom-r.top);
+      if(!r.width||!r.height||w/r.width<.95||end<=start)return;
+      const intervals=[...(seenRanges.get(id)||[]),[start,end]].sort((a,b)=>a[0]-b[0]);
+      const merged=[];for(const range of intervals){const last=merged.at(-1);if(last&&range[0]<=last[1])last[1]=Math.max(last[1],range[1]);else merged.push([...range]);}
+      seenRanges.set(id,merged);
+      if(merged.reduce((sum,[a,b])=>sum+b-a,0)>=r.height*.95)seenDetails.add(id);
+    });
+    state.rendered=required.every(id=>seenDetails.has(id))&&visible($('confirm'))?state.revision:0;
+  }
+  function variant(selection){return `${t(selection.colour)} · ${selection.size} · ${validQuantity(selection)?`${selection.quantity} ${state.lang==='vi'?'áo':selection.quantity===1?'shirt':'shirts'}`:t('invalidQuantity')}`;}
+  function render(){
+    document.documentElement.lang=state.lang;
+    $('shell').setAttribute('aria-label',t('shell'));$('controls').setAttribute('aria-label',t('controls'));$('languages').setAttribute('aria-label',t('language'));
+    for(const [id,key] of Object.entries({'history-title':'historyTitle','history-current-detail':'currentDetail','history-old-detail':'oldDetail','selection-question':'selectionQuestion','selection-answer':'selectionAnswer','product-title':'product','unit-label':'unit','total-label':'total','terms-label':'terms','terms-value':'termsValue','consequence':'consequence','message-label':'message','privacy':'privacy','editing-note':'editingPrompt','sheet-title':'sheetTitle','sheet-help':'sheetHelp','product-label':'productLabel','colour-label':'colourLabel','size-label':'sizeLabel','quantity-label':'quantityLabel','quantity-help':'quantityHelp','draft-notice':'draftNotice','back-chat':'back','review-again':'reviewAgain','history-notice':'historyNotice','return-current':'returnCurrent','old-title':'oldTitle','old-question':'oldQuestion','old-answer':'oldAnswer','reopen':'reopen'}))setText(id,key);
+    $('history-current').firstChild.textContent=t('currentItem');$('history-old').firstChild.textContent=t('oldItem');
+    for(const id of ['history-toggle','close-chat','close-sheet','close-history','send']){const key={'history-toggle':'history','close-chat':'close','close-sheet':'back','close-history':'back',send:'send'}[id];$(id).setAttribute('aria-label',t(key));$(id).title=t(key);}
+    $('message').placeholder=t(state.editing||state.listing?'editingPlaceholder':'placeholder');$('followups').setAttribute('aria-label',t('log'));$('product').value=t('product');
+    document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===state.lang)));
+    $('colour').options[0].textContent=t('white');$('colour').options[1].textContent=t('black');
+    const shown = state.operation?.selection||state.preview||state.selection;
+    $('variant-line').textContent=variant(shown);$('unit-value').textContent=money(490000);$('total-value').textContent=validQuantity(shown)?money(490000*shown.quantity):t('unknownTotal');
+    let status='',label='confirm';
+    if(state.mode==='stale'){status=t('stale');label='reviewAgain';}
+    else if(state.mode==='not-sent'){status=t('notSent');label='notSentButton';}
+    else if(state.mode==='unknown'){status=t('unknown');label='reconcile';}
+    else if(state.mode==='reconciling'){status=t('reconciling');label='reconcile';}
+    else if(state.mode==='unavailable'){status=t('unavailable');label='retryLoad';}
+    else if(state.mode==='signed-out'){status=t('signedOut');label='signIn';}
+    else if(state.mode==='loading'){status=t('loading');label='reviewAgain';}
+    else if(state.mode==='empty'){status=t('empty');}
+    $('review-status').textContent=status;$('confirm').textContent=t(label);
+    $('confirm').disabled=state.history||['not-sent','reconciling','loading'].includes(state.mode);
+    $('edit').textContent=t('edit');$('edit').setAttribute('aria-label',t('editName'));$('edit').disabled=!!state.operation||state.history||state.readiness!=='ready';
+    $('reply-hint').textContent=t('hint');$('reply-hint').hidden=state.mode!=='review'||state.history;
+    $('review').hidden=state.mode==='empty';$('selection-question').closest('.question').hidden=state.mode==='empty';$('selection-answer').textContent=state.mode==='empty'?t('empty'):t('selectionAnswer');
+    $('current-view').hidden=state.history;$('old-view').hidden=!state.history;$('history-note').hidden=!state.history;
+    $('stream').hidden=state.editing||state.listing;$('stream').inert=state.editing||state.listing;
+    $('sheet').hidden=!state.editing;$('history').hidden=!state.listing;
+    $('history-toggle').setAttribute('aria-expanded',String(state.listing));$('history-toggle').disabled=state.editing;
+    $('message').disabled=state.history||state.editing||state.listing;$('send').disabled=state.history||state.editing||state.listing||!$('message').value.trim();
+    $('editing-note').hidden=!(state.editing||state.listing);$('privacy').hidden=state.editing||state.listing||document.activeElement!==$('message');
+    state.messages.forEach((message,index)=>{let section=$('followups').children[index];if(!section){section=document.createElement('section');section.className='turn followup';const question=document.createElement('div');question.className='question';const q=document.createElement('p');q.textContent=message.text;question.append(q);const answer=document.createElement('div');answer.className='answer';answer.append(document.createElement('p'));section.append(question,answer);$('followups').append(section);}section.querySelector('.answer p').textContent=t(message.key);});
+  }
+  function latest(){requestAnimationFrame(()=>$('stream').scrollTo({top:$('stream').scrollHeight,behavior:'instant'}));}
+  function revealReview(initial=false){requestAnimationFrame(()=>{
+    if($('review').hidden||state.history||state.editing||state.listing||$('shell').hidden)return;
+    if(initial)$('stream').scrollTop=0;
+    else $('review').scrollIntoView({block:'nearest',behavior:'instant'});
+    updateRendered();
+  });}
+  function addMessage(text,key){state.messages.push({text,key});render();latest();}
+  function confirm(){
+    updateRendered();
+    if(state.history||state.editing||state.listing)return;
+    if(state.operation){if(state.mode!=='reconciling'){const pending=state.operation;state.mode='reconciling';render();setTimeout(()=>{if(state.operation!==pending)return;state.mode='unknown';render();$('review-status').textContent=t('stillUnknown');},550);}return;}
+    if(state.mode==='signed-out'){ $('review-status').textContent=t('signInUnavailable');return; }
+    if(state.mode==='unavailable'){const ticket=++loadTicket;state.mode='loading';state.readiness='loading';render();setTimeout(()=>{if(ticket!==loadTicket||state.readiness!=='loading')return;state.readiness='ready';invalidate();render();if(review())revealReview();},450);return;}
+    if(state.mode!=='review'||!state.preview||state.rendered!==state.revision){review();revealReview();return;}
+    state.mode='not-sent';state.attempts++;render();
+  }
+  function closeHistory(restoreFocus=true){
+    if(!state.listing)return;state.listing=false;render();$('stream').scrollTop=state.listPosition;
+    if(restoreFocus){const target=state.listReturn;target?.isConnected&&!target.disabled?target.focus({preventScroll:true}):$('history-toggle').focus({preventScroll:true});}
+  }
+  function openSheet(){
+    if(state.operation||state.history||state.listing||state.readiness!=='ready')return;
+    state.sheetReturn=document.activeElement;state.readingPosition=$('stream').scrollTop;invalidate();state.editing=true;
+    $('colour').value=state.selection.colour;$('size').value=state.selection.size;$('quantity').value=Number.isFinite(state.selection.quantity)?state.selection.quantity:'';
+    render();$('sheet-title').focus({preventScroll:true});
+  }
+  function closeSheet(restoreFocus=true){
+    if(!state.editing)return;state.editing=false;render();$('stream').scrollTop=state.readingPosition;
+    if(restoreFocus){const target=state.sheetReturn;target?.isConnected&&!target.disabled?target.focus({preventScroll:true}):$('message').focus({preventScroll:true});}
+  }
+  $('edit').addEventListener('click',openSheet);$('confirm').addEventListener('click',confirm);
+  $('close-sheet').addEventListener('click',()=>closeSheet());$('back-chat').addEventListener('click',()=>closeSheet());
+  $('edit-form').addEventListener('input',()=>{state.selection={colour:$('colour').value,size:$('size').value,quantity:$('quantity').valueAsNumber};state.preview=null;state.rendered=0;seenDetails.clear();seenRanges.clear();});
+  $('edit-form').addEventListener('submit',event=>{event.preventDefault();if(!$('edit-form').reportValidity())return;state.revision++;closeSheet(false);if(review()){revealReview();requestAnimationFrame(()=>$('confirm').focus({preventScroll:true}));}});
+  $('history-toggle').addEventListener('click',()=>{
+    if(state.editing)return;if(state.listing){closeHistory();return;}
+    state.listReturn=document.activeElement;state.listPosition=$('stream').scrollTop;invalidate();state.listing=true;render();$('history-title').focus({preventScroll:true});
+  });
+  $('close-history').addEventListener('click',()=>closeHistory());
+  $('history-old').addEventListener('click',()=>{closeHistory(false);state.readingPosition=$('stream').scrollTop;invalidate();state.history=true;render();$('stream').scrollTop=0;$('old-view').focus({preventScroll:true});});
+  function returnCurrent(){closeHistory(false);state.history=false;invalidate();render();$('stream').scrollTop=state.readingPosition;$('message').focus({preventScroll:true});}
+  $('history-current').addEventListener('click',returnCurrent);$('return-current').addEventListener('click',returnCurrent);
+  document.addEventListener('keydown',event=>{
+    if($('shell').hidden)return;
+    if(event.key==='Escape'){event.preventDefault();if(state.editing)closeSheet();else if(state.listing)closeHistory();else if(state.history)returnCurrent();else closePanel();return;}
+    if(event.key==='Tab'){
+      const focusable=[...$('shell').querySelectorAll('button,input,select,textarea,summary,[tabindex="0"]')].filter(node=>!node.disabled&&!node.closest('[hidden],[inert]')&&node.getClientRects().length);
+      if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1),active=document.activeElement;
+      if(event.shiftKey&&(active===first||!$('shell').contains(active))){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&(active===last||!$('shell').contains(active))){event.preventDefault();first.focus();}
+    }
+  });
+  document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{if(state.lang===button.dataset.lang)return;state.lang=button.dataset.lang;invalidate();render();}));
+  $('message').addEventListener('input',()=>{$('send').disabled=state.history||state.editing||state.listing||!$('message').value.trim();$('message').style.height='auto';$('message').style.height=Math.min($('message').scrollHeight,96)+'px';});
+  $('message').addEventListener('focus',()=>{$('privacy').hidden=false;});
+  $('message').addEventListener('blur',()=>{$('privacy').hidden=true;});
+  $('message').addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();$('composer').requestSubmit();}});
+  $('composer').addEventListener('submit',event=>{
+    event.preventDefault();const text=$('message').value.trim();if(!text||state.history||state.editing||state.listing)return;$('message').value='';$('message').style.height='auto';
+    const clean=text.toLocaleLowerCase().replace(/[.!]$/,'').trim();
+    if(state.operation){addMessage(text,'pendingReply');return;}
+    const quantity=previewQuantityEdit(text);
+    const uncertainEdit=/(?:\b(?:don't|do not|not|if|unless|maybe|should|could)\b|đừng|không|nếu|chưa|có thể|giả sử)/iu.test(clean)||/[?？"“”]/u.test(text);
+    if(quantity&&uncertainEdit){addMessage(text,'clarifyEdit');return;}
+    if(quantity){if(!quantity.valid){addMessage(text,'clarifyEdit');return;}state.selection.quantity=quantity.value;invalidate();addMessage(text,'mixed');return;}
+    if(['yes','đồng ý'].includes(clean)){if(state.readiness!=='ready'){addMessage(text,{ 'signed-out':'signedOut',loading:'loading',unavailable:'unavailable'}[state.readiness]);return;}updateRendered();const fresh=state.mode==='review'&&state.preview&&state.rendered===state.revision;if(fresh){confirm();addMessage(text,'notSent');}else{review();addMessage(text,'firstReview');revealReview();}return;}
+    if(['chưa','không','no','not yet'].includes(clean)){invalidate();addMessage(text,'declined');return;}
+    if(/^(?:tạo đơn|xác nhận lựa chọn và tạo đơn|create product order|confirm selection and create order)$/iu.test(clean)){if(state.readiness!=='ready'){addMessage(text,{'signed-out':'signedOut',loading:'loading',unavailable:'unavailable'}[state.readiness]);return;}review();addMessage(text,'firstReview');revealReview();return;}
+    addMessage(text,'generic');
+  });
+  function closePanel(){
+    // No commit transport in this local model. Production keeps the existing
+    // operationMode==='commit' fence and every admitted pending identity.
+    closeHistory(false);closeSheet(false);invalidate();render();
+    $('shell').hidden=true;$('veil').hidden=true;$('closed').hidden=false;$('reopen').focus();
+  }
+  $('close-chat').addEventListener('click',closePanel);
+  $('reopen').addEventListener('click',()=>{$('closed').hidden=true;$('shell').hidden=false;$('veil').hidden=false;render();$('message').disabled?$('history-toggle').focus({preventScroll:true}):$('message').focus({preventScroll:true});});
+  window.askPreview={
+    setState(mode){if(!['review','stale','unknown','loading','empty','unavailable','signed-out'].includes(mode))throw Error('Unsupported preview state');++loadTicket;state.revision++;state.history=false;state.editing=false;state.listing=false;state.readiness=['signed-out','loading','unavailable'].includes(mode)?mode:'ready';state.operation=mode==='unknown'?Object.freeze({id:'pending-local-1',selection:snapshot()}):null;state.mode=mode;state.rendered=0;seenDetails.clear();seenRanges.clear();state.preview=mode==='review'?snapshot():null;if(mode==='review')review();else render();},
+    reveal(){revealReview(true);},
+    inspect(){return JSON.parse(JSON.stringify({language:state.lang,mode:state.mode,readiness:state.readiness,history:state.history,editing:state.editing,listing:state.listing,revision:state.revision,rendered:state.rendered,selection:state.selection,preview:state.preview,operation:state.operation,localSelections:state.attempts}));}
+  };
+  $('stream').addEventListener('scroll',updateRendered,{passive:true});window.addEventListener('resize',updateRendered);
+  review();revealReview(true);requestAnimationFrame(()=>$('message').focus({preventScroll:true}));
+  const requested=new URLSearchParams(location.search).get('state');if(requested)window.askPreview.setState(requested);
+})();
+</script>
+</body>
+</html>

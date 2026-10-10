@@ -12,6 +12,11 @@ const fixture = vi.hoisted(() => {
       exists: rows.has(ref.path),
       data: () => structuredClone(rows.get(ref.path)),
     }),
+    getAll: async (...refs: Ref[]) =>
+      refs.map((ref) => ({
+        exists: rows.has(ref.path),
+        data: () => structuredClone(rows.get(ref.path)),
+      })),
     create(ref: Ref, data: Row) {
       const write = { kind: "create" as const, path: ref.path, data };
       writes.push(write);
@@ -59,7 +64,10 @@ let api: typeof import("../../functions/src/purchase-checkout");
 beforeAll(async () => {
   vi.stubEnv("FUNCTIONS_EMULATOR", "true");
   vi.stubEnv("GCLOUD_PROJECT", "demo-satsunicgo");
-  vi.stubEnv("FIREBASE_CONFIG", JSON.stringify({ projectId: "demo-satsunicgo" }));
+  vi.stubEnv(
+    "FIREBASE_CONFIG",
+    JSON.stringify({ projectId: "demo-satsunicgo" }),
+  );
   vi.stubEnv("FIRESTORE_EMULATOR_HOST", "127.0.0.1:18207");
   api = await import("../../functions/src/purchase-checkout");
 });
@@ -99,7 +107,14 @@ function request(expectedRevision: number) {
       expectedRevision,
       request: {
         market: "US",
-        items: [{ name: "Synthetic purchase", quantity: 1, variant: "", unitSourceMinor: 1200 }],
+        items: [
+          {
+            name: "Synthetic purchase",
+            quantity: 1,
+            variant: "",
+            unitSourceMinor: 1200,
+          },
+        ],
         notes: "",
       },
     },
@@ -107,31 +122,63 @@ function request(expectedRevision: number) {
 }
 
 it("rejects a valid same-revision cart owned by another account before any writes", async () => {
-  const stored = { ownerId: "synthetic-other-owner", revision: 7, updatedAt: 0, items: [existingLine] };
+  const stored = {
+    ownerId: "synthetic-other-owner",
+    revision: 7,
+    updatedAt: 0,
+    items: [existingLine],
+  };
   fixture.rows.set(cartPath, structuredClone(stored));
   const outcome = await api.purchaseCheckout.run(request(7)).then(
     (value) => ({ accepted: true, value }),
     (error: unknown) => ({ accepted: false, error }),
   );
   expect(fixture.writes.map((write) => write.path)).toEqual([]);
-  expect(outcome).toMatchObject({ accepted: false, error: { code: "permission-denied", message: "Chưa mở được giỏ." } });
+  expect(outcome).toMatchObject({
+    accepted: false,
+    error: { code: "permission-denied", message: "Chưa mở được giỏ." },
+  });
   expect(fixture.rows.get(cartPath)).toEqual(stored);
 });
 
 it("adds a request to the same-owner cart while preserving existing lines", async () => {
-  fixture.rows.set(cartPath, { ownerId: uid, revision: 7, updatedAt: 0, items: [existingLine] });
+  fixture.rows.set(cartPath, {
+    ownerId: uid,
+    revision: 7,
+    updatedAt: 0,
+    items: [existingLine],
+  });
   const result = await api.purchaseCheckout.run(request(7));
   expect(result).toMatchObject({ cart: { ownerId: uid, revision: 8 } });
   const cart = fixture.rows.get(cartPath);
-  expect(cart?.items).toEqual([existingLine, expect.objectContaining({ kind: "custom", quantity: 1, custom: expect.objectContaining({ name: "Synthetic purchase" }) })]);
-  expect(fixture.writes.filter((write) => write.path === cartPath)).toHaveLength(1);
-  expect(fixture.writes.filter((write) => write.path.startsWith("purchaseDrafts/"))).toHaveLength(1);
-  expect(fixture.writes.filter((write) => write.path === `idempotencyKeys/purchase-${uid}-${operationId}`)).toHaveLength(1);
+  expect(cart?.items).toEqual([
+    existingLine,
+    expect.objectContaining({
+      kind: "custom",
+      quantity: 1,
+      custom: expect.objectContaining({ name: "Synthetic purchase" }),
+    }),
+  ]);
+  expect(
+    fixture.writes.filter((write) => write.path === cartPath),
+  ).toHaveLength(1);
+  expect(
+    fixture.writes.filter((write) => write.path.startsWith("purchaseDrafts/")),
+  ).toHaveLength(1);
+  expect(
+    fixture.writes.filter(
+      (write) =>
+        write.path === `idempotencyKeys/purchase-${uid}-${operationId}`,
+    ),
+  ).toHaveLength(1);
   expect(fixture.writes).toHaveLength(3);
 });
 
 it("preserves the authenticated owner default when no cart exists", async () => {
   await api.purchaseCheckout.run(request(0));
-  expect(fixture.rows.get(cartPath)).toMatchObject({ ownerId: uid, revision: 1 });
+  expect(fixture.rows.get(cartPath)).toMatchObject({
+    ownerId: uid,
+    revision: 1,
+  });
   expect(fixture.writes).toHaveLength(3);
 });

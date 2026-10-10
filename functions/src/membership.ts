@@ -1,4 +1,8 @@
 import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
+import {
   isStringRoleArray,
   recentMfa,
   requireVerifiedGoogle,
@@ -337,6 +341,21 @@ export const membershipCommand = onCall(
           action: "membershipActivated",
           state: "queued",
           createdAt: now,
+          ...customerEventFields(() =>
+            customerEvent(
+              "membership_activated",
+              {
+                ownerId: target,
+                entityId: target,
+                entityVersion: term.endsAt,
+                occurredAt: now,
+              },
+              {
+                planName: typeof plan.name === "string" ? plan.name : "",
+                endsAt: term.endsAt,
+              },
+            ),
+          ),
         });
         tx.create(db.collection("membershipHistory").doc(), {
           ...value,

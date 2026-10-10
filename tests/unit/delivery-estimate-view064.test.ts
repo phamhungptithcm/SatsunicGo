@@ -203,3 +203,26 @@ it("accepts redacted tracking DTO with freshness but revalidates date/state and 
   expect(malformed).toContain("Chưa có thời gian giao dự kiến.");
   expect(malformed).not.toContain("PRIVATE");
 });
+it("compact aggregate keeps exact instants and recording range in accessible details", () => {
+  const text = renderToStaticMarkup(
+    createElement(DeliveryEstimate, {
+      aggregate: true,
+      compact: true,
+      value: {
+        source: "staff_aggregate",
+        startAt: now + 1000,
+        endAt: now + 2000,
+        oldestRecordedAt: now - 500,
+        latestRecordedAt: now - 100,
+      },
+      observedAt: now,
+      language: "en",
+    }),
+  );
+  expect(text).toContain("Estimated delivery");
+  expect(text).toContain("Time details");
+  expect(text).toContain("Staff estimate; dates may change.");
+  expect(text).toContain("Oldest estimate:");
+  expect(text).toContain(new Date(now + 1000).toISOString());
+  expect(text).toContain(new Date(now + 2000).toISOString());
+});

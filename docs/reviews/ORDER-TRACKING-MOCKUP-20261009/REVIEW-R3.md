@@ -1,0 +1,9 @@
+# Compact timeline revision 3
+
+Authorized scope: user requested smaller, cleaner milestones with no wrapped text. Only prototype CSS changed. No application implementation or data meaning changes. Existing degraded intelligence brief and prototype boundaries apply.
+
+Changes: desktop icons 46→34px; minimum milestone height 136→88px; date and hour on one line; labels remain complete and nowrap; current/next badges sit above desktop nodes. Mobile uses 30px icons and 62px rows with one-line labels and dates underneath. Narrow desktop timeline can scroll inside its panel rather than wrapping labels. No motion, timestamp, ETA, event or financial behavior changed.
+
+Review: inspected actual 1440px desktop and 320px mobile. All six labels fit without clipping; recorded times occupy a 15px single line on mobile. Default, warehouse, hold and delivered fit at 320px with document width 320. Date/year/time, timezone, accessible names, focus styles, current-state text and full labels retained. Images: r3-desktop.jpg, r3-mobile-320.jpg. Source formatting and diff checks passed. No new issues found in this bounded prototype CSS review. Earlier R2 language/motion checks apply to unchanged behavior; full AT/zoom/production checks remain NOT_RUN. Manual prototype design review PASSED; application/release readiness NOT_READY. No commit, deploy, data mutation or runtime restart.
+
+Product principles: Purpose—same progress/time task; Agency—same step controls; Responsibility—same unknown/estimate semantics; Familiarity—same blue account style; Flexibility—320px verified; Simplicity—less vertical spacing; Craft—nowrap date and complete labels; Delight—less visual noise. All pass for this visual prototype scope. Formal engineering runtime recording unavailable as documented in R2. Token usage/cost Unavailable. Memory candidates None.

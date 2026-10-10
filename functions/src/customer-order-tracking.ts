@@ -18,7 +18,7 @@ const shipment = z.object({
   route: z.string().max(200),
   carrier: z.string().max(100).optional(),
   tracking: z.string().max(100).optional(),
-  updatedAt: z.number().int().positive().optional(),
+  updatedAt: z.number().int().positive().max(8_640_000_000_000_000).optional(),
   allocations: z
     .array(
       z.object({
@@ -30,6 +30,11 @@ const shipment = z.object({
     .max(100),
 });
 const safeActions = new Set([
+  "parcelDispatch",
+  "parcelPacked",
+  "parcelProgress",
+  "parcelDelivered",
+  "deliveryEstimateUpdated",
   "catalogCheckout",
   "submitRequest",
   "issueQuote",
@@ -135,6 +140,7 @@ export const customerOrderTracking = onCall(
       );
       let shipmentsPartial =
         (rawIds !== undefined && !validIds) ||
+        (validIds && parcelIds.length !== (rawIds as string[]).length) ||
         (shippingStage && parcelIds.length === 0);
       for (let i = 0; i < projections.length; i++) {
         const parsed = shipment.safeParse(projections[i].data());
@@ -142,6 +148,7 @@ export const customerOrderTracking = onCall(
           !parsed.success ||
           parsed.data.ownerId !== uid ||
           parsed.data.id !== parcelIds[i] ||
+          (parsed.data.updatedAt ?? 0) > observedAt ||
           !parsed.data.allocations.some((a) => a.orderId === orderId)
         ) {
           shipmentsPartial = true;
@@ -200,7 +207,7 @@ export const customerOrderTracking = onCall(
         const parsed = z
           .object({
             action: z.string().max(80),
-            createdAt: z.number().int().positive(),
+            createdAt: z.number().int().positive().max(observedAt),
           })
           .safeParse(event.data());
         if (!parsed.success) {

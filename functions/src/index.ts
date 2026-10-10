@@ -1,3 +1,4 @@
+import { orderCustomerFields } from "./customer-notification-events";
 import {
   isStringRoleArray,
   recentMfa,
@@ -7,6 +8,7 @@ import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { normalizeCustomerName } from "../../packages/domain/crm";
+import { fullyDelivered, type Parcel } from "../../packages/domain/shipping";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import {
@@ -77,6 +79,7 @@ export const command = onCall(config, async (req) => {
         ? (access.data()?.roles ?? [])
         : [];
     let o = snapshot.data() as Order;
+    let parcelDeliveryConfirmed = false;
     let finance: Record<string, unknown> | undefined;
     let bankRef;
     let bankData;
@@ -136,6 +139,41 @@ export const command = onCall(config, async (req) => {
           "aborted",
           "Dữ liệu đã thay đổi. Tải lại để tiếp tục.",
         );
+      if (d.action === "confirmReceipt") {
+        const allocation = await tx.get(db.doc(`packageAllocations/${id}`));
+        if (allocation.exists) {
+          const parsedIds = z
+            .array(z.string().regex(/^[a-zA-Z0-9-]{1,80}$/))
+            .min(1)
+            .max(60)
+            .safeParse(allocation.get("parcelIds"));
+          if (
+            !parsedIds.success ||
+            new Set(parsedIds.data).size !== parsedIds.data.length
+          )
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa xác nhận được đủ kiện của đơn.",
+            );
+          const parcels = await Promise.all(
+            parsedIds.data.map((parcelId) =>
+              tx.get(db.doc(`packages/${parcelId}`)),
+            ),
+          );
+          try {
+            parcelDeliveryConfirmed =
+              parcels.every((parcel) => parcel.exists) &&
+              fullyDelivered(o, parcels.map((parcel) => parcel.data() as Parcel));
+          } catch {
+            parcelDeliveryConfirmed = false;
+          }
+          if (!parcelDeliveryConfirmed)
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa xác nhận được đủ kiện của đơn.",
+            );
+        }
+      }
     }
     if (d.action === "submitRequest" && previous.exists)
       return previous.data()?.result;
@@ -321,7 +359,10 @@ export const command = onCall(config, async (req) => {
               );
           }
         }
-        o = evolve(o, d.action as Action, d.payload, now);
+        o = evolve(
+          o, d.action as Action, d.payload, now,
+          parcelDeliveryConfirmed ? { parcelDeliveryConfirmed: true } : undefined,
+        );
         if (["recordPurchase", "receive"].includes(d.action))
           tx.create(
             db
@@ -430,6 +471,7 @@ export const command = onCall(config, async (req) => {
       action: d.action,
       state: "queued",
       createdAt: now,
+      ...orderCustomerFields(d.action, o, now, typeof finance?.amount === "number" ? finance.amount : undefined),
     });
     return result;
   });
@@ -548,6 +590,8 @@ export { askFeedbackWithdraw, askFeedbackInbox, askFeedbackCleanup, askFeedbackE
 export { purchaseCheckout } from "./purchase-checkout";
 import { purchaseDemoPayment as guardedPurchaseDemoPayment } from "./purchase-checkout";
 export const purchaseDemoPayment = process.env.FUNCTIONS_EMULATOR === "true" ? guardedPurchaseDemoPayment : undefined;
+import { purchaseDemoWebhook as guardedPurchaseDemoWebhook } from "./purchase-demo-gateway";
+export const purchaseDemoWebhook = process.env.FUNCTIONS_EMULATOR === "true" ? guardedPurchaseDemoWebhook : undefined;
 export { purchaseBalanceCheckout } from "./purchase-checkout";
 export { purchaseCheckoutSetup } from "./purchase-checkout";
 
@@ -557,3 +601,17 @@ export { purchaseOrderRead } from "./purchase-checkout";
 export { purchaseReceipt, purchaseReceiptWorker, purchaseReceiptRecovery } from "./purchase-receipts";
 
 export { purchaseSourcingChange } from "./purchase-adjustment";
+
+// SePay sandbox endpoints are never part of a production release.
+import { purchaseSePayPayment as sandboxSePayPayment, purchaseSePayIpn as sandboxSePayIpn, purchaseSePayInboxWorker as sandboxSePayInboxWorker } from "./purchase-sepay";
+const localSePay = process.env.FUNCTIONS_EMULATOR === "true" && process.env.GCLOUD_PROJECT === "demo-satsunicgo";
+export const purchaseSePayPayment = localSePay ? sandboxSePayPayment : undefined;
+export const purchaseSePayIpn = localSePay ? sandboxSePayIpn : undefined;
+export const purchaseSePayInboxWorker = localSePay ? sandboxSePayInboxWorker : undefined;
+
+export { customerNotificationCreated } from "./customer-notification-delivery";
+
+export { notificationPreferences } from "./notification-preferences";
+export { deliverSubscriptionEmail } from "./subscription-email";
+
+export { publicOrderTracking, managePublicTrackingCode } from "./public-order-tracking";

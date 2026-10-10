@@ -1,0 +1,15 @@
+# Editorial and publication review
+
+Task: SATSUNICGO-BLOG-20261007. Scope: author a bilingual blog, generate a cover, upload user-supplied screenshots and existing original architecture artwork, and publish via the authenticated HunpeoLabs Studio. User explicitly requested publication. No application code, configuration, runtime, payment, identity, or business records changed by this task.
+
+Repository intelligence: DEGRADED in both repositories; stale/unhealthy optional indexes. Bounded native source reads verified the CMS fields, image validation, and current SatsunicGo pilot restrictions. Source evidence is not live AI acceptance. The article attributes the broad workflow to the target design, not to an already deployed product.
+
+Cycle 1: manuscript and rendered desktop/mobile preview reviewed. Found the first cover's lettering clipped by the reader's 1000 x 300 cover frame. Generated a new 3:1 cover without text; original retained. Image-upload description dialogs handled through Studio; all six body image instances have natural alt text. Examples are explicitly illustrative, with no invented customers, revenue, prices, shipment outcomes or medical advice. Source chart is the project's original SatsunicGo design, not the third-party reference chart.
+
+Language/content integrity: English first, Vietnamese second; corresponding storyline, same business meaning. LLM, context, chunking and vector DB retained as familiar engineering terms. The customer retains confirmation authority; request submission, purchase, payment and fulfillment are separate. Health questions demonstrate information discovery, not diagnosis, treatment, dosage or safety guarantees. Customer activity analytics is a permitted-data future extension, not a claimed live system.
+
+Human-centered content review: Purpose—explain the product through one everyday purchase. Agency—explicit customer review and confirmation. Responsibility—mark proposed capabilities and information limits. Familiarity—ordinary shopping questions, natural Vietnamese. Flexibility—parallel EN/VI sections and contextual links. Simplicity—one journey before architecture detail. Craft—captions, alt text, paired diagrams, SEO and responsive reader checks. Delight—restrained founder voice and Lego metaphor. Target platform: existing web blog; no UI strings or controls changed. Functional loading/error/authentication states are unchanged and outside this editorial task.
+
+Preview evidence: 1512 px desktop has no document overflow; 390 px mobile scrollWidth equals width. Body image loading is lazy, so unloaded off-screen images are not considered failed. Loaded screenshots and EN diagram verified after navigating to their sections. Cover final publication/readback checks are recorded separately in PUBLICATION.md.
+
+Review scope exclusions: no application implementation or production AI rollout, no product/payment/provider acceptance tests, no full-system security audit. Build/test/deploy NOT_APPLICABLE to this content-only publication. Governed runtime CLI unavailable on PATH; no runtime review receipt claimed. Token usage and billed cost unavailable. Memory candidates: None.

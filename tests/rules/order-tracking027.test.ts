@@ -194,7 +194,46 @@ it("latest50 history is chronological and sanitized; malformed stage fails close
     service.customerOrderTracking.run(request()),
   ).rejects.toMatchObject({ code: "failed-precondition" });
 });
+it("invalid and future activity dates are omitted; duplicate parcels disclose partial data", async () => {
+  const now = Date.now();
+  await db
+    .doc("orders/" + id + "/timeline/future")
+    .set({ action: "dispatch", createdAt: now + 86400000 });
+  await db
+    .doc("orders/" + id + "/timeline/invalid-date")
+    .set({ action: "track", createdAt: 9e16 });
+  await db
+    .doc("packageAllocations/" + id)
+    .set({ parcelIds: [prefix + "-duplicate", prefix + "-duplicate"] });
+  const parcel = db.doc(
+    "customerShipments/" + uid + "-" + prefix + "-duplicate",
+  );
+  await parcel.set({
+    id: prefix + "-duplicate",
+    ownerId: uid,
+    state: "in_transit",
+    route: "JP-VN",
+    allocations: [{ orderId: id, line: 0, quantity: 1 }],
+  });
+  const value = await service.customerOrderTracking.run(request());
+  expect(value.timeline.every((e) => e.createdAt <= value.observedAt)).toBe(
+    true,
+  );
+  expect(value.timelinePartial).toBe(true);
+  expect(value.shipmentsPartial).toBe(true);
+  expect(value.shipments).toHaveLength(1);
+  expect(value.estimate).toBeNull();
+  await db
+    .doc("packageAllocations/" + id)
+    .set({ parcelIds: [prefix + "-duplicate"] });
+  await parcel.update({ updatedAt: Date.now() + 86400000 });
+  const malformed = await service.customerOrderTracking.run(request());
+  expect(malformed.shipments).toEqual([]);
+  expect(malformed.shipmentsPartial).toBe(true);
+});
 afterAll(async () => {
+  for (const collection of await db.listCollections())
+    await db.recursiveDelete(collection);
   await db.terminate();
   await deleteApp(getApp());
 });

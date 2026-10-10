@@ -1,0 +1,1642 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>SatsunicGo · checkout sau giỏ hàng</title>
+    <link rel="stylesheet" href="/src/styles/global.css?direct" />
+    <link rel="stylesheet" href="/src/styles/public-ux.css?direct" />
+    <link
+      rel="stylesheet"
+      href="/src/features/requests/request-form.css?direct"
+    />
+    <link rel="stylesheet" href="/src/shared/page-tabs.css?direct" />
+    <link rel="stylesheet" href="/src/features/invoices/documents.css?direct" />
+    <style>
+      .previewNotice {
+        padding: 12px 28px;
+        border-bottom: 1px solid #e1e7ff;
+        background: #f1f4ff;
+        color: #36477b;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewNotice strong {
+        color: #111c35;
+      }
+      .previewMain {
+        padding-top: 32px;
+      }
+      .previewContext {
+        font-size: 12px;
+        color: #68758d;
+        margin: 0 0 18px;
+      }
+      .previewMain [hidden] {
+        display: none !important;
+      }
+      .previewMain p {
+        line-height: 1.6;
+      }
+      .previewMain button,
+      .previewMain input,
+      .previewMain select {
+        font: inherit;
+      }
+      .previewMain button:focus-visible,
+      .previewMain a:focus-visible,
+      .previewMain input:focus-visible,
+      .previewMain textarea:focus-visible,
+      .previewMain select:focus-visible {
+        outline: 3px solid #163cff;
+        outline-offset: 3px;
+      }
+      .previewPanel {
+        min-width: 0;
+        outline-offset: 5px;
+      }
+      .previewPanel h2 {
+        font-size: 20px;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+      }
+      .previewPanel h3 {
+        font-size: 15px;
+        margin: 0 0 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      .card {
+        border: 1px solid #e6eaf2;
+        border-radius: 14px;
+        padding: 20px;
+        min-width: 0;
+      }
+      .muted,
+      .hint {
+        color: #68758d;
+      }
+      .hint,
+      .small {
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .hint {
+        margin: 8px 0 16px;
+      }
+      .field label,
+      .requestPrice label {
+        display: grid;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .previewMain input:not([type="checkbox"]),
+      .previewMain select,
+      .previewMain textarea:not(.productComposer textarea) {
+        border: 1px solid #dce2ed;
+        border-radius: 10px;
+        padding: 11px 12px;
+        background: #fff;
+        color: #111c35;
+        min-height: 44px;
+        min-width: 0;
+        width: 100%;
+      }
+      .requestProducts .productComposer textarea {
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+      }
+      .requestPrice {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 140px;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .requestPrice input[readonly] {
+        background: #f5f7fb;
+      }
+      .previewMain .itemOptions label {
+        display: grid;
+        gap: 7px;
+        font-weight: 500;
+      }
+      .requestExtras {
+        display: grid;
+      }
+      .requestExtras label {
+        display: grid;
+        gap: 7px;
+      }
+      .requestItem {
+        border: 1px solid #e6eaf2;
+      }
+      .stepSummary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 20px;
+        align-items: start;
+      }
+      .stepSummary .requestReview {
+        min-width: 0;
+      }
+      .stepSummary .requestReview p {
+        margin: 8px 0;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: baseline;
+        padding: 8px 0;
+        font-size: 13px;
+      }
+      .row span:first-child {
+        min-width: 0;
+      }
+      .row strong,
+      .row span:last-child {
+        white-space: nowrap;
+      }
+      .total {
+        border-top: 1px solid #e6eaf2;
+        margin-top: 12px;
+        padding-top: 16px;
+        font-size: 13px;
+      }
+      .large {
+        font-size: 28px;
+        font-weight: 600;
+        color: #163cff;
+        letter-spacing: -0.035em;
+        line-height: 1.25 !important;
+        margin: 6px 0 18px;
+      }
+      .note {
+        padding: 12px 14px;
+        border: 1px solid #d5defb;
+        border-radius: 10px;
+        background: #f2f5ff;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+      .neutral {
+        background: #f5f7fb;
+        border-color: #e6eaf2;
+      }
+      .previewMain .primary {
+        width: 100%;
+        font-size: 14px;
+        min-height: 48px;
+      }
+      .previewMain .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #e2e6ef;
+        border-radius: 10px;
+        background: #fff;
+        color: #111c35;
+        padding: 12px 16px;
+        margin: 0;
+        min-height: 44px;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .quickRequestPage.previewMain label.consent {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 18px 0;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewMain .consent input {
+        width: 18px !important;
+        height: 18px;
+        flex: 0 0 18px;
+        margin: 2px 0;
+        accent-color: #163cff;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .status {
+        padding: 12px 14px;
+        border: 1px solid #e0e6ef;
+        border-radius: 10px;
+        background: #f5f7fb;
+        font-size: 13px;
+        margin-top: 16px;
+        line-height: 1.6;
+      }
+      .tag {
+        display: inline-flex;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: #f4f6fa;
+        color: #53627b;
+        font-size: 11px;
+      }
+      .tagblue {
+        background: #eef2ff;
+        color: #253987;
+      }
+      .scroll {
+        overflow-x: auto;
+        max-width: 100%;
+      }
+      .previewMain table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .previewMain th,
+      .previewMain td {
+        text-align: left;
+        padding: 12px 8px;
+        border-bottom: 1px solid #e6eaf2;
+        vertical-align: top;
+      }
+      .previewMain th:last-child,
+      .previewMain td:last-child {
+        text-align: right;
+      }
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+      .product {
+        padding: 14px 0;
+        border-top: 1px solid #e6eaf2;
+        border-bottom: 1px solid #e6eaf2;
+        margin: 16px 0;
+      }
+      .product small {
+        display: block;
+        color: #68758d;
+        font-size: 12px;
+        margin-top: 6px;
+      }
+      .receiptBrand {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -1px;
+      }
+      .receiptBrand span {
+        color: #163cff;
+      }
+      .salesStatement.card {
+        margin: 0;
+      }
+      .footer {
+        border-top: 1px solid #e6eaf2;
+        padding-top: 20px;
+        margin-top: 32px;
+        color: #68758d;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .previewMain .textbutton {
+        min-height: 44px;
+      }
+      .catalogChoices {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 100px;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .catalogChoices label {
+        display: grid;
+        gap: 7px;
+        font-size: 12px;
+      }
+      .receiptLinks {
+        margin-top: 18px;
+      }
+      @media (max-width: 760px) {
+        .grid,
+        .stepSummary {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .previewNotice {
+          padding: 10px 20px;
+        }
+        .quickRequestPage.previewMain {
+          padding: 24px 16px 40px;
+        }
+        .previewMain .requestHeading h1 {
+          font-size: 26px;
+        }
+        .previewMain .card {
+          padding: 16px;
+        }
+      }
+      @media (max-width: 640px) {
+        .requestPrice,
+        .catalogChoices {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .quickRequestPage .requestStageTitle {
+          line-height: 1.4;
+        }
+        .previewMain .requestHeading {
+          margin-bottom: 20px;
+        }
+        .row {
+          gap: 8px;
+          font-size: 12px;
+        }
+        .row span:last-child {
+          white-space: normal;
+          text-align: right;
+        }
+        .large {
+          font-size: 25px;
+        }
+        .quickRequestPage .requestInformation {
+          padding: 12px;
+        }
+        .previewMain .secondary {
+          width: 100%;
+        }
+        .previewMain .quickRequestForm {
+          gap: 16px 12px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .previewMain * {
+          transition: none !important;
+          animation: none !important;
+          scroll-behavior: auto;
+        }
+      }
+
+      .unifiedFields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .unifiedFields label {
+        display: grid;
+        gap: 7px;
+        font-size: 13px;
+      }
+      .unifiedFields .wide {
+        grid-column: 1/-1;
+      }
+      .cartLine {
+        padding: 20px 0;
+        border-bottom: 1px solid #e2e6ef;
+        display: grid;
+        grid-template-columns: 24px minmax(0, 1fr);
+        gap: 12px;
+      }
+      .cartLine h3 {
+        margin: 8px 0;
+        overflow-wrap: anywhere;
+      }
+      .cartLine p {
+        margin: 6px 0;
+      }
+      .cartLine input[type="checkbox"],
+      .previewMain .consent input {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin: 3px 0;
+      }
+      .cartLine .lineControls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .cartLine .lineControls label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 12px;
+      }
+      .cartLine .lineControls input {
+        width: 74px;
+      }
+      .cartLine .lineControls strong {
+        margin-left: auto;
+      }
+      .previewMain .consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        line-height: 1.6;
+        font-size: 13px;
+      }
+      .quickRequestPage .checkoutSteps {
+        margin: 16px 0 24px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-column: auto;
+        grid-row: auto;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid #e6eaf2;
+        padding: 0 0 18px;
+        gap: 4px;
+      }
+      .quickRequestPage .checkoutSteps button {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-size: 12px;
+      }
+      .quickRequestPage .checkoutSteps button:not(:last-child)::after {
+        top: 21px;
+        left: 50%;
+        width: calc(100% + 4px);
+        height: 2px;
+      }
+      .allocationLine {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e6ef;
+        font-size: 13px;
+      }
+      .allocationLine span {
+        overflow-wrap: anywhere;
+        min-width: 0;
+      }
+      .staffItem {
+        border-bottom: 1px solid #e2e6ef;
+        padding: 18px 0;
+        overflow-wrap: anywhere;
+      }
+      .staffItem p {
+        margin: 8px 0;
+      }
+      #recipientSummary {
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+      }
+      .checkoutFooter {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .checkoutFooter button {
+        min-height: 44px;
+      }
+      .checkoutAside {
+        position: sticky;
+        top: 120px;
+      }
+      .previewMain .card .row {
+        flex-wrap: wrap;
+      }
+      .previewMain .card .row span:last-child {
+        white-space: normal;
+        text-align: right;
+      }
+      @media (max-width: 700px) {
+        .unifiedFields {
+          grid-template-columns: 1fr;
+        }
+        .checkoutSteps button {
+          padding: 10px 5px;
+          font-size: 12px;
+        }
+        .checkoutAside {
+          position: static;
+        }
+        .checkoutSteps {
+          gap: 4px;
+        }
+        .checkoutFooter {
+          flex-wrap: wrap;
+        }
+        .lineControls strong {
+          width: 100%;
+          margin-left: 0 !important;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="/src/features/cart/cart.css?direct" />
+    <link rel="stylesheet" href="/docs/previews/payment-upfront-r4.css" />
+  </head>
+  <body class="paymentDesignR4">
+    <a class="skip" href="#main">Đến nội dung chính</a>
+    <header class="topbar" data-menu-open="false">
+      <div class="navShell">
+        <a class="brand" href="/" aria-label="SatsunicGo — Trang chủ"
+          ><svg
+            class="brandMark"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m16 3 12 7-12 7-12-7 12-7Z" />
+            <path d="M4 10v13l12 7 12-7V10M16 17v13M10 6l12 7" /></svg
+          ><span class="brandWord">Satsunic<span>Go</span></span></a
+        >
+        <nav
+          id="primary-navigation"
+          aria-label="Điều hướng chính"
+          data-open="false"
+        >
+          <a href="#catalog" data-go="catalog">Sản phẩm</a
+          ><a href="#initial" data-go="initial">Mua hộ</a
+          ><a href="/fees">Biểu phí</a><a href="/membership">Membership</a
+          ><a href="/posts">Bài viết</a><a href="/support">Hỗ trợ</a>
+        </nav>
+        <div class="headerActions">
+          <a
+            class="headerCart107"
+            href="/cart"
+            id="headerCart"
+            aria-label="Giỏ hàng"
+            ><svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M3 3h2l2.4 11.5a2 2 0 0 0 2 1.5H18a2 2 0 0 0 2-1.5L22 7H6"
+              />
+              <circle cx="10" cy="21" r="1" />
+              <circle cx="18" cy="21" r="1" /></svg
+            ><span id="cartCount" aria-hidden="true">0</span></a
+          ><button
+            class="menuToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Mở điều hướng"
+          >
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <div class="previewNotice">
+      <strong>Bản thiết kế r4</strong
+      ><span
+        >Checkout mẫu sau giỏ hàng · 2 dòng / 3 món minh họa, chưa kết nối
+        backend/PayOS, không chuyển tiền thật.</span
+      >
+    </div>
+    <main class="page quickRequestPage previewMain" id="main" tabindex="-1">
+      <p class="previewContext">Xem từng màn hình thiết kế</p>
+      <div
+        class="pageTabs"
+        role="tablist"
+        aria-label="Màn hình thiết kế thanh toán"
+      >
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-initial"
+          aria-controls="initial"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="initial"
+        >
+          Mua hộ
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-catalog"
+          aria-controls="catalog"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="catalog"
+        >
+          Sản phẩm
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-cart"
+          aria-controls="cart"
+          aria-selected="true"
+          tabindex="0"
+          data-panel="cart"
+        >
+          Checkout
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-payment"
+          aria-controls="payment"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="payment"
+        >
+          Thanh toán
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-additional"
+          aria-controls="additional"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="additional"
+        >
+          Phát sinh
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-document"
+          aria-controls="document"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="document"
+        >
+          Phiếu PDF
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="pageTab"
+          id="preview-tab-staff"
+          aria-controls="staff"
+          aria-selected="false"
+          tabindex="-1"
+          data-panel="staff"
+        >
+          Nhân viên
+        </button>
+      </div>
+
+      <section
+        class="previewPanel"
+        id="initial"
+        role="tabpanel"
+        aria-labelledby="preview-tab-initial"
+        tabindex="0"
+        hidden
+      >
+        <header class="requestHeading">
+          <div class="requestHeadingRow">
+            <h1 id="heading" tabindex="-1">Bạn muốn mua gì?</h1>
+            <div
+              class="requestMarkets"
+              role="group"
+              aria-label="Quốc gia mua hàng"
+            >
+              <button type="button" aria-pressed="true">Mỹ</button
+              ><button type="button" aria-pressed="false" disabled>
+                Nhật Bản</button
+              ><button type="button" aria-pressed="false" disabled>
+                Hàn Quốc
+              </button>
+            </div>
+          </div>
+          <p>
+            Giữ thông tin món bạn muốn mua. Thêm yêu cầu vào giỏ, rồi nhập địa
+            chỉ và thanh toán cùng các sản phẩm khác.
+          </p>
+          <a class="requestCatalogLink" href="#catalog" id="catalogLink"
+            >Chọn sản phẩm niêm yết để thêm vào cùng giỏ →</a
+          >
+          <p class="hint">
+            Mẫu tương tác này dùng USD; các thị trường còn lại sẽ dùng tiền
+            nguồn tương ứng khi triển khai.
+          </p>
+        </header>
+        <form class="quickRequestForm" id="requestDraft" novalidate>
+          <nav class="requestStepper" aria-label="Các bước tạo yêu cầu">
+            <button
+              type="button"
+              data-step="0"
+              class="isCurrent"
+              aria-current="step"
+            >
+              <span aria-hidden="true">1</span
+              ><span>Món hàng<small>Đang nhập</small></span>
+            </button>
+            <button type="button" data-step="1" disabled>
+              <span aria-hidden="true">2</span
+              ><span>Thông tin thêm<small></small></span>
+            </button>
+            <button type="button" data-step="2" disabled>
+              <span aria-hidden="true">3</span
+              ><span>Kiểm tra<small></small></span>
+            </button>
+          </nav>
+          <h2 class="requestStageTitle" id="stageTitle" tabindex="-1">
+            Món hàng
+          </h2>
+          <div class="requestProducts" data-stage="0">
+            <div class="requestItem">
+              <label class="requestFieldLabel" for="product"
+                >Tên hoặc link sản phẩm
+                <span class="requiredMark" aria-hidden="true">*</span></label
+              >
+              <div class="productComposer">
+                <textarea
+                  id="product"
+                  required
+                  maxlength="2400"
+                  rows="2"
+                  aria-describedby="producterror"
+                >
+Tai nghe không dây</textarea>
+                <div class="composerBar">
+                  <span>Nhập tên hoặc link tại nơi bán</span>
+                </div>
+              </div>
+              <p id="producterror" class="error" role="alert" hidden>
+                Nhập tên hoặc link sản phẩm để tiếp tục.
+              </p>
+              <div class="itemOptions">
+                <div class="twoCols">
+                  <label
+                    >Số lượng
+                    <input
+                      id="quantity"
+                      type="number"
+                      min="1"
+                      max="100"
+                      step="1"
+                      value="2"
+                      required
+                      aria-describedby="quantityerror"
+                  /></label>
+                  <label
+                    >Mẫu, màu, kích cỡ
+                    <input id="variant" maxlength="200" value="Màu trắng"
+                  /></label>
+                  <label
+                    >Tình trạng
+                    <select id="condition">
+                      <option value="new">Hàng mới</option>
+                      <option value="used">Hàng đã qua sử dụng</option>
+                      <option value="any">Có thể xem cả hai</option>
+                    </select></label
+                  >
+                </div>
+              </div>
+              <p id="quantityerror" class="error" role="alert" hidden>
+                Nhập số lượng nguyên từ 1 đến 100.
+              </p>
+              <div class="requestPrice">
+                <label
+                  >Giá bạn đã tìm hiểu / mỗi món
+                  <input
+                    id="price"
+                    type="number"
+                    min="0.01"
+                    max="1000000"
+                    step="0.01"
+                    value="58"
+                    required
+                    aria-describedby="pricehelp priceerror" /></label
+                ><label
+                  >Tiền nguồn
+                  <input
+                    id="currency"
+                    value="USD"
+                    readonly
+                    aria-describedby="pricehelp"
+                /></label>
+              </div>
+              <p id="pricehelp" class="hint">
+                Giá dự kiến bạn tìm thấy tại nơi bán. Giá mua thực tế sẽ được
+                nhân viên xác nhận.
+              </p>
+              <p id="priceerror" class="error" role="alert" hidden>
+                Nhập giá USD lớn hơn 0, tối đa 1.000.000, với tối đa 2 chữ số
+                thập phân.
+              </p>
+              <p id="totalerror" class="error" role="alert" hidden>
+                Tổng số tiền vượt giới hạn của mẫu. Kiểm tra giá và số lượng.
+              </p>
+            </div>
+            <p class="hint">
+              Form trong ứng dụng sẽ giữ chức năng thêm món, ảnh và bản nháp
+              đang có. Mẫu này chỉ minh họa một món hàng.
+            </p>
+          </div>
+          <aside class="requestInformation" data-stage="1" hidden>
+            <span class="requestOptional">Không bắt buộc</span>
+            <div class="requestExtras">
+              <label class="requestNotes"
+                >Ghi chú
+                <textarea
+                  id="notes"
+                  rows="3"
+                  maxlength="2400"
+                  placeholder="Điều cần lưu ý khi mua…"
+                ></textarea>
+              </label>
+              <label>Cửa hàng <input id="store" maxlength="160" /></label
+              ><label
+                >Ngân sách tham khảo (₫)
+                <input
+                  id="budget"
+                  type="number"
+                  min="0"
+                  max="1000000000000"
+                /><small
+                  >Thông tin tham khảo; không thay thế số tiền thanh
+                  toán.</small
+                ></label
+              ><label
+                >Ngày mong muốn <input id="desired" type="date" /><small
+                  >Cần nhân viên xác nhận.</small
+                ></label
+              >
+            </div>
+          </aside>
+          <div class="stepSummary" data-stage="2" hidden>
+            <section class="requestReview" aria-label="Tóm tắt yêu cầu">
+              <div class="requestReviewHeading">
+                <h3>Mỹ · 1 món hàng</h3>
+                <button class="textbutton" type="button" data-edit="0">
+                  Chỉnh sửa món
+                </button>
+              </div>
+              <ul>
+                <li>
+                  <strong id="reviewProduct">Tai nghe không dây</strong
+                  ><span id="reviewChoice">2 chiếc · Màu trắng · Hàng mới</span
+                  ><span id="reviewPrice">58 USD / chiếc</span>
+                </li>
+              </ul>
+              <div class="requestReviewHeading">
+                <h3>Thông tin thêm</h3>
+                <button class="textbutton" type="button" data-edit="1">
+                  Chỉnh sửa thông tin
+                </button>
+              </div>
+              <p id="reviewExtras">Không có thông tin thêm.</p>
+              <p class="note neutral">
+                Tỷ giá mẫu: 25.000 VND/USD. Phí mua hộ mẫu: 5%. Khi triển khai,
+                backend tính theo chính sách đã duyệt và khóa phiên bản khi bạn
+                xác nhận.
+              </p>
+            </section>
+            <aside class="card">
+              <h3>Số tiền ban đầu</h3>
+              <div class="row">
+                <span>Giá hàng dự kiến</span
+                ><strong id="goods">2.900.000 ₫</strong>
+              </div>
+              <div class="row">
+                <span>Phí mua hộ mẫu</span><span id="fee">145.000 ₫</span>
+              </div>
+              <div class="row">
+                <span>Vận chuyển</span><span class="muted">Chưa chốt</span>
+              </div>
+              <div class="total">Tạm tính để thêm vào giỏ</div>
+              <p class="large" id="initialtotal">3.045.000 ₫</p>
+              <p class="note">
+                Cước vận chuyển chưa nằm trong số tiền này. Bạn sẽ xem và duyệt
+                khoản trả thêm sau khi giá thực tế và cước được chốt.
+              </p>
+              <p class="hint">
+                <strong>Cần tìm mua</strong> · Nhân viên sẽ tìm nơi bán và kiểm
+                tra giá sau khi khoản thanh toán ban đầu được xác nhận. Bạn xem
+                tổng và xác nhận thanh toán tại giỏ.
+              </p>
+            </aside>
+          </div>
+          <div class="requestFinalActions">
+            <button type="button" class="requestBack" id="back" hidden>
+              Quay lại</button
+            ><button type="button" class="primary requestSubmit" id="next">
+              Thông tin thêm →</button
+            ><button
+              type="button"
+              class="primary requestSubmit"
+              id="start"
+              disabled
+              hidden
+            >
+              Thêm vào giỏ hàng
+            </button>
+            <p class="hint" id="draftStatus" role="status">
+              Bản thiết kế; thao tác không tạo đơn hoặc ghi nhận tiền.
+            </p>
+          </div>
+        </form>
+      </section>
+      <section
+        class="previewPanel"
+        id="catalog"
+        role="tabpanel"
+        aria-labelledby="preview-tab-catalog"
+        tabindex="0"
+        hidden
+      >
+        <h2 tabindex="-1">Đặt mua sản phẩm niêm yết</h2>
+        <div class="grid">
+          <div class="card">
+            <span class="tag">Listing mẫu · giá trọn gói</span>
+            <h3 style="margin-top: 16px">
+              Tai nghe không dây · phiên bản niêm yết
+            </h3>
+            <p class="muted small">Giá niêm yết: 1.650.000 ₫ / chiếc</p>
+            <div class="catalogChoices">
+              <label
+                >Mẫu sản phẩm
+                <select id="catalogVariant">
+                  <option>Màu trắng</option>
+                  <option>Màu đen</option>
+                </select></label
+              ><label
+                >Số lượng
+                <input
+                  id="catalogQty"
+                  type="number"
+                  value="1"
+                  min="1"
+                  max="100"
+                  step="1"
+                  aria-describedby="catalogerror"
+              /></label>
+            </div>
+            <p id="catalogerror" class="error" role="alert" hidden>
+              Nhập số lượng nguyên từ 1 đến 100.
+            </p>
+            <p class="note neutral">
+              Thanh toán toàn bộ một lần. Nhân viên mua hộ sau khi tiền được xác
+              nhận. Giá trọn gói đã xác nhận không tạo khoản thu thứ hai.
+            </p>
+            <p class="hint">
+              Mẫu dùng bố cục lựa chọn và tổng thanh toán của Checkout đang có.
+              Ảnh, nội dung, giá và điều khoản thật sẽ đọc từ listing.
+            </p>
+          </div>
+          <aside class="card">
+            <h3>Tổng thanh toán</h3>
+            <div class="row">
+              <span id="catalogSummary">1 chiếc · Màu trắng</span
+              ><strong id="catalogtotal">1.650.000 ₫</strong>
+            </div>
+            <p class="hint">
+              Không dùng giá người mua tự nhập cho sản phẩm niêm yết.
+            </p>
+            <button type="button" id="catalogPay" class="primary">
+              Thêm vào giỏ hàng
+            </button>
+            <p id="catalogAdded" role="status" class="hint"></p>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        id="cart"
+        class="previewPanel"
+        role="tabpanel"
+        aria-labelledby="preview-tab-cart"
+        tabindex="0"
+      >
+        <header class="requestHeading">
+          <a href="/cart" class="requestCatalogLink">← Giỏ hàng</a>
+          <h1 id="checkoutPageHeading">Thông tin nhận hàng</h1>
+          <p id="checkoutPageHelp">
+            Nhập địa chỉ nhận hàng, rồi xem tổng quan trước khi thanh toán.
+          </p>
+        </header>
+        <nav
+          class="requestStepper checkoutSteps"
+          aria-label="Các bước hoàn tất đơn"
+        >
+          <button
+            type="button"
+            data-checkout="1"
+            class="isCurrent"
+            aria-current="step"
+          >
+            <span aria-hidden="true">1</span><span>Nhận hàng</span>
+          </button>
+          <button type="button" data-checkout="2" disabled>
+            <span aria-hidden="true">2</span><span>Tổng quan</span>
+          </button>
+          <button type="button" id="paymentStep" disabled>
+            <span aria-hidden="true">3</span><span>Thanh toán</span>
+          </button>
+        </nav>
+        <h2 id="checkoutHeading" tabindex="-1" hidden>Món trong giỏ</h2>
+        <div class="grid">
+          <div>
+            <section data-checkout-stage="0" hidden>
+              <p id="emptyCart" class="note neutral">
+                Giỏ chưa có món. Tiếp tục chọn sản phẩm hoặc yêu cầu mua hộ để
+                bắt đầu.
+              </p>
+              <div class="cartSheet" id="cartSheet">
+                <div class="cartSheetHeading">
+                  <span>Món đã thêm vào giỏ</span><span>Số tiền ban đầu</span>
+                </div>
+                <div id="cartLines"></div>
+              </div>
+              <div class="actions">
+                <button type="button" class="secondary" data-go="catalog">
+                  Tiếp tục chọn sản phẩm</button
+                ><button type="button" class="secondary" data-go="initial">
+                  Thêm món cần mua hộ
+                </button>
+              </div>
+              <p id="cartMessage" role="status" class="hint"></p>
+            </section>
+            <section data-checkout-stage="1">
+              <form id="recipientForm" class="card" novalidate>
+                <h3>Một địa chỉ cho các món đã chọn</h3>
+                <label class="field"
+                  >Địa chỉ đã lưu<select id="savedAddress">
+                    <option value="">Nhập địa chỉ mới</option>
+                    <option value="sample">
+                      Địa chỉ mẫu · TP. Hồ Chí Minh
+                    </option>
+                  </select></label
+                >
+                <p class="hint">Địa chỉ này dùng cho tất cả món bạn đã chọn.</p>
+                <div class="unifiedFields">
+                  <label
+                    >Người nhận<input
+                      id="recipientName"
+                      autocomplete="shipping name"
+                      minlength="2"
+                      maxlength="120"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label
+                    >Số điện thoại<input
+                      id="recipientPhone"
+                      type="tel"
+                      autocomplete="shipping tel"
+                      maxlength="20"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label
+                    >Quốc gia<input
+                      value="Việt Nam"
+                      readonly
+                      autocomplete="shipping country-name"
+                  /></label>
+                  <label
+                    >Tỉnh / thành phố<select
+                      id="province"
+                      required
+                      aria-describedby="recipientError regionHelp"
+                    >
+                      <option value="">Chọn tỉnh / thành phố</option>
+                      <option value="hcm">TP. Hồ Chí Minh</option>
+                      <option value="hanoi">Hà Nội</option>
+                    </select></label
+                  >
+                  <label
+                    >Phường / xã<select
+                      id="ward"
+                      required
+                      disabled
+                      aria-describedby="recipientError regionHelp"
+                    >
+                      <option value="">Chọn tỉnh / thành phố trước</option>
+                    </select></label
+                  >
+                  <label
+                    >Số nhà, đường, tòa nhà / căn hộ<input
+                      id="street"
+                      autocomplete="shipping street-address"
+                      minlength="5"
+                      maxlength="300"
+                      required
+                      aria-describedby="recipientError"
+                  /></label>
+                  <label class="wide"
+                    >Ghi chú giao hàng <span class="hint">Không bắt buộc</span
+                    ><textarea
+                      id="deliveryNote"
+                      rows="2"
+                      maxlength="500"
+                    ></textarea>
+                  </label>
+                </div>
+                <p id="regionHelp" class="hint">
+                  Bản mẫu có 2 thành phố và một số phường để thử thao tác. Bản
+                  triển khai sẽ dùng danh mục hành chính đầy đủ và có tìm kiếm.
+                </p>
+                <p class="note neutral">
+                  Google Maps chưa được kết nối trong bản mẫu. Bạn vẫn nhập địa
+                  chỉ và chọn khu vực tại đây.
+                </p>
+                <p id="recipientError" class="error" role="alert" hidden></p>
+              </form>
+            </section>
+            <section class="card checkoutReview" data-checkout-stage="2" hidden>
+              <div class="sectionHeading">
+                <div>
+                  <h3>Món đã chọn</h3>
+                  <span id="selectedCount" class="hint">0 món</span>
+                </div>
+                <a href="/cart" class="textbutton">Sửa giỏ hàng</a>
+              </div>
+              <div id="reviewLines"></div>
+              <div class="deliveryReview">
+                <div class="sectionHeading">
+                  <h3>Giao đến</h3>
+                  <button
+                    type="button"
+                    class="textbutton"
+                    data-checkout-back="1"
+                  >
+                    Sửa địa chỉ
+                  </button>
+                </div>
+                <p id="recipientSummary"></p>
+              </div>
+              <p class="checkoutTerms">
+                Giá niêm yết giữ trọn gói. Món cần tìm mua có thể phát sinh giá
+                và cước; bạn duyệt khoản trả thêm trước khi gửi.
+              </p>
+            </section>
+          </div>
+          <aside class="card checkoutAside">
+            <h3>Chi tiết thanh toán</h3>
+
+            <div class="row">
+              <span>Sản phẩm niêm yết</span
+              ><strong id="listedTotal">0 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Giá hàng cần tìm mua</span
+              ><strong id="customGoods">0 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Phí mua hộ mẫu</span><strong id="customFee">0 ₫</strong>
+            </div>
+            <div class="row" hidden>
+              <span>Cước món cần tìm mua</span
+              ><span id="shippingStatus">Không áp dụng</span>
+            </div>
+            <div class="total">Thanh toán ban đầu</div>
+            <p id="cartTotal" class="large">0 ₫</p>
+            <p class="hint" id="paymentIncludes">
+              100% giá hàng và phí mua hộ. Giá niêm yết đã gồm cước; món cần tìm
+              mua chốt cước trước khi gửi.
+            </p>
+            <section
+              class="shippingCard"
+              id="shippingCard"
+              aria-labelledby="shippingHeading"
+              hidden
+            >
+              <div class="sectionHeading">
+                <h3 id="shippingHeading">Cước vận chuyển</h3>
+                <a class="textbutton" href="/fees">Biểu phí ↗</a>
+              </div>
+              <div class="freightResult" aria-live="polite">
+                <div>
+                  <span>Quốc tế dự tính · chưa thu</span
+                  ><strong id="shipQuoteAmount">Chưa tính</strong>
+                </div>
+                <p id="shipQuoteDetail">
+                  Chọn loại hàng và nhập cân nặng để xem cước.
+                </p>
+              </div>
+              <div class="deliveryRegion">
+                <div>
+                  <span>Giao nội địa</span
+                  ><strong id="shipDestination"
+                    >Chọn địa chỉ ở bước Nhận hàng</strong
+                  >
+                </div>
+                <span class="tag" id="domesticStatus">Phí cần xác nhận</span>
+              </div>
+              <details class="shippingOptions">
+                <summary>Xem / điều chỉnh cước</summary>
+                <p class="hint">
+                  Hàng cần tìm mua · Mỹ → Việt Nam. Có thể để trống cân nặng nếu
+                  bạn chưa biết.
+                </p>
+                <div class="shippingFields">
+                  <label for="shipWarehouse"
+                    >Kho xuất gửi<select id="shipWarehouse">
+                      <option value="texas_cali">Texas / California</option>
+                      <option value="oregon">Oregon</option>
+                    </select></label
+                  >
+                  <label for="shipCategory"
+                    >Loại hàng để ước tính<select id="shipCategory">
+                      <option value="">Chọn loại hàng</option>
+                    </select></label
+                  >
+                  <label for="shipWeight"
+                    >Tổng cân nặng dự kiến (kg)<input
+                      id="shipWeight"
+                      type="text"
+                      inputmode="decimal"
+                      maxlength="12"
+                      placeholder="Ví dụ: 1,5"
+                      aria-describedby="shipWeightHelp shipQuoteDetail"
+                  /></label>
+                </div>
+                <p class="hint" id="shipWeightHelp">
+                  Cho nhóm hàng cần tìm mua đã chọn. Cước tối thiểu 1 kg; hàng
+                  cồng kềnh dùng cân quy đổi khi cao hơn cân thực.
+                </p>
+                <div class="shippingConditions">
+                  <p id="domesticDetail">
+                    Biểu phí hiện có chưa có cước giao nội địa theo tỉnh/thành.
+                    Nhân viên xác nhận phí theo địa chỉ trước khi gửi.
+                  </p>
+                  <p>
+                    Biểu phí tham khảo lấy từ code hiện có, chưa phải cấu hình
+                    đã công bố. Phí thông quan, thuế, bảo hiểm và giao nội địa
+                    tính riêng. Nhân viên xác nhận loại hàng, cân nặng và các
+                    phí trước khi bạn duyệt khoản trả thêm.
+                  </p>
+                  <p id="shipSource"></p>
+                  <p id="shipClearance"></p>
+                  <p>
+                    Cước dự tính chưa được thu trong lần thanh toán ban đầu này.
+                    Sản phẩm niêm yết giữ giá trọn gói.
+                  </p>
+                  <p>
+                    Tỷ giá mẫu 25.000 ₫/USD · phí mua hộ mẫu 5%. Không phải biểu
+                    phí đang áp dụng.
+                  </p>
+                </div>
+              </details>
+            </section>
+
+            <div class="checkoutCompletion">
+              <section data-checkout-stage="2" hidden>
+                <label class="consent"
+                  ><input id="checkoutConsent" type="checkbox" /><span
+                    >Tôi đã kiểm tra món, địa chỉ và số tiền cần thanh toán ban
+                    đầu.</span
+                  ></label
+                >
+                <p class="hint">Thanh toán mô phỏng, không chuyển tiền thật.</p>
+              </section>
+              <div class="checkoutFooter">
+                <button
+                  id="checkoutBack"
+                  type="button"
+                  class="secondary"
+                  hidden
+                >
+                  Quay lại</button
+                ><button
+                  id="checkoutNext"
+                  type="button"
+                  class="primary"
+                  disabled
+                >
+                  Thông tin nhận hàng →
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <details class="designControls checkoutDemoControls">
+          <summary>Tùy chọn bản thiết kế</summary>
+          <label for="shipRateState"
+            >Trạng thái bảng cước<select id="shipRateState">
+              <option value="reference">Biểu phí tham khảo trong code</option>
+              <option value="unavailable">Không tải được biểu phí</option>
+            </select></label
+          >
+        </details>
+      </section>
+      <section
+        id="staff"
+        class="previewPanel"
+        role="tabpanel"
+        aria-labelledby="preview-tab-staff"
+        tabindex="0"
+        hidden
+      >
+        <header class="requestHeading">
+          <h1>Nhân viên · tìm mua</h1>
+          <p>
+            Mẫu hàng việc sau khi thanh toán được xác nhận. Yêu cầu còn trong
+            giỏ chưa giao việc cho nhân viên.
+          </p>
+        </header>
+        <div class="grid">
+          <div class="card">
+            <h2>Cần tìm mua</h2>
+            <div id="staffLines">
+              <p class="muted">
+                Chưa có yêu cầu đã thanh toán trong phiên mẫu này.
+              </p>
+            </div>
+          </div>
+          <aside class="card">
+            <h3>Trước khi mua</h3>
+            <p>
+              Kiểm tra nơi bán, đúng mẫu và giá thực tế. Nếu vượt số tiền đã
+              được khách chấp thuận, gửi khách duyệt trước khi mua.
+            </p>
+            <p class="hint">
+              Trạng thái tìm mua đi theo từng món. Sản phẩm niêm yết xử lý trong
+              hàng việc riêng theo điều kiện đã chốt.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-additional"
+        id="additional"
+        hidden
+        aria-label="Chi phí phát sinh"
+      >
+        <div class="grid">
+          <div class="card">
+            <span class="tag tagblue">Đơn mẫu SG-DEMO-20261008</span>
+            <h2 tabindex="-1" style="margin-top: 16px">
+              Xem chi phí phát sinh
+            </h2>
+            <p class="muted">
+              Giá tại nơi bán tăng từ 58 USD lên 62 USD/món. Cước vận chuyển đã
+              được chốt trong mẫu này.
+            </p>
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Khoản chi</th>
+                    <th>Chênh lệch</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Giá hàng · 2 món</td>
+                    <td>+200.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <td>Phí mua hộ · theo quy tắc 5% mẫu</td>
+                    <td>+10.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <td>Cước mới chốt</td>
+                    <td>+240.000 ₫</td>
+                  </tr>
+                  <tr>
+                    <th>Tổng cần trả thêm</th>
+                    <th>450.000 ₫</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="hint">
+              Bản chi phí demo-02 · Tỷ giá đã khóa 25.000 VND/USD. Giá thực tế
+              và cước cần có bằng chứng của nhân viên trong ứng dụng.
+            </p>
+            <div class="note neutral">
+              Nếu chưa đồng ý, bạn có thể yêu cầu nhân viên kiểm tra. Đơn sẽ
+              được giữ để xử lý; không tự thu thêm hoặc tự gửi hàng.
+            </div>
+            <button class="secondary" id="reviewcost" style="margin-top: 16px">
+              Yêu cầu kiểm tra trong mẫu
+            </button>
+            <p id="costreview" class="status" role="status" hidden>
+              Trạng thái mẫu: chờ nhân viên kiểm tra chi phí. Chưa thu khoản trả
+              thêm.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Đối chiếu tiền</h2>
+            <div class="row">
+              <span>Tổng chi phí đã chốt</span><strong>3.495.000 ₫</strong>
+            </div>
+            <div class="row">
+              <span>Đã thanh toán</span><span>3.045.000 ₫</span>
+            </div>
+            <div class="total">Còn cần thanh toán</div>
+            <p class="large">450.000 ₫</p>
+            <label class="consent"
+              ><input type="checkbox" id="additionalconsent" /><span
+                >Tôi đồng ý bản chi phí demo-02 và số tiền thanh toán thêm
+                450.000 ₫.</span
+              ></label
+            ><button class="primary" id="payadditional" disabled>
+              Xem thanh toán thêm demo
+            </button>
+            <p class="hint">
+              Sau khi thanh toán đủ, đơn còn cần qua kiểm tra đóng gói và bàn
+              giao gửi hàng.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-payment"
+        id="payment"
+        hidden
+        aria-label="Thanh toán demo"
+      >
+        <nav class="paymentJourney" aria-label="Tiến độ hoàn tất đơn">
+          <div><span aria-hidden="true">1</span><span>Nhận hàng</span></div>
+          <div><span aria-hidden="true">2</span><span>Tổng quan</span></div>
+          <div class="isCurrent" aria-current="step">
+            <span aria-hidden="true">3</span><span>Thanh toán</span>
+          </div>
+        </nav>
+        <div class="grid">
+          <div class="card">
+            <span class="tag tagblue"
+              >Cổng mô phỏng · không chuyển tiền thật</span
+            >
+            <h2 tabindex="-1" style="margin-top: 16px">Thanh toán demo</h2>
+            <p id="paymentContext">Chưa có lượt checkout trong mẫu này.</p>
+            <div id="paymentAllocation"></div>
+            <p id="purpose">Thanh toán toàn bộ số tiền ban đầu</p>
+            <p class="large" id="payamount">3.045.000 ₫</p>
+            <div class="note neutral">
+              Khi được triển khai, nút xác nhận demo gọi backend demo. UI chỉ
+              hiển thị “Đã thanh toán” sau khi server xác minh và ghi sổ. Trở về
+              từ PayOS không tự xác nhận tiền vào.
+            </div>
+            <div class="actions" style="margin-top: 20px">
+              <button class="secondary" data-result="pending">
+                Mô phỏng đang xác minh</button
+              ><button class="secondary" data-result="unknown">
+                Mô phỏng kết quả chưa rõ</button
+              ><button class="secondary" data-result="paid">
+                Mô phỏng đã xác nhận tiền
+              </button>
+            </div>
+            <div class="status" id="paystatus" role="status">
+              Chờ xác nhận thanh toán mẫu.
+            </div>
+            <p class="hint">
+              Hủy trang thanh toán không tự hủy đơn. Không tạo yêu cầu thu mới
+              khi lần trước chưa có kết quả rõ ràng.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Tiếp tục đơn mua hộ</h2>
+            <p id="nextstep" class="muted">
+              Nhân viên chỉ nhận việc mua khi đã đủ số tiền ban đầu.
+            </p>
+            <button class="primary" id="showreceipt" disabled>
+              Xem phiếu của giỏ
+            </button>
+            <p class="hint">
+              Trong app: tiền đã xác nhận và PDF đang xử lý là hai trạng thái
+              riêng; PDF lỗi không làm mất thanh toán.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <section
+        class="previewPanel"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="preview-tab-document"
+        id="document"
+        hidden
+        aria-label="Phiếu PDF"
+      >
+        <div class="grid">
+          <div class="card receiptpreview salesStatement">
+            <div class="receiptBrand">Satsunic<span>Go</span></div>
+            <span class="tag">Chứng từ mẫu · chưa phải hóa đơn thuế</span>
+            <h2 tabindex="-1" style="margin-top: 16px">
+              Phiếu xác nhận thanh toán
+            </h2>
+            <div class="product">
+              <strong id="receiptpurpose"
+                >Thanh toán toàn bộ số tiền ban đầu</strong
+              ><small>SG-DEMO-20261008 · Khách hàng minh họa</small>
+            </div>
+            <p class="muted">Số tiền xác nhận trong lần này</p>
+            <p class="large" id="receiptamount">3.045.000 ₫</p>
+            <div class="tableWrap scroll">
+              <table aria-label="Sản phẩm trong phiếu mẫu cố định">
+                <thead>
+                  <tr>
+                    <th>Sản phẩm trong đơn</th>
+                    <th>Mẫu</th>
+                    <th>Số lượng theo đơn</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tai nghe không dây</td>
+                    <td>Màu trắng</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <dl class="statementTotals">
+              <dt>Giá hàng dự kiến</dt>
+              <dd>2.900.000 ₫</dd>
+              <dt>Phí mua hộ mẫu</dt>
+              <dd>145.000 ₫</dd>
+              <dt>Vận chuyển</dt>
+              <dd>Chưa chốt</dd>
+              <dt>Tiền nhận trong lần này</dt>
+              <dd>3.045.000 ₫</dd>
+            </dl>
+            <p class="small muted">
+              Phiếu giữ thông tin tại thời điểm nhận tiền: món, số lượng, giá,
+              phí, tỷ giá và điều khoản. Mỗi lần thanh toán thêm có phiếu riêng
+              để đối chiếu.
+            </p>
+            <p class="note neutral">
+              PDF cố định dùng ví dụ 2 món × 58 USD, trả ban đầu 3.045.000 ₫,
+              trả thêm 450.000 ₫. Thay giá trong màn hình tính thử không đổi các
+              PDF mẫu. Chưa xác nhận tiền thật, chưa gửi email, chưa phát hành
+              hóa đơn VAT.
+            </p>
+          </div>
+          <aside class="card">
+            <h2>Tải mẫu PDF</h2>
+            <div id="checkoutReceipt" hidden>
+              <h3>Khoản nhận của giỏ trong phiên mẫu</h3>
+              <p id="checkoutReceiptTotal" class="large"></p>
+              <div id="checkoutReceiptLines"></div>
+              <p class="hint">
+                Chi tiết này theo giỏ vừa mô phỏng; các PDF tải xuống bên dưới
+                là ví dụ cố định riêng, không thay đổi theo giỏ.
+              </p>
+            </div>
+            <div class="stack">
+              <a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/01-thanh-toan-ban-dau.pdf"
+                target="_blank"
+                rel="noopener"
+                >Phiếu thanh toán ban đầu</a
+              ><a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/02-thanh-toan-them.pdf"
+                target="_blank"
+                rel="noopener"
+                >Phiếu thanh toán thêm</a
+              ><a
+                class="secondary"
+                href="/output/pdf/payment-upfront-20261008/03-kiem-tra-30-mon.pdf"
+                target="_blank"
+                rel="noopener"
+                >Mẫu 30 món · 3 trang</a
+              >
+            </div>
+            <p class="hint">
+              Ứng dụng sẽ có tải riêng tư trong tài khoản và email đính kèm PDF;
+              demo sẽ có hộp thư mô phỏng.
+            </p>
+          </aside>
+        </div>
+      </section>
+      <div class="footer">
+        Thiết kế r4 bám SiteChrome, RequestForm, Checkout, PageTabs và Documents
+        hiện có. Các trạng thái trên trang là minh họa; PDF tải xuống dùng bộ số
+        liệu cố định. Đơn cũ giữ điều khoản đã chấp thuận, listing giữ giá trọn
+        gói.
+      </div>
+    </main>
+    <script type="module" src="/docs/previews/payment-upfront-r4.js"></script>
+  </body>
+</html>

@@ -1,0 +1,467 @@
+.quickRequestPage.page {
+  max-width: 1180px;
+  padding-inline: 28px;
+}
+.quickRequestPage .requestHeading {
+  margin-bottom: 28px;
+}
+.quickRequestPage .requestHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.quickRequestPage .requestHeading h1 {
+  font-size: 30px;
+  margin: 0;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+.quickRequestPage .requestHeading p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 14px 0 6px;
+  max-width: 650px;
+  color: #68758d;
+}
+.quickRequestPage .requestCatalogLink {
+  font-size: 12px;
+  color: #163cff;
+  line-height: 1.6;
+}
+.quickRequestPage .requestMarkets {
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  background: #f5f7fb;
+  border: 1px solid #e6eaf2;
+  border-radius: 12px;
+  margin: 0;
+}
+.quickRequestPage .requestMarkets button {
+  min-height: 38px;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 0;
+  background: transparent;
+  color: #68758d;
+}
+.quickRequestPage .requestMarkets button[aria-pressed="true"] {
+  background: #fff;
+  color: #163cff;
+  box-shadow: 0 1px 4px #111c3510;
+}
+.quickRequestPage .quickRequestForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.quickRequestPage .requestProducts,
+.quickRequestPage .requestInformation,
+.quickRequestPage .requestFinalActions {
+  width: 100%;
+  min-width: 0;
+}
+.quickRequestPage .requestSectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.quickRequestPage .requestSectionHeading > span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: #edf0ff;
+  color: #163cff;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.quickRequestPage .requestSectionHeading h2 {
+  margin: 0;
+  font-size: 15px;
+}
+.quickRequestPage .requestSectionHeading .requestOptional {
+  margin: 0 0 0 auto;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f4f6fa;
+}
+.quickRequestPage .requestItem {
+  padding: 20px;
+  border-radius: 14px;
+}
+.quickRequestPage .requestFieldLabel {
+  font-size: 12px;
+}
+.quickRequestPage .requestImageHint {
+  font-size: 11px;
+  margin: 8px 0 16px;
+}
+.quickRequestPage .itemOptions .twoCols {
+  grid-template-columns: 90px minmax(0, 1fr) 190px;
+  gap: 14px;
+}
+.quickRequestPage .itemOptions .twoCols label:last-child {
+  grid-column: auto;
+}
+.quickRequestPage .itemOptions label,
+.quickRequestPage .requestExtras label {
+  font-size: 12px;
+  gap: 7px;
+}
+.quickRequestPage .itemOptions input,
+.quickRequestPage .itemOptions select,
+.quickRequestPage .requestExtras input {
+  min-height: 44px;
+  height: 44px;
+}
+.quickRequestPage .requestInformation {
+  padding: 20px;
+  border-radius: 14px;
+}
+.quickRequestPage .requestExtras {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.quickRequestPage .quickRequestForm .requestExtras .requestNotes {
+  grid-column: 1 / -1;
+}
+.quickRequestPage .requestExtras textarea {
+  min-height: 72px;
+}
+.quickRequestPage .requestExtras small {
+  font-size: 10px;
+  line-height: 1.4;
+}
+.quickRequestPage .requestCsv {
+  grid-column: 1 / -1;
+  font-size: 12px;
+}
+.quickRequestPage .requestFinalActions {
+  border-top: 1px solid #e6eaf2;
+  padding-top: 20px;
+}
+.quickRequestPage .requestSubmit {
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  font-size: 14px;
+  border-radius: 12px;
+}
+.quickRequestPage button:focus-visible,
+.quickRequestPage a:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .quickRequestPage .requestHeading h1 {
+    font-size: 26px;
+  }
+  .quickRequestPage .requestHeadingRow {
+    align-items: flex-start;
+  }
+  .quickRequestPage .requestMarkets {
+    width: 100%;
+  }
+  .quickRequestPage .requestMarkets button {
+    flex: 1;
+    min-height: 44px;
+  }
+  .quickRequestPage .requestItem,
+  .quickRequestPage .requestInformation {
+    padding: 16px;
+  }
+  .quickRequestPage .itemOptions .twoCols {
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .quickRequestPage .itemOptions .twoCols label:last-child {
+    grid-column: 1 / -1;
+  }
+  .quickRequestPage .requestExtras {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+}
+.quickRequestPage [hidden] {
+  display: none !important;
+}
+.quickRequestPage .requestStepper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.quickRequestPage .requestStepper button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 6px 0;
+  min-height: 44px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #68758d;
+  opacity: 1;
+  font-size: 12px;
+}
+.quickRequestPage .requestStepper button > span:first-child {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background: #e9edf4;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.quickRequestPage .requestStepper small {
+  display: block;
+  min-height: 14px;
+  font-size: 10px;
+  margin-top: 3px;
+}
+.quickRequestPage .requestStepper .isCurrent {
+  color: #163cff;
+}
+.quickRequestPage .requestStepper .isCurrent > span:first-child {
+  background: #163cff;
+  color: white;
+}
+.quickRequestPage .requestStepper .isComplete {
+  color: #16704c;
+}
+.quickRequestPage .requestStepper .isComplete > span:first-child {
+  background: #16704c;
+  color: white;
+}
+.quickRequestPage .requestStageTitle {
+  margin: 0;
+  font-size: 18px;
+  outline: none;
+}
+.quickRequestPage .requestCsv {
+  margin-top: 16px;
+}
+.quickRequestPage .requestFinalActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.quickRequestPage .requestFinalActions > p {
+  width: 100%;
+}
+.quickRequestPage .requestSubmit {
+  width: auto;
+  flex: 1;
+}
+.quickRequestPage .requestBack {
+  border: 1px solid #e6eaf2;
+  border-radius: 12px;
+  padding: 12px 18px;
+  min-height: 48px;
+  background: white;
+}
+.quickRequestPage .requestReview {
+  padding: 20px;
+  border: 1px solid #e6eaf2;
+  border-radius: 14px;
+}
+.quickRequestPage .requestReviewHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.quickRequestPage .requestReview h3 {
+  font-size: 14px;
+  margin: 0;
+}
+.quickRequestPage .requestReview ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 24px;
+}
+.quickRequestPage .requestReview li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e6eaf2;
+  overflow-wrap: anywhere;
+}
+.quickRequestPage .requestReview li strong,
+.quickRequestPage .requestReview li span {
+  display: block;
+  white-space: pre-wrap;
+}
+.quickRequestPage .requestReview li span,
+.quickRequestPage .requestReview p,
+.quickRequestPage .requestReview dl {
+  font-size: 12px;
+  color: #68758d;
+}
+.quickRequestPage .requestReview dd {
+  margin: 4px 0 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .quickRequestPage .requestStepper {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .quickRequestPage .requestStepper button {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 0;
+    gap: 10px;
+    font-size: 12px;
+  }
+}
+.quickRequestPage .requestStepper {
+  width: 100%;
+  max-width: none;
+}
+.quickRequestPage .requestInformation > .requestOptional {
+  display: inline-block;
+  margin: 0 0 16px;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f4f6fa;
+}
+/* Step navigation and active content share one form surface. */
+.quickRequestPage .quickRequestForm {
+  padding: 24px;
+  border: 1px solid #e6eaf2;
+  border-radius: 18px;
+  background: #fff;
+}
+.quickRequestPage .requestStepper {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e6eaf2;
+}
+@media (max-width: 640px) {
+  .quickRequestPage .quickRequestForm {
+    display: grid;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 16px 12px;
+    padding: 12px;
+    align-items: start;
+  }
+  .quickRequestPage .quickRequestForm > :not(.requestStepper) {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .quickRequestPage .requestStepper {
+    grid-column: 1;
+    grid-row: 1 / span 8;
+    align-content: start;
+    gap: 16px;
+    padding: 0 8px 0 0;
+    border-bottom: 0;
+    border-right: 1px solid #e6eaf2;
+    height: 100%;
+  }
+  .quickRequestPage .requestStepper button {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 10px;
+    gap: 6px;
+  }
+  .quickRequestPage .requestStepper small {
+    font-size: 9px;
+  }
+  .quickRequestPage .requestStageTitle {
+    font-size: 16px;
+  }
+  .quickRequestPage .requestItem,
+  .quickRequestPage .requestInformation,
+  .quickRequestPage .requestReview {
+    padding: 12px;
+  }
+  .quickRequestPage .itemOptions .twoCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .quickRequestPage input,
+  .quickRequestPage textarea,
+  .quickRequestPage select {
+    min-width: 0;
+    width: 100%;
+  }
+  .quickRequestPage .requestFinalActions {
+    gap: 8px;
+  }
+  .quickRequestPage .requestBack {
+    width: 100%;
+  }
+  .quickRequestPage .requestSubmit {
+    flex-basis: 100%;
+    font-size: 12px;
+  }
+}
+.quickRequestPage .requestStepper button {
+  position: relative;
+}
+.quickRequestPage .requestStepper button:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: calc(100% + 12px);
+  height: 2px;
+  background: #e1e6ef;
+  pointer-events: none;
+}
+.quickRequestPage .requestStepper button.isComplete::after {
+  background: #16704c;
+}
+.quickRequestPage .requestStepper button > span {
+  position: relative;
+  z-index: 1;
+}
+.quickRequestPage .requestStepper button > span:last-child {
+  background: white;
+  padding-right: 10px;
+}
+@media (max-width: 640px) {
+  .quickRequestPage .requestStepper button:not(:last-child)::after {
+    top: 21px;
+    left: 15px;
+    width: 2px;
+    height: calc(100% + 16px);
+  }
+  .quickRequestPage .requestStepper button > span:last-child {
+    padding: 3px 0;
+  }
+}
+
+@media (max-width: 540px) {
+  .quickRequestPage.page {
+    padding-inline: 20px;
+  }
+}
+
+/* Center the desktop progress rail and its labels in equal-width steps. */
+@media (min-width: 641px) {
+  .quickRequestPage .requestStepper button {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  .quickRequestPage .requestStepper button:not(:last-child)::after {
+    top: 21px;
+    left: 50%;
+  }
+  .quickRequestPage .requestStepper button > span:last-child {
+    padding: 0;
+  }
+}

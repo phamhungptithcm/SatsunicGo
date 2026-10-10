@@ -3,6 +3,8 @@ import { RestrictedPage } from "../features/content/RestrictedPage";
 import { PrivacyPage } from "../features/content/PrivacyPage";
 import { TermsPage } from "../features/content/TermsPage";
 import { AuthFeedbackToast } from "../features/auth/AuthFeedbackToast";
+import { AuthPageBoundary } from "../features/auth/AuthPageBoundary";
+import { GoogleLoginDialog } from "../features/auth/GoogleLoginDialog";
 import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
 import {
   authFeedbackSnapshot,
@@ -281,11 +283,11 @@ export function App() {
     setAuthBusy(true);
     setAuthError("");
     try {
-      await withProgress(login, { overlay: !isCrmPath(location.pathname) });
+      await login();
       if (auth?.currentUser && !pendingMfa())
         notify("Đã đăng nhập.", "success");
-    } catch (e) {
-      setAuthError((e as Error).message);
+    } catch {
+      // The shared Google dialog owns popup failures and recovery.
     } finally {
       authFlight.current = false;
       setAuthBusy(false);
@@ -306,10 +308,12 @@ export function App() {
     }
   }
   return (
-    <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
+    <AuthPageBoundary uid={user?.uid ?? null}>
+    <CartProvider user={user} ready={authReady}>
     <StaffMfaSetup user={user} signOut={signOut} busy={authBusy}>
       <AnalyticsConsent account={user?.uid ?? null} ready={authReady} />
       <OneTap user={user} onError={setAuthError} />
+      <GoogleLoginDialog retry={() => void signIn()} />
       <AuthFeedbackToast
         message={authError || redirectError}
         staff={isCrmPath(location.pathname)}
@@ -355,7 +359,6 @@ export function App() {
                 path="/request"
                 element={
                   <RequestForm
-                    key={user?.uid ?? "anonymous"}
                     user={user}
                     signIn={signIn}
                   />
@@ -426,11 +429,11 @@ export function App() {
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
               <Route path="/cart" element={<CartPage signIn={signIn} />} />
-              <Route path="/checkout" element={<PurchaseCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
+              <Route path="/checkout" element={<PurchaseCheckout user={user} signIn={signIn} />} />
               <Route path="/checkout/payment/:id" element={<PurchasePayment key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
               <Route
                 path="/products/:slug/checkout"
-                element={<ProductCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />}
+                element={<ProductCheckout user={user} signIn={signIn} />}
               />
               <Route path="/posts" element={<Catalog kind="posts" />} />
               <Route
@@ -494,7 +497,7 @@ export function App() {
       {!isCrmPath(location.pathname) && <SiteFooter />}
       {authReady && !isCrmPath(location.pathname) && (
         <Ask
-          key={`${location.pathname}:${user?.uid ?? "anonymous"}`}
+          key={location.pathname}
           startCollapsed={
             location.pathname.startsWith("/posts") ||
             location.pathname.startsWith("/account") ||
@@ -505,6 +508,7 @@ export function App() {
       )}
     </StaffMfaSetup>
     </CartProvider>
+    </AuthPageBoundary>
   );
 }
 function JourneyTimeline() {
@@ -620,9 +624,9 @@ function JourneyTimeline() {
     >
       <div className="journeyTop">
         <span>
-          Từ món hàng bạn muốn
+          Bạn chọn món,
           <br />
-          <strong>đến tận tay bạn.</strong>
+          <strong>chúng mình lo.</strong>
         </span>
       </div>
       <div className="journeyTrack">
@@ -633,23 +637,23 @@ function JourneyTimeline() {
           {[
             [
               "01",
-              "Bạn gửi yêu cầu",
-              "Tên sản phẩm hoặc link, số lượng, biến thể.",
+              "Chọn món",
+              "Chọn sản phẩm đã đăng hoặc gửi món cần mua hộ.",
             ],
             [
               "02",
-              "Xem và duyệt báo giá",
-              "Chi phí dự kiến và điều khoản trước khi cọc.",
+              "Xem giá và thanh toán",
+              "Rõ chi phí, đồng ý rồi thanh toán.",
             ],
             [
               "03",
-              "Mua và kiểm hàng",
-              "Nhân viên mua hộ, nhận kho và đóng gói.",
+              "Mua và gửi hàng",
+              "Chúng mình mua, kiểm tra và đóng gói.",
             ],
             [
               "04",
-              "Thanh toán số dư, nhận hàng",
-              "Tổng cuối đã duyệt, trả đủ trước xuất gửi.",
+              "Nhận hàng",
+              "Theo dõi đơn, đợi hàng về tận nhà.",
             ],
           ].map(([n, t, d]) => (
             <li key={n}>
@@ -662,17 +666,9 @@ function JourneyTimeline() {
           ))}
         </ol>
       </div>
-      <div className="journeyFoot">
-        <span>
-          Cọc <strong>50%</strong>
-        </span>
-        <p>
-          Theo báo giá bạn đã chấp nhận.
-          <br />
-          Số dư tính theo chi phí cuối đã duyệt.
-        </p>
-      </div>
-      <p className="journeyIllustration">Minh họa quy trình mua hộ</p>
+      <Link className="journeyMore" to="/how-it-works">
+        Xem cách hoạt động <Icon />
+      </Link>
     </div>
   );
 }
@@ -686,22 +682,21 @@ function Home() {
             <span /> Mua hộ Mỹ · Nhật · Hàn
           </span>
           <h1>
-            Bạn chọn.
+            Chính hãng từ xa.
             <br />
-            Chúng mình lo
-            <br />
-            <span>phần còn lại.</span>
+            <span>Ưng ý về nhà.</span>
           </h1>
           <p>
-            Gửi tên hoặc link món hàng bạn muốn mua tại Mỹ, Nhật, Hàn. Nhận báo
-            giá rõ ràng trước khi quyết định.
+            Món bạn thích từ Mỹ, Nhật, Hàn — rõ nguồn gốc, an tâm chọn mua.
           </p>
-          <Link className="primary" to="/request">
-            Gửi yêu cầu mua hộ <Icon />
-          </Link>
-          <Link className="secondary" to="/how-it-works">
-            Xem cách hoạt động
-          </Link>
+          <div className="heroActions">
+            <Link className="primary" to="/products">
+              Xem sản phẩm <Icon />
+            </Link>
+            <Link className="secondary" to="/request">
+              Gửi yêu cầu mua hộ
+            </Link>
+          </div>
           <div className="origins">
             <span>
               Mỹ <b>US</b>

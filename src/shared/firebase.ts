@@ -1,7 +1,5 @@
-import {
-  loginFeedback,
-  publishAuthFailure,
-} from "../features/auth/auth-feedback";
+import { publishAuthFailure } from "../features/auth/auth-feedback";
+import { googlePopupLogin } from "../features/auth/google-popup-login";
 import { requestActionMfa } from "../features/auth/ActionMfa";
 import { runWithMfaRecovery } from "./mfa-recovery";
 import { notify, withProgress } from "./feedback";
@@ -12,7 +10,6 @@ import {
   connectAuthEmulator,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
   signOut,
   getRedirectResult,
 } from "firebase/auth";
@@ -81,24 +78,14 @@ if (local && auth && db && functions) {
     Number(env.VITE_FUNCTIONS_EMULATOR_PORT ?? 5101),
   );
 }
-export async function login() {
-  if (!auth) throw Error("Đăng nhập chưa được kích hoạt.");
-  const p = new GoogleAuthProvider();
-  try {
-    await signInWithPopup(auth, p);
-  } catch (e) {
-    if (captureMfa(e, auth)) return;
-    const code = (e as { code?: string }).code;
-    if (code === "auth/popup-blocked") {
-      try {
-        await signInWithRedirect(auth, p);
-      } catch (failure) {
-        throw Object.assign(new Error(loginFeedback(failure)), {
-          code: (failure as { code?: string }).code,
-        });
-      }
-    } else throw Object.assign(new Error(loginFeedback(e)), { code });
-  }
+export function login() {
+  return googlePopupLogin(
+    () => {
+      if (!auth) throw Error("AUTH_UNCONFIGURED");
+      return signInWithPopup(auth, new GoogleAuthProvider());
+    },
+    (error) => captureMfa(error, auth),
+  );
 }
 export async function logout() {
   clearMfa();
@@ -170,24 +157,36 @@ const readServices = new Set([
   "productReviewEligibility",
   "productReviewAdmin",
 ]);
-export async function callService<T>(name: string, data: unknown): Promise<T> {
+export async function callService<T>(
+  name: string,
+  data: unknown,
+  feedback: "global" | "inline" = "global",
+): Promise<T> {
   if (!functions || !navigator.onLine)
     throw Error("Không thể kết nối lúc này. Kiểm tra kết nối và thử lại.");
   const readOnly =
     readServices.has(name) ||
-    (name === "purchaseCheckout" && (data as {action?:string})?.action === "status") ||
-    (name === "purchaseDraftImage" && (data as {action?:string})?.action === "read") ||
+    (name === "purchaseCheckout" &&
+      (data as { action?: string })?.action === "status") ||
+    (name === "purchaseDraftImage" &&
+      (data as { action?: string })?.action === "read") ||
     (name === "shippingRatesAdmin" &&
       (data as { action?: string })?.action === "read");
   try {
-    return (await recoverCallable(name, data, readOnly)).data as T;
+    return (await recoverCallable(name, data, readOnly, feedback === "inline"))
+      .data as T;
   } catch (e) {
     const error = serviceError(e, "Chưa xử lý được. Thử lại sau.");
-    notify(error.message, "error");
+    if (feedback === "global") notify(error.message, "error");
     throw error;
   }
 }
-async function recoverCallable(name: string, data: unknown, readOnly = false) {
+async function recoverCallable(
+  name: string,
+  data: unknown,
+  readOnly = false,
+  inline = false,
+) {
   const uid = auth?.currentUser?.uid;
   const path = window.location.pathname;
   const payload = structuredClone(data);
@@ -197,7 +196,7 @@ async function recoverCallable(name: string, data: unknown, readOnly = false) {
         httpsCallable(functions!, name, { timeout: readOnly ? 15000 : 60000 })(
           payload,
         ),
-      { overlay: !readOnly },
+      { overlay: !readOnly && !inline },
     );
   return runWithMfaRecovery(
     execute,

@@ -34,6 +34,10 @@ type Attempt = {
   orderId?: string;
   images: { hash: string; operationId: string; uploaded: boolean }[];
 };
+function savedRequestName() {
+  try { return sessionStorage.getItem("request-name") ?? ""; }
+  catch { return ""; }
+}
 function pendingFor(uid?: string): Attempt | null {
   if (!uid) return null;
   try {
@@ -58,7 +62,7 @@ export function RequestForm({
   signIn: () => Promise<void>;
 }) {
   const { cart, refresh: refreshCart } = useCart();
-  const [legacyPending] = useState(() =>
+  const [legacyPending, setLegacyPending] = useState(() =>
     Boolean(user && sessionStorage.getItem(`request-pending:${user.uid}`)),
   );
   const location = useLocation(),
@@ -88,7 +92,7 @@ export function RequestForm({
           : String(i.unitSourceMinor / (initial.market === "US" ? 100 : 1)),
     })) ?? [
       {
-        content: sessionStorage.getItem("request-name") ?? "",
+        content: savedRequestName(),
         quantity: 1,
         variant: "",
       },
@@ -117,7 +121,7 @@ export function RequestForm({
   useEffect(() => {
     if (user) anonymousImageHandoff.images = [];
   }, [user?.uid]);
-  const [pendingUnreadable] = useState(() => {
+  const [pendingUnreadable, setPendingUnreadable] = useState(() => {
     try {
       return Boolean(
         user &&
@@ -144,6 +148,24 @@ export function RequestForm({
     locked = useRef(false);
   const attemptRef = useRef(attempt);
   attemptRef.current = attempt;
+  useEffect(() => {
+    // The guest form now stays mounted on login. Re-admit private recovery
+    // state without replacing the person's in-progress fields or images.
+    if (!user) return;
+    try {
+      setLegacyPending(Boolean(sessionStorage.getItem(`request-pending:${user.uid}`)));
+      const stored = sessionStorage.getItem(`request-cart-pending:${user.uid}`);
+      const recovered = pendingFor(user.uid);
+      setPendingUnreadable(Boolean(stored && !recovered));
+      if (recovered) {
+        attemptRef.current = recovered;
+        setAttempt(recovered);
+        setStep(2);
+      }
+    } catch {
+      setPendingUnreadable(true);
+    }
+  }, [user?.uid]);
   useEffect(() => {
     mounted.current = true;
     return () => {

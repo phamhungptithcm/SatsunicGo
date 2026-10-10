@@ -1,0 +1,50 @@
+# Ask · Product content review
+
+Scope: actual Ask action window, task/conversation navigation, commerce entry buttons, immutable review details, contextual confirmation and fresh approved-guidance answers. Web/React, Vietnamese and English. Customer/staff actor separation and catalog-full-payment/custom-quote-deposit semantics remain server authoritative. This is a scoped local application review; not a claim about all existing workspace strings, native Apple HIG compliance, real customer comprehension or live provider answers.
+
+Sources: write-product-content SKILL, product-content-integrity, product-content profile, apple-human-interface-principles and surface-patterns. Apple principles are a quality reference; browser/native HTML controls and SatsunicGo blue/white/navy brand remain authoritative. No Apple assets/conventions copied. SOURCE-final binds current files. CONTENT-INVENTORY.json separates 239 syntactic locale pairs, 14 state alternatives and 65 unmatched source candidates, including existing/technical strings. All are source inventory, not proof that 239 translations were verified in isolation. Dynamic t calls and existing single-language account/backend messages are reviewed by state in this report.
+
+| Location/state | User job and content contract | Evidence |
+|---|---|---|
+| Navigation/default/history | Conversation / Current task; indexed waypoints; Return to current conversation actually returns to composer. History is read only. | Current Ask handlers; workcell history/locale and Escape cases |
+| Native commerce entry | Review request, Review selection, Review quote and deposit, Review final total, Review receipt prepare a review only. | First-button/first-chat cases; 0 durable dispatch before preview |
+| Request review | Exact item/variant/quantity/market/link/condition, notes, requested budget/date/store; staff review and quotation, no purchase/payment yet. | Detached command/hash; VI/EN request screenshots; payload tests |
+| Catalog review | Frozen public product title/version/variant/qty, all-inclusive unit price, total and terms; delivery details and full payment later. No collection here. | Real client public read, canonical version/selection; VI/EN catalog cases |
+| Quote/final review | Frozen owned order ID/version, quoted total/deposit/product/terms/revision/expiry or final total. Amounts precede prose. Confirmation does not collect money. | Three order cases, expiry/version guard, mobile monetary-summary cases |
+| Receipt review | All items of the exact order; confirms complete receipt and completes order. Partial receipt text cannot consent. | Receipt case, strict reply cases, initial consequence/order capture plus independently scrolled item/quantity capture |
+| Editing/decline | Edit details restores native controls; exact 'not yet/chưa' invalidates review, not a sent operation. | Hidden review and fresh-consent cases; pending guards |
+| Loading/disabled/pending | Sending only while an owned dispatch is unresolved; profile tasks maintain their own disabled/recovery state. | Held response + locale test; pending account source guards |
+| Success | Recorded only after admitted typed server acknowledgement. Transcript is saved afterward and cannot replay the command. | Button/chat transport cases; command result admission tests |
+| Unknown/recovery | Returning to chat does not cancel sent action; separate reachable reconciliation control; no blind retry. Verified no_operation restores editing and requires fresh review. | Unknown/no_operation case; preserved operation envelope |
+| Offline/stale/partial | Saved authoritative conversation/order unavailable, edited fields, changed versions or expiry block confirmation and request review. No invented prices/zeroes. | Queue-time admission and knowledge tests |
+| Unauthorized/owner changes | Auth epoch, owner and CID bind state. History and departed account cannot mutate; no new secret/PII persistence. | A→B→A, source fences, profile private draft case |
+| Empty/no task | Current native blank draft or existing validation stays visible; no synthetic order/amount. | Source schema/readiness; no absent evidence promoted to zero |
+| Guidance | Reviewed original excerpts, linked public citations, no quote or order confirmation; unclear follow-up asks which topic. | 28 actual transaction-caller tests; current typed formatter |
+
+Data meanings: all money is VND formatted vi-VN/en-US with zero fraction digits; sourceMinor and FX internals do not replace the reviewed VND payable. Requested budget/date are requests, not guaranteed quote/delivery. Quote expiry is source time shown in the browser's local timezone; technical source version and identity remain separate from amounts. A local verified RPC acknowledgement is not payment/provider confirmation or completed shipment. Private form values stay in owned in-memory UI state; authorized persistence uses existing typed endpoints. No private address/profile/body is newly forwarded to Gemini or web search.
+
+| Mandatory principle | Status | Current scoped evidence |
+|---|---|---|
+| Purpose | PASSED | One current action, visible exact target/value and next consequence; native entry prepares review |
+| Agency | PASSED | Button/chat equivalence, Edit/decline/back, no first-reply dispatch, history read only, current task reachable |
+| Responsibility | PASSED | No payment collected by consent; order-type distinction, receipt completeness, unknown result retained |
+| Familiarity | PASSED | Native inputs/buttons/fieldset/dialog; VI/EN practical buying/request language; LLM/Gemini terms retained where technical |
+| Flexibility | PASSED |320/390/768/1440 bounded layout, VI/EN preview,390x720monetary summary, keyboard Escape, independent scrolling |
+| Simplicity | PASSED | Forms outside log; one task scroller and fixed footer; material summary ahead of explanation |
+| Craft | PASSED | Representable delivery dates, neutral current-task destinations, manual chat/field merge, current source/data and immutable payload agree, disabled/inert history, account epoch, clean review labels; source and browser receipts |
+| Delight | PASSED | Draft edits open appropriate work area; preserved unsaved fields and reading position; quiet reversible navigation without added decorative motion |
+
+Target-platform fit: PASSED within executed browser fixtures. Named nonmodal task section inside existing modal dialog, deterministic heading focus, accessible controls/status, native disabled+inert descendants, reduced-motion browser execution and branded CSS. No ARIA application role or new nested modal/focus trap.
+
+Pattern checks: writing/labels, feedback/interruption, consequential choices, contextual help, privacy/account control, VI/EN and keyboard each PASSED within source/browser scope. RTL not applicable to current VI/EN scope. Profile/Membership remain existing Vietnamese native forms with explicit lang=vi even inside English Ask; complete form localization is not included or claimed.
+
+Gate dimensions: meaning/behavior, audience/business task, natural respectful tone, concise consequence, state coverage, data/privacy semantics, terminology, labels/keyboard, locale/text expansion, eight principles and platform fit PASSED within current executed evidence. In-context gate acceptance depends on the current final browser receipt and independent review; missing/stale receipt blocks closeout.
+
+Evidence: current request VI/EN, quote/final/receipt and four-width screenshots under output/ask-integration-4; BROWSER-r15 and copied JSON once completed; UNIT-r7 current unit receipt; compiler/lint. Performance receipt is local two-rAF switching plus bounded DOM only. No native screen reader, Firefox/WebKit, real mobile device, zoom acceptance, real user study or production/provider execution is claimed. These remain NOT_RUN/NOT_VERIFIED and bound rollout readiness.
+
+
+Executor inventory review: technical statuses/role strings, SVG paths, CSS easing/selectors and imported directives are classified as nonproduct strings. Existing Vietnamese-only backend errors, profile/membership loading labels and named-chat aliases are preserved and explicitly excluded from complete English-localization claims. Paired readiness messages, result titles and prompts were checked against their existing handlers; final-total success now says tổng tiền cuối, matching the amount semantics. Full receipt details may require task-body scrolling; neither long forms nor all receipt items are claimed initially visible. Current source and receipt hashes are required before final gate closure.
+
+Anonymous state: current draft may open the task view without a CID; identity normalizes absent CID to null. A named request asks the customer to sign in and dispatches nothing. Existing auth transitions still clear private state; cross-login guest-draft transfer is not implemented or claimed. ANON-r3 is actual hook/component evidence with synthetic transport, not live anonymous LLM availability.
+
+Final regression coverage: quantity, variant and market manual→chat→original-value transitions retire old overrides; unsaved unrelated notes persist. Saved typed payload and next immutable review are asserted. A synthetic prepared item refreshes name/link controls while preserving unrelated notes. Exact country aliases preserve KR canonical meaning; no merchant, price or purchase authority is inferred. Full current browser receipt required; older attempts remain preserved as red/green history.

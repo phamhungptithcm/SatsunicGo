@@ -7,13 +7,45 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 const REGION='asia-southeast1';
 const triggerConstructors=new Map([['firebase-functions/v2/https',new Set(['onCall','onRequest'])],['firebase-functions/v2/scheduler',new Set(['onSchedule'])],['firebase-functions/v2/firestore',new Set(['onDocumentCreated','onDocumentWritten'])]]);
-// One source-owned emulator exception, never a generic conditional-export parser.
+// Exact source-owned emulator exports, never a generic conditional-export parser.
+const emulatorExports=new Map([
+  ['purchaseDemoPayment',{binding:'guardedPurchaseDemoPayment',from:'./purchase-checkout',kind:'onCall',sdk:'firebase-functions/v2/https'}],
+  ['purchaseDemoWebhook',{binding:'guardedPurchaseDemoWebhook',from:'./purchase-demo-gateway',kind:'onRequest',sdk:'firebase-functions/v2/https'}],
+  ['purchaseSePayPayment',{binding:'sandboxSePayPayment',from:'./purchase-sepay',kind:'onCall',sdk:'firebase-functions/v2/https',guard:'localSePay'}],
+  ['purchaseSePayIpn',{binding:'sandboxSePayIpn',from:'./purchase-sepay',kind:'onRequest',sdk:'firebase-functions/v2/https',guard:'localSePay'}],
+  ['purchaseSePayInboxWorker',{binding:'sandboxSePayInboxWorker',from:'./purchase-sepay',kind:'onDocumentCreated',sdk:'firebase-functions/v2/firestore',guard:'localSePay'}],
+]);
 export function exactDemoCondition(node) {
   return ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken &&
     ts.isStringLiteral(node.right) && node.right.text === 'true' &&
     ts.isPropertyAccessExpression(node.left) && !node.left.questionDotToken && node.left.name.text === 'FUNCTIONS_EMULATOR' &&
     ts.isPropertyAccessExpression(node.left.expression) && !node.left.expression.questionDotToken && node.left.expression.name.text === 'env' &&
     ts.isIdentifier(node.left.expression.expression) && node.left.expression.expression.text === 'process';
+}
+function exactSePayCondition(node) {
+  if(!ts.isBinaryExpression(node)||node.operatorToken.kind!==ts.SyntaxKind.AmpersandAmpersandToken||!exactDemoCondition(node.left))return false;
+  const project=node.right;
+  return ts.isBinaryExpression(project)&&project.operatorToken.kind===ts.SyntaxKind.EqualsEqualsEqualsToken&&
+    ts.isStringLiteral(project.right)&&project.right.text==='demo-satsunicgo'&&
+    ts.isPropertyAccessExpression(project.left)&&!project.left.questionDotToken&&project.left.name.text==='GCLOUD_PROJECT'&&
+    ts.isPropertyAccessExpression(project.left.expression)&&!project.left.expression.questionDotToken&&project.left.expression.name.text==='env'&&
+    ts.isIdentifier(project.left.expression.expression)&&project.left.expression.expression.text==='process';
+}
+function assertDemoEnvironmentReads(ast) {
+  function visit(node) {
+    if(ts.isIdentifier(node)&&node.text==='process'){
+      const env=node.parent,property=env?.parent,comparison=property?.parent;
+      // A pure comparison cannot leak an alias through which the guard's environment is changed.
+      if(!env||!ts.isPropertyAccessExpression(env)||env.expression!==node||env.questionDotToken||env.name.text!=='env'||
+        !property||!ts.isPropertyAccessExpression(property)||property.expression!==env||property.questionDotToken||
+        !comparison||!ts.isBinaryExpression(comparison)||comparison.left!==property||
+        ![ts.SyntaxKind.EqualsEqualsEqualsToken,ts.SyntaxKind.ExclamationEqualsEqualsToken].includes(comparison.operatorToken.kind)||
+        !ts.isStringLiteral(comparison.right)||
+        !(property.name.text==='FUNCTIONS_EMULATOR'&&comparison.right.text==='true'||property.name.text==='GCLOUD_PROJECT'&&comparison.right.text==='demo-satsunicgo'))throw Error('EMULATOR_ENVIRONMENT_ESCAPES');
+    }
+    ts.forEachChild(node,visit);
+  }
+  visit(ast);
 }
 export function assertDemoBindings(ast, names, allowed = new Set(), propertyWrites = new Set()) {
   const includes = node => ts.isIdentifier(node) ? names.has(node.text) :
@@ -120,29 +152,46 @@ export function preflight({root,project}) {
     const region=regionOf(call.arguments[0]);if(!region)throw Error('REGION_UNRESOLVED');
     return {name,kind:m.constructors.get(call.expression.text),region,source:relative};
   }
-  function emulatorExport(m, name) {
-    const declaration=m.declarations.get(name), conditional=declaration?.initializer;
-    if (!conditional || !ts.isConditionalExpression(conditional)) {
-      if(name==='purchaseDemoPayment')throw Error('EMULATOR_EXPORT_SHAPE');
-      return false;
+  function demoDeclaration(m,name,spec) {
+    const declaration=m.declarations.get(name),conditional=declaration?.initializer;
+    if(m.relative!=='functions/src/index.ts'||!conditional||!ts.isConditionalExpression(conditional)||m.exports.get(name)?.local!==name||m.exports.get(name)?.from||
+      !(declaration.parent.flags&ts.NodeFlags.Const)||declaration.parent.declarations.length!==1||!declaration.parent.parent.modifiers?.some(modifier=>modifier.kind===ts.SyntaxKind.ExportKeyword)||
+      !(spec.guard?ts.isIdentifier(conditional.condition)&&conditional.condition.text===spec.guard:exactDemoCondition(conditional.condition))||
+      !ts.isIdentifier(conditional.whenTrue)||conditional.whenTrue.text!==spec.binding||!ts.isIdentifier(conditional.whenFalse)||conditional.whenFalse.text!=='undefined')throw Error('EMULATOR_EXPORT_SHAPE');
+    return {declaration,conditional};
+  }
+  function emulatorExport(m,name) {
+    const spec=emulatorExports.get(name);if(!spec)return false;
+    const {declaration,conditional}=demoDeclaration(m,name,spec),imported=m.imports.get(spec.binding);
+    if(imported?.from!==spec.from||imported.name!==name)throw Error('EMULATOR_EXPORT_SHAPE');
+    const imports=m.ast.statements.filter(node=>ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(item=>item.name.text===spec.binding);
+    if(imports.length!==1||m.ast.statements.filter(node=>ts.isVariableStatement(node)).flatMap(node=>node.declarationList.declarations).filter(item=>ts.isIdentifier(item.name)&&item.name.text===name).length!==1||m.ast.statements.some(node=>ts.isExportDeclaration(node)&&node.exportClause&&ts.isNamedExports(node.exportClause)&&node.exportClause.elements.some(item=>item.name.text===name)))throw Error('EMULATOR_EXPORT_DUPLICATE');
+    const names=new Set(['process','undefined',spec.binding,name]),allowed=new Set([imports[0].name,declaration.name]);
+    if(spec.guard){
+      const guard=m.declarations.get(spec.guard);
+      if(!guard||!(guard.parent.flags&ts.NodeFlags.Const)||guard.parent.declarations.length!==1||m.exports.has(spec.guard)||!guard.initializer||!exactSePayCondition(guard.initializer))throw Error('EMULATOR_GUARD_SHAPE');
+      names.add(spec.guard);allowed.add(guard.name);
+      const references=new Set([guard.name]);
+      for(const [otherName,otherSpec] of emulatorExports)if(otherSpec.guard===spec.guard&&m.exports.has(otherName))references.add(demoDeclaration(m,otherName,otherSpec).conditional.condition);
+      assertOnlyDemoReferences(m.ast,spec.guard,references);
     }
-    const imported=m.imports.get('guardedPurchaseDemoPayment');
-    if (m.relative!=='functions/src/index.ts' || name!=='purchaseDemoPayment' || m.exports.get(name)?.local!==name || m.exports.get(name)?.from || !(declaration.parent.flags&ts.NodeFlags.Const) || declaration.parent.declarations.length!==1 || !declaration.parent.parent.modifiers?.some(modifier=>modifier.kind===ts.SyntaxKind.ExportKeyword) || !exactDemoCondition(conditional.condition) || !ts.isIdentifier(conditional.whenTrue) || conditional.whenTrue.text!=='guardedPurchaseDemoPayment' || !ts.isIdentifier(conditional.whenFalse) || conditional.whenFalse.text!=='undefined' || imported?.from!=='./purchase-checkout' || imported.name!=='purchaseDemoPayment') throw Error('EMULATOR_EXPORT_SHAPE');
-    const imports=m.ast.statements.filter(node=>ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(item=>item.name.text==='guardedPurchaseDemoPayment');
-    if (imports.length!==1 || m.ast.statements.filter(node=>ts.isVariableStatement(node)).flatMap(node=>node.declarationList.declarations).filter(item=>ts.isIdentifier(item.name)&&item.name.text===name).length!==1 || m.ast.statements.some(node=>ts.isExportDeclaration(node)&&node.exportClause&&ts.isNamedExports(node.exportClause)&&node.exportClause.elements.some(item=>item.name.text===name))) throw Error('EMULATOR_EXPORT_DUPLICATE');
-    assertDemoBindings(m.ast,new Set(['process','undefined','guardedPurchaseDemoPayment',name]),new Set([imports[0].name,declaration.name]));
-    assertOnlyDemoReferences(m.ast,'guardedPurchaseDemoPayment',new Set([imports[0].name,conditional.whenTrue]));
-    const target=module('functions/src/purchase-checkout.ts'), binding=target.declarations.get(name);
-    if (!binding || !(binding.parent.flags&ts.NodeFlags.Const) || target.exports.get(name)?.local!==name || target.exports.get(name)?.from) throw Error('EMULATOR_TARGET_MUTABLE');
+    assertDemoBindings(m.ast,names,allowed);
+    assertDemoEnvironmentReads(m.ast);
+    assertOnlyDemoReferences(m.ast,spec.binding,new Set([imports[0].name,conditional.whenTrue]));
+    const exportReferences=new Set([declaration.name]);
+    if(imports[0].propertyName)exportReferences.add(imports[0].propertyName);
+    assertOnlyDemoReferences(m.ast,name,exportReferences);
+    const target=module('functions/src/'+spec.from.slice(2)+'.ts'),binding=target.declarations.get(name);
+    if(!binding||!(binding.parent.flags&ts.NodeFlags.Const)||binding.parent.declarations.length!==1||!binding.parent.parent.modifiers?.some(modifier=>modifier.kind===ts.SyntaxKind.ExportKeyword)||target.exports.get(name)?.local!==name||target.exports.get(name)?.from)throw Error('EMULATOR_TARGET_MUTABLE');
     assertDemoBindings(target.ast,new Set([name]),new Set([binding.name]));
     assertOnlyDemoReferences(target.ast,name,new Set([binding.name]));
     const sdk=binding.initializer?.expression;
     if(!sdk || !ts.isIdentifier(sdk))throw Error('EMULATOR_TARGET_INVALID');
-    const sdkImports=target.ast.statements.filter(node=>ts.isImportDeclaration(node)&&ts.isStringLiteral(node.moduleSpecifier)&&node.moduleSpecifier.text==='firebase-functions/v2/https'&&node.importClause?.namedBindings&&!node.importClause.isTypeOnly&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(item=>item.name.text===sdk.text&&!item.isTypeOnly);
+    const sdkImports=target.ast.statements.filter(node=>ts.isImportDeclaration(node)&&ts.isStringLiteral(node.moduleSpecifier)&&node.moduleSpecifier.text===spec.sdk&&node.importClause?.namedBindings&&!node.importClause.isTypeOnly&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(item=>item.name.text===sdk.text&&(item.propertyName?.text??item.name.text)===spec.kind&&!item.isTypeOnly);
     if(sdkImports.length!==1)throw Error('EMULATOR_TARGET_INVALID');
     assertDemoBindings(target.ast,new Set([sdk.text]),new Set([sdkImports[0].name]));
     const trigger=resolve(target.relative,name);
-    if (trigger.kind!=='onCall' || trigger.region!==REGION) throw Error('EMULATOR_TARGET_INVALID');
+    if(trigger.kind!==spec.kind||trigger.region!==REGION)throw Error('EMULATOR_TARGET_INVALID');
     emulatorOnlyExports.push(trigger);
     return true;
   }

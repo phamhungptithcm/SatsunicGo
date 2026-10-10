@@ -26,6 +26,9 @@ export function Notifications({
         id: string;
         orderId?: string;
         action: string;
+        title?: string;
+        targetPath?: string;
+        targetLabel?: string;
         read: boolean;
         createdAt: number;
       }[]
@@ -121,6 +124,17 @@ export function Notifications({
       {!loading &&
         rows.map((n) => {
           const target = notificationTarget(n.action, n.orderId);
+          if (
+            typeof n.targetPath === "string" &&
+            /^(?:\/account(?:\/orders\/[a-zA-Z0-9_-]{1,128}|\/documents)?|\/support|\/membership)$/.test(
+              n.targetPath,
+            ) &&
+            typeof n.targetLabel === "string" &&
+            n.targetLabel.length <= 100
+          ) {
+            target.path = n.targetPath;
+            target.label = n.targetLabel;
+          }
           const date = new Date(n.createdAt);
           const validDate = Number.isFinite(date.getTime());
           return (
@@ -133,7 +147,11 @@ export function Notifications({
                 aria-label={n.read ? "Đã đọc" : "Chưa đọc"}
               />
               <div className="notificationItemBody">
-                <h3>{labels[n.action] ?? "Bạn có cập nhật mới"}</h3>
+                <h3>
+                  {typeof n.title === "string" && n.title.length <= 200
+                    ? n.title
+                    : (labels[n.action] ?? "Bạn có cập nhật mới")}
+                </h3>
                 <time dateTime={validDate ? date.toISOString() : undefined}>
                   {validDate
                     ? date.toLocaleString("vi-VN")
