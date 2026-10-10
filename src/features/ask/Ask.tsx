@@ -151,6 +151,7 @@ type Turn = {
   webQuery?: string;
   tracking?: CustomerOrderTracking;
   guestTracking?: PublicOrderTracking;
+  guestLookup?: boolean;
   shipping?: {
     snapshot: ShippingRatesPublicSnapshot;
     direction: "VN_US" | "US_VN";
@@ -473,28 +474,40 @@ const ConversationContent = memo(function ConversationContent({
               role={turn.status === "error" ? "alert" : "status"}
             >
               <p>
-                {turn.status === "stopped"
-                  ? vi
-                    ? "Đã dừng câu trả lời."
-                    : "Response stopped."
-                  : turn.rateLimited
+                {turn.guestLookup
+                  ? turn.status === "stopped"
                     ? vi
-                      ? "Chưa thể trả lời lúc này. Hãy thử lại sau."
-                      : "We can’t answer right now. Please try again later."
+                      ? "Đã dừng tra cứu. Nhập lại mã để thử lại."
+                      : "Tracking stopped. Enter the code again to retry."
                     : vi
-                      ? "Em chưa thể trả lời lúc này. Câu hỏi của anh/chị vẫn được giữ lại."
-                      : "We couldn’t answer just now. Your question is still here."}
+                      ? "Chưa thể tra cứu lúc này. Nhập lại mã để thử lại."
+                      : "Tracking is unavailable. Enter the code again to retry."
+                  : turn.status === "stopped"
+                    ? vi
+                      ? "Đã dừng câu trả lời."
+                      : "Response stopped."
+                    : turn.rateLimited
+                      ? vi
+                        ? "Chưa thể trả lời lúc này. Hãy thử lại sau."
+                        : "We can’t answer right now. Please try again later."
+                      : vi
+                        ? "Em chưa thể trả lời lúc này. Câu hỏi của anh/chị vẫn được giữ lại."
+                        : "We couldn’t answer just now. Your question is still here."}
               </p>
-              <button
-                type="button"
-                disabled={busy || !visible}
-                onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
-              >
-                {vi ? "Thử lại" : "Try again"}
-              </button>
-              <Link href="/request">
-                {vi ? "Gửi yêu cầu mua hộ" : "Request an item"} ↗
-              </Link>
+              {!turn.guestLookup && (
+                <>
+                  <button
+                    type="button"
+                    disabled={busy || !visible}
+                    onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
+                  >
+                    {vi ? "Thử lại" : "Try again"}
+                  </button>
+                  <Link href="/request">
+                    {vi ? "Gửi yêu cầu mua hộ" : "Request an item"} ↗
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </section>
@@ -849,6 +862,12 @@ export function Ask({
     operationMode.current = null;
     locked.current = false;
     setBusy(false);
+    if (
+      turns.at(-1)?.guestLookup &&
+      !closing.current &&
+      dialog.current?.contains(document.activeElement)
+    )
+      chatInput.current?.focus({ preventScroll: true });
     setTurns((current) =>
       current.map((turn) =>
         turn.id === id && turn.status === "pending"
@@ -1072,6 +1091,7 @@ export function Ask({
               : "Track progress"
             : suppliedText,
           status: "pending",
+          ...(guestLookup ? { guestLookup: true } : {}),
           analyticsTurn,
         },
       ]);
@@ -2587,6 +2607,7 @@ export function Ask({
         <div className={styles.workControls}>
           <div
             className={styles.languageControls}
+            role="group"
             aria-label={vi ? "Ngôn ngữ" : "Language"}
           >
             <button
@@ -2616,6 +2637,7 @@ export function Ask({
             className={styles.conversation}
             ref={conversation}
             role="log"
+            tabIndex={0}
             aria-label={
               vi ? "Hội thoại với SatsunicGo" : "Conversation with SatsunicGo"
             }
