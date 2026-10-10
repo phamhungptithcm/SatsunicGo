@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "task_id": "HOME-CATALOG-NAV-20261010",
+  "at": "2026-10-10T04:24:21.581552+00:00",
+  "status": "BLOCKED",
+  "scoped_source_review": "PASSED",
+  "production_readiness": "NOT_READY",
+  "source_base_commit": "0929b9f81d89d024b63cfcc9d88f4d9caf114d7c",
+  "source_digest": "7b8afd94c83c22bc65b0fe41dee33a2b7d07b8e529070f822b2780b75f7cb72f",
+  "source_files": {
+    "src/app/App.tsx": "1973e2e7df484f378b5bd66a08f7b0e632cc44f747b2495ee7e5d30db088c9f2",
+    "src/app/SiteChrome.tsx": "c16c0864a6ccd32eaa7f006fb6cb7f4dec86a21c4bb561d1c59621e1a1cc4988",
+    "src/styles/public-ux.css": "f229cf070540a89fd26734227ac9304793f3e0e81df1f24aed2b23efaaaf9f1f",
+    "functions/generated/public-assets.json": "7db878f529e7771468523575e5f9c17c8aacea08f30e5d6558d1e958876fed11"
+  },
+  "reviewer": "/root fresh review of complete current diff; not independent whole-system certification",
+  "cycles": [
+    {
+      "cycle": 1,
+      "finding": "Medium: long-name signed-in mobile header pushes menu offscreen",
+      "fixed": true,
+      "verification": "HEADER-STATE-CHECKS-R2.json18/18"
+    },
+    {
+      "cycle": 2,
+      "finding": "Low:390px orphan headline word",
+      "fixed": true,
+      "verification": "APP-VIEWPORT-CHECKS-R3.json + current screenshots"
+    },
+    {
+      "cycle": 3,
+      "decision": "BLOCKED",
+      "new_actionable_source_findings": 0,
+      "blockers": [
+        "genuine200%zoom/spoken AT not run; Mac locked",
+        "broader PRE001 genuine MFA pending",
+        "new SHA mandatory CI/immutable release/live not run"
+      ]
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved two CTAs/navbar and candidate App preservation verified",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Source boundary unchanged; no new auth/data/I/O",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Strict/lint3focused regression tests and production CI-tuple build pass",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Local cart/account failure/cached/long name cases plus menu recovery; bounded scope",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing recovery/listener cleanup unchanged; fixtures cleaned",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Native zoom/spoken AT missing; eight-principle review blocked",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "New SHA CI/manual/immutable release/live pending",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "1200px collapse and avatar-only narrow display explicitly documented",
+      "evidence_refs": [
+        "IMPLEMENTATION-REPORT.md",
+        "PRODUCT-CONTENT-IMPLEMENTATION-REVIEW.md",
+        "IMPLEMENTATION-SOURCE-FREEZE.json"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Synthetic role/cart fixtures do not establish genuine auth/MFA/provider behavior",
+    "Existing Ask composer may overlay lower content; unchanged/out of current design scope"
+  ],
+  "limitations": [
+    "Candidate repository intelligence DEGRADED",
+    "No absolute full-system correctness/performance/production claim",
+    "Provider token usage and actual billing Unavailable"
+  ]
+}

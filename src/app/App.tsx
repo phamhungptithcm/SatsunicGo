@@ -636,7 +636,7 @@ function JourneyTimeline() {
             [
               "01",
               "Chọn món",
-              "Chọn hàng có sẵn hoặc gửi món cần mua hộ.",
+              "Chọn sản phẩm đã đăng hoặc gửi món cần mua hộ.",
             ],
             [
               "02",
@@ -664,6 +664,9 @@ function JourneyTimeline() {
           ))}
         </ol>
       </div>
+      <Link className="journeyMore" to="/how-it-works">
+        Xem cách hoạt động <Icon />
+      </Link>
     </div>
   );
 }
@@ -684,12 +687,14 @@ function Home() {
           <p>
             Món bạn thích từ Mỹ, Nhật, Hàn — rõ nguồn gốc, an tâm chọn mua.
           </p>
-          <Link className="primary" to="/request">
-            Gửi yêu cầu mua hộ <Icon />
-          </Link>
-          <Link className="secondary" to="/how-it-works">
-            Xem cách hoạt động
-          </Link>
+          <div className="heroActions">
+            <Link className="primary" to="/products">
+              Xem sản phẩm <Icon />
+            </Link>
+            <Link className="secondary" to="/request">
+              Gửi yêu cầu mua hộ
+            </Link>
+          </div>
           <div className="origins">
             <span>
               Mỹ <b>US</b>

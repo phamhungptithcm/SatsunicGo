@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-10T04:24:21.581552+00:00",
+  "base_commit": "0929b9f81d89d024b63cfcc9d88f4d9caf114d7c",
+  "scope": "Approved UI delta, generated manifest from CI-tuple build",
+  "files": {
+    "src/app/App.tsx": "1973e2e7df484f378b5bd66a08f7b0e632cc44f747b2495ee7e5d30db088c9f2",
+    "src/app/SiteChrome.tsx": "c16c0864a6ccd32eaa7f006fb6cb7f4dec86a21c4bb561d1c59621e1a1cc4988",
+    "src/styles/public-ux.css": "f229cf070540a89fd26734227ac9304793f3e0e81df1f24aed2b23efaaaf9f1f",
+    "functions/generated/public-assets.json": "7db878f529e7771468523575e5f9c17c8aacea08f30e5d6558d1e958876fed11"
+  },
+  "unchanged_global_css": "017da48de7b6c2e6edc49005e073816b6a6fd2dc49d26a1aa31e59a3394b91cf",
+  "excluded": [
+    "pre-existing tracked Python pyc drift",
+    "untracked node_modules symlink",
+    "temporary header fixture outputs"
+  ],
+  "digest": "7b8afd94c83c22bc65b0fe41dee33a2b7d07b8e529070f822b2780b75f7cb72f"
+}

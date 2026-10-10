@@ -1,0 +1,200 @@
+[
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "guest",
+    "width": 1440
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "customer",
+    "width": 1440
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": true,
+    "state": "staff",
+    "width": 1440
+  },
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "guest",
+    "width": 1280
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "customer",
+    "width": 1280
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": true,
+    "state": "staff",
+    "width": 1280
+  },
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "guest",
+    "width": 1201
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": false,
+    "state": "customer",
+    "width": 1201
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": true,
+    "overflow": false,
+    "requestVisible": true,
+    "staffLink": true,
+    "state": "staff",
+    "width": 1201
+  },
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "guest",
+    "width": 1024
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "customer",
+    "width": 1024
+  },
+  {
+    "account": true,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": true,
+    "state": "staff",
+    "width": 1024
+  },
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "guest",
+    "width": 390
+  },
+  {
+    "account": true,
+    "headerFits": false,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "customer",
+    "width": 390
+  },
+  {
+    "account": true,
+    "headerFits": false,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": true,
+    "state": "staff",
+    "width": 390
+  },
+  {
+    "account": false,
+    "headerFits": true,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "guest",
+    "width": 320
+  },
+  {
+    "account": true,
+    "headerFits": false,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": false,
+    "state": "customer",
+    "width": 320
+  },
+  {
+    "account": true,
+    "headerFits": false,
+    "navOverlap": false,
+    "navVisible": false,
+    "overflow": false,
+    "requestVisible": false,
+    "staffLink": true,
+    "state": "staff",
+    "width": 320
+  }
+]
