@@ -1,4 +1,6 @@
 "use client";
+import "../../shared/public-tabs.css";
+import { isCrmPath } from "../../../packages/domain/staff-route";
 import { readGuestTracking } from "./guest-tracking-request";
 import { TrackingRefresh } from "./TrackingRefresh";
 import { GuestOrderTracking } from "./GuestOrderTracking";
@@ -2203,6 +2205,7 @@ export function Ask({
       preparing.current !== null
     )
       return;
+    if (historyTurn !== null) return;
     // Public lookups must precede image preparation, action context and transcript writes.
     if (
       useGuestTracking(
@@ -2616,6 +2619,89 @@ export function Ask({
           </span>
           <span>{vi ? "Hỏi SatsunicGo" : "Ask SatsunicGo"}</span>
         </header>
+        <nav
+          className={styles.waypoints}
+          aria-label={vi ? "Các điểm hội thoại" : "Conversation waypoints"}
+        >
+          {turns.map((turn, index) => (
+            <button
+              key={turn.id}
+              type="button"
+              title={turn.question}
+              aria-current={historyTurn === turn.id ? "step" : undefined}
+              onClick={() => {
+                if (historyTurn === null)
+                  readingPosition.current =
+                    conversation.current?.scrollTop ?? 0;
+                actions.invalidate();
+                setHistoryTurn(turn.id);
+                setTaskView(false);
+                requestAnimationFrame(() => {
+                  const pane = conversation.current,
+                    item = pane?.querySelector<HTMLElement>(
+                      `[data-ask-turn="${turn.id}"]`,
+                    );
+                  if (pane && item) {
+                    pane.scrollTop +=
+                      item.getBoundingClientRect().top -
+                      pane.getBoundingClientRect().top;
+                    item.focus({ preventScroll: true });
+                  }
+                });
+              }}
+            >
+              <span>{index + 1}</span>
+              {turn.question}
+            </button>
+          ))}
+        </nav>
+        <div className={styles.workControls}>
+          {historyTurn !== null ? (
+            <button
+              type="button"
+              onClick={() => {
+                setHistoryTurn(null);
+                actions.invalidate();
+                setTaskView(false);
+                requestAnimationFrame(() => {
+                  conversation.current?.scrollTo({
+                    top: readingPosition.current,
+                    behavior: "instant",
+                  });
+                  chatInput.current?.focus({ preventScroll: true });
+                });
+              }}
+            >
+              {vi ? "Về hội thoại hiện tại" : "Return to current conversation"}
+            </button>
+          ) : (
+            <div
+              className={isCrmPath(route.pathname) ? undefined : "publicTabs"}
+              style={
+                isCrmPath(route.pathname) ? { display: "contents" } : undefined
+              }
+            >
+              <button
+                type="button"
+                aria-pressed={!taskView}
+                onClick={() => {
+                  actions.hideReview();
+                  setTaskView(false);
+                  chatInput.current?.focus({ preventScroll: true });
+                }}
+              >
+                {vi ? "Hội thoại" : "Conversation"}
+              </button>
+              <button
+                type="button"
+                aria-pressed={taskView}
+                onClick={() => setTaskView(true)}
+              >
+                {vi ? "Tác vụ hiện tại" : "Current task"}
+              </button>
+            </div>
+          )}
+        </div>
         <div className={styles.workArea} data-task={taskView}>
           <div
             className={styles.conversation}
@@ -2637,12 +2723,13 @@ export function Ask({
               onCatalogResults={rememberCatalog}
             />
             {turns.at(-1)?.trackingRefreshFailed && <p role="status">{vi ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản." : "Tracking is unavailable. Re-enter the code or check your account."}</p>}
-            {open && !exiting && !busy && !accountPending && turns.at(-1)?.status === "answered" && (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
+            {open && !exiting && historyTurn === null && !busy && !accountPending && turns.at(-1)?.status === "answered" && (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
               <TrackingRefresh key={`${turns.at(-1)!.id}:${authGeneration.current}`} uid={auth?.currentUser?.uid ?? null} order={turns.at(-1)?.tracking} code={turns.at(-1)?.guestTracking ? selectedGuestTracking.current ?? undefined : undefined} language={language}
                 update={value => { const id = turns.at(-1)!.id; setTurns(current => current.map(turn => turn.id === id ? "publicStatus" in value ? {...turn, guestTracking: value} : {...turn, tracking: value} : turn)); }}
                 clear={() => { const id = turns.at(-1)!.id; selectedGuestTracking.current = null; setTurns(current => current.map(turn => turn.id === id ? {...turn, tracking: undefined, guestTracking: undefined, trackingRefreshFailed: true} : turn)); }} />
             )}
-            {(import.meta.env.DEV ||
+            {historyTurn === null &&
+              (import.meta.env.DEV ||
               import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
               turns.at(-1)?.status === "answered" &&
               turns.at(-1)?.question ===

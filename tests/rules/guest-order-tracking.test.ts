@@ -1,5 +1,5 @@
 import { demoFirestoreEndpoint } from "../helpers/demo-environment";
-import { initializeApp, getApp, deleteApp } from "firebase-admin/app";
+import { initializeApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   initializeTestEnvironment,
@@ -12,6 +12,7 @@ import { randomUUID, createHash, createHmac } from "node:crypto";
 import { beforeAll, beforeEach, afterAll, it, expect } from "vitest";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { profileTransaction } from "../helpers/tracking-transaction-profile";
+let app: ReturnType<typeof initializeApp> | undefined;
 let db: ReturnType<typeof getFirestore>, env: RulesTestEnvironment;
 let service: typeof import("../../functions/src/public-order-tracking"),
   privateService: typeof import("../../functions/src/customer-order-tracking");
@@ -110,7 +111,7 @@ async function seed() {
 }
 beforeAll(async () => {
   const endpoint = demoFirestoreEndpoint(process.env);
-  initializeApp({ projectId });
+  app = initializeApp({ projectId });
   db = getFirestore();
   env = await initializeTestEnvironment({
     projectId,
@@ -458,5 +459,5 @@ afterAll(async () => {
     await db.terminate();
   }
   if (env) await env.cleanup();
-  await deleteApp(getApp());
+  if (app) await deleteApp(app);
 });

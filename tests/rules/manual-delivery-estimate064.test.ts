@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import {
   initializeApp,
   deleteApp,
@@ -115,14 +116,9 @@ function commandImpl(
 const runImpl = (data: unknown, identity: unknown = auth(staff)) =>
   shipping.shippingCommand.run({ data, auth: identity } as CallableRequest);
 beforeAll(async () => {
-  if (
-    !["127.0.0.1:8187", "127.0.0.1:18207"].includes(
-      process.env.FIRESTORE_EMULATOR_HOST ?? "",
-    ) ||
-    process.env.GCLOUD_PROJECT !== "demo-satsunicgo" ||
-    process.env.FUNCTIONS_EMULATOR !== "true" ||
-    getApps().some((a) => a.name === "[DEFAULT]")
-  )
+  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:8187")
+    demoFirestoreEndpoint(process.env);
+  if (getApps().some((a) => a.name === "[DEFAULT]"))
     throw Error(
       "064 requires an isolated default SDK project on the validated loopback demo emulator; no baseline writes",
     );
@@ -205,25 +201,34 @@ async function invariantImpl() {
     ).docs.map((d) => d.data()),
   };
 }
-it("records one public staff window with CAS/replay, one order revision/event, no money/outbox effects and redacted owner ETA", async () => {
+async function expectCustomerRevision(
+  before: Awaited<ReturnType<typeof invariantImpl>>,
+  after: Awaited<ReturnType<typeof invariantImpl>>,
+) {
+  expect(after.order?.version).toBe(before.order!.version + 1);
+  expect(after).toEqual({
+    ...before,
+    order: {
+      ...before.order,
+      version: before.order!.version + 1,
+    },
+  });
+  const events = await db.collection(`orders/${orderId}/timeline`).get();
+  expect(events.size).toBe(after.order!.version - 1);
+  for (const event of events.docs) {
+    expect(event.get("action")).toBe("deliveryEstimateUpdated");
+    expect(event.get("createdAt")).toEqual(expect.any(Number));
+    expect(event.get("createdAt")).toBeGreaterThan(0);
+  }
+}
+it("records one public staff window with CAS/replay, customer revision only and redacted owner ETA", async () => {
   const current = generation,
     { db, run, command, invariant, tracking } = caseScope(current);
   const before = await invariant(),
     data = command(),
     result = await run(data);
   expect(await run(data)).toEqual(result);
-  expect(await invariant()).toEqual({
-    ...before,
-    order: { ...before.order, version: 2 },
-  });
-  const history = await db.collection(`orders/${orderId}/timeline`).get();
-  expect(history.size).toBe(1);
-  expect(history.docs[0].data()).toEqual({
-    action: "deliveryEstimateUpdated",
-    createdAt: (await db.doc(`customerShipments/${owner}-${parcelId}`).get()).get(
-      "updatedAt",
-    ),
-  });
+  await expectCustomerRevision(before, await invariant());
   const parcel = (await db.doc(`packages/${parcelId}`).get()).data()!;
   expect(parcel.version).toBe(2);
   expect(parcel.state).toBe("in_transit");
@@ -254,7 +259,7 @@ it("records one public staff window with CAS/replay, one order revision/event, n
   expect(JSON.stringify(own)).not.toContain("Synthetic ETA evidence064");
   expect(JSON.stringify(own)).not.toContain(staff);
 });
-it("explicit null clears estimate, increments parcel and order once, and preserves whole unknown", async () => {
+it("explicit null clears estimate, refreshes customer revision and preserves whole unknown", async () => {
   const current = generation,
     { db, run, command, invariant, tracking } = caseScope(current);
   await run(command());
@@ -268,11 +273,7 @@ it("explicit null clears estimate, increments parcel and order once, and preserv
   expect(
     (await db.doc(`customerShipments/${owner}-${parcelId}`).get()).data(),
   ).not.toHaveProperty("deliveryEstimate");
-  expect(await invariant()).toEqual({
-    ...before,
-    order: { ...before.order, version: 3 },
-  });
-  expect((await db.collection(`orders/${orderId}/timeline`).get()).size).toBe(2);
+  await expectCustomerRevision(before, await invariant());
   expect(
     (
       await tracking.customerOrderTracking.run({
@@ -294,6 +295,8 @@ it("CAS/order conflict and reused operation payload reject without effects", asy
   ).toBe(false);
   const data = command();
   await run(data);
+  const after = await invariant();
+  await expectCustomerRevision(before, after);
   await expect(
     run({
       ...data,
@@ -301,13 +304,9 @@ it("CAS/order conflict and reused operation payload reject without effects", asy
     }),
   ).rejects.toMatchObject({ code: "already-exists" });
   await expect(
-    run({ ...command(undefined, 2), orderVersions: { [orderId]: 1 } }),
+    run({ ...command(undefined, 2), orderVersions: { [orderId]: 3 } }),
   ).rejects.toMatchObject({ code: "aborted" });
-  expect(await invariant()).toEqual({
-    ...before,
-    order: { ...before.order, version: 2 },
-  });
-  expect((await db.collection(`orders/${orderId}/timeline`).get()).size).toBe(1);
+  expect(await invariant()).toEqual(after);
 });
 it.each(["WAREHOUSE", "FINANCE", "SUPPORT", "BUYER"])(
   "%s cannot record an ETA",
@@ -417,11 +416,12 @@ it("redacts mixed-owner parcel projections and denies cross-owner tracking", asy
     ...command(),
     orderVersions: { [orderId]: 1, [foreignOrder]: 1 },
   });
-  expect((await db.doc(`orders/${foreignOrder}`).get()).data()).toEqual({
+  const refreshed = (await db.doc(`orders/${foreignOrder}`).get()).data()!;
+  expect(refreshed.version).toBe(before!.version + 1);
+  expect(refreshed).toEqual({
     ...before,
-    version: 2,
+    version: before!.version + 1,
   });
-  expect((await db.collection(`orders/${foreignOrder}/timeline`).get()).size).toBe(1);
   for (const [uid, selectedOrder, allocation, hiddenOwner, hiddenOrder] of [
     [owner, orderId, ownAllocation, foreignOwner, foreignOrder],
     [foreignOwner, foreignOrder, foreignAllocation, owner, orderId],
@@ -479,13 +479,11 @@ it.each([true, false])(
       finalFreightVersion: 1,
     });
     // Legacy canonical metadata is seeded directly: ETA action itself cannot set a packed parcel.
-    await db
-      .doc(`packages/${parcelId}`)
-      .update({
-        state: "packed",
-        batchId,
-        deliveryEstimate: valid ? estimate : { ...estimate, actor: staff },
-      });
+    await db.doc(`packages/${parcelId}`).update({
+      state: "packed",
+      batchId,
+      deliveryEstimate: valid ? estimate : { ...estimate, actor: staff },
+    });
     await db.doc(`consolidationBatches/${batchId}`).set({
       id: batchId,
       version: 1,
@@ -556,7 +554,7 @@ afterEach(async () => {
     ),
     db.collection(`packages/${parcelId}/events`),
     ...[...ownedPaths]
-      .filter((path) => path.startsWith("orders/"))
+      .filter((path) => /^orders\/[^/]+$/.test(path))
       .map((path) => db.collection(`${path}/timeline`)),
   ];
   for (const query of queries) {

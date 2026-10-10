@@ -653,3 +653,19 @@ it("N20 refresh settling in the new-question event cannot rewrite historical pro
   expect(cards[1].querySelector("h2")?.textContent).toBe("Đang chuẩn bị");
   privacy();
 });
+
+it("release integration preserves upstream history read-only guards and pauses tracking refresh", async () => {
+  state.call.mockResolvedValueOnce(dto());
+  await submit(A);
+  const waypoint = host.querySelector<HTMLButtonElement>('nav button')!;
+  expect(waypoint).not.toBeNull();
+  await act(async () => waypoint.click());
+  expect(input().disabled).toBe(true);
+  expect(host.textContent).not.toContain("Cập nhật tiến độ");
+  privacy();
+  const back = Array.from(host.querySelectorAll<HTMLButtonElement>("button")).find(b => b.textContent?.includes("Về hội thoại hiện tại"))!;
+  await act(async () => back.click());
+  expect(input().disabled).toBe(false);
+  expect(host.textContent).toContain("Cập nhật tiến độ");
+  privacy();
+});
