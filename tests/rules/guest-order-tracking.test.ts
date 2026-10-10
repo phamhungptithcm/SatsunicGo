@@ -1,4 +1,5 @@
-import { initializeApp, getApp, deleteApp } from "firebase-admin/app";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
+import { initializeApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   initializeTestEnvironment,
@@ -11,6 +12,7 @@ import { randomUUID, createHash, createHmac } from "node:crypto";
 import { beforeAll, beforeEach, afterAll, it, expect } from "vitest";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { profileTransaction } from "../helpers/tracking-transaction-profile";
+let app: ReturnType<typeof initializeApp> | undefined;
 let db: ReturnType<typeof getFirestore>, env: RulesTestEnvironment;
 let service: typeof import("../../functions/src/public-order-tracking"),
   privateService: typeof import("../../functions/src/customer-order-tracking");
@@ -108,15 +110,13 @@ async function seed() {
   await batch.commit();
 }
 beforeAll(async () => {
-  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18207")
-    throw Error("Existing shared emulator required; unique project only");
-  initializeApp({ projectId });
+  const endpoint = demoFirestoreEndpoint(process.env);
+  app = initializeApp({ projectId });
   db = getFirestore();
   env = await initializeTestEnvironment({
     projectId,
     firestore: {
-      host: "127.0.0.1",
-      port: 18207,
+      ...endpoint,
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });
@@ -459,5 +459,5 @@ afterAll(async () => {
     await db.terminate();
   }
   if (env) await env.cleanup();
-  await deleteApp(getApp());
+  if (app) await deleteApp(app);
 });
