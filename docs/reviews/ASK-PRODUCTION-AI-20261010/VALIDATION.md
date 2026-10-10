@@ -9,8 +9,8 @@ Approved scope: plan v1 plus 50,000 VND human budget answer. Production activati
 | Compilation | PASSED | Candidate `npm run typecheck`, exit 0, `/private/tmp/ask-ai-final-typecheck.log` |
 | Focused unit | PASSED | 7 files / 124 tests on current candidate, including 47 new admission/workspace/context/answer tests; `/private/tmp/ask-ai-focused-final.log` |
 | Full unit | FAILED | Rebased latest production: 164 files pass, 1 fails; 2407 tests pass, 6 fail before six additional Ask tests were copied. `/private/tmp/ask-ai-latest-tests.log` |
-| Static analysis | PASSED | ESLint of changed files; no dependencies added |
-| Production build/preflight | PASSED (prior candidate tree) | Latest-base `npm run release:build`; preflight errors[]; `/private/tmp/ask-ai-production-build.log`. Final text/test-only refinements compiled afterward; immutable CI build still required |
+| Static analysis | PASSED | Full `npm run lint` exit 0; no dependencies added; `/private/tmp/ask-ai-final-lint.log` |
+| Production build/preflight | PASSED | Final source `npm run release:build` exit 0; `/private/tmp/ask-ai-final-build.log`; immutable CI artifact/deployment still required |
 | Rules/HTTP/restore | NOT_RUN | Required CI gates; shared emulators were preserved |
 | Architecture/API | PASSED | Same callable request/response; additive OWNER action; server-only ledger; strict user ownership retained |
 | Security/failure paths | PASSED within focused checks | Locks/auth/MFA/replay/concurrency/unknown provider/schema/source/context regression tests; no weakening of controls |
@@ -28,3 +28,5 @@ Approved scope: plan v1 plus 50,000 VND human budget answer. Production activati
 Rollback: use authenticated OWNER customer-disable control with recent MFA; retains reservation ledger. Restore previous verified immutable release artifact through native release procedures if necessary. No direct production Firestore patch. Existing native pipeline deploys the complete unchanged-plus-Ask artifact; any mismatch with the approved affected-callable release scope must be resolved before deployment.
 
 Final review cycles: cycle 1 found connection readiness and exhaustion recovery wording defects; fixed and verified by current focused tests/rendered component check. Cycle 2 blocks production handoff on full unit and outstanding release/live acceptance gates. Token usage and actual billed cost: Unavailable. No paid provider generation was invoked by this task. Memory candidates: None.
+
+Final source build and full lint passed. A third review cycle rechecked the same source after final build; required unit/integration/release gates remain blocked. Automatic approval review also rejected the public push, requiring explicit disclosure approval. No PR exists. Generated public-assets output and the dependency symlink remain uncommitted in the isolated worktree; no unrelated source is staged.
