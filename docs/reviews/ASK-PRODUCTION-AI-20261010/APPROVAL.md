@@ -21,3 +21,11 @@ Approved paths:
 
 Required constraints: Preserve shared WIP, App Check, verified Google, OWNER/MFA administration, account locks, object ownership, explicit transactional actions and uncertain reservations. No secrets, production fixtures, role grants, IAM expansion, rule changes, dependency changes or ledger reset.
 Explicit exclusions: Anonymous paid AI, images, paid web research, payment/provider activation beyond scoped AI, unrelated release work.
+
+## Approved delta and public disclosure — 2026-10-10
+
+Human reply: “Approve test-only clock fix”. Scope adds `tests/unit/notification-subscriptions.test.ts`: freeze Date to the existing fixture timestamp before each test, restore real timers after each test, preserve all assertions and production email behavior. Rerun focused and full suites.
+
+Human reply: “Approve public push and draft PR”. Explicit authorization to publish the isolated Ask commits to the existing public GitHub repository `phamhungptithcm/SatsunicGo` and open a draft PR. No unrelated shared WIP or secrets may be published.
+
+Intelligence remains DEGRADED: prior source-verified brief retained, current test file and clock hooks reopened before editing; no dependency or production code change in this delta.

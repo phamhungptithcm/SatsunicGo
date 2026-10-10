@@ -30,3 +30,9 @@ Rollback: use authenticated OWNER customer-disable control with recent MFA; reta
 Final review cycles: cycle 1 found connection readiness and exhaustion recovery wording defects; fixed and verified by current focused tests/rendered component check. Cycle 2 blocks production handoff on full unit and outstanding release/live acceptance gates. Token usage and actual billed cost: Unavailable. No paid provider generation was invoked by this task. Memory candidates: None.
 
 Final source build and full lint passed. A third review cycle rechecked the same source after final build; required unit/integration/release gates remain blocked. Automatic approval review also rejected the public push, requiring explicit disclosure approval. No PR exists. Generated public-assets output and the dependency symlink remain uncommitted in the isolated worktree; no unrelated source is staged.
+
+## Approved continuation — 2026-10-10
+
+Human approved the test-only clock delta and public push/draft PR. Added Date-only beforeEach fixture clock and afterEach real-timer cleanup to notification-subscriptions.test.ts, preserving all assertions and production email code. Focused check: 2 files / 127 tests passed. Complete check: **165 files / 2,419 tests passed**, `/private/tmp/ask-ai-approved-full-unit-unsandboxed.log`. First sandbox run passed 2,418 tests but the telemetry temporary HTTP listener hit EPERM; permitted rerun passed all tests. Full lint passed, `/private/tmp/ask-ai-approved-lint.log`. Production source/build remains unchanged by the test delta.
+
+Prior clock and public disclosure blockers are resolved. Native Node 22 CI/rules/HTTP/restore, immutable deployment, real OWNER canary and non-OWNER customer acceptance remain required. No production mutation or paid model call yet.
