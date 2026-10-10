@@ -40,3 +40,5 @@ checks are separate release gates, not authorized by this integration. No deploy
 main push, provider activation or shared runtime restart/reseed. Immutable artifact
 audit, PRE001/MFA/manual/live acceptance remain mandatory. Memory candidates None;
 token usage/actual cost Unavailable.
+
+Upstream reconciliation cycle: main b5c0a1c2 was newly merged externally. PR conflict was adjacent workspace imports only. Kept both imports and both existing test projections; all15 other upstream files match main exactly. Owner/MFA/customer budget admission remains gated, no AI policy changes/calls. Merged frontend/backend strict build, scoped lint and178 AI/isolation/notification regression cases PASS. No drift outside approved integration/upstream allowlist. Current exact-head CI pending.

@@ -20,3 +20,22 @@ Approved paths:
 - `src/features/ask/Ask.module.css`
 - `functions/generated/public-assets.json`
 - `docs/reviews/GUEST-ASK-CANDIDATE-20261010/**`
+
+Upstream reconciliation: routine current-main conflict resolution for approved candidate CI per UPSTREAM-RECONCILIATION-PLAN.md; retain exact upstream feature, do not activate AI or deploy.
+Approved upstream merge paths:
+- `docs/plans/ASK-PRODUCTION-AI-20261010.md`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/APPROVAL.md`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/FINAL-REVIEW-CYCLE-1.json`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/FINAL-REVIEW-CYCLE-2.json`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/FINAL-REVIEW-CYCLE-3.json`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/FINAL-REVIEW-CYCLE-4.json`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/PRODUCT-CONTENT.md`
+- `docs/reviews/ASK-PRODUCTION-AI-20261010/VALIDATION.md`
+- `functions/src/ai/ask-pilot-answer.ts`
+- `functions/src/ai/ask-production.ts`
+- `functions/src/ai/ask.ts`
+- `functions/src/ai/server-context.ts`
+- `functions/src/workspace.ts`
+- `src/features/settings/AskPilot.tsx`
+- `tests/unit/ask-production-admission.test.ts`
+- `tests/unit/notification-subscriptions.test.ts`

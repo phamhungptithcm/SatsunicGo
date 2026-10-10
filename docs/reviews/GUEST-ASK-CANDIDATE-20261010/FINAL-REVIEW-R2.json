@@ -5,12 +5,13 @@
   "dimensions": {
     "requirement_match": {
       "status": "PASSED",
-      "summary": "Bounded source/diff/local checks; preservation proven.",
+      "summary": "Guest/Ask integration and normal upstream import conflict resolution match current candidate CI request. No main push/deploy/AI activation.",
       "evidence_refs": [
         "SOURCE-FREEZE.json",
         "LOCAL-CHECKS.json",
         "CODE-QUALITY-REVIEW.md",
-        "PRODUCT-CONTENT-REVIEW.md"
+        "PRODUCT-CONTENT-REVIEW.md",
+        "docs/reviews/GUEST-ASK-CANDIDATE-20261010/UPSTREAM-RECONCILIATION-PLAN.md"
       ]
     },
     "security": {
@@ -96,6 +97,7 @@
   "limitations": [
     "RIG DEGRADED; self-review only",
     "genuine200%zoom/spokenAT NOT_RUN; Product Language BLOCKED",
-    "PRE001/MFA/immutable release/live remain blocked"
+    "PRE001/MFA/immutable release/live remain blocked",
+    "Upstream main reconciled;15 files exact, workspace import conflict only;178 focused unit tests pass; merged exact-SHA CI pending."
   ]
 }

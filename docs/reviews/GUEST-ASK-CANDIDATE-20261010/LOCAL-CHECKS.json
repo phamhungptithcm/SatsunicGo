@@ -1,5 +1,4 @@
 {
-  "sourceDigest": "1aabd13f1aa0108a2d82e12b514604eaf6d0a8c25d3fe68afa6bcfe1ff4b82ab",
   "buildFrontendTypesAssets": {
     "status": "PASSED",
     "log": "/private/tmp/satsunicgo-guest-ask-candidate-20261010/BUILD-R2.log",
@@ -37,5 +36,29 @@
   "diffCheck": "PASSED",
   "genuine200Zoom": "NOT_RUN",
   "spokenAT": "NOT_RUN",
-  "production": "NOT_READY"
+  "production": "NOT_READY",
+  "preMergeSourceDigest": "1aabd13f1aa0108a2d82e12b514604eaf6d0a8c25d3fe68afa6bcfe1ff4b82ab",
+  "sourceDigest": "79617d7b1e2ba51ad223d5bafb3c9e1792ad9bc87d26df8659181278f28f6a25",
+  "upstreamReconciliation": {
+    "main": "b5c0a1c285c07faeacf1d3b8ba544f76d885ceb6",
+    "checks": {
+      "frontendStrictBuildAssets": "PASSED",
+      "backendStrictBuild": "PASSED",
+      "mergedScopedLint": "PASSED",
+      "focusedAiIsolationRegression": {
+        "files": 5,
+        "tests": 178,
+        "status": "PASSED"
+      }
+    },
+    "logs": [
+      "/private/tmp/satsunicgo-guest-ask-candidate-20261010/BUILD-MERGED.log",
+      "/private/tmp/satsunicgo-guest-ask-candidate-20261010/BACKEND-MERGED.log",
+      "/private/tmp/satsunicgo-guest-ask-candidate-20261010/LINT-MERGED.log",
+      "/private/tmp/satsunicgo-guest-ask-candidate-20261010/UPSTREAM-REGRESSION.log"
+    ],
+    "noPaidProviderCalls": true,
+    "workflowsRulesDeps": "UNCHANGED",
+    "sourcePreflightAfterMerge": "PENDING_CI; premerge backend receipt historical"
+  }
 }
