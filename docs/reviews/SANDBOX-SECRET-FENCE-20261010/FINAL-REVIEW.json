@@ -1,0 +1,94 @@
+{
+  "plan": "SANDBOX-SECRET-FENCE-v1",
+  "reviewedAt": "2026-10-10T00:30:47.103329+00:00",
+  "baseCommit": "52350cb80de2ae6245bb003a2dc80e1b41a797bc",
+  "decision": "PASSED",
+  "scope": "Localized SDK parameter registration fix only; no activation or whole-product readiness assertion",
+  "intelligence": "DEGRADED; stale CodeGraph/unhealthy CocoIndex, bounded current source/import/SDK/test evidence",
+  "dimensions": {
+    "requirements": "PASSED",
+    "securityPrivacyAuth": "PASSED: no secret values, network or auth relaxation; optional IPN parameter fails closed",
+    "correctnessCompatibility": "PASSED: exact demo still declares both parameters; non-demo declares neither; actual runtime demo guard unchanged",
+    "negativePaths": "PASSED: undefined/nonemulator/production/wrong/conflicting project matrix; absent binding denies readiness/adapter",
+    "performanceConcurrency": "PASSED: constant-time module initialization only; no added transactions or network calls",
+    "errorsCleanupRollback": "PASSED: existing error contracts retained; roll forward from failed immutablev080 through normal release",
+    "productContent": "NOT_APPLICABLE: no UI/string/display semantics changed",
+    "productionRelease": "PASSED_FOR_SCOPED_FIX: normal full CI/artifact/deploy still pending; SDK production discovery105sourceendpoints,0sandboxparams; strippedartifactcount separately verified by pipeline"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "decision": "CHANGES_REQUESTED",
+      "finding": "Firebase SDK registers sandbox SecretParams globally via reachable checkout import even if no endpoint binds them; normal deploy fails before promotion",
+      "evidence": "run38007935994 deploy; regression RED6failed2passed"
+    },
+    {
+      "cycle": 2,
+      "decision": "PASSED",
+      "finding": "No further actionable issue within scoped current source diff",
+      "evidence": "111focused tests, both strict0, lint0; actual SDK loader0sandboxparams and0network"
+    }
+  ],
+  "tests": {
+    "focusedTests": 111,
+    "files": 3,
+    "redBeforeFix": "6failed2passed",
+    "strictAndLint": {
+      "frontendStrict": {
+        "exitCode": 0,
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "node_modules/typescript/bin/tsc",
+          "--noEmit"
+        ]
+      },
+      "backendStrict": {
+        "exitCode": 0,
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "node_modules/typescript/bin/tsc",
+          "-p",
+          "functions/tsconfig.json",
+          "--noEmit"
+        ]
+      },
+      "focusedLint": {
+        "exitCode": 0,
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "node_modules/eslint/bin/eslint.js",
+          "functions/src/payments/sepay-sandbox.ts",
+          "functions/src/purchase-sepay.ts",
+          "tests/unit/sepay-secret-registration.test.ts"
+        ]
+      }
+    },
+    "sdk": {
+      "scope": "Current compiled source SDK discovery, not stripped production artifact or deployed proof",
+      "environment": "satsunicgo production, emulatorfalse",
+      "endpointCount": 105,
+      "paramNames": [
+        "PAYOS_API_KEY",
+        "PAYOS_CHECKSUM_KEY",
+        "PAYOS_CLIENT_ID",
+        "SFTP_PASSWORD"
+      ],
+      "sandboxParams": [],
+      "networkAttempts": 0,
+      "secretValueReads": 0
+    }
+  },
+  "sources": {
+    "functions/src/payments/sepay-sandbox.ts": "2c60acbf1d9db13ee00a86b69cc4cd459cabf9f3bc626b30fddf417ddbab8548",
+    "functions/src/purchase-sepay.ts": "4e352fec23171606dcffe616ca40bfa0ba7acc5191754c64b0a1091929815ea5",
+    "tests/unit/sepay-secret-registration.test.ts": "f2bac719c744179dd14bb9edecbb9fe86270e858f3bbd19478bd4ee9bb3e73b9"
+  },
+  "productionReadiness": "NOT_READY_PENDING_NORMAL_DEPLOY_AND_NEW_PRODUCTION_TEST_MODE_DELTA",
+  "residuals": [
+    "Genuine staff MFA acceptance remains user-login pending; not certified by source test",
+    "New human request to use sandbox on production is a material separate runtime/artifact/financial-isolation delta; scoped plan being prepared; not activated by this fix"
+  ],
+  "tokens": "Unavailable",
+  "actualBilledCost": "Unavailable",
+  "memoryCandidates": "None"
+}

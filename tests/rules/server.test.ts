@@ -722,7 +722,8 @@ it("scheduled publication, expiry and in-app outbox processing are replay safe",
   expect((await post.collection("versions").get()).size).toBe(1);
   expect((await member.get()).data()?.state).toBe("expired");
   expect((await member.collection("history").get()).size).toBe(1);
-  expect((await job.get()).data()?.emailState).toBe("blocked_external");
+  // Legacy in-app notifications remain available without authorizing email.
+  expect((await job.get()).data()?.emailState).toBe("blocked_policy");
   expect(
     (await db.doc(`notifications/${prefix}-notice`).get()).data()?.ownerId,
   ).toBe(customer);

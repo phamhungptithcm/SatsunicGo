@@ -1,0 +1,14 @@
+Đơn hàng đang tạm dừng
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+
+Xem tình trạng đơn: {{ctaUrl}}
+
+{{nextStep}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

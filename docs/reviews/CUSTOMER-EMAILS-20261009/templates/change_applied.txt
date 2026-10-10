@@ -1,0 +1,13 @@
+Đơn hàng đã được cập nhật
+
+Phương án bạn đồng ý đã được áp dụng.
+
+Đơn hàng: {{orderRef}}
+Nội dung cập nhật: {{changeSummary}}
+
+Xem thay đổi: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -1,0 +1,13 @@
+Kiện hàng được ghi nhận hoàn về
+
+Bạn xem tình trạng và trao đổi hướng xử lý tiếp theo trong đơn.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+
+Xem tình trạng kiện: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

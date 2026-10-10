@@ -1,0 +1,14 @@
+Hành trình có cập nhật
+
+{{trackingSummary}}.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+Ghi nhận lúc: {{observedAt}}
+
+Xem hành trình: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

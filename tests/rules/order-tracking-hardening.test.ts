@@ -1,4 +1,5 @@
-import { initializeApp, deleteApp, getApp } from "firebase-admin/app";
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
+import { initializeApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { randomUUID } from "node:crypto";
@@ -15,6 +16,7 @@ vi.mock("firebase-admin/app", async (original) => {
 });
 
 // Real source transactions; synthetic identities, unique emulator project, no shared baseline writes.
+let app: ReturnType<typeof initializeApp> | undefined;
 let db: ReturnType<typeof getFirestore>;
 let shipping: typeof import("../../functions/src/shipping");
 let tracking: typeof import("../../functions/src/customer-order-tracking");
@@ -57,9 +59,8 @@ async function state() {
   return [order.data(), p1.data(), p2.data()];
 }
 beforeAll(async () => {
-  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18207")
-    throw Error("Shared emulator required, unique project only");
-  initializeApp({ projectId: `demo-trackinghard-${randomUUID().slice(0, 8)}` });
+  demoFirestoreEndpoint(process.env);
+  app = initializeApp({ projectId: `demo-trackinghard-${randomUUID().slice(0, 8)}` });
   db = getFirestore();
   shipping = await import("../../functions/src/shipping");
   tracking = await import("../../functions/src/customer-order-tracking");
@@ -632,7 +633,7 @@ afterAll(async () => {
       await db.recursiveDelete(collection);
     await db.terminate();
   }
-  await deleteApp(getApp());
+  if (app) await deleteApp(app);
 });
 
 it("H10 N06 parcel receipt checks canonical quantities, not a fabricated order tracking number", async () => {

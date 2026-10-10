@@ -1,0 +1,13 @@
+Đã lưu lựa chọn của bạn
+
+Bạn đã đồng ý báo giá. Khoản thanh toán vẫn cần được xác nhận.
+
+Đơn hàng: {{orderRef}}
+Báo giá đã đồng ý: {{quotedTotal}}
+
+Xem thanh toán: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

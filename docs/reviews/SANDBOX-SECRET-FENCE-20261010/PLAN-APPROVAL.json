@@ -1,0 +1,34 @@
+{
+  "id": "SANDBOX-SECRET-REGISTRATION-FENCE-20261010-v1",
+  "recordedAt": "2026-10-10T00:23:10.323900+00:00",
+  "approval": {
+    "status": "AUTHORIZED_WITHIN_EXISTING_CI_DEPLOY_FIX_REQUEST",
+    "approver": "Human user",
+    "taskReference": "Current chat: explicit mainpush plus monitorCI/CD and fixissues; existing explicit no-sandbox-production constraint",
+    "exactRequest": "Commit push sẽ trigger bạn càn monitor cicd và fizx isur nếu có"
+  },
+  "problem": "Normal deploy38007935994/v0.8.0 stopped while Firebase resolved declared parameters: missingSEPAY_SANDBOX_IPN_SECRET_KEY. purchaseCheckout imports sandboxPaymentReady/sepaySecrets module; module eagerly callsdefineSecret even though production Function options have secrets[] and sandbox endpoints are excluded. Endpoint count alone does not prove parameter isolation.",
+  "failureLogSha256": "86b07a1b620a67210f73410f45eae67bb18c957645586cd82e8db01feae1c909",
+  "plan": [
+    "Add a focused environment-matrix regression that spies actual defineSecret registrations during module import: production/undefined/otherdemo/spoofed/conflictingproject all0; exactdemo emulator two expectedSecretParams. Prove failure before patch.",
+    "Guard sandbox SecretParam declarations by exact demo emulator identity, expose no sandboxSecretParams outside it, and failclosed if optional boundparameter unavailable. Preserve existing runtime purchaseDemoEnvironment, IPN authentication and payment invariants.",
+    "Run focused SePay and analytics regressions, frontend/backend strict and lint; compileFunctions and inspect actual SDK-discovered parameter names with production env; require0sandboxparams alongside correct endpoint names.",
+    "Record source/finalreview hashes, commit only scoped source/tests/evidence, nonforcepushmain; normal new version builds a new immutableartifact. Do not modify/reusev0.8.0 bytes or retry unchanged failure.",
+    "Read provider metadata to determine whether deployment changed resources before retry; never create sandbox secrets onproduction or broaden IAM/gates."
+  ],
+  "files": [
+    "functions/src/payments/sepay-sandbox.ts",
+    "functions/src/purchase-sepay.ts",
+    "tests/unit/sepay-secret-registration.test.ts"
+  ],
+  "constraints": [
+    "No secretpayload read/create/rotation",
+    "No sandboxexport activation or fake secretvalues",
+    "No auth/MFA/consent/paymentcontrol weakening",
+    "No artifact/workflow/dependency/threshold change",
+    "No shared server/emulator restart or provider businessrecords"
+  ],
+  "risk": "Localized initialization fence; only exact existing demo emulator declares sandbox params; runtime sandbox handler rejects absentbinding; production checkout retains its no-sandbox policy.",
+  "productContent": "NOT_APPLICABLE_NO_STRINGS_OR_DISPLAYED_MEANING_CHANGE",
+  "status": "PLAN_RECORDED_BEFORE_SOURCE_EDIT"
+}

@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { beforeAll, afterAll, test } from "vitest";
 import { readFileSync } from "node:fs";
 import {
@@ -11,8 +12,7 @@ beforeAll(async () => {
   rules = await initializeTestEnvironment({
     projectId: "demo-satsunicgo-purchase-gateway-rules",
     firestore: {
-      host: "127.0.0.1",
-      port: 18207,
+      ...demoFirestoreEndpoint(process.env),
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });

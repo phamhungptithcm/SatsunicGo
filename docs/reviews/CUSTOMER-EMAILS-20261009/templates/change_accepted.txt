@@ -1,0 +1,13 @@
+Đã lưu phương án bạn đồng ý
+
+Lựa chọn đã được lưu. Bạn có thể xem bước tiếp theo trong đơn.
+
+Đơn hàng: {{orderRef}}
+Phương án: {{changeSummary}}
+
+Xem đơn hàng: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

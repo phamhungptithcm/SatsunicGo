@@ -1,0 +1,14 @@
+Đã mua một phần hàng
+
+Bạn có thể theo dõi từng món trong đơn.
+
+Đơn hàng: {{orderRef}}
+Đã mua: {{purchasedSummary}}
+Còn lại: {{remainingSummary}}
+
+Xem tiến độ mua: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -1,0 +1,13 @@
+Đã lưu lựa chọn từ chối
+
+Bạn có thể trao đổi thêm với bên mình trong đơn.
+
+Đơn hàng: {{orderRef}}
+Phương án đã từ chối: {{changeSummary}}
+
+Xem đơn hàng: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -11,6 +11,8 @@ const groups = [
   ['cart', 18207, 'demo-satsunicgo-cart107'],
   ['pilot', 18207, 'demo-satsunicgo-ask106-ci'],
   ['delivery', 8187, 'demo-satsunicgo'],
+  ['recipient', 18207, 'demo-satsunicgo'],
+  ['sepay', 18207, 'demo-satsunicgo'],
 ];
 for (const [group, port, project] of groups) {
   const config = JSON.parse(readFileSync('firebase.json', 'utf8'));

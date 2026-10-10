@@ -1,0 +1,60 @@
+{
+  "scope": "retry confirmation only; production-test index/artifact/jobs WIP excluded",
+  "base": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "decision": "PASSED_WITHIN_SCOPED_LOCAL_REPAIR",
+  "cycles": [
+    {
+      "cycle": 1,
+      "result": "105/106 release tests; new retry tests7PASS, concurrent PDF import exposed transitive fixture omission"
+    },
+    {
+      "cycle": 2,
+      "result": "106/106 release tests PASS; fixture compiles actual domain dependencies and resolves installed zod"
+    }
+  ],
+  "dimensions": {
+    "requirements": "PASSED",
+    "security": "PASSED: force flag confined to copied retry options; actual deletion prompt unchanged and executable rejection verified",
+    "failure_paths": "PASSED: unreviewed retry, document/source/inventory/project/region/codebase drift, unsafe options and provider mismatch rejection",
+    "quality": "PASSED: pinned CLI API dependency explicit15.32.1, bounded manifest selectors and provider metadata only",
+    "product_content": "NOT_APPLICABLE: no displayed strings/meaning changed in repair",
+    "production": "NOT_VERIFIED: normalCI/provider deployment required"
+  },
+  "tests": "/private/tmp/release-reviewed-retry-test-r2.log",
+  "test_counts": {
+    "passed": 106,
+    "failed": 0
+  },
+  "files": {
+    ".github/workflows/release.yml": "9fb8f52e6ddc603c27ceb69f54942e4ca33273eed9c70868e4bc9639d0ff6eed",
+    "scripts/release/verify-production.mjs": "8a188b0d7e98a248952872f60939e627fcd75cded02004abb0628effa3fd6ae4",
+    "tests/unit/release108.test.mjs": "25cafb138e7d297becab6898e3d220bde098ff38c7252a85d61a3ec1f9a5b217",
+    "scripts/release/reviewed-retries.mjs": "85cdef79b47f62be04e8417084f94500eb16d880a2be010e56a3e5b88a9311c0",
+    "docs/reviews/PRODUCTION-TEST-20261010/RELEASE-SCOPE/IMPACT.md": "a2eed9f9a2f7db5486ef8f435ab59fb562104f31af402994b50d4ccde3cd7171"
+  },
+  "patch_sha256": "b798f1a8347594c97a5be405634685c551fdb3b755ad5c975a9f44770d410efd",
+  "limitations": [
+    "Private pinned Firebase CLI prompt API coupling; fail closed on dependency version drift",
+    "No deployment/provider success claim",
+    "Whole production-test mode not included"
+  ],
+  "tokens": "Unavailable",
+  "actual_cost": "Unavailable",
+  "memory_candidates": "None",
+  "rootIndependentReview": {
+    "decision": "PASSED_WITHIN_SCOPED_LOCAL_REPAIR",
+    "checks": {
+      "release108": "106/106 PASS under Node22.23.3",
+      "diffCheck": "PASS",
+      "privateCliContract": "15.32.1 source verified; getEndpointFilters strips functions: then parses codebase:id; prompt matching backend includes all manifest selectors; real force remains false",
+      "providerComparison": "95 functions unchanged in common source/labels/state fields. Revision/latest updateTime not compared because projections differ."
+    },
+    "scope": "Only reviewed retry prompt admission plus exact provider retry-policy readback. Full production-test WIP excluded.",
+    "releaseStatus": "NOT_VERIFIED: normal CI and immutable deployment/provider readback pending",
+    "newUnresolvedFindings": [],
+    "RIG": "DEGRADED: metadata still references0d6; bounded current source and executable CLI tests used",
+    "tokens": "Unavailable",
+    "actualCost": "Unavailable",
+    "memoryCandidates": "None"
+  }
+}

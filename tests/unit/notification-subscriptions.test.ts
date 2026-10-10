@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Firestore } from "firebase-admin/firestore";
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
   changeNotificationPreferences,
   emptyNotificationPreferences,
@@ -27,6 +27,14 @@ import {
 } from "../../functions/src/notification-order-policy";
 const email = "owner@example.invalid",
   now = 1791547200000;
+// Match I/O-time authorization checks to the fixture clock without freezing timers.
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(now);
+});
+afterEach(() => {
+  vi.useRealTimers();
+});
 const identity = async () => ({ email, verified: true, disabled: false });
 // Serialized commit/rollback fake also rejects reads after writes, like Firestore transactions.
 function harness() {

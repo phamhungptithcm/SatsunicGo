@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import {
   initializeTestEnvironment,
   assertFails,
@@ -17,8 +18,7 @@ beforeAll(async () => {
   env = await initializeTestEnvironment({
     projectId: `demo-trackrules-${randomUUID().slice(0, 8)}`,
     firestore: {
-      host: "127.0.0.1",
-      port: 18207,
+      ...demoFirestoreEndpoint(process.env),
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });

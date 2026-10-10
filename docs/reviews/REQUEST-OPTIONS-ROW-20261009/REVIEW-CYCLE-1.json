@@ -1,0 +1,16 @@
+{
+  "cycle": 1,
+  "status": "BLOCKED",
+  "findings": [
+    {
+      "id": "ROW-01",
+      "severity": "low",
+      "location": "src/features/requests/request-form.css:108",
+      "evidence": "Four labels but only three desktop grid columns; screenshot shows condition on second row.",
+      "impact": "Unnecessarily tall form and detached condition control.",
+      "fix": "Four columns, end alignment, min-width zero labels.",
+      "status": "FIXED",
+      "verification": "Native browser controls have equal top coordinates at all tested widths >640; three market currencies pass."
+    }
+  ]
+}

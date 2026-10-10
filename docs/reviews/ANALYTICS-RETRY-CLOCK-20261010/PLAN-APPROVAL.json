@@ -1,0 +1,39 @@
+{
+  "id": "ANALYTICS-RETRY-CLOCK-20261010-v1",
+  "recordedAt": "2026-10-10T00:04:57.853605+00:00",
+  "approval": {
+    "status": "AUTHORIZED_WITHIN_EXISTING_CI_FIX_REQUEST",
+    "approver": "Human user",
+    "taskReference": "Current root chat; human explicitly requested commit/push, monitor CI/CD and fix issues if any",
+    "exactRequest": "Commit push sẽ trigger bạn càn monitor cicd và fizx isur nếu có"
+  },
+  "failure": {
+    "run": 38006910464,
+    "head": "cc9e0843a1c4553596e2c9703331240e59a551c2",
+    "stage": "quality/local rules",
+    "test": "session retries alias one visit, and a duplicate20-event burst applies once",
+    "source": "functions/src/analytics-ingest.ts:126 validSession(prior,subject,now)",
+    "logSha256": "1be2c60befed304b8a182e1399313f605a5464990bb10a914cfe1d3440d54621",
+    "effect": "now captured before Firestore runTransaction; an earlier request retried after a later concurrent request commits can fail now<prior.startedAt. This is a real idempotency race, not grounds to weaken or retry away the test."
+  },
+  "plan": [
+    "Add a deterministic unit transaction-conflict harness that executes callback twice, inserts a later winning session between attempts and advances the clock; prove current code fails.",
+    "Move analyticsSession timestamp and its UTC quota ref into each transaction callback so retry observes fresh time and matching UTC day. Keep token/receipt identities outside retry.",
+    "Verify alias/session/quota invariants and negative controls: revoked/closed/future/idle/retention/wrongowner, aliaslimit, disabledconsent.",
+    "Run focused new regression plus existing analytics units, strict checks and lint. Final-review exact minimal diff.",
+    "Commit only approved scoped source/test change in isolated integration checkout; push non-force to main and monitor normal full release workflow, with no threshold/workflow/runtime/auth/consent changes."
+  ],
+  "files": [
+    "functions/src/analytics-ingest.ts",
+    "tests/unit/analytics-session-retry.test.ts"
+  ],
+  "risk": "Low localized correctness fix in transaction time sampling; no new API/schema/dependency/IAM or privacy retention/expiry/quota change. UTC day quota must follow the same per-attempt time.",
+  "constraints": [
+    "No stale-time tolerance or removed validation",
+    "No test skipping/timeouts or threshold changes",
+    "No shared emulator/runtime/settings mutations",
+    "No production financial fixture or secret payload access"
+  ],
+  "productContent": "NOT_APPLICABLE_NO_TEXT_OR_DATA_SEMANTICS_CHANGE",
+  "status": "PLAN_RECORDED_BEFORE_SOURCE_EDIT"
+}

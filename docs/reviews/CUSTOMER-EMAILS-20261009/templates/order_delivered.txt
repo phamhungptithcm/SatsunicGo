@@ -1,0 +1,14 @@
+Đơn hàng đã được giao đủ
+
+Nếu hàng nhận có vấn đề, bạn có thể mở đơn để trao đổi với bên mình.
+
+Đơn hàng: {{orderRef}}
+
+Xem đơn hàng: {{ctaUrl}}
+
+Cảm ơn bạn đã tin tưởng SatsunicGo.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

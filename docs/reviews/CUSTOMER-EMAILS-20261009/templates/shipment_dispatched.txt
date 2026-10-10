@@ -1,0 +1,16 @@
+Kiện hàng đã được gửi
+
+Kiện đã được bàn giao cho đơn vị vận chuyển.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+Đơn vị vận chuyển: {{carrierName}}
+Mã vận đơn: {{trackingCode}}
+Hàng trong kiện: {{parcelItems}}
+
+Theo dõi kiện hàng: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

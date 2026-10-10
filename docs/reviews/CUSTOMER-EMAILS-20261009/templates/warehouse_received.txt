@@ -1,0 +1,13 @@
+Kho đã nhận hàng
+
+Số lượng hàng nhận đã được cập nhật trong đơn.
+
+Đơn hàng: {{orderRef}}
+Đã nhận: {{receivedSummary}}
+
+Xem hàng đã nhận: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

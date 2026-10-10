@@ -1,0 +1,12 @@
+Bạn có phản hồi mới
+
+Bên mình đã trả lời yêu cầu hỗ trợ của bạn.
+
+Yêu cầu hỗ trợ: {{ticketRef}}
+
+Xem phản hồi: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

@@ -1,0 +1,18 @@
+Bạn xem giúp giá mua mới
+
+{{customerReason}}.
+
+Tổng theo giá mới: {{proposedTotal}}
+
+Đơn hàng: {{orderRef}}
+Giá trước đó: {{previousTotal}}
+Chênh lệch tăng: {{differenceAmount}}
+
+Xem giá mua mới: {{ctaUrl}}
+
+Phần mua theo giá mới cần bạn đồng ý.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

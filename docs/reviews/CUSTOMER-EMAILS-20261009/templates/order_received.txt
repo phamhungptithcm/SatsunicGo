@@ -1,0 +1,15 @@
+Đơn hàng đã được tạo
+
+Đơn đã được lưu và đang chờ xác nhận thanh toán.
+
+Đơn hàng: {{orderRef}}
+Sản phẩm: {{itemSummary}}
+
+Xem đơn hàng: {{ctaUrl}}
+
+Cảm ơn bạn đã chọn SatsunicGo.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

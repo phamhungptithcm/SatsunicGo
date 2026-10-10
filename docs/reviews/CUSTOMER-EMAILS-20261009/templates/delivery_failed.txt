@@ -1,0 +1,15 @@
+Kiện hàng chưa giao được
+
+{{customerReason}}.
+
+Đơn hàng: {{orderRef}}
+Kiện hàng: {{parcelRef}}
+
+Xem hướng xử lý: {{ctaUrl}}
+
+{{nextStep}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

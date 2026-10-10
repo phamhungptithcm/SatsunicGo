@@ -1,0 +1,16 @@
+Đã đối chiếu khoản thanh toán
+
+Khoản tiền đã được ghi nhận vào đúng đơn.
+
+Khoản đã đối chiếu: {{paidAmount}}
+
+Đơn hàng: {{orderRef}}
+
+Xem thanh toán: {{ctaUrl}}
+
+Cảm ơn bạn đã chờ bên mình kiểm tra.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

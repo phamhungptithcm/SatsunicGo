@@ -1,0 +1,14 @@
+Báo giá đã sẵn sàng
+
+Bạn xem chi phí và điều khoản trước khi quyết định nhé.
+
+Tổng báo giá: {{quotedTotal}}
+
+Đơn hàng: {{orderRef}}
+
+Xem báo giá: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

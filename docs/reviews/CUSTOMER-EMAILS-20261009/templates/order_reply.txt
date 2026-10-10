@@ -1,0 +1,12 @@
+Bên mình đã trả lời về đơn
+
+Bạn mở cuộc trao đổi để xem và trả lời khi tiện nhé.
+
+Đơn hàng: {{orderRef}}
+
+Xem phản hồi: {{ctaUrl}}
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy

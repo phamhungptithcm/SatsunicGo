@@ -1,0 +1,291 @@
+{
+  "matrix": [
+    {
+      "columns": "142px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 132,
+          "top": 197.7734375,
+          "width": 142
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 132,
+          "top": 295.7734375,
+          "width": 142
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 132,
+          "top": 375.7734375,
+          "width": 142
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 132,
+          "top": 455.7734375,
+          "width": 142
+        }
+      ],
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "columns": "212px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 132,
+          "top": 179.7734375,
+          "width": 212
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 132,
+          "top": 277.7734375,
+          "width": 212
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 132,
+          "top": 357.7734375,
+          "width": 212
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 132,
+          "top": 437.7734375,
+          "width": 212
+        }
+      ],
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "columns": "446px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 140,
+          "top": 146.3828125,
+          "width": 446
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 140,
+          "top": 226.3828125,
+          "width": 446
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 140,
+          "top": 306.3828125,
+          "width": 446
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 140,
+          "top": 386.3828125,
+          "width": 446
+        }
+      ],
+      "overflow": false,
+      "width": 640
+    },
+    {
+      "columns": "90px 123.688px 77.3125px 160px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 74,
+          "top": 377.6875,
+          "width": 90
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 178,
+          "top": 377.6875,
+          "width": 123.6875
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 315.6875,
+          "top": 377.6875,
+          "width": 77.3125
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 407,
+          "top": 377.6875,
+          "width": 160
+        }
+      ],
+      "overflow": false,
+      "width": 641
+    },
+    {
+      "columns": "90px 201.844px 126.156px 160px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 74,
+          "top": 468.1875,
+          "width": 90
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 178,
+          "top": 468.1875,
+          "width": 201.84375
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 393.84375,
+          "top": 468.1875,
+          "width": 126.15625
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 534,
+          "top": 468.1875,
+          "width": 160
+        }
+      ],
+      "overflow": false,
+      "width": 768
+    },
+    {
+      "columns": "90px 340.109px 212.57px 191.32px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 74,
+          "top": 468.1875,
+          "width": 90
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 178,
+          "top": 468.1875,
+          "width": 340.109375
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 532.109375,
+          "top": 468.1875,
+          "width": 212.5703125
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 758.6796875,
+          "top": 468.1875,
+          "width": 191.3203125
+        }
+      ],
+      "overflow": false,
+      "width": 1024
+    },
+    {
+      "columns": "90px 411.422px 257.148px 231.422px",
+      "controls": [
+        {
+          "height": 44,
+          "label": "Số lượng *",
+          "left": 204,
+          "top": 476.1875,
+          "width": 90
+        },
+        {
+          "height": 44,
+          "label": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+          "left": 308,
+          "top": 476.1875,
+          "width": 411.421875
+        },
+        {
+          "height": 44,
+          "label": "Mẫu, màu, kích cỡ",
+          "left": 733.421875,
+          "top": 476.1875,
+          "width": 257.1484375
+        },
+        {
+          "height": 44,
+          "label": "Tình trạngChưa xác địnhHàng mớiHàng đã qua sử dụngCó thể xem cả hai",
+          "left": 1004.5703125,
+          "top": 476.1875,
+          "width": 231.421875
+        }
+      ],
+      "overflow": false,
+      "width": 1440
+    }
+  ],
+  "currencies": [
+    {
+      "market": "Mỹ",
+      "priceLabel": "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+      "tops": [
+        699.1875,
+        699.1875,
+        699.1875,
+        699.1875
+      ],
+      "width": 1440
+    },
+    {
+      "market": "Nhật Bản",
+      "priceLabel": "Giá bạn đã tìm hiểu (JPY / sản phẩm) *",
+      "tops": [
+        699.1875,
+        699.1875,
+        699.1875,
+        699.1875
+      ],
+      "width": 1440
+    },
+    {
+      "market": "Hàn Quốc",
+      "priceLabel": "Giá bạn đã tìm hiểu (KRW / sản phẩm) *",
+      "tops": [
+        699.1875,
+        699.1875,
+        699.1875,
+        699.1875
+      ],
+      "width": 1440
+    }
+  ],
+  "keyboard": [
+    "Giá bạn đã tìm hiểu (USD / sản phẩm) *",
+    "Mẫu, màu, kích cỡ",
+    "SELECT"
+  ],
+  "inputAndSelectValuesVerified": true,
+  "testValuesRestored": true
+}

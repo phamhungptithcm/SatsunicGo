@@ -1,0 +1,17 @@
+Đã ghi nhận khoản hoàn tiền
+
+Bạn có thể xem xác nhận khoản hoàn trong đơn.
+
+Khoản hoàn đã ghi nhận: {{refundAmount}}
+
+Đơn hàng: {{orderRef}}
+Ghi nhận ngày: {{refundRecordedAt}}
+
+Xem khoản hoàn: {{ctaUrl}}
+
+Nếu chưa thấy tiền về, bạn liên hệ bên mình để kiểm tra nhé.
+
+SatsunicGo by HunpeoLabs
+Hỗ trợ: https://satsunicgo.web.app/support
+Điều khoản: https://satsunicgo.web.app/terms
+Quyền riêng tư: https://satsunicgo.web.app/privacy
