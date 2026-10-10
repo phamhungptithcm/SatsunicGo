@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "task_id": "ANALYTICS-RETRY-CLOCK-20261010",
+  "cycle": 2,
+  "reviewedAt": "2026-10-10T00:10:51.886482+00:00",
+  "status": "PASSED_WITHIN_LOCAL_FIX_SCOPE",
+  "reviewer": "Root manual final-implementation-review/code-review/code-quality-review; no independent whole-system review claimed",
+  "technology": "Node22.23.3 TypeScript6 FirebaseFunctions7.4 FirestoreTransactions Vitest4.1.11",
+  "profiles": [
+    "universal",
+    "typescript-javascript",
+    "api",
+    "database",
+    "concurrency",
+    "devops"
+  ],
+  "files": {
+    "functions/src/analytics-ingest.ts": "1f1ebfa1437bdfd454520766e68f9cd9fd8e7bb54412ddf72ffdade911da0624",
+    "tests/unit/analytics-session-retry.test.ts": "021cb7d9b9f74b118790a20e6cf342a135962de2a30cdd1b01f720ea0928603c"
+  },
+  "dimensions": {
+    "requirement_match": "PASSED: precise failed CI concurrency path fixed, with pre-fix deterministic reproduction",
+    "security": "PASSED: auth, current policy, session eligibility, TTL, quota and alias limit unchanged; no secrets/PII/provider/runtime writes",
+    "correctness": "PASSED: eligibility now sampled immediately after reading winning session; per-attempt UTCquota remains coherent; stable identities and everyread-beforewrite preserved",
+    "failure_paths": "PASSED: revoked/closed/wrongsubject/future/idle/retention/aliaslimit/disabledpolicy regression controls remain rejecting",
+    "performance": "PASSED_SOURCE_REVIEW: identical bounded database reads/writes; only Date.now and quota-ref construction repeat per Firestore retry; no externalI/O/unboundedloop/sleep",
+    "product_content": "NOT_APPLICABLE: no displayed string or data meaning changed",
+    "rollback": "PASSED_PREPARATION: source-compatible forward fix; no migration; normal immutable release workflow retained",
+    "production": "NOT_RUN_CURRENT_CI_ARTIFACT_PROVIDER_LIVE"
+  },
+  "checks": {
+    "red": {
+      "path": "/private/tmp/satsunicgo-full-release-20261009/MAIN-PROMOTION/ANALYTICS-CYCLE2-RED.log",
+      "sha256": "39b88134c5f36fff8bc5cf83f10e30879715745f0c54f9c438e40e56228c373c",
+      "result": "FAILED_EXPECTED_1FAIL_10PASS_ON35b7831"
+    },
+    "green": {
+      "path": "/private/tmp/satsunicgo-full-release-20261009/MAIN-PROMOTION/ANALYTICS-CYCLE2-GREEN.log",
+      "sha256": "1868c4cb8dedfdfc28e16a7b645bf018b5eb02cc3fc378cc516f63f70bfbe32f",
+      "result": "PASSED_25_ANALYTICS_TESTS"
+    },
+    "frontendStrict": {
+      "path": "/private/tmp/satsunicgo-full-release-20261009/MAIN-PROMOTION/ANALYTICS-CYCLE2-FRONTEND-STRICT.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "PASSED_EXIT0"
+    },
+    "backendStrict": {
+      "path": "/private/tmp/satsunicgo-full-release-20261009/MAIN-PROMOTION/ANALYTICS-CYCLE2-BACKEND-STRICT.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "PASSED_EXIT0"
+    },
+    "lint": {
+      "path": "/private/tmp/satsunicgo-full-release-20261009/MAIN-PROMOTION/ANALYTICS-CYCLE2-LINT.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "PASSED_EXIT0"
+    }
+  },
+  "findings": [
+    {
+      "id": "STALE_TRANSACTION_TIME",
+      "severity": "MEDIUM",
+      "status": "FIXED_LOCAL_VERIFIED",
+      "evidence": "Original deterministic regression4fail5pass; exact fix24analytics tests pass; current CI must verify real concurrent Firestore test and all suites"
+    },
+    {
+      "id": "INITIAL_READ_TIME_WINDOW",
+      "severity": "MEDIUM",
+      "status": "FIXED_LOCAL_VERIFIED",
+      "evidence": "A winner can commit before the initial policy read finishes, without an SDK retry. Deterministic new test fails on35b7831 and passes after fresh post-read validation. Future/expiry/session-policy guards retained."
+    }
+  ],
+  "limitations": [
+    "No shared emulator restart or local rules execution; normal CI runs actual isolated realFirestore regression",
+    "Actual production business readiness, genuine staffMFA acceptance and email activation/live remain unverified"
+  ],
+  "memoryCandidates": "None",
+  "tokenUsage": "Unavailable",
+  "actualBilledCost": "Unavailable",
+  "previousCycle": "LOCAL-FINAL-REVIEW.json retained immutable; later review found initial-policy-read race not covered by first callback-retry test"
+}

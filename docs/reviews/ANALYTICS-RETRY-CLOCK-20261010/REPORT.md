@@ -5,3 +5,5 @@ Run38006910464 failed the actual concurrent same-request analytics session test 
 Sample time and UTC quota day inside each transaction attempt. Keep stable request/capability identities, all current session validity, consent, ownership, alias and quota checks unchanged. No API/schema/dependency/workflow/runtime change.
 
 A deterministic conflict test failed against the original code. The fix passed24analytics unit regressions, frontend/backend strict compilation and focused ESLint on Node22.23.3. Normal CI and production artifact/provider/live verification remain required; this local evidence is not a production-readiness claim. Genuine staffMFA acceptance remains pending.
+
+Second review found a remaining initial-read window: another request can commit before the first policy read completes, without a transaction retry. An additional deterministic test failed on35b7831. Validate alias eligibility with time sampled immediately after reading the winning session. All25focused analytics tests and both strict compilers/lint pass; original and second-cycle failing evidence remain archived. No security guard or expiry tolerance changed.

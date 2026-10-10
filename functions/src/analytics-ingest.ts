@@ -125,7 +125,8 @@ export const analyticsSession = onCall(analyticsOptions, async (req) => {
       const prior = (
         await tx.get(db.doc(`analyticsSessions/${old.data()!.sessionId}`))
       ).data();
-      validSession(prior, subject, now);
+      // The initial read can also wait behind a newer committed request.
+      validSession(prior, subject, Date.now());
       if (old.data()!.aliases >= 8)
         throw new HttpsError(
           "resource-exhausted",

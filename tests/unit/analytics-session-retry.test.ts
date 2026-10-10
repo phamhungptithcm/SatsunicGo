@@ -34,6 +34,7 @@ function conflict(
   sessionOverrides: Row = {},
   aliases = 1,
   policyEnabled = true,
+  winnerBeforeFirstRead = false,
 ) {
   let now = start;
   vi.spyOn(Date, "now").mockImplementation(() => now);
@@ -42,12 +43,27 @@ function conflict(
   ]);
   const reads: string[][] = [];
   const attempts: ReturnType<typeof transaction>[] = [];
+  function commitWinner() {
+    rows.set(receipt, { sessionId: winner, aliases });
+    rows.set("analyticsConfig/current", {
+      enabled: policyEnabled,
+      startedAt: start - 10_000,
+    });
+    rows.set(`analyticsSessions/${winner}`, {
+      subject: null,
+      startedAt: start + 1,
+      lastSeenAt: start + 1,
+      ...sessionOverrides,
+    });
+    now = start + 2;
+  }
   function transaction() {
     const paths: string[] = [];
     reads.push(paths);
     return {
       get: async (ref: Ref) => {
         paths.push(ref.path);
+        if (winnerBeforeFirstRead && paths.length === 1) commitWinner();
         return { exists: rows.has(ref.path), data: () => rows.get(ref.path) };
       },
       create: vi.fn(),
@@ -62,19 +78,9 @@ function conflict(
     ) => {
       const first = transaction();
       attempts.push(first);
-      await callback(first);
-      rows.set(receipt, { sessionId: winner, aliases });
-      rows.set("analyticsConfig/current", {
-        enabled: policyEnabled,
-        startedAt: start - 10_000,
-      });
-      rows.set(`analyticsSessions/${winner}`, {
-        subject: null,
-        startedAt: start + 1,
-        lastSeenAt: start + 1,
-        ...sessionOverrides,
-      });
-      now = start + 2;
+      const result = await callback(first);
+      if (winnerBeforeFirstRead) return result;
+      commitWinner();
       const retry = transaction();
       attempts.push(retry);
       return callback(retry);
@@ -142,6 +148,19 @@ it("keeps the eight-alias limit on a retried request", async () => {
   });
   expect(h.attempts[1].create).not.toHaveBeenCalled();
   expect(h.attempts[1].update).not.toHaveBeenCalled();
+});
+
+it("aliases a session committed while the initial policy read is pending, without a transaction retry", async () => {
+  const start = Date.parse("2026-10-09T12:00:00Z");
+  const h = conflict(start, {}, 1, true, true);
+  const result = await call(request());
+  expect(result.startedAt).toBe(start + 1);
+  expect(h.attempts).toHaveLength(1);
+  expect(h.attempts[0].create).toHaveBeenCalledExactlyOnceWith(
+    { path: `analyticsCapabilities/${digest(result.session)}` },
+    expect.objectContaining({ sessionId: winner }),
+  );
+  expect(h.attempts[0].set).not.toHaveBeenCalled();
 });
 
 it("rechecks disabled analytics policy before creating a retry alias", async () => {
