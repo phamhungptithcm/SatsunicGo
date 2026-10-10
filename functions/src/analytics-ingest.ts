@@ -87,18 +87,20 @@ export const analyticsSession = onCall(analyticsOptions, async (req) => {
       "Thông tin thống kê không hợp lệ.",
     );
   const subject = identity(req.auth),
-    db = getFirestore(),
-    now = Date.now();
+    db = getFirestore();
   const token = randomUUID(),
     newSessionId = randomUUID();
   // Retry aliases point to one logical session. Persist only a capability hash, never the token.
   const receipt = db.doc(
     `analyticsSessionRequests/${digest(`${p.data.browserId}:${subject}:${p.data.requestId}`)}`,
   );
-  const quota = db.doc(
-    `analyticsSubjects/${utcDay(now)}-${digest(p.data.browserId)}`,
-  );
   return db.runTransaction(async (tx) => {
+    // A retry can observe a session committed by a later concurrent request.
+    // Use this attempt's time for eligibility and the matching UTC quota day.
+    const now = Date.now();
+    const quota = db.doc(
+      `analyticsSubjects/${utcDay(now)}-${digest(p.data.browserId)}`,
+    );
     await enabledPolicy(tx, db);
     const accountQuota = subject
       ? db.doc(`analyticsSubjects/${utcDay(now)}-${subject}`)
