@@ -1,6 +1,6 @@
 # Rà soát nội dung sổ tay hạ tầng
 
-Ngày 10/10/2026. Phạm vi là tài liệu nội bộ Markdown/PDF và năm bảng CSV, không thay đổi nội dung trong giao diện ứng dụng. Người dùng yêu cầu hướng dẫn từng bước, vị trí cấu hình, cập nhật và tài khoản quản lý. Email hunpeo97@gmail.com được người dùng cung cấp trực tiếp trong turn này; đã ghi là xác nhận của người dùng, chưa coi là xác minh quyền đăng nhập từng provider.
+Ngày 10/10/2026. Phạm vi là tài liệu nội bộ Markdown/PDF và năm bảng CSV, không thay đổi nội dung trong giao diện ứng dụng. Người dùng yêu cầu hướng dẫn từng bước, vị trí cấu hình, cập nhật và tài khoản quản lý. Email [owner email configured privately] được người dùng cung cấp trực tiếp trong turn này; đã ghi là xác nhận của người dùng, chưa coi là xác minh quyền đăng nhập từng provider.
 
 ## Nội dung và trạng thái
 

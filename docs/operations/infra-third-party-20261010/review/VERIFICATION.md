@@ -11,7 +11,7 @@ Ngày 10/10/2026. Phạm vi: sổ tay hạ tầng và dịch vụ bên thứ ba 
 | Account register dùng về sau | 20% | PASSED ở mức hồ sơ — 23 nhóm; email do người dùng cung cấp; quyền live chưa xác nhận |
 | Có nguồn chỉnh sửa và kiểm file bàn giao | 15% | PASSED — Markdown/PDF, năm CSV, manifest và ZIP |
 
-Hoàn thành 100% phạm vi tác giả hồ sơ; không đồng nghĩa 100% setup provider hoặc quyền account đã được xác minh. Chủ hệ thống đã cung cấp email chung hunpeo97@gmail.com; không có mật khẩu/token/MFA/recovery code được yêu cầu hay lưu.
+Hoàn thành 100% phạm vi tác giả hồ sơ; không đồng nghĩa 100% setup provider hoặc quyền account đã được xác minh. Chủ hệ thống đã cung cấp email chung [owner email configured privately]; không có mật khẩu/token/MFA/recovery code được yêu cầu hay lưu.
 
 ## Kiểm tra
 

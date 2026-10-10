@@ -2,7 +2,7 @@
 
 [Sổ tay thiết lập và vận hành](SETUP-AND-OPERATIONS.md) gồm 32 chương, hướng dẫn từng bước cho nền tảng chính và các nhánh tích hợp có trong nguồn.
 
-- [Danh mục tài khoản quản trị](ACCOUNT-REGISTER.csv) — 23 nhóm dịch vụ; email chung do người dùng xác nhận là hunpeo97@gmail.com.
+- [Danh mục tài khoản quản trị](ACCOUNT-REGISTER.csv) — 23 nhóm dịch vụ; email chung do người dùng xác nhận là [owner email configured privately].
 - [Danh mục cấu hình](CONFIGURATION-REGISTER.csv) — 41 tên, mục đích, nơi cập nhật và cách kiểm tra.
 - [Danh mục chính sách server](POLICY-REGISTER.csv) — 22 trường email, PayOS và AI; giá trị live chưa xác nhận.
 - [Danh mục tài nguyên](RESOURCE-REGISTER.csv) — ID, location, runtime identity, backup và bằng chứng đọc lại.

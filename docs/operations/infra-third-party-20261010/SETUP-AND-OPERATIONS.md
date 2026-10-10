@@ -77,7 +77,7 @@ Ví dụ: có quyền OWNER trong CRM không có nghĩa được quản lý bill
 
 ### Email quản trị đã được cung cấp
 
-Người dùng xác nhận email quản trị chung là `hunpeo97@gmail.com` trong cuộc trao đổi ngày 10/10/2026. Email này đã được điền trong danh mục cho các dịch vụ cần quản lý. Quyền đăng nhập, workspace, vai trò và người dự phòng của từng dịch vụ vẫn cần đọc lại tại bảng điều khiển. Với GitHub, username nguồn `phamhungptithcm` được giữ riêng; không tự kết luận username đăng nhập từ email. Với runtime, tài khoản service account vẫn được ghi riêng.
+Người dùng xác nhận email quản trị chung là `[owner email configured privately]` trong cuộc trao đổi ngày 10/10/2026. Email này đã được điền trong danh mục cho các dịch vụ cần quản lý. Quyền đăng nhập, workspace, vai trò và người dự phòng của từng dịch vụ vẫn cần đọc lại tại bảng điều khiển. Với GitHub, username nguồn `phamhungptithcm` được giữ riêng; không tự kết luận username đăng nhập từ email. Với runtime, tài khoản service account vẫn được ghi riêng.
 
 ### Cách hoàn thiện danh sách tài khoản
 
@@ -612,29 +612,29 @@ Năm tệp CSV đi kèm là hồ sơ có thể cập nhật sau mỗi lần vậ
 
 | Dịch vụ | Email quản trị do người dùng cung cấp | Định danh cần đối chiếu |
 | --- | --- | --- |
-| Google Cloud | `hunpeo97@gmail.com` | satsunicgo / 278913913091 |
-| Firebase | `hunpeo97@gmail.com` | satsunicgo; web app 1:278913913091:web:e40355cd8ad5abe00f9936 |
-| GitHub | `hunpeo97@gmail.com` | phamhungptithcm/SatsunicGo |
-| Domain registrar | `hunpeo97@gmail.com` | Domain website CHƯA XÁC NHẬN; hunpeolabs.com là domain gửi trong source |
-| DNS provider | `hunpeo97@gmail.com` | Authoritative zone CHƯA XÁC NHẬN |
-| Google OAuth | `hunpeo97@gmail.com` | OAuth client ID CHƯA XÁC NHẬN |
-| Identity Platform MFA | `hunpeo97@gmail.com` | satsunicgo; phương thức/gói live CHƯA XÁC NHẬN |
-| App Check reCAPTCHA Enterprise | `hunpeo97@gmail.com` | Web app satsunicgo; key CHƯA XÁC NHẬN |
-| Cloud Billing | `hunpeo97@gmail.com` | Billing account CHƯA XÁC NHẬN |
-| Secret Manager | `hunpeo97@gmail.com` | Secret names ở sổ tay; version live CHƯA XÁC NHẬN |
-| Firebase Hosting | `hunpeo97@gmail.com` | satsunicgo.web.app; site ID live CHƯA XÁC NHẬN |
-| Firestore | `hunpeo97@gmail.com` | Database ID/location live CHƯA XÁC NHẬN |
-| Cloud Storage | `hunpeo97@gmail.com` | Bucket ID live CHƯA XÁC NHẬN |
-| Cloud Functions Cloud Run | `hunpeo97@gmail.com` | Codebase satsunicgo / asia-southeast1 / Node 22 |
-| Cloud Build Artifact Registry | `hunpeo97@gmail.com` | Repository và service agents CHƯA XÁC NHẬN |
-| Scheduler Eventarc PubSub | `hunpeo97@gmail.com` | Từng job/trigger live CHƯA XÁC NHẬN |
-| Resend | `hunpeo97@gmail.com` | Workspace ID CHƯA XÁC NHẬN; sender contact@hunpeolabs.com |
-| SePay Payment Gateway | `hunpeo97@gmail.com` | Sandbox merchant source SP-TEST-HL5339A9 |
-| PayOS | `hunpeo97@gmail.com` | Integration/channel CHƯA XÁC NHẬN |
-| Vertex AI runtime | `hunpeo97@gmail.com` | satsunicgo; us-central1; model theo source |
-| Gemini API CI | `hunpeo97@gmail.com` | Project/key owner CHƯA XÁC NHẬN |
-| Monitoring Logging | `hunpeo97@gmail.com` | Alert channels/dashboard IDs CHƯA XÁC NHẬN |
-| Password manager recovery | `hunpeo97@gmail.com` | Tên kho và item recovery CHƯA XÁC NHẬN |
+| Google Cloud | `[owner email configured privately]` | satsunicgo / 278913913091 |
+| Firebase | `[owner email configured privately]` | satsunicgo; web app 1:278913913091:web:e40355cd8ad5abe00f9936 |
+| GitHub | `[owner email configured privately]` | phamhungptithcm/SatsunicGo |
+| Domain registrar | `[owner email configured privately]` | Domain website CHƯA XÁC NHẬN; hunpeolabs.com là domain gửi trong source |
+| DNS provider | `[owner email configured privately]` | Authoritative zone CHƯA XÁC NHẬN |
+| Google OAuth | `[owner email configured privately]` | OAuth client ID CHƯA XÁC NHẬN |
+| Identity Platform MFA | `[owner email configured privately]` | satsunicgo; phương thức/gói live CHƯA XÁC NHẬN |
+| App Check reCAPTCHA Enterprise | `[owner email configured privately]` | Web app satsunicgo; key CHƯA XÁC NHẬN |
+| Cloud Billing | `[owner email configured privately]` | Billing account CHƯA XÁC NHẬN |
+| Secret Manager | `[owner email configured privately]` | Secret names ở sổ tay; version live CHƯA XÁC NHẬN |
+| Firebase Hosting | `[owner email configured privately]` | satsunicgo.web.app; site ID live CHƯA XÁC NHẬN |
+| Firestore | `[owner email configured privately]` | Database ID/location live CHƯA XÁC NHẬN |
+| Cloud Storage | `[owner email configured privately]` | Bucket ID live CHƯA XÁC NHẬN |
+| Cloud Functions Cloud Run | `[owner email configured privately]` | Codebase satsunicgo / asia-southeast1 / Node 22 |
+| Cloud Build Artifact Registry | `[owner email configured privately]` | Repository và service agents CHƯA XÁC NHẬN |
+| Scheduler Eventarc PubSub | `[owner email configured privately]` | Từng job/trigger live CHƯA XÁC NHẬN |
+| Resend | `[owner email configured privately]` | Workspace ID CHƯA XÁC NHẬN; sender contact@hunpeolabs.com |
+| SePay Payment Gateway | `[owner email configured privately]` | Sandbox merchant source SP-TEST-HL5339A9 |
+| PayOS | `[owner email configured privately]` | Integration/channel CHƯA XÁC NHẬN |
+| Vertex AI runtime | `[owner email configured privately]` | satsunicgo; us-central1; model theo source |
+| Gemini API CI | `[owner email configured privately]` | Project/key owner CHƯA XÁC NHẬN |
+| Monitoring Logging | `[owner email configured privately]` | Alert channels/dashboard IDs CHƯA XÁC NHẬN |
+| Password manager recovery | `[owner email configured privately]` | Tên kho và item recovery CHƯA XÁC NHẬN |
 
 Email chung do người dùng xác nhận; chưa kiểm phiên đăng nhập/quyền riêng từng dịch vụ. Các nhóm Google Cloud dùng chung project không nhất thiết cần đăng ký nhiều tài khoản độc lập.
 
