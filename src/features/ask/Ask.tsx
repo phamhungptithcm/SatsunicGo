@@ -333,6 +333,7 @@ const ConversationContent = memo(function ConversationContent({
               )}
               {turn.tracking && (
                 <OrderTracking
+                  compact
                   tracking={turn.tracking}
                   language={turn.mixed.language}
                 />
@@ -445,6 +446,7 @@ const ConversationContent = memo(function ConversationContent({
               )}
               {turn.tracking && (
                 <OrderTracking
+                  compact
                   tracking={turn.tracking}
                   language={turn.answer.language}
                 />
@@ -2604,34 +2606,6 @@ export function Ask({
           </span>
           <span>{vi ? "Hỏi SatsunicGo" : "Ask SatsunicGo"}</span>
         </header>
-        <div className={styles.workControls}>
-          <div
-            className={styles.languageControls}
-            role="group"
-            aria-label={vi ? "Ngôn ngữ" : "Language"}
-          >
-            <button
-              type="button"
-              aria-pressed={language === "vi"}
-              onClick={() => {
-                actions.invalidate();
-                setLanguage("vi");
-              }}
-            >
-              VI
-            </button>
-            <button
-              type="button"
-              aria-pressed={language === "en"}
-              onClick={() => {
-                actions.invalidate();
-                setLanguage("en");
-              }}
-            >
-              EN
-            </button>
-          </div>
-        </div>
         <div className={styles.workArea} data-task={taskView}>
           <div
             className={styles.conversation}

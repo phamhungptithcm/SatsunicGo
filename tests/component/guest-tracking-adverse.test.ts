@@ -313,9 +313,7 @@ it("async completion preserves focus moved to another control", async () => {
   const pending = deferred();
   state.call.mockReturnValueOnce(pending.promise);
   await submit(A);
-  const control = [
-    ...host.querySelectorAll<HTMLButtonElement>("dialog button"),
-  ].find((button) => button.textContent === "EN")!;
+  const control = host.querySelector<HTMLElement>('[role="log"]')!;
   control.focus();
   expect(document.activeElement).toBe(control);
   await act(async () => pending.resolve(dto()));
@@ -401,7 +399,7 @@ it("unmount removes auth subscription and ignores late SDK response", async () =
   expect(host.innerHTML).toBe("");
   privacy();
 });
-it("scrollable conversation is a keyboard stop and language choices form a named group", async () => {
+it("scrollable conversation is a keyboard stop without language toggle controls", async () => {
   state.call.mockResolvedValueOnce(dto());
   await submit(A);
   const log = host.querySelector<HTMLElement>('[role="log"]')!;
@@ -410,7 +408,7 @@ it("scrollable conversation is a keyboard stop and language choices form a named
   expect(document.activeElement).toBe(log);
   expect(
     host.querySelector('[role="group"][aria-label="Ngôn ngữ"]'),
-  ).not.toBeNull();
+  ).toBeNull();
   privacy();
 });
 it("cancelled guest lookup offers honest recovery without retrying a redacted question", async () => {
@@ -433,12 +431,7 @@ it.each(["vi", "en"])(
   "%s unexpected SDK diagnostic shows guest recovery without private CTAs",
   async (language) => {
     await submit("tra đơn");
-    if (language === "en")
-      await act(async () =>
-        [...host.querySelectorAll<HTMLButtonElement>("dialog button")]
-          .find((button) => button.textContent === "EN")!
-          .click(),
-      );
+    if (language === "en") await submit("track my order");
     state.call.mockRejectedValueOnce(
       Object.defineProperty({}, "code", {
         get() {
@@ -458,11 +451,7 @@ it.each(["vi", "en"])(
 );
 it("English cancellation keeps keyboard focus and asks for the code again", async () => {
   await submit("tra đơn");
-  await act(async () =>
-    [...host.querySelectorAll<HTMLButtonElement>("dialog button")]
-      .find((button) => button.textContent === "EN")!
-      .click(),
-  );
+  await submit("track my order");
   state.call.mockReturnValueOnce(new Promise(() => {}));
   await submit(A);
   const stop = host.querySelector<HTMLButtonElement>(
@@ -473,4 +462,33 @@ it("English cancellation keeps keyboard focus and asks for the code again", asyn
   expect(text()).toContain("Tracking stopped. Enter the code again to retry.");
   expect(document.activeElement).toBe(input());
   privacy();
+});
+
+it("owner tracking uses the compact shared timeline and recorded dates", async () => {
+  await signIn("synthetic-owner");
+  state.call.mockResolvedValueOnce({
+    orderId: "SG-261009-024",
+    stage: "IN_TRANSIT",
+    purchaseKind: "custom",
+    upfrontPayment: true,
+    version: 1,
+    observedAt: now,
+    onHold: false,
+    timelinePartial: false,
+    shipmentsPartial: false,
+    shipments: [],
+    estimate: null,
+    timeline: [{ action: "dispatch", createdAt: now - 1000 }],
+  });
+  await submit("tra đơn SG-261009-024");
+  expect(state.call).toHaveBeenCalledWith("customerOrderTracking", {
+    orderId: "SG-261009-024",
+  });
+  expect(host.querySelector(".ot-compact .ot-steps")?.children.length).toBe(6);
+  expect(
+    host.querySelector('[aria-current="step"] time')?.getAttribute("dateTime"),
+  ).toBe(new Date(now - 1000).toISOString());
+  expect(
+    host.querySelector('[role="group"][aria-label="Ngôn ngữ"]'),
+  ).toBeNull();
 });
