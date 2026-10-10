@@ -1,0 +1,14 @@
+{
+  "status": "APPROVED_WITHIN_EXISTING_BUGFIX_SCOPE",
+  "approval": "Latest root human: Duyệt gia hạn pricing demo2giờ rồi khôi phục, chạy nốt các ca còn thiếu và fix hết lỗi. Khi review đạt thì tích hợp vào candidate, giữ nguyênWIPkhác và chưa deploy.",
+  "at": "2026-10-10T18:37:49.743763+00:00",
+  "RIG": "DEGRADED",
+  "finding": "CI79f3 unit harness closed module map missing new actual domain/shipping import from command producer. CI unit2898 assertions passed but producer suite failed before collection.",
+  "impact": "Unit harness only; production source, financial/auth/test admission guards, assertProductionTestCommand and closed unexpected-import rejection remain unchanged.",
+  "paths": [
+    "tests/unit/production-test-command-producer.test.ts"
+  ],
+  "implementation": "Import the real domain shipping module and map that exact identifier in the VM closed module table. No generic require fallback or stubbed fullyDelivered.",
+  "validation": "Run actual affected producer suite and canonical receipt unit suite, TypeScript and scoped lint. NormalPRCI automatically runs full suite on newSHA. Preserve failedCIreceipt.",
+  "noDeploy": true
+}

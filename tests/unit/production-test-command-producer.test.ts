@@ -7,6 +7,7 @@ import * as https from "firebase-functions/v2/https";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import * as guards from "../../functions/src/auth/guards";
 import * as domain from "../../packages/domain";
+import * as shipping from "../../packages/domain/shipping";
 import * as crm from "../../packages/domain/crm";
 import * as events from "../../functions/src/customer-notification-events";
 import * as boundary from "../../functions/src/purchase-test-boundary";
@@ -51,6 +52,7 @@ const modules: Record<string, unknown> = {
   "./auth/guards": guards, "firebase-admin/app": { initializeApp: () => ({}) },
   "firebase-admin/firestore": { getFirestore: () => db }, "firebase-functions/v2/https": https,
   "../../packages/domain/crm": crm, "node:crypto": crypto, zod: { z }, "../../packages/domain": domain,
+  "../../packages/domain/shipping": shipping,
 };
 const exports: { command?: { run: (request: unknown) => Promise<unknown> } } = {};
 vm.runInNewContext(compiled, { exports, process, Date, require: (name: string) => {

@@ -1,0 +1,38 @@
+{
+  "status": "PASSED",
+  "scope": "Fresh scoped integration review after CI unit harness correction",
+  "at": "2026-10-10T18:38:34.963721+00:00",
+  "sourceDigest": "aecf39330416171098d23fe1d34546dd31ef4ae6f45c7872b9df35e78b2d2fc8",
+  "changedFile": "tests/unit/production-test-command-producer.test.ts",
+  "finding": {
+    "id": "CI-COMMAND-IMPORT",
+    "severity": "MEDIUM",
+    "status": "FIXED",
+    "summary": "Closed VM dependency table did not include the real shipping module newly imported by approved canonical receipt code.",
+    "resolution": "Add exact real shipping module import and dependency-table key; retain unexpected-import rejection and every existing production-test assertion."
+  },
+  "validation": [
+    {
+      "name": "ci-correction-unit",
+      "exitCode": 0,
+      "seconds": 1.97,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-unit.log"
+    },
+    {
+      "name": "ci-correction-types",
+      "exitCode": 0,
+      "seconds": 18.5,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-types.log"
+    },
+    {
+      "name": "ci-correction-lint",
+      "exitCode": 0,
+      "seconds": 1.39,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-lint.log"
+    }
+  ],
+  "prior40InputsUnchanged": true,
+  "priorUnit92Component44Backend87Build": "Still matching checked source; no production source change from CI correction",
+  "wholeCandidateFinalReview": "BLOCKED pending newCI and preexisting manual/release/live gates",
+  "noDeploy": true
+}
