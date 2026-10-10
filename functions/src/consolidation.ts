@@ -234,6 +234,12 @@ export const consolidationCommand = onCall(
             orders[i].stage = "IN_TRANSIT";
             orders[i].version++;
             tx.set(orderSnapshots[i].ref, orders[i]);
+            tx.create(
+              orderSnapshots[i].ref
+                .collection("timeline")
+                .doc(`batch-${input.operationId}`),
+              { action: "parcelDispatch", createdAt: now },
+            );
           }
           for (let i = 0; i < parcels.length; i++) {
             const parcel = {
@@ -292,6 +298,7 @@ export const consolidationCommand = onCall(
                 id: parcel.id,
                 version: parcel.version,
                 state: parcel.state,
+                updatedAt: now,
                 ...(readManualDeliveryEstimate(parcel.deliveryEstimate, now)
                   ? {
                       deliveryEstimate: readManualDeliveryEstimate(

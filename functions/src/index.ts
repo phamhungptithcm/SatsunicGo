@@ -11,6 +11,7 @@ import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { normalizeCustomerName } from "../../packages/domain/crm";
+import { fullyDelivered, type Parcel } from "../../packages/domain/shipping";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import {
@@ -81,6 +82,7 @@ export const command = onCall(config, async (req) => {
         ? (access.data()?.roles ?? [])
         : [];
     let o = snapshot.data() as Order;
+    let parcelDeliveryConfirmed = false;
     let finance: Record<string, unknown> | undefined;
     let bankRef;
     let bankData;
@@ -141,6 +143,41 @@ export const command = onCall(config, async (req) => {
           "Dữ liệu đã thay đổi. Tải lại để tiếp tục.",
         );
       assertProductionTestCommand(o, d.action);
+      if (d.action === "confirmReceipt") {
+        const allocation = await tx.get(db.doc(`packageAllocations/${id}`));
+        if (allocation.exists) {
+          const parsedIds = z
+            .array(z.string().regex(/^[a-zA-Z0-9-]{1,80}$/))
+            .min(1)
+            .max(60)
+            .safeParse(allocation.get("parcelIds"));
+          if (
+            !parsedIds.success ||
+            new Set(parsedIds.data).size !== parsedIds.data.length
+          )
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa xác nhận được đủ kiện của đơn.",
+            );
+          const parcels = await Promise.all(
+            parsedIds.data.map((parcelId) =>
+              tx.get(db.doc(`packages/${parcelId}`)),
+            ),
+          );
+          try {
+            parcelDeliveryConfirmed =
+              parcels.every((parcel) => parcel.exists) &&
+              fullyDelivered(o, parcels.map((parcel) => parcel.data() as Parcel));
+          } catch {
+            parcelDeliveryConfirmed = false;
+          }
+          if (!parcelDeliveryConfirmed)
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa xác nhận được đủ kiện của đơn.",
+            );
+        }
+      }
     }
     if (d.action === "submitRequest" && previous.exists)
       return previous.data()?.result;
@@ -333,7 +370,10 @@ export const command = onCall(config, async (req) => {
               );
           }
         }
-        o = evolve(o, d.action as Action, d.payload, now);
+        o = evolve(
+          o, d.action as Action, d.payload, now,
+          parcelDeliveryConfirmed ? { parcelDeliveryConfirmed: true } : undefined,
+        );
         if (["recordPurchase", "receive"].includes(d.action))
           tx.create(
             db

@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "task_id": "ORDER-TRACKING-CRM-E2E-20261010",
+  "status": "PASSED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "46/46 scoped criteria verified in explicitly stated layers. Product Language Gate complete; native reduced motion and focus correction verified.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/PRODUCT-CONTENT-REVIEW.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/motion-components.log"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped owner/staff access, strict public DTO, code lifecycle and quotas verified locally; no production security certification.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/REAL-HTTP.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/GUEST-ACCESSIBILITY.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-WINDOW.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/FIXTURE-LIFECYCLE.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Fresh rootbuild/types and scoped lint pass; Ask35/35. Ask pre-fix hash matches cycle4 exactly after removing6-line focus effect. QA harness readiness gate source reviewed; remaining scoped sources retain hashes.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SOURCE-MANIFEST.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/frontend-build.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/functions-build.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/lint-followup.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/continuation-build.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/continuation-types.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/continuation-lint.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/motion-components.log"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Native actual Shipping component conflict/reconcile and before-request/after-server-commit acknowledgement-loss retry now verified with real Firebase transport; database revision/event/money readbacks stable. Pricing negative rollback and active-fixture preservation pass.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/unit.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/NATIVE-CRM-ADVERSE.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-APPLY-REJECTION.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-APPLY-ACK-LOSS.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/motion-components.log"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped terminal clearing, transient stale recovery, abort cleanup, same-operation replay and canonical receipt failures reviewed/tested.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/account-code-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/CLEANUP.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/ACK-AFTER-RETRY.JSON",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/CONTINUATION-CLEANUP.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/motion-components.log"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Predeployment readiness assessment executed: no migration/rules/config/public DTO change; additive event and bounded polling rollback assessed. Production NOT_READY: provider/Node22/live acceptance unverified; dirty concurrent worktree requires isolated release candidate. No deploy authorized. This dimension records assessment, not production acceptance.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/QUALITY-GATES.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-GATE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Browser media emulation verifies reduced motion; physical OS setting, full WCAG, screen reader hardware, provider runtime and deployment remain outside local acceptance. No46nativeE2E claim; self-review only.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/REPORT.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/APPROVAL.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/motion-components.log"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "atomic-revision",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/shipping.ts; consolidation.ts",
+      "summary": "Parcel activity lacked an order revision and safe shipping milestone.",
+      "resolution": "Same transaction now publishes exactly one revision/event and common projection timestamp.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "terminal-abort",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/tracking-refresh.ts",
+      "summary": "Terminal watcher denial could be overwritten by pending abort recovery.",
+      "resolution": "Terminal guard prevents catch from reclassifying unavailable as stale.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/unit.log"
+      ]
+    },
+    {
+      "id": "parcel-receipt",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/index.ts; packages/domain/index.ts",
+      "summary": "Parcel-delivered orders could not confirm receipt without legacy order tracking.",
+      "resolution": "Server canonical bounded quantity proof enables existing receipt command; partial and malformed reject.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "refresh-focus",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/TrackingRefresh.tsx",
+      "summary": "Native disabled pending refresh button lost keyboard focus.",
+      "resolution": "aria-disabled plus repeat-activation guard preserves focus.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log"
+      ]
+    },
+    {
+      "id": "offline-estimate",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/orders/AccountTracking.tsx",
+      "summary": "Offline snapshot retained an aggregate or parcel ETA promise.",
+      "resolution": "Suppress both estimates offline, retain read time/stale disclosure, revalidate on reconnect.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/account-code-components.log"
+      ]
+    },
+    {
+      "id": "allocation-fixture",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/rules/order-tracking-hardening.test.ts",
+      "summary": "Array it.each spread supplied malformed shape instead of intended allocation negatives.",
+      "resolution": "Object fixture rows exercise actual invalid quantities/duplicate/wrong line/order;100backend tests rerun.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "fixture-clean-build",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/component/tracking-real-sdk.ts",
+      "summary": "Ordinary TypeScript build depended on ignored machine-local fixture JSON.",
+      "resolution": "Typed dedicated-build injection removes source build dependency; root build passes with metadata absent.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/frontend-build.log"
+      ]
+    },
+    {
+      "id": "incomplete46",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "acceptance",
+      "location": "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.md",
+      "summary": "Complete46 acceptance not established:45layered passes,1partial U03.",
+      "resolution": "Native Chrome reduced-motion readback and all timeline/pseudo computed styles verified. Post-close focus fix passes native Escape/close in reduce and normal motion plus2 regression cases.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json"
+      ]
+    },
+    {
+      "id": "accessibility-evidence",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "acceptance",
+      "location": "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/PRODUCT-CONTENT-REVIEW.md",
+      "summary": "Native reduced-motion emulation NOT_RUN because Mac locked. Owner contrast incomplete resolved manually at>=4.98:1; guest axe zero violations/incomplete.",
+      "resolution": "Native Chrome reduced-motion readback and all timeline/pseudo computed styles verified. Post-close focus fix passes native Escape/close in reduce and normal motion plus2 regression cases.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/BROWSER-RESPONSIVE.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/CONTRAST-REVIEW.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/GUEST-ACCESSIBILITY.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json"
+      ]
+    },
+    {
+      "id": "pricing-apply-ack-cleanup",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "error_handling",
+      "location": "tests/component/tracking-pricing-window.mjs",
+      "summary": "Temporary demo pricing wrapper originally marked applied only after transaction acknowledgement, risking skipped restoration on an unknown apply outcome. Identified during continuation review; no observed leftover pricing change.",
+      "resolution": "Enter guarded restoration before attempting apply. Original content is a safe no-op; temporary content restores; concurrent different content is not overwritten. Injected pre-commit rollback and post-commit lost-ack cases both restore original hash/version with no fixture started.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-APPLY-REJECTION.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-APPLY-ACK-LOSS.json"
+      ]
+    },
+    {
+      "id": "profile-helper-argument",
+      "severity": "LOW",
+      "status": "FIXED",
+      "category": "testing",
+      "location": "tests/rules/order-tracking-hardening.test.ts",
+      "summary": "Extracted performance helper missed the db argument in one multiline financial-contention call; TypeScript and one test failed.",
+      "resolution": "Corrected argument; current tsc/scoped lint and both affected backend suites87/87 pass.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/continuation-types.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/continuation-backend.log"
+      ]
+    },
+    {
+      "id": "business-fixture-cleanup",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "testing",
+      "location": "tests/component/tracking-real-fixture.mjs",
+      "summary": "Initial native fixture cleanup did not cover checkout-generated documents. Detected and expanded before the first successful business E2E.",
+      "resolution": "Discover synthetic-owner orders/checkouts/receipts and fixed allow-list of related artifacts, verify Auth synthetic ownership before deletion, reject duplicate setup while active. Business117paths/native21paths/guard15paths cleaned with0remaining; no shared settings/counters/quota reset.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-WINDOW.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/CONTINUATION-CLEANUP.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/FIXTURE-LIFECYCLE.json"
+      ]
+    },
+    {
+      "id": "close-composer-focus",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "accessibility",
+      "location": "src/features/ask/Ask.tsx",
+      "summary": "Closing Ask remounts the collapsed input; browser focus returns to BODY.",
+      "resolution": "Native Chrome reduced-motion readback and all timeline/pseudo computed styles verified. Post-close focus fix passes native Escape/close in reduce and normal motion plus2 regression cases.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/MOTION-BROWSER.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Local/native actual component and mocked component/unit evidence are separate layers; no46nativeE2E claim. Four native contexts all visible; native hidden-tab load NOT_RUN.",
+    "Provider/production/PDF runtime not verified; Node25 host differs from Functions22. No deploy authorized.",
+    "Self-review only; legacy declared review assurance, not authenticated independent release proof."
+  ],
+  "limitations": [
+    "Scoped local self-review cycle6 after fix; no authenticated independent release assurance.",
+    "46/46 in stated evidence layers; not46native E2E. Production NOT_READY; no deploy.",
+    "No known unresolved defect within executed checks; actual token usage and cost unavailable.",
+    "Physical OS reduced motion and full WCAG certification unverified."
+  ]
+}

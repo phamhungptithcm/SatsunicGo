@@ -1,0 +1,15 @@
+{
+  "evidence": {
+    "calls": {
+      "publicOrderTracking": 1
+    },
+    "forbiddenSinks": 0,
+    "faults": [],
+    "accessibility": {
+      "violations": [],
+      "incomplete": []
+    }
+  },
+  "dom": "- main:\n  - heading \"CRM → customer · owned emulator fixture\" [level=1]\n  - paragraph: \"Real Firebase transport; synthetic identities; provider/analytics disabled. Role: guest\"\n  - button \"Simulate offline UI\"\n  - button \"Restore online UI\"\n  - paragraph: Anonymous tracking only\n- dialog \"SatsunicGo\":\n  - banner:\n    - generic: SatsunicGo\n    - generic: Hỏi SatsunicGo\n  - log \"Hội thoại với SatsunicGo\":\n    - region \"Tra cứu tiến độ\":\n      - paragraph: Tra cứu tiến độ\n      - heading \"Tra cứu tiến độ\" [level=2]\n      - paragraph: Tiến độ và ETA theo các cập nhật đã ghi nhận.\n      - region \"Tra cứu tiến độ\":\n        - text: Tra cứu bằng mã\n        - heading \"Đang vận chuyển\" [level=2]\n        - paragraph: Chỉ hiển thị tiến độ và thời gian giao dự kiến.\n        - complementary \"Thời gian giao dự kiến\":\n          - paragraph: Chưa có thời gian giao dự kiến.\n        - generic: Cập nhật ghi nhận\n        - generic: America/Chicago\n        - list \"Các bước xử lý\":\n          - strong: Đã nhận đơn\n          - generic: Đã qua\n          - strong: Đang chuẩn bị\n          - generic: Đã qua\n          - strong: Đang vận chuyển\n          - generic: Hiện tại\n          - generic: Chưa có cập nhật\n          - strong: Đã giao\n          - generic: Tiếp theo\n        - paragraph:\n          - text: Đọc lúc\n          - time: 10/10/2026 · 12:52\n          - text: · Theo cập nhật đã ghi nhận\n    - status: Tự kiểm tra cập nhật khi đang mở. Tra cứu khách tối đa mỗi phút.\n    - button \"Cập nhật tiến độ\"\n  - button \"Thêm ảnh sản phẩm\":\n  - textbox \"Hỏi SatsunicGo\" [active]:\n    - /placeholder: Hỏi bất cứ điều gì…\n  - button \"Gửi câu hỏi\" [disabled]:\n  - button \"Đóng hội thoại\":\n  - paragraph:\n    - text: Khi dùng AI, câu hỏi có thể được Google xử lý. Không chia sẻ thông tin nhạy cảm.\n    - link \"Quyền riêng tư\":\n      - /url: /privacy",
+  "capabilityInDOM": false
+}

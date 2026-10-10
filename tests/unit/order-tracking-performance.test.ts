@@ -69,7 +69,8 @@ it("60-parcel complete allocation and 50-event projection stay bounded without m
   samples.sort((a, b) => a - b);
   if (benchmark)
     writeFileSync(
-      "docs/reviews/ORDER-TRACKING-HARDENING-20261009/PERFORMANCE.json",
+      process.env.ORDER_TRACKING_BENCH_PATH ??
+        "docs/reviews/ORDER-TRACKING-HARDENING-20261009/PERFORMANCE.json",
       JSON.stringify(
         {
           environment:

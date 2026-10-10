@@ -1,0 +1,790 @@
+{
+  "axe": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          {
+            "target": [
+              ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(1) > .ot-step-content > strong"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+            "checks": [
+              {
+                "id": "color-contrast",
+                "message": "Element's background color could not be determined due to a pseudo element",
+                "data": {
+                  "fontSize": "8.3pt (11px)",
+                  "fontWeight": "normal",
+                  "messageKey": "pseudoContent",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          },
+          {
+            "target": [
+              ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(3) > .ot-step-content > strong"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+            "checks": [
+              {
+                "id": "color-contrast",
+                "message": "Element's background color could not be determined due to a pseudo element",
+                "data": {
+                  "fontSize": "8.3pt (11px)",
+                  "fontWeight": "normal",
+                  "messageKey": "pseudoContent",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          },
+          {
+            "target": [
+              ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > strong"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+            "checks": [
+              {
+                "id": "color-contrast",
+                "message": "Element's background color could not be determined due to a pseudo element",
+                "data": {
+                  "fontSize": "8.3pt (11px)",
+                  "fontWeight": "normal",
+                  "messageKey": "pseudoContent",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          },
+          {
+            "target": [
+              ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > small"
+            ],
+            "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+            "checks": [
+              {
+                "id": "color-contrast",
+                "message": "Element's background color could not be determined due to a pseudo element",
+                "data": {
+                  "fontSize": "6.8pt (9px)",
+                  "fontWeight": "normal",
+                  "messageKey": "pseudoContent",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(17, 28, 53)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgb(185, 194, 255)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 137.94921875,
+        "right": 180.13671875,
+        "top": 589.51171875,
+        "width": 42.1875,
+        "x": 137.94921875,
+        "y": 589.51171875
+      },
+      "text": "Yêu cầu"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(17, 28, 53)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgb(185, 194, 255)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 283.65234375,
+        "right": 385.693359375,
+        "top": 589.51171875,
+        "width": 102.041015625,
+        "x": 283.65234375,
+        "y": 589.51171875
+      },
+      "text": "Thanh toán toàn bộ"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(17, 28, 53)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgb(185, 194, 255)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 484.638671875,
+        "right": 535.9765625,
+        "top": 589.51171875,
+        "width": 51.337890625,
+        "x": 484.638671875,
+        "y": 589.51171875
+      },
+      "text": "Mua hàng"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(17, 28, 53)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgb(185, 194, 255)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 644.990234375,
+        "right": 726.865234375,
+        "top": 589.51171875,
+        "width": 81.875,
+        "x": 644.990234375,
+        "y": 589.51171875
+      },
+      "text": "Kho & đóng gói"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(22, 60, 255)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgb(237, 240, 245)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 830.68359375,
+        "right": 892.431640625,
+        "top": 589.51171875,
+        "width": 61.748046875,
+        "x": 830.68359375,
+        "y": 589.51171875
+      },
+      "text": "Vận chuyển"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgb(241, 243, 255)",
+          "image": "none",
+          "tag": "SMALL"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(22, 60, 255)",
+      "fontSize": "9px",
+      "pseudo": {
+        "bg": "rgb(237, 240, 245)",
+        "content": "\"\"",
+        "height": "1.99219px",
+        "top": 559.525390625
+      },
+      "rect": {
+        "bottom": 535.52734375,
+        "height": 15.99609375,
+        "left": 841.2890625,
+        "right": 881.806640625,
+        "top": 519.53125,
+        "width": 40.517578125,
+        "x": 841.2890625,
+        "y": 519.53125
+      },
+      "text": "Hiện tại"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "STRONG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(17, 28, 53)",
+      "fontSize": "11px",
+      "pseudo": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "content": "none",
+        "height": "auto",
+        "top": null
+      },
+      "rect": {
+        "bottom": 606.005859375,
+        "height": 16.494140625,
+        "left": 1010.29296875,
+        "right": 1064.08203125,
+        "top": 589.51171875,
+        "width": 53.7890625,
+        "x": 1010.29296875,
+        "y": 589.51171875
+      },
+      "text": "Giao hàng"
+    },
+    {
+      "chain": [
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SMALL"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "LI"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "OL"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "SECTION"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "DIALOG"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "DIV"
+        },
+        {
+          "bg": "rgba(0, 0, 0, 0)",
+          "image": "none",
+          "tag": "BODY"
+        },
+        {
+          "bg": "rgb(255, 255, 255)",
+          "image": "none",
+          "tag": "HTML"
+        }
+      ],
+      "color": "rgb(101, 112, 135)",
+      "fontSize": "9px",
+      "pseudo": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "content": "none",
+        "height": "auto",
+        "top": null
+      },
+      "rect": {
+        "bottom": 535.52734375,
+        "height": 15.99609375,
+        "left": 1018.583984375,
+        "right": 1055.78125,
+        "top": 519.53125,
+        "width": 37.197265625,
+        "x": 1018.583984375,
+        "y": 519.53125
+      },
+      "text": "Tiếp theo"
+    }
+  ]
+}

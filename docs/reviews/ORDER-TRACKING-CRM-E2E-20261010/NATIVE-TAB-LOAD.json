@@ -1,0 +1,55 @@
+{
+  "start": [
+    {
+      "tab": "559926723",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":14},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":{\"violations\":[],\"incomplete\":[{\"id\":\"color-contrast\",\"nodes\":[{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"completed\\\"]:nth-child(1) > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"completed\\\"]:nth-child(3) > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"current\\\"][aria-current=\\\"step\\\"] > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"current\\\"][aria-current=\\\"step\\\"] > .ot-step-content > small\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"6.8pt (9px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]}]}]}}",
+      "hidden": false,
+      "observedAt": 1791654501415
+    },
+    {
+      "tab": "559926727",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":2},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654501460
+    },
+    {
+      "tab": "559926730",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":2},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654501500
+    },
+    {
+      "tab": "559926733",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":2},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654501535
+    }
+  ],
+  "end": [
+    {
+      "tab": "559926723",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":16},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":{\"violations\":[],\"incomplete\":[{\"id\":\"color-contrast\",\"nodes\":[{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"completed\\\"]:nth-child(1) > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"completed\\\"]:nth-child(3) > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"current\\\"][aria-current=\\\"step\\\"] > .ot-step-content > strong\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"8.3pt (11px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]},{\"target\":[\".ot-compact > .ot-panel > .ot-steps[data-compact=\\\"true\\\"][aria-label=\\\"Các bước xử lý\\\"] > li[data-state=\\\"current\\\"][aria-current=\\\"step\\\"] > .ot-step-content > small\"],\"summary\":\"Fix any of the following:\\n  Element's background color could not be determined due to a pseudo element\",\"checks\":[{\"id\":\"color-contrast\",\"message\":\"Element's background color could not be determined due to a pseudo element\",\"data\":{\"fontSize\":\"6.8pt (9px)\",\"fontWeight\":\"normal\",\"messageKey\":\"pseudoContent\",\"expectedContrastRatio\":\"4.5:1\"}}]}]}]}}",
+      "hidden": false,
+      "observedAt": 1791654581372
+    },
+    {
+      "tab": "559926727",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":3},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654581400
+    },
+    {
+      "tab": "559926730",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":3},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654581417
+    },
+    {
+      "tab": "559926733",
+      "evidence": "{\"calls\":{\"customerOrderTracking\":3},\"forbiddenSinks\":0,\"faults\":[],\"accessibility\":\"waiting\"}",
+      "hidden": false,
+      "observedAt": 1791654581513
+    }
+  ],
+  "layer": "Four actual browser contexts with real Auth/Functions/Firestore. Visibility is reported, not assumed. Hidden lifecycle separately covered by unit/component."
+}

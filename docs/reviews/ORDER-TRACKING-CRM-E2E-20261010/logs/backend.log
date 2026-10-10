@@ -1,0 +1,154 @@
+
+ RUN  v4.1.11 /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo
+
+stdout | tests/rules/order-tracking-hardening.test.ts > P01 1 affected orders publish bounded revisions atomically
+{"scenario":"P01","orders":1,"elapsedMs":227,"environment":"local emulator only"}
+
+stdout | tests/rules/order-tracking-hardening.test.ts > P01 10 affected orders publish bounded revisions atomically
+{"scenario":"P01","orders":10,"elapsedMs":584,"environment":"local emulator only"}
+
+stdout | tests/rules/order-tracking-hardening.test.ts > P01 1 batch parcels preserve bounded dispatch parity
+{"scenario":"P01","batchParcels":1,"elapsedMs":209,"environment":"local emulator only"}
+
+stdout | tests/rules/order-tracking-hardening.test.ts > P01 20 batch parcels preserve bounded dispatch parity
+{"scenario":"P01","batchParcels":20,"elapsedMs":1792,"environment":"local emulator only"}
+
+ ✓ tests/rules/order-tracking-hardening.test.ts (45 tests) 57357ms
+   ✓ records real ETA and activity time, exact replay creates no duplicate activity, changed replay/conflicting versions fail without writes  5839ms
+   ✓ failed delivery suppresses order promise; retry restores it; one delivered parcel does not complete order, all parcels do  6286ms
+   ✓ returned parcel remains terminal and cannot be silently reopened  1903ms
+   ✓ CUSTOMER cannot alter delivery ETA or money  1618ms
+   ✓ WAREHOUSE cannot alter delivery ETA or money  391ms
+   ✓ locked-user cannot alter delivery ETA or money  1227ms
+   ✓ locked-staff cannot alter delivery ETA or money  901ms
+   ✓ inactive cannot alter delivery ETA or money  516ms
+   ✓ invalid ETA payload leaves both parcels and order unchanged  578ms
+   ✓ invalid ETA payload leaves both parcels and order unchanged  658ms
+   ✓ invalid ETA payload leaves both parcels and order unchanged  683ms
+   ✓ invalid ETA payload leaves both parcels and order unchanged  862ms
+   ✓ packing then dispatch enforces payment and hold guards and publishes real activity  1230ms
+   ✓ H03 H04 H10 N11 N27 atomic ETA revision/event and replay preserve dispatch timestamp  1011ms
+   ✓ H07 partial scan publishes revision; only final quantity delivery gets delivery milestone  1129ms
+   ✓ N14 P04 concurrent operators cannot lose a revision or duplicate timeline  3552ms
+   ✓ N01 N02 WAREHOUSE cannot update ETA or journey  474ms
+   ✓ N01 N02 CUSTOMER cannot update ETA or journey  533ms
+   ✓ N01 N02 FINANCE cannot update ETA or journey  599ms
+   ✓ N01 anonymous denied with no transaction effects  361ms
+   ✓ N07 invalid estimate writes no event/revision { startAt: 1, endAt: 2 }  731ms
+   ✓ N07 invalid estimate writes no event/revision { startAt: NaN, endAt: Infinity }  424ms
+   ✓ N12 N13 conflict and changed replay write nothing, including safe timeline  852ms
+   ✓ N16 response lost after commit reconciles same operation once  536ms
+   ✓ N15 transaction write collision rolls back all canonical/projection/history/version writes  779ms
+   ✓ H08 two owners in a shared parcel receive only their own allocations  476ms
+   ✓ H09 batch dispatch publishes one order event/revision and timestamp parity  918ms
+   ✓ H10 N06 parcel receipt checks canonical quantities, not a fabricated order tracking number  6325ms
+   ✓ P01 1 affected orders publish bounded revisions atomically  625ms
+   ✓ P01 10 affected orders publish bounded revisions atomically  1032ms
+   ✓ P01 1 batch parcels preserve bounded dispatch parity  437ms
+   ✓ P01 20 batch parcels preserve bounded dispatch parity  2607ms
+   ✓ N01 staff credential email/false never publishes  573ms
+   ✓ N14 financial/order mutation racing a parcel revision preserves money and exactly one authoritative winner  3921ms
+   ✓ N05 invalid allocation {"allocations":[{"orderId":"order","line":0,"quantity":3}]} leaves registry and history unchanged  645ms
+   ✓ N05 invalid allocation {"allocations":[{"orderId":"order","line":1,"quantity":1}]} leaves registry and history unchanged  321ms
+   ✓ N05 invalid allocation {"allocations":[{"orderId":"order","line":0,"quantity":1},{"orderId":"order","line":0,"quantity":2}]} leaves registry and history unchanged  364ms
+   ✓ N05 invalid allocation {"allocations":[{"orderId":"missing-order","line":0,"quantity":1}]} leaves registry and history unchanged  1188ms
+   ✓ N04 unapproved final cost cannot dispatch or publish a milestone  330ms
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:02.590Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac74 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L7, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:02.731Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac75 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:02.842Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac76 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:02.935Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac77 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:02.993Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac78 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:03.084Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac79 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/guest-order-tracking.test.ts > guest cannot read code mappings/quota/private order or forge them through Firestore
+[2026-10-10T17:08:03.212Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x846dac7a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+ ✓ tests/rules/guest-order-tracking.test.ts (34 tests) 55034ms
+   ✓ owner issues capability; anonymous sees only progress/ETA; private state and PII unchanged  381ms
+   ✓ same issue replay returns same code without rotation; changed replay fails; stale version aborts  382ms
+   ✓ rotation/revoke invalidate old codes; replay cannot resurrect them  343ms
+   ✓ unknown guest input never reveals private data  423ms
+   ✓ private-flags guest input never reveals private data  360ms
+   ✓ locked-user returns indistinguishable unavailable response  386ms
+   ✓ locked-staff returns indistinguishable unavailable response  671ms
+   ✓ expired returns indistinguishable unavailable response  1615ms
+   ✓ deleted returns indistinguishable unavailable response  2141ms
+   ✓ malformed-stage returns indistinguishable unavailable response  3460ms
+   ✓ anonymous cannot issue/revoke capabilities  1394ms
+   ✓ foreign cannot issue/revoke capabilities  841ms
+   ✓ unverified cannot issue/revoke capabilities  784ms
+   ✓ password cannot issue/revoke capabilities  570ms
+   ✓ locked cannot issue/revoke capabilities  714ms
+   ✓ valid and malformed lookups share quota; concurrent attempts cannot exceed30 even with spoofed headers  8858ms
+   ✓ guest cannot read code mappings/quota/private order or forge them through Firestore  3930ms
+   ✓ partial delivery, held/failed and future projection cannot produce false ETA  1594ms
+   ✓ corrupted quota NaN fails closed  1017ms
+   ✓ corrupted quota 30 fails closed  2012ms
+   ✓ corrupted quota -1 fails closed  1530ms
+   ✓ corrupted quota 1.5 fails closed  855ms
+   ✓ thirty attempts are charged and thirty-first denied without exposing raw IP  3664ms
+   ✓ signed-in nonowner receives only public DTO, injected extra fields always reject  927ms
+   ✓ missing trusted network identity uses a limited shared fallback; caller UID ignored  310ms
+   ✓ concurrent rotations leave exactly one active code  8939ms
+   ✓ registry beyond60 never produces ETA or scans arbitrary extra parcels  1625ms
+   ✓ quota expiry is TTL-compatible Firestore Timestamp, not a numeric deletion promise  496ms
+   ✓ expired operation cannot replay a successful code issuance  1121ms
+   ✓ replaying operation after TTL deletion creates a different code, never resurrects old capability  559ms
+ ✓ tests/rules/catalog-checkout.test.ts (5 tests) 21961ms
+   ✓ creates one authoritative order on concurrent retries without collecting money or issuing quote  4643ms
+   ✓ allocates authoritative full-purpose callbacks once and quarantines mismatched funds  7295ms
+   ✓ validates explicitly configured listed prices at authorized publication  899ms
+   ✓ listed product travels through purchase, packing and delivery after one full collection  615ms
+ ✓ tests/rules/order-tracking027.test.ts (9 tests) 16977ms
+   ✓ owner receives only safe fields, no desiredAt ETA, hold detail, address or ledger  10309ms
+   ✓ foreign/missing denial is identical even for active OWNER staff  876ms
+   ✓ all 34 associated parcels remain discoverable, mixed allocations never escape, one delivered parcel does not complete the order  578ms
+   ✓ latest50 history is chronological and sanitized; malformed stage fails closed  1065ms
+   ✓ invalid and future activity dates are omitted; duplicate parcels disclose partial data  482ms
+stderr | tests/rules/order-tracking-security.test.ts > owner cannot forge stage, scan, ETA, canonical parcel or financial record
+[2026-10-10T17:09:23.843Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x1e6a2aa9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L7, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/order-tracking-security.test.ts > owner cannot forge stage, scan, ETA, canonical parcel or financial record
+[2026-10-10T17:09:23.859Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x1e6a2aaa error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L27, false for 'update' @ L27
+
+stderr | tests/rules/order-tracking-security.test.ts > owner cannot forge stage, scan, ETA, canonical parcel or financial record
+[2026-10-10T17:09:23.865Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x1e6a2aab error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L12, false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L12, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/order-tracking-security.test.ts > owner cannot forge stage, scan, ETA, canonical parcel or financial record
+[2026-10-10T17:09:23.883Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x1e6a2aac error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+stderr | tests/rules/order-tracking-security.test.ts > owner cannot forge stage, scan, ETA, canonical parcel or financial record
+[2026-10-10T17:09:23.903Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x1e6a2aad error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L26, false for 'create' @ L27, false for 'update' @ L26, false for 'update' @ L27
+
+ ✓ tests/rules/order-tracking-security.test.ts (7 tests) 4503ms
+   ✓ verified owner reads their order, history and redacted shipment  734ms
+
+ Test Files  5 passed (5)
+      Tests  100 passed (100)
+   Start at  12:06:26
+   Duration  178.13s (transform 5.60s, setup 626ms, import 15.77s, tests 155.83s, environment 1ms)
+
+JSON report written to /Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/test-results/tracking-backend-final.json

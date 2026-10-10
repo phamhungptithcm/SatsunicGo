@@ -1,0 +1,1 @@
+The legacy validator rejects DEGRADED because it hardcodes READY. Current AGENTS.md explicitly permits bounded DEGRADED work when optional indexes are missing/stale/unhealthy. Direct human plan/fix/integration approval is preserved in APPROVAL.md; no fake READY, policy/validator edit or threshold weakening was used.

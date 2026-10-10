@@ -1,0 +1,32 @@
+{
+  "status": "PASSED",
+  "environment": "real local HTTP Auth/Functions/Firestore + native CRM UI fixture",
+  "orderVersion": 3,
+  "parcelVersion": 3,
+  "safeEvents": [
+    {
+      "action": "parcelDelivered",
+      "createdAt": 1791649852531
+    },
+    {
+      "action": "deliveryEstimateUpdated",
+      "createdAt": 1791649735469
+    }
+  ],
+  "projectionUpdatedAt": 1791649852531,
+  "publicDTOKeys": [
+    "eta",
+    "observedAt",
+    "publicStatus",
+    "updatedAt"
+  ],
+  "publicStatus": "delivered",
+  "privateReadDenials": 2,
+  "uniformInvalidCodeDenials": 2,
+  "moneyUnchanged": true,
+  "externalProviderCalls": 0,
+  "limitations": [
+    "Synthetic prerequisite IN_TRANSIT order, not checkout end to end",
+    "Native parent is a fixture; real Shipping/AccountTracking/Ask components and SDK transports; commerce/provider/analytics isolated"
+  ]
+}

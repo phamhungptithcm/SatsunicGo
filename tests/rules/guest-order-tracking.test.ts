@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { initializeApp, getApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import {
@@ -10,7 +11,7 @@ import { readFileSync } from "node:fs";
 import { randomUUID, createHash, createHmac } from "node:crypto";
 import { beforeAll, beforeEach, afterAll, it, expect } from "vitest";
 import type { CallableRequest } from "firebase-functions/v2/https";
-import { demoFirestoreEndpoint } from "../helpers/demo-environment";
+import { profileTransaction } from "../helpers/tracking-transaction-profile";
 let db: ReturnType<typeof getFirestore>, env: RulesTestEnvironment;
 let service: typeof import("../../functions/src/public-order-tracking"),
   privateService: typeof import("../../functions/src/customer-order-tracking");
@@ -108,8 +109,6 @@ async function seed() {
   await batch.commit();
 }
 beforeAll(async () => {
-  // Validate before Admin initialization; CI8181 and shared18207 use a unique
-  // disposable project, never the shared demo project's data.
   const endpoint = demoFirestoreEndpoint(process.env);
   initializeApp({ projectId });
   db = getFirestore();
@@ -277,12 +276,18 @@ it("valid and malformed lookups share quota; concurrent attempts cannot exceed30
   await db
     .doc(`guestTrackingQuotas/${bucket}`)
     .set({ count: 27, expiresAt: Date.now() + 120000 });
-  const results = await Promise.allSettled(
-    Array.from({ length: 8 }, (_, i) =>
-      service.publicOrderTracking.run(
-        request(i % 2 ? { code } : { code: "bad" }),
+  const results = await profileTransaction(
+    db,
+    "P04 shared-IP guest quota eight contenders",
+    () =>
+      Promise.allSettled(
+        Array.from({ length: 8 }, (_, i) =>
+          service.publicOrderTracking.run(
+            request(i % 2 ? { code } : { code: "bad" }),
+          ),
+        ),
       ),
-    ),
+    40,
   );
   const errors = results
     .filter((r): r is PromiseRejectedResult => r.status === "rejected")

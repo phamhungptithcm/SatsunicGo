@@ -21,6 +21,7 @@ const state = vi.hoisted(() => {
     auth: { currentUser: null as null | { uid: string } },
     listeners: new Set<(user: null | { uid: string }) => void>(),
     call: vi.fn(),
+    revisions: new Set<(version: number) => void>(),
     analytics: vi.fn(),
     provider: vi.fn(),
     invalidate: vi.fn(),
@@ -29,7 +30,18 @@ const state = vi.hoisted(() => {
 });
 vi.mock("../../src/shared/firebase", () => ({
   auth: state.auth,
+  db: null,
   callService: state.call,
+}));
+vi.mock("../../src/features/ask/tracking-watch", () => ({
+  watchTrackingOrder: (
+    _uid: string,
+    _id: string,
+    callback: (version: number) => void,
+  ) => {
+    state.revisions.add(callback);
+    return () => state.revisions.delete(callback);
+  },
 }));
 vi.mock("firebase/auth", () => ({
   onAuthStateChanged: (
@@ -163,6 +175,7 @@ function privacy() {
 beforeEach(async () => {
   vi.clearAllMocks();
   state.listeners.clear();
+  state.revisions.clear();
   state.auth.currentUser = null;
   Object.assign(state.commerce, { user: null, conversationId: null });
   localStorage.clear();
@@ -178,6 +191,23 @@ afterEach(async () => {
   await act(async () => root.unmount());
   host.remove();
   vi.restoreAllMocks();
+  vi.useRealTimers();
+});
+it.each(["escape", "close button"])("U03 %s restores focus to the collapsed Ask composer with reduced motion", async (action) => {
+  state.call.mockResolvedValueOnce(dto());
+  await submit(A);
+  const dialog = host.querySelector<HTMLDialogElement>("dialog")!;
+  expect(dialog.open).toBe(true);
+  await act(async () => {
+    if (action === "escape") {
+      dialog.dispatchEvent(new Event("cancel", { bubbles: false, cancelable: true }));
+    } else {
+      host.querySelector<HTMLButtonElement>('button[aria-label="Đóng hội thoại"]')!.click();
+    }
+  });
+  expect(dialog.open).toBe(false);
+  expect(document.activeElement).toBe(input());
+  privacy();
 });
 it("offline rejects safely, re-entering code retries successfully without private sinks", async () => {
   state.call.mockRejectedValueOnce(
@@ -491,4 +521,135 @@ it("owner tracking uses the compact shared timeline and recorded dates", async (
   expect(
     host.querySelector('[role="group"][aria-label="Ngôn ngữ"]'),
   ).toBeNull();
+});
+
+const ownerDto = (version = 1) => ({
+  orderId: "SG-261009-024",
+  stage: "IN_TRANSIT",
+  purchaseKind: "custom",
+  upfrontPayment: true,
+  version,
+  observedAt: now,
+  onHold: false,
+  timelinePartial: false,
+  shipmentsPartial: false,
+  shipments: [],
+  estimate: null,
+  timeline: [],
+});
+it("H05 N21 owner active answer follows CRM revision and unsubscribes on close", async () => {
+  vi.useFakeTimers();
+  await signIn("owner");
+  state.call
+    .mockResolvedValueOnce(ownerDto())
+    .mockResolvedValueOnce({ ...ownerDto(2), stage: "DELIVERED" });
+  await submit("tra đơn SG-261009-024");
+  expect(state.revisions.size).toBe(1);
+  await act(async () => {
+    for (const r of state.revisions) r(2);
+    await vi.advanceTimersByTimeAsync(250);
+  });
+  expect(host.querySelector('[aria-current="step"]')?.textContent).toContain(
+    "Giao hàng",
+  );
+  expect(state.call).toHaveBeenCalledTimes(2);
+  await act(async () =>
+    host
+      .querySelector<HTMLButtonElement>('button[aria-label="Đóng hội thoại"]')!
+      .click(),
+  );
+  expect(state.revisions.size).toBe(0);
+});
+it("H06 H05 guest refresh updates only the latest turn with public DTO", async () => {
+  vi.useFakeTimers();
+  state.call
+    .mockResolvedValueOnce(dto("received"))
+    .mockResolvedValueOnce(dto("preparing"))
+    .mockResolvedValueOnce(dto("shipping"));
+  await submit(A);
+  await submit(B);
+  await act(async () => vi.advanceTimersByTimeAsync(60000));
+  const cards = host.querySelectorAll('[aria-label="Tra cứu tiến độ"].ot');
+  expect(cards).toHaveLength(2);
+  expect(cards[0].textContent).toContain("Đã nhận đơn");
+  expect(cards[1].querySelector("h2")?.textContent).toBe("Đang vận chuyển");
+  expect(state.call).toHaveBeenCalledTimes(3);
+  privacy();
+});
+it("N22 N24 refresh denial clears the card and retains safe recovery", async () => {
+  vi.useFakeTimers();
+  state.call.mockResolvedValueOnce(dto()).mockRejectedValueOnce({
+    code: "functions/not-found",
+    message: "PRIVATE_CANARY",
+  });
+  await submit(A);
+  await act(async () => vi.advanceTimersByTimeAsync(60000));
+  expect(host.querySelector(".ot-panel")).toBeNull();
+  expect(text()).toContain("Không thể tiếp tục tra cứu");
+  privacy();
+});
+it("N17 N24 failed refresh retains only scoped old data with stale disclosure", async () => {
+  vi.useFakeTimers();
+  state.call
+    .mockResolvedValueOnce(dto())
+    .mockRejectedValueOnce({ code: "functions/unavailable" });
+  await submit(A);
+  await act(async () => vi.advanceTimersByTimeAsync(60000));
+  expect(host.querySelector(".ot-panel")).not.toBeNull();
+  expect(text()).toContain("có thể đã cũ");
+  privacy();
+});
+it("N19 N20 pending automatic refresh cannot leak after account switch", async () => {
+  vi.useFakeTimers();
+  const pending = deferred();
+  state.call.mockResolvedValueOnce(dto()).mockReturnValueOnce(pending.promise);
+  await submit(A);
+  await act(async () => vi.advanceTimersByTimeAsync(60000));
+  await signIn("other");
+  await act(async () => pending.resolve(dto("delivered")));
+  expect(text()).toBe("");
+  privacy();
+});
+it("U02 manual refresh preserves keyboard focus while pending and ignores repeat activation", async () => {
+  vi.useFakeTimers();
+  await signIn("owner");
+  const pending = deferred();
+  state.call
+    .mockResolvedValueOnce(ownerDto())
+    .mockReturnValueOnce(pending.promise);
+  await submit("tra đơn SG-261009-024");
+  await act(async () => vi.advanceTimersByTimeAsync(250));
+  const button = host.querySelector<HTMLButtonElement>(".ot-refresh button")!;
+  button.focus();
+  await act(async () => button.click());
+  expect(document.activeElement).toBe(button);
+  expect(button.disabled).toBe(false);
+  expect(button.getAttribute("aria-disabled")).toBe("true");
+  await act(async () => button.click());
+  expect(state.call).toHaveBeenCalledTimes(2);
+  await act(async () => pending.resolve(ownerDto(2)));
+  expect(document.activeElement).toBe(button);
+  expect(button.getAttribute("aria-disabled")).toBe("false");
+});
+it("N20 refresh settling in the new-question event cannot rewrite historical progress", async () => {
+  vi.useFakeTimers();
+  const pending = deferred();
+  state.call.mockResolvedValueOnce(dto("received"))
+    .mockReturnValueOnce(pending.promise).mockResolvedValueOnce(dto("preparing"));
+  await submit(A);
+  await act(async () => vi.advanceTimersByTimeAsync(60000));
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!
+      .set!.call(input(), B);
+    input().dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await act(async () => {
+    input().closest("form")!.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    pending.resolve(dto("delivered"));
+  });
+  const cards = host.querySelectorAll('[aria-label="Tra cứu tiến độ"].ot');
+  expect(cards).toHaveLength(2);
+  expect(cards[0].querySelector("h2")?.textContent).toBe("Đã nhận đơn");
+  expect(cards[1].querySelector("h2")?.textContent).toBe("Đang chuẩn bị");
+  privacy();
 });

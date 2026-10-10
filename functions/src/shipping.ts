@@ -1,5 +1,8 @@
 import { requireLivePurchaseRecord } from "./purchase-test-boundary";
-import { parcelCustomerEvent, customerEventFields } from "./customer-notification-events";
+import {
+  parcelCustomerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -85,6 +88,7 @@ export const shippingCommand = onCall(options, async (req) => {
           );
         return previous.data()?.result;
       }
+      const now = Date.now();
       let parcel = snapshot.data() as Parcel;
       if (d.action === "packParcel") {
         if (snapshot.exists)
@@ -151,7 +155,7 @@ export const shippingCommand = onCall(options, async (req) => {
           });
         tx.create(db.doc(`packageEvidence/${id}`), {
           ...(d.payload as Record<string, unknown>),
-          createdAt: Date.now(),
+          createdAt: now,
           createdBy: uid,
         });
       } else if (d.action === "dispatchParcel") {
@@ -176,12 +180,10 @@ export const shippingCommand = onCall(options, async (req) => {
           parcelId: id,
           ...p,
           actor: uid,
-          createdAt: Date.now(),
+          createdAt: now,
         });
         for (let i = 0; i < orders.length; i++) {
           orders[i].stage = "IN_TRANSIT";
-          orders[i].version++;
-          tx.set(snapshots[i].ref, orders[i]);
         }
       } else if (d.action === "setDeliveryEstimate") {
         if (!["in_transit", "failed"].includes(parcel.state))
@@ -193,7 +195,6 @@ export const shippingCommand = onCall(options, async (req) => {
           })
           .strict()
           .parse(d.payload);
-        const now = Date.now();
         if (p.estimate && p.estimate.endAt < now)
           throw Error("ESTIMATE_ELAPSED");
         parcel = { ...parcel, version: parcel.version + 1 };
@@ -240,20 +241,39 @@ export const shippingCommand = onCall(options, async (req) => {
             )
           ) {
             orders[i].stage = "DELIVERED";
-            orders[i].version++;
-            tx.set(snapshots[i].ref, orders[i]);
           }
         tx.create(ref.collection("events").doc(), {
           ...p,
-          createdAt: Date.now(),
+          createdAt: now,
           source: "manual",
           actor: uid,
         });
       }
+      // Publish the customer revision and safe history atomically with the parcel.
+      for (let i = 0; i < orders.length; i++) {
+        orders[i].version++;
+        tx.set(snapshots[i].ref, orders[i]);
+        const action =
+          d.action === "dispatchParcel"
+            ? "parcelDispatch"
+            : d.action === "packParcel"
+              ? "parcelPacked"
+              : d.action === "setDeliveryEstimate"
+                ? "deliveryEstimateUpdated"
+                : orders[i].stage === "DELIVERED"
+                  ? "parcelDelivered"
+                  : "parcelProgress";
+        tx.create(
+          snapshots[i].ref
+            .collection("timeline")
+            .doc(`shipping-${d.operationId}`),
+          { action, createdAt: now },
+        );
+      }
       tx.set(ref, parcel);
       const publicEstimate = readManualDeliveryEstimate(
         parcel.deliveryEstimate,
-        Date.now(),
+        now,
       );
       // Each projection contains only this customer's allocations, never a manifest.
       for (const ownerId of new Set(orders.map((o) => o.ownerId)))
@@ -261,7 +281,7 @@ export const shippingCommand = onCall(options, async (req) => {
           id: parcel.id,
           version: parcel.version,
           state: parcel.state,
-          updatedAt: Date.now(),
+          updatedAt: now,
           route: parcel.route,
           warehouse: parcel.warehouse,
           ...(publicEstimate ? { deliveryEstimate: publicEstimate } : {}),
@@ -276,24 +296,37 @@ export const shippingCommand = onCall(options, async (req) => {
         actor: uid,
         action: d.action,
         resourceId: id,
-        createdAt: Date.now(),
+        createdAt: now,
       });
       const result = { id, version: parcel.version };
       // One event per owner+parcel revision; ETA policy remains disabled.
       if (d.action !== "setDeliveryEstimate")
-        for (const ownerId of new Set(orders.map(o => o.ownerId))) {
-          const order = orders.find(o => o.ownerId === ownerId)!;
-          tx.create(db.doc(`outboxJobs/parcel-${id}-${parcel.version}-${ownerId}`), {
-            ownerId, orderId: order.id, resourceId: id, action: d.action,
-            state: "queued", createdAt: Date.now(),
-            ...customerEventFields(() => {
-              const event = parcelCustomerEvent(parcel, orders, ownerId, d.action, Date.now());
-              if (!event) throw Error("NO_CUSTOMER_EVENT");
-              return event;
-            }),
-          });
+        for (const ownerId of new Set(orders.map((o) => o.ownerId))) {
+          const order = orders.find((o) => o.ownerId === ownerId)!;
+          tx.create(
+            db.doc(`outboxJobs/parcel-${id}-${parcel.version}-${ownerId}`),
+            {
+              ownerId,
+              orderId: order.id,
+              resourceId: id,
+              action: d.action,
+              state: "queued",
+              createdAt: now,
+              ...customerEventFields(() => {
+                const event = parcelCustomerEvent(
+                  parcel,
+                  orders,
+                  ownerId,
+                  d.action,
+                  now,
+                );
+                if (!event) throw Error("NO_CUSTOMER_EVENT");
+                return event;
+              }),
+            },
+          );
         }
-      tx.create(op, { hash, result, createdAt: Date.now() });
+      tx.create(op, { hash, result, createdAt: now });
       return result;
     });
   } catch (e) {

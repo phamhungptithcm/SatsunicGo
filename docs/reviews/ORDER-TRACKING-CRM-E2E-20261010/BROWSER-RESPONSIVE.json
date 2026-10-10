@@ -1,0 +1,122 @@
+{
+  "keyboardRefreshFocus": "BUTTON preserved",
+  "samples": [
+    {
+      "role": "owner",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":10},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 258,
+      "focus": "BUTTON",
+      "pageWidth": 320,
+      "viewport": 320
+    },
+    {
+      "role": "owner",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":10},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 328,
+      "focus": "BUTTON",
+      "pageWidth": 390,
+      "viewport": 390
+    },
+    {
+      "role": "owner",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":10},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 1114,
+      "focus": "BUTTON",
+      "pageWidth": 1280,
+      "viewport": 1280
+    },
+    {
+      "role": "owner",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":11},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 258,
+      "pageWidth": 320,
+      "viewport": 320
+    },
+    {
+      "role": "owner",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":11},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 328,
+      "pageWidth": 390,
+      "viewport": 390
+    },
+    {
+      "role": "owner",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"customerOrderTracking\":11},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 1114,
+      "pageWidth": 1280,
+      "viewport": 1280
+    },
+    {
+      "role": "guest",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":2},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 258,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 320,
+      "viewport": 320
+    },
+    {
+      "role": "guest",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":2},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 328,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 390,
+      "viewport": 390
+    },
+    {
+      "role": "guest",
+      "locale": "vi",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":2},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 1114,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 1280,
+      "viewport": 1280
+    },
+    {
+      "role": "guest",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":3},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 258,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 320,
+      "viewport": 320
+    },
+    {
+      "role": "guest",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":3},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 328,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 390,
+      "viewport": 390
+    },
+    {
+      "role": "guest",
+      "locale": "en",
+      "accessibility": "{\"calls\":{\"publicOrderTracking\":3},\"forbiddenSinks\":0,\"accessibility\":{\"violations\":[],\"incomplete\":[\"color-contrast\"]}}",
+      "cardWidth": 1114,
+      "hasCapability": false,
+      "hasPrivateOrder": false,
+      "pageWidth": 1280,
+      "viewport": 1280
+    }
+  ],
+  "limitations": [
+    "Actual iframe media viewport, QA wrapper parent 1280px",
+    "Settled axe reports no violations; color-contrast incomplete remains unresolved",
+    "Native OS reduced-motion preference not toggled",
+    "Provider and client analytics fixture disabled; real Firebase transport"
+  ]
+}

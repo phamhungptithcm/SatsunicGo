@@ -369,9 +369,7 @@ export function trackingMilestoneUpdates(
       event.createdAt <= tracking.observedAt,
   );
   const purchase = history
-    .filter((e) =>
-      ["claimPurchase", "recordPurchase"].includes(e.action),
-    )
+    .filter((e) => ["claimPurchase", "recordPurchase"].includes(e.action))
     .reduce((first, e) => Math.min(first, e.createdAt), Infinity);
   const stages: Record<string, CustomerOrderTracking["stage"]> = {
     submitRequest: "REQUESTED",
@@ -385,6 +383,10 @@ export function trackingMilestoneUpdates(
     finalize: "PACKED",
     approveFinal: "PACKED",
     dispatch: "IN_TRANSIT",
+    parcelPacked: "ORIGIN_RECEIVED",
+    parcelDispatch: "IN_TRANSIT",
+    parcelProgress: "IN_TRANSIT",
+    parcelDelivered: "DELIVERED",
     confirmReceipt: "COMPLETED",
     cancelRequest: "CANCELLED",
   };

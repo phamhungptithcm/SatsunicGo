@@ -1,0 +1,9 @@
+{
+  "environment": "local Node; domain only; no provider/network/load guarantee",
+  "iterations": 200,
+  "parcels": 60,
+  "events": 50,
+  "p50Ms": 5.160292000000027,
+  "p95Ms": 39.05820900000026,
+  "maxMs": 135.98708399999987
+}

@@ -26,6 +26,14 @@ const events: Record<string, [string, string]> = {
   finalize: ["Đã chốt tổng tiền", "Final total reviewed"],
   approveFinal: ["Đã duyệt tổng cuối", "Final total approved"],
   dispatch: ["Đã xuất gửi", "Dispatched"],
+  parcelDispatch: ["Đã xuất gửi", "Dispatched"],
+  parcelPacked: ["Đã ghi nhận đóng kiện", "Parcel packing recorded"],
+  parcelProgress: ["Đã cập nhật vận chuyển", "Shipping updated"],
+  parcelDelivered: ["Đã giao đủ các kiện", "All parcels delivered"],
+  deliveryEstimateUpdated: [
+    "Đã cập nhật dự kiến giao",
+    "Delivery estimate updated",
+  ],
   track: ["Đã cập nhật vận chuyển", "Shipping updated"],
   confirmReceipt: ["Đã xác nhận nhận hàng", "Receipt confirmed"],
   hold: ["Đã cập nhật tạm giữ xử lý", "Processing hold updated"],
@@ -221,7 +229,7 @@ export function OrderTracking({
         <span>
           {vi ? "Đọc lúc " : "Read at "}
           {stamp(tracking.observedAt)} · {zone} ·{" "}
-          {vi ? "không cập nhật trực tiếp" : "not live"}
+          {vi ? "theo cập nhật đã ghi nhận" : "recorded updates"}
         </span>
       </p>
       {tracking.shipmentsPartial && (

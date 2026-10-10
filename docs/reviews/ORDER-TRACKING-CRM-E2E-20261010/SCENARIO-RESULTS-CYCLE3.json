@@ -1,0 +1,333 @@
+{
+  "acceptanceCount": 46,
+  "counts": {
+    "BLOCKED": 1,
+    "PARTIAL": 8,
+    "PASSED": 37
+  },
+  "nativeE2E46": false,
+  "scenarios": [
+    {
+      "id": "H01",
+      "scenario": "Custom approved checkout → purchase → receive → pack → dispatch",
+      "status": "BLOCKED",
+      "evidence": "DEMO-PRICING-GATE.json",
+      "observation": "Real purchaseCheckoutSetup HTTP returned pricing null. Existing approved shared pricing expired; no checkout/cart/order writes made. Awaiting narrowly scoped demo-config approval."
+    },
+    {
+      "id": "H02",
+      "scenario": "Catalog full-payment order through delivery",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Catalog checkout/lifecycle source and emulator tests pass; real HTTP checkout not reached after H01 gate."
+    },
+    {
+      "id": "H03",
+      "scenario": "CRM single-parcel dispatch",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Real shippingCommand transaction pack/dispatch; deterministic timeline/version/projection assertions. Native live journey begins IN_TRANSIT, not native dispatch."
+    },
+    {
+      "id": "H04",
+      "scenario": "CRM set/edit/remove ETA with customer Account already open",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; REAL-HTTP.json; BROWSER-RESPONSIVE.json",
+      "observation": "Backend ETA set/edit/remove atomicity; actual native CRM ETA update automatically refreshed open Account."
+    },
+    {
+      "id": "H05",
+      "scenario": "Owner Ask already open during CRM update",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; REAL-HTTP.json; BROWSER-RESPONSIVE.json",
+      "observation": "Native CRM→open owner Ask refresh without reload. Component confirms latest answer only; provider forbidden sink0."
+    },
+    {
+      "id": "H06",
+      "scenario": "Anonymous Ask active during CRM update",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; REAL-HTTP.json; BROWSER-RESPONSIVE.json",
+      "observation": "Native anonymous Ask initially in-transit/ETA then auto-delivered within60seconds; strict four-key public DTO."
+    },
+    {
+      "id": "H07",
+      "scenario": "Two parcels partially then fully delivered",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Real emulator partial/final delivered allocation commands; only full quantities complete order."
+    },
+    {
+      "id": "H08",
+      "scenario": "Two orders/owners share one parcel",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Real emulator shared parcel two owners; redacted owner allocations/projection/history."
+    },
+    {
+      "id": "H09",
+      "scenario": "Consolidated batch dispatch",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Real emulator consolidation command, one safe dispatch event/version and projection timestamp."
+    },
+    {
+      "id": "H10",
+      "scenario": "ETA + shipment tracking then recipient confirmation",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Real emulator command receipt rejects partial canonical quantities, succeeds after delivery without fabricated tracking. ETA-only edits preserve dispatch timestamp."
+    },
+    {
+      "id": "N01",
+      "scenario": "Unauthenticated/unverified/locked/revoked staff",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N02",
+      "scenario": "Warehouse attempts ETA/track; manager attempts unauthorized pack",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N03",
+      "scenario": "Owner/nonowner/anonymous direct private reads",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N04",
+      "scenario": "Unpaid/hold/unapproved final total dispatch",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N05",
+      "scenario": "Overallocated/duplicate/wrong-order/wrong-line parcel",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N06",
+      "scenario": "Partial/incomplete allocation, missing parcel/projection, mismatched revisions",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N07",
+      "scenario": "Malformed/null/future/reversed/elapsed ETA and missing evidence",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N08",
+      "scenario": "ETA expired while UI open",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N09",
+      "scenario": "Failed delivery, return, hold",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N10",
+      "scenario": "Delivered/returned terminal parcel reopening attempt",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N11",
+      "scenario": "Same operationId exact replay after response loss",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N12",
+      "scenario": "Same operationId changed payload or action",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N13",
+      "scenario": "Stale expectedVersion/orderVersions",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Atomic stale-version rejection verified. Native CRM draft preservation/conflict recovery not exercised."
+    },
+    {
+      "id": "N14",
+      "scenario": "Two staff concurrent ETA/delivery; financial update concurrent shipment",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N15",
+      "scenario": "Transaction failure after scheduling writes",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N16",
+      "scenario": "Transport timeout after commit vs before commit",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Source transaction replay after discarded response and component issuance same-operation retry pass; actual HTTP response-loss injection before/after commit NOT_RUN."
+    },
+    {
+      "id": "N17",
+      "scenario": "Customer offline during CRM update then reconnect",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Mounted Account/Ask offline/hidden and reconnect component checks; native navigator online/offline UI-event simulation plus screenshots. Physical network cut NOT_RUN."
+    },
+    {
+      "id": "N18",
+      "scenario": "Slow lookup15s and late response",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Actual component15s deadline, late completion ignored; unit loop cancellation."
+    },
+    {
+      "id": "N19",
+      "scenario": "Logout/account switch while subscription/refetch pending",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Account/Ask pending scope changes and public-code issuance auth fences; mock SDK component layer."
+    },
+    {
+      "id": "N20",
+      "scenario": "Order/code A→B→A response permutations",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Generation-based A→B→A response order tests; mock SDK component and unit layers."
+    },
+    {
+      "id": "N21",
+      "scenario": "Modal close/reopen, unmount, hidden tab",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Visible/hidden/close/unmount lifecycle and timer/listener cleanup in component/unit."
+    },
+    {
+      "id": "N22",
+      "scenario": "Guest code invalid/expired/revoked/rotated/ordinary order ID",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N23",
+      "scenario": "Guest quota429, same IP multiple tabs/users",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N24",
+      "scenario": "Backend missing/unavailable, permission-denied during refresh",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N25",
+      "scenario": "Tampered public DTO/internal note actor or PII injection",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Real HTTP four-key guest DTO; private fields redacted. Component malformed payload rejection, code not in transcript/storage/provider calls. Native DOM code/order absence and forbiddenSinks0."
+    },
+    {
+      "id": "N26",
+      "scenario": "Legacy missing times/history beyond50 events",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N27",
+      "scenario": "Out-of-order/duplicate/future events and ETA-only activity",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts",
+      "observation": "Scoped real emulator transactions/rules + domain/refresh/component adversarial assertions; see test IDs and logs. Not a native full-stack journey."
+    },
+    {
+      "id": "N28",
+      "scenario": "Cross-owner code issuance/rotation concurrent auth change",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log",
+      "observation": "Owner issuance/rotation server auth tests plus actual PublicTrackingCode component auth ABA/revision/lost-response fencing."
+    },
+    {
+      "id": "U01",
+      "scenario": "VI/EN320/390/1280px, long translated labels/timezone",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; BROWSER-RESPONSIVE.json; screenshots/final-*.png; logs/ask-components.log",
+      "observation": "Real Firebase fixture, actual CSS iframe320/390/1280, VI/EN owner+guest screenshots; pageWidth equals viewport. Account VI; Ask VI/EN. Shared approved timeline CSS retained."
+    },
+    {
+      "id": "U02",
+      "scenario": "Keyboard log/refresh/stop/close and dynamic update",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log; BROWSER-RESPONSIVE.json; screenshots/final-*.png; logs/ask-components.log",
+      "observation": "Native Enter submit/refresh/close; refresh focus staysBUTTON. Component named log, keyboard stop/cancel/close and semantic timeline. Screen-reader hardware NOT_RUN."
+    },
+    {
+      "id": "U03",
+      "scenario": "Settled axe and reduced motion",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; BROWSER-RESPONSIVE.json; screenshots/final-*.png; logs/ask-components.log",
+      "observation": "Settled axe zero reported violations; color-contrast incomplete unresolved. Native OS reduced-motion preference NOT_RUN; CSS reduce rules inspected."
+    },
+    {
+      "id": "U04",
+      "scenario": "CRM success/error/conflict/unknown acknowledgement",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; BROWSER-RESPONSIVE.json; screenshots/final-*.png; logs/ask-components.log",
+      "observation": "Native authoritative CRM success observed; source/queue error handling checked. Native error/conflict/unknown-acknowledgement journeys NOT_RUN."
+    },
+    {
+      "id": "P01",
+      "scenario": "1/10 affected orders +1/20 batch parcels",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; DOMAIN-PERFORMANCE.json; logs/shipping-regression.log",
+      "observation": "1/10 orders and1/20 batch parcel boundary transactions pass; write-count instrumentation and latency distribution NOT_RUN."
+    },
+    {
+      "id": "P02",
+      "scenario": "60 parcels/50 history events + invalid over-limit inputs",
+      "status": "PASSED",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; DOMAIN-PERFORMANCE.json; logs/shipping-regression.log",
+      "observation": "Domain200 iterations60parcels/50events + server bound/legacy checks; domain-only timing, no production SLA."
+    },
+    {
+      "id": "P03",
+      "scenario": "Rapid10 revisions and many active/hidden tabs",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; logs/unit.log; logs/ask-components.log; logs/account-code-components.log; DOMAIN-PERFORMANCE.json; logs/shipping-regression.log",
+      "observation": "Ten-revision coalescing, one-flight, hidden/offline cleanup pass in unit/component. Native many-tab load measurement NOT_RUN."
+    },
+    {
+      "id": "P04",
+      "scenario": "Concurrent staff and shared-IP guest quota load",
+      "status": "PARTIAL",
+      "evidence": "logs/backend.log; tests/rules/order-tracking-hardening.test.ts; order-tracking-security.test.ts; guest-order-tracking.test.ts; order-tracking027.test.ts; DOMAIN-PERFORMANCE.json; logs/shipping-regression.log",
+      "observation": "Concurrent staff/finance and shared-IP quota tests pass on emulator. Contention/retry cost profiling NOT_RUN."
+    }
+  ]
+}

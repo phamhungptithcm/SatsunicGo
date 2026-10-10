@@ -1,3 +1,4 @@
+import { readWithAbort } from "../ask/guest-tracking-request";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState } from "react";
 import { auth, callService } from "../../shared/firebase";
@@ -23,10 +24,12 @@ export function AccountTracking({
 }) {
   const request = useRef(new AccountTrackingRequest());
   const [retry, setRetry] = useState(0);
+  const [offline, setOffline] = useState(navigator.onLine === false);
   const [state, setState] = useState<ReadState | null>(null);
   const scope = JSON.stringify([uid, orderId, version, retry]);
   useEffect(() => {
     let active = true;
+    const controller = new AbortController();
     const owns = () => active && auth?.currentUser?.uid === uid;
     setState(null);
     if (auth?.currentUser?.uid !== uid) return;
@@ -35,15 +38,42 @@ export function AccountTracking({
       orderId,
       version,
       owns,
-      read: () => callService<unknown>("customerOrderTracking", { orderId }),
+      read: () =>
+        readWithAbort(
+          () => callService<unknown>("customerOrderTracking", { orderId }),
+          AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]),
+        ),
       success: (tracking) => setState({ scope, tracking }),
       failure: () => setState({ scope, error: true }),
     });
     return () => {
       active = false;
+      controller.abort();
       reader.invalidate();
     };
   }, [uid, orderId, version, scope]);
+  useEffect(() => {
+    const tick = () => {
+      setOffline(navigator.onLine === false);
+      if (
+        auth?.currentUser?.uid === uid &&
+        navigator.onLine !== false &&
+        document.visibilityState !== "hidden"
+      )
+        setRetry((value) => value + 1);
+    };
+    const timer = setInterval(tick, 60_000);
+    const disconnected = () => setOffline(true);
+    window.addEventListener("offline", disconnected);
+    window.addEventListener("online", tick);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("offline", disconnected);
+      window.removeEventListener("online", tick);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [uid, orderId]);
   const current =
     state?.scope === scope && auth?.currentUser?.uid === uid ? state : null;
   if (auth?.currentUser?.uid !== uid)
@@ -55,7 +85,26 @@ export function AccountTracking({
   if (current?.tracking)
     return (
       <>
-        <OrderTracking tracking={current.tracking} />
+        {offline && (
+          <p className="accountTrackingNotice" role="status">
+            Đang mất kết nối. Tiến độ bên dưới có thể đã cũ; dự kiến nhận hàng
+            sẽ hiện lại sau khi kiểm tra được cập nhật mới.
+          </p>
+        )}
+        <OrderTracking
+          tracking={
+            offline
+              ? {
+                  ...current.tracking,
+                  estimate: null,
+                  shipments: current.tracking.shipments.map((parcel) => ({
+                    ...parcel,
+                    deliveryEstimate: undefined,
+                  })),
+                }
+              : current.tracking
+          }
+        />
         <PublicTrackingCode uid={uid} orderId={orderId} version={version} />
       </>
     );

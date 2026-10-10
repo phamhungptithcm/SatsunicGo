@@ -76,10 +76,11 @@ export function projectPublicTracking(input: {
       "recordPurchase",
       "receive",
       "pack",
+      "parcelPacked",
       "dispatch",
     ],
-    shipping: ["dispatch", "track"],
-    delivered: ["track", "confirmReceipt"],
+    shipping: ["dispatch", "track", "parcelDispatch", "parcelProgress"],
+    delivered: ["track", "confirmReceipt", "parcelDelivered"],
     cancelled: ["cancelRequest"],
     temporarily_unavailable: [],
   };

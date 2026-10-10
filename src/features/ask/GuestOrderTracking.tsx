@@ -171,7 +171,7 @@ export function GuestOrderTracking({
           <time dateTime={new Date(t.observedAt).toISOString()}>
             {format(t.observedAt)}
           </time>
-          {vi ? " · Không cập nhật trực tiếp" : " · Not live"}
+          {vi ? " · Theo cập nhật đã ghi nhận" : " · Recorded updates"}
         </span>
       </p>
     </section>

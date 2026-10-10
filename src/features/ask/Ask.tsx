@@ -1,5 +1,6 @@
 "use client";
 import { readGuestTracking } from "./guest-tracking-request";
+import { TrackingRefresh } from "./TrackingRefresh";
 import { GuestOrderTracking } from "./GuestOrderTracking";
 import {
   guestTrackingQuery,
@@ -151,6 +152,7 @@ type Turn = {
   webQuery?: string;
   tracking?: CustomerOrderTracking;
   guestTracking?: PublicOrderTracking;
+  trackingRefreshFailed?: boolean;
   guestLookup?: boolean;
   shipping?: {
     snapshot: ShippingRatesPublicSnapshot;
@@ -753,6 +755,12 @@ export function Ask({
       document.body.style.overflow = previousOverflow;
     };
   }, [open]);
+
+  useEffect(() => {
+    // The collapsed composer is remounted when the dialog closes, so native
+    // dialog focus restoration can otherwise land on the document body.
+    if (!open && returned) idleInput.current?.focus({ preventScroll: true });
+  }, [open, returned]);
 
   const newestTurnId = turns.at(-1)?.id;
   useEffect(() => {
@@ -2626,6 +2634,12 @@ export function Ask({
               commerce={commerce}
               onCatalogResults={rememberCatalog}
             />
+            {turns.at(-1)?.trackingRefreshFailed && <p role="status">{vi ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản." : "Tracking is unavailable. Re-enter the code or check your account."}</p>}
+            {open && !exiting && !busy && !accountPending && turns.at(-1)?.status === "answered" && (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
+              <TrackingRefresh key={`${turns.at(-1)!.id}:${authGeneration.current}`} uid={auth?.currentUser?.uid ?? null} order={turns.at(-1)?.tracking} code={turns.at(-1)?.guestTracking ? selectedGuestTracking.current ?? undefined : undefined} language={language}
+                update={value => { const id = turns.at(-1)!.id; setTurns(current => current.map(turn => turn.id === id ? "publicStatus" in value ? {...turn, guestTracking: value} : {...turn, tracking: value} : turn)); }}
+                clear={() => { const id = turns.at(-1)!.id; selectedGuestTracking.current = null; setTurns(current => current.map(turn => turn.id === id ? {...turn, tracking: undefined, guestTracking: undefined, trackingRefreshFailed: true} : turn)); }} />
+            )}
             {(import.meta.env.DEV ||
               import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
               turns.at(-1)?.status === "answered" &&

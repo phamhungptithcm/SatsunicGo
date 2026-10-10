@@ -619,3 +619,29 @@
 
 /* Preserve Account capability-code controls outside the compact Ask delta. */
 .publicTrackingCode{margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:12px}.publicTrackingCode code{display:block;overflow-wrap:anywhere;margin:8px 0}.publicTrackingCode button{margin:4px 8px 4px 0}.publicTrackingCode p{font-size:13px;color:#64748b}
+.orderTracking.ot.ot-refresh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 8px 0 16px;
+  font-size: 11px;
+  color: #657087;
+}
+.ot-refresh button {
+  border: 1px solid #e4e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #163cff;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.ot-refresh button:focus-visible {
+  outline: 2px solid #163cff;
+  outline-offset: 2px;
+}
+.ot-refresh button:disabled,
+.ot-refresh button[aria-disabled="true"] {
+  opacity: 0.65;
+  cursor: default;
+}

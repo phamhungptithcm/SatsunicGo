@@ -1,0 +1,16 @@
+{
+  "appliedAt": "2026-10-10T18:28:02.093428+00:00",
+  "base": "4ef3b75c03a07a34629ff5fa004d1091d94eb31a",
+  "sourceFiles": 39,
+  "baselineTrackedChecked": 3580,
+  "baselineDriftBeforeApply": [],
+  "sharedProductWritesByRoot": 0,
+  "sharedRootHarnessOnlyFix": true,
+  "candidateOnlyCorrections": [
+    "test emulator endpoint helper restored for8181/18207",
+    "existing production-test guards retained by three-way merge",
+    "Account publicTrackingCode CSS rules retained"
+  ],
+  "generatedManifest": "Pending normal source regeneration",
+  "noDeploy": true
+}

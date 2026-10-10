@@ -1,0 +1,17 @@
+{
+  "scope": "Test fixture fidelity correction and remaining U03 reduced-motion browser emulation",
+  "authority": "Root direct human request: run missing cases and fix all discovered defects, integrate only after review passes, preserve WIP, no deploy",
+  "ownerHandoff": "01a126dc-faff-7193-9fb7-bcd034fda661 completed; source manifest39 files verified no drift",
+  "protectedChange": false,
+  "change": "Load existing CRM Workspace.css and reproduce existing crmRoot/workspaceShell/workspaceSidebar/workspaceMain/workspaceContent ancestors in owned test harness. No product UI/CSS change.",
+  "validation": "Node22 types/lint, dedicated fixture build, actual Chromium layout/icon sizing and keyboard interaction, reducedMotion no-preference/reduce actual browser CSS and animations, screenshots/console/axe; existing5207 only",
+  "boundaries": [
+    "Only fresh synthetic demo fixture; existing pricing unchanged",
+    "Provider and analytics disabled",
+    "No restart/reseed/new server/dependency/source product mutation",
+    "Archive old review and hashes; new supplement without overwriting owner archives",
+    "Cleanup only owned documents/Auth, generated fixture artifacts and browser session"
+  ],
+  "RIG": "DEGRADED stale indexes; bounded source verified",
+  "createdAt": "2026-10-10T18:03:39.799008+00:00"
+}

@@ -1,0 +1,328 @@
+{
+  "status": "PASSED",
+  "method": "Native Chrome DevTools Rendering UI; task-scoped media emulation",
+  "baseline": {
+    "animations": [
+      {
+        "className": "ot-panel",
+        "duration": "0.32s",
+        "name": "ot-enter",
+        "pseudo": null,
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "ot-step-icon",
+        "duration": "1.15s",
+        "name": "ot-ring",
+        "pseudo": "::after",
+        "transition": "0s"
+      },
+      {
+        "className": "ot-panel",
+        "duration": "0.32s",
+        "name": "ot-enter",
+        "pseudo": null,
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "",
+        "duration": "0.48s",
+        "name": "ot-line",
+        "pseudo": "::before",
+        "transition": "0s"
+      },
+      {
+        "className": "ot-step-icon",
+        "duration": "1.15s",
+        "name": "ot-ring",
+        "pseudo": "::after",
+        "transition": "0s"
+      }
+    ],
+    "reduce": false
+  },
+  "ownerReduced": {
+    "checkedStyles": 579,
+    "currentSteps": 2,
+    "qa": {
+      "accessibility": {
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": [
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(1) > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(3) > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > small"
+                ]
+              }
+            ]
+          }
+        ],
+        "violations": []
+      },
+      "calls": {
+        "customerOrderTracking": 3
+      },
+      "faults": [],
+      "forbiddenSinks": 0
+    },
+    "reduce": true,
+    "remainingMotion": [],
+    "timeCount": 2,
+    "timelineCount": 3
+  },
+  "ownerKeyboardRefresh": {
+    "focused": "Cập nhật tiến độ",
+    "qa": {
+      "accessibility": {
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "nodes": [
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(1) > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"completed\"]:nth-child(3) > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > strong"
+                ]
+              },
+              {
+                "checks": [
+                  {
+                    "data": "[MaxDepth]",
+                    "id": "color-contrast",
+                    "message": "Element's background color could not be determined due to a pseudo element"
+                  }
+                ],
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element",
+                "target": [
+                  ".ot-compact > .ot-panel > .ot-steps[data-compact=\"true\"][aria-label=\"Các bước xử lý\"] > li[data-state=\"current\"][aria-current=\"step\"] > .ot-step-content > small"
+                ]
+              }
+            ]
+          }
+        ],
+        "violations": []
+      },
+      "calls": {
+        "customerOrderTracking": 4
+      },
+      "faults": [],
+      "forbiddenSinks": 0
+    },
+    "reduce": true,
+    "refreshEnabled": true
+  },
+  "guestReduced": {
+    "capabilityInDOM": false,
+    "checkedStyles": 144,
+    "qa": {
+      "accessibility": {
+        "incomplete": [],
+        "violations": []
+      },
+      "calls": {
+        "publicOrderTracking": 1
+      },
+      "faults": [],
+      "forbiddenSinks": 0
+    },
+    "reduce": true,
+    "remainingMotion": [],
+    "timelineCount": 2
+  },
+  "guestKeyboardRefresh": {
+    "focused": "Cập nhật tiến độ",
+    "status": "Vừa kiểm tra tiến độ. Sẽ kiểm tra lại sau một phút."
+  },
+  "escape": {
+    "dialogCount": 0,
+    "focused": null
+  },
+  "restored": {
+    "active": {
+      "label": null,
+      "placeholder": null,
+      "tag": "BODY"
+    },
+    "dialogCount": 0,
+    "reduce": false
+  },
+  "limitations": [
+    "Not a physical OS Reduce Motion setting test",
+    "Owner axe contrast incomplete resolved separately by CONTRAST-REVIEW.json",
+    "Synthetic capability appeared once in QA tool output before send; disposable fixture will be removed; no customer data"
+  ],
+  "focusRegression": {
+    "before": {
+      "dialogCount": 0,
+      "focused": null
+    },
+    "afterEscape": {
+      "active": {
+        "label": "Hỏi SatsunicGo",
+        "tag": "INPUT"
+      },
+      "dialogCount": 0
+    },
+    "afterCloseButton": {
+      "active": {
+        "label": "Hỏi SatsunicGo",
+        "tag": "INPUT"
+      },
+      "dialogCount": 0
+    },
+    "normalMotionClose": {
+      "active": {
+        "label": "Hỏi SatsunicGo",
+        "tag": "INPUT"
+      },
+      "dialogCount": 0,
+      "reduce": false
+    }
+  },
+  "finalGuest": {
+    "qa": {
+      "accessibility": {
+        "incomplete": [],
+        "violations": []
+      },
+      "calls": {
+        "publicOrderTracking": 1
+      },
+      "faults": [],
+      "forbiddenSinks": 0
+    },
+    "reduce": true,
+    "remainingMotion": [],
+    "timelineCount": 2
+  }
+}

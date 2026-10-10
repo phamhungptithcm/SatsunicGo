@@ -1,0 +1,17 @@
+{
+  "approvedBy": "Human chat reply 2026-10-10",
+  "project": "demo-satsunicgo",
+  "changedFields": [
+    "expiresAt"
+  ],
+  "restore": "PASSED",
+  "cleanup": "PASSED",
+  "startedAt": 1791653750554,
+  "version": 1,
+  "originalExpiresAt": 1791640555633,
+  "temporaryExpiresAt": 1791660950554,
+  "originalHash": "66668b2c19587a6a7a99685c105317c9ad477cebd5249f35eb4418ac596ecc23",
+  "business": "PASSED",
+  "restoredHash": "66668b2c19587a6a7a99685c105317c9ad477cebd5249f35eb4418ac596ecc23",
+  "finishedAt": 1791653819080
+}
