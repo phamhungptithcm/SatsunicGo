@@ -590,3 +590,4 @@ export { customerNotificationCreated } from "./customer-notification-delivery";
 
 export { notificationPreferences } from "./notification-preferences";
 export { deliverSubscriptionEmail } from "./subscription-email";
+export { publicOrderTracking, managePublicTrackingCode } from "./public-order-tracking";

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { auth, callService } from "../../shared/firebase";
 import type { CustomerOrderTracking } from "../../../packages/domain/order-tracking";
 import { AccountTrackingRequest } from "./account-tracking-request";
+import { PublicTrackingCode } from "./PublicTrackingCode";
 import { OrderTracking } from "../ask/OrderTracking";
 
 type ReadState = {
@@ -51,7 +52,13 @@ export function AccountTracking({
         Phiên đăng nhập đã thay đổi. Mở lại đơn hàng trong tài khoản của bạn.
       </p>
     );
-  if (current?.tracking) return <OrderTracking tracking={current.tracking} />;
+  if (current?.tracking)
+    return (
+      <>
+        <OrderTracking tracking={current.tracking} />
+        <PublicTrackingCode uid={uid} orderId={orderId} version={version} />
+      </>
+    );
   if (current?.error)
     return (
       <section className="accountTrackingNotice" aria-label="Theo dõi đơn hàng">

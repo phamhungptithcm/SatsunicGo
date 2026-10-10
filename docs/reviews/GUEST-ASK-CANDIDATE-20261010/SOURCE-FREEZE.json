@@ -1,0 +1,31 @@
+{
+  "base": "f675ea3a7c94eca8aec88009b1e20eecb5d4822c",
+  "sourceFiles": {
+    "packages/domain/public-order-tracking.ts": "7004b237eff95761729604a3001cc206b1ba9f4652936e3ff96a8c137e2c5ebc",
+    "functions/src/public-order-tracking.ts": "61b852e6d7d6cf8370690dc8af3118a56effef9dacbc9f130f1de4ed02f52e57",
+    "functions/src/index.ts": "e4ef11674d2c536700638ebee9f27a6aac6e4393e85d869a519f4ab70a9e85be",
+    "src/features/ask/Ask.tsx": "7b6a74a219053b90c6cb80a57fb26dc46096e64d27e3674ba8ed59d46bea5f4f",
+    "src/features/ask/GuestOrderTracking.tsx": "d235a7a85be8e63ab67f28fefc63f202f731ccb8860deb64faf83505ad8d2fbf",
+    "src/features/ask/guest-tracking-request.ts": "77f398825069bb43697eea7069780afb23d6fd94e65926c3bf975499aba5d29c",
+    "src/features/ask/order-tracking.css": "480931c44f02a977b8693896cb5b5fac3edee5c33d182f231776b6618f8efa58",
+    "src/features/orders/PublicTrackingCode.tsx": "7a616e0db90f49816c5e6efea1b61ce9b0726426bdacec963f43a527020896a2",
+    "src/features/orders/AccountTracking.tsx": "538ef7e022c48ee98abf448f7c613f3ad03d362e6aa6fbe02942338ee66de84c",
+    "tests/unit/guest-order-tracking.test.ts": "d8845a4c96e353128082e35eaec8102012993fbf4c6285c5488a2246e1704a41",
+    "tests/rules/guest-order-tracking.test.ts": "99fa76dcf580c5cf57c5a0fda02a5ee0911db779e8c60cdb309b8413dde50c43",
+    "src/features/ask/Ask.module.css": "9757779a84116759880ff791e412685af886df61468df28a23cf7b96607ff089",
+    "functions/generated/public-assets.json": "9def9b1751ab60cab777988a0cdc6efc96d8dd07d7d0493899a16b6c62a4c61e"
+  },
+  "digest": "1aabd13f1aa0108a2d82e12b514604eaf6d0a8c25d3fe68afa6bcfe1ff4b82ab",
+  "trackedInventory": 3531,
+  "outsideAllowlistDrift": [],
+  "indexInverseExact": true,
+  "sharedWritesByRoot": 0,
+  "concurrentSharedDelta": {
+    "src/features/ask/Ask.tsx": "d38928521371828fd98c5d7d5a979feb677a33b3818f09754c329a805aaf16b7"
+  },
+  "intentionalSharedDelta": "Guest owner added null-safe error and moved-focus guard; independently source-reviewed and applied in scope",
+  "excludedPreexistingWip": [
+    ".ai/scripts/__pycache__/repository_intelligence_lib.cpython-314.pyc",
+    "node_modules symlink"
+  ]
+}
