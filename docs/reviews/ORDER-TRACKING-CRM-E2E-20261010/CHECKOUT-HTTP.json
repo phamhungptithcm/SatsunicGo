@@ -1,0 +1,41 @@
+{
+  "ownerId": "Ebg5g76v1bPKKEnEDQhXCky5QlXM",
+  "environment": "real HTTP local Auth/Functions/Firestore; no external payment/provider",
+  "scenarios": [
+    {
+      "id": "H01",
+      "status": "PASSED",
+      "orderId": "d5998ff0-d7d9-44b2-aaaa-f28f7eb208c9",
+      "stage": "COMPLETED",
+      "historyEvents": 13,
+      "financialEntries": 1,
+      "fullPayment": 52500,
+      "transport": "real HTTP emulator checkout → simulated paid → purchase → receive → pack → parcel dispatch → ETA set/remove → delivered → owner receipt"
+    },
+    {
+      "id": "H02",
+      "status": "PASSED",
+      "orderId": "e9041098-8ec0-443d-9685-844edcef8652",
+      "stage": "COMPLETED",
+      "historyEvents": 11,
+      "financialEntries": 1,
+      "fullPayment": 200000,
+      "transport": "real HTTP emulator checkout → simulated paid → purchase → receive → pack → parcel dispatch → ETA set/remove → delivered → owner receipt"
+    }
+  ],
+  "orderIds": [
+    "d5998ff0-d7d9-44b2-aaaa-f28f7eb208c9",
+    "e9041098-8ec0-443d-9685-844edcef8652"
+  ],
+  "parcelIds": [
+    "fd13adac-31bd-464b-b6c6-c0562cd4c840",
+    "94bf281d-3779-4e51-8070-2eac656e8ee5"
+  ],
+  "checkoutIds": [
+    "83633b6a-574e-466a-a8cd-4d4c2ffa8bba",
+    "e661ad60-40c2-444c-80d9-cb9a56b9dd0b"
+  ],
+  "productIds": [
+    "tracking-qa-product-750719f5-4e8c-4dc6-b110-dc476e5c9ff3"
+  ]
+}

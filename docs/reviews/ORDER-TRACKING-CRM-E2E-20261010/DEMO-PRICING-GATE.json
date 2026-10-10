@@ -1,0 +1,11 @@
+{
+  "exists": true,
+  "enabled": true,
+  "approved": true,
+  "version": 1,
+  "effectiveFrom": 0,
+  "expiresAt": 1791640555633,
+  "observedAt": 1791651206706,
+  "notExpired": false,
+  "settingsChanged": false
+}

@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import { initializeApp, getApp, deleteApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import {
@@ -108,15 +109,13 @@ async function seed() {
   await batch.commit();
 }
 beforeAll(async () => {
-  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:18207")
-    throw Error("Existing shared emulator required; unique project only");
+  const endpoint = demoFirestoreEndpoint(process.env);
   initializeApp({ projectId });
   db = getFirestore();
   env = await initializeTestEnvironment({
     projectId,
     firestore: {
-      host: "127.0.0.1",
-      port: 18207,
+      ...endpoint,
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });

@@ -9,7 +9,18 @@ import {
 import { activeKnowledge } from "../../../packages/domain/ask-knowledge";
 import { knowledgeSource } from "./approved-knowledge";
 import { evaluateRetrievalHoldout } from "./feedback-evaluation";
+import {
+  feedbackExecution,
+  feedbackCleanupEligible,
+  testFeedbackRetention,
+} from "./feedback-provenance";
 import { z } from "zod";
+import { productionTestArtifactEnvironmentAllowed } from "../production-test-policy";
+import {
+  admitFeedbackRetention,
+  feedbackRetentionEnvironment,
+  readFeedbackRetentionArtifact,
+} from "./feedback-retention-gate";
 import {
   requireVerifiedGoogle,
   isStringRoleArray,
@@ -56,8 +67,30 @@ export const askFeedbackWithdraw = onCall(config, async (req) => {
         ? Math.min(expiry.toMillis(), now + 90 * 86400000)
         : now + 310001,
     );
-    tx.set(ref, { withdrawn: true, expiresAt });
-    tx.set(quota, { count: count + 1, expiresAt: new Date(now + 172800000) });
+    let provenance;
+    try {
+      provenance = feedbackExecution(previous.data() ?? {});
+    } catch {
+      provenance = undefined;
+    }
+    tx.set(ref, {
+      withdrawn: true,
+      expiresAt,
+      ...(provenance
+        ? {
+            ...provenance,
+            createdAt: now,
+            retentionDays: testFeedbackRetention.maxDays,
+            retentionClass: testFeedbackRetention.recordClass,
+          }
+        : {}),
+    });
+    tx.set(quota, {
+      count: count + 1,
+      createdAt: now,
+      retentionClass: testFeedbackRetention.quotaClass,
+      expiresAt: new Date(now + 172800000),
+    });
   });
   return { id: parsed.data.feedbackId, withdrawn: true as const };
 });
@@ -75,6 +108,12 @@ export function inboxRow(
     row.expiresAt.toMillis() <= now
   )
     return null;
+  let provenance;
+  try {
+    provenance = feedbackExecution(row);
+  } catch {
+    return null;
+  }
   const parsed = feedbackInboxSchema.shape.rows.element.safeParse({
     ownerId: match[1],
     feedbackId: match[2],
@@ -83,6 +122,7 @@ export function inboxRow(
     createdAt: row.createdAt,
     expiresAt: row.expiresAt.toMillis(),
     disposition: row.disposition,
+    ...(provenance ? { testMode: true } : {}),
   });
   return parsed.success ? parsed.data : null;
 }
@@ -192,37 +232,82 @@ export const askFeedbackEvaluation = onCall(config, async (req) => {
     { readOnly: true },
   );
 });
-/** Bounded deletion uses update-time preconditions, so a changed record is never deleted from an old read. */
+/** Policy/readiness and each selected record share one serializable read-set.
+ * A concurrent disable/revocation must retry and pass admission again.
+ */
 export async function purgeExpiredFeedback(now = Date.now()) {
   if (!Number.isSafeInteger(now) || now <= 0) throw Error("INVALID_PURGE_TIME");
+  if (!productionTestArtifactEnvironmentAllowed(process.env))
+    return { deleted: 0 };
+  const artifact = readFeedbackRetentionArtifact();
+  if (!artifact) return { deleted: 0 };
   const db = getFirestore();
+  if (!feedbackRetentionEnvironment(db)) return { deleted: 0 };
   let deleted = 0;
-  for (const collection of [
-    "askFeedback",
-    "askFeedbackReviewOperations",
-    "askFeedbackQuota",
+  for (const [collection, recordClass] of [
+    ["askFeedback", testFeedbackRetention.recordClass],
+    ["askFeedbackReviewOperations", testFeedbackRetention.operationClass],
+    ["askFeedbackQuota", testFeedbackRetention.quotaClass],
   ]) {
-    const records = await db
-      .collection(collection)
-      .where("expiresAt", "<=", new Date(now))
-      .limit(100)
-      .get();
-    if (!records.size) continue;
-    const batch = db.batch();
-    for (const doc of records.docs)
-      batch.delete(doc.ref, { lastUpdateTime: doc.updateTime! });
-    await batch.commit();
-    deleted += records.size;
+    deleted += await db.runTransaction(
+      async (tx) => {
+        const [policy, readiness] = await Promise.all([
+          tx.get(db.doc("settings/askFeedbackRetention")),
+          tx.get(db.doc("settings/askFeedbackRetentionReadiness")),
+        ]);
+        if (
+          !admitFeedbackRetention(
+            policy.data(),
+            readiness.data(),
+            artifact,
+            Date.now(),
+          )
+        )
+          return 0;
+        const records = await tx.get(
+          db
+            .collection(collection)
+            .where("retentionClass", "==", recordClass)
+            .where("expiresAt", "<=", new Date(now))
+            .limit(100),
+        );
+        // Recheck wall-clock expiry after the query, before enqueuing any delete.
+        if (
+          !admitFeedbackRetention(
+            policy.data(),
+            readiness.data(),
+            artifact,
+            Date.now(),
+          )
+        )
+          return 0;
+        let count = 0;
+        for (const doc of records.docs) {
+          if (
+            !doc.updateTime ||
+            !feedbackCleanupEligible(collection, doc.data(), now)
+          )
+            continue;
+          tx.delete(doc.ref, { lastUpdateTime: doc.updateTime });
+          count++;
+        }
+        return count;
+      },
+      { maxAttempts: 3 },
+    );
   }
   return { deleted };
 }
-// No production invocation in this task. Deployment and retention approval remain separate gates.
+// Only explicitly stamped production-test/short operational classes are deleted.
 export const askFeedbackCleanup = onSchedule(
   {
     schedule: "every 60 minutes",
+    timeZone: "UTC",
+    timeoutSeconds: 60,
     region: "asia-southeast1",
     maxInstances: 1,
     retryCount: 0,
+    maxRetrySeconds: 0,
   },
   async () => {
     await purgeExpiredFeedback();

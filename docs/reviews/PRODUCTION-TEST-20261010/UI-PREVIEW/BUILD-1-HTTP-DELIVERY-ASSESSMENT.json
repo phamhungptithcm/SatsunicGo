@@ -1,0 +1,45 @@
+{
+  "assessed_at": "2026-10-10T01:38:28.575665+00:00",
+  "status": "CONDITIONAL_SAFE_DELIVERY_PATH_IDENTIFIED",
+  "assessment_mode": "READ_ONLY_APPLICATION_AND_RUNTIME",
+  "rig": "DEGRADED",
+  "denied_action": "file:// browser navigation",
+  "denial_record": "INTEGRATION/UI-BROWSER-ATTEMPT.json",
+  "denial_result": "BROWSER_URL_POLICY_DENIED_FILE_PROTOCOL",
+  "file_retry_or_alternate_browser": "NOT_ATTEMPTED",
+  "source": "/private/tmp/satsunicgo-full-local-integration-20261009-jdho247x/repo/docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/production-test-components.html",
+  "destination": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/docs/previews/PRODUCTION-TEST-COMPONENTS-20261010.htm",
+  "url": "http://127.0.0.1:5207/docs/previews/PRODUCTION-TEST-COMPONENTS-20261010.htm",
+  "bytes": 933564,
+  "sha256": "bc202b1f4b44613b9c8f3143df4087bfbd54fbe770aa272271422d4dd0c78bb2",
+  "target_absent": true,
+  "parent_exists": true,
+  "source_inputs": 34,
+  "source_drift": [],
+  "vite_static_delivery_source_sha256": "21d5c6b4fb1013b98b1436e9e2a3bb416c8932343ad42ec293bbf760f51a0131",
+  "source_basis": {
+    "mime_htm_text_html": 5041,
+    "static_skip_only_html": 17792,
+    "index_html_transform_only_html": 18106,
+    "static_before_index_html": 24903
+  },
+  "required_http_readback": {
+    "status": 200,
+    "content_type": "text/html",
+    "decoded_body_sha256": "bc202b1f4b44613b9c8f3143df4087bfbd54fbe770aa272271422d4dd0c78bb2",
+    "follow_redirects": false
+  },
+  "safety_conditions": [
+    "Only exact reviewed artifact, one collision-protected temporary copy.",
+    "Existing 5207 listener only; preserve configuration/processes/app source/accounts.",
+    "CSP connect-src none and provider/mutation/storage denial unchanged.",
+    "No normal shared app or external navigation.",
+    "Remove only owned matching temporary copy after acceptance and before release commit."
+  ],
+  "copy": "NOT_RUN",
+  "http_readback": "NOT_RUN",
+  "browser_acceptance": "NOT_RUN",
+  "genuine_role_mfa_backend_provider": "NOT_RUN",
+  "product_language_gate": "BLOCKED",
+  "root_action_required": "Decide any required delivery approval; execute readback and browser acceptance only after allowed conditions."
+}

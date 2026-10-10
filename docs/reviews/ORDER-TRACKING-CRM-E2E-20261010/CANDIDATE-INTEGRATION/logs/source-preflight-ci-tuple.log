@@ -1,0 +1,790 @@
+{
+  "status": "PREPARED_NOT_DEPLOYED",
+  "readiness": "NOT_READY",
+  "localChecks": "PASSED",
+  "project": "satsunicgo",
+  "region": "asia-southeast1",
+  "inventory": [
+    {
+      "name": "command",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/index.ts"
+    },
+    {
+      "name": "ask",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask.ts"
+    },
+    {
+      "name": "askWorkflow",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask-workflow.ts"
+    },
+    {
+      "name": "currentAskConversation",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/ask-workflow.ts"
+    },
+    {
+      "name": "listWork",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "workspaceCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "readOwnerConfiguration",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "ticketMessages",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "membershipCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/membership.ts"
+    },
+    {
+      "name": "publicPage",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/public.ts"
+    },
+    {
+      "name": "publicDiscovery",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/public.ts"
+    },
+    {
+      "name": "maintenance",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "readNotification",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "scheduledPublication",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "customerNotificationRecovery",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/jobs.ts"
+    },
+    {
+      "name": "createPaymentLink",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "payosWebhook",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "reconcilePayments",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/payments/payos.ts"
+    },
+    {
+      "name": "deliverEmail",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/email.ts"
+    },
+    {
+      "name": "readOrderConversation",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-conversation.ts"
+    },
+    {
+      "name": "orderConversationCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-conversation.ts"
+    },
+    {
+      "name": "shippingCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping.ts"
+    },
+    {
+      "name": "orderHistory",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-history.ts"
+    },
+    {
+      "name": "changeCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/changes.ts"
+    },
+    {
+      "name": "returnCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/returns.ts"
+    },
+    {
+      "name": "refundCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/refunds.ts"
+    },
+    {
+      "name": "uploadContentImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/media.ts"
+    },
+    {
+      "name": "publicImage",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/media.ts"
+    },
+    {
+      "name": "consolidationCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/consolidation.ts"
+    },
+    {
+      "name": "readStaffAccess",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "readCustomer",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "saveCustomerNotes",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listCustomers",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listFollowUps",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "listCrmStaff",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "operationalDashboard",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/crm.ts"
+    },
+    {
+      "name": "uploadOrderImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "listOrderImages",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "readOrderImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/order-media.ts"
+    },
+    {
+      "name": "financeReview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/finance-review.ts"
+    },
+    {
+      "name": "membershipReminderPolicy",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/membership-reminder-policy.ts"
+    },
+    {
+      "name": "readOrderOperations",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/workspace.ts"
+    },
+    {
+      "name": "catalogCheckout",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/catalog-checkout.ts"
+    },
+    {
+      "name": "cartCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/cart.ts"
+    },
+    {
+      "name": "invoiceCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceList",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceDetail",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoices.ts"
+    },
+    {
+      "name": "invoiceShare",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/invoice-share.ts"
+    },
+    {
+      "name": "outboxCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/outbox-command.ts"
+    },
+    {
+      "name": "customerOrderTracking",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/customer-order-tracking.ts"
+    },
+    {
+      "name": "shippingRatesPublic",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping-rates.ts"
+    },
+    {
+      "name": "shippingRatesAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/shipping-rates.ts"
+    },
+    {
+      "name": "studioRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioMediaUpload",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "studioMediaRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio.ts"
+    },
+    {
+      "name": "blogCommentSubmit",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentList",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "blogCommentReport",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-comments.ts"
+    },
+    {
+      "name": "studioAdvancedRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio-advanced.ts"
+    },
+    {
+      "name": "studioAdvancedCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/blog-studio-advanced.ts"
+    },
+    {
+      "name": "websiteBannerCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "websiteBannerAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "websiteBannerPreview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "campaignBannersPublic",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/campaign-banners.ts"
+    },
+    {
+      "name": "productReviewRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewEligibility",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewWrite",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewModerate",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "productReviewAdmin",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/product-reviews.ts"
+    },
+    {
+      "name": "askKnowledgeCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/approved-knowledge.ts"
+    },
+    {
+      "name": "askKnowledgePreview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/approved-knowledge.ts"
+    },
+    {
+      "name": "customerSaveResolve",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/customer-save.ts"
+    },
+    {
+      "name": "askResearchCommand",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/research.ts"
+    },
+    {
+      "name": "askResearchSearch",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/research.ts"
+    },
+    {
+      "name": "askResearchSelect",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/research.ts"
+    },
+    {
+      "name": "askFeedback",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback.ts"
+    },
+    {
+      "name": "askFeedbackReview",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback.ts"
+    },
+    {
+      "name": "askFeedbackPolicy",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback.ts"
+    },
+    {
+      "name": "analyticsSession",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-ingest.ts"
+    },
+    {
+      "name": "analyticsIngest",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-ingest.ts"
+    },
+    {
+      "name": "analyticsLinkOrder",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-ingest.ts"
+    },
+    {
+      "name": "analyticsWithdraw",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-ingest.ts"
+    },
+    {
+      "name": "analyticsOrderChanged",
+      "kind": "onDocumentWritten",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-worker.ts"
+    },
+    {
+      "name": "analyticsPaymentCreated",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-worker.ts"
+    },
+    {
+      "name": "analyticsJobCreated",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-worker.ts"
+    },
+    {
+      "name": "analyticsCompact",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/analytics-worker.ts"
+    },
+    {
+      "name": "dashboardAnalytics",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/dashboard-analytics.ts"
+    },
+    {
+      "name": "askWebDiscovery",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/research-live.ts"
+    },
+    {
+      "name": "askWebSelect",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/research-live.ts"
+    },
+    {
+      "name": "askFeedbackWithdraw",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback-lifecycle.ts"
+    },
+    {
+      "name": "askFeedbackInbox",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback-lifecycle.ts"
+    },
+    {
+      "name": "askFeedbackCleanup",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback-lifecycle.ts"
+    },
+    {
+      "name": "askFeedbackEvaluation",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/ai/feedback-lifecycle.ts"
+    },
+    {
+      "name": "purchaseCheckout",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-checkout.ts"
+    },
+    {
+      "name": "purchaseBalanceCheckout",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-checkout.ts"
+    },
+    {
+      "name": "purchaseCheckoutSetup",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-checkout.ts"
+    },
+    {
+      "name": "purchaseDraftImage",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-images.ts"
+    },
+    {
+      "name": "purchaseOrderRead",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-checkout.ts"
+    },
+    {
+      "name": "purchaseReceipt",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-receipts.ts"
+    },
+    {
+      "name": "purchaseReceiptWorker",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-receipts.ts"
+    },
+    {
+      "name": "purchaseReceiptRecovery",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-receipts.ts"
+    },
+    {
+      "name": "purchaseSourcingChange",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-adjustment.ts"
+    },
+    {
+      "name": "purchaseSePayPayment",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayIpn",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayInboxWorker",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "customerNotificationCreated",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/customer-notification-delivery.ts"
+    },
+    {
+      "name": "notificationPreferences",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/notification-preferences.ts"
+    },
+    {
+      "name": "deliverSubscriptionEmail",
+      "kind": "onSchedule",
+      "region": "asia-southeast1",
+      "source": "functions/src/subscription-email.ts"
+    },
+    {
+      "name": "publicOrderTracking",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/public-order-tracking.ts"
+    },
+    {
+      "name": "managePublicTrackingCode",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/public-order-tracking.ts"
+    }
+  ],
+  "emulatorOnlyExports": [
+    {
+      "name": "purchaseDemoPayment",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-checkout.ts"
+    },
+    {
+      "name": "purchaseDemoWebhook",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-demo-gateway.ts"
+    }
+  ],
+  "productionTestExports": [
+    {
+      "name": "purchaseSePayPayment",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayIpn",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayInboxWorker",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    }
+  ],
+  "hashes": {
+    "firebase.json": "9e71be961a801f8d56490b0e2cbafc38869842af2d39dd68a0d2e65b9642ba37",
+    "functions/package.json": "d695f48e38bb8eee8091085d5fb23d859483f7bd721b175da742a7f4457ab791",
+    "firestore.rules": "f55bbbde8623a7252d542b4dc8525f716f86caa4bf393ebc32486844d814ce58",
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "storage.rules": "4a043206e7ecbd14ffb97ce055cd22fe2a1f1300fb4f61d1a984f5b27b6889cf",
+    "functions/src/index.ts": "433c9808cba3f448406841c76b8d8cac41f823076bfe85af467d3e5deac3956a",
+    "functions/src/ai/ask.ts": "f8a500eea41fd36adcd968371ba9cec45d5df6a2f68f678f9464c01783d9aa45",
+    "functions/src/ai/ask-workflow.ts": "6d3a5a1802296b772f31c54710abfe984d1e986197931dc783301bcd5b5c38df",
+    "functions/src/workspace.ts": "8a00d5b884e6ecdbfab0dde68c9a84b6bbba86259370e84585cc4ae12ce2e8d9",
+    "functions/src/membership.ts": "3ccdab683844d6297ede2fc1636481b4fcf1c21f48b337bfd377d2315dcec2c0",
+    "functions/src/public.ts": "988d263ec6d012663e03626df2cb71de01adf9dff03764dd87ef2600bfd36c7e",
+    "functions/src/jobs.ts": "02c2b6462d7dd7c9834cc4acba73c7a40b6041dd1791158abdff8017198d4795",
+    "functions/src/payments/payos.ts": "78c266cacfacb5845a682f2d84f76bcf9577fd2e62ff118a91c99f9d90c1ec7b",
+    "functions/src/email.ts": "180d2a7663abae0e21d702918e21e1f17739ea17a9586d38f343e94033a6b4c2",
+    "functions/src/order-conversation.ts": "f202250920539c25f00364c3d03c57164785571e7a342c92f802d52f8c27de33",
+    "functions/src/shipping.ts": "685f6e05d8094ae5a2b724268c63192faa276f98c8e55a4df2ebf8fd2ef0e7c3",
+    "functions/src/order-history.ts": "34e1f163b3bb81e719834ef187a3a14a1bad3f30af3760ef57187b6822ed7269",
+    "functions/src/changes.ts": "c335d518e53b734b4ce2281e3546eea1308371918a6c33f07adcc5edf100f5df",
+    "functions/src/returns.ts": "b291411cc591177e56f69e35dae50c7ee38829d139576b19d7ded9ca7dff651d",
+    "functions/src/refunds.ts": "3aa6ad108d642b0b20956daffb4543b716e74ce855072424ba9660a5521d6131",
+    "functions/src/media.ts": "710bad74f93d9dc1aae6ebf36a8033c428e94431dc6e399873604333f38f7c57",
+    "functions/src/consolidation.ts": "2c50f0c7e3fd0ce4757c0c19202b9eedf2529d4e2b6cf7437da324706256426b",
+    "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+    "functions/src/order-media.ts": "e128312d5b16a8077906ced0ed21f8b4cfeae8c7ef2d19d9ca4feb077ab58b1d",
+    "functions/src/finance-review.ts": "f2d185d4d071736afd8bf21e3000cf04fd52c5b81eab8dfcf0196c5061b72733",
+    "functions/src/membership-reminder-policy.ts": "b6c18b530a8d6cf69e1ef4ec14c258c36c1f3917b7a8bbd2d600dc82ccf054c3",
+    "functions/src/catalog-checkout.ts": "5032a14edbe29ef63b900de61659001a04db7c18ff637aba2b1c197e083cf1bb",
+    "functions/src/cart.ts": "27b92e0f255edf429b3420e9a241066979833e5022bc2ff0dc20a6def7284160",
+    "functions/src/invoices.ts": "11914e999ff1f1da51c9e5995b3641e61ca1986d001c683c2cef99a78a29c8d2",
+    "functions/src/invoice-share.ts": "1dfe9c524b3e823ffd9566dd6838053e31d9ef0e37ba7593586de5c420a54d72",
+    "functions/src/outbox-command.ts": "55a7cf7a1db2a82ea4696bbf5a2cfb2b3756234705443192263a82ecfa1080ea",
+    "functions/src/customer-order-tracking.ts": "40ab827a77be13d4ce900d089a3c29e19ec6c4606616a917edccbabe187f0fe3",
+    "functions/src/shipping-rates.ts": "60e6dfef535552fd6fdefab3365a6141af64165870d1369236a376897dcd87b3",
+    "functions/src/blog-studio.ts": "1afe42f66a5aa193dc9a3ec186f8112542f65408ac40bf80cfb97d89677fd2e7",
+    "functions/src/blog-comments.ts": "2accf89f6cdd7fc63f753ef6abb0e12178a2b551cfa5ff70fdfdc67bf23911e3",
+    "functions/src/blog-studio-advanced.ts": "797d1657ff9a92b4dede1d10e858814e135720ae95c5d331992bf9ee2efce2a3",
+    "functions/src/campaign-banners.ts": "4a3bc16b255df113d9d6185da44815c05d5cdb49f0e6c23249e36e6fffd52852",
+    "functions/src/product-reviews.ts": "e00a5506bec542ebc321a9419ee03d4c7ff31796169de4d5dcd6e3509b7153d8",
+    "functions/src/ai/approved-knowledge.ts": "f88f73615425a71cb0bc9a63f4e5df476091d4fd2dba8e6944d532a92a048223",
+    "functions/src/ai/customer-save.ts": "f8629ef92a7f84097b7a3c146b4e4ce4183407b250e122b0276c0c12e10b12bf",
+    "functions/src/ai/research.ts": "0b4b0f31038ad033c020b39b048381b73baed71e76de6fa44a4ad4f454ed2272",
+    "functions/src/ai/feedback.ts": "7a9c653c5584d70401554ddbf0685240b9d31dbd2b4593844913cfb5966dbdd3",
+    "functions/src/analytics-ingest.ts": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+    "functions/src/analytics-worker.ts": "c3e085f40507d0cb0f7f9e7384bb71fb752fccb0760486a981581d83d447438e",
+    "functions/src/dashboard-analytics.ts": "999bc115d30834c9f53afe4cc45fc1eea18c72d32b32a3974465172dfb4c92ce",
+    "functions/src/ai/research-live.ts": "6d5673e53dfece6c1ac94cd778836f6291f3b1b1e400b00811fb9564ddd66229",
+    "functions/src/ai/feedback-lifecycle.ts": "ac06f5d391062be49ab62615c219d0adee5b716f21cf3b0fb8f620ae37781319",
+    "functions/src/purchase-checkout.ts": "59f8877b589d5f8d8bc49ec1c4d5a22205b331d6a4f394d9875b313240fc2672",
+    "functions/src/purchase-demo-gateway.ts": "f732e64398e9d15971bc345fc12ab2551069ae5bbf91e0c16ee3131cf0e1b159",
+    "functions/src/purchase-images.ts": "e5354a889ea5b66bf67635648a3c1c28d42264f537943084bb5c4eec4ad80e98",
+    "functions/src/purchase-receipts.ts": "2ff491eb2bce27d684487f4a42eea63b6c553381687abadd67d357ee3633b61b",
+    "functions/src/purchase-adjustment.ts": "5c21d41c88fb4f8868c1d871a6ebe25dfb94728925c71dcb8687bc762386773f",
+    "functions/src/production-test-policy.ts": "c839057220171ed74fd91c84e2e77ef1bc3d7447c734d6286bd5a62539a361e7",
+    "functions/src/purchase-sepay.ts": "16c2da115b93017ad82b2f4a38564426f030f55d9ecf5afb5b76e1ffaff0866e",
+    "functions/src/customer-notification-delivery.ts": "61c210d5293b0c4c43247a34ba677add5de907bcd03ec350020c20eab85a2911",
+    "functions/src/notification-preferences.ts": "84d0c146e313fab4707cff8cf7a08ec2a09b4686de3a7c8f709763b8cde4c1c1",
+    "functions/src/subscription-email.ts": "5f3b6e544d3a364baa30266c132ad4dcc868ae3826efe693a3db3edfe48600f3",
+    "functions/src/public-order-tracking.ts": "61b852e6d7d6cf8370690dc8af3118a56effef9dacbc9f130f1de4ed02f52e57",
+    "dist/.vite/manifest.json": "0d748557ce47a72bf6ccad6856ecdf6604ac2b5c03cddddce51aaba871cae184",
+    "functions/generated/public-assets.json": "6b09c20b514373680afb1217fbda7eccf82a01441aef6f7454ecf38c2836f251",
+    "dist/assets/index-Bg41Y4sA.js": "76eafa526582c6b01a29a07d25a79929bcc2e096ab90425bbb6bf42dc1d26fed",
+    "dist/assets/index-NQOWYDHQ.css": "6f43fb8c05582b7a1d5dd6aa1e780df9f73fe03bacf6991ce6b1142fdc180781",
+    "dist/index.html": "1ccbbd139852bc5d4a77478f853c8f53d3e7ff5869f370eeca1e0e4c3db140ab"
+  },
+  "errors": [],
+  "compiledLibraryFreshness": "UNVERIFIED_NO_SOURCE_BUILD_MANIFEST",
+  "cloud": "NOT_CHECKED",
+  "publicConfiguration": "NOT_CHECKED",
+  "limits": [
+    "Source inventory is not deployed inventory",
+    "No runtime imports, credentials, provider, network or deployment checks",
+    "Static option uses checked only in parsed modules; no whole-program side-effect or runtime proof",
+    "Only entry CSS/JS bindings checked; chunk graph and application configuration not fully certified"
+  ]
+}

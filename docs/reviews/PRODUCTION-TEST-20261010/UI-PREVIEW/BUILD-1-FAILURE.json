@@ -1,0 +1,21 @@
+{
+  "recorded_at": "2026-10-10T01:43:02.054613+00:00",
+  "cycle": 1,
+  "artifact_sha256": "bc202b1f4b44613b9c8f3143df4087bfbd54fbe770aa272271422d4dd0c78bb2",
+  "http_readback": {
+    "status": "PASSED_REPORTED_BY_ROOT",
+    "status_code": 200,
+    "content_type": "text/html",
+    "bytes": 933564,
+    "sha256_matches": true
+  },
+  "browser_result": "FAILED",
+  "reported_by": "/root",
+  "console_error": "ReferenceError: process is not defined",
+  "artifact_line": 16,
+  "verified_source_cause": "Vite library bundle retained 24 process identifier references, including React process.env.NODE_ENV branches. Generator lacked the browser production define.",
+  "scope": "Preview scaffolding only; no product source changes.",
+  "prior_syntax_check": "PASSED did not prove browser runtime globals.",
+  "minimal_fix": "Build-time define process.env.NODE_ENV to production; reject unresolved process.env references and real Firebase modules in output.",
+  "browser_retry": "Root only, after new exact HTTP readback."
+}

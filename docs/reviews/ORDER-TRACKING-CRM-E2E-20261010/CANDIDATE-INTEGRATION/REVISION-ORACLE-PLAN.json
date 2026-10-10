@@ -1,0 +1,15 @@
+{
+  "status": "APPROVED_WITHIN_EXISTING_BUGFIX_SCOPE",
+  "at": "2026-10-10T18:47:30.770317+00:00",
+  "approval": "Latest root human explicitly approves completing missing cases and fixing all found bugs, integrating reviewed scope without deploy. Original approved CRM plan adds order.version and safe timeline event for every parcel update.",
+  "finding": "CIca866 server split-parcel fixture hardcodes version1 after first pack; manual-delivery064 dedicated tests still assert no order revision/event and stale orderVersions after ETA. These contradict the approved revision semantics.",
+  "paths": [
+    "tests/rules/server.test.ts",
+    "tests/rules/manual-delivery-estimate064.test.ts"
+  ],
+  "impact": "Tests only. Preserve exact full order state except approved revision increment; allocation, money, outbox, replay, conflict, privacy and negative assertions remain. Add exact safe timeline/common timestamp checks and cleanup new synthetic timeline paths.",
+  "implementation": "Explicit version sequence for packing/dispatch/partial/final delivery.064 fixture derives order version from its parcel revision except explicit stale negatives; expected order revision/event increments exactly once. Allow guarded existing loopback18207 for unique064SDK project in addition to dedicated8187.",
+  "validation": "Affected actual suites on existing emulator using unique disposable project; server local adapter changes only test host/project configuration in memory to avoid shared settings writes. Node22 strict/lint and fresh normalPRCI. No new server, shared resets, workflow/dependency/source changes.",
+  "RIG": "DEGRADED",
+  "noDeploy": true
+}

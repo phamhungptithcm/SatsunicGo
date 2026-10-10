@@ -1,3 +1,4 @@
+import { purchaseFinancialCollection } from "./purchase-test-boundary";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { z } from "zod";
@@ -52,7 +53,7 @@ export const orderHistory = onCall(
         ),
         tx.get(
           db
-            .collection("financialEntries")
+            .collection(purchaseFinancialCollection(order.data()))
             .where("orderId", "==", id.data)
             .limit(100),
         ),

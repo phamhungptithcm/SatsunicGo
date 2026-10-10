@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "task_id": "ORDER-TRACKING-CRM-E2E-20261010",
+  "status": "BLOCKED",
+  "dimensions": {
+    "requirement_match": {
+      "status": "FAILED",
+      "summary": "Approved implementation present; complete46 acceptance and Product Language Gate are incomplete.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/PRODUCT-CONTENT-REVIEW.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Scoped owner/staff access, strict public DTO, code lifecycle and quotas verified locally; no production security certification.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/REAL-HTTP.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Scoped current TypeScript/build/lint and task-entry diff reviewed; no unrelated refactor/dependency change.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SOURCE-MANIFEST.json",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/frontend-build.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/functions-build.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/lint-followup.log"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Executed unit/component/emulator cancellation, timeout, races, replay, rollback and data guards pass; transport/profiling gaps separately block acceptance.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/unit.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Scoped terminal clearing, transient stale recovery, abort cleanup, same-operation replay and canonical receipt failures reviewed/tested.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/account-code-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/CLEANUP.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No deployment authorized. Provider/Node22/live acceptance not established; shared demo pricing expired; dirty concurrent worktree not release candidate.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/QUALITY-GATES.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/DEMO-PRICING-GATE.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Order-version contention and bounded60s guest latency accepted by plan; no schema/backfill/rules/financial policy expansion. H10 internal proof impact disclosed.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/REPORT.md",
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/APPROVAL.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "atomic-revision",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/shipping.ts; consolidation.ts",
+      "summary": "Parcel activity lacked an order revision and safe shipping milestone.",
+      "resolution": "Same transaction now publishes exactly one revision/event and common projection timestamp.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "terminal-abort",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/tracking-refresh.ts",
+      "summary": "Terminal watcher denial could be overwritten by pending abort recovery.",
+      "resolution": "Terminal guard prevents catch from reclassifying unavailable as stale.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/unit.log"
+      ]
+    },
+    {
+      "id": "parcel-receipt",
+      "severity": "HIGH",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "functions/src/index.ts; packages/domain/index.ts",
+      "summary": "Parcel-delivered orders could not confirm receipt without legacy order tracking.",
+      "resolution": "Server canonical bounded quantity proof enables existing receipt command; partial and malformed reject.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "refresh-focus",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/ask/TrackingRefresh.tsx",
+      "summary": "Native disabled pending refresh button lost keyboard focus.",
+      "resolution": "aria-disabled plus repeat-activation guard preserves focus.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/ask-components.log"
+      ]
+    },
+    {
+      "id": "offline-estimate",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "src/features/orders/AccountTracking.tsx",
+      "summary": "Offline snapshot retained an aggregate or parcel ETA promise.",
+      "resolution": "Suppress both estimates offline, retain read time/stale disclosure, revalidate on reconnect.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/account-code-components.log"
+      ]
+    },
+    {
+      "id": "allocation-fixture",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/rules/order-tracking-hardening.test.ts",
+      "summary": "Array it.each spread supplied malformed shape instead of intended allocation negatives.",
+      "resolution": "Object fixture rows exercise actual invalid quantities/duplicate/wrong line/order;100backend tests rerun.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/backend.log"
+      ]
+    },
+    {
+      "id": "fixture-clean-build",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "category": "correctness",
+      "location": "tests/component/tracking-real-sdk.ts",
+      "summary": "Ordinary TypeScript build depended on ignored machine-local fixture JSON.",
+      "resolution": "Typed dedicated-build injection removes source build dependency; root build passes with metadata absent.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/logs/frontend-build.log"
+      ]
+    },
+    {
+      "id": "incomplete46",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "acceptance",
+      "location": "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.md",
+      "summary": "Complete46 acceptance not established:37layered passes,8partial,1blocked.",
+      "resolution": "Finish remaining listed native/adverse/profiling gates; demo expiry-only delta awaits explicit approval.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/SCENARIO-RESULTS.json"
+      ]
+    },
+    {
+      "id": "accessibility-evidence",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "category": "acceptance",
+      "location": "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/PRODUCT-CONTENT-REVIEW.md",
+      "summary": "Contrast incomplete and native reduced-motion preference not tested.",
+      "resolution": "Complete accessibility evidence before a successful product language/final gate.",
+      "evidence_refs": [
+        "docs/reviews/ORDER-TRACKING-CRM-E2E-20261010/BROWSER-RESPONSIVE.json"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Full checkout blocked by expired demo pricing, no shared setting changed.",
+    "Native adverse acknowledgement, reduced-motion/contrast and performance instrumentation gaps remain.",
+    "Agent self-review only; legacy declared review assurance, not authenticated independent release proof."
+  ],
+  "limitations": [
+    "Local/emulator and mocked SDK components are distinct evidence layers;37passes are not37nativeE2E.",
+    "No deploy/provider production proof. Token usage and actual billed/API-equivalent cost unavailable.",
+    "Retrospective finding register recorded now against current fixed source; no historical sealed worktree or independent reviewer is asserted. Register 1."
+  ]
+}

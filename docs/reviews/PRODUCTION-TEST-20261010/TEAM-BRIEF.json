@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-10T00:46:46.683399+00:00",
+  "repository": "/private/tmp/satsunicgo-full-local-integration-20261009-jdho247x/repo",
+  "base": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "rig_mode": "DEGRADED",
+  "limitations": [
+    "CodeGraph index stale; prior structural query available",
+    "CocoIndex stale/unhealthy daemon sandbox permission; use bounded source, Git, compiler and tests"
+  ],
+  "approval": "APPROVAL.json",
+  "facts": [
+    "SePay signing/lookup merchant key differs from dashboard IPN authentication key",
+    "Exact demo guard currently protects checkout, settlement, endpoints and secret registrations",
+    "Existing sandbox orders/receipts/financial records have some testMode tags; consumers need complete boundary audit",
+    "Normal current release failed before successful promotion; failure-policy confirmation still needs safe handling",
+    "Production-test approved plan includes isolated test finance, secure HTTPS callbacks and opt-in email, bounded Gemini budget"
+  ],
+  "ownership_exclusions": [
+    "Do not edit shared checkout UI src/features/cart/purchase-checkout.tsx; cart owner is fixing preview invalidation race",
+    "Do not touch shared runtime or owner MFA harness",
+    "Edit only isolated integration repository; do not overwrite shared WIP",
+    "No agent secret payload access; no deployments or pushes from subagents"
+  ],
+  "coordination": "All claims must include paths/hashes/checks and limits. Central production-test provenance contract coordinated before consumer edits. Do not revert other agents changes."
+}

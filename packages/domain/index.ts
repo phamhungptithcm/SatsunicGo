@@ -164,6 +164,11 @@ export const stageLabels: Record<Stage, string> = {
   CANCELLED: "Đã hủy",
 };
 export type Order = {
+  executionMode?: "production_test";
+  executionPolicyVersion?: number;
+  testRunId?: string;
+  testMode?: boolean;
+  paymentProvider?: "sepay_sandbox";
   checkoutId?: string;
   latestReceiptId?: string;
   balanceCheckoutId?: string | null;

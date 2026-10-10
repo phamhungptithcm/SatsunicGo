@@ -1,0 +1,171 @@
+{
+  "task_id": "PRODUCTION-TEST-v1-EMAIL-REVOCATION-01",
+  "at": "2026-10-10T01:36:46.740835+00:00",
+  "status": "BLOCKED_PENDING_COMBINED_RELEASE_ACCEPTANCE",
+  "scoped_engineering": "PASSED",
+  "independent_review": "PASSED_FRESH_EXACT_SIX_FILE_READBACK",
+  "approval": "../APPROVAL.json",
+  "repository_intelligence": "DEGRADED; bounded source, actual-handler in-memory tests, compiler and lint; no clean index claimed",
+  "source_hashes": {
+    "functions/src/production-test-email-policy.ts": "3e5e28c89f1a77b692b74f09af78a1129453aa510908febc4cc19ef657b841f4",
+    "functions/src/customer-email-job.ts": "5cbdbb45c90c5a3fab3c24df292bdc0b2f10f328ddeb5d176f65f1847c2ce5a5",
+    "functions/src/email.ts": "180d2a7663abae0e21d702918e21e1f17739ea17a9586d38f343e94033a6b4c2",
+    "functions/src/subscription-delivery-service.ts": "dc689efd8788d79cfcc21948169839bb2cb1a89bcfbeed28fdbebc861fb88f1f",
+    "functions/src/subscription-email.ts": "5f3b6e544d3a364baa30266c132ad4dcc868ae3826efe693a3db3edfe48600f3",
+    "tests/unit/production-test-email.test.ts": "a01d238fd7ad26c31f634067fc1adbdda3ed76aa35712362c6132c83418bcbcd"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "decision": "FINDING",
+      "id": "EMAIL-REVOCATION-01",
+      "severity": "P2",
+      "locations": [
+        "subscription-delivery-service.ts authorize before Auth await and final transaction",
+        "email.ts beforeSend final job-only transaction"
+      ],
+      "problem": "Policy/allowlist/consent/entity authorization reads were outside the final attempt transaction. A revocation committed during the intervening await or transaction retry could still authorize an external attempt.",
+      "pre_fix_checks": "249 tests /4files PASS; did not cover this timing gap"
+    },
+    {
+      "cycle": 2,
+      "decision": "SCOPED_ENGINEERING_PASSED",
+      "fix": "Optional transaction readers in helper/prepare; final customer and subscription attempt transaction watches current policy/consent/resource. Per-retry result state reset. All reads precede writes.",
+      "verification": "17 new actual worker/service race and happy-path cases;38 test-email tests;266 tests/4files PASS;frontend+backend strict, targeted lint,diffcheck PASS"
+    },
+    {
+      "cycle": 3,
+      "decision": "FINDING",
+      "id": "EMAIL-REVOCATION-01-CONFIG-IDENTITY",
+      "severity": "P2",
+      "problem": "Existing customer worker provider config and profile lock/marketing eligibility reads remain outside the final attempt transaction. Disable/config or profile changes during the gap are not watched.",
+      "approval": "Root explicitly assigned minimal completion under approved v1 before editing",
+      "resolution": "FIXED: customer final tx now watches current provider config/profile eligibility; real subscription sender supplies its validated config to final service tx, which watches current provider readiness/subscriptions/from/cutover/quota before the attempt write. Default provider-agnostic service callers remain compatible.",
+      "locations": [
+        "email.ts customer final attempt transaction",
+        "subscription-email.ts sender config read before authorize",
+        "subscription-delivery-service.ts optional expected current provider config"
+      ],
+      "scope_completion": "Root explicitly transferred subscription-email.ts too; preserve default provider-agnostic service callers and current config meanings; no provider setup change"
+    },
+    {
+      "cycle": 4,
+      "decision": "SCOPED_ENGINEERING_PASSED",
+      "verification": "289 tests /4files PASS,61 test-email cases including40 new actual worker/service timing, conflict-retry and happy cases; fresh frontend/backend strict,targeted lint,diffcheck exit0",
+      "peer_review": "Requested after completion; pending response"
+    },
+    {
+      "cycle": 5,
+      "decision": "FINDING",
+      "id": "EMAIL-REVOCATION-01-PROMOTIONS",
+      "severity": "P2",
+      "problem": "Final customer transaction watches preferences for orderEmail but does not revalidate applicable promotionsEmail for marketing-tagged jobs. A promotion opt-out with the profile compatibility flag still true can remain authorized on retry.",
+      "approval": "Root assigned completion in same v1 final eligibility transaction, no other checkout changes",
+      "resolution": "FIXED: existing promotionsEmail predicate and destination are revalidated in final customer transaction; optional orderEmail already uses transaction-backed preparation. Added two opt-out timing/retry cases, an authorized promotion control and an optional live-order retry control."
+    },
+    {
+      "cycle": 6,
+      "decision": "SCOPED_ENGINEERING_PASSED",
+      "verification": "293 tests /4 files PASS;65 test-email cases including44 new actual worker/service cases; fresh frontend/backend strict,targeted lint,diffcheck exit0",
+      "peer_review": "Final complete config/consent/property inventory review triggered against completed source"
+    },
+    {
+      "cycle": 7,
+      "decision": "PASSED_WITHIN_SCOPED_ENGINEERING_REVIEW",
+      "reviewer": "/root/policy_implementation",
+      "evidence": "PEER-REVIEW.json",
+      "summary": "Complete config/consent/property inventory reviewed against exact final hashes; no further actionable scoped findings"
+    }
+  ],
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Bounded root-assigned revocation linearization fix; no global policy/provider contract change"
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Final attempt transaction watches exact global config; tester policies; current applicable promotionsEmail/orderEmail and destinations; relevant profile lock/marketing flag; authoritative entity/provenance and immutable job pins. External Auth check retained."
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "TypeScript strict on both projects and targeted ESLint; optional internal Transaction argument preserves default callers"
+    },
+    "database": {
+      "status": "PASSED_WITHIN_LOCAL_MODEL",
+      "summary": "Read-set conflict/retry model; all transaction reads before writes; one attempt update; bounded docs/no loop writes"
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Disable, removal,expiry,opt-out,foreign owner/run change before final commit/retry;zero fake provider I/O and attempt increments"
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Known-unsent blocks remain known-unsent; existing unknown rows and quota document remain unchanged; legacy regression suites pass"
+    },
+    "performance": {
+      "status": "PASSED_WITHIN_SOURCE_SCOPE",
+      "summary": "Customer final tx adds2 watched docs and subscription final tx adds1; existing preparation reads moved into tx. Queue/batch limits and provider request counts unchanged; no new writer."
+    },
+    "product_language": {
+      "status": "NOT_APPLICABLE",
+      "summary": "This correction adds no user-facing strings or displayed-data changes"
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Root owns combined CI/rules/immutable artifact/provider/live acceptance; no live acceptance claimed"
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Firestore transaction is authorization linearization point. Auth and external provider cannot be atomically committed with Firestore."
+    }
+  },
+  "checks": {
+    "tests": "293 tests /4 files PASS;65 test-email cases; TESTS.json",
+    "backend_strict": "exit0",
+    "frontend_strict": "exit0",
+    "targeted_lint": "exit0",
+    "git_diff_check": "exit0",
+    "ai_agent_kit_runtime": "UNAVAILABLE executable; review recorded directly, no runtime receipt claimed"
+  },
+  "limitations": [
+    "In-memory actual-handler and optimistic read-set retry tests are not Firestore emulator/provider/production proof",
+    "Auth identity is checked immediately before Firestore authorization but remains cross-service snapshot",
+    "Revocation after the authorization transaction commits cannot atomically cancel external I/O; unknown outcomes remain unreplayed",
+    "No secret payload/provider/network/production calls; no push/deploy/shared runtime changes"
+  ],
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None",
+  "final_eligibility_inventory": {
+    "customer_firestore_watched": [
+      "owned sending claim and immutable event/provenance/body/recipient pins",
+      "settings/email current readiness/from/cutover/dailyLimit",
+      "users owner lock and marketing compatibility flag",
+      "promotionsEmail active generation/current destination for marketing-tagged jobs",
+      "optional orderEmail active generation/current destination through prepareCustomerEmail",
+      "test orderEmail active generation/current destination through test helper",
+      "settings/customerNotifications approval/email/cutover for event jobs",
+      "productionTest and productionTestEmail current admission/testers/expiry/cutover when applicable",
+      "authoritative owner/entity/run/policy/obsolescence plus invoice issued owner/number or applicable shipment projection"
+    ],
+    "subscription_firestore_watched": [
+      "owned sending claim and immutable owner/channel/kind/scopes/destination/createdAt/execution pins",
+      "settings/email readiness/subscriptions/from/cutover/dailyLimit supplied by real sender",
+      "users owner lock",
+      "current notification preferences, pending/active generations and destination hash",
+      "current productionTest and productionTestEmail admission/testers/expiry/cutover when applicable",
+      "provider identity/from/attempt/time fences"
+    ],
+    "outside_firestore": [
+      "Firebase Auth identity email/verified/disabled checked before final transaction; cross-service snapshot",
+      "Immutable code/env/origin and shared provider dispatcher lease/day fences",
+      "External provider outcome remains non-atomic with Firestore authorization; unknown never auto-replayed"
+    ],
+    "preserved_semantics": "Normal live financial/action-required templates do not acquire an optional orderEmail requirement; explicit marketing/optional-order/test-order applicability is preserved; subscription confirmation uses pending generation."
+  },
+  "scoped_review_status": "PASSED",
+  "remaining_work": [
+    "Root apply exact six-file freeze to clean candidate and revalidate combined hashes",
+    "Root combined CI/rules/artifact/provider/live acceptance and deployment activation"
+  ]
+}

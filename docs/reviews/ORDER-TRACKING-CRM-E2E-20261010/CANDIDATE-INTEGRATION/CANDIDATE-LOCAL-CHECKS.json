@@ -1,0 +1,42 @@
+[
+  {
+    "name": "candidate-types",
+    "exitCode": 0,
+    "seconds": 18.85,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-types.log"
+  },
+  {
+    "name": "candidate-scoped-lint",
+    "exitCode": 0,
+    "seconds": 18.85,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-scoped-lint.log"
+  },
+  {
+    "name": "candidate-focused-unit",
+    "exitCode": 0,
+    "seconds": 18.84,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-focused-unit.log"
+  },
+  {
+    "name": "candidate-ask-component",
+    "exitCode": 0,
+    "seconds": 18.84,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-ask-component.log"
+  },
+  {
+    "name": "candidate-account-component",
+    "exitCode": 0,
+    "seconds": 18.84,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-account-component.log"
+  },
+  {
+    "name": "candidate-backend",
+    "exitCode": 0,
+    "tests": 87,
+    "files": 2,
+    "node": "22",
+    "environment": "Existing loopback18207 emulator; isolated random project; no new server",
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/candidate-backend.log",
+    "sha256": "9ebc541a765016e24ce3b57b95eebda65eb2de5d446cebe5bf0fead1dee7775c"
+  }
+]

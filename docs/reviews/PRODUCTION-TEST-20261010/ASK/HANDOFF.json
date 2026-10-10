@@ -1,0 +1,143 @@
+{
+  "scope": "PRODUCTION-TEST v1 Ask cost/context/feedback",
+  "approval": "call_5081fd46f74546c08b78d7a095730a9a item0",
+  "at": "2026-10-10T01:02:08.873732+00:00",
+  "base": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "rig": "DEGRADED; bounded direct evidence; no complete blast-radius claim",
+  "checks": {
+    "unit": {
+      "files": 13,
+      "tests": 130,
+      "exit": 0
+    },
+    "backendStrict": {
+      "exit": 0
+    },
+    "focusedLint": {
+      "exit": 0
+    },
+    "diffCheck": {
+      "exit": 0
+    },
+    "newRulesScenario": "NOT_RUN; root normal mandatory CI must execute",
+    "providerCalls": 0,
+    "liveModelReadiness": "NOT_RUN",
+    "actualBilledCost": "Unavailable",
+    "testRecipientBrowser": "NOT_RUN",
+    "indexProviderReadback": "NOT_RUN"
+  },
+  "files": [
+    {
+      "path": "functions/src/ai/ask-cost-policy.ts",
+      "sha256": "a2d81920ecde0c115ddc6ccb47c2a606264ed4cf7299ea5968eceb42da3dd3c8"
+    },
+    {
+      "path": "functions/src/ai/ask-pilot.ts",
+      "sha256": "1a398a90652c93a9ccb7a70c748ba7236c9c5ce7b4253ae7a87782b470f8aaba"
+    },
+    {
+      "path": "functions/src/ai/ask-workflow.ts",
+      "sha256": "6d3a5a1802296b772f31c54710abfe984d1e986197931dc783301bcd5b5c38df"
+    },
+    {
+      "path": "functions/src/ai/research-gemini.ts",
+      "sha256": "622f967a8fa78076c6f8e49008a201470c6760e9543a083368d3036a4583010e"
+    },
+    {
+      "path": "functions/src/ai/research-live.ts",
+      "sha256": "6d5673e53dfece6c1ac94cd778836f6291f3b1b1e400b00811fb9564ddd66229"
+    },
+    {
+      "path": "functions/src/ai/feedback.ts",
+      "sha256": "7a9c653c5584d70401554ddbf0685240b9d31dbd2b4593844913cfb5966dbdd3"
+    },
+    {
+      "path": "functions/src/ai/feedback-lifecycle.ts",
+      "sha256": "aa8a7bc2254ffc42df69b8f763493fa271ab6f5812837b0bc0ba77a52b7bb454"
+    },
+    {
+      "path": "functions/src/ai/feedback-provenance.ts",
+      "sha256": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c"
+    },
+    {
+      "path": "packages/domain/ask-feedback.ts",
+      "sha256": "0ed34d68d5d0614ef9aeff12d3cce796d78ec72f36bc860baa445470424b7ed2"
+    },
+    {
+      "path": "firestore.indexes.json",
+      "sha256": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9"
+    },
+    {
+      "path": "tests/unit/ask-production-test-cost.test.ts",
+      "sha256": "d1c477a22cc9d54d297cae76a2ac0e234598d5df0f4fbae80d0a8aa3a46d8bcd"
+    },
+    {
+      "path": "tests/unit/ask-production-test-feedback.test.ts",
+      "sha256": "a0a746e510ebbccc1d61456bbb49836eef0635c800752ffa2b8641b39af6884c"
+    },
+    {
+      "path": "tests/unit/ask-pilot106.test.ts",
+      "sha256": "bdcd9f3e3b67bf3dcdfa79f42167ab8c9f96e49af80b30098ed1005d1255ec38"
+    },
+    {
+      "path": "tests/unit/ask-feedback-cleanup.test.ts",
+      "sha256": "2f7dbb6ca85172006f47ab3a83383a208d12d8551257ac5b6239d73d199cd35d"
+    },
+    {
+      "path": "tests/unit/ask-research-gemini.test.ts",
+      "sha256": "8ff13c5003614873a62528946ee4ee1ea11bcb5f588115148d14a879ef4b52eb"
+    },
+    {
+      "path": "tests/rules/ask-research-feedback.test.ts",
+      "sha256": "7e47ba39346aeffeb8262e56378efade84f00a203573b8c0c3b101c6cb0ccf3d"
+    }
+  ],
+  "reviews": [
+    {
+      "cycle": 1,
+      "findings": [
+        "Expired price/model envelopes",
+        "Separate ledgers could admit up to60000VND",
+        "Cleanup lacked approved-class fence"
+      ],
+      "fixes": [
+        "Verified standard rates with explicit paid grounding and full billed context reserve; short price expiry before model retirement",
+        "Cross-ledger transaction reads with shared50000 ceiling; preserve original own ceilings/import floors/permanent unknown reservations",
+        "Explicit new test/operational retention classes and bounded class/expiry queries"
+      ]
+    },
+    {
+      "cycle": 2,
+      "findings": [
+        "Disabling test policy before feedback could classify a test answer as real",
+        "Skipped legacy expiry docs could starve new class cleanup",
+        "Production test revocation during count must block generation"
+      ],
+      "fixes": [
+        "Server-only bounded24-turn provenance map; feedback inherits saved matching answer hash even after disable",
+        "Three additive composite indexes and class equality before expiry query",
+        "Exact central environment/tester admission plus recheck before paid generation"
+      ]
+    },
+    {
+      "cycle": 3,
+      "decision": "SCOPED_LOCAL_REVIEW_PASS",
+      "findings": [],
+      "limits": [
+        "Not independent whole-candidate or production acceptance",
+        "Root final implementation review remains required"
+      ]
+    }
+  ],
+  "remaining": [
+    "Deploy composite indexes through normal immutable release; cleanup inactive until READY readback",
+    "Reconcile existing research import and both durable counters before paid activation; no reset/topup/new confirmed remaining balance assumed",
+    "Fresh whole combined mandatory CI/artifact/audit/final review and product-content in-context verification",
+    "Owner/staff genuine MFA and live AppCheck remain separate acceptance",
+    "Pricing expires2026-10-12T00:00:00Z; model retirement2026-10-20; no silent model or date extension"
+  ],
+  "memoryCandidates": "None",
+  "tokenUsage": "Unavailable",
+  "latestFinalReview": "FINAL-REVIEW.json",
+  "latestFinalReviewStatus": "BLOCKED_AGGREGATE_PENDING"
+}

@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-10T00:38:48.245053+00:00",
+  "decision": "PLAN_READY_AWAITING_HUMAN_REVIEW",
+  "protectedChangesImplemented": false,
+  "questionsPending": [
+    "PRODUCTION-TEST-v1 and missing empty IPN secret container"
+  ],
+  "coverage": {
+    "cases": 53,
+    "newModeCasesExecuted": 0,
+    "status": "NOT_RUN_NEW_MODE"
+  },
+  "materialRisks": [
+    "Actual sandbox settlement already tagged but downstream real-money/stock/fulfillment/email consumers not fully isolated",
+    "Fixed localhost callbacks and exact emulator runtime/export guards require reviewed production test path",
+    "Separate IPN authentication secret not found",
+    "Ask pricing expiry and model lifecycle need verified bounded policy"
+  ],
+  "approvedIndependentWork": {
+    "main": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+    "productionRun": 38009393058,
+    "status": "MONITORING"
+  },
+  "noSecretPayloadReads": true,
+  "noProviderPaymentCalls": true,
+  "productionReadiness": "NOT_READY",
+  "tokens": "Unavailable",
+  "actualBilledCost": "Unavailable",
+  "memoryCandidates": "None"
+}

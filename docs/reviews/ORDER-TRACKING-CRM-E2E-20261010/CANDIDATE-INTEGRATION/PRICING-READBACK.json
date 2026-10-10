@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-10-10T17:46:15.527Z",
+  "node": "v22.23.3",
+  "project": "demo-satsunicgo",
+  "readOnly": true,
+  "version": 1,
+  "expiresAt": 1791640555633,
+  "hash": "66668b2c19587a6a7a99685c105317c9ad477cebd5249f35eb4418ac596ecc23",
+  "matchesOriginal": true,
+  "ownerRecordedRestore": "PASSED",
+  "ownerRecordedCleanup": "PASSED",
+  "temporaryDurationMs": 7200000,
+  "capabilityFileExists": true
+}

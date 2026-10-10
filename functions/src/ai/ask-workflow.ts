@@ -12,6 +12,12 @@ import {
   type AskConversation,
 } from "../../../packages/domain/ask-workflow";
 import { type Order } from "../../../packages/domain";
+import {
+  productionTestEnvironment,
+  admitProductionTestPolicy,
+  productionTestProvenance,
+} from "../production-test-policy";
+import { feedbackExecution } from "./feedback-provenance";
 const options = {
   region: "asia-southeast1",
   maxInstances: 3,
@@ -140,13 +146,16 @@ export const askWorkflow = onCall(
     const ref = db.doc(`askConversations/${uid}-${d.conversationId}`);
     const op = ref.collection("operations").doc(d.operationId);
     const hash = createHash("sha256").update(JSON.stringify(d)).digest("hex");
+    const testRunId = randomUUID();
     const prepared = await db.runTransaction(async (tx) => {
-      const [user, access, conversation, previous] = await Promise.all([
-        tx.get(db.doc(`users/${uid}`)),
-        tx.get(db.doc(`staffAccess/${uid}`)),
-        tx.get(ref),
-        tx.get(op),
-      ]);
+      const [user, access, conversation, previous, testSettings] =
+        await Promise.all([
+          tx.get(db.doc(`users/${uid}`)),
+          tx.get(db.doc(`staffAccess/${uid}`)),
+          tx.get(ref),
+          tx.get(op),
+          tx.get(db.doc("settings/productionTest")),
+        ]);
       if (user.data()?.locked || access.data()?.locked)
         throw new HttpsError(
           "permission-denied",
@@ -272,6 +281,54 @@ export const askWorkflow = onCall(
           ...c.turns.filter((t) => t.id !== turn.id).slice(-23),
           turn,
         ];
+        const testPolicy = productionTestEnvironment(db)
+          ? admitProductionTestPolicy(testSettings.data(), uid)
+          : null;
+        const priorMap = conversation.data()?.turnProvenance;
+        const prior =
+          priorMap && typeof priorMap === "object" && !Array.isArray(priorMap)
+            ? (priorMap as Record<string, Record<string, unknown>>)
+            : {};
+        let pinned;
+        try {
+          pinned = feedbackExecution(prior[turn.id] ?? {});
+        } catch {
+          throw new HttpsError(
+            "failed-precondition",
+            "Hội thoại đã thay đổi. Mở lại trước khi tiếp tục.",
+          );
+        }
+        const provenance =
+          pinned ??
+          (testPolicy
+            ? {
+                ...productionTestProvenance(testPolicy, testRunId),
+                testMode: true as const,
+                analyticsEligible: false as const,
+              }
+            : undefined);
+        const turns = change.turns as AskConversation["turns"];
+        const retained = Object.fromEntries(
+          turns.flatMap((saved) => {
+            if (saved.id === turn.id)
+              return provenance
+                ? [
+                    [
+                      saved.id,
+                      {
+                        ...provenance,
+                        answerHash: createHash("sha256")
+                          .update(JSON.stringify(turn.answer))
+                          .digest("hex"),
+                      },
+                    ],
+                  ]
+                : [];
+            return prior[saved.id] ? [[saved.id, prior[saved.id]]] : [];
+          }),
+        );
+        if (Object.keys(retained).length || priorMap)
+          change.turnProvenance = retained;
       }
       if (a.action === "saveDraft") change.draft = a.payload;
       if (a.action === "saveRecipient") {

@@ -8,6 +8,11 @@ import {
 } from "../../packages/domain/catalog-checkout";
 import { normalizeCustomerName } from "../../packages/domain/crm";
 import { requireVerifiedGoogle } from "./auth/guards";
+import {
+  admitProductionTestPolicy,
+  productionTestEnvironment,
+  productionTestProvenance,
+} from "./production-test-policy";
 
 const checkoutSchema = catalogSelectionSchema
   .extend({ operationId: z.string().uuid() })
@@ -49,6 +54,28 @@ export const catalogCheckout = onCall(
           throw new HttpsError("already-exists", "Mã đặt mua đã được sử dụng.");
         return previous.data()?.result;
       }
+      const testEnvironment = productionTestEnvironment(db);
+      const testPolicy = testEnvironment
+        ? admitProductionTestPolicy(
+            (await tx.get(db.doc("settings/productionTest"))).data(),
+            uid,
+          )
+        : null;
+      if (
+        process.env.PURCHASE_PRODUCTION_TEST_ARTIFACT === "v1" &&
+        (!testEnvironment || !testPolicy)
+      )
+        throw new HttpsError(
+          "failed-precondition",
+          "Không thể đặt mua lúc này.",
+          { reason: "PRODUCTION_TEST_NOT_ADMITTED" },
+        );
+      const execution = testPolicy
+        ? {
+            ...productionTestProvenance(testPolicy, s.operationId),
+            testMode: true as const,
+          }
+        : {};
       let order;
       try {
         order = createCatalogOrder(product.data(), sWithoutOperation(s), {
@@ -67,9 +94,15 @@ export const catalogCheckout = onCall(
           "Sản phẩm hoặc lựa chọn này chưa thể đặt mua. Kiểm tra lại danh mục.",
         );
       }
-      const result = { id: ref.id, version: 1, total: order.finalTotal };
-      tx.create(ref, order);
+      const result = {
+        id: ref.id,
+        version: 1,
+        total: order.finalTotal,
+        ...execution,
+      };
+      tx.create(ref, { ...order, ...execution });
       tx.create(ref.collection("acceptances").doc("catalog"), {
+        ...execution,
         acceptedAt: now,
         acceptedBy: uid,
         catalogSnapshot: order.catalogSnapshot,
@@ -90,18 +123,21 @@ export const catalogCheckout = onCall(
           changedAt: now,
         });
       }
-      tx.create(op, { hash, result, createdAt: now });
+      tx.create(op, { ...execution, hash, result, createdAt: now });
       tx.create(ref.collection("timeline").doc(), {
+        ...execution,
         action: "catalogCheckout",
         createdAt: now,
       });
       tx.create(db.collection("auditEvents").doc(), {
+        ...execution,
         actor: uid,
         action: "catalogCheckout",
         resourceId: ref.id,
         createdAt: now,
       });
       tx.create(db.collection("outboxJobs").doc(), {
+        ...execution,
         ownerId: uid,
         orderId: ref.id,
         action: "catalogCheckout",

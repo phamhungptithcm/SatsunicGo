@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-10T00:34:11.421220+00:00",
+  "status": "PLAN_READY_NOT_IMPLEMENTED",
+  "sources": {
+    "functions/src/payments/sepay-sandbox.ts": "2c60acbf1d9db13ee00a86b69cc4cd459cabf9f3bc626b30fddf417ddbab8548",
+    "functions/src/purchase-environment.ts": "38f44521eed963f3376959df237dd984e5c653a23d7c93b8d214c4718cb5bfc0",
+    "functions/src/purchase-sepay.ts": "4e352fec23171606dcffe616ca40bfa0ba7acc5191754c64b0a1091929815ea5",
+    "functions/src/purchase-settlement.ts": "5ba1b7591cc329993bc670a936473649f79b643d3ebf620d403f65253aef266e",
+    "functions/src/ai/ask-pilot.ts": "9390ee5cac1d31c565e407e98c125cd2c1f7d9c28340229d7f14202ba3b17b3a",
+    "scripts/release/artifact.mjs": "860bd08c06bfb7bdc5cdff3ace059f4fa69c9370572898b7495ede0bccc4002f",
+    "scripts/release/preflight.mjs": "469fc9196d9f5339942ae9ec2589bf93e541e6d0895bb810becdd0dd5ca92379"
+  }
+}

@@ -8,18 +8,19 @@ import {
   type SePayIntent,
 } from "../../../packages/domain/purchase-sepay";
 import { purchaseDemoEnvironment } from "../purchase-environment";
+import {
+  sepayArtifactEnvironment,
+  productionTestEnvironment,
+} from "../production-test-policy";
+import { purchaseExecutionProvenance } from "../../../packages/domain/purchase-checkout";
 
 // defineSecret registers deploy-time params even when no endpoint binds them.
-const localSecrets =
-  process.env.FUNCTIONS_EMULATOR === "true" &&
-  process.env.GCLOUD_PROJECT === "demo-satsunicgo" &&
-  (process.env.GOOGLE_CLOUD_PROJECT === undefined ||
-    process.env.GOOGLE_CLOUD_PROJECT === "demo-satsunicgo");
-export const sepaySandboxSecret = localSecrets
+const registerSecrets = sepayArtifactEnvironment();
+export const sepaySandboxSecret = registerSecrets
   ? defineSecret("SEPAY_SANDBOX_SECRET_KEY")
   : undefined;
 // IPN authentication is independently configured in the merchant dashboard.
-export const sepaySandboxIpnSecret = localSecrets
+export const sepaySandboxIpnSecret = registerSecrets
   ? defineSecret("SEPAY_SANDBOX_IPN_SECRET_KEY")
   : undefined;
 export const sepaySecrets = [sepaySandboxSecret, sepaySandboxIpnSecret].filter(
@@ -29,7 +30,7 @@ export function sandboxPaymentReady() {
   return (
     !!sepaySandboxSecret &&
     !!sepaySandboxIpnSecret &&
-    purchaseDemoEnvironment() &&
+    (purchaseDemoEnvironment() || productionTestEnvironment()) &&
     process.env.PURCHASE_SEPAY_SANDBOX_ENABLED === "true" &&
     Boolean(process.env.SEPAY_SANDBOX_SECRET_KEY) &&
     Boolean(process.env.SEPAY_SANDBOX_IPN_SECRET_KEY)
@@ -67,13 +68,16 @@ export function createSandboxAdapter(
   });
   return {
     form(intent) {
+      // The injectable signer is shared with unit tests; hosted admission checks
+      // the persisted mode before it reaches this boundary.
       if (
         intent.merchant !== SEPAY_MERCHANT ||
         intent.provider !== "sepay_sandbox" ||
         intent.paymentMethod !== "BANK_TRANSFER"
       )
         throw Error("SEPAY_BINDING_MISMATCH");
-      const base = `http://127.0.0.1:5207/checkout/payment/${intent.checkoutId}`;
+      const provenance = purchaseExecutionProvenance(intent);
+      const base = `${provenance ? "https://satsunicgo.web.app" : "http://127.0.0.1:5207"}/checkout/payment/${intent.checkoutId}`;
       const signed = client.checkout.initOneTimePaymentFields({
         payment_method: "BANK_TRANSFER",
         order_invoice_number: intent.invoice,
@@ -94,7 +98,7 @@ export function createSandboxAdapter(
             String(value),
           ]),
         },
-        { id: intent.checkoutId, total: intent.amount },
+        { id: intent.checkoutId, total: intent.amount, ...(provenance ?? {}) },
       );
     },
     async readback(orderId) {

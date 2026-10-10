@@ -42,13 +42,22 @@ try {
       await db.doc(`purchaseCheckouts/${proof.checkoutId}`).get()
     ).data();
     const entries = await db
-      .collection("financialEntries")
+      .collection("purchaseTestFinancialEntries")
       .where("checkoutId", "==", proof.checkoutId)
       .get();
     assert.equal(entries.size, checkout.lines.length);
     assert.equal(
       entries.docs.reduce((sum, d) => sum + d.data().amount, 0),
       checkout.total,
+    );
+    assert.equal(
+      (
+        await db
+          .collection("financialEntries")
+          .where("checkoutId", "==", proof.checkoutId)
+          .get()
+      ).size,
+      0,
     );
     process.stdout.write(
       JSON.stringify({

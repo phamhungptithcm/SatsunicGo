@@ -9,6 +9,43 @@ import {
 import { cartItemsSchema, type CartItem } from "./cart";
 import { catalogProductSchema, createCatalogOrder } from "./catalog-checkout";
 
+export const purchaseExecutionProvenanceSchema = z.object({
+  executionMode: z.literal("production_test"),
+  executionPolicyVersion: z.number().int().positive().safe(),
+  testRunId: z.string().uuid(),
+});
+export type PurchaseExecutionProvenance = z.infer<
+  typeof purchaseExecutionProvenanceSchema
+>;
+const executionKeys = [
+  "executionMode",
+  "executionPolicyVersion",
+  "testRunId",
+] as const;
+/** Only wholly absent provenance is legacy. Partial or unknown modes fail closed. */
+export function purchaseExecutionProvenance(
+  record: unknown,
+): PurchaseExecutionProvenance | null {
+  if (!record || typeof record !== "object" || Array.isArray(record))
+    return null;
+  if (!executionKeys.some((key) => Object.hasOwn(record, key))) return null;
+  return purchaseExecutionProvenanceSchema.parse(record);
+}
+/** A malformed test marker must never turn a test record into live business data. */
+export function purchaseTestRecord(record: unknown): boolean {
+  if (!record || typeof record !== "object" || Array.isArray(record))
+    return false;
+  const value = record as Record<string, unknown>;
+  return (
+    executionKeys.some((key) => Object.hasOwn(value, key)) ||
+    value.testMode === true ||
+    value.provider === "demo" ||
+    value.provider === "sepay_sandbox" ||
+    value.paymentProvider === "demo" ||
+    value.paymentProvider === "sepay_sandbox"
+  );
+}
+
 export const researchedRequestSchema = requestSchema
   .extend({
     items: z
@@ -82,7 +119,7 @@ export type CheckoutLine = {
   fxDenominator?: number;
   mediaId?: string;
 };
-export type CheckoutSnapshot = {
+export type CheckoutSnapshot = Partial<PurchaseExecutionProvenance> & {
   purpose?: "balance";
   balanceReason?: "sourcing" | "final";
   sourceOrderVersion?: number;
@@ -150,7 +187,7 @@ export function admitPurchaseCheckoutAcknowledgement(
     result.id !== previewId
   )
     throw Error("INVALID_CHECKOUT_ACKNOWLEDGEMENT");
-  return result;
+  return { ...result, ...(purchaseExecutionProvenance(value) ?? {}) };
 }
 /** Replay is bound to the submitted version, even after a newer order read. */
 export function admitPurchaseSourcingAcknowledgement(

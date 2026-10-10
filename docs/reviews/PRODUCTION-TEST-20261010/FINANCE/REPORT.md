@@ -1,0 +1,11 @@
+# Production test finance isolation
+
+Approved v1 implementation isolates sandbox financial evidence in `purchaseTestFinancialEntries`, pins provenance in settlement derivatives and rejects mixed-mode balance targets before touching their source. Existing real finance/refund/physical shipping/consolidation/return/change workflows reject test and malformed mode markers. Simulated sourcing preserves provenance in its outbox. History selects the test ledger; analytics enqueue/application and live operational counts exclude test records.
+
+The review discovered generic invoice draft/issue/share/email could turn test totals into an unmarked fiscal statement and consume real numbering. Parent approved the bounded consumer fence under v1. Source orders and existing documents are now guarded before mutations, with authoritative source re-read before issuing/sharing/email. Missing source fails closed. Real invoice draft→issue→share→queueEmail remains verified by actual-handler test; test purchase PDFs retain their separate path.
+
+Node22 current focused checks:167tests/8files PASS; frontend/backend strict PASS; targeted lint PASS; diff check PASS. Handler tests cover5 concurrent same-proof calls,30-line bounded allocation, same-run sourcing balance, zero-write mixed-mode rejection, test late/underpaid/locked review evidence, foreign history denial, real finance reversal compatibility, historical analytics exclusion and8 invoice action/marker negatives. Mocks do not prove Firestore retries, IAM, providers or deployed behavior. Updated9 SePay emulator ledger assertions are NOT_RUN here; root owns combined emulator validation.
+
+Final engineering review cycle4: PASSED for the owned backend scope. Combined completion remains BLOCKED/NOT_READY for root-owned index/source freeze, current full CI/rules/artifact, product-language/browser and provider/live acceptance. Product review owner has the2 new denial strings and live-only aggregate meaning; no fabricated browser evidence. All findings/fixes and scoped SHA256s are in REVIEW.json.
+
+Shared runtime/data/WIP untouched. No secrets, provider calls, commits, pushes or deployment. `ai-agent-kit` executable unavailable; no ledger receipt invented. Memory candidates:None. Token usage and actual cost:Unavailable.

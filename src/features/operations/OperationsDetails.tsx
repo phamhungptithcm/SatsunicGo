@@ -1,7 +1,10 @@
 import { CrmIcon, CrmState } from "../crm/CrmPresentation";
 import { useEffect, useRef, useState } from "react";
 import { callService } from "../../shared/firebase";
-type Operations = {
+import { TestOrderBadge } from "../orders/TestOrderBadge";
+import type { PurchaseExecutionProvenance } from "../../../packages/domain/purchase-checkout";
+type Operations = Partial<PurchaseExecutionProvenance> & {
+  testMode?: boolean;
   recipient?: { recipient: string; phone: string; address: string } | null;
   receiving: { quantity: number; condition: string; shelf: string } | null;
   packing: {
@@ -48,15 +51,22 @@ export function OperationsDetails({ orderId }: { orderId: string }) {
         if (event.currentTarget.open && !data && !busy) void load();
       }}
     >
-      <summary><CrmIcon name="box" /> Dữ liệu mua, nhận kho và đóng gói</summary>
+      <summary>
+        <CrmIcon name="box" /> Dữ liệu mua, nhận kho và đóng gói
+      </summary>
       <p className="muted">
         Thông tin của lần ghi nhận gần nhất, không thay tổng số lượng trong đơn.
         Nhãn in nội bộ không phải shipping label đã mua của hãng vận chuyển.
       </p>
       {busy && <CrmState kind="loading" title="Đang tải dữ liệu kho…" />}
-      {error && <CrmState kind="error" title="Chưa tải được dữ liệu kho">{error}</CrmState>}
+      {error && (
+        <CrmState kind="error" title="Chưa tải được dữ liệu kho">
+          {error}
+        </CrmState>
+      )}
       {data && (
         <div className="crmFacts">
+          <TestOrderBadge record={data} />
           {data.recipient && (
             <p>
               Người nhận: {data.recipient.recipient} · {data.recipient.phone}

@@ -1,0 +1,205 @@
+{
+  "head": "99822aae502cc75406184ee345e4527c6e0db66d",
+  "worktree": "dirty, unrelated concurrent WIP preserved",
+  "files": [
+    {
+      "path": "functions/src/shipping.ts",
+      "sha256": "7dc314c8fcda60d4af5d80ff22c54efb9009f6eb4aa0441bd5a729d39a1c223d",
+      "taskEntrySha256": "0e346ca7c2ccc214197dfc596fe407e4ec67fef9a2280eb0adb9ba030d770f33"
+    },
+    {
+      "path": "functions/src/consolidation.ts",
+      "sha256": "dd316e39f555128cf821973d080b563cb767ac934d60b3a20b10bf326fa96fe5",
+      "taskEntrySha256": "61879c517621d0135dec207fc975c14f76c161a485317ea2deb30633fa48b3f2"
+    },
+    {
+      "path": "functions/src/customer-order-tracking.ts",
+      "sha256": "40ab827a77be13d4ce900d089a3c29e19ec6c4606616a917edccbabe187f0fe3",
+      "taskEntrySha256": "992fe22531b0a950d4d37343366c11e7f5f54fd0663a35bfbbe143195ee1a931"
+    },
+    {
+      "path": "functions/src/index.ts",
+      "sha256": "98013817312f26b12d459d17d639d305213b361777cc5a5c9e5ec8f36a9ab6d9",
+      "taskEntrySha256": "606f2d5867fcd438d0016ac53867d9fb84f24a1a087209932c483834d6ac3b6e"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "d66d61cc6e70933ec450fcf1bc3c9f7b700e4c3215c0f2e8813af8d0511f54e9",
+      "taskEntrySha256": "2c396d1f6ca18ccb5c028e9a4cc446aa1266ff9ec29d7fd2d18a11141064d7d0"
+    },
+    {
+      "path": "packages/domain/order-tracking.ts",
+      "sha256": "3d7a14b614daf4e6ab553c11655b4aa3316dcf50f61f401aab4b57dc43473b3b",
+      "taskEntrySha256": "a7137304858b9934dae33c2b575d0f69ef8e27b4fd950ec0d10922d143b8d8b5"
+    },
+    {
+      "path": "packages/domain/public-order-tracking.ts",
+      "sha256": "aec7bd39353074094c4f931d2719435d6cc9fee16c1346c277374763d4a973f8",
+      "taskEntrySha256": "7004b237eff95761729604a3001cc206b1ba9f4652936e3ff96a8c137e2c5ebc"
+    },
+    {
+      "path": "src/features/ask/Ask.tsx",
+      "sha256": "55d65c08d20bc8a5b907ca3ec82c033b2ebb754c49bf897615cbe42f1db07560",
+      "taskEntrySha256": "a966655139e456621e8e09fd96ae8f0242ed253e80aad149d3a82334d64e4b27",
+      "previousReviewSha256": "432ccb641cc557142f361597211ad9f15a83659a1ec7c469633c691d00f35e39"
+    },
+    {
+      "path": "src/features/ask/OrderTracking.tsx",
+      "sha256": "9e57339604296e24284ccb2e239de2ebe96efc6072a84f6d2e68224dcd0df37e",
+      "taskEntrySha256": "8497d8666d2c272a832560f638beafba5563193e0eff79d9373d862db4642f5e"
+    },
+    {
+      "path": "src/features/ask/GuestOrderTracking.tsx",
+      "sha256": "6aff4eb7d8162383d627981a84b4642e1ad587f6f4ee1d1bb2c3e8e02bfc41ef",
+      "taskEntrySha256": "d337e76edd4244e528344ceb162852f46c4a8270b433af4124cdf63b4f61dd86"
+    },
+    {
+      "path": "src/features/ask/TrackingRefresh.tsx",
+      "sha256": "feaa23eabaa834d1f2170f5cc4e94dd24be0a0ecfa3acc552d9319ae90937f78",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "src/features/ask/tracking-refresh.ts",
+      "sha256": "0e0cfde0bac80174484d0b0e6616b4e594ad19197ce4553f403208b906f7a577",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "src/features/ask/tracking-watch.ts",
+      "sha256": "e4bbc8ad1943f986b969c3e4a273fc7cc5c33d2c755c9c40f10337d6fb8975f0",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "src/features/ask/order-tracking.css",
+      "sha256": "b67337da78745d35c15773bdaa4cc4c83805f17a8eb99bf4fa692f8508b31691",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "src/features/orders/AccountTracking.tsx",
+      "sha256": "a02bf312e5df164c6cc8e5e65c5bb3aa590062b9884a128860c681c5b29a74b1",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "src/features/orders/account-tracking-request.ts",
+      "sha256": "0f50162a9880db4430a2b7b91298b08bd874098ed8002a94b04f0eafea01c3d6",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/rules/order-tracking-hardening.test.ts",
+      "sha256": "5e632f537d65a5fc6dbd900305debf401c28c855d72055a36557b075dea03fd7",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "bd228d1b976bc9f5f1ea3de46e33eac54edbaff31681f85615bf8a4a74fff300"
+    },
+    {
+      "path": "tests/rules/catalog-checkout.test.ts",
+      "sha256": "1523ef46a69f5616c2e7d3d654d14aa9e4108a7ed98c7a1250d6b0cea531fd5d",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/unit/tracking-refresh.test.ts",
+      "sha256": "1323b95121efc55c0a435cd4945326d2065ee4da9efd97bb7b3787e4fef1e98c",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/unit/parcel-receipt.test.ts",
+      "sha256": "1f44f75f5a1babb976d8eef1735a668f3f3b155642814dfb772b5efb4e6d4885",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/unit/order-tracking-performance.test.ts",
+      "sha256": "b54a044f725214390865efe13e4037afbf08320aa0f7ebabc5454b00e4d8a0a6",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/account-tracking-sync.test.ts",
+      "sha256": "823719a2010a4bb1412cc627d9095e9ee90226ec087272d757926792b4e44d28",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/public-code-sync.test.ts",
+      "sha256": "45e71d0d674b9ee61c1de4809cb9e9bff0c0cbdd470135b15b76621eaacbedc3",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/guest-tracking-adverse.test.ts",
+      "sha256": "f90525bb46a90db91babc3dbb885f07eb9a8ca6607442ea16188008121e7783f",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "921fb6ebce4a8cede8233d9752bd32a55a657255325bd3de1a69dc1a2b3e9271"
+    },
+    {
+      "path": "tests/component/account-sync.config.mjs",
+      "sha256": "713450b1ea69e2a6a1d5a54d7db1eabc724e4bf0be7144fc799af78a0ce91f93",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/tracking-real-fixture.mjs",
+      "sha256": "e9d57179a517863707f43350b8ea5337c01cc3dbd4274525a4f361f4cd8e675f",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "8f3fee97bd3ba2842ac4e7f3c3739c5ee56c5df2a2ec93addc55f93b12f3f453"
+    },
+    {
+      "path": "tests/component/tracking-real-sdk.ts",
+      "sha256": "d905fc23c5486688058b721348d1735d9b0352f650d872c870ccf714b31a56f7",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "cce7ca28a60c833f22f696afc26362697e6d0f53b55792972f638c79081be65e"
+    },
+    {
+      "path": "tests/component/tracking-real-harness.tsx",
+      "sha256": "57f1969c64c26dad692aa808c4f835f8723630b3b47c7d316e04dd8e1e10631f",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "c587a503d9b8ed672d3212097d91e09084a75ebb6c44bf7e8ed0b730ec4fb6ec"
+    },
+    {
+      "path": "tests/component/build-tracking-real.mjs",
+      "sha256": "ff150dbdd5b590c7527923c83db9f3d041ad9ac588a116ce413e9d4484155bf2",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/tracking-real-readback.mjs",
+      "sha256": "4db61e9388c327157021af7142cc2afeac824a80c2a59986ce9c6594e0b3b548",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/tracking-config-readback.mjs",
+      "sha256": "ad712d92f2134365c6a5dd9452b03f49d9200e8e44318b10fe48332d9ffa7513",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/tracking-business-http.mjs",
+      "sha256": "0bd839984c426f4c402cea1b52b5ed0e9896084c3760683e5ca883c17de1703a",
+      "taskEntrySha256": null,
+      "previousReviewSha256": "c8bf6911b71cc7b48136a6f974b3dc3a6956a263c086f8438d0c8e41d18767d5"
+    },
+    {
+      "path": "tests/component/tracking-responsive.html",
+      "sha256": "2c011ec51a83bb5a3b6a5655208d158166ba1453d6cf4aeb2db2b850ee5ff4a2",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/component/tracking-real.html",
+      "sha256": "04e58efa0e81092aa51d8563d94af23782e4dfb6e694161dc94f92ed53a99e33",
+      "taskEntrySha256": null
+    },
+    {
+      "path": "tests/helpers/tracking-transaction-profile.ts",
+      "sha256": "18b3b36099d1c333ea2ff06d91f7a86e8d8a700493cbea59cd1c636e0207059f"
+    },
+    {
+      "path": "tests/rules/guest-order-tracking.test.ts",
+      "sha256": "185117d4b364e394fefca7403a6b7199baf638f66da4a2d75e42ca49560d95cf"
+    },
+    {
+      "path": "tests/component/guest-qa-tools.d.ts",
+      "sha256": "033fd750bfd4fbe0f0cfeffe71463ec99f7e167bb4a28909d1672bde3347a9b1"
+    },
+    {
+      "path": "tests/component/tracking-pricing-window.mjs",
+      "sha256": "c79901ad4fcf07d03400808b5029215a4d57aaca3b1b8cb49f8fc71643b82c95"
+    },
+    {
+      "path": "tests/component/tracking-ack-readback.mjs",
+      "sha256": "7158df7fd4ddede8fda02dec232a70d03e1cadc2c86fa29d205d8e1f3184da26"
+    }
+  ],
+  "limits": "Hash binding for scoped inputs, not an immutable release artifact or whole-worktree ownership claim",
+  "continuation": "Demo expiry approved/restored; test-only utilities and evidence changes; application source unchanged from cycle3."
+}

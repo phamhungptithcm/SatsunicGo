@@ -617,6 +617,8 @@
   }
 }
 
+/* Preserve Account capability-code controls outside the compact Ask delta. */
+.publicTrackingCode{margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:12px}.publicTrackingCode code{display:block;overflow-wrap:anywhere;margin:8px 0}.publicTrackingCode button{margin:4px 8px 4px 0}.publicTrackingCode p{font-size:13px;color:#64748b}
 .orderTracking.ot.ot-refresh {
   display: flex;
   flex-wrap: wrap;

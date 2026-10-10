@@ -12,6 +12,7 @@ type Transaction = {
 };
 const state = vi.hoisted(() => ({
   reserved: 0,
+  researchReserved: 0 as number | undefined,
   events: [] as unknown[],
   serial: Promise.resolve(),
   enabled: true,
@@ -45,13 +46,27 @@ vi.mock("firebase-admin/firestore", () => ({
               }
             : path === "aiPilotBudget/lifetime"
               ? { reservedVnd: state.reserved }
-              : { active: true, roles: ["OWNER"] },
+              : path === "askResearchBudget/lifetime"
+                ? { reservedVnd: state.researchReserved }
+                : path === "settings/productionTest"
+                  ? {
+                      enabled: true,
+                      approved: true,
+                      version: 1,
+                      effectiveFrom: 0,
+                      expiresAt: Date.now() + 10000,
+                      origin: "https://satsunicgo.web.app",
+                      provider: "sepay_sandbox",
+                      testerUids: ["owner"],
+                    }
+                  : { active: true, roles: ["OWNER"] },
       }),
       update: async (data: unknown) => {
         state.events.push(data);
       },
     });
     return {
+      projectId: "satsunicgo",
       doc,
       runTransaction: (work: (tx: Transaction) => Promise<unknown>) => {
         const result = state.serial.then(() =>
@@ -84,7 +99,18 @@ beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-10-07T18:00:00Z"));
   vi.stubEnv("GCLOUD_PROJECT", "satsunicgo");
+  vi.stubEnv("PURCHASE_PRODUCTION_TEST_ARTIFACT", "v1");
+  vi.stubEnv("FIREBASE_CONFIG", JSON.stringify({ projectId: "satsunicgo" }));
+  for (const key of [
+    "FUNCTIONS_EMULATOR",
+    "FIRESTORE_EMULATOR_HOST",
+    "FIREBASE_AUTH_EMULATOR_HOST",
+    "FIREBASE_STORAGE_EMULATOR_HOST",
+    "GOOGLE_CLOUD_PROJECT",
+  ])
+    vi.stubEnv(key, undefined);
   state.reserved = 0;
+  state.researchReserved = 0;
   state.events = [];
   state.enabled = true;
   state.serial = Promise.resolve();
@@ -253,6 +279,41 @@ test("unknown dispatch failure retains reservation and never retries", async () 
   ).rejects.toThrow();
   expect(state.reserved).toBe(1000);
   expect(attempts).toBe(1);
+});
+test("pilot dispatch cannot consume research reservations or infer a missing production ledger as zero", async () => {
+  let generations = 0;
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string) => {
+      if (url.endsWith(":countTokens"))
+        return { ok: true, json: async () => ({ totalTokens: 20 }) };
+      generations++;
+      throw Error("Synthetic unknown outcome");
+    }),
+  );
+  state.researchReserved = undefined;
+  await expect(
+    generatePilot(
+      "owner",
+      pilotRequest("System", "Prompt"),
+      new AbortController().signal,
+    ),
+  ).rejects.toThrow();
+  expect(state.reserved).toBe(0);
+  expect(generations).toBe(0);
+  state.researchReserved = 49000;
+  await Promise.allSettled(
+    Array.from({ length: 4 }, () =>
+      generatePilot(
+        "owner",
+        pilotRequest("System", "Prompt"),
+        new AbortController().signal,
+      ),
+    ),
+  );
+  expect(state.reserved).toBe(1000);
+  expect(generations).toBe(1);
+  expect(state.researchReserved).toBe(49000);
 });
 test("failed token count prevents reservation and paid dispatch", async () => {
   vi.stubGlobal(

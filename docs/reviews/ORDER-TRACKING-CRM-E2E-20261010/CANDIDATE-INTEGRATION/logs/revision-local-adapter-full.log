@@ -1,0 +1,53 @@
+
+ RUN  v4.1.11 /private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo
+
+ ❯ tests/rules/server.test.ts (27 tests | 2 failed) 12340ms
+   × scheduled publication, expiry and in-app outbox processing are replay safe 17ms
+   × technical quota retention requires approval and preserves current counters and financial records 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/rules/server.test.ts > scheduled publication, expiry and in-app outbox processing are replay safe
+AssertionError: expected 1 to be 2 // Object.is equality
+
+- Expected
++ Received
+
+- 2
++ 1
+
+ ❯ tests/rules/server.test.ts:725:46
+    723|   await maintenance.run({ scheduleTime: new Date().toISOString() });
+    724|   await maintenance.run({ scheduleTime: new Date().toISOString() });
+    725|   expect((await post.get()).data()?.version).toBe(2);
+       |                                              ^
+    726|   expect((await post.collection("versions").get()).size).toBe(1);
+    727|   expect((await member.get()).data()?.state).toBe("expired");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/rules/server.test.ts > technical quota retention requires approval and preserves current counters and financial records
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/rules/server.test.ts:873:38
+    871|   });
+    872|   await maintenance.run({ scheduleTime: new Date().toISOString() });
+    873|   expect((await stale.get()).exists).toBe(false);
+       |                                      ^
+    874|   expect((await current.get()).exists).toBe(true);
+    875|   expect((await db.collection("financialEntries").get()).size).toBe(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 40 passed (42)
+   Start at  13:48:37
+   Duration  14.99s (transform 968ms, setup 29ms, import 766ms, tests 13.98s, environment 0ms)
+

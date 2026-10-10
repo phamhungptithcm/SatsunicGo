@@ -1,7 +1,11 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
-import type { CheckoutLine } from "../../packages/domain/purchase-checkout";
-export type PurchaseReceiptData = {
+import {
+  purchaseTestRecord,
+  type CheckoutLine,
+  type PurchaseExecutionProvenance,
+} from "../../packages/domain/purchase-checkout";
+export type PurchaseReceiptData = Partial<PurchaseExecutionProvenance> & {
   id: string;
   ownerId: string;
   lines: CheckoutLine[];
@@ -24,6 +28,7 @@ export type PurchaseReceiptData = {
 /** Bounded PDF renderer: embedded licensed Unicode TTF, explicit text mapping,
  * integer financial snapshots. No HTML, remote fonts, scripts or user URLs. */
 export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
+  const testReceipt = purchaseTestRecord(receipt);
   if (
     receipt.lines.length < 1 ||
     receipt.lines.length > 30 ||
@@ -197,7 +202,14 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
     text("Satsunic", 82, 787, 22, navy, true);
     text("Go", 82 + width("Satsunic", 22), 787, 22, blue, true);
     text("MUA HỘ QUỐC TẾ", 82, 770, 7.5, muted);
-    right("CHỨNG TỪ THANH TOÁN", 551, 784, 9, navy, true);
+    right(
+      testReceipt ? "CHỨNG TỪ TEST" : "CHỨNG TỪ THANH TOÁN",
+      551,
+      784,
+      9,
+      navy,
+      true,
+    );
     line(752);
     y = 724;
   }
@@ -220,7 +232,16 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
       page = [];
       pages.push(page);
       header();
-      text("Thanh toán mua hộ - tiếp theo", 44, y, 13, navy, true);
+      text(
+        testReceipt
+          ? "Thanh toán test - tiếp theo"
+          : "Thanh toán mua hộ - tiếp theo",
+        44,
+        y,
+        13,
+        navy,
+        true,
+      );
       y -= 20;
       text(`Mã chứng từ: SG-${receipt.id}`, 44, y, 8, muted);
       y -= 30;
@@ -233,7 +254,14 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   page.push(
     `q ${green} RG 1.2 w 440 ${y + 1} m 443 ${y - 2} l 449 ${y + 5} l S Q`,
   );
-  text("Đã thanh toán", 456, y - 1, 8.5, green, true);
+  text(
+    testReceipt ? "Thanh toán test" : "Đã thanh toán",
+    456,
+    y - 1,
+    8.5,
+    green,
+    true,
+  );
   y -= 21;
   text(
     balance
@@ -456,7 +484,11 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   }
   line(y - 51, 336, 537);
   text(
-    balance ? "Thanh toán lần này" : "Đã thanh toán",
+    balance
+      ? "Thanh toán lần này"
+      : testReceipt
+        ? "Thanh toán test"
+        : "Đã thanh toán",
     336,
     y - 73,
     9,
@@ -472,7 +504,15 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
       text(thanks, (595.28 - width(thanks, 8.5)) / 2, 74, 8.5);
     }
     line(58);
-    text("Không thay thế hóa đơn thuế.", 44, 42, 7, muted);
+    text(
+      testReceipt
+        ? "Chứng từ test · Không thay thế hóa đơn thuế."
+        : "Không thay thế hóa đơn thuế.",
+      44,
+      42,
+      7,
+      muted,
+    );
     right(`Trang ${i + 1}/${pages.length}`, 551, 42, 7, muted);
   }
   if (pages.length > 12) throw Error("PDF_TOO_LARGE");

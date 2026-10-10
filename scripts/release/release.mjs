@@ -17,6 +17,9 @@ export function gh(path, body) {
     encoding: 'utf8', timeout: 60_000, ...(body ? { input: JSON.stringify(body) } : {}),
   }));
 }
+export function releaseDeploymentScope() {
+  return 'Database rules and business-data migrations are excluded. A production-test v1 artifact additionally delivers only the three additive feedback-retention indexes listed in its manifest; other artifacts make no index changes.';
+}
 export function compareVersions(a, b) {
   const left = SEMVER.exec(a), right = SEMVER.exec(b);
   if (!left || !right) throw Error('INVALID_RELEASE_TAG');
@@ -133,7 +136,7 @@ export function prepare() {
   if (candidate.existing) return;
   const generated = gh(`repos/${repository}/releases/generate-notes`, { tag_name: candidate.tag, target_commitish: sha, ...(base ? { previous_tag_name: base } : {}), configuration_file_path: '.github/release.yml' });
   const comparison = base ? `https://github.com/${repository}/compare/${base}...${candidate.tag}` : `https://github.com/${repository}/commits/${sha}`;
-  writeFileSync('release-notes.md', `# SatsunicGo ${candidate.tag}\n\nProduction candidate for commit \`${sha}\`.\n\n## Changes\n\n${commitNotes(commits, repository)}\n\n## Pull requests and contributors\n\n${generated.body}\n\n## Validation and build identity\n\nAll required CI quality gates passed before the production build. Hosting and Functions are promoted from the attached checksum-verified artifact. No database rules/indexes or business-data migrations are included in this automated deployment.\n\n- Tag: \`${candidate.tag}\`\n- Source: \`${sha}\`\n- [Complete comparison](${comparison})\n- [Release operations and rollback](https://github.com/${repository}/blob/${sha}/docs/releases/CICD-108.md)\n\n## Deployment\n\nPending production verification. This draft must not be treated as deployed.\n`);
+  writeFileSync('release-notes.md', `# SatsunicGo ${candidate.tag}\n\nProduction candidate for commit \`${sha}\`.\n\n## Changes\n\n${commitNotes(commits, repository)}\n\n## Pull requests and contributors\n\n${generated.body}\n\n## Validation and build identity\n\nAll required CI quality gates passed before the production build. Hosting and Functions are promoted from the attached checksum-verified artifact. ${releaseDeploymentScope()}\n\n- Tag: \`${candidate.tag}\`\n- Source: \`${sha}\`\n- [Complete comparison](${comparison})\n- [Release operations and rollback](https://github.com/${repository}/blob/${sha}/docs/releases/CICD-108.md)\n\n## Deployment\n\nPending production verification. This draft must not be treated as deployed.\n`);
 }
 export function reserve() {
   assertHead();

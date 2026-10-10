@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T02:31:34.820761+00:00",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "source_freeze_sha256": "4dd8ed195a5dc3d6bd5d545e38fb0c3aa0be8bebb68af8010942094788ed3938",
+  "source_digest": "8fb877f191cb46c858d74d7dba20d0add8fad5ac82e436c8188d95ce09ccbb57",
+  "bounded_inputs": 624,
+  "source_drift": [],
+  "checks": [
+    {
+      "name": "unit",
+      "at": "2026-10-10T02:26:53.752997+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--reporter=dot"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 21.5,
+      "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/unit.log",
+      "sha256": "21e750c26ad45f474e1a37a103581f7c516ccaa3791f4fbb15eb78bde6d2def4"
+    },
+    {
+      "name": "frontend-strict",
+      "at": "2026-10-10T02:26:50.134151+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 36.56,
+      "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/frontend-strict.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "backend-strict",
+      "at": "2026-10-10T02:26:50.133510+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "functions/tsconfig.json"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 18.95,
+      "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/backend-strict.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "lint",
+      "at": "2026-10-10T02:26:50.133267+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/eslint/bin/eslint.js",
+        "src",
+        "packages/domain",
+        "functions/src",
+        "tests"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 27.72,
+      "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "release-node",
+      "at": "2026-10-10T02:26:50.133271+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "--test",
+        "tests/unit/release108.test.mjs",
+        "tests/unit/public-config069.test.mjs",
+        "tests/unit/deep-review.test.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 36.5,
+      "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/release-node.log",
+      "sha256": "15b9f4b35d1212aa6ae675da3c29c48b0843be187db8ec852f3ff392129f91ce"
+    }
+  ],
+  "build": {
+    "config_source": "Exact public release.yml tuple; whitelisted repository build-variable values kept only in memory",
+    "checks": [
+      {
+        "name": "public-config-ci-tuple",
+        "at": "2026-10-10T02:27:58.247228+00:00",
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "scripts/release/check-public-config.mjs"
+        ],
+        "exit_code": 0,
+        "duration_seconds": 0.14,
+        "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/public-config-ci-tuple.log",
+        "sha256": "a78e5ff25dbd82b721ffa8b397c1ae33f8cc70ff2e8d16b2d6d1948c384f06d8"
+      },
+      {
+        "name": "frontend-build-ci-tuple",
+        "at": "2026-10-10T02:28:00.072081+00:00",
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "node_modules/vite/bin/vite.js",
+          "build"
+        ],
+        "exit_code": 0,
+        "duration_seconds": 1.82,
+        "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/frontend-build-ci-tuple.log",
+        "sha256": "3c1ca38abcd2a9d9f92f93ab193e0d7dc35b771bb5351ad38039f33acea5e320"
+      },
+      {
+        "name": "public-assets-ci-tuple",
+        "at": "2026-10-10T02:28:00.113500+00:00",
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "scripts/public-assets.mjs"
+        ],
+        "exit_code": 0,
+        "duration_seconds": 0.04,
+        "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/public-assets-ci-tuple.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "backend-build-ci-tuple",
+        "at": "2026-10-10T02:28:04.137125+00:00",
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "node_modules/typescript/bin/tsc",
+          "-p",
+          "functions/tsconfig.json"
+        ],
+        "exit_code": 0,
+        "duration_seconds": 4.02,
+        "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/backend-build-ci-tuple.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "source-preflight-ci-tuple",
+        "at": "2026-10-10T02:28:04.566011+00:00",
+        "command": [
+          "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+          "scripts/release/preflight.mjs",
+          "--project",
+          "satsunicgo"
+        ],
+        "exit_code": 0,
+        "duration_seconds": 0.43,
+        "log": "/private/tmp/satsunicgo-production-test-final-r2-checks/source-preflight-ci-tuple.log",
+        "sha256": "84dfc2f700edccce2056de15b8e3b2657816b574c8c009c8e5d4b2738bbadb83"
+      }
+    ]
+  },
+  "unit": {
+    "files": 180,
+    "tests": 2789,
+    "status": "PASSED"
+  },
+  "release_node": {
+    "tests": 179,
+    "status": "PASSED"
+  },
+  "generated_public_assets_sha256": "802a0102bfa7c576ea74d32cb15c1361ab324b891b80a822eb95fc3248c7add2",
+  "high_confidence_secret_scan": {
+    "checked_source_test_tooling_paths": 91,
+    "flagged_paths": [
+      "tests/unit/production-test-email.test.ts"
+    ],
+    "scope": "Three high-confidence private-key/provider-token patterns only; not exhaustive DLP",
+    "triage": [
+      {
+        "path": "tests/unit/production-test-email.test.ts:28",
+        "status": "SYNTHETIC_TEST_FIXTURE",
+        "evidence": "Named synthetic constant inside mocked firebase-functions/params; provider send mocked; value withheld"
+      }
+    ],
+    "unresolved_actual_secret_findings": []
+  },
+  "rules_http_restore": "NOT_RUN_LOCAL; normal PR CI required without competing shared emulators",
+  "audit": "Normal CI root and packaged artifact fresh audit required; unchanged lock, no redundant local network audit",
+  "artifact_sdk": {
+    "status": "PASSED_WITHIN_OFFLINE_ARTIFACT_SCOPE",
+    "receipt": "ARTIFACT-SDK-R2.json",
+    "sha256": "8a42fffeddbaf54b81d83ecfd75a6e97d2c85b74c9a76e50b58d860a7b3a76b1",
+    "endpoints": 106,
+    "packaged_files": 360,
+    "network_attempts": 0,
+    "deployment": "NOT_RUN"
+  },
+  "live": "NOT_RUN",
+  "production_readiness": "NOT_READY",
+  "repository_intelligence": "DEGRADED; bounded source/compilers/tests",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None",
+  "source_commit": "fdbbda017a324befce93e6a3fac2ee882c6de795"
+}

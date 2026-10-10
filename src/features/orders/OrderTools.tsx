@@ -4,6 +4,7 @@ import { OrderImages } from "./OrderImages";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { callService } from "../../shared/firebase";
+import { purchaseTestRecord } from "../../../packages/domain/purchase-checkout";
 import {
   csvCell,
   paymentPurpose,
@@ -42,6 +43,7 @@ export function OrderTools({
   showImages?: boolean;
   section?: "all" | "actions" | "files" | "history";
 }) {
+  const testOrder = purchaseTestRecord(order);
   const [history, setHistory] = useState<History | null>(null),
     [error, setError] = useState(""),
     [historyLoading, setHistoryLoading] = useState(false),
@@ -138,21 +140,28 @@ export function OrderTools({
             if (e.currentTarget.open) void load();
           }}
         >
-          <summary>Lịch sử và bảng đối chiếu tiền</summary>
+          <summary>
+            {testOrder
+              ? "Lịch sử và thanh toán test"
+              : "Lịch sử và bảng đối chiếu tiền"}
+          </summary>
           <p>
-            Bảng đối chiếu nội bộ, không phải hóa đơn thuế. Chỉ các khoản đã xác
-            nhận mới xuất hiện ở đây.
+            {testOrder
+              ? "Các khoản thanh toán trong lần test này."
+              : "Bảng đối chiếu nội bộ, không phải hóa đơn thuế. Chỉ các khoản đã xác nhận mới xuất hiện ở đây."}
           </p>
           {historyLoading && (
             <LoadingState overlay={false}>Đang tải lịch sử…</LoadingState>
           )}
           {history?.entries.map((e) => (
             <p key={e.id}>
-              {e.kind === "refund"
-                ? "Hoàn tiền"
-                : e.kind === "reversal"
-                  ? "Tiền vào bị đảo"
-                  : "Tiền đã xác nhận"}
+              {testOrder
+                ? "Thanh toán test"
+                : e.kind === "refund"
+                  ? "Hoàn tiền"
+                  : e.kind === "reversal"
+                    ? "Tiền vào bị đảo"
+                    : "Tiền đã xác nhận"}
               : {e.amount.toLocaleString("vi-VN")} ₫ · mã khoản {e.id} ·{" "}
               {new Date(e.createdAt).toLocaleString("vi-VN")}
             </p>
@@ -172,9 +181,13 @@ export function OrderTools({
           >
             In bảng đối chiếu
           </button>
-          <Link to={`/account/documents?order=${encodeURIComponent(order.id)}`}>
-            Chứng từ đơn hàng
-          </Link>
+          {!testOrder && (
+            <Link
+              to={`/account/documents?order=${encodeURIComponent(order.id)}`}
+            >
+              Chứng từ đơn hàng
+            </Link>
+          )}
           {error && (
             <button disabled={historyLoading} onClick={() => void load()}>
               Thử tải lại
@@ -184,6 +197,7 @@ export function OrderTools({
       )}
       {(section === "all" || section === "actions") &&
         !order.checkoutId &&
+        !testOrder &&
         order.acceptedAt &&
         order.stage !== "CANCELLED" &&
         paymentDue(order) > 0 && (

@@ -14,6 +14,10 @@ import {
 } from "../../packages/domain/customer-notification";
 import { customerSnapshotHash } from "./customer-notification-events";
 import { renderCustomerEmail } from "./email-content";
+import {
+  matchingPurchaseExecution,
+  purchaseExecutionFields,
+} from "./purchase-test-boundary";
 /** Same transaction for trigger and bounded scheduled recovery. No provider delivery here. */
 export async function projectCustomerNotification(
   db: Firestore,
@@ -59,6 +63,19 @@ export async function projectCustomerNotification(
       });
       return true;
     }
+    let execution;
+    try {
+      if (!matchingPurchaseExecution(entity.data(), job))
+        throw Error("EXECUTION_MISMATCH");
+      execution = purchaseExecutionFields(entity.data());
+    } catch {
+      tx.update(ref, {
+        state: "blocked_content",
+        emailState: "blocked_content",
+        customerContentState: "invalid_execution",
+      });
+      return true;
+    }
     const settings = policy.data();
     // Independent cutover prevents configuration from draining the historical outbox.
     const eligible =
@@ -89,6 +106,7 @@ export async function projectCustomerNotification(
       targetLabel: customerEmailCatalog[event.templateId].ctaLabel,
       createdAt: event.occurredAt,
       read: false,
+      ...execution,
     });
     tx.update(ref, {
       state: "inAppDelivered",

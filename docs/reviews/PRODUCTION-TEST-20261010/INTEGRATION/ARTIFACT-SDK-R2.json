@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T02:33:35.674Z",
+  "sourceSha": "fdbbda017a324befce93e6a3fac2ee882c6de795",
+  "tag": "v0.11.0",
+  "tagScope": "Local validation only, not a reserved release",
+  "artifactManifestSha256": "9b5db91245072eeba7f09b4ed76ae32fbf9665559d0a439f5a080c1b6dd8b0fd",
+  "sdkDiscoverySha256": "ab369543f65085ba959ca9d7b4359fcf53a2b27c4b39746e2fa19eb0b2f9a4d4",
+  "sourceInventory": 110,
+  "artifactEndpoints": 106,
+  "held": [
+    "createPaymentLink",
+    "maintenance",
+    "payosWebhook",
+    "reconcilePayments"
+  ],
+  "emulatorOnly": [
+    "purchaseDemoPayment",
+    "purchaseDemoWebhook"
+  ],
+  "productionTestExports": [
+    {
+      "name": "purchaseSePayPayment",
+      "kind": "onCall",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayIpn",
+      "kind": "onRequest",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    },
+    {
+      "name": "purchaseSePayInboxWorker",
+      "kind": "onDocumentCreated",
+      "region": "asia-southeast1",
+      "source": "functions/src/purchase-sepay.ts"
+    }
+  ],
+  "feedbackRetention": {
+    "schemaVersion": 1,
+    "project": "satsunicgo",
+    "database": "(default)",
+    "artifactSha": "fdbbda017a324befce93e6a3fac2ee882c6de795",
+    "artifactTag": "v0.11.0",
+    "indexDigest": "d45e22479d05d76c7d9789878bf879070712da8790378d9e09a715cf2a7c7607",
+    "indexes": [
+      {
+        "collectionGroup": "askFeedback",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "retentionClass",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "expiresAt",
+            "order": "ASCENDING"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "askFeedbackReviewOperations",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "retentionClass",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "expiresAt",
+            "order": "ASCENDING"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "askFeedbackQuota",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "retentionClass",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "expiresAt",
+            "order": "ASCENDING"
+          }
+        ]
+      }
+    ]
+  },
+  "actualSdkDiscovered": {
+    "names": [
+      "analyticsCompact",
+      "analyticsIngest",
+      "analyticsJobCreated",
+      "analyticsLinkOrder",
+      "analyticsOrderChanged",
+      "analyticsPaymentCreated",
+      "analyticsSession",
+      "analyticsWithdraw",
+      "ask",
+      "askFeedback",
+      "askFeedbackCleanup",
+      "askFeedbackEvaluation",
+      "askFeedbackInbox",
+      "askFeedbackPolicy",
+      "askFeedbackReview",
+      "askFeedbackWithdraw",
+      "askKnowledgeCommand",
+      "askKnowledgePreview",
+      "askResearchCommand",
+      "askResearchSearch",
+      "askResearchSelect",
+      "askWebDiscovery",
+      "askWebSelect",
+      "askWorkflow",
+      "blogCommentCommand",
+      "blogCommentList",
+      "blogCommentReport",
+      "blogCommentSubmit",
+      "campaignBannersPublic",
+      "cartCommand",
+      "catalogCheckout",
+      "changeCommand",
+      "command",
+      "consolidationCommand",
+      "currentAskConversation",
+      "customerNotificationCreated",
+      "customerNotificationRecovery",
+      "customerOrderTracking",
+      "customerSaveResolve",
+      "dashboardAnalytics",
+      "deliverEmail",
+      "deliverSubscriptionEmail",
+      "financeReview",
+      "invoiceCommand",
+      "invoiceDetail",
+      "invoiceList",
+      "invoiceShare",
+      "listCrmStaff",
+      "listCustomers",
+      "listFollowUps",
+      "listOrderImages",
+      "listWork",
+      "membershipCommand",
+      "membershipReminderPolicy",
+      "notificationPreferences",
+      "operationalDashboard",
+      "orderConversationCommand",
+      "orderHistory",
+      "outboxCommand",
+      "productReviewAdmin",
+      "productReviewEligibility",
+      "productReviewModerate",
+      "productReviewRead",
+      "productReviewWrite",
+      "publicDiscovery",
+      "publicImage",
+      "publicPage",
+      "purchaseBalanceCheckout",
+      "purchaseCheckout",
+      "purchaseCheckoutSetup",
+      "purchaseDraftImage",
+      "purchaseOrderRead",
+      "purchaseReceipt",
+      "purchaseReceiptRecovery",
+      "purchaseReceiptWorker",
+      "purchaseSePayInboxWorker",
+      "purchaseSePayIpn",
+      "purchaseSePayPayment",
+      "purchaseSourcingChange",
+      "readCustomer",
+      "readNotification",
+      "readOrderConversation",
+      "readOrderImage",
+      "readOrderOperations",
+      "readOwnerConfiguration",
+      "readStaffAccess",
+      "refundCommand",
+      "returnCommand",
+      "saveCustomerNotes",
+      "scheduledPublication",
+      "shippingCommand",
+      "shippingRatesAdmin",
+      "shippingRatesPublic",
+      "studioAdvancedCommand",
+      "studioAdvancedRead",
+      "studioCommand",
+      "studioMediaRead",
+      "studioMediaUpload",
+      "studioRead",
+      "ticketMessages",
+      "uploadContentImage",
+      "uploadOrderImage",
+      "websiteBannerAdmin",
+      "websiteBannerCommand",
+      "websiteBannerPreview",
+      "workspaceCommand"
+    ],
+    "calls": 0,
+    "params": [
+      {
+        "name": "SEPAY_SANDBOX_SECRET_KEY",
+        "type": "secret"
+      },
+      {
+        "name": "SEPAY_SANDBOX_IPN_SECRET_KEY",
+        "type": "secret"
+      },
+      {
+        "name": "SFTP_PASSWORD",
+        "type": "secret"
+      }
+    ],
+    "secretBindings": {
+      "command": [],
+      "ask": [],
+      "askWorkflow": [],
+      "currentAskConversation": [],
+      "listWork": [],
+      "workspaceCommand": [],
+      "readOwnerConfiguration": [],
+      "ticketMessages": [],
+      "membershipCommand": [],
+      "publicPage": [],
+      "publicDiscovery": [],
+      "readNotification": [],
+      "scheduledPublication": [],
+      "customerNotificationRecovery": [],
+      "deliverEmail": [
+        {
+          "key": "SFTP_PASSWORD"
+        }
+      ],
+      "readOrderConversation": [],
+      "orderConversationCommand": [],
+      "shippingCommand": [],
+      "orderHistory": [],
+      "changeCommand": [],
+      "returnCommand": [],
+      "refundCommand": [],
+      "uploadContentImage": [],
+      "publicImage": [],
+      "consolidationCommand": [],
+      "readStaffAccess": [],
+      "readCustomer": [],
+      "saveCustomerNotes": [],
+      "listCustomers": [],
+      "listFollowUps": [],
+      "listCrmStaff": [],
+      "operationalDashboard": [],
+      "uploadOrderImage": [],
+      "listOrderImages": [],
+      "readOrderImage": [],
+      "financeReview": [],
+      "membershipReminderPolicy": [],
+      "readOrderOperations": [],
+      "catalogCheckout": [],
+      "cartCommand": [],
+      "invoiceCommand": [],
+      "invoiceList": [],
+      "invoiceDetail": [],
+      "invoiceShare": [],
+      "outboxCommand": [],
+      "customerOrderTracking": [],
+      "shippingRatesPublic": [],
+      "shippingRatesAdmin": [],
+      "studioRead": [],
+      "studioCommand": [],
+      "studioMediaUpload": [],
+      "studioMediaRead": [],
+      "blogCommentSubmit": [],
+      "blogCommentList": [],
+      "blogCommentCommand": [],
+      "blogCommentReport": [],
+      "studioAdvancedRead": [],
+      "studioAdvancedCommand": [],
+      "websiteBannerCommand": [],
+      "websiteBannerAdmin": [],
+      "websiteBannerPreview": [],
+      "campaignBannersPublic": [],
+      "productReviewRead": [],
+      "productReviewEligibility": [],
+      "productReviewWrite": [],
+      "productReviewModerate": [],
+      "productReviewAdmin": [],
+      "askKnowledgeCommand": [],
+      "askKnowledgePreview": [],
+      "customerSaveResolve": [],
+      "askResearchCommand": [],
+      "askResearchSearch": [],
+      "askResearchSelect": [],
+      "askFeedback": [],
+      "askFeedbackReview": [],
+      "askFeedbackPolicy": [],
+      "analyticsSession": [],
+      "analyticsIngest": [],
+      "analyticsLinkOrder": [],
+      "analyticsWithdraw": [],
+      "analyticsOrderChanged": [],
+      "analyticsPaymentCreated": [],
+      "analyticsJobCreated": [],
+      "analyticsCompact": [],
+      "dashboardAnalytics": [],
+      "askWebDiscovery": [],
+      "askWebSelect": [],
+      "askFeedbackWithdraw": [],
+      "askFeedbackInbox": [],
+      "askFeedbackCleanup": [],
+      "askFeedbackEvaluation": [],
+      "purchaseCheckout": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseBalanceCheckout": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseCheckoutSetup": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseDraftImage": [],
+      "purchaseOrderRead": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseReceipt": [],
+      "purchaseReceiptWorker": [],
+      "purchaseReceiptRecovery": [],
+      "purchaseSourcingChange": [],
+      "purchaseSePayPayment": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseSePayIpn": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "purchaseSePayInboxWorker": [
+        {
+          "key": "SEPAY_SANDBOX_SECRET_KEY"
+        },
+        {
+          "key": "SEPAY_SANDBOX_IPN_SECRET_KEY"
+        }
+      ],
+      "customerNotificationCreated": [],
+      "notificationPreferences": [],
+      "deliverSubscriptionEmail": [
+        {
+          "key": "SFTP_PASSWORD"
+        }
+      ]
+    }
+  },
+  "networkAttempts": 0,
+  "packagedFiles": 360,
+  "publicHostingPaths": 193,
+  "providerCalls": 0,
+  "deployment": "NOT_RUN",
+  "audit": "Normal CI current packaged artifact audit remains required",
+  "status": "PASSED_WITHIN_OFFLINE_ARTIFACT_SCOPE"
+}

@@ -155,6 +155,7 @@ export const deliverSubscriptionEmail = onSchedule(
           sender,
           subscriptionIdentity,
           config.cutoverAt,
+          config,
         );
       } catch {
         // Keep the durable state for retry/reconciliation; isolate one job failure.

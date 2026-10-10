@@ -1,0 +1,79 @@
+{
+  "scope": "Actual owner Ask compact timeline nodes that axe could not evaluate because of connector pseudo elements. Live computed styles and geometry; not WCAG certification. Existing source CSS has no responsive color override.",
+  "results": [
+    {
+      "label": "Y\u00eau c\u1ea7u",
+      "foreground": "rgb(17, 28, 53)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 16.92,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Thanh to\u00e1n to\u00e0n b\u1ed9",
+      "foreground": "rgb(17, 28, 53)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 16.92,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Mua h\u00e0ng",
+      "foreground": "rgb(17, 28, 53)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 16.92,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Kho & \u0111\u00f3ng g\u00f3i",
+      "foreground": "rgb(17, 28, 53)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 16.92,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "V\u1eadn chuy\u1ec3n",
+      "foreground": "rgb(22, 60, 255)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 6.72,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Hi\u1ec7n t\u1ea1i",
+      "foreground": "rgb(22, 60, 255)",
+      "background": "rgb(241, 243, 255)",
+      "ratio": 6.08,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Giao h\u00e0ng",
+      "foreground": "rgb(17, 28, 53)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 16.92,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    },
+    {
+      "label": "Ti\u1ebfp theo",
+      "foreground": "rgb(101, 112, 135)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 4.98,
+      "required": 4.5,
+      "pseudoIntersectsTextVertically": false,
+      "status": "PASSED"
+    }
+  ],
+  "axeReportedViolations": [],
+  "reducedMotion": "NOT_RUN: native Mac locked"
+}

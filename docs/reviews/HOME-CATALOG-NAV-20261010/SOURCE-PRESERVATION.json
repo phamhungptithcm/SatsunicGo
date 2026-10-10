@@ -1,0 +1,25 @@
+[
+  {
+    "root": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo",
+    "app_inverse_matches_preimage": true
+  },
+  {
+    "root": "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo",
+    "app_inverse_matches_preimage": true
+  },
+  {
+    "path": "src/app/SiteChrome.tsx",
+    "shared_candidate_match": true,
+    "sha256": "c16c0864a6ccd32eaa7f006fb6cb7f4dec86a21c4bb561d1c59621e1a1cc4988"
+  },
+  {
+    "path": "src/styles/global.css",
+    "shared_candidate_match": true,
+    "sha256": "017da48de7b6c2e6edc49005e073816b6a6fd2dc49d26a1aa31e59a3394b91cf"
+  },
+  {
+    "path": "src/styles/public-ux.css",
+    "shared_candidate_match": true,
+    "sha256": "f229cf070540a89fd26734227ac9304793f3e0e81df1f24aed2b23efaaaf9f1f"
+  }
+]

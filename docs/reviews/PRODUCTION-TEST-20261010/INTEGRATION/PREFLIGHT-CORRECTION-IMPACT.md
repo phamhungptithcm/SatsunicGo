@@ -1,0 +1,7 @@
+# Preflight compatibility correction
+
+The approved v1 generic request producer rejects new requests when its artifact marker is v1 but runtime identity or tester admission is invalid. Its direct environment comparison in index.ts also triggers the existing strict demo environment scanner, which deliberately permits only historical emulator/project comparisons across that module. Regenerated public asset bindings are already valid; the remaining source preflight failure is FUNCTION_INVENTORY_INVALID.
+
+Move the exact v1 marker comparison into an imported helper in production-test-commands.ts and invoke it from the producer. Preserve all admission, idempotency, transaction, auth and error behavior. Do not relax the environment scanner or any CI/release/security gate. Extend the canonical source preflight fixture to include the actual command prelude so later changes in that producer cannot evade this regression. Verify the ten actual producer scenarios and focused source inventory tests. This is a same-v1 packaging compatibility correction, with no new capability or runtime mutation.
+
+Ownership is limited to index.ts, production-test-commands.ts, release-preflight067.test.ts and this scoped receipt in the combined candidate. Root owns the full combined checks, commit and release. Repository intelligence remains DEGRADED; bounded source/compiler/tests are used. No provider call, push, deployment, secret access or shared runtime change is authorized for this correction.

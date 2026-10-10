@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import {
   customerEvent,
   customerEventFields,
@@ -106,6 +107,7 @@ export const financeReview = onCall(
           exception = await tx.get(ref);
         if (exception.data()?.state !== "open")
           throw new HttpsError("failed-precondition", "Ngoại lệ không còn mở.");
+        requireLivePurchaseRecord(exception.data());
         tx.update(ref, {
           state: "closed",
           reviewedBy: uid,
@@ -123,6 +125,7 @@ export const financeReview = onCall(
             "aborted",
             "Đơn đã thay đổi. Tải lại để đối soát.",
           );
+        requireLivePurchaseRecord(o);
         let allocatedAmount: number | undefined;
         if (d.action === "reverse") {
           const entryRef = db.doc(`financialEntries/${d.entryId}`),
@@ -135,6 +138,7 @@ export const financeReview = onCall(
             tx.get(counterRef),
             tx.get(bankRef),
           ]);
+          requireLivePurchaseRecord(entry.data());
           if (bank.exists)
             throw new HttpsError(
               "already-exists",
@@ -192,6 +196,7 @@ export const financeReview = onCall(
               "failed-precondition",
               "Chưa xác minh tiền vào đúng tài khoản hoặc đơn chưa có chấp nhận báo giá.",
             );
+          requireLivePurchaseRecord(e);
           const amount = money.positive().parse(e.amount),
             bankRef = db.doc(`bankTransactions/${e.bankReferenceHash}`),
             bank = await tx.get(bankRef);

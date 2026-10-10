@@ -32,6 +32,7 @@ it.each([
     vi.stubEnv("FUNCTIONS_EMULATOR", emulator);
     vi.stubEnv("GCLOUD_PROJECT", project);
     vi.stubEnv("GOOGLE_CLOUD_PROJECT", googleProject);
+    vi.stubEnv("PURCHASE_PRODUCTION_TEST_ARTIFACT", undefined);
     const module = await import("../../functions/src/payments/sepay-sandbox");
     const names = allowed
       ? ["SEPAY_SANDBOX_SECRET_KEY", "SEPAY_SANDBOX_IPN_SECRET_KEY"]
@@ -44,5 +45,32 @@ it.each([
       expect(module.sandboxPaymentReady()).toBe(false);
       expect(() => module.sandboxAdapter()).toThrow("SEPAY_NOT_CONFIGURED");
     }
+  },
+);
+
+it.each([
+  ["v1", "satsunicgo", undefined, true],
+  ["v1", "satsunicgo", "127.0.0.1:18207", false],
+  ["v1", "other", undefined, false],
+  ["true", "satsunicgo", undefined, false],
+  [undefined, "satsunicgo", undefined, false],
+] as const)(
+  "registers approved production-test params only for exact artifact %s/%s/%s",
+  async (marker, project, emulator, allowed) => {
+    vi.resetModules();
+    vi.stubEnv("FUNCTIONS_EMULATOR", undefined);
+    vi.stubEnv("GCLOUD_PROJECT", project);
+    vi.stubEnv("GOOGLE_CLOUD_PROJECT", project);
+    vi.stubEnv("FIREBASE_CONFIG", JSON.stringify({ projectId: project }));
+    vi.stubEnv("FIRESTORE_EMULATOR_HOST", emulator);
+    vi.stubEnv("FIREBASE_AUTH_EMULATOR_HOST", undefined);
+    vi.stubEnv("FIREBASE_STORAGE_EMULATOR_HOST", undefined);
+    vi.stubEnv("PURCHASE_PRODUCTION_TEST_ARTIFACT", marker);
+    const module = await import("../../functions/src/payments/sepay-sandbox");
+    const names = allowed
+      ? ["SEPAY_SANDBOX_SECRET_KEY", "SEPAY_SANDBOX_IPN_SECRET_KEY"]
+      : [];
+    expect(h.define.mock.calls.map(([name]) => name)).toEqual(names);
+    expect(module.sepaySecrets.map((secret) => secret.name)).toEqual(names);
   },
 );

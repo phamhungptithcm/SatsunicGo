@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-10T02:09:22.512490+00:00",
+  "project": "satsunicgo",
+  "service_account": "github-release@satsunicgo.iam.gserviceaccount.com",
+  "direct_project_role": "projects/satsunicgo/roles/satsunicgoProductionDeployer",
+  "required_permission_presence": {
+    "datastore.indexes.list": false,
+    "datastore.indexes.create": false,
+    "cloudscheduler.jobs.get": true
+  },
+  "scope": "Direct project custom-role metadata only; inherited allow/deny policies and effective impersonated access NOT_VERIFIED",
+  "role_etag": "BwZdV6n8VOE=",
+  "role_stage": "GA",
+  "iam_changes": 0
+}

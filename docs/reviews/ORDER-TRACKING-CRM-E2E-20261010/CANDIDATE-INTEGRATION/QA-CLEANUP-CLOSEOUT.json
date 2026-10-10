@@ -1,0 +1,28 @@
+{
+  "completedAt": "2026-10-10T18:18:53.124779+00:00",
+  "rootFixtureCleanup": {
+    "cleanup": "PASSED",
+    "ownedOrder": "SG-QA-880b8298",
+    "remainingOwnedDocuments": 0,
+    "sharedQuotaBuckets": "Preserved; normal TTL",
+    "sharedConfiguration": "Cleanup excludes settings; pricing restored separately by compare-and-set",
+    "deletedOwnedPaths": 15
+  },
+  "rootPrivateCapabilityAbsent": true,
+  "rootBundleAbsent": true,
+  "removedRootBundleHashes": {
+    "robots.txt": "824c0064f02fc1d8c7810f11aa8720bce1d905ff1d3b5115927cc61ed0722b6c",
+    "favicon.svg": "c47c66c498ae6bde38712120a9aefcb1607ebf6d77d0fad9e54668960dfab903",
+    "assets/tracking-real-skG25TcO.js": "02f243d9b639b0e81ef14b1a76db351464c0faed318d3174fbb284e3827e3155",
+    "assets/tracking-real-D8jsrR6P.css": "feeebb99c532355b60eb50db86ba6b1b9b1759f74cb6509c762dbd17c0d547e2",
+    "tests/component/tracking-real.html": "ad6d15d6da505fa1c0ef14d71dcc91e91bf8dc9c2684296f349e7a0f989b51a0",
+    "images/markets/jp-v2.webp": "4c3cf104d6d671fc584cd4142a0279d0070503291f0bf510c64affe2f08c773d",
+    "images/markets/kr-v2.webp": "1bff1dc8219690c8d366db6f43093db62cb95cecd8dafd65a9580bc6a53805c8",
+    "images/markets/us-v2.webp": "9cc87e2651098f5b218f5e52cda5377b7959c9e22dbd78cde02f57743f6f2a8b"
+  },
+  "sharedOwnerArtifacts": "Preserved current owner artifacts; root did not restore stale generated backup",
+  "browser": "crm-root-20261010 closed",
+  "consoleErrors": 0,
+  "warnings": 0,
+  "failedAttempt": "First read used shared fixture superseded by concurrent owner continuation; identity guard rejected stale bundle. No acceptance credited; recreated root synthetic staff Auth removed with exact ownership guards. Isolated fresh fixture run passed."
+}

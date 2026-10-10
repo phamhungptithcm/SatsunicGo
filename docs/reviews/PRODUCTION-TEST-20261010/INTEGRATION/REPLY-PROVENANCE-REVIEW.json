@@ -1,0 +1,52 @@
+{
+  "task_id": "PRODUCTION-TEST-v1-REPLY-PROVENANCE",
+  "at": "2026-10-10T01:51:35Z",
+  "status": "PASSED",
+  "scope": "Bounded local reply producer and in-app notification projection only; not whole-candidate or production acceptance",
+  "repository": "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo",
+  "rig_mode": "DEGRADED",
+  "approval": "PRODUCTION-TEST v1 call_5081fd46f74546c08b78d7a095730a9a item0; parent assigned bounded consumer correction",
+  "skills": ["final-implementation-review", "code-review", "code-quality-review", "security-review", "database-change"],
+  "profiles": ["typescript-javascript", "database", "api", "concurrency"],
+  "files": {
+    "functions/src/order-conversation.ts": "f202250920539c25f00364c3d03c57164785571e7a342c92f802d52f8c27de33",
+    "functions/src/customer-notification-delivery.ts": "61c210d5293b0c4c43247a34ba677add5de907bcd03ec350020c20eab85a2911",
+    "tests/unit/order-reply-provenance.test.ts": "cf27772ebda886d2def6dea76e64ec60784d4a798d45f6fd429f8cd17f07ae76"
+  },
+  "dimensions": {
+    "requirement_match": {"status":"PASSED","summary":"Authoritative execution fields persist through staff customer-reply outbox and matching in-app projection. No new email eligibility."},
+    "security": {"status":"PASSED","summary":"Existing verified Google/object/role/lock authority preserved; strict client schema rejects supplied provenance; malformed/mixed-mode source/job fails closed."},
+    "code_quality": {"status":"PASSED","summary":"Existing shared provenance helpers reused; backend strict and scoped ESLint pass; no dependency, API or runtime configuration changes."},
+    "failure_paths": {"status":"PASSED","summary":"Actual callable/projection tests cover malformed source/job, changed run/version, missing/mixed mode, current owner/lock denial, replay/content conflict, legacy sandbox and live controls."},
+    "error_handling": {"status":"PASSED","summary":"Invalid reply source fails transaction before writes. Invalid projection execution uses existing blocked_content states and safe invalid_execution reason; no customer payload or secrets logged."},
+    "production_readiness": {"status":"PASSED","summary":"Scoped deployment-impact review complete: additive metadata and no new reads/indexes/migrations/providers. Actual combined CI/artifact/deployment/live acceptance remains NOT_RUN by this subtask and root-owned."},
+    "trade_offs": {"status":"PASSED","summary":"Historical unmarked jobs against test sources remain blocked instead of being relabeled. Legacy test markers remain conservative; no unread email mechanism or visible Test badge is introduced."},
+    "product_content": {"status":"NOT_APPLICABLE","summary":"No changed strings, layout or displayed-data meaning. Current Notifications renderer ignores execution metadata; no visual claim."}
+  },
+  "review_cycles": [
+    {"cycle":1,"status":"CHANGES_REQUESTED","finding":"P2 authoritative reply/projection provenance omitted","fix":"Copy validated source execution fields at reply creation and project only when source/job mode/run/version agrees."},
+    {"cycle":2,"status":"PASSED","reviewer":"finance_implementation self-review plus independent policy_implementation read-only review","findings":[],"evidence":"Exact frozen hashes matched by independent reviewer; 177 tests/4 suites, backend strict, scoped lint, diff check pass."}
+  ],
+  "checks": {
+    "focused_unit": {"status":"PASSED","command":"node22 node_modules/vitest/vitest.mjs run tests/unit/order-reply-provenance.test.ts tests/unit/order-conversation.test.ts tests/unit/customer-emails.test.ts tests/unit/production-test-email.test.ts","result":"177 tests, 4 suites, exit0; 24 new actual-handler/projection cases"},
+    "backend_strict": {"status":"PASSED","command":"node22 node_modules/typescript/bin/tsc --noEmit -p functions/tsconfig.json","result":"exit0"},
+    "scoped_lint": {"status":"PASSED","command":"node22 node_modules/eslint/bin/eslint.js functions/src/order-conversation.ts functions/src/customer-notification-delivery.ts tests/unit/order-reply-provenance.test.ts","result":"exit0"},
+    "diff_check": {"status":"PASSED","command":"git diff --check","result":"exit0"},
+    "architecture_and_api": {"status":"PASSED","evidence":"Existing producer, projector, email policy and UI reader traced. Only optional derivative metadata added; callable input/output and event hash schema unchanged."},
+    "security_and_database": {"status":"PASSED","evidence":"All reads before writes; authoritative entity included in transaction read-set; idempotency/replay preserved. No new queries, indexes, collection names or network I/O."},
+    "database_migration": {"status":"NOT_APPLICABLE","reason":"Additive fields only on newly created derivative records; no backfill or schema migration."},
+    "emulator_browser_provider_live": {"status":"NOT_RUN","reason":"No runtime/provider/production activity authorized to this subtask; parent owns combined release verification. Unit harness mocks Firestore transaction persistence, not deployed SDK/IAM/AppCheck."}
+  },
+  "independent_review": {
+    "reviewer": "/root/policy_implementation",
+    "status": "PASSED",
+    "hashes_match": true,
+    "summary": "No remaining actionable finding in bounded reply/projection source. Authoritative authorized order pins validated fields; absent live stays absent; legacy test conservative; partial source fails before writes. Projection compares mode/run/version and blocks corruption/owner/lock before inbox create. Idempotency and reads-before-writes preserved, no extra I/O. Test receipt is owner-executed, not provider/runtime proof."
+  },
+  "remaining_work": ["Root rebind combined candidate checks/review/artifact and production/live acceptance after this delta"],
+  "production_status": "NOT_READY_FROM_THIS_SUBTASK",
+  "runtime_ledger": "ai-agent-kit executable unavailable on PATH; durable scoped JSON/Markdown receipts supplied instead, no fabricated runtime ledger",
+  "provider_tokens": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

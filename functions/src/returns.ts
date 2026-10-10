@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import { isStringRoleArray, requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -76,6 +77,8 @@ export const returnCommand = onCall(
           "failed-precondition",
           "Hồ sơ hàng trả không còn mở.",
         );
+      requireLivePurchaseRecord(data);
+      requireLivePurchaseRecord(order.data());
       const lines = data.lines as {
         line: number;
         authorized: number;

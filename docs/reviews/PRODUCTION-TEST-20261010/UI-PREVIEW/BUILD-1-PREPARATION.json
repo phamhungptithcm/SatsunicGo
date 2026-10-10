@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-10-10T01:32:24.482205+00:00",
+  "html_sha256": "bc202b1f4b44613b9c8f3143df4087bfbd54fbe770aa272271422d4dd0c78bb2",
+  "inline_scripts": 1,
+  "external_script_tags": 0,
+  "stylesheet_links": 0,
+  "css_imports": 0,
+  "csp_connect_none": true,
+  "source_drift": [],
+  "owned_UI_drift": [],
+  "browser_acceptance": "NOT_RUN",
+  "genuine_role_mfa_provider": "NOT_RUN",
+  "compiled_js_syntax": {
+    "status": "PASSED",
+    "exit_code": 0,
+    "command": "Node 22.23.3 --check /private/tmp/satsunicgo-production-test-ui-evidence/preview-compiled-check.js"
+  },
+  "build": {
+    "status": "PASSED",
+    "exit_code": 0,
+    "command": "Node 22.23.3 docs/reviews/PRODUCTION-TEST-20261010/UI-PREVIEW/build.mjs"
+  },
+  "shared_runtime_inspection": {
+    "pid": 12137,
+    "port": 5207,
+    "cwd": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo",
+    "shared_owned_paths_matching_candidate": 0,
+    "candidate_owned_paths_matching_UI_CHECKS": 15,
+    "public_env_file_metadata": {
+      "project": "satsunicgo",
+      "VITE_USE_EMULATORS": "false"
+    },
+    "running_process_environment": "NOT_VERIFIED",
+    "curl_loopback_transport": "FAILED_EXIT_7",
+    "new_server_started": false
+  },
+  "prepared_at": "2026-10-10T01:33:38.458880+00:00"
+}

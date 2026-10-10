@@ -1,0 +1,10 @@
+{
+  "at": "2026-10-10T02:07:29.161547+00:00",
+  "scope": "Root-owned synthetic HTTP preview and agent-owned tab only",
+  "temporary_copy_removed": true,
+  "expected_sha256": "b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394",
+  "tab_closed": true,
+  "shared_runtime_unchanged": true,
+  "accounts_data_unchanged": true,
+  "viewport_override": "RESET"
+}

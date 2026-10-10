@@ -1,8 +1,8 @@
 # Production test mode v1
 
-Status: PLAN_READY — material delta awaiting concrete reviewed-plan approval. Human explicitly requests using the production deployment for testing and accepts sandbox. This supersedes the earlier environment preference; it does not certify unfinished provider paths or waive auth, consent, financial integrity or CI.
+Status: APPROVED — see APPROVAL.json and the human answer “Duyệt v1 và tạo secret trống”. Implementation is in progress; combined release and live acceptance remain separate gates. Human explicitly requests using the production deployment for testing and accepts sandbox. This supersedes the earlier environment preference; it does not certify unfinished provider paths or waive auth, consent, financial integrity or CI.
 
-## Current source facts
+## Source facts at plan preparation
 
 - Current main608d2e0 contains the full combined local feature candidate plus analytics concurrency and sandbox-parameter discovery fixes. Normal release38009393058 is in progress. That release preserves the previous runtime boundaries; it is not this activation delta.
 - SePay uses merchant SP-TEST-HL5339A9 and fixed sandbox endpoints. Only BANK_TRANSFER is implemented as available. CARD/NAPAS are modeled but disabled; their provider support has not been verified.

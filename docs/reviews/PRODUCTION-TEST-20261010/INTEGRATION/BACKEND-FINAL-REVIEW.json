@@ -1,0 +1,610 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-INDEPENDENT-BACKEND-FINAL-REVIEW",
+  "created_at": "2026-10-10T01:55:48.672522+00:00",
+  "reviewer": "/root/policy_implementation",
+  "repository": "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo",
+  "base_revision": "c4230014959389c3c23b44cdb11c5fe846f815fe",
+  "base_release": "v0.10.0 verified production per BASE-RELEASE-v0100.json; no provider query by reviewer",
+  "head_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "working_tree": "DIRTY; exact reviewed source bytes bound below, not a clean deployable commit",
+  "status": "BLOCKED",
+  "scoped_backend_source_review": "PASSED",
+  "production_status": "NOT_READY_FROM_THIS_REVIEW",
+  "approval_reference": "PRODUCTION-TEST v1 APPROVAL.json; call_5081fd46f74546c08b78d7a095730a9a item0. No new implementation or activation authority inferred.",
+  "scope": {
+    "changed_backend_domain_files": [
+      "functions/src/ai/ask-cost-policy.ts",
+      "functions/src/ai/ask-pilot.ts",
+      "functions/src/ai/ask-workflow.ts",
+      "functions/src/ai/feedback-lifecycle.ts",
+      "functions/src/ai/feedback-provenance.ts",
+      "functions/src/ai/feedback.ts",
+      "functions/src/ai/research-gemini.ts",
+      "functions/src/ai/research-live.ts",
+      "functions/src/analytics-ingest.ts",
+      "functions/src/analytics-worker.ts",
+      "functions/src/catalog-checkout.ts",
+      "functions/src/changes.ts",
+      "functions/src/consolidation.ts",
+      "functions/src/crm.ts",
+      "functions/src/customer-email-job.ts",
+      "functions/src/customer-notification-delivery.ts",
+      "functions/src/email.ts",
+      "functions/src/finance-review.ts",
+      "functions/src/index.ts",
+      "functions/src/invoices.ts",
+      "functions/src/jobs.ts",
+      "functions/src/order-conversation.ts",
+      "functions/src/order-history.ts",
+      "functions/src/payments/sepay-sandbox.ts",
+      "functions/src/production-test-commands.ts",
+      "functions/src/production-test-email-policy.ts",
+      "functions/src/production-test-policy.ts",
+      "functions/src/provider-release-gate.ts",
+      "functions/src/purchase-adjustment.ts",
+      "functions/src/purchase-checkout.ts",
+      "functions/src/purchase-pdf.ts",
+      "functions/src/purchase-receipts.ts",
+      "functions/src/purchase-sepay.ts",
+      "functions/src/purchase-settlement.ts",
+      "functions/src/purchase-test-boundary.ts",
+      "functions/src/purchase-test-projection.ts",
+      "functions/src/refunds.ts",
+      "functions/src/returns.ts",
+      "functions/src/shipping.ts",
+      "functions/src/subscription-delivery-service.ts",
+      "functions/src/subscription-email.ts",
+      "functions/src/workspace.ts",
+      "packages/domain/ask-feedback.ts",
+      "packages/domain/index.ts",
+      "packages/domain/purchase-checkout.ts",
+      "packages/domain/purchase-sepay.ts"
+    ],
+    "additional_traced_dependencies": [
+      "functions/src/purchase-environment.ts",
+      "functions/src/purchase-mutation-queue.ts",
+      "functions/src/customer-notification-events.ts",
+      "functions/src/email/provider-config.ts",
+      "functions/src/email/dispatch.ts",
+      "functions/src/notification-order-policy.ts",
+      "functions/src/ai/server-context.ts",
+      "functions/src/ai/research-budget.ts",
+      "functions/src/ai/ask-pilot-answer.ts",
+      "functions/src/auth/guards.ts",
+      "functions/src/cart.ts",
+      "functions/src/order-media.ts",
+      "functions/src/customer-order-tracking.ts",
+      "functions/src/product-reviews.ts",
+      "functions/src/payments/payos.ts",
+      "packages/domain/customer-notification.ts",
+      "packages/domain/notification-preferences.ts",
+      "packages/domain/product-reviews.ts",
+      "scripts/release/artifact.mjs",
+      "scripts/release/preflight.mjs",
+      "scripts/release/verify-production.mjs",
+      "src/features/notifications/Notifications.tsx",
+      "functions/src/ai/feedback-retention-gate.ts",
+      "scripts/release/feedback-retention.mjs",
+      "scripts/release/reviewed-retries.mjs",
+      "scripts/release/release.mjs",
+      "firestore.indexes.json"
+    ],
+    "source_input_count": 74,
+    "method": "Current source and full relevant base diff; actual producer/consumer transactions, authoritative consumed fields and failure paths inspected. No source/test edits, providers, secrets, runtime changes or full suites by reviewer.",
+    "outside_scope": [
+      "Root combined CI/rules/audit/build/artifact/live verification",
+      "Rendered UI/product-language acceptance",
+      "Real staff MFA completion",
+      "Provider dashboard/IPN key correctness, IAM and secret-version readback",
+      "Actual Gemini/Resend billing or inbox delivery"
+    ]
+  },
+  "repository_intelligence": {
+    "mode": "DEGRADED",
+    "command": "python3 .ai/scripts/check-repository-intelligence.py",
+    "observed": "CodeGraph1.5.0/CocoIndex installed but project config/index missing or health failed; bounded rg/source/Git/check receipts used. No installation or recovery attempted.",
+    "confidence_limit": "No whole-repository index coverage or whole-production PASS claimed."
+  },
+  "tooling": {
+    "backend": "TypeScript6.0.3 strict, Node22, firebase-admin14.5.0, firebase-functions7.4.0, Zod4.6.5",
+    "tests": "Vitest4.1.11, ESLint9.39.5; owner receipts only, no duplicate suites by reviewer",
+    "selected_profiles": [
+      "universal",
+      "typescript-javascript",
+      "api",
+      "database",
+      "concurrency",
+      "infrastructure"
+    ],
+    "runtime_ledger": "ai-agent-kit executable unavailable on PATH (command -v exit1); durable review JSON/Markdown supplied, no fabricated runtime review receipt"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped backend delta implements exact production-test admission and server-pinned provenance through catalog/custom/cart producers, checkout/proof/settlement/receipts and derivative customer notifications. Existing legacy modes are not relabeled. All UI/provider acceptance remains separate.",
+      "evidence_refs": [
+        "functions/src/production-test-policy.ts",
+        "functions/src/catalog-checkout.ts",
+        "functions/src/index.ts",
+        "functions/src/purchase-checkout.ts",
+        "functions/src/purchase-settlement.ts",
+        "INTEGRATION/REPLY-PROVENANCE-REVIEW.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Verified Google/AppCheck and existing object/role/lock authority retained; client provenance rejected; exact project/config/database and no-emulator identity required; fixed HTTPS callbacks and sandbox endpoints; callback is only a signal, authoritative readback and persisted pins settle. No provider/secret payload inspected.",
+      "evidence_refs": [
+        "functions/src/auth/guards.ts",
+        "functions/src/production-test-policy.ts",
+        "functions/src/purchase-sepay.ts",
+        "functions/src/payments/sepay-sandbox.ts",
+        "functions/src/email.ts"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Shared strict parser and conservative classifier are consumed by actual producers and readers. Bounded helpers preserve old demo behavior. Exact current source matches the focused finance/email/analytics/preflight/reply verification receipts; owner compiler/lint evidence remains scoped.",
+      "evidence_refs": [
+        "packages/domain/purchase-checkout.ts",
+        "functions/src/purchase-test-boundary.ts",
+        "FINANCE/REVIEW.json",
+        "EMAIL-REVOCATION-01/REVIEW.json",
+        "INTEGRATION/PREFLIGHT-CORRECTION.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Current transactions preserve authorized idempotent replay before new admission; new operations fail closed on missing/expired/mismatched policy. Test/live balance or run mismatch rejected before even hold writes. Duplicate/late/second/unknown payment proofs retain evidence and route review. Final mail read sets watch current config/profile/consent/entity/policies, with retry sentinels reset and quota/unknown fences retained.",
+      "evidence_refs": [
+        "functions/src/purchase-checkout.ts",
+        "functions/src/purchase-settlement.ts",
+        "functions/src/email.ts",
+        "functions/src/subscription-delivery-service.ts",
+        "INTEGRATION/REPLY-PROVENANCE-REVIEW.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Safe bounded failure codes and blocked states; provider responses/secrets/signed forms/contact data not logged by the reviewed error paths. Projection rejects corrupt execution metadata before in-app creation; no new exception-driven financial mutation.",
+      "evidence_refs": [
+        "functions/src/purchase-sepay.ts",
+        "functions/src/purchase-receipts.ts",
+        "functions/src/customer-notification-delivery.ts",
+        "functions/src/ai/research-live.ts"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Backend and retention source reviews do not close current combined CI/audit/artifact/rules, genuine MFA, rendered product content, configured sandbox IPN, effective IAM/index READY/Scheduler/invocation readback, protected retention activation/renewal, canary or live provider verification. Root must verify the final combined source.",
+      "evidence_refs": [
+        "PLAN.md",
+        "INTEGRATION/PREFLIGHT-CORRECTION.json",
+        "INTEGRATION/REPLY-PROVENANCE-REVIEW.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Conservative legacy/partial test classification prevents live authority; historical mismatched jobs remain blocked rather than backfilled. Pinned payment reconciliation survives admission-off. Real financial/fulfillment mutations reject test records instead of simulating unsupported operations. Anonymous/non-admitted analytics retains its existing consent path; no blanket test exclusion claim.",
+      "evidence_refs": [
+        "functions/src/purchase-test-boundary.ts",
+        "functions/src/production-test-policy.ts",
+        "functions/src/analytics-ingest.ts",
+        "functions/src/invoices.ts"
+      ]
+    }
+  },
+  "verified_trace": [
+    {
+      "boundary": "Admission and producer completeness",
+      "result": "catalogCheckout, generic submitRequest and cart checkout read current policy within existing transaction before new writes; artifact-requested null admission rejects. Strict client schema and server-assigned UUID/version pin provenance; replay returns original authorized result."
+    },
+    {
+      "boundary": "SePay and settlement",
+      "result": "Fixed BANK_TRANSFER sandbox contract; signed form/callback origin validated; authenticated IPN body is not money proof. Persisted readback and intent/checkout/invoice/merchant/method/currency/amount/owner/run/version pins precede settlement. Pinned mode cannot bridge to live order."
+    },
+    {
+      "boundary": "Finance, stock, fulfillment and invoices",
+      "result": "Test financial evidence uses purchaseTestFinancialEntries. No real stock writer exists in reviewed checkout/settlement producers. Generic financial corrections/refunds/returns/shipping/consolidation/live invoice operations reject conservative test markers, rechecking authoritative sources. PDF test receipt remains separate from fiscal statement numbering."
+    },
+    {
+      "boundary": "Email/retry/consent",
+      "result": "Final transaction watches current settings/email, profile locks/marketing flag, applicable promotionsEmail, existing optional live orderEmail semantics, additive required test orderEmail/current destination, customer/test policies, source/provenance/invoice. Subscription real wrapper passes validated config to final transactional guard. Auth/provider are cross-service snapshots, not atomically committed with Firestore; no exactly-once inbox claim."
+    },
+    {
+      "boundary": "Analytics and reports",
+      "result": "Test ledger is separate; test orders/entries rejected from attribution/enqueue/worker aggregates. Current operational-dashboard samples filter tests with bounded/truncated semantics. Anonymous or non-admitted traffic is not inferred as test."
+    },
+    {
+      "boundary": "Ask/knowledge/feedback",
+      "result": "Server-owned facts and approved knowledge; bounded context/output, fixed merchant/domain access, no arbitrary URL/PII tool or LLM commerce authority. Shared conservative transactional50,000VND ceiling. Feedback lineage/review do not auto-publish raw feedback. New default-inactive retention requires exact artifact/default DB and current protected independent policy/readiness inside each class deletion transaction; canonical checksum, exact classes/durations and read-version preconditions preserve legacy/financial/audit records."
+    },
+    {
+      "boundary": "Schedules/artifact",
+      "result": "Safe publication/recovery separated from general maintenance. Explicit v1 marker and immutable metadata bind discovery/runtime; v1 packages independent default-inactive cleanup, legacy keeps its hold. Exact3 additive indexes only through trusted-main LIST/POST tooling with READY/Scheduler receipt; no full reconciliation/TTL/settings writes. Other holds retained. Actual combined package/provider acceptance remains root-owned."
+    }
+  ],
+  "findings": [
+    {
+      "id": "BACKEND-REPLY-PROVENANCE-01",
+      "priority": "P2",
+      "status": "FIXED_AND_INDEPENDENTLY_REVIEWED",
+      "problem": "Staff customer reply outbox omitted source execution provenance; in-app projector omitted derivative provenance and source/job consistency check. This could remove Test classification from the customer inbox metadata.",
+      "scope_correction": "order_reply uses email_if_unread and is intentionally email-ineligible in v1. Initial observation that provenance newly blocks an otherwise enabled reply email was incorrect and is withdrawn; no email allowlist expansion was needed.",
+      "fix": "Finance copies validated authoritative authorized-order fields before reply writes; projector compares exact source/job mode/run/policy and copies source fields only on agreement. Invalid records use blocked_content/invalid_execution.",
+      "verification": "Fresh independent readback at exact3hashes below; owner177 tests/4 suites,24actual handler/projection cases, backend strict/lint/diff PASS. No provider/runtime proof."
+    }
+  ],
+  "external_product_findings": [
+    {
+      "id": "PRODUCT-INBOX-TEST-MARKER-01",
+      "priority": "P2",
+      "status": "FIXED_SOURCE_AND_BOUNDED_RENDER_REVIEWED",
+      "location": "src/features/notifications/Notifications.tsx:139",
+      "problem": "Current notification row/render consumes title/action/date but does not display execution metadata. A test payment_confirmed inbox item can look like a normal paid notification. Backend propagation alone does not provide the visible Test distinction requested by v1.",
+      "owner": "Root/UI owner; reported directly to root; no edit or UI acceptance by this reviewer.",
+      "resolution": "Actual Notifications title reuses TestOrderBadge on the persisted full row. Conservative canonical/legacy/partial tags receive the existing accessible Test marker; genuine rows remain unmarked. No query/auth/read/navigation mutation changes.",
+      "verification": "Independent source/test hash readback; UI owner59 focused presentation/adapter cases plus frontend strict/lint. Root exact cycle3 browser artifact shows canonical/legacy/partial badges versus genuine at desktop and390px with no horizontal overflow; receipt bound, not reviewer-operated browser or backend/provider proof."
+    }
+  ],
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "status": "CHANGES_REQUESTED",
+      "scope": "Complete current backend source diff and consumer trace",
+      "finding_ids": [
+        "BACKEND-REPLY-PROVENANCE-01"
+      ],
+      "action": "Reported bounded metadata gap to root; finance assigned minimal approved-v1 correction."
+    },
+    {
+      "cycle": 2,
+      "status": "PASSED",
+      "scope": "Independent current backend source review and exact reply/projection correction",
+      "finding_ids": [],
+      "evidence": "Exact source/evidence hashes and five focused receipt bindings current. Existing order_reply exclusion, authorization, replay and transaction ordering retained. No additional actionable backend source finding within reviewed checks."
+    },
+    {
+      "cycle": 3,
+      "status": "BLOCKED",
+      "scope": "Whole-product/production applicability",
+      "finding_ids": [
+        "PRODUCT-INBOX-TEST-MARKER-01"
+      ],
+      "evidence": "Product renderer still lacks Test distinction and root combined/provider/MFA acceptance not certified by this review. No whole production success handoff."
+    },
+    {
+      "cycle": 4,
+      "status": "PASSED",
+      "scope": "Independent notification consumer source rebind",
+      "finding_ids": [],
+      "evidence": "Previous renderer omission fixed atd1362742 sourcehash andec844c56 testhash; bound root browser artifact b9dc199c desktop/390px. Whole product/production remains blocked."
+    },
+    {
+      "cycle": 5,
+      "status": "PASSED",
+      "scope": "Independent bounded retention completion and prior backend-source rebind",
+      "finding_ids": [],
+      "evidence": "RETENTION-COMPLETION-PEER-REVIEW.json cycle1 CHANGES_REQUESTED retained; cycle2 checksum fix freshly reviewed with14source/impact/runbook inputs and5logs matching48runtime/145Node/strict/lint/preflight110 exit0. Existing69source inputs differ only reviewed retention changes; combined74source inputs current. Whole production remains BLOCKED."
+    }
+  ],
+  "checks": {
+    "reviewer_direct_source_and_diff": {
+      "status": "PASSED",
+      "method": "Bounded rg, targeted source reads, complete relevant git diff against verified base, current SHA256 receipt binding; no full suites rerun."
+    },
+    "focused_receipt_bindings": [
+      {
+        "receipt": "FINANCE/REVIEW.json",
+        "inputs": 16,
+        "status": "PASSED",
+        "mismatches": []
+      },
+      {
+        "receipt": "EMAIL-REVOCATION-01/REVIEW.json",
+        "inputs": 6,
+        "status": "PASSED",
+        "mismatches": []
+      },
+      {
+        "receipt": "INTEGRATION/ANALYTICS-PEER-REVIEW.json",
+        "inputs": 2,
+        "status": "PASSED",
+        "mismatches": []
+      },
+      {
+        "receipt": "INTEGRATION/PREFLIGHT-CORRECTION.json",
+        "inputs": 3,
+        "status": "PASSED",
+        "mismatches": []
+      },
+      {
+        "receipt": "INTEGRATION/REPLY-PROVENANCE-REVIEW.json",
+        "inputs": 3,
+        "status": "PASSED",
+        "mismatches": []
+      },
+      {
+        "receipt": "INTEGRATION/RETENTION-COMPLETION-R2-CHECKS.json",
+        "inputs": 14,
+        "logs": 5,
+        "status": "PASSED",
+        "mismatches": []
+      }
+    ],
+    "email_owner_checks": {
+      "status": "PASSED",
+      "scope": "293 tests/4files,65test-email cases, both strict compilers,lint,diff per current exact-bound REVIEW/TESTS; not reviewer-executed/provider evidence"
+    },
+    "reply_owner_checks": {
+      "status": "PASSED",
+      "scope": "177 tests/4files,24new actual callable/projection cases,backend strict,lint,diff per exact-bound REPLY-PROVENANCE-REVIEW; no emulator/provider/SDK claim"
+    },
+    "combined_candidate_suite_after_reply": {
+      "status": "NOT_VERIFIED_BY_THIS_REVIEW",
+      "reason": "Root owns final combined run after reply/notification/retention changes; historical2698 and focused owner checks do not certify current whole candidate."
+    },
+    "artifact_sdk_rules_audit_live": {
+      "status": "NOT_RUN",
+      "reason": "Root-owned normal release workflow and live acceptance; no provider/runtime/secret access by reviewer"
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "reason": "Previous notification omission closed at source plus bound synthetic browser receipt; genuine native select/200% zoom/spoken AT and full eight-principle/product completion remain root/UI-owned."
+    },
+    "database_migration": {
+      "status": "NOT_APPLICABLE_TO_DATA",
+      "reason": "No business-data backfill/migration by reviewer. Approved exact-three additive index delivery is implemented and reviewed separately; current effective IAM/index READY/Scheduler/activation remain root-owned."
+    },
+    "retention_owner_checks": {
+      "status": "PASSED",
+      "scope": "48runtime/gate and145Node release checks,backend strict,scoped lint,sourcepreflight110 exit0; checksum/malformed/expiry/revocation/idempotent409/compiled-layout/parity controls; no provider evidence"
+    }
+  },
+  "residual_risks": [
+    "Actual IPN secret/provider dashboard configuration and version1 runtime bindings remain unverified by this reviewer; code should deploy inactive and pass readback/canary before activation.",
+    "Auth identity and provider delivery cannot be atomic with Firestore transactions; preserve unknown-send fences, quota reservations, current consent and no blind replay. Resend accepted is not inbox delivered.",
+    "Research imported minimum reserved amount50,000VND can intentionally exhaust shared50,000VND allocation until actual historical reservation/cost is reconciled. Never reset floor or represent allocation as proven remaining balance.",
+    "Reviewed model pricing envelope expires2026-10-12 and model retirement is2026-10-20 in pinned policy; no automatic date/model extension.",
+    "Simulated finance/receipt/CRM code does not certify all live admin workflows as sandbox. Unsupported test fulfillment/refund/fiscal actions are deliberately unavailable.",
+    "Local/mock receipts are bounded evidence, not genuine MFA, deployed AppCheck/IAM or provider E2E. UI inbox marker now source-fixed with bounded synthetic render evidence; native product acceptance remains root-owned.",
+    "Retention is bounded/hourly and expires fail-closed;24h generated readiness/max7d validity needs reviewed renewal. No continuous physical erasure SLA; malformed same-class rows may delay bounded query progress."
+  ],
+  "limitations": [
+    "RIG DEGRADED; direct source coverage is bounded, not graph-complete.",
+    "Read-only reviewer did not run provider calls, access secret values, modify source/tests, create fixtures, change runtime or deploy.",
+    "Exact input hashes bind this review; any subsequent reviewed-source change invalidates its applicability until re-reviewed.",
+    "Owner test receipts inspected/bound; no duplicate full suite execution claimed."
+  ],
+  "source_hashes": {
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "functions/src/ai/ask-cost-policy.ts": "a2d81920ecde0c115ddc6ccb47c2a606264ed4cf7299ea5968eceb42da3dd3c8",
+    "functions/src/ai/ask-pilot-answer.ts": "3df0e5786064498a3d77b99924249934035499b27d0be1b32ec58011671507b9",
+    "functions/src/ai/ask-pilot.ts": "1a398a90652c93a9ccb7a70c748ba7236c9c5ce7b4253ae7a87782b470f8aaba",
+    "functions/src/ai/ask-workflow.ts": "6d3a5a1802296b772f31c54710abfe984d1e986197931dc783301bcd5b5c38df",
+    "functions/src/ai/feedback-lifecycle.ts": "ac06f5d391062be49ab62615c219d0adee5b716f21cf3b0fb8f620ae37781319",
+    "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+    "functions/src/ai/feedback-retention-gate.ts": "7f94f35c5066f001b86dcb5d14138236dd37ff6f77a545620539df5edc6d77e7",
+    "functions/src/ai/feedback.ts": "7a9c653c5584d70401554ddbf0685240b9d31dbd2b4593844913cfb5966dbdd3",
+    "functions/src/ai/research-budget.ts": "f5c9d40b539fa28a6a9b40daa6894741700c2729f62af615094741b54d49f63c",
+    "functions/src/ai/research-gemini.ts": "622f967a8fa78076c6f8e49008a201470c6760e9543a083368d3036a4583010e",
+    "functions/src/ai/research-live.ts": "6d5673e53dfece6c1ac94cd778836f6291f3b1b1e400b00811fb9564ddd66229",
+    "functions/src/ai/server-context.ts": "a550c19f065e3560c8332c8efbeb02e0eb1b9bf301fb401cf85e87ad403c92c4",
+    "functions/src/analytics-ingest.ts": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+    "functions/src/analytics-worker.ts": "c3e085f40507d0cb0f7f9e7384bb71fb752fccb0760486a981581d83d447438e",
+    "functions/src/auth/guards.ts": "887dfdcb754067bf1d0318a37cabc63baa8be514bfa536da5ac0a215dc30129a",
+    "functions/src/cart.ts": "27b92e0f255edf429b3420e9a241066979833e5022bc2ff0dc20a6def7284160",
+    "functions/src/catalog-checkout.ts": "5032a14edbe29ef63b900de61659001a04db7c18ff637aba2b1c197e083cf1bb",
+    "functions/src/changes.ts": "c335d518e53b734b4ce2281e3546eea1308371918a6c33f07adcc5edf100f5df",
+    "functions/src/consolidation.ts": "bfeffd22ed813a2279557bc9fc655fdf48646385332968448a58a6dd7eae0b27",
+    "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+    "functions/src/customer-email-job.ts": "5cbdbb45c90c5a3fab3c24df292bdc0b2f10f328ddeb5d176f65f1847c2ce5a5",
+    "functions/src/customer-notification-delivery.ts": "61c210d5293b0c4c43247a34ba677add5de907bcd03ec350020c20eab85a2911",
+    "functions/src/customer-notification-events.ts": "3a7c6753a746cf47b79fefd132c27e108f110d32573e3c640b2652d643674057",
+    "functions/src/customer-order-tracking.ts": "992fe22531b0a950d4d37343366c11e7f5f54fd0663a35bfbbe143195ee1a931",
+    "functions/src/email.ts": "180d2a7663abae0e21d702918e21e1f17739ea17a9586d38f343e94033a6b4c2",
+    "functions/src/email/dispatch.ts": "92cbdec02fdd3a406aa59950d30c848424bb367dc5fe300203966a52d7628533",
+    "functions/src/email/provider-config.ts": "851ca4958e965c85b682ee279e79877cd59f3bb36d1899328fd4b4a85687f839",
+    "functions/src/finance-review.ts": "f2d185d4d071736afd8bf21e3000cf04fd52c5b81eab8dfcf0196c5061b72733",
+    "functions/src/index.ts": "ccaf558cc6da84f29d9ef273325229bdff6af7ab72658683b6fda03f0b4aa125",
+    "functions/src/invoices.ts": "11914e999ff1f1da51c9e5995b3641e61ca1986d001c683c2cef99a78a29c8d2",
+    "functions/src/jobs.ts": "02c2b6462d7dd7c9834cc4acba73c7a40b6041dd1791158abdff8017198d4795",
+    "functions/src/notification-order-policy.ts": "192919e0aad7ebc7bf9b20dc48195231e9c41a80132f3bd0d72eba25a5df6b94",
+    "functions/src/order-conversation.ts": "f202250920539c25f00364c3d03c57164785571e7a342c92f802d52f8c27de33",
+    "functions/src/order-history.ts": "34e1f163b3bb81e719834ef187a3a14a1bad3f30af3760ef57187b6822ed7269",
+    "functions/src/order-media.ts": "e128312d5b16a8077906ced0ed21f8b4cfeae8c7ef2d19d9ca4feb077ab58b1d",
+    "functions/src/payments/payos.ts": "78c266cacfacb5845a682f2d84f76bcf9577fd2e62ff118a91c99f9d90c1ec7b",
+    "functions/src/payments/sepay-sandbox.ts": "6d43b35ad9a55bea6a7a04ffca4794de09b3ae4454e75648f6a1ec21d7c90c00",
+    "functions/src/product-reviews.ts": "e00a5506bec542ebc321a9419ee03d4c7ff31796169de4d5dcd6e3509b7153d8",
+    "functions/src/production-test-commands.ts": "be93b7667f35bd7554c4ec0f72f7359e3a5ed2799a9ecf26632ff65c5d0a96f5",
+    "functions/src/production-test-email-policy.ts": "3e5e28c89f1a77b692b74f09af78a1129453aa510908febc4cc19ef657b841f4",
+    "functions/src/production-test-policy.ts": "c839057220171ed74fd91c84e2e77ef1bc3d7447c734d6286bd5a62539a361e7",
+    "functions/src/provider-release-gate.ts": "7abf20487e70a78e1ced85ca430f3e66a5b7385a8d06fa7266d9b6b4128c2889",
+    "functions/src/purchase-adjustment.ts": "5c21d41c88fb4f8868c1d871a6ebe25dfb94728925c71dcb8687bc762386773f",
+    "functions/src/purchase-checkout.ts": "59f8877b589d5f8d8bc49ec1c4d5a22205b331d6a4f394d9875b313240fc2672",
+    "functions/src/purchase-environment.ts": "38f44521eed963f3376959df237dd984e5c653a23d7c93b8d214c4718cb5bfc0",
+    "functions/src/purchase-mutation-queue.ts": "71d08478d50e868e287b759bcd94ea5569a82c7bfb697de0bde3e319b049063d",
+    "functions/src/purchase-pdf.ts": "4c42d93bd5f5b219cc36240e4f24fea8258904deaa574bbdce4828eeb2543d8e",
+    "functions/src/purchase-receipts.ts": "2ff491eb2bce27d684487f4a42eea63b6c553381687abadd67d357ee3633b61b",
+    "functions/src/purchase-sepay.ts": "16c2da115b93017ad82b2f4a38564426f030f55d9ecf5afb5b76e1ffaff0866e",
+    "functions/src/purchase-settlement.ts": "f9aa113d9c10369fd499d2700410ff29317fbdb69b7f7eaed40bbbd035480531",
+    "functions/src/purchase-test-boundary.ts": "88bc852e3d6d65be5f56dd6df0e3718d44af2c86b5d8d7ebaa29c9947c6a3c6a",
+    "functions/src/purchase-test-projection.ts": "1dce34d128d9b1497880c96d453fb5e1028214136d0110552d21c68e0e79f257",
+    "functions/src/refunds.ts": "3aa6ad108d642b0b20956daffb4543b716e74ce855072424ba9660a5521d6131",
+    "functions/src/returns.ts": "b291411cc591177e56f69e35dae50c7ee38829d139576b19d7ded9ca7dff651d",
+    "functions/src/shipping.ts": "5e1f5c2f8a06a2b5189edd8f3ce9c2e8410564b461908594f42fe45e38145ba4",
+    "functions/src/subscription-delivery-service.ts": "dc689efd8788d79cfcc21948169839bb2cb1a89bcfbeed28fdbebc861fb88f1f",
+    "functions/src/subscription-email.ts": "5f3b6e544d3a364baa30266c132ad4dcc868ae3826efe693a3db3edfe48600f3",
+    "functions/src/workspace.ts": "9c86ab9c21cfa24f5c080e397a813a3bbf893e177affa3397e90fc19f40c1d2b",
+    "packages/domain/ask-feedback.ts": "0ed34d68d5d0614ef9aeff12d3cce796d78ec72f36bc860baa445470424b7ed2",
+    "packages/domain/customer-notification.ts": "5dd09c1fdcfaafcf9593fcb121940b26988d2fdf123da185f6c4829e67adf94c",
+    "packages/domain/index.ts": "5d1f9d25daa786fb7e96944751cf6380ce077ff97c0fa97d0240e912db54f7eb",
+    "packages/domain/notification-preferences.ts": "ab3e5142108b231c4e25ec96d5ad02975b9ebda9ccc8662283e3d0c6298d4a01",
+    "packages/domain/product-reviews.ts": "9e8357ae83409cbd7ed193ff3267795f259ecddb380206de3b05299ed5137693",
+    "packages/domain/purchase-checkout.ts": "4a4d7823ee98c315b23c7d222cd373ef27f1d6b29c8ee7c8f0c322d93fe7e054",
+    "packages/domain/purchase-sepay.ts": "d85a5359f86d238091bc346d790a93934b022b8c7fe9ddc79c6dca10bae1afd3",
+    "scripts/release/artifact.mjs": "78a9fbe9dbac3e6316ed654ea6c60cf8a4bc9438d63c2e5ab953a5d341ac6b4a",
+    "scripts/release/feedback-retention.mjs": "c149b912f353195e83062aa99ff8b0176cf7d4822c5acfecb7c2f4cfab0a39a4",
+    "scripts/release/preflight.mjs": "7fbd3e3b97723e888deac295e810aad871be5148d4554ed755d6d37eed05af2a",
+    "scripts/release/release.mjs": "65e3b4b179dfb0cbe1342a12c5b5c3b4d8fef60570a3a7b74cb8ef8cfbd59cd4",
+    "scripts/release/reviewed-retries.mjs": "63489c69c66c09f9354cf78ac7d2e032abbd79b2c2835a97a3860c254f707687",
+    "scripts/release/verify-production.mjs": "28f79a4afa1b880538842eea170cc03c94694998f2a6d03b53e28a82f8bd6d52",
+    "src/features/notifications/Notifications.tsx": "d1362742c33d15aed81f4c5c3e1a77fcec9e5931397b0fb98cd51de969813456",
+    "src/features/orders/TestOrderBadge.tsx": "bbe0e68d3f3f462bf6b08913bc2f6d1348e5e012b478e109b8a59df9772acbaf"
+  },
+  "source_snapshot_sha256": "9aee1e4bf2c8b547e606a82599fb67e3c23193aedfbf13ada279cd7bf01dc45d",
+  "evidence_hashes": {
+    "docs/reviews/PRODUCTION-TEST-20261010/PLAN.md": "c0a5ff83047d05aec86e78505139c94debd4d3ec831906e823cfb925302c7275",
+    "docs/reviews/PRODUCTION-TEST-20261010/APPROVAL.json": "d08af16bbe5ae3bd3f7e459a15fd8c5c60053e882fc02022826f24f6d7dbd560",
+    "docs/reviews/PRODUCTION-TEST-20261010/BACKEND-POLICY-REVIEW.json": "4c626b0b2c12932229da038badc728efd1fb038c8ad739f0ab3e365bf4cb1f8a",
+    "docs/reviews/PRODUCTION-TEST-20261010/CATALOG-PRODUCER-REVIEW.json": "5f643b0d2126db8378f5169227ea1969c3772830060708585db9c8d6daed1100",
+    "docs/reviews/PRODUCTION-TEST-20261010/FINANCE/REVIEW.json": "944f942e8a133e8dbdc9fe59f38dc278d43bc14cd34293496f862225be23f5b0",
+    "docs/reviews/PRODUCTION-TEST-20261010/EMAIL-REVOCATION-01/REVIEW.json": "0c3dbf587d9b98a83ce169f12e92cf50d0c324b822b1c3927e9fafdc33018f95",
+    "docs/reviews/PRODUCTION-TEST-20261010/EMAIL-REVOCATION-01/TESTS.json": "ed0c068d7a2ae3eb4d8a8f2b0a45ba1f1045d0529c66fd5ffb2933f9e4e4aa48",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/ANALYTICS-PEER-REVIEW.json": "f993dcab0d77db7efefbf1a12b0f2c7caa4693dfa0bbcef1931d530f2847ce09",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/ANALYTICS-CHECKS.json": "6ad693bac36e5e087d8d56449fa1c58e22b8887d0fb94b91c8f7cb4cd5f1c101",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/PREFLIGHT-CORRECTION.json": "d428439e16ce9cfe9a538cf194f74e2f37cbe37c4930e0148bcafc84663583fc",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/REPLY-PROVENANCE-IMPACT.md": "d6432808870858c60b5973611557db5570959f9d8f86149e8fc3e5d27d990b9f",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/REPLY-PROVENANCE-REVIEW.json": "efc5960bdc7317f49e8197cffae7001a07a48933544b672107f0b9058be7e093",
+    "tests/unit/production-test-notification-ui.test.ts": "ec844c5632b9efdbe17b190f97242155aa573c4a04e52cf147d130342dc85137",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/UI-NOTIFICATION-REVIEW.json": "b979069cc9585dd7a767bb2034d8a2b5fc45ab2d3c4047e9806ef13709ff4224",
+    "/private/tmp/satsunicgo-production-test-ui-evidence/NOTIFICATION-BROWSER-CHECKS.json": "752e7a427ea563ad6a599f29a4953f1523f8e3a408c25ddf2f795939828ca421",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/UI-NOTIFICATION-FREEZE.json": "14128d6be77c5491f0807544e2eeb787f58a86cc961c6dcb1f7114f178ed7cf2",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json": "b6e0944504d81091fdf45fa2428361626be4a0cedcb912b7743f64fca28c6db1",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-R2-CHECKS.json": "6e78ddd2578b4320de9a488423a1e83eaf163850e584aab3503b029dbcf7be40",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.json": "fb81906b31df1857d324cd4d744d5b94067505f9947bbf2d781ea2f42b23b75e",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.md": "060284e3cf06836404465422b7ad0d9f20e7eefe89c1ad049737104c1cd188ae",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-IMPACT.md": "28a2b4dbe42ce2bfec2beb2af4d89c08d043e60c76c18dbbe4e4e6480cc443bb",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-ROLLOUT-RUNBOOK.md": "0f7f8d5c592d77117eac60bf69846f482a744c5031f03243279f77a9be921027"
+  },
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None",
+  "completion": {
+    "weighted_progress": "Unavailable: parent aggregate owns weights; backend source trace and independent fix review completed, whole readiness gated.",
+    "completed": [
+      "Complete bounded source review vs verified v0.10.0",
+      "Consumer omission reported and minimal fix independently reviewed",
+      "Exact focused source/test receipts rebound",
+      "Backend/security/performance/failure tradeoffs recorded",
+      "Bounded retention default-inactive gate/index/Scheduler/receipt source independently reviewed after canonical checksum correction; current74input backend binding"
+    ],
+    "remaining": [
+      "Root combined checks after final reply/notification/retention source freeze",
+      "Remaining native UI/product review; notification Test marker source/render observation closed",
+      "Genuine staff MFA acceptance",
+      "Immutable artifact/CI/audit/provider metadata and live canary",
+      "Cost/imported reservation reconciliation and per-capability activation",
+      "Effective index IAM/READY/Scheduler/invocation proof and separately authorized retention activation/renewal"
+    ],
+    "git": "Dirty candidate; no commit/push/deploy by reviewer"
+  },
+  "notification_observation_rebind": {
+    "at": "2026-10-10T02:05:31.571732+00:00",
+    "previous_snapshot": "22fcdec7763874b0a9e6be6459dcac1d1aa2d6b7f6bec7ea36c76678c43ec311",
+    "previous_ui_sha256": "62269d36b0eff98b5d64364e03b45617a87b61778c6cbd441be1fe11db94535b",
+    "current_ui_sha256": "d1362742c33d15aed81f4c5c3e1a77fcec9e5931397b0fb98cd51de969813456",
+    "test_sha256": "ec844c5632b9efdbe17b190f97242155aa573c4a04e52cf147d130342dc85137",
+    "badge_sha256": "bbe0e68d3f3f462bf6b08913bc2f6d1348e5e012b478e109b8a59df9772acbaf",
+    "browser_artifact": "b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394",
+    "status": "PASSED_WITHIN_SOURCE_AND_SYNTHETIC_RENDER_SCOPE",
+    "remaining": "Product Language Gate still BLOCKED by native select/200% zoom/spoken AT and full provider/live acceptance; no whole production PASS.",
+    "canonical_browser_receipt": "INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json",
+    "canonical_browser_receipt_sha256": "b6e0944504d81091fdf45fa2428361626be4a0cedcb912b7743f64fca28c6db1",
+    "ui_receipt_status": "Final UI owner handoff:59focusedcases,frontendstrict/lint; notification desktop/390 acceptance closed; native select/real200%zoom/spokenAT stillBLOCKED"
+  },
+  "updated_at": "2026-10-10T02:27:33.597441+00:00",
+  "retention_rebind": {
+    "at": "2026-10-10T02:27:33.597441+00:00",
+    "previous_snapshot": "be7529d9d277c7a73ebeb794aba3ed6e167acdef5bd8878892c5c4016600b6a4",
+    "previous_source_hashes": {
+      "functions/src/ai/ask-cost-policy.ts": "a2d81920ecde0c115ddc6ccb47c2a606264ed4cf7299ea5968eceb42da3dd3c8",
+      "functions/src/ai/ask-pilot-answer.ts": "3df0e5786064498a3d77b99924249934035499b27d0be1b32ec58011671507b9",
+      "functions/src/ai/ask-pilot.ts": "1a398a90652c93a9ccb7a70c748ba7236c9c5ce7b4253ae7a87782b470f8aaba",
+      "functions/src/ai/ask-workflow.ts": "6d3a5a1802296b772f31c54710abfe984d1e986197931dc783301bcd5b5c38df",
+      "functions/src/ai/feedback-lifecycle.ts": "aa8a7bc2254ffc42df69b8f763493fa271ab6f5812837b0bc0ba77a52b7bb454",
+      "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+      "functions/src/ai/feedback.ts": "7a9c653c5584d70401554ddbf0685240b9d31dbd2b4593844913cfb5966dbdd3",
+      "functions/src/ai/research-budget.ts": "f5c9d40b539fa28a6a9b40daa6894741700c2729f62af615094741b54d49f63c",
+      "functions/src/ai/research-gemini.ts": "622f967a8fa78076c6f8e49008a201470c6760e9543a083368d3036a4583010e",
+      "functions/src/ai/research-live.ts": "6d5673e53dfece6c1ac94cd778836f6291f3b1b1e400b00811fb9564ddd66229",
+      "functions/src/ai/server-context.ts": "a550c19f065e3560c8332c8efbeb02e0eb1b9bf301fb401cf85e87ad403c92c4",
+      "functions/src/analytics-ingest.ts": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+      "functions/src/analytics-worker.ts": "c3e085f40507d0cb0f7f9e7384bb71fb752fccb0760486a981581d83d447438e",
+      "functions/src/auth/guards.ts": "887dfdcb754067bf1d0318a37cabc63baa8be514bfa536da5ac0a215dc30129a",
+      "functions/src/cart.ts": "27b92e0f255edf429b3420e9a241066979833e5022bc2ff0dc20a6def7284160",
+      "functions/src/catalog-checkout.ts": "5032a14edbe29ef63b900de61659001a04db7c18ff637aba2b1c197e083cf1bb",
+      "functions/src/changes.ts": "c335d518e53b734b4ce2281e3546eea1308371918a6c33f07adcc5edf100f5df",
+      "functions/src/consolidation.ts": "bfeffd22ed813a2279557bc9fc655fdf48646385332968448a58a6dd7eae0b27",
+      "functions/src/crm.ts": "da2cdef7dcd53c636e86b29b72ad8800beb8887e3b41ba7d9b433670c2d05f3d",
+      "functions/src/customer-email-job.ts": "5cbdbb45c90c5a3fab3c24df292bdc0b2f10f328ddeb5d176f65f1847c2ce5a5",
+      "functions/src/customer-notification-delivery.ts": "61c210d5293b0c4c43247a34ba677add5de907bcd03ec350020c20eab85a2911",
+      "functions/src/customer-notification-events.ts": "3a7c6753a746cf47b79fefd132c27e108f110d32573e3c640b2652d643674057",
+      "functions/src/customer-order-tracking.ts": "992fe22531b0a950d4d37343366c11e7f5f54fd0663a35bfbbe143195ee1a931",
+      "functions/src/email.ts": "180d2a7663abae0e21d702918e21e1f17739ea17a9586d38f343e94033a6b4c2",
+      "functions/src/email/dispatch.ts": "92cbdec02fdd3a406aa59950d30c848424bb367dc5fe300203966a52d7628533",
+      "functions/src/email/provider-config.ts": "851ca4958e965c85b682ee279e79877cd59f3bb36d1899328fd4b4a85687f839",
+      "functions/src/finance-review.ts": "f2d185d4d071736afd8bf21e3000cf04fd52c5b81eab8dfcf0196c5061b72733",
+      "functions/src/index.ts": "ccaf558cc6da84f29d9ef273325229bdff6af7ab72658683b6fda03f0b4aa125",
+      "functions/src/invoices.ts": "11914e999ff1f1da51c9e5995b3641e61ca1986d001c683c2cef99a78a29c8d2",
+      "functions/src/jobs.ts": "02c2b6462d7dd7c9834cc4acba73c7a40b6041dd1791158abdff8017198d4795",
+      "functions/src/notification-order-policy.ts": "192919e0aad7ebc7bf9b20dc48195231e9c41a80132f3bd0d72eba25a5df6b94",
+      "functions/src/order-conversation.ts": "f202250920539c25f00364c3d03c57164785571e7a342c92f802d52f8c27de33",
+      "functions/src/order-history.ts": "34e1f163b3bb81e719834ef187a3a14a1bad3f30af3760ef57187b6822ed7269",
+      "functions/src/order-media.ts": "e128312d5b16a8077906ced0ed21f8b4cfeae8c7ef2d19d9ca4feb077ab58b1d",
+      "functions/src/payments/payos.ts": "78c266cacfacb5845a682f2d84f76bcf9577fd2e62ff118a91c99f9d90c1ec7b",
+      "functions/src/payments/sepay-sandbox.ts": "6d43b35ad9a55bea6a7a04ffca4794de09b3ae4454e75648f6a1ec21d7c90c00",
+      "functions/src/product-reviews.ts": "e00a5506bec542ebc321a9419ee03d4c7ff31796169de4d5dcd6e3509b7153d8",
+      "functions/src/production-test-commands.ts": "be93b7667f35bd7554c4ec0f72f7359e3a5ed2799a9ecf26632ff65c5d0a96f5",
+      "functions/src/production-test-email-policy.ts": "3e5e28c89f1a77b692b74f09af78a1129453aa510908febc4cc19ef657b841f4",
+      "functions/src/production-test-policy.ts": "c839057220171ed74fd91c84e2e77ef1bc3d7447c734d6286bd5a62539a361e7",
+      "functions/src/provider-release-gate.ts": "7abf20487e70a78e1ced85ca430f3e66a5b7385a8d06fa7266d9b6b4128c2889",
+      "functions/src/purchase-adjustment.ts": "5c21d41c88fb4f8868c1d871a6ebe25dfb94728925c71dcb8687bc762386773f",
+      "functions/src/purchase-checkout.ts": "59f8877b589d5f8d8bc49ec1c4d5a22205b331d6a4f394d9875b313240fc2672",
+      "functions/src/purchase-environment.ts": "38f44521eed963f3376959df237dd984e5c653a23d7c93b8d214c4718cb5bfc0",
+      "functions/src/purchase-mutation-queue.ts": "71d08478d50e868e287b759bcd94ea5569a82c7bfb697de0bde3e319b049063d",
+      "functions/src/purchase-pdf.ts": "4c42d93bd5f5b219cc36240e4f24fea8258904deaa574bbdce4828eeb2543d8e",
+      "functions/src/purchase-receipts.ts": "2ff491eb2bce27d684487f4a42eea63b6c553381687abadd67d357ee3633b61b",
+      "functions/src/purchase-sepay.ts": "16c2da115b93017ad82b2f4a38564426f030f55d9ecf5afb5b76e1ffaff0866e",
+      "functions/src/purchase-settlement.ts": "f9aa113d9c10369fd499d2700410ff29317fbdb69b7f7eaed40bbbd035480531",
+      "functions/src/purchase-test-boundary.ts": "88bc852e3d6d65be5f56dd6df0e3718d44af2c86b5d8d7ebaa29c9947c6a3c6a",
+      "functions/src/purchase-test-projection.ts": "1dce34d128d9b1497880c96d453fb5e1028214136d0110552d21c68e0e79f257",
+      "functions/src/refunds.ts": "3aa6ad108d642b0b20956daffb4543b716e74ce855072424ba9660a5521d6131",
+      "functions/src/returns.ts": "b291411cc591177e56f69e35dae50c7ee38829d139576b19d7ded9ca7dff651d",
+      "functions/src/shipping.ts": "5e1f5c2f8a06a2b5189edd8f3ce9c2e8410564b461908594f42fe45e38145ba4",
+      "functions/src/subscription-delivery-service.ts": "dc689efd8788d79cfcc21948169839bb2cb1a89bcfbeed28fdbebc861fb88f1f",
+      "functions/src/subscription-email.ts": "5f3b6e544d3a364baa30266c132ad4dcc868ae3826efe693a3db3edfe48600f3",
+      "functions/src/workspace.ts": "9c86ab9c21cfa24f5c080e397a813a3bbf893e177affa3397e90fc19f40c1d2b",
+      "packages/domain/ask-feedback.ts": "0ed34d68d5d0614ef9aeff12d3cce796d78ec72f36bc860baa445470424b7ed2",
+      "packages/domain/customer-notification.ts": "5dd09c1fdcfaafcf9593fcb121940b26988d2fdf123da185f6c4829e67adf94c",
+      "packages/domain/index.ts": "5d1f9d25daa786fb7e96944751cf6380ce077ff97c0fa97d0240e912db54f7eb",
+      "packages/domain/notification-preferences.ts": "ab3e5142108b231c4e25ec96d5ad02975b9ebda9ccc8662283e3d0c6298d4a01",
+      "packages/domain/product-reviews.ts": "9e8357ae83409cbd7ed193ff3267795f259ecddb380206de3b05299ed5137693",
+      "packages/domain/purchase-checkout.ts": "4a4d7823ee98c315b23c7d222cd373ef27f1d6b29c8ee7c8f0c322d93fe7e054",
+      "packages/domain/purchase-sepay.ts": "d85a5359f86d238091bc346d790a93934b022b8c7fe9ddc79c6dca10bae1afd3",
+      "scripts/release/artifact.mjs": "f3e6f410fc508bceae1d1a87eaf8feba01c345ddb8837caebce66af93e46bad4",
+      "scripts/release/preflight.mjs": "7fbd3e3b97723e888deac295e810aad871be5148d4554ed755d6d37eed05af2a",
+      "scripts/release/verify-production.mjs": "40696429ed4ab33d9a744e76e3b520c28e34731498f268aa46fdeeb4e8c0c905",
+      "src/features/notifications/Notifications.tsx": "d1362742c33d15aed81f4c5c3e1a77fcec9e5931397b0fb98cd51de969813456",
+      "src/features/orders/TestOrderBadge.tsx": "bbe0e68d3f3f462bf6b08913bc2f6d1348e5e012b478e109b8a59df9772acbaf"
+    },
+    "new_source_inputs": 74,
+    "changed_or_added_inputs": [
+      "functions/src/ai/feedback-lifecycle.ts",
+      "functions/src/ai/feedback-retention-gate.ts",
+      "scripts/release/feedback-retention.mjs",
+      "scripts/release/artifact.mjs",
+      "scripts/release/reviewed-retries.mjs",
+      "scripts/release/verify-production.mjs",
+      "scripts/release/release.mjs",
+      "firestore.indexes.json"
+    ],
+    "peer_review": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.json",
+    "peer_review_sha256": "fb81906b31df1857d324cd4d744d5b94067505f9947bbf2d781ea2f42b23b75e",
+    "checks_receipt": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-R2-CHECKS.json",
+    "checks_receipt_sha256": "6e78ddd2578b4320de9a488423a1e83eaf163850e584aab3503b029dbcf7be40",
+    "status": "PASSED_WITHIN_SOURCE_AND_FOCUSED_LOCAL_EVIDENCE",
+    "production": "BLOCKED; no provider/IAM/activation/deletion execution by reviewer"
+  }
+}

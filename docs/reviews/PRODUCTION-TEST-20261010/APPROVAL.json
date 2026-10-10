@@ -1,0 +1,17 @@
+{
+  "plan_identifier": "PRODUCTION-TEST v1",
+  "approval_status": "APPROVED",
+  "approver": "human user in current chat",
+  "approval_task_reference": "call_5081fd46f74546c08b78d7a095730a9a item0",
+  "answer": "Duyệt v1 và tạo secret trống",
+  "recorded_at": "2026-10-10T00:46:14.342968+00:00",
+  "approved_scope": "PLAN.md production test implementation and release; empty SEPAY_SANDBOX_IPN_SECRET_KEY creation",
+  "constraints": [
+    "No agent secret payload access",
+    "Keep real auth/AppCheck/MFA/consent/quota/idempotency",
+    "Isolate test stock/finance/fulfillment",
+    "No real financial test records or customer mass send",
+    "Normal immutable release workflow",
+    "Keep shared runtime and other owners WIP"
+  ]
+}

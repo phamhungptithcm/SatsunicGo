@@ -1,0 +1,19 @@
+{
+  "scope": "Current shared canonical source/test/tooling path inclusion; byte equality is separately reviewed because v1 deliberately changes owned paths",
+  "shared_paths": 837,
+  "candidate_missing": [
+    "tests/browser/output/cart107/browser-results.json",
+    "tests/browser/output/ask-integration-4/browser-result.json",
+    "tests/browser/output/login105/results.json"
+  ],
+  "all_included": false,
+  "deliberate_exclusions": [
+    "tests/browser/output/ask-integration-4/browser-result.json",
+    "tests/browser/output/cart107/browser-results.json",
+    "tests/browser/output/login105/results.json"
+  ],
+  "exclusion_evidence": "CHAT-INTEGRATION-AUDIT-20261009/COMBINED-COVERAGE.JSON prior EXCLUDED_BROWSER_OUTPUT",
+  "canonical_source_test_tooling_count": 834,
+  "unexplained_missing": [],
+  "all_canonical_included": true
+}

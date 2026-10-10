@@ -1,0 +1,19 @@
+{
+  "approvedBy": "Human chat reply 2026-10-10",
+  "project": "demo-satsunicgo",
+  "changedFields": [
+    "expiresAt"
+  ],
+  "restore": "PASSED",
+  "cleanup": "NOT_APPLICABLE: no fixture started",
+  "startedAt": 1791654713460,
+  "version": 1,
+  "originalExpiresAt": 1791640555633,
+  "temporaryExpiresAt": 1791661913460,
+  "originalHash": "66668b2c19587a6a7a99685c105317c9ad477cebd5249f35eb4418ac596ecc23",
+  "business": "NOT_RUN",
+  "injectedFailure": "apply-rejection",
+  "error": "Synthetic apply-rejection",
+  "restoredHash": "66668b2c19587a6a7a99685c105317c9ad477cebd5249f35eb4418ac596ecc23",
+  "finishedAt": 1791654713870
+}

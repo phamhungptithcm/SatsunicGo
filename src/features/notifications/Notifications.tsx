@@ -14,6 +14,7 @@ import { createRequestSequence } from "../content/editor-state";
 import { notificationTarget } from "../content/notification-target";
 import "./notifications.css";
 import { notificationLabels as labels } from "../../../packages/domain/notification-content";
+import { TestOrderBadge } from "../orders/TestOrderBadge";
 export function Notifications({
   uid,
   expanded = false,
@@ -31,6 +32,12 @@ export function Notifications({
         targetLabel?: string;
         read: boolean;
         createdAt: number;
+        executionMode?: unknown;
+        executionPolicyVersion?: unknown;
+        testRunId?: unknown;
+        testMode?: unknown;
+        provider?: unknown;
+        paymentProvider?: unknown;
       }[]
     >([]),
     [error, setError] = useState(""),
@@ -150,7 +157,8 @@ export function Notifications({
                 <h3>
                   {typeof n.title === "string" && n.title.length <= 200
                     ? n.title
-                    : (labels[n.action] ?? "Bạn có cập nhật mới")}
+                    : (labels[n.action] ?? "Bạn có cập nhật mới")}{" "}
+                  <TestOrderBadge record={n} />
                 </h3>
                 <time dateTime={validDate ? date.toISOString() : undefined}>
                   {validDate

@@ -1,0 +1,23 @@
+{
+  "plan_id": "HOME-CATALOG-NAV v1",
+  "plan_sha256": "17ecd856679b339b76b49c4d4f1491cc6b8097fd22f37dede77cff020310fa16",
+  "approval_status": "APPROVED",
+  "approver": "Human user in current chat",
+  "approval_reference": "request_user_input_async call_d4efe982c52d4e3daa89da4cefa7c0e8 item0",
+  "answer": "Duyệt và triển khai",
+  "recorded_at": "2026-10-10T03:59:46Z",
+  "approved_paths": [
+    "src/app/App.tsx",
+    "src/app/SiteChrome.tsx",
+    "src/styles/public-ux.css",
+    "src/styles/global.css",
+    "docs/reviews/HOME-CATALOG-NAV-20261010/**"
+  ],
+  "constraints": [
+    "Only approved Home/Journey/navbar/CSS delta; preserve candidate test-mode App changes",
+    "Keep existing auth, roles, cart state, preload, reduced motion, and shared5207 runtime",
+    "No backend, database, IAM, dependency, CI, or release-gate change",
+    "Retain1200px collapse if signed-in/staff width checks cannot support1024px"
+  ],
+  "repository_intelligence": "Shared discovery READY after single incremental refresh; candidate DEGRADED missing indexes; direct source fences verified"
+}

@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-10-10T13:37:33.093626+00:00",
+  "sourceDigest": "af80cc9aee8d047bbddbcdf046cc9a4bce6440f72b8681deb166fc9cfd174dc4",
+  "component": {
+    "status": "PASSED",
+    "files": 1,
+    "tests": 25,
+    "node": "22",
+    "log": "/private/tmp/satsunicgo-guest-adverse-candidate-20261010/COMPONENT.log",
+    "limits": "controlledDOM/auth/SDK;real15sdeadline;not browser/real signin/physical offline"
+  },
+  "focusedUnit": {
+    "status": "PASSED",
+    "files": 3,
+    "tests": 117,
+    "log": "/private/tmp/satsunicgo-guest-adverse-candidate-20261010/UNIT.log"
+  },
+  "scopedLint": {
+    "status": "PASSED",
+    "log": "/private/tmp/satsunicgo-guest-adverse-candidate-20261010/LINT.log"
+  },
+  "frontendStrictBuildAssets": {
+    "status": "PASSED",
+    "log": "/private/tmp/satsunicgo-guest-adverse-candidate-20261010/BUILD.log"
+  },
+  "normalExactHeadCI": "PENDING_NEW_COMMIT",
+  "sourcePreservation": {
+    "trackedChecked": 3559,
+    "unapprovedDrift": 0
+  },
+  "logHashes": {
+    "LINT.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "COMPONENT.log": "b82c224b8d250d09d58d4069b8b75607c042893d864713f62686910668465861",
+    "UNIT.log": "36fddcaf53f9ee12294dd66521242e7e905865e32407c3d06874f7a1e8583a91",
+    "BUILD.log": "f8de568dc45a66aef91765e2099a490fff78808b1f0ed7464d1fa8aef2bd8bac"
+  },
+  "backendSource": "UNCHANGED;no redundant local emulator suite;normalCI required",
+  "productLanguage": "BLOCKED",
+  "productionReadiness": "NOT_READY"
+}

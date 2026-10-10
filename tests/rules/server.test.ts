@@ -392,12 +392,12 @@ it("parcel allocation serializes duplicate packing and partial delivery", async 
     packingComplete: true,
     packedQuantity: 2,
   });
-  const pack = async (quantity: number) =>
+  const pack = async (quantity: number, version: number) =>
     shippingCommand.run(
       req(owner, {
         action: "packParcel",
         operationId: randomUUID(),
-        orderVersions: { [id]: 1 },
+        orderVersions: { [id]: version },
         payload: {
           allocations: [{ orderId: id, line: 0, quantity }],
           weightGrams: 200,
@@ -409,10 +409,11 @@ it("parcel allocation serializes duplicate packing and partial delivery", async 
         },
       }),
     );
-  const first = await pack(1),
-    second = await pack(1);
-  await expect(pack(1)).rejects.toMatchObject({ code: "failed-precondition" });
-  let orderVersion = 1;
+  const first = await pack(1, 1),
+    second = await pack(1, 2);
+  await expect(pack(1, 3)).rejects.toMatchObject({ code: "failed-precondition" });
+  expect((await db.doc(`orders/${id}`).get()).get("version")).toBe(3);
+  let orderVersion = 3;
   for (const parcel of [first, second]) {
     await shippingCommand.run(
       req(owner, {
@@ -450,6 +451,7 @@ it("parcel allocation serializes duplicate packing and partial delivery", async 
     }),
   );
   expect((await db.doc(`orders/${id}`).get()).data()?.stage).toBe("IN_TRANSIT");
+  expect((await db.doc(`orders/${id}`).get()).get("version")).toBe(++orderVersion);
   await shippingCommand.run(
     req(owner, {
       action: "trackParcel",
@@ -461,6 +463,8 @@ it("parcel allocation serializes duplicate packing and partial delivery", async 
     }),
   );
   expect((await db.doc(`orders/${id}`).get()).data()?.stage).toBe("DELIVERED");
+  expect((await db.doc(`orders/${id}`).get()).get("version")).toBe(orderVersion + 1);
+  expect((await db.collection(`orders/${id}/timeline`).get()).size).toBe(6);
 });
 it("customer-approved cancellation preserves collected money and hides internal proof", async () => {
   const { changeCommand } = await import("../../functions/src/changes");

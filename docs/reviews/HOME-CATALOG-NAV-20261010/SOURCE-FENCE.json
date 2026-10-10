@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-10T03:23:12.092481+00:00",
+  "shared_head": "99822aae502cc75406184ee345e4527c6e0db66d",
+  "candidate_head": "0929b9f81d89d024b63cfcc9d88f4d9caf114d7c",
+  "scope": "Plan and standalone preview only; application source unchanged",
+  "intelligence": "READY after one incremental refresh; CodeGraph structural and CocoIndex semantic queries then direct canonical source/DOM verification. Index includes output baselines; only src canonical results used.",
+  "inputs": {
+    "src/app/App.tsx": "642f5ce5ee1ac1470fd76ac6e3b74a5286efd8fec0a7bab6417b72d010edb93a",
+    "src/app/SiteChrome.tsx": "cd5461182d8b7f4d60361dc6c3697b47dbef7e33dc067a963a6754d94fac1d9d",
+    "src/styles/global.css": "017da48de7b6c2e6edc49005e073816b6a6fd2dc49d26a1aa31e59a3394b91cf",
+    "src/styles/public-ux.css": "749fc8b5d5892fcf0e7b1ce95b7a131ce87bca6fb882be8a912720cde4dd1bae"
+  },
+  "preview_sha256": "a9f551dd1d0182fb2c0f7485e2658065c785003062f1e4ad57d36bfbf48fef53",
+  "approval": "PENDING scoped navbar/hero design approval"
+}
