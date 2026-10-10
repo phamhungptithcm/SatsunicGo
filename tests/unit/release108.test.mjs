@@ -6,12 +6,13 @@ import { URL } from 'node:url';
 import { runInNewContext } from 'node:vm';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, symlinkSync, chmodSync, copyFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { nextVersion, chooseCandidate, commitNotes, compareVersions, validateDeployIdentity } from '../../scripts/release/release.mjs';
 import { create, verify, digest, deploymentConfig, deploymentLockSeed, assertLockedVersions, applyProductionHolds, HELD_EXPORTS, prepareWorkspace, REQUIRED_FUNCTION_ASSETS, excludeEmulatorOnlyExports } from '../../scripts/release/artifact.mjs';
-import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory } from '../../scripts/release/verify-production.mjs';
+import { checkInventory, verifyHosting, assertStableHostingRelease, readHostingRelease, readFunctionSource, waitForActiveInventory, verifyRetryReadback } from '../../scripts/release/verify-production.mjs';
+import { retryAdmission, installReviewedRetryPrompt, deploymentArguments } from '../../scripts/release/reviewed-retries.mjs';
 import { assetDecision } from '../../scripts/release/assets.mjs';
 
 const repositoryRoot = resolve(import.meta.dirname, '../..');
@@ -391,13 +392,17 @@ test('compiled artifact-only PDF renders Unicode without shared source or font f
     const source=readFileSync(join(repositoryRoot,'functions/src/purchase-pdf.ts'),'utf8');
     const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
     put(root,'functions/lib/functions/src/purchase-pdf.js',compiled);
+    for (const name of readdirSync(join(repositoryRoot,'packages/domain')).filter(name=>name.endsWith('.ts'))) {
+      const domain = readFileSync(join(repositoryRoot,'packages/domain',name),'utf8');
+      put(root,'functions/lib/packages/domain/'+name.replace(/\.ts$/,'.js'),ts.transpileModule(domain,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);
+    }
   });
   rmSync(join(root,'functions'),{recursive:true});
   assert.equal(existsSync(join(stage,'deployment/functions/src')),false);
   const renderer=join(stage,'deployment/functions/lib/functions/src/purchase-pdf.js');
   const script=join(root,'render.cjs');
   put(root,'render.cjs',`const assert=require('node:assert/strict');const {renderPurchaseReceipt}=require(process.argv[2]);const receipt={id:'synthetic',ownerId:'synthetic',lines:[{kind:'listed',name:'Cà phê Việt Nam',variant:'Trắng',quantity:1,goods:100000,service:0,total:100000}],total:100000,provider:'demo',reference:'DEMO-SYNTHETIC',paidAt:Date.UTC(2026,9,8),purpose:'initial',previouslyPaid:0,snapshotHash:'synthetic',shipping:{state:'uncollected'}};const a=renderPurchaseReceipt(receipt),b=renderPurchaseReceipt(receipt);assert.equal(a.subarray(0,8).toString(),'%PDF-1.7');assert.ok(a.equals(b));assert.ok(a.length<3000000);const source=a.toString('binary');assert.match(source,/FontFile2/);assert.match(source,/ToUnicode/);const mapping=new Map();for(const [,key,hex] of source.matchAll(/<([0-9a-f]{4})> <([0-9a-f]+)>/g)){const bytes=Buffer.from(hex,'hex');if(bytes.length%2===0)mapping.set(key,bytes.swap16().toString('utf16le'));}const rows=[...source.matchAll(/Tm <([0-9a-f]+)> Tj ET/g)].map(([,hex])=>(hex.match(/.{4}/g)??[]).map(key=>mapping.get(key)??'').join('')).join(' ');assert.ok(rows.includes('Cà phê Việt Nam'));assert.ok(rows.includes('Trắng'));console.log(JSON.stringify({rendered:true,unicode:true,deterministic:true,bytes:a.length}));`);
-  const run=()=>spawnSync(process.execPath,[script,renderer],{cwd:stage,encoding:'utf8'});
+  const run=()=>spawnSync(process.execPath,[script,renderer],{cwd:stage,encoding:'utf8',env:{...process.env,NODE_PATH:join(repositoryRoot,'node_modules')}});
   const result=run();assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).rendered,true);
   rmSync(join(stage,'deployment/functions/assets/NotoSans-Regular.ttf'));
   assert.notEqual(run().status,0,'missing bundled font must fail, never find shared fallback');
@@ -829,4 +834,64 @@ test('literal object spreads containing cleanup are rejected across export objec
     assert.throws(() => applyProductionHolds(compiled, []), /COMPILED_SHAPE/);
     assert.throws(() => applyProductionHolds(cleanupBinding + '\n' + compiled, [{name:'askFeedbackCleanup'}]), /COMPILED_SHAPE/);
   }
+});
+
+
+// Real pinned CLI policy tests: approval is confined to the retry prompt.
+const firebaseRequire = createRequire(import.meta.url);
+const retryBackend = firebaseRequire('firebase-tools/lib/deploy/functions/backend.js');
+const retryPrompts = firebaseRequire('firebase-tools/lib/deploy/functions/prompts.js');
+const retryRow = {name:'customerNotificationCreated',kind:'onDocumentCreated',region:'asia-southeast1',source:'functions/src/customer-notification-delivery.ts'};
+const retryManifest = {sha,tag:'v1.2.3',project:'satsunicgo',inventory:[retryRow]};
+const retryEndpoint = {id:retryRow.name,region:'asia-southeast1',project:'satsunicgo',codebase:'satsunicgo',platform:'gcfv2',eventTrigger:{retry:true,eventType:'google.cloud.firestore.document.v1.created',eventFilterPathPatterns:{document:'outboxJobs/{jobId}'}}};
+const backendOf = endpoint => retryBackend.of(endpoint);
+test('reviewed retry confirmation approves only its copied options and preserves the real deletion rejection',async()=>{
+  const options={nonInteractive:true,force:false};
+  const untouchedDeletion=retryPrompts.promptForFunctionDeletion;
+  let record;
+  const restore=installReviewedRetryPrompt(retryPrompts,retryBackend,retryManifest,value=>{record=value;});
+  try{
+    await retryPrompts.promptForFailurePolicies(options,backendOf(retryEndpoint),retryBackend.empty());
+    assert.deepEqual(options,{nonInteractive:true,force:false});
+    assert.deepEqual(record.newRetries,['customerNotificationCreated']);
+    assert.equal(retryPrompts.promptForFunctionDeletion,untouchedDeletion);
+    await assert.rejects(()=>retryPrompts.promptForFunctionDeletion([retryEndpoint],options),/deletion cannot proceed/);
+  }finally{restore();}
+});
+test('reviewed retry cannot approve a new unreviewed consumer or changed document binding',()=>{
+  for(const endpoint of [{...retryEndpoint,id:'unreviewed'}, {...retryEndpoint,eventTrigger:{...retryEndpoint.eventTrigger,eventFilterPathPatterns:{document:'users/{id}'}}}]){
+    const manifest={...retryManifest,inventory:[{...retryRow,name:endpoint.id}]};
+    assert.throws(()=>retryAdmission(manifest,backendOf(endpoint),retryBackend.empty(),retryBackend),/UNREVIEWED/);
+  }
+});
+test('retry admission rejects source, inventory, project, region and codebase drift',()=>{
+  assert.throws(()=>retryAdmission({...retryManifest,inventory:[{...retryRow,source:'functions/src/other.ts'}]},backendOf(retryEndpoint),retryBackend.empty(),retryBackend),/UNREVIEWED/);
+  assert.throws(()=>retryAdmission({...retryManifest,inventory:[]},backendOf(retryEndpoint),retryBackend.empty(),retryBackend),/INVENTORY/);
+  for(const patch of [{project:'other'},{region:'us-central1'},{codebase:'default'},{platform:'gcfv1'}])assert.throws(()=>retryAdmission(retryManifest,backendOf({...retryEndpoint,...patch}),retryBackend.empty(),retryBackend),/ENDPOINT/);
+});
+test('an existing retry policy does not request newly enabled authority',()=>{
+  assert.deepEqual(retryAdmission(retryManifest,backendOf(retryEndpoint),backendOf(retryEndpoint),retryBackend).newRetries,[]);
+});
+test('unsafe deployment options are rejected before any CLI retry prompt',async()=>{
+  let calls=0;const prompts={promptForFailurePolicies:async()=>{calls++;}};
+  const restore=installReviewedRetryPrompt(prompts,retryBackend,retryManifest);
+  try{for(const options of [{force:true,nonInteractive:true},{force:false,nonInteractive:false}])await assert.rejects(()=>prompts.promptForFailurePolicies(options,backendOf(retryEndpoint),retryBackend.empty()),/UNSAFE/);}
+  finally{restore();}
+  assert.equal(calls,0);
+});
+test('deployment arguments use manifest-only selectors and never global force',()=>{
+  const args=deploymentArguments(retryManifest,sha,'v1.2.3');
+  assert.equal(args.includes('--force'),false);
+  assert.equal(args[args.indexOf('--only')+1],'functions:satsunicgo:customerNotificationCreated,hosting');
+  assert.equal(args.includes('--non-interactive'),true);
+  assert.throws(()=>deploymentArguments({...retryManifest,inventory:[{name:'name-unsafe'}]},sha,'v1.2.3'),/UNSAFE/);
+  assert.throws(()=>deploymentArguments(retryManifest,'b'.repeat(40),'v1.2.3'),/IDENTITY/);
+});
+test('provider readback binds retry configuration to the same artifact and exact enabled endpoint set',()=>{
+  const admission=retryAdmission(retryManifest,backendOf(retryEndpoint),retryBackend.empty(),retryBackend);
+  const deployed=[{name:'functions/customerNotificationCreated',eventTrigger:{retryPolicy:'RETRY_POLICY_RETRY'}}];
+  assert.deepEqual(verifyRetryReadback(retryManifest,deployed,admission),['customerNotificationCreated']);
+  assert.throws(()=>verifyRetryReadback(retryManifest,[{...deployed[0],eventTrigger:{retryPolicy:'RETRY_POLICY_DO_NOT_RETRY'}}],admission),/POLICY_MISMATCH/);
+  assert.throws(()=>verifyRetryReadback(retryManifest,[...deployed,{name:'functions/unexpected',eventTrigger:{retryPolicy:'RETRY_POLICY_RETRY'}}],admission),/POLICY_MISMATCH/);
+  assert.throws(()=>verifyRetryReadback(retryManifest,deployed,{...admission,sha:'b'.repeat(40)}),/BINDING/);
 });
