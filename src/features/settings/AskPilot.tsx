@@ -9,12 +9,45 @@ type Pilot = {
   maxBudgetVnd: number;
   reservedVnd: number | null;
   expiresAt: number | null;
+  audience?: "owner-canary" | "customers" | null;
+  canPromote?: boolean;
 };
+function validBudget(value: unknown, customer: boolean): value is Pilot {
+  if (!value || typeof value !== "object") return false;
+  const p = value as Pilot;
+  return (
+    typeof p.enabled === "boolean" &&
+    typeof p.ready === "boolean" &&
+    (p.version === null ||
+      (Number.isSafeInteger(p.version) && p.version > 0)) &&
+    p.maxBudgetVnd === (customer ? 50000 : 10000) &&
+    (p.reservedVnd === null ||
+      (Number.isSafeInteger(p.reservedVnd) &&
+        p.reservedVnd >= 0 &&
+        p.reservedVnd <= p.maxBudgetVnd)) &&
+    (p.expiresAt === null ||
+      (Number.isSafeInteger(p.expiresAt) && p.expiresAt > 0)) &&
+    (!customer ||
+      (typeof p.canPromote === "boolean" &&
+        [null, "owner-canary", "customers"].includes(p.audience ?? null)))
+  );
+}
 const money = (value: number) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
     value,
   );
 export function AskPilot() {
+  return (
+    <>
+      <AiBudget />
+      <AiBudget customer />
+    </>
+  );
+}
+function AiBudget({ customer = false }: { customer?: boolean }) {
+  const configurationKey = customer ? "customerAi" : "askPilot";
+  const sectionId = customer ? "askCustomerAiTitle" : "askPilotTitle";
+  const [promote, setPromote] = useState(false);
   const confirmation = useRef<HTMLDialogElement>(null);
   const [pilot, setPilot] = useState<Pilot | null>(null),
     [busy, setBusy] = useState(false),
@@ -33,12 +66,14 @@ export function AskPilot() {
     setBusy(true);
     setConfirm(false);
     try {
-      const result = await callService<{ askPilot: Pilot }>(
+      const result = await callService<{ askPilot: Pilot; customerAi: Pilot }>(
         "readOwnerConfiguration",
         {},
       );
+      if (!validBudget(result[configurationKey], customer))
+        throw Error("INVALID_CONFIGURATION");
       if (mounted.current && request === sequence.current)
-        setPilot(result.askPilot);
+        setPilot(result[configurationKey]);
     } catch {
       if (mounted.current && request === sequence.current) {
         setPilot(null);
@@ -68,16 +103,21 @@ export function AskPilot() {
     button.current?.focus();
   }
   async function save(enabled: boolean) {
-    if (running.current || !pilot || busy) return;
+    if (running.current || (!pilot && !pending.current) || busy) return;
     running.current = true;
     setBusy(true);
     setConfirm(false);
     publish("");
     const command = pending.current ?? {
-      action: "saveAskPilotPolicy",
+      action: customer ? "saveAskCustomerPolicy" : "saveAskPilotPolicy",
       operationId: crypto.randomUUID(),
-      ...(pilot.version === null ? {} : { expectedVersion: pilot.version }),
-      payload: { enabled },
+      ...(pilot?.version == null ? {} : { expectedVersion: pilot.version }),
+      payload: {
+        enabled,
+        ...(customer
+          ? { audience: promote ? "customers" : "owner-canary" }
+          : {}),
+      },
     };
     pending.current = command;
     let acknowledged = false;
@@ -85,17 +125,21 @@ export function AskPilot() {
       await callService("workspaceCommand", command);
       acknowledged = true;
       pending.current = null;
-      const result = await callService<{ askPilot: Pilot }>(
+      const result = await callService<{ askPilot: Pilot; customerAi: Pilot }>(
         "readOwnerConfiguration",
         {},
       );
+      if (!validBudget(result[configurationKey], customer))
+        throw Error("INVALID_CONFIGURATION");
       if (!mounted.current) return;
-      setPilot(result.askPilot);
+      setPilot(result[configurationKey]);
       publish(
-        result.askPilot.enabled ===
+        result[configurationKey].enabled ===
           (command.payload as { enabled: boolean }).enabled
-          ? result.askPilot.enabled
-            ? "Đã bật AI cho tài khoản của bạn."
+          ? result[configurationKey].enabled
+            ? customer
+              ? "Đã cập nhật phạm vi AI. Kiểm tra trạng thái bên dưới."
+              : "Đã bật AI cho tài khoản của bạn."
             : "Đã tắt AI."
           : "Trạng thái hiện tại khác thao tác vừa gửi. Kiểm tra cấu hình trước khi tiếp tục.",
       );
@@ -115,7 +159,8 @@ export function AskPilot() {
         ].includes(code)
       )
         pending.current = null;
-      if (mounted.current)
+      if (mounted.current) {
+        setPilot(null);
         publish(
           (error as { details?: { reason?: string } }).details?.reason ===
             "ACTION_NOT_RESUMED"
@@ -126,6 +171,7 @@ export function AskPilot() {
                 ? "Chưa xác nhận được kết quả. Thử lại thao tác đang chờ để đối chiếu."
                 : "Chưa cập nhật được AI Budget. Thử lại.",
         );
+      }
     } finally {
       running.current = false;
       if (mounted.current) setBusy(false);
@@ -134,7 +180,7 @@ export function AskPilot() {
   return (
     <section
       className="panel askPilot106"
-      aria-labelledby="askPilotTitle"
+      aria-labelledby={sectionId}
       onKeyDown={(event) => {
         if (event.key === "Escape" && confirm && !busy) {
           event.preventDefault();
@@ -143,7 +189,9 @@ export function AskPilot() {
       }}
     >
       <header className="budgetHeader">
-        <h2 id="askPilotTitle">AI Budget</h2>
+        <h2 id={sectionId}>
+          {customer ? "AI cho khách hàng" : "AI Budget · chủ doanh nghiệp"}
+        </h2>
         <span
           className={`aiBadge ${pilot ? (pilot.enabled ? "on" : "off") : "unknown"}`}
         >
@@ -152,7 +200,9 @@ export function AskPilot() {
         <button
           type="button"
           className="budgetReload"
-          aria-label="Tải lại AI Budget"
+          aria-label={
+            customer ? "Tải lại AI cho khách hàng" : "Tải lại AI Budget"
+          }
           title="Tải lại"
           disabled={busy}
           onClick={() => void load()}
@@ -172,7 +222,9 @@ export function AskPilot() {
         </button>
       </header>
       <p className="muted">
-        AI văn bản cho tài khoản chủ doanh nghiệp. Bản nháp chưa phải yêu cầu đã gửi.
+        {customer
+          ? "AI văn bản cho khách hàng đã đăng nhập và xác minh tài khoản Google. Thử bằng tài khoản chủ doanh nghiệp trước khi mở cho khách hàng."
+          : "AI văn bản cho tài khoản chủ doanh nghiệp. Bản nháp chưa phải yêu cầu đã gửi."}
       </p>
       {busy && <p role="status">Đang cập nhật…</p>}
       {pilot && (
@@ -202,29 +254,51 @@ export function AskPilot() {
           <p className="budgetNote">
             Giữ 1.000 ₫/lượt, kể cả khi lỗi hoặc dừng. Không tự đặt lại ngân
             sách; đây chưa phải hóa đơn cloud.
+            {customer &&
+              " Tổng giới hạn 50.000 ₫, mỗi tài khoản tối đa 5.000 ₫."}
           </p>
           <p className="muted">
-            {pilot.ready ? "AI sẵn sàng" : "Chưa kết nối được AI"}
+            {pilot.ready
+              ? customer
+                ? "Đã kiểm tra kết nối AI"
+                : "AI sẵn sàng"
+              : "Chưa kết nối được AI"}
             {pilot.expiresAt
               ? ` · Hết hạn ${new Date(pilot.expiresAt).toLocaleString("vi-VN")}`
               : ""}
           </p>
+          {customer && (
+            <p role="status">
+              {pilot.enabled
+                ? pilot.audience === "customers"
+                  ? "Đang mở cho khách hàng đã xác minh."
+                  : "Đang thử bằng tài khoản chủ doanh nghiệp."
+                : pilot.expiresAt && pilot.expiresAt <= Date.now()
+                  ? "Đã hết thời gian bật AI cho khách hàng."
+                  : "AI cho khách hàng đang tắt."}
+            </p>
+          )}
           {confirm && (
             <dialog
               ref={confirmation}
               className="pilotConfirm"
-              aria-labelledby="askPilotConfirm"
+              aria-labelledby={`${sectionId}-confirm`}
               onCancel={(e) => {
                 e.preventDefault();
                 cancel();
               }}
             >
-              <h3 id="askPilotConfirm" tabIndex={-1} ref={title}>
-                Bật AI cho tài khoản của bạn?
+              <h3 id={`${sectionId}-confirm`} tabIndex={-1} ref={title}>
+                {customer
+                  ? promote
+                    ? "Mở AI cho khách hàng?"
+                    : "Bật thử AI trước khi mở cho khách hàng?"
+                  : "Bật AI cho tài khoản của bạn?"}
               </h3>
               <p>
-                Bật cho tài khoản của bạn trong tối đa 24 giờ, trong ngân sách
-                còn lại. Cần xác thực hai lớp gần đây.
+                {customer
+                  ? "Bật tối đa 24 giờ trong ngân sách còn lại của giới hạn 50.000 ₫. Không đặt lại số tiền đã giữ. Cần xác thực hai lớp gần đây."
+                  : "Bật cho tài khoản của bạn trong tối đa 24 giờ, trong ngân sách còn lại. Cần xác thực hai lớp gần đây."}
               </p>
               <button type="button" onClick={cancel}>
                 Hủy xác nhận
@@ -243,16 +317,35 @@ export function AskPilot() {
       )}
 
       <footer className="pilotActions">
+        {customer && pilot?.enabled && pilot.audience === "owner-canary" && (
+          <button
+            type="button"
+            disabled={
+              busy ||
+              Boolean(pending.current) ||
+              !pilot.ready ||
+              !pilot.canPromote ||
+              pilot.reservedVnd === null ||
+              pilot.reservedVnd >= pilot.maxBudgetVnd
+            }
+            onClick={() => {
+              setPromote(true);
+              setConfirm(true);
+            }}
+          >
+            Mở cho khách hàng
+          </button>
+        )}
         <button
           ref={button}
           type="button"
           className="primary"
           disabled={
             busy ||
-            !pilot ||
+            (!pilot && !pending.current) ||
             (!pending.current &&
-              !pilot.enabled &&
-              (!pilot.ready ||
+              !pilot?.enabled &&
+              (!pilot?.ready ||
                 pilot.reservedVnd === null ||
                 pilot.reservedVnd >= pilot.maxBudgetVnd))
           }
@@ -262,7 +355,10 @@ export function AskPilot() {
                 (pending.current.payload as { enabled: boolean }).enabled,
               );
             else if (pilot?.enabled) void save(false);
-            else setConfirm(true);
+            else {
+              setPromote(false);
+              setConfirm(true);
+            }
           }}
         >
           {(

@@ -19,6 +19,15 @@ import { randomUUID, createHash } from "node:crypto";
 import { roles, money, type Role } from "../../packages/domain";
 import { normalizeCustomerName } from "../../packages/domain/crm";
 import { pilotReady, pilotLimits, verifyPilotProvider } from "./ai/ask-pilot";
+import {
+  customerAiLimits,
+  customerAiReady,
+  verifyCustomerAiProvider,
+  customerAiPolicySchema,
+  customerAiCanPromote,
+  customerAiReservation,
+  customerAiEnvironmentReady,
+} from "./ai/ask-production";
 const opts = {
   region: "asia-southeast1",
   maxInstances: 4,
@@ -329,6 +338,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "saveStaffAccess",
         "savePricingPolicy",
         "saveAskPilotPolicy",
+        "saveAskCustomerPolicy",
       ]),
       operationId: z.string().uuid(),
       id: z
@@ -354,7 +364,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
     op = db.doc(`idempotencyKeys/${uid}-${d.operationId}`);
   let providerReady = false;
   if (
-    d.action === "saveAskPilotPolicy" &&
+    ["saveAskPilotPolicy", "saveAskCustomerPolicy"].includes(d.action) &&
     (d.payload as { enabled?: unknown })?.enabled === true
   ) {
     const [access, profile] = await Promise.all([
@@ -378,7 +388,10 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "Cần xác thực hai lớp gần đây.",
         { reason: "RECENT_MFA_REQUIRED" },
       );
-    providerReady = await verifyPilotProvider();
+    providerReady =
+      d.action === "saveAskCustomerPolicy"
+        ? await verifyCustomerAiProvider()
+        : await verifyPilotProvider();
   }
   return db.runTransaction(async (tx) => {
     const [access, profile, oldOp, customerSaveFence] = await Promise.all([
@@ -415,6 +428,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
         "savePricingPolicy",
         "saveStaffAccess",
         "saveAskPilotPolicy",
+        "saveAskCustomerPolicy",
       ].includes(d.action)
     )
       require(["OWNER"]);
@@ -428,10 +442,20 @@ export const workspaceCommand = onCall(opts, async (req) => {
       if (ticket.data()?.ownerId !== uid)
         require(["OWNER", "SUPPORT", "OPERATIONS_MANAGER"]);
     }
-    if (["saveStaffAccess", "saveAskPilotPolicy"].includes(d.action))
+    if (
+      [
+        "saveStaffAccess",
+        "saveAskPilotPolicy",
+        "saveAskCustomerPolicy",
+      ].includes(d.action)
+    )
       require(["OWNER"]);
     if (
-      ["saveStaffAccess", "saveAskPilotPolicy"].includes(d.action) &&
+      [
+        "saveStaffAccess",
+        "saveAskPilotPolicy",
+        "saveAskCustomerPolicy",
+      ].includes(d.action) &&
       process.env.FUNCTIONS_EMULATOR !== "true" &&
       !recentMfa(req.auth!.token, now)
     )
@@ -455,6 +479,61 @@ export const workspaceCommand = onCall(opts, async (req) => {
       data: Record<string, unknown> = {};
     try {
       switch (d.action) {
+        case "saveAskCustomerPolicy": {
+          require(["OWNER"]);
+          if (
+            d.id ||
+            !customerAiEnvironmentReady(
+              (db as unknown as { projectId?: unknown }).projectId,
+            )
+          )
+            throw new HttpsError(
+              "failed-precondition",
+              "Chưa thể cập nhật AI cho khách hàng.",
+            );
+          const payload = z
+            .object({
+              enabled: z.boolean(),
+              audience: z.enum(["owner-canary", "customers"]),
+            })
+            .strict()
+            .parse(d.payload);
+          const ledger = await tx.get(db.doc("aiCustomerBudget/lifetime"));
+          if (payload.enabled) {
+            if (!providerReady || !customerAiReady(now))
+              throw new HttpsError(
+                "failed-precondition",
+                "Chưa xác minh kết nối AI.",
+              );
+            customerAiReservation(
+              ledger.exists ? ledger.data()?.reservedVnd : 0,
+              customerAiLimits.maxBudgetVnd,
+            );
+            if (
+              payload.audience === "customers" &&
+              !customerAiCanPromote(ledger.data(), uid, now)
+            )
+              throw new HttpsError(
+                "failed-precondition",
+                "Cần thử Ask thành công bằng tài khoản chủ doanh nghiệp trước khi bật cho khách hàng.",
+              );
+          }
+          collection = "settings";
+          data = {
+            schemaVersion: 1,
+            enabled: payload.enabled,
+            audience: payload.audience,
+            canaryUid: uid,
+            maxBudgetVnd: customerAiLimits.maxBudgetVnd,
+            releaseId: customerAiLimits.releaseId,
+            activatedAt: now,
+            expiresAt: Math.min(
+              now + customerAiLimits.windowMs,
+              customerAiLimits.pricingExpiresAt,
+            ),
+          };
+          break;
+        }
         case "saveAskPilotPolicy": {
           require(["OWNER"]);
           if (d.id)
@@ -681,11 +760,13 @@ export const workspaceCommand = onCall(opts, async (req) => {
     const entityId =
       d.action === "saveProfile"
         ? uid
-        : d.action === "saveAskPilotPolicy"
-          ? "askPaidPilot"
-          : d.action === "savePricingPolicy"
-            ? "pricing"
-            : id;
+        : d.action === "saveAskCustomerPolicy"
+          ? "askCustomerAi"
+          : d.action === "saveAskPilotPolicy"
+            ? "askPaidPilot"
+            : d.action === "savePricingPolicy"
+              ? "pricing"
+              : id;
     if (d.action === "saveStaffAccess" && !d.id)
       throw new HttpsError("invalid-argument", "Cần định danh nhân viên.");
     const ref = db.doc(`${collection}/${entityId}`),
@@ -830,13 +911,16 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
   if (!req.auth?.uid)
     throw new HttpsError("unauthenticated", "Đăng nhập để tiếp tục.");
   const db = getFirestore(),
-    [access, user, policy, pilot, budget] = await Promise.all([
-      db.doc(`staffAccess/${req.auth.uid}`).get(),
-      db.doc(`users/${req.auth.uid}`).get(),
-      db.doc("settings/pricing").get(),
-      db.doc("settings/askPaidPilot").get(),
-      db.doc("aiPilotBudget/lifetime").get(),
-    ]);
+    [access, user, policy, pilot, budget, customerPolicy, customerBudget] =
+      await Promise.all([
+        db.doc(`staffAccess/${req.auth.uid}`).get(),
+        db.doc(`users/${req.auth.uid}`).get(),
+        db.doc("settings/pricing").get(),
+        db.doc("settings/askPaidPilot").get(),
+        db.doc("aiPilotBudget/lifetime").get(),
+        db.doc("settings/askCustomerAi").get(),
+        db.doc("aiCustomerBudget/lifetime").get(),
+      ]);
   if (
     access.data()?.active !== true ||
     access.data()?.locked ||
@@ -846,7 +930,34 @@ export const readOwnerConfiguration = onCall(opts, async (req) => {
   )
     throw new HttpsError("permission-denied", "Cần quyền chủ doanh nghiệp.");
   const data = policy.data();
+  const customer = customerAiPolicySchema.safeParse(customerPolicy.data());
+  const customerReserved = !customerBudget.exists
+    ? 0
+    : customerBudget.data()?.reservedVnd;
   return {
+    customerAi: {
+      enabled:
+        customer.success &&
+        customer.data.enabled &&
+        customerAiReady(Date.now()) &&
+        customer.data.expiresAt > Date.now(),
+      version: customerPolicy.data()?.version ?? null,
+      audience: customer.success ? customer.data.audience : null,
+      ready: await verifyCustomerAiProvider(),
+      canPromote: customerAiCanPromote(
+        customerBudget.data(),
+        req.auth.uid,
+        Date.now(),
+      ),
+      maxBudgetVnd: customerAiLimits.maxBudgetVnd,
+      reservedVnd:
+        Number.isSafeInteger(customerReserved) &&
+        customerReserved >= 0 &&
+        customerReserved <= customerAiLimits.maxBudgetVnd
+          ? customerReserved
+          : null,
+      expiresAt: customer.success ? customer.data.expiresAt : null,
+    },
     askPilot: {
       enabled:
         pilot.data()?.enabled === true &&
