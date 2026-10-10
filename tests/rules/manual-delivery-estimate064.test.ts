@@ -1,3 +1,4 @@
+import { demoFirestoreEndpoint } from "../helpers/demo-environment";
 import {
   initializeApp,
   deleteApp,
@@ -115,10 +116,9 @@ function commandImpl(
 const runImpl = (data: unknown, identity: unknown = auth(staff)) =>
   shipping.shippingCommand.run({ data, auth: identity } as CallableRequest);
 beforeAll(async () => {
-  if (
-    process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:8187" ||
-    getApps().some((a) => a.name === "[DEFAULT]")
-  )
+  if (process.env.FIRESTORE_EMULATOR_HOST !== "127.0.0.1:8187")
+    demoFirestoreEndpoint(process.env);
+  if (getApps().some((a) => a.name === "[DEFAULT]"))
     throw Error(
       "064 requires isolated default SDK on dedicated emulator; no baseline writes",
     );
@@ -201,21 +201,25 @@ async function invariantImpl() {
     ).docs.map((d) => d.data()),
   };
 }
-function expectCustomerRevision(
+async function expectCustomerRevision(
   before: Awaited<ReturnType<typeof invariantImpl>>,
   after: Awaited<ReturnType<typeof invariantImpl>>,
 ) {
   expect(after.order?.version).toBe(before.order!.version + 1);
-  expect(after.order?.updatedAt).toEqual(expect.any(Number));
-  expect(after.order!.updatedAt).toBeGreaterThan(0);
   expect(after).toEqual({
     ...before,
     order: {
       ...before.order,
       version: before.order!.version + 1,
-      updatedAt: after.order!.updatedAt,
     },
   });
+  const events = await db.collection(`orders/${orderId}/timeline`).get();
+  expect(events.size).toBe(after.order!.version - 1);
+  for (const event of events.docs) {
+    expect(event.get("action")).toBe("deliveryEstimateUpdated");
+    expect(event.get("createdAt")).toEqual(expect.any(Number));
+    expect(event.get("createdAt")).toBeGreaterThan(0);
+  }
 }
 it("records one public staff window with CAS/replay, customer revision only and redacted owner ETA", async () => {
   const current = generation,
@@ -224,7 +228,7 @@ it("records one public staff window with CAS/replay, customer revision only and 
     data = command(),
     result = await run(data);
   expect(await run(data)).toEqual(result);
-  expectCustomerRevision(before, await invariant());
+  await expectCustomerRevision(before, await invariant());
   const parcel = (await db.doc(`packages/${parcelId}`).get()).data()!;
   expect(parcel.version).toBe(2);
   expect(parcel.state).toBe("in_transit");
@@ -269,7 +273,7 @@ it("explicit null clears estimate, refreshes customer revision and preserves who
   expect(
     (await db.doc(`customerShipments/${owner}-${parcelId}`).get()).data(),
   ).not.toHaveProperty("deliveryEstimate");
-  expectCustomerRevision(before, await invariant());
+  await expectCustomerRevision(before, await invariant());
   expect(
     (
       await tracking.customerOrderTracking.run({
@@ -292,7 +296,7 @@ it("CAS/order conflict and reused operation payload reject without effects", asy
   const data = command();
   await run(data);
   const after = await invariant();
-  expectCustomerRevision(before, after);
+  await expectCustomerRevision(before, after);
   await expect(
     run({
       ...data,
@@ -414,11 +418,9 @@ it("redacts mixed-owner parcel projections and denies cross-owner tracking", asy
   });
   const refreshed = (await db.doc(`orders/${foreignOrder}`).get()).data()!;
   expect(refreshed.version).toBe(before!.version + 1);
-  expect(refreshed.updatedAt).toEqual(expect.any(Number));
   expect(refreshed).toEqual({
     ...before,
     version: before!.version + 1,
-    updatedAt: refreshed.updatedAt,
   });
   for (const [uid, selectedOrder, allocation, hiddenOwner, hiddenOrder] of [
     [owner, orderId, ownAllocation, foreignOwner, foreignOrder],
