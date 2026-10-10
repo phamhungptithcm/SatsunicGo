@@ -36,7 +36,7 @@
       ]
     },
     "error_handling": {
-      "status": "BLOCKED",
+      "status": "FAILED",
       "summary": "Readiness and budget exhaustion wording findings require correction.",
       "evidence_refs": [
         "VALIDATION.md",
@@ -44,7 +44,7 @@
       ]
     },
     "production_readiness": {
-      "status": "BLOCKED",
+      "status": "FAILED",
       "summary": "Latest production baseline has six notification unit failures caused by a real-clock/fixed-fixture mismatch. Test-only delta approval pending. Rules/HTTP/restore CI, immutable deployment and real canary/customer acceptance remain required.",
       "evidence_refs": [
         "VALIDATION.md",
@@ -66,21 +66,36 @@
       "severity": "low",
       "location": "src/features/settings/AskPilot.tsx",
       "status": "OPEN",
-      "summary": "countTokens connectivity was described as AI readiness; changed customer label to connection checked and reran actual component browser fixture."
+      "summary": "countTokens connectivity was described as AI readiness; changed customer label to connection checked and reran actual component browser fixture.",
+      "category": "product-content",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
     },
     {
       "id": "ASK-REVIEW-2",
       "severity": "medium",
       "location": "functions/src/ai/ask-production.ts",
       "status": "OPEN",
-      "summary": "Lifetime budget exhaustion suggested retry later; separated exhaustion wording from transient rate denial and reran focused tests."
+      "summary": "Lifetime budget exhaustion suggested retry later; separated exhaustion wording from transient rate denial and reran focused tests.",
+      "category": "product-content",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
     },
     {
       "id": "ASK-REVIEW-3",
       "severity": "high",
       "location": "tests/unit/notification-subscriptions.test.ts",
-      "status": "BLOCKED",
-      "summary": "Latest production test baseline has six fixed-date versus real-clock failures; out-of-scope test-only delta awaits human approval."
+      "status": "OPEN",
+      "summary": "Latest production test baseline has six fixed-date versus real-clock failures; out-of-scope test-only delta awaits human approval.",
+      "category": "validation",
+      "evidence_refs": [
+        "VALIDATION.md",
+        "PRODUCT-CONTENT.md"
+      ]
     }
   ],
   "residual_risks": [
@@ -92,6 +107,7 @@
     "Repository intelligence DEGRADED; bounded source checks used.",
     "Local validation uses Node 25; required release CI uses Node 22.",
     "Synthetic browser component calls are mocked; not production proof.",
-    "No independent agent spawned; user did not authorize delegation."
+    "No independent agent spawned; user did not authorize delegation.",
+    "Public GitHub push rejected by automatic approval review; explicit public disclosure approval pending. No PR exists."
   ]
 }
