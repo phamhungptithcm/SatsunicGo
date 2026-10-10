@@ -49,11 +49,7 @@ async function openGoogle() {
       await reauthenticateWithPopup(user, new GoogleAuthProvider());
     } catch (error) {
       if (current !== task) return;
-      if (
-        ["auth/popup-blocked", "auth/internal-error"].includes(
-          (error as { code?: string }).code ?? "",
-        )
-      ) {
+      if ((error as { code?: string }).code === "auth/popup-blocked") {
         change("blocked");
         return;
       }
@@ -68,7 +64,12 @@ async function openGoogle() {
     const firebase = token.claims.firebase as
       { sign_in_second_factor?: string } | undefined;
     const age = Date.now() - Date.parse(token.authTime);
-    if (!firebase?.sign_in_second_factor || age < -30000 || age >= 300000)
+    if (
+      !firebase?.sign_in_second_factor ||
+      !Number.isFinite(age) ||
+      age < -30000 ||
+      age >= 300000
+    )
       throw new Error(
         "Cần xác thực hai lớp để tiếp tục. Kiểm tra ứng dụng xác thực của tài khoản.",
       );
