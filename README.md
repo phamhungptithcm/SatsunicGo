@@ -294,3 +294,13 @@ This repository contains the implementation and ongoing work toward that rollout
 
 Start with [architecture and data boundaries](docs/ARCHITECTURE_AND_DATA.md), [external setup requirements](docs/EXTERNAL_SETUP_REQUIRED.md), and the [operations runbook](docs/OPERATIONS_RUNBOOK.md). The [release guide](docs/releases/CICD-108.md) describes the release pipeline. [AGENTS.md](AGENTS.md) defines the current shared development environment; older ports in the [local runbook](docs/LOCAL_RUNBOOK.md) describe earlier demo setups.
 
+
+## Ask Anything · real app recording
+
+The real recording is now available: a one-minute walkthrough of finding a listed product, choosing a variant and quantity, reviewing the cart, selecting a Google reference, transferring a purchase draft into the form, asking about shipping fees, and looking up a sample order.
+
+[![Watch the real Ask Anything demo](docs/assets/readme/ask-real-demo/poster.jpg)](docs/assets/readme/ask-real-demo/ask-anything-real-demo.mp4)
+
+[Watch the video](docs/assets/readme/ask-real-demo/ask-anything-real-demo.mp4) · [Vietnamese captions](docs/assets/readme/ask-real-demo/captions.vi.vtt) · [Recording details](docs/assets/readme/ask-real-demo/README.md)
+
+Recorded in the local app with sample data and a real Google-grounded response. Web references and fee estimates need checking. The form remains a draft; no purchase or payment is completed.
