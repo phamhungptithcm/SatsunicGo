@@ -404,13 +404,16 @@ export async function generateCustomerAi(
     state: "provider-answered",
     usage: payload.usageMetadata,
   });
-  return {
-    value: JSON.parse(
+  let value: unknown;
+  try {
+    value = JSON.parse(
       payload.candidates[0].content.parts.map((p) => p.text).join(""),
-    ) as unknown,
-    operation,
-    policyVersion: initial.version,
-  };
+    );
+  } catch (error) {
+    warn("ask-answer-rejected", { reason: "answer-json" });
+    throw error;
+  }
+  return { value, operation, policyVersion: initial.version };
 }
 export async function completeCustomerAiAnswer(
   uid: string,
