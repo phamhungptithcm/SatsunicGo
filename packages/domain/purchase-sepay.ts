@@ -191,7 +191,8 @@ export function verifySePayReadback(
   );
   // A normalized authenticated notice identifies one transaction within the
   // readback. Without it, multiple approved payments remain ambiguous.
-  if (paid.length !== 1) throw Error("SEPAY_AMBIGUOUS_PAYMENT");
+  if (paid.length === 0) throw Error("SEPAY_NO_APPROVED_PAYMENT");
+  if (paid.length > 1) throw Error("SEPAY_MULTIPLE_APPROVED_PAYMENTS");
   const t = paid[0];
   if (
     t.payment_method !== intent.paymentMethod ||

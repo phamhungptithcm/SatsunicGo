@@ -296,6 +296,31 @@ describe("readback is the only money proof", () => {
     expect(() => verifySePayReadback(raw(), intent, p, now)).toThrow();
   });
 });
+describe("private ambiguity classification", () => {
+  it("distinguishes zero eligible payments without accepting the captured order", () => {
+    const r = raw();
+    r.data.transactions[0].transaction_status = "DECLINED";
+    expect(() => verifySePayReadback(r, intent, undefined, now)).toThrow(
+      "SEPAY_NO_APPROVED_PAYMENT",
+    );
+  });
+  it("distinguishes multiple eligible payments without selecting one", () => {
+    const r = raw();
+    r.data.transactions.push({ ...transaction, id: "OTHER_APPROVED" });
+    expect(() => verifySePayReadback(r, intent, undefined, now)).toThrow(
+      "SEPAY_MULTIPLE_APPROVED_PAYMENTS",
+    );
+  });
+  it.each(["SEPAY_NO_APPROVED_PAYMENT", "SEPAY_MULTIPLE_APPROVED_PAYMENTS"])(
+    "allows only the fixed diagnostic %s",
+    (code) => {
+      expect(sepayFailureDiagnostic(new Error(code))).toEqual({ code });
+      expect(sepayFailureDiagnostic(new Error(code + ": private-value"))).toEqual({
+        code: "SEPAY_INTERNAL_FAILURE",
+      });
+    },
+  );
+});
 describe("backend-only signing and form admission", () => {
   const adapter = createSandboxAdapter(
     "synthetic-fixture-only-never-a-credential",
