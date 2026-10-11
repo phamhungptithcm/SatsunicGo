@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { z } from "zod";
+import { warn } from "firebase-functions/logger";
+import { describe, expect, it, vi } from "vitest";
 import { createHmac } from "node:crypto";
 import { readFileSync } from "node:fs";
 import {
@@ -16,8 +18,11 @@ import {
 import {
   createSandboxAdapter,
   authenticSePayIpn,
+  sepayFailureDiagnostic,
 } from "../../functions/src/payments/sepay-sandbox";
 import { admitPurchaseCheckoutAcknowledgement } from "../../packages/domain/purchase-checkout";
+
+vi.mock("firebase-functions/logger", () => ({ warn: vi.fn() }));
 
 const id = "00000000-0000-4000-8000-000000000001";
 const now = Date.UTC(2026, 9, 9, 10, 0);
@@ -445,4 +450,75 @@ describe("bounded private readback transport", () => {
       );
     },
   );
+});
+
+describe("private runtime failure diagnostics", () => {
+  it("admits only fixed internal codes and never raw exception details", () => {
+    expect(sepayFailureDiagnostic(new Error("SEPAY_BINDING_MISMATCH"))).toEqual(
+      { code: "SEPAY_BINDING_MISMATCH" },
+    );
+    for (const error of [
+      new Error("Authorization: secret-key; customer@example.test"),
+      { message: "SEPAY_BINDING_MISMATCH", token: "private" },
+      null,
+    ])
+      expect(sepayFailureDiagnostic(error)).toEqual({
+        code: "SEPAY_INTERNAL_FAILURE",
+      });
+    const parsed = sepayIpnSchema.safeParse({ timestamp: "private-value" });
+    if (parsed.success) throw Error("fixture must fail");
+    const diagnostic = sepayFailureDiagnostic(parsed.error);
+    expect(diagnostic.code).toBe("SEPAY_SCHEMA_INVALID");
+    expect(JSON.stringify(diagnostic)).not.toContain("private-value");
+    const injected = new z.ZodError([
+      {
+        code: "custom",
+        path: ["secret-customer-name", 123],
+        message: "private-token",
+      },
+    ]);
+    expect(sepayFailureDiagnostic(injected)).toEqual({
+      code: "SEPAY_SCHEMA_INVALID",
+      issueCount: 1,
+      fields: ["other.*"],
+    });
+  });
+  it("records response status without credentials, URL, headers or body", async () => {
+    const spy = vi.mocked(warn);
+    spy.mockClear();
+    try {
+      const adapter = createSandboxAdapter(
+        "private-key",
+        async () =>
+          new Response("private-provider-body", {
+            status: 403,
+            headers: {
+              "content-type": "text/html",
+              "x-secret": "private-header",
+            },
+          }),
+      );
+      await expect(adapter.readback("fixture-order")).rejects.toThrow(
+        "SEPAY_READBACK_UNAVAILABLE",
+      );
+      expect(warn).toHaveBeenCalledWith("SEPAY_READBACK_DIAGNOSTIC", {
+        stage: "response",
+        httpStatus: 403,
+        jsonContentType: false,
+        timedOut: false,
+      });
+      const logged = JSON.stringify(spy.mock.calls);
+      for (const secret of [
+        "private-key",
+        "private-provider-body",
+        "private-header",
+        "fixture-order",
+        "authorization",
+        "pgapi",
+      ])
+        expect(logged).not.toContain(secret);
+    } finally {
+      spy.mockClear();
+    }
+  });
 });

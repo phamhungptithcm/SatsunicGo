@@ -1,3 +1,4 @@
+import { warn } from "firebase-functions/logger";
 import type { Response } from "express";
 import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
@@ -34,6 +35,7 @@ import {
 import {
   authenticSePayIpn,
   sandboxAdapter,
+  sepayFailureDiagnostic,
   sandboxPaymentReady,
   sepaySecrets,
   sepaySandboxIpnSecret,
@@ -197,6 +199,10 @@ export async function handleSePayPayment(
     };
   } catch (error) {
     if (error instanceof HttpsError) throw error;
+    warn("SEPAY_PAYMENT_DIAGNOSTIC", {
+      action,
+      ...sepayFailureDiagnostic(error),
+    });
     throw new HttpsError(
       "unavailable",
       "Chưa xác minh được với SePay. Giữ cùng lượt và kiểm tra lại sau.",
