@@ -1,0 +1,32 @@
+1
+00:00:00,000 --> 00:00:09,000
+Bạn cứ kể món mình thích. Ask giúp bạn tìm và chọn bước tiếp theo.
+
+2
+00:00:09,000 --> 00:00:18,000
+Thấy món phù hợp? Bạn chọn mẫu và số lượng nhé.
+
+3
+00:00:18,000 --> 00:00:27,000
+Xem lại món, mẫu và tổng tiền trước khi thêm vào giỏ.
+
+4
+00:00:27,000 --> 00:00:36,000
+Bạn xem các nơi bán và tự chọn chỗ mình muốn mua.
+
+5
+00:00:36,000 --> 00:00:45,000
+Bạn kiểm tra, bổ sung thông tin còn thiếu rồi gửi yêu cầu nhé.
+
+6
+00:00:45,000 --> 00:00:54,000
+Xem thông tin phí và điều kiện áp dụng trước khi quyết định.
+
+7
+00:00:54,000 --> 00:01:03,000
+Từ lúc nhận yêu cầu đến khi giao hàng, bạn có thể theo dõi tiến độ.
+
+8
+00:01:03,000 --> 00:01:12,000
+Video minh hoạ. Bạn luôn kiểm tra và xác nhận trước khi mua.
+
