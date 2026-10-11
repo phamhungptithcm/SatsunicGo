@@ -1,95 +1,68 @@
 # SatsunicGo
 
-Shopping and purchase assistance from the US, Japan, and Korea to Vietnam, with Ask Anything as a way to find a product, understand the costs, and continue with a purchase request.
+**Overseas shopping, from the first question to order tracking.**
 
-## Taking one AI project all the way
+SatsunicGo helps customers in Vietnam buy products from the US, Japan, and South Korea. Browse listed products or request something new. **Ask Anything** connects product discovery, purchase details, service information, and order tracking in one conversation.
 
-After a lot of AI experiments, unfinished prototypes, and more burned tokens than I would like to count, I wanted to take one personal product all the way: build it, put it in front of customers, run the service, and see whether it can earn real money.
+[Explore SatsunicGo](https://satsunicgo.web.app/) · [Watch the walkthrough](docs/assets/readme/ask-demo/ask-anything-demo.mp4) · [Local setup](#install-and-run) · [Architecture](docs/ARCHITECTURE_AND_DATA.md)
 
-That product is SatsunicGo.
+[![Ask Anything walkthrough: find products, choose a source, prepare a purchase request, ask about fees, and track orders](docs/assets/readme/ask-demo/poster.png)](docs/assets/readme/ask-demo/ask-anything-demo.mp4)
 
-The starting point is fairly ordinary. Someone finds a pair of shoes on a US website and wants to buy them. Before they can do that, they need to work out the size, find a purchase assistance service, read the fees, fill in a form, and ask about shipping. Change the quantity halfway through, and there is another round of explaining.
+*A 72-second Vietnamese product walkthrough with captions and illustrative data. This is a storyboard based on current source, rather than a recording of a completed transaction. [Transcript and demo notes](docs/assets/readme/ask-demo/README.md).*
 
-I had already built Ask Anything on [HunpeoLabs](https://hunpeolabs.com) so visitors could ask about me and my work. With SatsunicGo, I wanted to carry that idea into shopping: let people say what they need, ask a few questions, and keep going from the same place.
+## Ask Anything
 
-The longer story is in [SatsunicGo: Making Overseas Shopping Feel More Like a Conversation](https://hunpeolabs.com/resources/blog/satsunicgo-building-an-applied-ai-shopping-product). This repository is where I am building it.
+Start with what you need. Keep the product pages, cart, and forms available when you want to check the details.
 
-![SatsunicGo homepage showing the purchase assistance journey and Ask Anything composer](docs/assets/readme/webapp-home.png)
+| You ask | The next step |
+| --- | --- |
+| “Find an AIRism shirt in SatsunicGo.” | Search listed products by name or purpose, then choose a result. |
+| “Make it two, size M.” | Update a supported selection, review its variant and total, then confirm adding it to the cart. |
+| “Find this product in Japan.” | When external discovery is enabled and you are signed in, see reference sources in a selection panel. |
+| “Use this source, in white.” | Select a source, variant, and quantity to prepare a custom purchase draft; review and complete the request form. |
+| “What are the service fees?” | Get guidance grounded in published service information and links to the fee pages. |
+| “Where is my order?” | Look up orders you can access, or use the supported guest tracking-code flow. |
 
-_The customer homepage during development, with the purchase assistance steps and Ask Anything at the bottom._
+**You stay in control.** A draft is not a submitted order. Catalog prices are checked again when items enter the cart. New checkout requires full initial payment of the displayed amount. Existing orders retain their recorded payment workflow. Payment confirmation and order progress come from backend records, never from generated chat text.
 
-## “Can you help me buy this?”
+**Availability matters.** External discovery depends on frontend enablement, server policy, provider access, and a signed-in conversation. Web references do not confirm price, stock, or authenticity. A limited search with no matches does not prove the full catalog has no suitable product. When a lookup cannot be verified, use the catalog, request form, or support path.
 
-Someone might arrive with a link and a clear request:
+## One service, two ways to shop
 
-> “Can you get these shoes from the US? I usually wear size 38.”
+- **Listed products:** choose a variant and quantity, review the cart and recipient, and complete checkout.
+- **Custom purchase assistance:** describe an item, share a link or reference image, or select a seller reference. Review the prepared details and provide missing source and price information before continuing.
 
-Then come the details: which size chart applies, what shipping includes, and which costs still need a quote. If the customer decides to go ahead, Ask should help collect the missing information and show the request for them to check. “Actually, get two pairs” should carry the change forward without starting the whole conversation again.
+The customer account brings together orders, payments, notifications, membership, and support. The staff workspace supports request review, purchasing, inspection, packing, shipping, and finance operations.
 
-Other questions are just as practical:
+![SatsunicGo customer homepage](docs/assets/readme/webapp-home.png)
 
-> “How much for two bottles, including shipping to Vietnam?”
->
-> “Has my order from last week reached Vietnam?”
+## Built around business actions
 
-People should be able to ask those questions without knowing where the service keeps its information. The usual product pages, forms, and account screens remain available; the conversation gives them another way through the task.
+| Layer | Implementation |
+| --- | --- |
+| Web application | React 19, TypeScript, Vite, React Router |
+| Identity and data | Firebase Authentication, Firestore, Storage |
+| Business services | Firebase Cloud Functions v2 and shared domain validation |
+| AI and discovery | Genkit / Gemini integration, bounded lexical knowledge retrieval, catalog and external-reference flows |
+| Payments | payOS integration and SePay purchase checkout paths; environment-specific setup and acceptance required |
+| Validation | Vitest, Firebase Security Rules checks, HTTP scenarios, Playwright browser coverage |
 
-That is the experience I am working toward. Ask still needs work, particularly around context, retrieval, and the steps between a useful answer and a completed request.
+The server enforces ownership, permissions, validation, and transaction rules. Ask supplies explanations and prepares supported actions; application controls handle confirmation and checkout. Current retrieval uses bounded lexical search rather than a vector database.
 
-![SatsunicGo Ask panel showing a CeraVe search, product results, and a purchase assistance link](docs/assets/readme/webapp-ask.png)
+This README describes the current working tree, including ongoing changes. The walkthrough and local development evidence do not certify production authentication, AI providers, payment settlement, or fulfillment. See [external setup](docs/EXTERNAL_SETUP_REQUIRED.md) and [operations](docs/OPERATIONS_RUNBOOK.md) for environment requirements.
 
-_Product discovery inside Ask. This screenshot shows the starting point of the conversation._
+## Repository guide
 
-## The work behind the conversation
+| Path | Contents |
+| --- | --- |
+| `src/` | Public website, customer account, Ask, cart, and staff workspace |
+| `functions/src/` | Business commands, integrations, AI services, and jobs |
+| `packages/domain/` | Shared schemas, pricing, order lifecycle, and domain rules |
+| `tests/` | Unit, Security Rules, HTTP, and browser checks |
+| `scripts/` | Local utilities, demo tools, and release checks |
+| `docs/` | Architecture, workflows, operating notes, and review evidence |
 
-A purchase still moves through the business: reviewing the request, quoting, getting the customer's approval, purchasing, checking the goods, packing, and shipping. SatsunicGo includes the customer screens and staff workspace for that work, alongside payments, membership, support, and content management.
-
-The distinctions around orders and money matter. A prepared request stays a draft until the customer submits it. Payment confirmation comes from the payment system. Order progress comes from the customer's actual order record. If a customer approves one pair of shoes and then changes it to two, the changed request needs another confirmation.
-
-Ask helps people understand and reach these steps. The application checks access and handles the business action. When information cannot be checked, the conversation needs to make that clear.
-
-## The Lego pieces behind Ask
-
-I think of the design as a few Lego pieces that need to fit together. The LLM interprets the question and explains the response. Knowledge supplies product and service information. Tools look up current facts or prepare the next step. The backend checks who is asking, what they can access, and what action they have confirmed.
-
-![SatsunicGo target AI architecture connecting the agent runner, model adapter, permission gate, tools, context compaction, memory, audit logs, and a separate customer activity pipeline](docs/assets/readme/ask-architecture.png)
-
-_The design I am working toward, including parts still being built. [View the architecture diagram at full size](docs/assets/readme/ask-architecture.png)._
-
-The code uses React, TypeScript, and Vite for the web application; Firebase Authentication, Firestore, Storage, and Cloud Functions for identity and business data; and Genkit with Gemini for the model integration. Shared domain modules hold validation and business rules. payOS is part of the payment integration.
-
-The broader agent design also needs limits on steps, time, and model usage, along with cancellation and a record of what happened. These are part of the direction being built; describing the design here does not mean every part has been accepted in production.
-
-## Context is where I am spending a lot of time
-
-Ask can still be a little clumsy. It can miss the point, ask an unnecessary question, or receive too much background. Getting the right information into the model at the right moment takes more work than adding an input box.
-
-Chunking is a good example. A shipping policy might give a rate, followed by the conditions for using it. Retrieve the rate without those conditions, and the answer can read well while leaving the customer with the wrong expectation. I am working on keeping useful sections together and preserving their sources.
-
-Some information can come from a document. Other information changes: an order status needs a fresh, authorised lookup. Longer conversations bring another problem. Older discussion can be summarised, but the selected item, draft request, and pending confirmation need to remain application state.
-
-There is no vector database in the current retrieval implementation. I am starting with a bounded knowledge collection and targeted lexical retrieval. I want to see where that approach falls short before adding semantic retrieval and another component to operate.
-
-## What I want to learn from real use
-
-My priority is to make the everyday journeys dependable: finding a product, understanding the fees, preparing a purchase request, confirming it, and checking an order. Then I can learn where people get stuck, which answers lack enough evidence, and what each useful interaction costs.
-
-Understanding customer activity is another part of the design, with its own privacy and consent work. A product view, a submitted request, and a payment each mean different things. That distinction needs to survive any reporting built around them.
-
-This repository contains the implementation and ongoing work toward that rollout. Local tests and emulator sessions help develop it; real authentication, payment, model access, and operational acceptance require their own verification. Current release and setup details belong in the linked project documents below.
-
-## Finding your way around the repo
-
-| Path               | What lives there                                                    |
-| ------------------ | ------------------------------------------------------------------- |
-| `src/`             | Public pages, customer account, Ask, and staff workspace            |
-| `functions/src/`   | Server handlers, business commands, integrations, and AI services   |
-| `packages/domain/` | Shared validation, pricing, order lifecycle, and other domain rules |
-| `tests/`           | Unit, Security Rules, HTTP, and browser checks                      |
-| `scripts/`         | Local tooling, demo utilities, and release checks                   |
-| `docs/`            | Architecture, plans, reviews, and operating notes                   |
-
-Start with [architecture and data boundaries](docs/ARCHITECTURE_AND_DATA.md), [external setup requirements](docs/EXTERNAL_SETUP_REQUIRED.md), and the [operations runbook](docs/OPERATIONS_RUNBOOK.md). The [release guide](docs/releases/CICD-108.md) describes the release pipeline. [AGENTS.md](AGENTS.md) defines the current shared development environment; older ports in the [local runbook](docs/LOCAL_RUNBOOK.md) describe earlier demo setups.
+Read the [product workflows](docs/PRODUCT_AND_WORKFLOWS.md), [architecture and data boundaries](docs/ARCHITECTURE_AND_DATA.md), [release guide](docs/releases/CICD-108.md), and [repository instructions](AGENTS.md). The [project story](https://hunpeolabs.com/resources/blog/satsunicgo-building-an-applied-ai-shopping-product) explains why I built SatsunicGo.
 
 ## Install and run
 
