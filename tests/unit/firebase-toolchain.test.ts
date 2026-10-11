@@ -57,7 +57,13 @@ describe("Firebase toolchain compatibility", () => {
 
   it("preserves ready, hot reload, add, unlink, ignore and close", async () => {
     const root = await realpath(
-      await mkdtemp(join(tmpdir(), "firebase-watcher-")),
+      // Keep the native fixture on the system temporary filesystem on macOS.
+      await mkdtemp(
+        join(
+          process.platform === "darwin" ? "/tmp" : tmpdir(),
+          "firebase-watcher-",
+        ),
+      ),
     );
     // Subscribe to an existing file before testing change: add/change on a
     // newly discovered file can be coalesced by the native filesystem watcher.
@@ -79,6 +85,9 @@ describe("Firebase toolchain compatibility", () => {
     instance.on("error", (error) => errors.push(error));
     try {
       await once(instance, "ready", { signal: AbortSignal.timeout(5000) });
+      // A real change event confirms native subscriptions before discovery.
+      await writeFile(hotFile, "updated hot reload");
+      await until(() => seen.includes(`change:${hotFile}`));
       const addedDirectory = join(root, "nested");
       await mkdir(addedDirectory);
       const file = join(addedDirectory, "index.js");
@@ -94,8 +103,6 @@ describe("Firebase toolchain compatibility", () => {
           watched: instance.getWatched(),
         }),
       );
-      await writeFile(hotFile, "updated hot reload");
-      await until(() => seen.includes(`change:${hotFile}`));
       await unlink(file);
       await until(() => seen.includes(`unlink:${file}`));
       for (const folder of [".hidden", "generated", "node_modules/pkg"]) {

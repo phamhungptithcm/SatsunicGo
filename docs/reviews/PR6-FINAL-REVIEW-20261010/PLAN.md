@@ -30,3 +30,9 @@ Watcher diagnostic cycle: native ready completed but addDir emitted no event and
 
 
 Fixture final delta preserves dynamic directory plus file creation before waiting for both addDir/add. Empty-directory wait was not part of the original case and is removed. Local full validation is still failing under current runtime; CI and independent review remain pending, no readiness claimed.
+
+
+Final watcher evidence: direct Node22 all-lifecycle smoke also failed waiting for directory discovery after ready; Vitest-only diagnosis disproved. Moving the existing hot-file change assertion immediately after ready provides a real native-event readiness barrier before dynamic directory/file creation. Identical standalone assertions passed3/3 with that ordering. Independent reviewer recommends this test-only correction. Preserve native watcher, dynamic add/addDir, unlink, ignore, close and unchanged deadlines; no runtime adapter modification, polling, retries, sleeps or case suppression. Aggregate and final CI/artifact must bind the resulting commit.
+
+
+Environment evidence: all2506 unit cases passed using TMPDIR=/private/tmp with the event barrier, while default macOS per-user T failed directory discovery. Final fixture selects system /tmp on Darwin (mkdtemp private random directory, canonicalized with realpath), uses os.tmpdir elsewhere, and retains the positive native-event barrier. This is a bounded test fixture filesystem choice, not a watcher runtime/polling/timeout change. Root cause of macOS per-user T event loss remains unproven; do not claim kernel diagnosis. Verify default npm test without TMPDIR override, then freeze new commit and rerun exact CI/artifact/reviewer.
