@@ -1,4 +1,6 @@
 import { timingSafeEqual, createHash } from "node:crypto";
+import { warn } from "firebase-functions/logger";
+import { z } from "zod";
 import { defineSecret } from "firebase-functions/params";
 import { SePayPgClient } from "sepay-pg-node";
 import {
@@ -55,6 +57,64 @@ export function sandboxAdapter(): SePayAdapter {
   // shares static base URLs, so all readback uses the fixed, bounded client below.
   return createSandboxAdapter(sepaySandboxSecret.value());
 }
+const diagnosticCodes = new Set([
+  "SEPAY_NOT_CONFIGURED",
+  "SEPAY_READBACK_UNAVAILABLE",
+  "SEPAY_BINDING_MISMATCH",
+  "SEPAY_LEASE_LOST",
+  "SEPAY_AMOUNT_INVALID",
+  "SEPAY_DATE_INVALID",
+  "SEPAY_AMBIGUOUS_PAYMENT",
+  "SEPAY_TRANSACTION_MISMATCH",
+]);
+const diagnosticFields = new Set([
+  "data",
+  "id",
+  "order_id",
+  "order_invoice_number",
+  "order_status",
+  "order_amount",
+  "order_currency",
+  "transactions",
+  "transaction_id",
+  "payment_method",
+  "transaction_type",
+  "transaction_status",
+  "transaction_amount",
+  "transaction_currency",
+  "transaction_date",
+]);
+/** Never return raw provider/SDK exceptions or validation values to logs. */
+export function sepayFailureDiagnostic(error: unknown) {
+  if (error instanceof z.ZodError)
+    return {
+      code: "SEPAY_SCHEMA_INVALID",
+      issueCount: Math.min(error.issues.length, 100),
+      fields: [
+        ...new Set(
+          error.issues
+            .slice(0, 10)
+            .map((issue) =>
+              issue.path
+                .map((part) =>
+                  typeof part === "number"
+                    ? "*"
+                    : typeof part === "string" && diagnosticFields.has(part)
+                      ? part
+                      : "other",
+                )
+                .join("."),
+            ),
+        ),
+      ],
+    };
+  return {
+    code:
+      error instanceof Error && diagnosticCodes.has(error.message)
+        ? error.message
+        : "SEPAY_INTERNAL_FAILURE",
+  };
+}
 /** Injectable only in internal tests; never accepts a client-supplied secret or URL. */
 export function createSandboxAdapter(
   secret: string,
@@ -107,6 +167,9 @@ export function createSandboxAdapter(
       const controller = new AbortController(),
         timer = setTimeout(() => controller.abort(), 10000);
       let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+      let httpStatus: number | null = null,
+        jsonContentType = false;
+      let stage: "transport" | "response" | "body" | "json" = "transport";
       try {
         const response = await transport(
           `https://pgapi-sandbox.sepay.vn/v1/order/detail/${orderId}`,
@@ -120,6 +183,11 @@ export function createSandboxAdapter(
             },
           },
         );
+        httpStatus = response.status;
+        jsonContentType = /^application\/json(?:;|$)/i.test(
+          response.headers.get("content-type") ?? "",
+        );
+        stage = "response";
         if (
           !response.ok ||
           !response.body ||
@@ -128,6 +196,7 @@ export function createSandboxAdapter(
           )
         )
           throw Error("SEPAY_READBACK_FAILED");
+        stage = "body";
         reader = response.body.getReader();
         let size = 0;
         const chunks: Uint8Array[] = [];
@@ -138,8 +207,15 @@ export function createSandboxAdapter(
           if (size > 262144) throw Error("SEPAY_RESPONSE_TOO_LARGE");
           chunks.push(part.value);
         }
+        stage = "json";
         return JSON.parse(Buffer.concat(chunks).toString("utf8"));
       } catch {
+        warn("SEPAY_READBACK_DIAGNOSTIC", {
+          stage,
+          httpStatus,
+          jsonContentType,
+          timedOut: controller.signal.aborted,
+        });
         // Never propagate SDK/fetch errors containing headers, URL or raw body.
         throw Error("SEPAY_READBACK_UNAVAILABLE");
       } finally {
