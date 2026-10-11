@@ -1,0 +1,86 @@
+{
+  "duration": 60.0,
+  "videoSha256": "57dbad3c9a3de39c3731d7bf8d5e7b693edb2800ff7a537a9229d523de2f3182",
+  "scenes": [
+    {
+      "start": 0,
+      "duration": 1.5,
+      "caption": "Bạn thích món nào? Nhắn Ask để tìm nhé.",
+      "source": "output/playwright/readme-showcase/catalog-sora-real.webm",
+      "sourceStart": 0.7
+    },
+    {
+      "start": 1.5,
+      "duration": 6.0,
+      "caption": "Ask tìm món trong danh mục.",
+      "source": "output/playwright/readme-showcase/catalog-closeup-real.webm",
+      "sourceStart": 34.0
+    },
+    {
+      "start": 7.5,
+      "duration": 7.0,
+      "caption": "Chọn mẫu và số lượng bạn muốn.",
+      "source": "output/playwright/readme-showcase/catalog-closeup-real.webm",
+      "sourceStart": 106.0
+    },
+    {
+      "start": 14.5,
+      "duration": 5.0,
+      "caption": "Kiểm tra lại giỏ trước khi đặt mua nhé.",
+      "source": "output/playwright/readme-showcase/cart-final-real.webm",
+      "sourceStart": 8.0
+    },
+    {
+      "start": 19.5,
+      "duration": 2.5,
+      "caption": "Chưa có trong danh mục? Chọn nguồn tham khảo.",
+      "source": ".playwright-cli/video-2026-10-11T22-43-45-177Z.webm",
+      "sourceStart": 32.3
+    },
+    {
+      "start": 22.0,
+      "duration": 5.8,
+      "caption": "Chọn mẫu và số lượng để chuẩn bị bản nháp.",
+      "source": ".playwright-cli/video-2026-10-11T22-43-45-177Z.webm",
+      "sourceStart": 42.0
+    },
+    {
+      "start": 27.8,
+      "duration": 8.0,
+      "caption": "Ask điền sẵn link, mẫu và số lượng.",
+      "source": "output/playwright/readme-showcase/form-final-real.webm",
+      "sourceStart": 55.0
+    },
+    {
+      "start": 35.8,
+      "duration": 4.0,
+      "caption": "Bạn kiểm tra đúng món, quốc gia và giá nhé.",
+      "source": "output/playwright/readme-showcase/form-final-real.webm",
+      "sourceStart": 63.0
+    },
+    {
+      "start": 39.8,
+      "duration": 10.2,
+      "caption": "Muốn biết phí? Hỏi ngay trong chat.",
+      "source": "output/playwright/readme-showcase/fees-demo-clean.webm",
+      "sourceStart": 5.0
+    },
+    {
+      "start": 50.0,
+      "duration": 10.0,
+      "caption": "Nhập mã đơn để xem tiến độ.",
+      "source": ".playwright-cli/video-2026-10-11T22-47-59-973Z.webm",
+      "sourceStart": 10.0
+    }
+  ],
+  "editing": "Actual UI footage; idle cuts, recorder-padding crop, caption band. No fabricated responses or success states. No voice or music.",
+  "sourcesSha256": {
+    "output/playwright/readme-showcase/catalog-sora-real.webm": "43209445b4b4c8d0608248b6a16d5e86600a0d93d04b416adb5cc98a97b5e796",
+    "output/playwright/readme-showcase/catalog-closeup-real.webm": "598af86e0882009ede139aaca39abf4edf93ebbf348b014e08ba22958e112486",
+    "output/playwright/readme-showcase/cart-final-real.webm": "ee8779a971a99d9a8a543486c0f9aaee08d23dac34c43abed71523ee4e543d39",
+    ".playwright-cli/video-2026-10-11T22-43-45-177Z.webm": "894c767e944f9f254730ecdec9ccd37e7f14953ac9d938dfcc756895cd6e3bd5",
+    "output/playwright/readme-showcase/form-final-real.webm": "81092e813dacc72a7d512b36c9697546398a8cbe959cd30b9d00f99cd974d50e",
+    "output/playwright/readme-showcase/fees-demo-clean.webm": "76943c22aa235e7dc9bb805604fadfc61b67fac31b37eaca413c26c80cbe9719",
+    ".playwright-cli/video-2026-10-11T22-47-59-973Z.webm": "a0cfd3cef07d11488601c594fed1dcc1725eb750e2a3ef22908325b7383addda"
+  }
+}
