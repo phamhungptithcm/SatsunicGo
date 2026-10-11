@@ -1,3 +1,4 @@
+import { warn } from "firebase-functions/logger";
 import { HttpsError } from "firebase-functions/v2/https";
 import { askAnswerSchema } from "../../../packages/domain/ask-stream";
 import { redactChat, redactDraft } from "../../../packages/domain/ask-workflow";
@@ -9,6 +10,29 @@ import {
   customerAiRequest,
   completeCustomerAiAnswer,
 } from "./ask-production";
+
+function parseAnswer(value: unknown) {
+  const parsed = askAnswerSchema.safeParse(value);
+  if (!parsed.success) {
+    warn("ask-answer-rejected", { reason: "answer-schema" });
+    throw parsed.error;
+  }
+  return parsed.data;
+}
+
+function rejectedAnswer(
+  reason:
+    | "context-binding"
+    | "source-binding"
+    | "action-claim"
+    | "shopping-draft"
+    | "draft-binding",
+  code: "unavailable" | "failed-precondition",
+  message: string,
+) {
+  warn("ask-answer-rejected", { reason });
+  return new HttpsError(code, message);
+}
 
 const fold = (value: string) =>
   value
@@ -58,7 +82,7 @@ export async function pilotAnswer(
         return result.value;
       }
     : generatePilot;
-  const result = askAnswerSchema.parse(
+  const result = parseAnswer(
     await generate(
       uid,
       async (count) => {
@@ -108,12 +132,14 @@ export async function pilotAnswer(
     customerSessionId ? "customer" : "pilot",
   );
   if (current.stamp !== snapshot.stamp)
-    throw new HttpsError(
+    throw rejectedAnswer(
+      "context-binding",
       "failed-precondition",
       "Thông tin đã thay đổi trong lúc trả lời. Mở lại hội thoại để kiểm tra.",
     );
   if (result.sourceIds.some((id) => !usedSources.includes(id)))
-    throw new HttpsError(
+    throw rejectedAnswer(
+      "source-binding",
       "unavailable",
       "Chưa xác minh được nguồn của câu trả lời.",
     );
@@ -125,12 +151,14 @@ export async function pilotAnswer(
       fold([result.title, ...result.paragraphs, ...result.bullets].join(" ")),
     )
   )
-    throw new HttpsError(
+    throw rejectedAnswer(
+      "action-claim",
       "unavailable",
       "Chưa xác minh được nội dung trả lời. Anh/chị có thể dùng trang yêu cầu mua hộ.",
     );
   if (result.shoppingDraft)
-    throw new HttpsError(
+    throw rejectedAnswer(
+      "shopping-draft",
       "unavailable",
       "Bản nháp chưa đủ thông tin để kiểm tra.",
     );
@@ -165,7 +193,8 @@ export async function pilotAnswer(
       ) &&
       (!draft.notes || question.includes(draft.notes));
     if (!explicit)
-      throw new HttpsError(
+      throw rejectedAnswer(
+        "draft-binding",
         "unavailable",
         "Chưa xác minh được thông tin bản nháp. Anh/chị có thể dùng trang yêu cầu mua hộ.",
       );
@@ -177,11 +206,16 @@ export async function pilotAnswer(
   }
   if (completed) {
     signal.throwIfAborted();
-    await completeCustomerAiAnswer(
-      uid,
-      completed.operation,
-      completed.policyVersion,
-    );
+    try {
+      await completeCustomerAiAnswer(
+        uid,
+        completed.operation,
+        completed.policyVersion,
+      );
+    } catch (error) {
+      warn("ask-answer-rejected", { reason: "completion-binding" });
+      throw error;
+    }
     signal.throwIfAborted();
   }
   return result;

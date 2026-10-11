@@ -1,4 +1,6 @@
+import { warn } from "firebase-functions/logger";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+vi.mock("firebase-functions/logger", () => ({ warn: vi.fn() }));
 const state = vi.hoisted(() => ({
   docs: new Map<string, Record<string, unknown>>(),
   serial: Promise.resolve(),
@@ -544,7 +546,14 @@ test("customer context cannot read a foreign conversation or order", async () =>
     ),
   ).rejects.toThrow();
 });
-test.each(["valid", "invented-citation", "malformed", "changed-context"])(
+test.each([
+  "valid",
+  "invented-citation",
+  "malformed",
+  "changed-context",
+  "invalid-json",
+  "action-claim",
+])(
   "real customer answer path validates %s before canary proof",
   async (kind) => {
     state.docs.set(policyPath, policy("owner-canary"));
@@ -571,7 +580,11 @@ test.each(["valid", "invented-citation", "malformed", "changed-context"])(
         const value = {
           language: "en",
           title: "Fabric care",
-          paragraphs: ["Check the care label before washing."],
+          paragraphs: [
+            kind === "action-claim"
+              ? "We purchased private-sensitive-fixture."
+              : "Check the care label before washing.",
+          ],
           bullets: [],
           sourceIds: kind === "invented-citation" ? ["post:unapproved"] : [],
           action: "workflow",
@@ -583,7 +596,12 @@ test.each(["valid", "invented-citation", "malformed", "changed-context"])(
               finishReason: "STOP",
               content: {
                 parts: [
-                  { text: JSON.stringify(kind === "malformed" ? {} : value) },
+                  {
+                    text:
+                      kind === "invalid-json"
+                        ? "private-sensitive-fixture{"
+                        : JSON.stringify(kind === "malformed" ? {} : value),
+                  },
                 ],
               },
             },
@@ -604,6 +622,22 @@ test.each(["valid", "invented-citation", "malformed", "changed-context"])(
       ).toBe(true);
     } else {
       await expect(result).rejects.toThrow();
+      const reasons = {
+        "invented-citation": "source-binding",
+        malformed: "answer-schema",
+        "changed-context": "context-binding",
+        "invalid-json": "answer-json",
+        "action-claim": "action-claim",
+      };
+      expect(warn).toHaveBeenCalledWith("ask-answer-rejected", {
+        reason: reasons[kind as keyof typeof reasons],
+      });
+      expect(JSON.stringify(vi.mocked(warn).mock.calls)).not.toContain(
+        "private-sensitive-fixture",
+      );
+      expect(JSON.stringify(vi.mocked(warn).mock.calls)).not.toContain(
+        "post:unapproved",
+      );
       expect(
         customerAiCanPromote(state.docs.get(budgetPath), "owner", Date.now()),
       ).toBe(false);
