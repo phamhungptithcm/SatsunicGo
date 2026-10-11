@@ -1126,3 +1126,44 @@ test('real compiled runtime checksum matches release producer and accepts Firest
   const response=spawnSync(process.execPath,['-e',script,join(stage,'deployment/functions/lib/functions/src/ai/feedback-retention-gate.js'),JSON.stringify({receipt:reordered,policy,now})],{env:{PATH:process.env.PATH,NODE_PATH:join(repositoryRoot,'node_modules')},encoding:'utf8',timeout:15000});
   assert.equal(response.status,0,response.stderr);assert.deepEqual(JSON.parse(response.stdout.trim()),{digest:receipt.receiptSha256,allowed:true});
 });
+
+test('standalone resource adapter is portable and rejects escaping or unrelated links', () => {
+  const adapter = 'vendor/otel-resources-compat';
+  const name = '@satsunicgo/otel-resources-compat';
+  const links = [`node_modules/${name}`, 'node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/resources'];
+  const dependencies = { [name]: `file:${adapter}` };
+  const rootLock = { lockfileVersion: 3, packages: {
+    functions: { dependencies },
+    [`functions/${adapter}`]: { name, version: '1.0.0', dependencies: { '@opentelemetry/resources': '2.11.0' } },
+    ...Object.fromEntries(links.map(key => [key, { link: true, resolved: `functions/${adapter}` }])),
+  } };
+  const seed = deploymentLockSeed(rootLock, { name: 'fixture', version: '1.2.3', dependencies });
+  assert.equal(seed.packages[links[1]].resolved, adapter);
+  assert.equal(seed.packages[adapter].version, '1.0.0');
+  assert.doesNotThrow(() => assertLockedVersions(seed, seed));
+  for (const bad of ['../outside', '/tmp/outside', 'node_modules/unrelated']) {
+    const actual = globalThis.structuredClone(seed); actual.packages[links[1]].resolved = bad;
+    assert.throws(() => assertLockedVersions(seed, actual), /DEPENDENCY_DRIFT/);
+  }
+  const disguised = globalThis.structuredClone(seed); disguised.packages[links[1]].link = false;
+  assert.throws(() => assertLockedVersions(seed, disguised), /DEPENDENCY_DRIFT/);
+  const extra = globalThis.structuredClone(seed); extra.packages['node_modules/unrelated'] = { link: true, resolved: adapter };
+  assert.throws(() => assertLockedVersions(seed, extra), /DEPENDENCY_DRIFT/);
+  const badRoot = globalThis.structuredClone(rootLock); badRoot.packages[links[1]].resolved = '../outside';
+  assert.throws(() => deploymentLockSeed(badRoot, { dependencies }), /INVALID_RESOURCE_ADAPTER_LINK/);
+});
+
+
+test('artifact refuses a source adapter directory symlink before reading its files', t => {
+  assert.throws(() => builtFixture(t, root => {
+    const name = '@satsunicgo/otel-resources-compat';
+    const pkg = JSON.parse(readFileSync(join(root, 'functions/package.json')));
+    pkg.dependencies = { [name]: 'file:vendor/otel-resources-compat' };
+    put(root, 'functions/package.json', pkg);
+    put(root, 'package.json', { overrides: { '@genkit-ai/google-cloud': { '@opentelemetry/resources': 'file:../../../functions/vendor/otel-resources-compat' } } });
+    const outside = join(root, 'external-bridge'); mkdirSync(outside);
+    put(outside, 'package.json', { name, version: '2.11.0' }); put(outside, 'index.cjs', 'throw Error("must not read")');
+    mkdirSync(join(root, 'functions/vendor'));
+    symlinkSync(outside, join(root, 'functions/vendor/otel-resources-compat'), 'dir');
+  }), /UNSAFE_RESOURCE_ADAPTER_SOURCE/);
+});

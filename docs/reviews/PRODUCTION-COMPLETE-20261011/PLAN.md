@@ -1,0 +1,13 @@
+# Production completion 2026-10-11
+
+Authorization: human explicitly authorizes merge all MRs to main, monitor production, enable AI and sandbox payments, fix and re-review issues; no additional approval prompts for already authorized scope.
+
+Repository intelligence: DEGRADED; both main-workspace indexes are stale. Current Git/source/PR metadata and targeted tests remain authoritative. No complete-index coverage claimed.
+
+High risk React/TypeScript/Firebase Node22 commerce/auth/CRM/customer/AI and CI release. Current upstream main e9d248f3; PR7 117f3e35 integrates PR3 f41aff21 and old PR6 a4c59f6f. Latest PR6 a5c1ff55 contains reviewed security dependencies, artifact compatibility and stale revoke fix. Preserve shared dirty workspace and shared5207 runtime.
+
+Plan: merge latest PR6 into isolated PR7 candidate, resolve only verified overlapping source/config/test conflicts; regenerate assets from source. Run typecheck/lint/full unit/component/release contracts and root+packaged audit plus exact-head GitHub Rules/HTTP/restore/build. Re-review combined diff, preserve endpoint inventory/secret bindings/financial isolation and independent current evidence. Update PR7 with exact source and evidence. Promote via merge commits retaining both PR histories; main starts native immutable release. Verify original artifact/checksum/source/Hosting/Functions/version and no deletion. Monitor failures, fix in isolated candidate and repeat checks/review. Activate only implemented ready capabilities through real hosted OWNER controls, with recent MFA/AppCheck, existing50000VND lifetime AI cap and owner canary before customer audience, sandbox only and isolated financial data. Configure verified minimum metadata only within authorized scope. Retain all unknown/pending/cutover/consent/revocation fences. Native provider and customer acceptance recorded separately; never substitute synthetic auth for real MFA.
+
+Files: incoming PR6 functions/package*.json, root package*.json, tools/firebase-watcher/**, functions/vendor/otel-resources-compat/**, scripts/release/artifact.mjs, public-order-tracking.ts and related tests/docs. Existing approved production-test and AI activation paths are reused, no invented availability. No unrelated refactoring, secret payload disclosure, real-money operation, destructive datafix or MFA bypass.
+
+Rollback: use prior verified immutable artifact through native release, disable new test/AI attempts first; preserve ledgers and unknown outcomes. Partial deploy requires provider readback before retry. Native accessibility/manual acceptance remains required where recorded; report unavailable evidence honestly.
