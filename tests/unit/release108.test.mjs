@@ -1110,6 +1110,28 @@ test('Scheduler readback binds exact hourly active POST/OIDC target and Function
   assert.deepEqual(verifyRetentionScheduler(cleanupJob,cleanupFunction),{name:RETENTION_SCHEDULER,state:'ENABLED',uri:cleanupFunction.serviceConfig.uri,revision:cleanupFunction.serviceConfig.revision});
   for(const delta of [{state:'PAUSED'},{schedule:'every 30 minutes'},{timeZone:'America/Chicago'},{retryConfig:{retryCount:1}},{httpTarget:{...cleanupJob.httpTarget,uri:'https://other.example.test'}},{httpTarget:{...cleanupJob.httpTarget,oidcToken:{serviceAccountEmail:'other@example.test'}}},{httpTarget:{...cleanupJob.httpTarget,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:'https://other.example.test'}}}])assert.throws(()=>verifyRetentionScheduler({...cleanupJob,...delta},cleanupFunction),/SCHEDULER_READBACK/);
 });
+test('Scheduler accepts the exact provider-attested Function alias with its matching OIDC audience',()=>{
+  const url='https://asia-southeast1-satsunicgo.cloudfunctions.net/askFeedbackCleanup';
+  const fn={...cleanupFunction,url};
+  const job={...cleanupJob,httpTarget:{...cleanupJob.httpTarget,uri:url,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:url}}};
+  assert.deepEqual(verifyRetentionScheduler(job,fn),{name:RETENTION_SCHEDULER,state:'ENABLED',uri:cleanupFunction.serviceConfig.uri,revision:cleanupFunction.serviceConfig.revision});
+  assert.doesNotThrow(()=>verifyRetentionScheduler({...job,httpTarget:{...job.httpTarget,oidcToken:{serviceAccountEmail:cleanupFunction.serviceConfig.serviceAccountEmail}}},fn));
+  for(const url of [undefined,'https://asia-southeast1-other.cloudfunctions.net/askFeedbackCleanup','https://us-central1-satsunicgo.cloudfunctions.net/askFeedbackCleanup'])assert.throws(()=>verifyRetentionScheduler(job,{...fn,url}),/SCHEDULER_READBACK/);
+  assert.throws(()=>verifyRetentionScheduler({...job,httpTarget:{...job.httpTarget,oidcToken:{...job.httpTarget.oidcToken,audience:cleanupFunction.serviceConfig.uri}}},fn),/SCHEDULER_READBACK/);
+  assert.throws(()=>verifyRetentionScheduler({...cleanupJob,httpTarget:{...cleanupJob.httpTarget,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:url}}},fn),/SCHEDULER_READBACK/);
+});
+test('Scheduler rejects unbound Function aliases, modified paths and cross-target audiences',()=>{
+  const url='https://asia-southeast1-satsunicgo.cloudfunctions.net/askFeedbackCleanup';
+  const fn={...cleanupFunction,url};
+  for(const uri of [url+'/',url+'?redirect=1',url+'#fragment',url.replace('askFeedbackCleanup','otherFunction'),url.replace('askFeedbackCleanup','%61skFeedbackCleanup'),url.replace('satsunicgo','other'),url.replace('asia-southeast1','us-central1')]){
+    const job={...cleanupJob,httpTarget:{...cleanupJob.httpTarget,uri,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:uri}}};
+    assert.throws(()=>verifyRetentionScheduler(job,fn),/SCHEDULER_READBACK/);
+    assert.throws(()=>verifyRetentionScheduler(job,{...fn,url:uri}),/SCHEDULER_READBACK/);
+  }
+  const job={...cleanupJob,httpTarget:{...cleanupJob.httpTarget,uri:url,oidcToken:{...cleanupJob.httpTarget.oidcToken,audience:url}}};
+  assert.throws(()=>verifyRetentionScheduler(job,{...fn,name:fn.name.replace('satsunicgo','other')}),/SCHEDULER_READBACK/);
+  assert.throws(()=>verifyRetentionScheduler(job,{...fn,serviceConfig:{...fn.serviceConfig,uri:'https://other-synthetic.a.run.app'}}),/SCHEDULER_READBACK/);
+});
 test('readiness receipt is bound to artifact and READY index names without writing activation policy',async()=>{
   const calls=[];const now=1791597600000;
   const ready=await readRetentionReadiness(retentionPlan,[cleanupFunction],async(method,path)=>{calls.push({method,path});return path===RETENTION_SCHEDULER?cleanupJob:{indexes:[indexRow(RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/')))]};},now);
