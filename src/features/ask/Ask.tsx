@@ -104,6 +104,7 @@ import {
 } from "../../../packages/domain/ask-workflow";
 
 import {
+  informationalPreparationQuestion,
   collectReadFrame,
   canonicalFrameDetectors,
   type ReadKind,
@@ -127,7 +128,16 @@ function explicitUnsplitReadGoals(text: string) {
     (tracking.kind !== "none" && (catalogCue || feesCue))
   );
 }
-function mixedReadCandidate(text: string) {
+function mixedReadCandidate(text: string, hasCanonicalCommand: boolean) {
+  if (
+    informationalPreparationQuestion(
+      text,
+      extractOrderTrackingIntent(text).kind !== "none" ||
+        !!shippingQuestionDirection(text),
+      hasCanonicalCommand,
+    )
+  )
+    return false;
   return (
     /[,;\n]|\s+(?:và|va|and)\s+/iu.test(text) || explicitUnsplitReadGoals(text)
   );
@@ -1407,7 +1417,10 @@ export function Ask({
           trackAsk(text, analyticsTurn);
         // Only explicit multi-clause, image-free reads enter this local panel path.
         // Existing standalone commerce actions retain their serial authority below.
-        const mixedSyntax = mixedReadCandidate(text);
+        const mixedSyntax = mixedReadCandidate(
+          text,
+          !!customerChatAction(text, commerce.order, commerce.draft),
+        );
         if (
           !images.length &&
           mixedSyntax &&
