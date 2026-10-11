@@ -1,0 +1,11 @@
+.fixtureBar, .fixtureTrace { margin: 12px auto; max-width: 1180px; padding: 10px 16px; color: #53627b; font: 12px/1.5 system-ui, sans-serif; box-sizing: border-box; }
+.fixtureBar p { margin: 0 0 8px; }
+.fixtureControls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fixtureControls button { padding: 6px 9px; font: inherit; color: #163cff; border: 1px solid #dce2ec; border-radius: 5px; background: #fff; }
+.fixtureControls button[aria-pressed="true"] { background: #edf1ff; }
+.fixtureControls button:disabled { opacity: .5; }
+.fixtureControls button:focus-visible { outline: 2px solid #163cff; outline-offset: 2px; }
+.fixtureTrace ol { margin: 8px 0; padding-left: 24px; overflow-wrap: anywhere; }
+.fixtureTrace li { font: 11px/1.5 ui-monospace, monospace; }
+.fixtureCheckout { max-width: 780px; margin: 24px auto; }
+.fixtureDisclosure { color: #667086; font: 12px/1.5 system-ui, sans-serif; }

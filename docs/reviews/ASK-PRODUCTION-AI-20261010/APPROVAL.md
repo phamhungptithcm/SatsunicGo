@@ -29,3 +29,7 @@ Human reply: “Approve test-only clock fix”. Scope adds `tests/unit/notificat
 Human reply: “Approve public push and draft PR”. Explicit authorization to publish the isolated Ask commits to the existing public GitHub repository `phamhungptithcm/SatsunicGo` and open a draft PR. No unrelated shared WIP or secrets may be published.
 
 Intelligence remains DEGRADED: prior source-verified brief retained, current test file and clock hooks reopened before editing; no dependency or production code change in this delta.
+
+## Native release delta approved — 2026-10-10
+
+Human reply: “Approve native release after green CI”. Authorizes PR #4 merge and the existing complete immutable Functions + Hosting release, including unchanged functions, only after every required CI gate passes. AI stays disabled until the authenticated OWNER canary succeeds; 50,000 VND lifetime ceiling unchanged. Exact proposed delta is in RELEASE-DELTA.md. No IAM expansion, datafix or manual release bypass authorized.

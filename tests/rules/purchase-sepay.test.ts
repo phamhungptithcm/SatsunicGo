@@ -290,10 +290,14 @@ test("mixed cart → one immutable invoice → authenticated IPN/readback → al
   );
   expect(orders.docs.every((d) => d.data().testMode === true)).toBe(true);
   const entries = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("checkoutId", "==", c.preview.id)
     .get();
   expect(entries.size).toBe(2);
+  expect(
+    (await db.collection("financialEntries")
+      .where("checkoutId", "==", c.preview.id).get()).size,
+  ).toBe(0);
   const proofId = hash(
     `sepay_sandbox|${SEPAY_MERCHANT}|${f.notification.transaction.id}`,
   );
@@ -305,7 +309,7 @@ test("mixed cart → one immutable invoice → authenticated IPN/readback → al
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", c.preview.id)
         .get()
     ).size,
@@ -500,7 +504,7 @@ test.each(["cooldown", "lease"])(
     expect(
       (
         await db
-          .collection("financialEntries")
+          .collection("purchaseTestFinancialEntries")
           .where("checkoutId", "==", c.preview.id)
           .get()
       ).size,
@@ -533,7 +537,7 @@ test("authenticated void holds fulfillment without automatically reversing money
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", c.preview.id)
         .get()
     ).size,
@@ -880,7 +884,7 @@ test("receipt rendering failure is bounded and never reverses a verified payment
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", c.preview.id)
         .get()
     ).size,
@@ -1027,7 +1031,7 @@ test("five real readback failures exhaust the retry budget without losing eviden
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", c.preview.id)
         .get()
     ).size,
@@ -1129,7 +1133,7 @@ test("concurrent return reconciliation performs one readback while the owner lea
     transactionId: f.notification.transaction.id,
   });
   const entries = await getFirestore()
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("checkoutId", "==", c.preview.id)
     .get();
   expect(entries.size).toBe(1);
@@ -1162,7 +1166,7 @@ test.each(["line_total", "foreign_order"])(
     expect(
       (
         await db
-          .collection("financialEntries")
+          .collection("purchaseTestFinancialEntries")
           .where("checkoutId", "==", c.preview.id)
           .get()
       ).size,
@@ -1230,7 +1234,7 @@ test("private PDF is downloadable only by verified unlocked owner and a corrupt 
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", c.preview.id)
         .get()
     ).size,

@@ -109,6 +109,8 @@ export function CartProvider({
     identity = useRef(user?.uid ?? "guest");
   identity.current = user?.uid ?? "guest";
   const persistentGuest = useRef(true);
+  const volatileGuest = useRef<GuestCart | null>(null);
+  const volatileBaseRevision = useRef(0);
   const pendingKey = `satsunicgo-cart-pending-v1:${scope}:${user?.uid ?? "guest"}`;
   function apply(next: Cart) {
     current.current = next;
@@ -134,7 +136,7 @@ export function CartProvider({
     attempt.current = null;
     flight.current = false;
     transferFlight.current = false;
-    persistentGuest.current = true;
+    persistentGuest.current = !volatileGuest.current;
     if (!ready)
       return () => {
         live.current = false;
@@ -143,6 +145,12 @@ export function CartProvider({
     window.addEventListener("online", connection);
     window.addEventListener("offline", connection);
     function guest() {
+      if (volatileGuest.current) {
+        if (user) setGuestItems(volatileGuest.current.items);
+        else apply(volatileGuest.current);
+        setStorageWarning("Giỏ chỉ được giữ trong trang này vì trình duyệt chưa cho phép lưu.");
+        return;
+      }
       try {
         const saved = readGuest();
         if (user) setGuestItems(saved.items);
@@ -357,6 +365,8 @@ export function CartProvider({
       cartItemsSchema.parse(items);
       const next = { ...previous, items, revision: previous.revision + 1 };
       try {
+        if (volatileGuest.current && readGuest().revision !== volatileBaseRevision.current)
+          throw Error("GUEST_CART_CHANGED");
         localStorage.setItem(
           guestCartKey,
           JSON.stringify({
@@ -366,8 +376,12 @@ export function CartProvider({
             appliedMerges: previous.appliedMerges ?? [],
           }),
         );
+        volatileGuest.current = null;
+        persistentGuest.current = true;
         setStorageWarning("");
       } catch {
+        if (!volatileGuest.current) volatileBaseRevision.current = previous.revision;
+        volatileGuest.current = { ...next, appliedMerges: previous.appliedMerges ?? [] };
         persistentGuest.current = false;
         setStorageWarning(
           "Giỏ chỉ được giữ trong trang này vì trình duyệt chưa cho phép lưu.",
@@ -409,6 +423,22 @@ export function CartProvider({
     transferFlight.current = true;
     setMerging(true);
     try {
+      if (volatileGuest.current) {
+        const stored = await navigator.locks.request(`${guestCartKey}:transfer`, async () => {
+          if (!active()) return false;
+          const source = readGuest();
+          if (source.revision !== volatileBaseRevision.current || readGuestTransfer(localStorage, guestCartKey)) {
+            setError("Giỏ đã thay đổi ở tab khác. Các món ở trang này vẫn được giữ lại.");
+            return false;
+          }
+          localStorage.setItem(guestCartKey, JSON.stringify({ ...volatileGuest.current, version: 1 }));
+          volatileGuest.current = null;
+          persistentGuest.current = true;
+          setStorageWarning("");
+          return true;
+        });
+        if (!stored || !active()) return false;
+      }
       const existing = readGuestTransfer(localStorage, guestCartKey);
       if (
         attempt.current &&
@@ -463,6 +493,10 @@ export function CartProvider({
     setMerging(true);
     const edit = async () => {
       if (!active()) return false;
+      if (volatileGuest.current) {
+        setError("Các món vẫn được giữ trong trang này. Cho phép lưu rồi thử lưu vào giỏ trước khi sửa.");
+        return false;
+      }
       try {
         if (readGuestTransfer(localStorage, guestCartKey)) {
           setError("Kiểm tra lại lần lưu giỏ trước khi sửa món đã chọn.");
@@ -523,6 +557,7 @@ export function CartProvider({
         return;
       }
       localStorage.removeItem(guestCartKey);
+      volatileGuest.current = null;
       persistentGuest.current = true;
       setGuestItems([]);
       if (!user) apply(empty());

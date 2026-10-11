@@ -1,0 +1,37 @@
+[
+  {
+    "badge": null,
+    "initials": "KH",
+    "label": "Giỏ hàng đang tải",
+    "photoRendered": false,
+    "state": "loading"
+  },
+  {
+    "badge": "3",
+    "initials": "KH",
+    "label": "Giỏ hàng, 3 sản phẩm từ bản lưu",
+    "photoRendered": false,
+    "state": "cached"
+  },
+  {
+    "badge": null,
+    "initials": "KH",
+    "label": "Giỏ hàng chưa tải được",
+    "photoRendered": false,
+    "state": "error"
+  },
+  {
+    "badge": "99+",
+    "initials": "KH",
+    "label": "Giỏ hàng, 120 sản phẩm",
+    "photoRendered": false,
+    "state": "many"
+  },
+  {
+    "badge": "3",
+    "initials": "KH",
+    "label": "Giỏ hàng, 3 sản phẩm",
+    "photoRendered": false,
+    "state": "photo"
+  }
+]

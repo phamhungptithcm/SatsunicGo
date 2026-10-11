@@ -1,0 +1,1 @@
+Human user in this chat: "merge hết MRs to main and monitor release production enable all include AI and sanbox payment if any issue auto fix review fix until production complete I approved all do not ask approval anymore auto do anything that made this done". Authorizes this scoped completion plan; security/financial integrity/MFA/budget controls remain enforced.

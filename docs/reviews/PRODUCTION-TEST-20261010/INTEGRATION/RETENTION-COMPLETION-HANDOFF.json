@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task": "PRODUCTION-TEST-v1-retention-completion",
+  "at": "2026-10-10T02:27:09.136573+00:00",
+  "status": "PASSED_SOURCE_LOCAL_HANDOFF",
+  "repository": "/private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo",
+  "source_hashes": {
+    "functions/src/ai/feedback-lifecycle.ts": "ac06f5d391062be49ab62615c219d0adee5b716f21cf3b0fb8f620ae37781319",
+    "functions/src/ai/feedback-retention-gate.ts": "7f94f35c5066f001b86dcb5d14138236dd37ff6f77a545620539df5edc6d77e7",
+    "scripts/release/feedback-retention.mjs": "c149b912f353195e83062aa99ff8b0176cf7d4822c5acfecb7c2f4cfab0a39a4",
+    "scripts/release/artifact.mjs": "78a9fbe9dbac3e6316ed654ea6c60cf8a4bc9438d63c2e5ab953a5d341ac6b4a",
+    "scripts/release/reviewed-retries.mjs": "63489c69c66c09f9354cf78ac7d2e032abbd79b2c2835a97a3860c254f707687",
+    "scripts/release/verify-production.mjs": "28f79a4afa1b880538842eea170cc03c94694998f2a6d03b53e28a82f8bd6d52",
+    "scripts/release/release.mjs": "65e3b4b179dfb0cbe1342a12c5b5c3b4d8fef60570a3a7b74cb8ef8cfbd59cd4",
+    "tests/unit/ask-feedback-cleanup.test.ts": "ed92429e0df9785b89ba9700ebcd3460d2552b284b360226c5d93e2ffe8ced61",
+    "tests/unit/feedback-retention-gate.test.ts": "55da0315b84480105eda0d477e4571e5d0c8b60ef3cf18def283803615129341",
+    "tests/unit/release108.test.mjs": "63c493a466fe0deb6f059d6c9342d7a76d15c904ff49e6cca89695c5d3ba638d",
+    "firestore.indexes.json": "6d2b1a3032b08d9ae653c3e2747f75d85be3346cbfd688d749c098a933e9caf9",
+    "functions/src/ai/feedback-provenance.ts": "5ff465c6603d4845741f44f19ec53531bbc9d6728706df697a1ff519bcb3507c",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-IMPACT.md": "28a2b4dbe42ce2bfec2beb2af4d89c08d043e60c76c18dbbe4e4e6480cc443bb",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-ROLLOUT-RUNBOOK.md": "0f7f8d5c592d77117eac60bf69846f482a744c5031f03243279f77a9be921027"
+  },
+  "receipts": {
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-R2-CHECKS.json": "6e78ddd2578b4320de9a488423a1e83eaf163850e584aab3503b029dbcf7be40",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-SELF-REVIEW.json": "d8488a62909e5005e8c6c92aa23ab22101db79f0c999fc55c26bfd3661957307",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-COMPLETION-PEER-REVIEW.json": "fb81906b31df1857d324cd4d744d5b94067505f9947bbf2d781ea2f42b23b75e",
+    "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/RETENTION-ROLLOUT-RUNBOOK.md": "0f7f8d5c592d77117eac60bf69846f482a744c5031f03243279f77a9be921027"
+  },
+  "checks": {
+    "focused_runtime_gate": {
+      "status": "PASSED",
+      "tests": 48,
+      "exit_code": 0
+    },
+    "normal_release_node_contracts": {
+      "status": "PASSED",
+      "tests": 145,
+      "exit_code": 0
+    },
+    "backend_strict": {
+      "status": "PASSED",
+      "exit_code": 0
+    },
+    "scoped_lint": {
+      "status": "PASSED",
+      "exit_code": 0
+    },
+    "source_preflight": {
+      "status": "PASSED",
+      "inventory": 110,
+      "provider": "NOT_RUN",
+      "exit_code": 0
+    }
+  },
+  "review_cycles": 2,
+  "open_scoped_findings": [],
+  "source_acceptance": {
+    "exact_classes_durations": "PASSED",
+    "default_inactive_transaction_gate": "PASSED",
+    "immutable_metadata_legacy_v1_holds": "PASSED",
+    "create_only_fixed_index_operations": "PASSED",
+    "ready_scheduler_and_digest_readback_contract": "PASSED",
+    "rollback_renewal_documentation": "PASSED"
+  },
+  "remaining_rollout": {
+    "combined_root_suite_build_package": "PARENT_OWNED",
+    "normal_ci_iam_index_function_scheduler_provider": "NOT_RUN_BY_THIS_AGENT",
+    "protected_retention_activation_and_renewal": "NOT_AUTHORIZED_AUTONOMOUSLY_BY_ASSIGNMENT",
+    "continuous_erasure_sla": "NOT_CLAIMED"
+  },
+  "source_export_contract": "v1 retains askFeedbackCleanup with independent strict default-inactive gate. Legacy keeps7holds; v1 keeps maintenance+3PayOS holds. No other hold removed.",
+  "evidence_contract": "feedback-retention.json lives under deployment/functions, included in existing immutable TAR and provider source comparison. deployment.json embeds canonical readiness with receiptSha256. No automatic settings writes.",
+  "actions": {
+    "provider_calls": 0,
+    "secret_access": 0,
+    "index_operations": 0,
+    "iam_changes": 0,
+    "settings_activation": 0,
+    "production_deletions": 0,
+    "push": 0,
+    "deploy": 0
+  },
+  "production": "NOT_READY_FOR_ACTIVATION_FROM_THIS_SCOPE",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

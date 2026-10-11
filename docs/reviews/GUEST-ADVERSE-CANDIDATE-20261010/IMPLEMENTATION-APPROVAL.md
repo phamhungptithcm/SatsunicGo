@@ -1,0 +1,1 @@
+APPROVED continuation within current human guest/Ask integration and fix scope. Root direct request plus verified human owner continuation are quoted in PLAN.md. No deployment authorized. No new broad scope, backend/runtime/workflow/dependency changes.

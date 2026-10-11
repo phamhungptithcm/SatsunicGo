@@ -13,6 +13,14 @@ import zipfile
 def verify_source(archive, manifest):
     prefix = "deployment/functions/"
     expected = {key[len(prefix):]: value for key, value in manifest["files"].items() if key.startswith(prefix)}
+    # Firebase reads this fixed public dotenv before creating source ZIP; it is
+    # digest-bound in the bundle and separately verified in deployed env metadata.
+    environment = expected.pop(".env.satsunicgo", None)
+    if environment is not None:
+        fixed = b"PURCHASE_PRODUCTION_TEST_ARTIFACT=v1\nPURCHASE_SEPAY_SANDBOX_ENABLED=true\n"
+        if (manifest.get("runtimeEnvironment") != {"PURCHASE_PRODUCTION_TEST_ARTIFACT": "v1", "PURCHASE_SEPAY_SANDBOX_ENABLED": "true"}
+                or environment != hashlib.sha256(fixed).hexdigest()):
+            raise ValueError("UNSAFE_PUBLIC_RUNTIME_ENVIRONMENT")
     if not expected:
         raise ValueError("EMPTY_EXPECTED_FUNCTION_PACKAGE")
     actual = {}

@@ -1,4 +1,7 @@
-import { customerEvent, customerEventFields } from "./customer-notification-events";
+import {
+  customerEvent,
+  customerEventFields,
+} from "./customer-notification-events";
 import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
@@ -9,11 +12,19 @@ import { z } from "zod";
 import { requireVerifiedGoogle } from "./auth/guards";
 import { purchaseDemoEnvironment } from "./purchase-checkout";
 import { withPurchaseMutation } from "./purchase-mutation-queue";
+import { purchaseTestRecord } from "../../packages/domain/purchase-checkout";
+import { purchaseTestProjection } from "./purchase-test-projection";
 import {
   renderPurchaseReceipt,
   type PurchaseReceiptData,
 } from "./purchase-pdf";
 const hash = (b: Buffer) => createHash("sha256").update(b).digest("hex");
+type PurchaseReceiptReply = ReturnType<typeof purchaseTestProjection> & {
+  state: string;
+  emailState: string | null;
+  mime?: "application/pdf";
+  base64?: string;
+};
 /** Lease before I/O; deterministic private object + outbox identifiers. Money
  * confirmation is independent of rendering/delivery success. */
 export async function processPurchaseReceipt(id: string) {
@@ -98,13 +109,16 @@ async function processReceipt(id: string) {
           ? "demo_delivered"
           : "pending_configuration";
       tx.set(db.doc(`purchaseEmailOutbox/${id}`), {
+        ...purchaseTestProjection(receipt),
         ownerId: receipt.ownerId,
         receiptId: id,
         objectPath,
         pdfSha256: digest,
         to: receipt.ownerEmail ?? null,
-        subject: `SatsunicGo · Chứng từ thanh toán ${id}`,
-        text: `SatsunicGo đã ghi nhận ${receipt.total.toLocaleString("vi-VN")} ₫. Chứng từ PDF xác nhận khoản thanh toán được đính kèm. Chứng từ này không thay thế hóa đơn thuế.`,
+        subject: `SatsunicGo · ${purchaseTestRecord(receipt) ? "Chứng từ test" : "Chứng từ thanh toán"} ${id}`,
+        text: purchaseTestRecord(receipt)
+          ? `Thanh toán test ${receipt.total.toLocaleString("vi-VN")} ₫. Chứng từ PDF được đính kèm.`
+          : `SatsunicGo đã ghi nhận ${receipt.total.toLocaleString("vi-VN")} ₫. Chứng từ PDF xác nhận khoản thanh toán được đính kèm. Chứng từ này không thay thế hóa đơn thuế.`,
         attachments: [
           {
             filename: `SatsunicGo-${id}.pdf`,
@@ -121,10 +135,24 @@ async function processReceipt(id: string) {
       });
       // Shared customer inbox; receipt mail remains opt-in to avoid a second payment email.
       tx.create(db.doc(`outboxJobs/purchase-receipt-${id}`), {
-        ownerId: receipt.ownerId, resourceId: id, action: "purchaseReceiptReady", state: "queued", createdAt: now,
-        ...customerEventFields(() => customerEvent("receipt_ready", {
-          ownerId: receipt.ownerId, entityId: id, entityVersion: 1, occurredAt: now,
-        }, {receiptRef: id, paidAmount: receipt.total})),
+        ...purchaseTestProjection(receipt),
+        ownerId: receipt.ownerId,
+        resourceId: id,
+        action: "purchaseReceiptReady",
+        state: "queued",
+        createdAt: now,
+        ...customerEventFields(() =>
+          customerEvent(
+            "receipt_ready",
+            {
+              ownerId: receipt.ownerId,
+              entityId: id,
+              entityVersion: 1,
+              occurredAt: now,
+            },
+            { receiptRef: id, paidAmount: receipt.total },
+          ),
+        ),
       });
       tx.update(receiptRef, {
         state: "ready",
@@ -211,7 +239,7 @@ export const purchaseReceipt = onCall(
     concurrency: 4,
     enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   },
-  async (req) => {
+  async (req): Promise<PurchaseReceiptReply> => {
     const uid = requireVerifiedGoogle(req.auth),
       input = z
         .object({ id: z.string().uuid(), download: z.boolean() })
@@ -243,7 +271,11 @@ export const purchaseReceipt = onCall(
       data = await read();
     }
     if (!input.data.download || data.state !== "ready")
-      return { state: data.state, emailState: data.emailState ?? null };
+      return {
+        ...purchaseTestProjection(data),
+        state: data.state,
+        emailState: data.emailState ?? null,
+      };
     const [bytes] = await getStorage()
       .bucket()
       .file(data.objectPath)
@@ -255,6 +287,7 @@ export const purchaseReceipt = onCall(
       );
     await read();
     return {
+      ...purchaseTestProjection(data),
       state: "ready",
       emailState: data.emailState,
       mime: "application/pdf",

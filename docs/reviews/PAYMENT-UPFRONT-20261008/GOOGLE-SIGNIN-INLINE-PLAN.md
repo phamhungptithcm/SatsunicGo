@@ -1,0 +1,9 @@
+# Inline Google sign-in — 2026-10-09
+
+Approval binding: current human request prefers a small sign-in button on the originating screen rather than a nearly-empty sign-in page; existing approved v3 explicitly includes Cart.tsx and purchase-* UI review/fix loops. This supersedes the interrupted CENTER plan. No new confirmation is required for this bounded refinement.
+
+Intelligence: current DEGRADED checker, CodeGraph first and CocoIndex second; source CartPage confirms guest action already calls signIn inline, while only the user branch navigates to checkout. PurchasePayment/Checkout fallbacks exist for direct routes or lost authentication, not a newly-created login route. Preserve those fallbacks for recovery; private order data must remain gated.
+
+Plan: remove only this turn's centering class/CSS additions. Reuse existing PurchaseSignIn in the existing guest cart summary action instead of its blue primary button. Extend that button's scoped selector to cart107 and set width:auto so it stays compact despite summary button defaults. Preserve Cart layout/cart.css, callbacks, merge/revalidation, explicit continue action after login, checkout route and direct-payment recovery; no auto-advance or redirect/state/storage change. Exact files Cart.tsx,purchase-sign-in.css,purchase-checkout.tsx,purchase-payment.tsx plus review evidence. No new dependency/backend/API/config/data changes.
+
+Validation: targeted TypeScript/lint/format, source branch/route review; actual browser on5207 if available, no OAuth/money/email. Shared frontend was absent and sandbox launch failed EPERM; earlier human permission allows the same5207 demo-only restart without backend restart/reset. Preserve unrelated WIP. Fresh final implementation and eight-principle product content review; provider/deployed acceptance excluded. No implementation-mirroring tests for this presentation-only change.

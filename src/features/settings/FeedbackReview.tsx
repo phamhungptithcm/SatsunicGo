@@ -8,6 +8,7 @@ import {
   feedbackEvaluationResultSchema,
 } from "../../../packages/domain/ask-feedback";
 import { knowledgePreviewResultSchema } from "../../../packages/domain/ask-knowledge";
+import { TestOrderBadge } from "../orders/TestOrderBadge";
 type Inbox = z.infer<typeof feedbackInboxSchema>;
 type Review = z.infer<typeof feedbackReviewSchema>;
 type Preview = z.infer<typeof knowledgePreviewResultSchema>;
@@ -235,6 +236,7 @@ export function FeedbackReview() {
                     key={`${item.ownerId}-${item.feedbackId}`}
                     value={`${item.ownerId}-${item.feedbackId}`}
                   >
+                    {item.testMode ? "Test · " : ""}
                     {labels[item.category]} ·{" "}
                     {new Date(item.createdAt).toLocaleString("vi-VN")} ·{" "}
                     {item.feedbackId.slice(0, 8)}
@@ -244,7 +246,8 @@ export function FeedbackReview() {
             </label>
             {row && (
               <p>
-                Phiên bản xem xét: {row.reviewVersion}. Góp ý này hết hạn ngày{" "}
+                <TestOrderBadge record={row} label="Góp ý test" /> Phiên bản xem
+                xét: {row.reviewVersion}. Góp ý này hết hạn ngày{" "}
                 {new Date(row.expiresAt).toLocaleDateString("vi-VN")}.
               </p>
             )}

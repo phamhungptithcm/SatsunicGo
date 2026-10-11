@@ -28,6 +28,7 @@ describe("One Tap credential lifecycle", () => {
     );
     const error = vi.fn();
     createOneTapController(x.identity, "client", exchange, error);
+    expect(x.identity.initialize).toHaveBeenCalledWith(expect.objectContaining({ itp_support: true, use_fedcm_for_prompt: true, auto_select: false }));
     const pending = x.send("fixture");
     await x.send("duplicate");
     expect(exchange).toHaveBeenCalledTimes(1);

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-RELEASE-SCOPE",
+  "status": "BLOCKED",
+  "source_review": "PASSED_WITHIN_OWNED_SCOPE",
+  "created_at": "2026-10-10T01:18:32.522074+00:00",
+  "base_revision": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "source_hashes": {
+    ".github/workflows/release.yml": "9fb8f52e6ddc603c27ceb69f54942e4ca33273eed9c70868e4bc9639d0ff6eed",
+    "functions/src/index.ts": "dff14921e406d189e8764a497e3f2c22da8dc53816c14d109d57e6d66f5ff226",
+    "functions/src/jobs.ts": "02c2b6462d7dd7c9834cc4acba73c7a40b6041dd1791158abdff8017198d4795",
+    "functions/src/provider-release-gate.ts": "7abf20487e70a78e1ced85ca430f3e66a5b7385a8d06fa7266d9b6b4128c2889",
+    "functions/src/production-test-commands.ts": "13e81973a8b2f352de77de62e043599f7576c2d49f31b1edd0dd7ca3f78fcdc4",
+    "scripts/release/artifact.mjs": "f3e6f410fc508bceae1d1a87eaf8feba01c345ddb8837caebce66af93e46bad4",
+    "scripts/release/preflight.mjs": "7fbd3e3b97723e888deac295e810aad871be5148d4554ed755d6d37eed05af2a",
+    "scripts/release/verify-production.mjs": "40696429ed4ab33d9a744e76e3b520c28e34731498f268aa46fdeeb4e8c0c905",
+    "scripts/release/verify-source.py": "9f800510f76a6d1983ea62c09c81de47d0cc01b8f79e5932e576436e9306b173",
+    "scripts/release/production-test.mjs": "2ded738a8db209fc7aa98c74d135bdca8e414f9bbfdf3d090bb5cc80e428c5d8",
+    "scripts/release/reviewed-retries.mjs": "85cdef79b47f62be04e8417084f94500eb16d880a2be010e56a3e5b88a9311c0",
+    "tests/unit/release108.test.mjs": "2df1d765f77d815faa4240e2443e80f64672962adfa69f9f991e613afe4ca247",
+    "tests/unit/release-preflight067.test.ts": "7f2eafb532443d551be2871f4344097f025bbafe5921dc0593d15e24049c462a",
+    "tests/unit/production-test-commands.test.ts": "aeb627e31541c755dfd8523495c4189852ab73572d3f1521d6a9766cbce4403f",
+    "tests/unit/production-test-jobs.test.ts": "4e9c63b98c2774668ef2ba1af78906978d6649140bee39856f2c14ba4967d465",
+    "tests/unit/production-test-command-producer.test.ts": "eb282f434258583451cff6ca11db03df24109bae6ffd266fe8970a5c392bc04e"
+  },
+  "evidence_hashes": {
+    "/private/tmp/release-mode-unit-frozen.log": "b9953e6bfdb258e40b63767906e8decce2c1049652b060875591c509af699a7c",
+    "/private/tmp/release-mode-typecheck-frozen.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/release-mode-lint-frozen.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/release-mode-artifact-test-r2.log": "14f151fd7c4107c9fd91f58c809c93359a9f09a047ef50019a86eff5fc2b8802",
+    "/private/tmp/release-mode-preflight-current.json": "862d81e61e25566443adfe094e6623a73c0166a2696bc9a2170ad235650b9f17"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Approved v1 registration, simulated commands, safe scheduled jobs and immutable artifact contracts were reviewed against source.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No global force, deletion bypass, secret payload access, dependency change or client mode authority was introduced. Null admission rejects before writes.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Node 22, TypeScript 6 and Firebase v2 source pass backend strict, lint, 258 focused unit cases and 124 artifact/SDK contracts.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Invalid runtime/policy, replay, malformed provenance, unsupported financial/physical actions, guard escape, dotenv/source mismatch and scheduler recovery races are covered.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "An existing customer-safe generic message is reused with a new internal reason. Projection failures log a constant without PII and remain eligible on future wrap or creation-trigger retry.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "The fixed two-flag public dotenv ZIP exception is digest-bound and substituted by per-function runtime environment readback. Legacy artifacts preserve their existing holds and exclusions.",
+      "evidence_refs": [
+        "/private/tmp/release-mode-unit-frozen.log",
+        "/private/tmp/release-mode-typecheck-frozen.log",
+        "/private/tmp/release-mode-lint-frozen.log",
+        "/private/tmp/release-mode-artifact-test-r2.log",
+        "/private/tmp/release-mode-preflight-current.json"
+      ]
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "Full combined build, CI, artifact, provider readback, activation and live acceptance remain outside child ownership. Production is NOT_READY.",
+      "evidence_refs": []
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Owned release files introduce no new user-facing copy. Backend provenance feeds UI meaning, so the root aggregate product review remains required.",
+      "evidence_refs": []
+    }
+  },
+  "findings": [],
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "decision": "CHANGES_REQUESTED",
+      "finding": "The first artifact aggregate failed 19 offline fixture lock-resolution calls. No security, lock or audit gate was relaxed. A fresh unchanged rerun passed 124/124; historical retry-only 106/106 evidence remains separate."
+    },
+    {
+      "cycle": 2,
+      "decision": "CHANGES_REQUESTED",
+      "finding": "The canonical five-demo fixture was stale after approved SePay registration. It now checks three retained authentic handlers and two excluded client-outcome demo handlers. The 199 preflight cases pass within the current 258-case run."
+    },
+    {
+      "cycle": 3,
+      "decision": "CHANGES_REQUESTED",
+      "finding": "Recovery could repeatedly scan the same 30 legacy/noncustomer jobs. Fixed with a private round-robin cursor and transactional compare-and-set; mixed-head, wrap, projection failure and overlap cases pass."
+    },
+    {
+      "cycle": 4,
+      "decision": "CHANGES_REQUESTED",
+      "severity": "High",
+      "finding": "Generic submitRequest could fall through to live creation when test admission was missing. Artifact v1 now fails closed, including malformed runtime identity. Ten actual-producer scenarios cover zero-write negatives, provenance, replay after policy-off and legacy compatibility."
+    },
+    {
+      "cycle": 5,
+      "decision": "PASSED_WITHIN_SOURCE_SCOPE",
+      "finding": "No known actionable defect remains in the reviewed owned source within executed checks. Aggregate release review remains BLOCKED pending root-owned build, CI, artifact, provider, live and product review."
+    }
+  ],
+  "residual_risks": [
+    "The normal combined build must regenerate public-assets; actual source preflight currently fails PUBLIC_ASSET_BINDING_INVALID as expected.",
+    "Whole combined unit/rules/HTTP/audit/artifact/provider readback and post-activation live acceptance remain root-owned and NOT_RUN here.",
+    "Recovery scans at most 30 outbox rows per run, plus policy/cursor reads and bounded projection transactions, with at most five projections running together. Sustained backlog latency has not been benchmarked; the retry-enabled creation trigger remains the primary recovery path.",
+    "Ask feedback cleanup remains held until index deployment and READY readback are implemented and reviewed.",
+    "Actual SePay secret version and endpoint/provider IPN acceptance must be verified without agents reading secret payloads.",
+    "Root must reconcile clean main c423001 retry repair with this 608-based working tree before the final combined commit."
+  ],
+  "limitations": [
+    "RIG is DEGRADED; evidence is bounded source, CLI, compiler and contract checks rather than a fresh whole-program index.",
+    "The actual-command unit executes the verbatim index.ts command declaration with real domain/auth/policy and Firebase callable .run; storage is a mocked atomic transaction. This is not live HTTP, AppCheck or MFA proof.",
+    "SDK artifact discovery uses real constructors/imports with zero network access; it is not provider payment acceptance.",
+    "The ai-agent-kit executable is absent. Hash-bound file receipts are preserved; the runtime ledger/report adapter was unavailable."
+  ]
+}

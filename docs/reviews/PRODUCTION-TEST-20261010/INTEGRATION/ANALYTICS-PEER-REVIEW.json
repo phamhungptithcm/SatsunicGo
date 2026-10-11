@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-ANALYTICS-PEER-REVIEW",
+  "created_at": "2026-10-10T01:44:52.517291+00:00",
+  "base_revision": "b916c75cbb0e686fe20e2e52e31dd1a340b2272e",
+  "status": "PASSED",
+  "scope": "Independent source review within ANALYTICS-IMPACT.md; no whole-production certification",
+  "reviewer": "release_implementation",
+  "supersedes_pending_field": "ANALYTICS-CHECKS.json independentReview=PENDING_RELEASE_OWNER; original evidence is preserved unchanged",
+  "impact_ref": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/ANALYTICS-IMPACT.md",
+  "check_receipt_ref": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/ANALYTICS-CHECKS.json",
+  "source_hashes": {
+    "functions/src/analytics-ingest.ts": "d39df30806b95225651076068c671af4706a41a69ad967c068bff9a9d4b8db7a",
+    "tests/unit/production-test-analytics.test.ts": "59f43bbf1bae925beeba7244242982f43458a84b4ba3a430bb07c8f74f21bf8d"
+  },
+  "evidence_hashes": {
+    "/private/tmp/satsunicgo-production-test-analytics-check.log": "7781b6de6fd2535c5a31091217054a3b4dd768f9a99af70239388522cd67e071",
+    "/private/tmp/satsunicgo-production-test-analytics-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/satsunicgo-production-test-current-backend.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "check_receipt_hash": "6ad693bac36e5e087d8d56449fa1c58e22b8887d0fb94b91c8f7cb4cd5f1c101",
+  "verified_behavior": [
+    "Actual session/ingest handlers verify Google identity before using authenticated UID admission.",
+    "Current tester admission is read within the existing transaction before any analytics session/event writes, preserving the watched policy concurrency boundary.",
+    "Existing consent, quotas, staff exclusion, locked-account exclusion and capability/session checks remain intact.",
+    "Classified test orders, including malformed/partial test markers, are rejected before attribution and analytics job writes by the conservative purchase test classifier.",
+    "The change introduces no new retained identifiers, client-authoritative test flags, analytics store, tracking feature or unbounded work.",
+    "One additional watched productionTest policy read is bounded to authenticated session/ingest calls in the exact test environment."
+  ],
+  "findings": [],
+  "test_applicability": {
+    "status": "PASSED",
+    "owner_reported_total": 25,
+    "new_cases": 9,
+    "proof": "Existing recorded source/test/log hashes exactly match current files. Nine new handler-unit cases cover admitted test customers with zero writes, real/anonymous visitor controls, legacy behavior, classified test-order attribution rejection and legitimate live-order attribution.",
+    "limitations": "In-memory transaction/callable adapters are unit evidence, not emulator/provider/live or load acceptance. No tests were rerun for this receipt."
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "The actual delta matches ANALYTICS-IMPACT.md and approved v1 test-operation isolation."
+    },
+    "security_privacy": {
+      "status": "PASSED",
+      "summary": "Server-derived admission and conservative test record classification are authoritative; existing auth, consent and quotas remain enforced."
+    },
+    "correctness_data_flow": {
+      "status": "PASSED",
+      "summary": "Admission rejects before writes and test orders cannot produce live attribution/job writes."
+    },
+    "compatibility": {
+      "status": "PASSED",
+      "summary": "Anonymous and non-admitted real visitor behavior, legacy artifacts and legitimate live-order attribution are intentionally preserved."
+    },
+    "performance": {
+      "status": "PASSED",
+      "summary": "At most one added policy document read per authenticated session/ingest; no new unbounded loop, queue or network access."
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Reuses existing internal-traffic rejection and attribution-denial errors without exposing policy metadata."
+    },
+    "operational_readiness": {
+      "status": "PASSED",
+      "summary": "The bounded source/test contract was reviewed; root owns combined CI, artifact deployment and live acceptance."
+    }
+  },
+  "residual_limits": [
+    "Anonymous and non-admitted visits remain ordinary consented analytics by design; this review does not claim every browser visit on a test deployment is excluded.",
+    "Existing live-order attribution remains permitted, including a real order belonging to an admitted tester; only classified test orders are rejected by the attribution delta.",
+    "Repository intelligence is DEGRADED; canonical source and hash-bound recorded focused checks were used.",
+    "No new production/provider/runtime or secret action was performed."
+  ],
+  "independent_freeze_recheck": {
+    "reference": "docs/reviews/PRODUCTION-TEST-20261010/INTEGRATION/PREFLIGHT-CORRECTION.json",
+    "status": "PASSED",
+    "source_hashes": {
+      "functions/src/index.ts": "ccaf558cc6da84f29d9ef273325229bdff6af7ab72658683b6fda03f0b4aa125",
+      "functions/src/production-test-commands.ts": "be93b7667f35bd7554c4ec0f72f7359e3a5ed2799a9ecf26632ff65c5d0a96f5",
+      "tests/unit/release-preflight067.test.ts": "7360afbea32409f70c2d13dba2840f2830df8b2b1c89fadf38630df66dcd573b"
+    },
+    "claim": "All three helper/index/preflight-test source hashes still match their final correction receipt; no implementation edits or reruns performed."
+  },
+  "production": "NOT_READY_FROM_THIS_SCOPED_RECEIPT",
+  "provider_tokens": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

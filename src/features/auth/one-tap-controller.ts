@@ -3,6 +3,7 @@ export type OneTapIdentity = {
     client_id: string;
     auto_select: boolean;
     use_fedcm_for_prompt: boolean;
+    itp_support: boolean;
     callback: (response: { credential: string }) => Promise<void>;
   }): void;
   prompt(): void;
@@ -20,6 +21,7 @@ export function createOneTapController(
     client_id: clientId,
     auto_select: false,
     use_fedcm_for_prompt: true,
+    itp_support: true,
     callback: async ({ credential }) => {
       if (disposed || busy || !credential) return;
       busy = true;

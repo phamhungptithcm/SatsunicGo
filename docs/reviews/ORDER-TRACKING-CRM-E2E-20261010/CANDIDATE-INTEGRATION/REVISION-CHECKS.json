@@ -1,0 +1,32 @@
+{
+  "status": "PASSED affected scope",
+  "static": [
+    {
+      "name": "revision-types",
+      "exitCode": 0,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-types.log"
+    },
+    {
+      "name": "revision-lint",
+      "exitCode": 0,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-lint.log"
+    }
+  ],
+  "serverAffected": {
+    "tests": 1,
+    "status": "PASSED",
+    "otherTestsSkipped": 26,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-focused-server.log"
+  },
+  "manualDelivery": {
+    "tests": 15,
+    "status": "PASSED",
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/revision-local-adapter-full.log",
+    "deduction": "Two files42tests; server27had exactly2maintenance failures, manual15file passed.",
+    "cleanup": "Per-case timeline/owned path cleanup assertions passed"
+  },
+  "fullLocalAdapter": "NOT_ACCEPTED:40passed2maintenancefail; preserved log. Actual project fence in functions/src/provider-release-gate.ts requires demo-satsunicgo, intentionally rejects disposable demo-server-crm UUID. No gate weakened.",
+  "adapter": "Only server test configuration host/project and exact owned project cleanup transformed in memory. Actual production modules and assertions unchanged.",
+  "sharedWrites": 0,
+  "newServers": 0
+}

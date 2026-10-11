@@ -1,4 +1,8 @@
 import { z } from "zod";
+import {
+  purchaseExecutionProvenance,
+  type PurchaseExecutionProvenance,
+} from "./purchase-checkout";
 
 export const SEPAY_MERCHANT = "SP-TEST-HL5339A9";
 export const SEPAY_CHECKOUT_URL =
@@ -79,7 +83,7 @@ export const sepayReadbackSchema = z.object({
     transactions: z.array(transactionSchema).max(50),
   }),
 });
-export type SePayIntent = {
+export type SePayIntent = Partial<PurchaseExecutionProvenance> & {
   checkoutId: string;
   ownerId: string;
   invoice: string;
@@ -94,7 +98,7 @@ export type SePayIntent = {
   providerOrderId?: string;
   providerInternalId?: string;
 };
-export type SePayProof = {
+export type SePayProof = Partial<PurchaseExecutionProvenance> & {
   checkoutId: string;
   ownerId: string;
   provider: "sepay_sandbox";
@@ -211,6 +215,7 @@ export function verifySePayReadback(
   if (paidAt > now + 300000 || paidAt < intent.createdAt - 300000)
     throw Error("SEPAY_DATE_INVALID");
   return {
+    ...(purchaseExecutionProvenance(intent) ?? {}),
     checkoutId: intent.checkoutId,
     ownerId: intent.ownerId,
     provider: "sepay_sandbox",
@@ -242,7 +247,7 @@ export const sepayFormSchema = z
 /** Ordered pairs preserve the SDK's signed field order. No arbitrary hidden fields. */
 export function admitSePayForm(
   raw: unknown,
-  intent: { id: string; total: number },
+  intent: { id: string; total: number } & Partial<PurchaseExecutionProvenance>,
 ) {
   const form = sepayFormSchema.parse(raw),
     fields = Object.fromEntries(form.fields);
@@ -274,7 +279,7 @@ export function admitSePayForm(
   for (const name of ["success", "error", "cancel"])
     if (
       fields[`${name}_url`] !==
-      `http://127.0.0.1:5207/checkout/payment/${intent.id}?sepay=${name}`
+      `${purchaseExecutionProvenance(intent) ? "https://satsunicgo.web.app" : "http://127.0.0.1:5207"}/checkout/payment/${intent.id}?sepay=${name}`
     )
       throw Error("SEPAY_RETURN_INVALID");
   return form;

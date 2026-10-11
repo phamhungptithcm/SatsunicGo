@@ -1,0 +1,70 @@
+{
+  "config_source": "Exact public release.yml tuple; whitelisted repository build-variable values kept only in memory",
+  "checks": [
+    {
+      "name": "public-config-ci-tuple",
+      "at": "2026-10-10T18:32:17.610275+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "scripts/release/check-public-config.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.16,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/public-config-ci-tuple.log",
+      "sha256": "a78e5ff25dbd82b721ffa8b397c1ae33f8cc70ff2e8d16b2d6d1948c384f06d8"
+    },
+    {
+      "name": "frontend-build-ci-tuple",
+      "at": "2026-10-10T18:32:19.735463+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/vite/bin/vite.js",
+        "build"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 2.12,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/frontend-build-ci-tuple.log",
+      "sha256": "0f4455d5a7648d9676181b50d32acdb658f0183ef571a74158cd43ce735374a3"
+    },
+    {
+      "name": "public-assets-ci-tuple",
+      "at": "2026-10-10T18:32:19.776782+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "scripts/public-assets.mjs"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.04,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/public-assets-ci-tuple.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "backend-build-ci-tuple",
+      "at": "2026-10-10T18:32:23.649017+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "functions/tsconfig.json"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 3.87,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/backend-build-ci-tuple.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-preflight-ci-tuple",
+      "at": "2026-10-10T18:32:24.077952+00:00",
+      "command": [
+        "/Users/hunpeo97/.npm/_npx/52027bd8fc0022aa/node_modules/node/bin/node",
+        "scripts/release/preflight.mjs",
+        "--project",
+        "satsunicgo"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.43,
+      "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/source-preflight-ci-tuple.log",
+      "sha256": "47bde9e4af7bdda7cadf47535bbefeb42dbdc269d5832801eb7112db627cec1c"
+    }
+  ]
+}

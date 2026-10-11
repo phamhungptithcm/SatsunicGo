@@ -1,0 +1,9 @@
+# Repository intelligence brief — final purchase gateway candidate
+
+Repository HEAD: `0d6e721698608eebb36b0b2f68021c3054d97d1c`. Latest gate script: DEGRADED; both index markers stale, CocoIndex health failed, indexed commit53d59bd differs. Work continues under the explicit bounded fallback in `.ai/workflows/repository-intelligence-workflow.md:7` and repository AGENTS. No indexing/installation or policy weakening.
+
+CodeGraph queried first at start and again before final review. Current flow: receivePurchaseDemoWebhook -> applyPurchaseDemoOutcome -> withPurchaseMutation; receipt trigger/recovery/callable -> processPurchaseReceipt -> bounded receipt lane. Final query returned current source but structural test discovery reports no coverage for some handlers. Executed HTTP, rules and independent-process evidence supplies actual coverage; static index coverage is not a test verdict.
+
+CocoIndex queried second with purchase file filter. It returned older line positions/body snippets for receipt outbox and balance snapshot, so semantic content is treated as stale context only. Critical data/state conclusions verified in actual current source, TypeScript, strict schemas, Git diffs and scoped tests. Native approval validator requiring READY reports ERROR; human approved v3 plus current mock/scenario instruction exists. This limitation is recorded, not falsely converted to READY or a missing human approval.
+
+Affected boundaries: cart/request and connected checkout; strict private demo intent/index; shared financial allocation; funded staff/customer top-ups; immutable PDF/outbox; lease recovery; guarded local UI. No production payment adapter, bank settlement, real mail, retention policy, IAM grant or infrastructure edit. Whole-file source hashes in GATEWAY-SOURCE-MANIFEST.json bind the shared candidate, not ownership of every line or unrelated WIP.

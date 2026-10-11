@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "at": "2026-10-10T02:38:56.241310+00:00",
+  "scope": "Fresh shared canonical path inclusion and known historical input drift only; owned v1 byte deltas separately reviewed",
+  "source_commit": "fdbbda017a324befce93e6a3fac2ee882c6de795",
+  "historical_inputs": 886,
+  "shared_paths_now": 837,
+  "deliberate_output_exclusions": [
+    "tests/browser/output/ask-integration-4/browser-result.json",
+    "tests/browser/output/cart107/browser-results.json",
+    "tests/browser/output/login105/results.json"
+  ],
+  "missing_canonical": [],
+  "shared_drift": [
+    {
+      "path": "functions/src/analytics-ingest.ts",
+      "latest_sha256": "1f1ebfa1437bdfd454520766e68f9cd9fd8e7bb54412ddf72ffdade911da0624",
+      "previously_explained": true
+    },
+    {
+      "path": "functions/src/payments/sepay-sandbox.ts",
+      "latest_sha256": "2c60acbf1d9db13ee00a86b69cc4cd459cabf9f3bc626b30fddf417ddbab8548",
+      "previously_explained": true
+    },
+    {
+      "path": "functions/src/purchase-sepay.ts",
+      "latest_sha256": "4e352fec23171606dcffe616ca40bfa0ba7acc5191754c64b0a1091929815ea5",
+      "previously_explained": true
+    },
+    {
+      "path": "src/features/cart/purchase-checkout.tsx",
+      "latest_sha256": "34b96ced28ab271a230cf50d6882e41f7dca1c1bb28a5833892a927a1f27de4b",
+      "previously_explained": true
+    },
+    {
+      "path": "src/features/requests/request-form.css",
+      "latest_sha256": "599e6860b3238507f76a259e9828e14101d07b92c911a48e60ea67455d833cd6",
+      "previously_explained": true
+    }
+  ],
+  "unexplained_drift": [],
+  "source_complete_within_checked_inventory": true
+}

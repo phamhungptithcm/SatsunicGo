@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="vi">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SatsunicGo - xem trước luồng thanh toán 100%</title>
+  <style>
+    :root {
+      font-family: Arial, sans-serif;
+      color: #111c35;
+      background: #f6f8fc;
+      font-size: 15px;
+      line-height: 1.55;
+      --blue: #163cff;
+      --line: #dce3ed;
+      --muted: #566277;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+    }
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+    button,
+    a,
+    input,
+    select {
+      touch-action: manipulation;
+    }
+    button {
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: default;
+      opacity: 0.65;
+    }
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #163cff;
+      outline-offset: 4px;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid var(--line);
+      padding: 16px 6%;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .brand {
+      color: var(--blue);
+      font-size: 23px;
+      font-weight: 750;
+    }
+    .crumb {
+      color: var(--muted);
+    }
+    .design {
+      padding: 10px 6%;
+      background: #eef2ff;
+      border-bottom: 1px solid var(--line);
+      color: #253987;
+      font-size: 13px;
+    }
+    .wrap {
+      max-width: 1120px;
+      padding: 30px 24px 50px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 16px;
+    }
+    h3 {
+      font-size: 15px;
+      margin: 0 0 8px;
+    }
+    p {
+      margin: 8px 0 16px;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      padding: 9px 14px;
+    }
+    .pill[aria-pressed="true"] {
+      background: #111c35;
+      color: white;
+      border-color: #111c35;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 350px;
+      gap: 20px;
+      align-items: start;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+    .fieldgrid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 100px;
+      gap: 16px;
+    }
+    .field label {
+      display: block;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid #b8c4d5;
+      border-radius: 7px;
+      padding: 9px 12px;
+      background: white;
+      color: #111c35;
+    }
+    .field input[readonly] {
+      background: #f6f8fc;
+    }
+    .hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 6px 0 20px;
+    }
+    .pricegrid {
+      display: grid;
+      grid-template-columns: 1fr 105px;
+      gap: 12px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      padding: 8px 0;
+    }
+    .row span:first-child {
+      min-width: 0;
+    }
+    .row strong,
+    .row span:last-child {
+      white-space: nowrap;
+    }
+    .total {
+      border-top: 1px solid var(--line);
+      margin-top: 10px;
+      padding-top: 16px;
+      font-size: 16px;
+    }
+    .large {
+      font-size: 29px;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin: 4px 0 16px;
+    }
+    .note {
+      padding: 12px 14px;
+      border: 1px solid #d5defb;
+      border-radius: 8px;
+      background: #f2f5ff;
+      font-size: 13px;
+    }
+    .neutral {
+      background: #f7f9fc;
+      border-color: var(--line);
+    }
+    .primary {
+      background: var(--blue);
+      color: white;
+      border: 1px solid var(--blue);
+      width: 100%;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-weight: 600;
+    }
+    .secondary {
+      background: white;
+      color: #111c35;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .consent {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 18px 0;
+      font-size: 13px;
+    }
+    .consent input {
+      margin-top: 4px;
+      min-width: 18px;
+      min-height: 18px;
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      background: #f6f8fc;
+    }
+    .tagblue {
+      color: #1732a4;
+      background: #edf2ff;
+      border-color: #d4dffc;
+    }
+    .hr {
+      border-top: 1px solid var(--line);
+      margin: 20px 0;
+    }
+    .panel[hidden] {
+      display: none;
+    }
+    .status {
+      margin: 16px 0;
+      padding: 14px;
+      border-radius: 8px;
+      background: #edf2ff;
+      border: 1px solid #cad5ff;
+    }
+    .product {
+      padding: 14px;
+      background: #f7f9fc;
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+    .product strong {
+      display: block;
+    }
+    .product small {
+      color: var(--muted);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th,
+    td {
+      text-align: left;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    td:last-child,
+    th:last-child {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .scroll {
+      overflow: auto;
+    }
+    .small {
+      font-size: 13px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .receiptpreview {
+      border-top: 4px solid var(--blue);
+      padding-top: 18px;
+    }
+    .receiptpreview .brand {
+      margin-bottom: 18px;
+    }
+    .footer {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+    .offscreen {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    @media (max-width: 760px) {
+      header {
+        padding: 14px 20px;
+        gap: 20px;
+      }
+      .crumb {
+        font-size: 13px;
+      }
+      .wrap {
+        padding: 20px 16px 36px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        padding: 20px;
+      }
+      .large {
+        font-size: 28px;
+      }
+      .fieldgrid {
+        grid-template-columns: 1fr 80px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto;
+      }
+    }
+    @media print {
+      header,
+      .design,
+      nav {
+        display: none;
+      }
+      .wrap {
+        padding: 0;
+      }
+      .grid {
+        display: block;
+      }
+      .card {
+        border: 0;
+      }
+      .footer {
+        margin-top: 12px;
+      }
+    }
+  </style>
+  <header>
+    <div class="brand">SatsunicGo</div>
+    <span class="crumb">Mua hộ quốc tế / Thanh toán</span>
+  </header>
+  <div class="design">
+    BẢN THIẾT KẾ · Dữ liệu minh họa. Các thao tác chỉ đổi trạng thái trên trang
+    này, chưa kết nối backend hay PayOS.
+  </div>
+  <main class="wrap">
+    <span class="tag">Đề xuất thanh toán 100% ban đầu</span>
+    <h1 id="heading" tabindex="-1">Mua hộ theo giá bạn đã tìm hiểu</h1>
+    <p class="muted">Xem rõ số tiền cần trả trước khi xác nhận yêu cầu.</p>
+    <nav aria-label="Các màn hình mẫu">
+      <button class="pill" data-panel="initial" aria-pressed="true">
+        1. Giá và thanh toán ban đầu
+      </button>
+      <button class="pill" data-panel="additional" aria-pressed="false">
+        2. Chi phí phát sinh
+      </button>
+      <button class="pill" data-panel="payment" aria-pressed="false">
+        3. Thanh toán demo
+      </button>
+      <button class="pill" data-panel="document" aria-pressed="false">
+        4. Phiếu PDF
+      </button>
+    </nav>
+    <section class="panel" id="initial" aria-label="Giá và thanh toán ban đầu">
+      <div class="grid">
+        <div class="card">
+          <h2>Sản phẩm bạn muốn mua hộ</h2>
+          <div class="fieldgrid">
+            <div class="field">
+              <label for="product">Tên sản phẩm / lựa chọn</label
+              ><textarea
+                id="product"
+                readonly
+                rows="2"
+                style="
+                  font: inherit;
+                  width: 100%;
+                  border: 1px solid #b8c4d5;
+                  border-radius: 7px;
+                  padding: 9px 12px;
+                  background: #f6f8fc;
+                  resize: vertical;
+                "
+              >
+Tai nghe không dây - màu trắng</textarea>
+            </div>
+            <div class="field">
+              <label for="quantity">Số lượng</label
+              ><input
+                id="quantity"
+                type="number"
+                min="1"
+                max="100"
+                step="1"
+                value="2"
+                aria-describedby="quantityerror"
+              />
+            </div>
+          </div>
+          <p id="quantityerror" role="alert" hidden>
+            Nhập số lượng nguyên từ 1 đến 100.
+          </p>
+          <p class="hint">
+            Mẫu yêu cầu mua từ Mỹ. Tên và lựa chọn đã được giữ trong bản xác
+            nhận.
+          </p>
+          <div class="pricegrid">
+            <div class="field">
+              <label for="price">Giá bạn đã tìm hiểu / mỗi món</label
+              ><input
+                id="price"
+                type="number"
+                min="0.01"
+                max="1000000"
+                step="0.01"
+                value="58"
+                aria-describedby="pricehelp priceerror"
+              />
+            </div>
+            <div class="field">
+              <label for="currency">Tiền nguồn</label
+              ><select id="currency">
+                <option>USD</option>
+              </select>
+            </div>
+          </div>
+          <p id="pricehelp" class="hint">
+            Giá dự kiến bạn tìm thấy tại nơi bán. Giá mua thực tế sẽ được nhân
+            viên xác nhận.
+          </p>
+          <p id="priceerror" role="alert" hidden>
+            Nhập giá USD lớn hơn 0, tối đa 1.000.000, với tối đa 2 chữ số thập
+            phân.
+          </p>
+          <p id="totalerror" role="alert" hidden>
+            Tổng số tiền vượt giới hạn của mẫu. Kiểm tra giá và số lượng.
+          </p>
+          <div class="note neutral">
+            Tỷ giá mẫu: 25.000 VND/USD. Phí mua hộ mẫu: 5%. Trong ứng dụng,
+            backend sẽ tính theo chính sách đã được duyệt và khóa phiên bản khi
+            bạn xác nhận.
+          </div>
+          <div class="hr"></div>
+          <h3>Nếu giá mua thực tế thay đổi</h3>
+          <p class="small muted">
+            Bạn sẽ xem giá thực tế, lý do chênh lệch và phần còn phải trả. Khoản
+            bổ sung cần được bạn chấp thuận; đơn chỉ được gửi khi đã thanh toán
+            đủ chi phí cuối cùng.
+          </p>
+        </div>
+        <aside class="card">
+          <h2>Số tiền ban đầu</h2>
+          <div class="row">
+            <span>Giá hàng dự kiến</span><strong id="goods">2.900.000 ₫</strong>
+          </div>
+          <div class="row">
+            <span>Phí mua hộ mẫu</span><span id="fee">145.000 ₫</span>
+          </div>
+          <div class="row">
+            <span>Vận chuyển</span><span class="muted">Chưa chốt</span>
+          </div>
+          <div class="total">Cần thanh toán 100%</div>
+          <p class="large" id="initialtotal">3.045.000 ₫</p>
+          <div class="note">
+            Cước vận chuyển chưa nằm trong số tiền này. Cước sẽ được chốt và thể
+            hiện trong khoản thanh toán sau.
+          </div>
+          <label class="consent"
+            ><input type="checkbox" id="initialconsent" /><span
+              >Tôi đã xem số tiền ban đầu và hiểu rằng giá thực tế, cước vận
+              chuyển có thể phát sinh khoản trả thêm.</span
+            ></label
+          ><button class="primary" id="start" disabled>
+            Xem thanh toán demo
+          </button>
+          <p class="hint">
+            Đây là mẫu tương tác; chưa tạo đơn hoặc ghi nhận tiền.
+          </p>
+        </aside>
+      </div>
+    </section>
+    <section
+      class="panel"
+      id="additional"
+      hidden
+      aria-label="Chi phí phát sinh"
+    >
+      <div class="grid">
+        <div class="card">
+          <span class="tag tagblue">Đơn mẫu SG-DEMO-20261008</span>
+          <h2 style="margin-top: 16px">Xem chi phí phát sinh</h2>
+          <p class="muted">
+            Giá tại nơi bán tăng từ 58 USD lên 62 USD/món. Cước vận chuyển đã
+            được chốt trong mẫu này.
+          </p>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Khoản chi</th>
+                  <th>Chênh lệch</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Giá hàng · 2 món</td>
+                  <td>+200.000 ₫</td>
+                </tr>
+                <tr>
+                  <td>Phí mua hộ · theo quy tắc 5% mẫu</td>
+                  <td>+10.000 ₫</td>
+                </tr>
+                <tr>
+                  <td>Cước mới chốt</td>
+                  <td>+240.000 ₫</td>
+                </tr>
+                <tr>
+                  <th>Tổng cần trả thêm</th>
+                  <th>450.000 ₫</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="hint">
+            Bản chi phí demo-02 · Tỷ giá đã khóa 25.000 VND/USD. Giá thực tế và
+            cước cần có bằng chứng của nhân viên trong ứng dụng.
+          </p>
+          <div class="note neutral">
+            Nếu chưa đồng ý, bạn có thể yêu cầu nhân viên kiểm tra. Đơn sẽ được
+            giữ để xử lý; không tự thu thêm hoặc tự gửi hàng.
+          </div>
+          <button class="secondary" id="reviewcost" style="margin-top: 16px">
+            Yêu cầu kiểm tra trong mẫu
+          </button>
+          <p id="costreview" class="status" role="status" hidden>
+            Trạng thái mẫu: chờ nhân viên kiểm tra chi phí. Chưa thu khoản trả
+            thêm.
+          </p>
+        </div>
+        <aside class="card">
+          <h2>Đối chiếu tiền</h2>
+          <div class="row">
+            <span>Tổng chi phí đã chốt</span><strong>3.495.000 ₫</strong>
+          </div>
+          <div class="row">
+            <span>Đã thanh toán</span><span>3.045.000 ₫</span>
+          </div>
+          <div class="total">Còn cần thanh toán</div>
+          <p class="large">450.000 ₫</p>
+          <label class="consent"
+            ><input type="checkbox" id="additionalconsent" /><span
+              >Tôi đồng ý bản chi phí demo-02 và số tiền thanh toán thêm 450.000
+              ₫.</span
+            ></label
+          ><button class="primary" id="payadditional" disabled>
+            Xem thanh toán thêm demo
+          </button>
+          <p class="hint">
+            Sau khi thanh toán đủ, đơn còn cần qua kiểm tra đóng gói và bàn giao
+            gửi hàng.
+          </p>
+        </aside>
+      </div>
+    </section>
+    <section class="panel" id="payment" hidden aria-label="Thanh toán demo">
+      <div class="grid">
+        <div class="card">
+          <span class="tag tagblue"
+            >Cổng mô phỏng · không chuyển tiền thật</span
+          >
+          <h2 style="margin-top: 16px">Thanh toán demo</h2>
+          <p>Đơn mẫu SG-DEMO-20261008</p>
+          <p id="purpose">Thanh toán toàn bộ số tiền ban đầu</p>
+          <p class="large" id="payamount">3.045.000 ₫</p>
+          <div class="note neutral">
+            Khi được triển khai, nút xác nhận demo gọi backend demo. UI chỉ hiển
+            thị “Đã thanh toán” sau khi server xác minh và ghi sổ. Trở về từ
+            PayOS không tự xác nhận tiền vào.
+          </div>
+          <div class="actions" style="margin-top: 20px">
+            <button class="secondary" data-result="pending">
+              Xem trạng thái chờ</button
+            ><button class="secondary" data-result="unknown">
+              Xem khi kết quả chưa rõ</button
+            ><button class="secondary" data-result="paid">
+              Xem trạng thái đã trả
+            </button>
+          </div>
+          <div class="status" id="paystatus" role="status">
+            Chờ xác nhận thanh toán mẫu.
+          </div>
+          <p class="hint">
+            Hủy trang thanh toán không tự hủy đơn. Không tạo yêu cầu thu mới khi
+            lần trước chưa có kết quả rõ ràng.
+          </p>
+        </div>
+        <aside class="card">
+          <h2>Tiếp tục đơn mua hộ</h2>
+          <p id="nextstep" class="muted">
+            Nhân viên chỉ nhận việc mua khi đã đủ số tiền ban đầu.
+          </p>
+          <button class="primary" id="showreceipt">Xem mẫu phiếu PDF</button>
+          <p class="hint">
+            Trong app: tiền đã xác nhận và PDF đang xử lý là hai trạng thái
+            riêng; PDF lỗi không làm mất thanh toán.
+          </p>
+        </aside>
+      </div>
+    </section>
+    <section class="panel" id="document" hidden aria-label="Phiếu PDF">
+      <div class="grid">
+        <div class="card receiptpreview">
+          <div class="brand">SatsunicGo</div>
+          <span class="tag">Chứng từ mẫu · chưa phải hóa đơn thuế</span>
+          <h2 style="margin-top: 16px">Phiếu xác nhận thanh toán</h2>
+          <div class="product">
+            <strong id="receiptpurpose"
+              >Thanh toán toàn bộ số tiền ban đầu</strong
+            ><small>SG-DEMO-20261008 · Khách hàng minh họa</small>
+          </div>
+          <p class="muted">Số tiền xác nhận trong lần này</p>
+          <p class="large" id="receiptamount">3.045.000 ₫</p>
+          <p class="small muted">
+            Phiếu giữ thông tin tại thời điểm nhận tiền: món, số lượng, giá,
+            phí, tỷ giá và điều khoản. Mỗi lần thanh toán thêm có phiếu riêng để
+            đối chiếu.
+          </p>
+          <p class="note neutral">
+            PDF cố định dùng ví dụ 2 món × 58 USD, trả ban đầu 3.045.000 ₫, trả
+            thêm 450.000 ₫. Thay giá trong màn hình tính thử không đổi các PDF
+            mẫu. Chưa xác nhận tiền thật, chưa gửi email, chưa phát hành hóa đơn
+            VAT.
+          </p>
+        </div>
+        <aside class="card">
+          <h2>Tải mẫu PDF</h2>
+          <div class="stack">
+            <a
+              class="secondary"
+              href="/output/pdf/payment-upfront-20261008/01-thanh-toan-ban-dau.pdf"
+              target="_blank"
+              rel="noopener"
+              >Phiếu thanh toán ban đầu</a
+            ><a
+              class="secondary"
+              href="/output/pdf/payment-upfront-20261008/02-thanh-toan-them.pdf"
+              target="_blank"
+              rel="noopener"
+              >Phiếu thanh toán thêm</a
+            ><a
+              class="secondary"
+              href="/output/pdf/payment-upfront-20261008/03-kiem-tra-30-mon.pdf"
+              target="_blank"
+              rel="noopener"
+              >Mẫu 30 món · 3 trang</a
+            >
+          </div>
+          <p class="hint">
+            Ứng dụng sẽ có tải riêng tư trong tài khoản và email đính kèm PDF;
+            demo sẽ có hộp thư mô phỏng.
+          </p>
+        </aside>
+      </div>
+    </section>
+    <div class="footer">
+      Bản thiết kế PAYMENT-UPFRONT-20261008 / v1 · Màu thương hiệu xanh, trắng
+      và navy. Đơn cũ giữ điều khoản đã chấp thuận; listing giữ giá trọn gói.
+    </div>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id),
+      money = (v) => new Intl.NumberFormat("vi-VN").format(v) + " ₫";
+    let valid = true,
+      additionalHeld = false,
+      amount = 3045000,
+      mode = "initial";
+    function show(id) {
+      document
+        .querySelectorAll(".panel")
+        .forEach((el) => (el.hidden = el.id !== id));
+      document
+        .querySelectorAll("[data-panel]")
+        .forEach((el) =>
+          el.setAttribute("aria-pressed", String(el.dataset.panel === id)),
+        );
+      $("heading").focus();
+    }
+    document
+      .querySelectorAll("[data-panel]")
+      .forEach((b) => b.addEventListener("click", () => show(b.dataset.panel)));
+    function update() {
+      const value = $("price").value,
+        q = Number($("quantity").value),
+        priceOk =
+          /^\d+(\.\d{1,2})?$/.test(value) &&
+          Number(value) > 0 &&
+          Number(value) <= 1000000,
+        quantityOk = Number.isSafeInteger(q) && q >= 1 && q <= 100;
+      valid = priceOk && quantityOk;
+      $("priceerror").hidden = priceOk;
+      $("quantityerror").hidden = quantityOk;
+      $("totalerror").hidden = true;
+      $("price").setAttribute("aria-invalid", String(!priceOk));
+      $("quantity").setAttribute("aria-invalid", String(!quantityOk));
+      if (valid) {
+        const [whole, fraction = ""] = value.split("."),
+          cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, "0")),
+          goods = Number((cents * BigInt(q) * 25000n + 99n) / 100n),
+          fee = Math.ceil(goods / 20);
+        amount = goods + fee;
+        if (amount > 1000000000000) {
+          valid = false;
+          $("totalerror").hidden = false;
+        } else {
+          $("goods").textContent = money(goods);
+          $("fee").textContent = money(fee);
+          $("initialtotal").textContent = money(amount);
+        }
+      }
+      if (!valid) {
+        ["goods", "fee", "initialtotal"].forEach(
+          (id) => ($(id).textContent = "Chưa tính được"),
+        );
+      }
+      $("initialconsent").checked = false;
+      $("start").disabled = true;
+    }
+    ["price", "quantity"].forEach((id) =>
+      $(id).addEventListener("input", update),
+    );
+    $("initialconsent").addEventListener("change", () => {
+      $("start").disabled = !valid || !$("initialconsent").checked;
+    });
+    $("additionalconsent").addEventListener("change", () => {
+      $("payadditional").disabled =
+        additionalHeld || !$("additionalconsent").checked;
+    });
+    function checkout(additional) {
+      mode = additional ? "additional" : "initial";
+      $("purpose").textContent = additional
+        ? "Thanh toán thêm theo bản chi phí demo-02"
+        : "Thanh toán toàn bộ số tiền ban đầu";
+      $("payamount").textContent = money(additional ? 450000 : amount);
+      $("paystatus").textContent = "Chờ xác nhận thanh toán mẫu.";
+      $("nextstep").textContent = additional
+        ? "Sau khi đủ tiền, đơn vẫn cần qua kiểm tra đóng gói và bàn giao."
+        : "Nhân viên chỉ nhận việc mua khi đã đủ số tiền ban đầu.";
+      show("payment");
+    }
+    $("start").addEventListener("click", () => checkout(false));
+    $("payadditional").addEventListener("click", () => checkout(true));
+    document.querySelectorAll("[data-result]").forEach((b) =>
+      b.addEventListener("click", () => {
+        $("paystatus").textContent = {
+          pending:
+            "Trạng thái mẫu: đang xác minh thanh toán. Chưa ghi nhận tiền.",
+          unknown:
+            "Trạng thái mẫu: chưa xác định được kết quả. Kiểm tra yêu cầu đang chờ trước khi thanh toán lại.",
+          paid: "Trạng thái mẫu: đã thanh toán. Phiếu đang được xử lý.",
+        }[b.dataset.result];
+      }),
+    );
+    $("reviewcost").addEventListener("click", () => {
+      additionalHeld = true;
+      $("costreview").hidden = false;
+      $("additionalconsent").checked = false;
+      $("additionalconsent").disabled = true;
+      $("reviewcost").disabled = true;
+      $("payadditional").disabled = true;
+    });
+    $("showreceipt").addEventListener("click", () => {
+      $("receiptpurpose").textContent =
+        mode === "additional"
+          ? "Khoản thanh toán thêm"
+          : "Thanh toán toàn bộ số tiền ban đầu";
+      $("receiptamount").textContent = money(
+        mode === "additional" ? 450000 : 3045000,
+      );
+      show("document");
+    });
+  </script>
+</html>

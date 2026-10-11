@@ -1,0 +1,13 @@
+# Ask production-test impact
+
+Approved scope: PRODUCTION-TEST v1, call_5081fd46f74546c08b78d7a095730a9a item0. Repository Intelligence is DEGRADED (missing isolated indexes); bounded source/caller/compiler/test evidence is used. No complete structural coverage claim.
+
+TypeScript6/Node22, Firebase callable/Firestore transactions. Profiles: universal, TypeScript-JavaScript, API, database, concurrency. Data is confidential metadata; feedback contains no copied chat or free text. No UI string or provider contract change is planned.
+
+Source facts: pilot permanently reserves1000VND in aiPilotBudget/lifetime (own ceiling10000), discovery permanently reserves25000VND in askResearchBudget/lifetime (ceiling50000), and neither reads the other. Discovery retains a historical import floor; this must remain intact. Pricing expires8/9October. Grounded response usage can include a full1048576-token window and800output tokens. Verified standard rate evidence and model retirement are in ../PROVIDER-RESEARCH.json. Feedback is metadata-only, owner/recent-MFA reviewed and never edits knowledge/models. Cleanup currently deletes every expired document in three feedback-specific collections.
+
+Implementation: source-bound short-lived pricing/model evidence; conservative cost calculation including paid grounding; shared50000VND admission reading both existing ledgers in each reservation transaction, permanent no-refund counters and historical import fences preserved. No missing production ledger is inferred as zero. Server-authoritative production-test feedback provenance, separate collection and reviewed-only learning; explicit30-day feedback class and bounded deletion with version preconditions. Existing production feedback remains governed by its original retention policy and is not relabeled or migrated. Exact central policy helper will be reused after owner handoff.
+
+Validation: focused mixed text/grounding final-reservation concurrency, missing/corrupt/imported counters, fixed model/expiry, late expiry and unknown dispatch retention; feedback forged/test provenance, review/analytics exclusion, retention boundary and cleanup race. Existing context packing, PII redaction, source citation and explicit commerce confirmation tests remain required. No provider call, secret read, production write, runtime restart, CI or export edit in this subtask.
+
+Rollout: activation remains inactive until current pricing/model readiness, reconciled historical budget metadata and exact artifact checks pass. No new allowance is initialized automatically. Disable new paid calls first; preserve lifetime counters/unknown attempts on rollback. Runtime actual billed cost remains unavailable. Memory candidates: None.

@@ -1,4 +1,6 @@
 import { purchaseAmount, type Order } from "../../packages/domain";
+import { purchaseTestProjection } from "./purchase-test-projection";
+import { purchaseTestRecord } from "../../packages/domain/purchase-checkout";
 import { requireVerifiedGoogle } from "./auth/guards";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
@@ -293,6 +295,7 @@ export const readCustomer = onCall(opts, async (req) => {
       membership,
       orders: orders.docs.slice(0, 30).map((d) => ({
         id: d.id,
+        ...purchaseTestProjection(d.data()),
         stage: d.data().stage,
         createdAt: d.data().createdAt,
         hold: !!d.data().hold,
@@ -470,7 +473,9 @@ export const operationalDashboard = onCall(opts, async (req) => {
         ),
       ),
     );
-    const orders = snapshots[0].docs.map((d) => d.data() as Order);
+    const orders = snapshots[0].docs
+      .filter((d) => !purchaseTestRecord(d.data()))
+      .map((d) => d.data() as Order);
     const counts = {
       requests: orders.filter((o) => o.stage === "REQUESTED").length,
       quotes: orders.filter((o) => o.stage === "QUOTED").length,
@@ -496,12 +501,15 @@ export const operationalDashboard = onCall(opts, async (req) => {
           o.finalTotal !== undefined &&
           o.collected - o.refunded - (o.refundReserved ?? 0) >= o.finalTotal,
       ).length,
-      tickets: snapshots[1].docs.filter((d) => d.data().status !== "resolved")
-        .length,
-      transfers: snapshots[2].docs.filter((d) => d.data().status === "pending")
-        .length,
-      exceptions: snapshots[3].docs.filter((d) => d.data().state === "open")
-        .length,
+      tickets: snapshots[1].docs.filter(
+        (d) => !purchaseTestRecord(d.data()) && d.data().status !== "resolved",
+      ).length,
+      transfers: snapshots[2].docs.filter(
+        (d) => !purchaseTestRecord(d.data()) && d.data().status === "pending",
+      ).length,
+      exceptions: snapshots[3].docs.filter(
+        (d) => !purchaseTestRecord(d.data()) && d.data().state === "open",
+      ).length,
     };
     return {
       counts,

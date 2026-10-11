@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ci-correction-unit",
+    "exitCode": 0,
+    "seconds": 1.97,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-unit.log"
+  },
+  {
+    "name": "ci-correction-types",
+    "exitCode": 0,
+    "seconds": 18.5,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-types.log"
+  },
+  {
+    "name": "ci-correction-lint",
+    "exitCode": 0,
+    "seconds": 1.39,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/ci-correction-lint.log"
+  }
+]

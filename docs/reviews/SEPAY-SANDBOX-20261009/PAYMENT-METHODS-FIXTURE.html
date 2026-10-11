@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SatsunicGo · Kiểm tra giao diện phương thức thanh toán</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f8f9fc;
+        font:
+          14px/1.5 Arial,
+          sans-serif;
+      }
+      main {
+        width: calc(100% - 40px);
+        margin: 28px auto;
+      }
+      .fixtureControls {
+        max-width: 1160px;
+        margin: 16px auto;
+        padding: 12px 20px;
+        color: #53627b;
+        font-size: 12px;
+      }
+      .fixtureControls label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .fixtureControls select {
+        min-height: 44px;
+        padding: 8px;
+        border: 1px solid #dce2ed;
+        border-radius: 8px;
+        font: inherit;
+        background: white;
+      }
+      .fixtureControls p {
+        margin: 8px 0;
+      }
+      .fixtureBrand {
+        color: #111c35;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .fixtureBrand span {
+        color: #163cff;
+      }
+      .fixtureTextLarge .purchaseMethodLabel {
+        font-size: 24px;
+      }
+      .fixtureTextLarge .purchaseMethodDescription,
+      .fixtureTextLarge .purchaseMethodNotice {
+        font-size: 22px;
+      }
+      .fixtureTextLarge .purchaseMethods legend {
+        font-size: 26px;
+      }
+      .fixtureThumbnail {
+        width: 44px;
+        height: 44px;
+        border: 1px solid #dce2ed;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: #f3f5f9;
+      }
+      @media (max-width: 600px) {
+        main {
+          width: calc(100% - 24px);
+          margin-top: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./PAYMENT-METHODS-FIXTURE.tsx"></script>
+  </body>
+</html>

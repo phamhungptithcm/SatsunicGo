@@ -1,0 +1,9 @@
+# Approved success-card refinement
+
+Approval: the user's current instruction to make the paid screen compact and centered, with a green circular check, prominent success message, clickable blue order IDs, a small icon PDF download, and a centered order-view action. This is explicit authorization for this concrete UI change within the previously approved checkout integration.
+
+Impact: `src/features/cart/purchase-payment.tsx`, `purchase-completion.tsx`, `purchase-checkout.css`, and focused presenter tests. Keep the existing Cart and RequestForm layout. Keep the checkout route and all backend payment/receipt contracts. Replace only the paid presentation; retain pending, unknown, cancellation, review-required and recovery controls. Remove duplicate headings, amounts and implementation descriptions from the success card. The PDF remains an internal payment receipt, with its classification in the actual file; no claim of real email delivery or tax-invoice issuance is introduced.
+
+Implementation: a pure completion presenter with one green completion symbol, one amount, the actual child-order UUID links, icon download with a meaningful accessible name, and one order-view action. Single-order payments open that order; grouped checkout opens the order list. Shared payment status/receipt polling and guarded download stay unchanged. Compact local CSS, no dependencies or new animations.
+
+Validation: focused server-rendered accessibility/navigation/duplicate-amount assertions; root build and scoped lint; actual initial and additional paid pages in the shared 5207 demo at desktop and mobile width, plus keyboard download focus. Update the product-content inventory, screenshots and final review to this candidate. No production activation, deployment or database change is authorized by this refinement.

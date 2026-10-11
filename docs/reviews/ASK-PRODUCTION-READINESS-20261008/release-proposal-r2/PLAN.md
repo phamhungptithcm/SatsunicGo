@@ -1,0 +1,13 @@
+# Release inventory delta
+
+Status: PROPOSAL_NOT_APPLIED. Production script/CI not edited. Current preflight fails FUNCTION_INVENTORY_INVALID at analyticsOrderChanged because preflight only understands https/scheduler triggers. Do not remove concurrent Analytics exports or ignore unresolved functions.
+
+Concrete smallest patch: scripts/release/preflight.mjs recognizes imported onDocumentCreated/onDocumentWritten only from firebase-functions/v2/firestore and preserves import aliases, static options/spreads, exact region and declared trigger kind. Module-specific constructor sets also reject a constructor attributed to the wrong module. Hosting rewrites remain onRequest only. Unknown/dynamic constructors, computed region, unknown spreads, unsafe paths and implicit Function deletion remain blocked. No Function, settings, schema, transaction, deployment or workflow change.
+
+Source baseline and patch recorded. Proposal is evaluated as a separate file under output/ask-readiness, with the existing preflight tests plus eight actual success/failure cases; proposal results do not mean the repository script was fixed. After explicit approval, sole writer applies the reviewed bounded patch and adds these cases to tests/unit/release-preflight067.test.ts, reruns full preflight against current source plus focused/fullunit and fresh independent review. Other consumers release/artifact use name/region/source and HTTPkind validation; all new inventory must remain exact.
+
+Rollback: restore just this owned import constructor map delta, not concurrent application changes. Unknown trigger support remains fail-closed. No deployment requested until policy/live/current candidate acceptance complete.
+
+Approval required by .ai/workflows/plan-existing-system-change.md step15 and guard: existing release tooling is outside the approved Ask/two-label slice. A proposal file is reversible review evidence, not agent self-approval.
+
+Second verified blocker: dashboardAnalytics imports analyticsOptions from analytics-ingest. Proposal resolves direct relative named imports of exported variable options, preserving aliases and source-order static spreads. Module-qualified cycle keys and existing128-module budget bound traversal; dynamic/nonrelative/escaping/unexported/re-export-only options remain blocked. No execution of source modules or configuration expressions. Current repo script remains unchanged.

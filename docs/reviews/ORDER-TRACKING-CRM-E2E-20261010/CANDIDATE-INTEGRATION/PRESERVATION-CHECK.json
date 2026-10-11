@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-10T18:33:24.591459+00:00",
+  "baselineTrackedChecked": 3580,
+  "outsideApprovedDrift": [],
+  "preexistingPycPreserved": true,
+  "nodeModulesSymlinkPreserved": true,
+  "sharedRootProductWritesByRoot": 0,
+  "sharedHarnessFix": "57f1969c64c26dad692aa808c4f835f8723630b3b47c7d316e04dd8e1e10631f",
+  "protectedCandidateGuards": "shipping/consolidation live boundary and command production-test boundary retained",
+  "CSS": "Entire prior prefix including four publicTrackingCode rules retained; only26 refresh lines appended",
+  "noDeploy": true
+}

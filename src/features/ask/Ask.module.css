@@ -230,8 +230,7 @@
   gap: 8px;
   padding: 8px 20px 12px;
 }
-.workControls button,
-.waypoints button {
+.workControls button {
   border: 1px solid #e2e6ef;
   border-radius: 10px;
   min-height: 44px;
@@ -242,14 +241,12 @@
   font-size: 13px;
   cursor: pointer;
 }
-.workControls button[aria-pressed="true"],
-.waypoints button[aria-current] {
+.workControls button[aria-pressed="true"] {
   color: #163cff;
   border-color: #afc0ff;
   background: #eef3ff;
 }
-.workControls button:focus-visible,
-.waypoints button:focus-visible {
+.workControls button:focus-visible {
   outline: 2px solid #163cff;
   outline-offset: 2px;
 }
@@ -260,30 +257,6 @@
 }
 .languageControls button {
   padding: 8px;
-}
-.waypoints {
-  display: flex;
-  flex-shrink: 0;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 8px 20px 0;
-  min-width: 0;
-}
-.waypoints:empty {
-  display: none;
-}
-.waypoints button {
-  display: flex;
-  gap: 8px;
-  max-width: 180px;
-  flex-shrink: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.waypoints button span {
-  color: #163cff;
-  font-weight: 600;
 }
 @media (max-width: 760px) {
   .workArea {
@@ -297,8 +270,7 @@
   .workArea > .conversation {
     padding: 16px 4px;
   }
-  .workControls,
-  .waypoints {
+  .workControls {
     padding-left: 12px;
     padding-right: 12px;
   }

@@ -375,11 +375,20 @@ try {
     assert.equal(
       (
         await db
-          .collection("financialEntries")
+          .collection("purchaseTestFinancialEntries")
           .where("checkoutId", "==", f.checkout.id)
           .get()
       ).size,
       1,
+    );
+    assert.equal(
+      (
+        await db
+          .collection("financialEntries")
+          .where("checkoutId", "==", f.checkout.id)
+          .get()
+      ).size,
+      0,
     );
   });
   await check(
@@ -711,13 +720,22 @@ try {
       await gateway(maximum, "pay");
       assert.equal(await orderCount(maximum), 30);
       const entries = await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("checkoutId", "==", maximum.checkout.id)
         .get();
       assert.equal(entries.size, 30);
       assert.equal(
         entries.docs.reduce((sum, d) => sum + d.data().amount, 0),
         maximum.preview.total,
+      );
+      assert.equal(
+        (
+          await db
+            .collection("financialEntries")
+            .where("checkoutId", "==", maximum.checkout.id)
+            .get()
+        ).size,
+        0,
       );
     },
   );

@@ -8,6 +8,9 @@ import {
   releaseCapabilityAllowed,
 } from "./provider-release-gate";
 import { publishDueStudioPosts } from "./blog-studio";
+import { z } from "zod";
+import { warn } from "firebase-functions/logger";
+import { productionTestArtifactEnvironment } from "./production-test-policy";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { FieldPath, getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
@@ -313,6 +316,69 @@ export const maintenance = onSchedule(
         });
       }),
     );
+  },
+);
+const scheduledJobsPolicy = z.object({
+  approved: z.literal(true),
+  version: z.number().int().positive().safe(),
+  effectiveFrom: z.number().int().nonnegative().safe(),
+  expiresAt: z.number().int().positive().safe(),
+  studioPublication: z.boolean(),
+  notificationRecovery: z.boolean(),
+}).strict();
+/** These jobs never expire memberships, delete data, or retry external sends. */
+export async function scheduledJobAllowed(
+  db: ReturnType<typeof getFirestore>,
+  capability: "scheduledPublication" | "notificationRecovery",
+  now: number,
+) {
+  if (!releaseCapabilityAllowed(capability, process.env, Reflect.get(db, "projectId"))) return false;
+  const parsed = scheduledJobsPolicy.safeParse((await db.doc("settings/scheduledJobs").get()).data());
+  if (!parsed.success || !Number.isSafeInteger(now) || parsed.data.effectiveFrom > now || parsed.data.expiresAt <= now) return false;
+  return capability === "scheduledPublication" ? parsed.data.studioPublication : parsed.data.notificationRecovery;
+}
+export const scheduledPublication = onSchedule(
+  { schedule: "every 30 minutes", region: "asia-southeast1", maxInstances: 1 },
+  async () => {
+    if (!productionTestArtifactEnvironment()) return;
+    const db = getFirestore(), now = Date.now();
+    if (await scheduledJobAllowed(db, "scheduledPublication", now))
+      await publishDueStudioPosts(db, now);
+  },
+);
+export async function recoverCustomerNotifications(
+  db: ReturnType<typeof getFirestore>,
+  now: number,
+) {
+  if (!await scheduledJobAllowed(db, "notificationRecovery", now)) return;
+  const cursorRef = db.doc("scheduledJobCursors/customerNotificationRecovery");
+  const cursorValue = (await cursorRef.get()).data()?.lastId;
+  const lastId = typeof cursorValue === "string" && cursorValue.length > 0 && cursorValue.length <= 1500 && !cursorValue.includes("/")
+    ? cursorValue : null;
+  let query = db.collection("outboxJobs").where("state", "==", "queued").orderBy(FieldPath.documentId());
+  if (lastId) query = query.startAfter(lastId);
+  const jobs = await query.limit(30).get();
+  // Each projection has its own idempotent transaction; at most five run together.
+  for (let offset = 0; offset < jobs.docs.length; offset += 5)
+    await Promise.all(jobs.docs.slice(offset, offset + 5).map(async (row) => {
+      if (!row.data().customerEvent) return;
+      try { await projectCustomerNotification(db, row.id, now); }
+      catch { warn("CUSTOMER_NOTIFICATION_RECOVERY_RETRY"); }
+    }));
+  // Round-robin progress prevents legacy/noncustomer rows from pinning every run.
+  // A failed projection is revisited after wrap; the projection itself is idempotent.
+  const nextId = jobs.docs.at(-1)?.id ?? null;
+  await db.runTransaction(async (tx) => {
+    const current = (await tx.get(cursorRef)).data()?.lastId ?? null;
+    if (current !== (cursorValue ?? null)) return;
+    tx.set(cursorRef, { lastId: nextId, changedAt: now });
+  });
+}
+export const customerNotificationRecovery = onSchedule(
+  { schedule: "every 5 minutes", region: "asia-southeast1", maxInstances: 1 },
+  async () => {
+    if (!productionTestArtifactEnvironment()) return;
+    await recoverCustomerNotifications(getFirestore(), Date.now());
   },
 );
 export const readNotification = onCall(

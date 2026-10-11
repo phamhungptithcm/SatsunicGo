@@ -1,0 +1,256 @@
+{
+  "scope": "Local emulator SDK calls/attempts including aborted transaction attempts. No provider billed-read/write, Cloud latency, SLA or high-capacity inference. Boundary timings: three samples each; contention: one bounded sample each.",
+  "measurements": [
+    {
+      "profile": "P04 concurrent staff",
+      "attempts": 3,
+      "readCalls": 20,
+      "writes": 16,
+      "elapsedMs": 2909.46,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 7,
+      "elapsedMs": 18.4,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=10",
+      "attempts": 1,
+      "readCalls": 24,
+      "writes": 25,
+      "elapsedMs": 40.07,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 7,
+      "elapsedMs": 29.71,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=10",
+      "attempts": 1,
+      "readCalls": 24,
+      "writes": 25,
+      "elapsedMs": 24.16,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 7,
+      "elapsedMs": 25.99,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 orders=10",
+      "attempts": 1,
+      "readCalls": 24,
+      "writes": 25,
+      "elapsedMs": 28.35,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 10,
+      "elapsedMs": 26.33,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=20",
+      "attempts": 1,
+      "readCalls": 25,
+      "writes": 67,
+      "elapsedMs": 46.27,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 10,
+      "elapsedMs": 62.8,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=20",
+      "attempts": 1,
+      "readCalls": 25,
+      "writes": 67,
+      "elapsedMs": 47.6,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=1",
+      "attempts": 1,
+      "readCalls": 6,
+      "writes": 10,
+      "elapsedMs": 17.2,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P01 batchParcels=20",
+      "attempts": 1,
+      "readCalls": 25,
+      "writes": 67,
+      "elapsedMs": 46.54,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P04 concurrent finance/shipping",
+      "attempts": 3,
+      "readCalls": 15,
+      "writes": 14,
+      "elapsedMs": 3368.76,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    },
+    {
+      "profile": "P04 shared-IP guest quota eight contenders",
+      "attempts": 17,
+      "readCalls": 43,
+      "writes": 22,
+      "elapsedMs": 3402.92,
+      "environment": "local emulator, SDK call counts, no provider SLA/billing inference"
+    }
+  ],
+  "summaries": [
+    {
+      "profile": "P04 concurrent staff",
+      "samples": 1,
+      "p50Ms": 2909.46,
+      "p95Ms": 2909.46,
+      "attempts": [
+        3
+      ],
+      "readCalls": [
+        20
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        16
+      ]
+    },
+    {
+      "profile": "P01 orders=1",
+      "samples": 3,
+      "p50Ms": 25.99,
+      "p95Ms": 29.71,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "readCalls": [
+        6,
+        6,
+        6
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        7,
+        7,
+        7
+      ]
+    },
+    {
+      "profile": "P01 orders=10",
+      "samples": 3,
+      "p50Ms": 28.35,
+      "p95Ms": 40.07,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "readCalls": [
+        24,
+        24,
+        24
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        25,
+        25,
+        25
+      ]
+    },
+    {
+      "profile": "P01 batchParcels=1",
+      "samples": 3,
+      "p50Ms": 26.33,
+      "p95Ms": 62.8,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "readCalls": [
+        6,
+        6,
+        6
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        10,
+        10,
+        10
+      ]
+    },
+    {
+      "profile": "P01 batchParcels=20",
+      "samples": 3,
+      "p50Ms": 46.54,
+      "p95Ms": 47.6,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "readCalls": [
+        25,
+        25,
+        25
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        67,
+        67,
+        67
+      ]
+    },
+    {
+      "profile": "P04 concurrent finance/shipping",
+      "samples": 1,
+      "p50Ms": 3368.76,
+      "p95Ms": 3368.76,
+      "attempts": [
+        3
+      ],
+      "readCalls": [
+        15
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        14
+      ]
+    },
+    {
+      "profile": "P04 shared-IP guest quota eight contenders",
+      "samples": 1,
+      "p50Ms": 3402.92,
+      "p95Ms": 3402.92,
+      "attempts": [
+        17
+      ],
+      "readCalls": [
+        43
+      ],
+      "scheduledWritesIncludingAbortedAttempts": [
+        22
+      ]
+    }
+  ]
+}

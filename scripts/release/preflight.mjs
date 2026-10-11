@@ -71,7 +71,7 @@ export function assertOnlyDemoReferences(ast, name, allowed) {
 }
 const requiredRoutes={'/campaign-banners':'campaignBannersPublic','/campaign-banners/**':'campaignBannersPublic','/robots.txt':'publicDiscovery','/sitemap.xml':'publicDiscovery','/media/**':'publicImage','/products':'publicPage','/posts':'publicPage','/products/**':'publicPage','/posts/**':'publicPage','/how-it-works':'publicPage','/fees':'publicPage','/privacy':'publicPage','/terms':'publicPage','/restricted':'publicPage'};
 export function preflight({root,project}) {
-  const errors=[],hashes={},inventory=[],emulatorOnlyExports=[],cache=new Map();
+  const errors=[],hashes={},inventory=[],emulatorOnlyExports=[],productionTestExports=[],cache=new Map();
   const fail=code=>errors.push(code);
   const base=fs.realpathSync(root);
   function read(relative){
@@ -195,6 +195,36 @@ export function preflight({root,project}) {
     emulatorOnlyExports.push(trigger);
     return true;
   }
+  function productionTestExport(m,name) {
+    const spec=emulatorExports.get(name),declaration=m.declarations.get(name),conditional=declaration?.initializer;
+    if(!spec?.guard || !conditional || !ts.isConditionalExpression(conditional) || !ts.isIdentifier(conditional.condition) || conditional.condition.text!=='productionSePay')return false;
+    const guard=m.declarations.get('productionSePay'),call=guard?.initializer;
+    const imported=m.imports.get('sepayArtifactEnvironment');
+    if(m.relative!=='functions/src/index.ts'||!(declaration.parent.flags&ts.NodeFlags.Const)||declaration.parent.declarations.length!==1||m.exports.get(name)?.local!==name||m.exports.get(name)?.from||
+      !ts.isIdentifier(conditional.whenTrue)||conditional.whenTrue.text!==spec.binding||!ts.isIdentifier(conditional.whenFalse)||conditional.whenFalse.text!=='undefined'||
+      !guard||!(guard.parent.flags&ts.NodeFlags.Const)||guard.parent.declarations.length!==1||m.exports.has('productionSePay')||!call||!ts.isCallExpression(call)||!ts.isIdentifier(call.expression)||call.expression.text!=='sepayArtifactEnvironment'||call.arguments.length||
+      imported?.from!=='./production-test-policy'||imported.name!=='sepayArtifactEnvironment'||m.imports.get(spec.binding)?.from!==spec.from||m.imports.get(spec.binding)?.name!==name)throw Error('PRODUCTION_TEST_EXPORT_SHAPE');
+    const guardReferences=new Set([guard.name]);
+    for(const exportName of ['purchaseSePayPayment','purchaseSePayIpn','purchaseSePayInboxWorker']) {
+      const other=m.declarations.get(exportName)?.initializer;
+      if(!other||!ts.isConditionalExpression(other)||!ts.isIdentifier(other.condition)||other.condition.text!=='productionSePay')throw Error('PRODUCTION_TEST_EXPORT_SET');
+      guardReferences.add(other.condition);
+    }
+    assertOnlyDemoReferences(m.ast,'productionSePay',guardReferences);
+    const imports=m.ast.statements.filter(node=>ts.isImportDeclaration(node)&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements);
+    const helper=imports.filter(item=>item.name.text==='sepayArtifactEnvironment'),binding=imports.filter(item=>item.name.text===spec.binding);
+    if(helper.length!==1||binding.length!==1)throw Error('PRODUCTION_TEST_EXPORT_SHAPE');
+    assertDemoBindings(m.ast,new Set(['productionSePay','sepayArtifactEnvironment',spec.binding,name]),new Set([guard.name,helper[0].name,binding[0].name,declaration.name]));
+    assertOnlyDemoReferences(m.ast,'sepayArtifactEnvironment',new Set([helper[0].name,call.expression]));
+    assertOnlyDemoReferences(m.ast,spec.binding,new Set([binding[0].name,conditional.whenTrue]));
+    const names=new Set([declaration.name]);if(binding[0].propertyName)names.add(binding[0].propertyName);
+    assertOnlyDemoReferences(m.ast,name,names);
+    // Bind the actual admission implementation into source hashes too.
+    module('functions/src/production-test-policy.ts');
+    const trigger=resolve('functions/src/'+spec.from.slice(2)+'.ts',name);
+    if(trigger.kind!==spec.kind||trigger.region!==REGION)throw Error('PRODUCTION_TEST_TARGET_INVALID');
+    inventory.push(trigger);productionTestExports.push(trigger);return true;
+  }
   function attempt(code,operation){try{return operation();}catch{fail(code);return undefined;}}
   if(project!=='satsunicgo')fail('PROJECT_NOT_EXACT_PRODUCTION_TARGET');
   const config=attempt('FIREBASE_CONFIG_INVALID',()=>json('firebase.json'));
@@ -203,7 +233,7 @@ export function preflight({root,project}) {
     if(functions.length!==1||functions[0]?.source!=='functions'||functions[0]?.codebase!=='satsunicgo'||functions[0]?.runtime!=='nodejs22')fail('FUNCTIONS_CONFIG_MISMATCH');
     const pkg=attempt('FUNCTIONS_PACKAGE_INVALID',()=>json('functions/package.json'));if(pkg?.engines?.node!=='22')fail('NODE_ENGINE_MISMATCH');
     for(const [name,relative]of Object.entries({firestoreRules:config.firestore?.rules,firestoreIndexes:config.firestore?.indexes,storageRules:config.storage?.rules}))attempt('MISSING_OR_UNSAFE_'+name,()=>name==='firestoreIndexes'?json(relative):read(relative));
-    attempt('FUNCTION_INVENTORY_INVALID',()=>{const m=module('functions/src/index.ts');for(const name of m.exports.keys()){if(emulatorExport(m,name))continue;const trigger=resolve('functions/src/index.ts',name);inventory.push(trigger);if(trigger.region!==REGION)fail('FUNCTION_REGION_MISMATCH');}});
+    attempt('FUNCTION_INVENTORY_INVALID',()=>{const m=module('functions/src/index.ts');for(const name of m.exports.keys()){if(productionTestExport(m,name)||emulatorExport(m,name))continue;const trigger=resolve('functions/src/index.ts',name);inventory.push(trigger);if(trigger.region!==REGION)fail('FUNCTION_REGION_MISMATCH');}});
     const rewrites=config.hosting?.rewrites??[];
     const canonical=[...Object.entries(requiredRoutes).map(([source,functionId])=>({source,function:{functionId,region:REGION}})),{source:'**',destination:'/index.html'}];
     if(JSON.stringify(rewrites)!==JSON.stringify(canonical))fail('REWRITE_ORDER_OR_EXTRA_MISMATCH');
@@ -234,7 +264,7 @@ export function preflight({root,project}) {
       if(templateDepth!==0||tags.filter(t=>t.name==='script'&&t.attrs.get('type')==='module'&&t.attrs.get('src')==='/'+entry.file).length!==1||(entry.css??[]).some(css=>tags.filter(t=>t.name==='link'&&t.attrs.get('rel')==='stylesheet'&&t.attrs.get('href')==='/'+css).length!==1))throw Error('HTML_ASSET_MISMATCH');
     });
   }
-  return {status:'PREPARED_NOT_DEPLOYED',readiness:'NOT_READY',localChecks:errors.length?'FAILED':'PASSED',project:project==='satsunicgo'?'satsunicgo':'REJECTED',region:REGION,inventory,emulatorOnlyExports,hashes,errors,compiledLibraryFreshness:'UNVERIFIED_NO_SOURCE_BUILD_MANIFEST',cloud:'NOT_CHECKED',publicConfiguration:'NOT_CHECKED',limits:['Source inventory is not deployed inventory','No runtime imports, credentials, provider, network or deployment checks','Static option uses checked only in parsed modules; no whole-program side-effect or runtime proof','Only entry CSS/JS bindings checked; chunk graph and application configuration not fully certified']};
+  return {status:'PREPARED_NOT_DEPLOYED',readiness:'NOT_READY',localChecks:errors.length?'FAILED':'PASSED',project:project==='satsunicgo'?'satsunicgo':'REJECTED',region:REGION,inventory,emulatorOnlyExports,productionTestExports,hashes,errors,compiledLibraryFreshness:'UNVERIFIED_NO_SOURCE_BUILD_MANIFEST',cloud:'NOT_CHECKED',publicConfiguration:'NOT_CHECKED',limits:['Source inventory is not deployed inventory','No runtime imports, credentials, provider, network or deployment checks','Static option uses checked only in parsed modules; no whole-program side-effect or runtime proof','Only entry CSS/JS bindings checked; chunk graph and application configuration not fully certified']};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const args=process.argv.slice(2);if(args.length!==2||args[0]!=='--project'){console.error('Usage: node scripts/release/preflight.mjs --project satsunicgo');process.exitCode=1;}else{const result=preflight({root:process.cwd(),project:args[1]});console.log(JSON.stringify(result,null,2));if(result.localChecks==='FAILED')process.exitCode=1;}

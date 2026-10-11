@@ -1,0 +1,47 @@
+{
+  "status": "PASSED",
+  "scope": "Completed reviewed CRM delta integration and root corrections, pre-CI local scope only",
+  "at": "2026-10-10T18:33:24.591459+00:00",
+  "sourceDigest": "89a8d9b612c8d1b8597148b14c7f2e0b0efde87870c4316ab7a4238d3c0438aa",
+  "ownerReviewSha256": "538818bd5516ca8a44da5a981d2e1df3534569891ba1aaf206b3fa8c1700cbb8",
+  "findings": [
+    {
+      "id": "CRM-HARNESS-STYLE",
+      "status": "FIXED",
+      "validation": "Actual Chromium component with Workspace ancestors/CSS,1280/390/320,18pxicons,reload,0console errors; disposed15ownedpaths"
+    },
+    {
+      "id": "CI-EMULATOR-PORT",
+      "status": "FIXED",
+      "validation": "Existing fail-closed demoFirestoreEndpoint restored for8181/18207;87backend tests pass on18207;8181 will execute in normalCI"
+    }
+  ],
+  "requirements": "46/46 owner criteria PASSED in stated layers; pricing exactly2h window restored before root readback; no46nativeE2E claim",
+  "preservationChecks": {
+    "at": "2026-10-10T18:33:24.591459+00:00",
+    "baselineTrackedChecked": 3580,
+    "outsideApprovedDrift": [],
+    "preexistingPycPreserved": true,
+    "nodeModulesSymlinkPreserved": true,
+    "sharedRootProductWritesByRoot": 0,
+    "sharedHarnessFix": "57f1969c64c26dad692aa808c4f835f8723630b3b47c7d316e04dd8e1e10631f",
+    "protectedCandidateGuards": "shipping/consolidation live boundary and command production-test boundary retained",
+    "CSS": "Entire prior prefix including four publicTrackingCode rules retained; only26 refresh lines appended",
+    "noDeploy": true
+  },
+  "localValidation": {
+    "unit": 92,
+    "component": 44,
+    "backend": 87,
+    "types": "PASSED Node22",
+    "scopedLint": "PASSED",
+    "build": "Exact public CI tuple five commands PASSED"
+  },
+  "productionReadiness": "NOT_READY",
+  "wholeCandidateFinalReview": "BLOCKED pending currentCI and preexisting manual/release/live gates",
+  "limitations": [
+    "Self-review source and layered owner evidence, not independent production acceptance",
+    "Genuine200%browserzoom/spokenAT/PRE001/MFA/manual/immutablemainartifact/provider/live remain incomplete",
+    "Legacy approval validator incorrectly requiresREADY although AGENTS explicitly allowsDEGRADED; recorded without bypass or falseREADY"
+  ]
+}

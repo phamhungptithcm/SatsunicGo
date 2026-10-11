@@ -73,11 +73,16 @@ function trackCheckout(p: CheckoutSnapshot) {
   ])
     ownedPaths.add(`${collection}/${p.id}`);
   ownedPaths.add(`purchasePaymentEvidence/DEMO-${p.id}`);
+  ownedPaths.add(`outboxJobs/purchase-payment-${p.id}`);
   for (const line of p.lines) {
     ownedPaths.add(`orders/${line.orderId}`);
     ownedPaths.add(`orderRecipients/${line.orderId}`);
+    ownedPaths.add(`orderOperations/${line.orderId}`);
     ownedPaths.add(`orders/${line.orderId}/timeline/purchase-${p.id}`);
     ownedPaths.add(`financialEntries/purchase-${p.id}-${line.orderId}`);
+    ownedPaths.add(
+      `purchaseTestFinancialEntries/purchase-${p.id}-${line.orderId}`,
+    );
   }
 }
 async function preview(owner: string) {
@@ -199,8 +204,8 @@ beforeAll(async () => {
       rules: readFileSync("firestore.rules", "utf8"),
     },
   });
-  // A real paid business operation supplies receipt fixtures independently of
-  // the race test, with a distinct owner so its financial oracle remains exact.
+  // A server-confirmed demo payment supplies receipt fixtures independently of
+  // the race test, with a distinct owner so its test-ledger oracle remains exact.
   const p = await preview(receiptUid);
   await commit(p, receiptUid);
   await api.purchaseDemoPayment.run(
@@ -299,11 +304,20 @@ it("parallel commit operations reserve one checkout; parallel proof allocates ex
   ]);
   expect(payments[0]).toEqual(payments[1]);
   const entries = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("ownerId", "==", uid)
     .get();
   expect(entries.size).toBe(1);
-  expect(entries.docs[0].data().amount).toBe(200000);
+  expect(entries.docs[0].data()).toMatchObject({
+    amount: 200000,
+    checkoutId: p.id,
+    provider: "demo",
+    testMode: true,
+  });
+  expect(
+    (await db.collection("financialEntries").where("ownerId", "==", uid).get())
+      .empty,
+  ).toBe(true);
   expect((await db.doc(`carts/${uid}`).get()).data()!.items).toEqual([]);
   await expect(
     api.purchaseCheckout.run(req({ action: "status", id: p.id }, "other")),
@@ -365,9 +379,10 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
     (await db.doc(`purchaseReceiptJobs/${id}`).get()).data()!.attempts,
   ).toBe(2);
   const before = await db
-    .collection("financialEntries")
+    .collection("purchaseTestFinancialEntries")
     .where("ownerId", "==", receiptUid)
     .get();
+  expect(before.size).toBe(1);
   const badId = randomUUID();
   trackReceipt(badId);
   await db.doc(`purchaseReceipts/${badId}`).create({
@@ -394,11 +409,19 @@ it("receipt workers recover expired leases, deduplicate private attachments and 
   expect(
     (
       await db
+        .collection("purchaseTestFinancialEntries")
+        .where("ownerId", "==", receiptUid)
+        .get()
+    ).docs.map((entry) => ({ id: entry.id, data: entry.data() })),
+  ).toEqual(before.docs.map((entry) => ({ id: entry.id, data: entry.data() })));
+  expect(
+    (
+      await db
         .collection("financialEntries")
         .where("ownerId", "==", receiptUid)
         .get()
-    ).size,
-  ).toBe(before.size);
+    ).empty,
+  ).toBe(true);
 });
 it("background recovery reaches expired leases while new work and active leases are present", async () => {
   const db = getFirestore();

@@ -1,0 +1,716 @@
+/* Design proxy only. Existing three-step RequestForm structure is retained. */
+.paymentDesignR4 {
+  background: #f7f8fc;
+  color: #111c35;
+}
+.paymentDesignR4 .topbar {
+  background: #fff;
+}
+.paymentDesignR4 .previewNotice {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 9px max(24px, calc((100vw - 1160px) / 2));
+  background: #fff;
+  border-color: #e7ebf2;
+  font-size: 11px;
+  color: #69758b;
+}
+.paymentDesignR4 .previewNotice strong {
+  font-weight: 600;
+  color: #163cff;
+}
+.paymentDesignR4 .previewMain {
+  max-width: 1160px;
+  padding-top: 24px;
+  padding-bottom: 40px;
+}
+.paymentDesignR4 .previewContext {
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #69758b;
+}
+.paymentDesignR4 .pageTabs {
+  margin-bottom: 28px;
+}
+.paymentDesignR4 .pageTab {
+  padding: 12px 16px;
+  font-size: 13px;
+}
+.paymentDesignR4 .requestHeading {
+  margin-bottom: 20px;
+}
+.paymentDesignR4 .requestHeading h1 {
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+.paymentDesignR4 .requestHeading p {
+  margin: 9px 0 12px;
+  font-size: 13px;
+  color: #53627b;
+}
+.paymentDesignR4 .card {
+  background: #fff;
+  border: 1px solid #e0e5ef;
+  border-radius: 12px;
+  padding: 22px;
+}
+.paymentDesignR4 .grid {
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+}
+.paymentDesignR4 #cart > .grid {
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 20px;
+  align-items: start;
+}
+.paymentDesignR4 #cart .requestHeading {
+  margin-bottom: 12px;
+}
+.paymentDesignR4 #cart .requestHeading h1 {
+  font-size: 26px;
+}
+.paymentDesignR4 #cart .checkoutSteps {
+  margin: 10px 0 16px;
+  padding-bottom: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.paymentDesignR4 #cart .checkoutSteps button > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+.paymentDesignR4 #cart .checkoutSteps button:not(:last-child)::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  width: calc(100% + 12px);
+  height: 2px;
+  background: #e1e6ef;
+  pointer-events: none;
+}
+.paymentDesignR4 #cart .checkoutSteps button {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  border-bottom: 0;
+  padding: 6px 0;
+}
+.paymentDesignR4 #cart .checkoutSteps button.isComplete::after {
+  background: #16704c;
+}
+.paymentDesignR4 #cart .checkoutSteps button > span:last-child {
+  background: transparent;
+  padding: 0;
+}
+.paymentDesignR4 #checkoutHeading {
+  font-size: 17px;
+  margin-bottom: 14px;
+}
+.paymentDesignR4 .cartSheet {
+  border: 1px solid #e0e5ef;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.paymentDesignR4 .cartSheetHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fafbfe;
+  border-bottom: 1px solid #e7ebf2;
+  padding: 12px 20px;
+  font-size: 11px;
+  color: #69758b;
+}
+.paymentDesignR4 .cartLine {
+  padding: 20px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 14px;
+}
+.paymentDesignR4 .cartLine:last-child {
+  border-bottom: 0;
+}
+.paymentDesignR4 .cartLine h3 {
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.paymentDesignR4 .cartLine p {
+  font-size: 12px;
+  margin: 4px 0;
+}
+.paymentDesignR4 .cartLine .lineControls {
+  margin-top: 12px;
+}
+.paymentDesignR4 .cartLine .lineControls input {
+  width: 64px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.paymentDesignR4 .cartLine .lineControls strong {
+  color: #111c35;
+  font-size: 15px;
+}
+.paymentDesignR4 #cart .actions {
+  margin-top: 14px;
+  gap: 16px;
+}
+.paymentDesignR4 #cart .actions .secondary {
+  border: 0;
+  background: none;
+  color: #163cff;
+  padding: 0;
+  font-size: 12px;
+}
+.paymentDesignR4 #cartMessage {
+  margin: 6px 0;
+  min-height: 19px;
+}
+.paymentDesignR4 .checkoutAside {
+  position: static;
+  padding: 18px;
+}
+.paymentDesignR4 .checkoutAside h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.paymentDesignR4 .checkoutAside .row {
+  font-size: 12px;
+  padding: 6px 0;
+  gap: 12px;
+}
+.paymentDesignR4 .checkoutAside .row strong {
+  font-weight: 600;
+}
+.paymentDesignR4 .checkoutAside .total {
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 10px;
+  padding-top: 12px;
+  color: #53627b;
+}
+.paymentDesignR4 .checkoutAside .large {
+  color: #111c35;
+  font-size: 28px;
+  margin: 4px 0 8px;
+}
+.paymentDesignR4 .checkoutAside > .hint:last-child {
+  border-top: 1px solid #e7ebf2;
+  padding-top: 12px;
+  margin: 14px 0 0;
+  font-size: 10px;
+}
+.paymentDesignR4 .estimateAside {
+  padding: 13px 14px;
+  border-radius: 8px;
+  background: #f4f6fd;
+  display: grid;
+  gap: 5px;
+  font-size: 11px;
+  color: #53627b;
+}
+.paymentDesignR4 .estimateAside strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111c35;
+}
+.paymentDesignR4 .estimateAside small {
+  font-size: 10px;
+  line-height: 1.5;
+}
+.paymentDesignR4 #paymentIncludes {
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 8px 0;
+}
+.paymentDesignR4 .shippingCard {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e7ebf2;
+}
+.paymentDesignR4 .sectionHeading {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+.paymentDesignR4 .eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #69758b;
+}
+.paymentDesignR4 .shippingCard h3 {
+  margin: 5px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.paymentDesignR4 .sectionHeading .textbutton {
+  white-space: nowrap;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+}
+.paymentDesignR4 .shippingCard > .hint {
+  margin: 12px 0;
+  font-size: 11px;
+}
+.paymentDesignR4 .shippingFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.paymentDesignR4 .checkoutAside .shippingCard h3 {
+  font-size: 14px;
+  margin: 0;
+}
+.paymentDesignR4 .checkoutAside .sectionHeading {
+  gap: 8px;
+  margin: 0;
+  flex-direction: row;
+  align-items: center;
+}
+.paymentDesignR4 .checkoutAside .freightResult {
+  padding: 10px;
+  margin: 8px 0;
+}
+.paymentDesignR4 .checkoutAside .freightResult > div {
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+}
+.paymentDesignR4 .checkoutAside .freightResult span {
+  font-size: 10px;
+}
+.paymentDesignR4 .checkoutAside .freightResult strong {
+  font-size: 16px;
+  white-space: nowrap;
+}
+.paymentDesignR4 .checkoutAside .freightResult p {
+  margin: 5px 0 0;
+  line-height: 1.55;
+}
+.paymentDesignR4 .checkoutAside .deliveryRegion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0;
+}
+.paymentDesignR4 .checkoutAside .deliveryRegion .tag {
+  font-size: 9px;
+}
+.paymentDesignR4 .shippingOptions summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 11px;
+  color: #163cff;
+}
+.paymentDesignR4 .shippingOptions summary::before {
+  content: "+";
+  margin-right: 8px;
+}
+.paymentDesignR4 .shippingOptions .hint {
+  font-size: 11px;
+}
+.paymentDesignR4 .shippingFields label {
+  min-width: 0;
+}
+.paymentDesignR4 .shippingConditions {
+  padding-top: 0;
+}
+.paymentDesignR4 .paymentJourney {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  font-size: 12px;
+  margin: 0 0 24px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e7ebf2;
+  color: #69758b;
+}
+.paymentDesignR4 .paymentJourney > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  text-align: center;
+  min-width: 0;
+}
+.paymentDesignR4 .paymentJourney > div > span {
+  position: relative;
+  z-index: 1;
+}
+.paymentDesignR4 .paymentJourney > div > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #e9edf4;
+  font-weight: 700;
+}
+.paymentDesignR4 .paymentJourney > div:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  width: calc(100% + 12px);
+  height: 2px;
+  background: #e1e6ef;
+  pointer-events: none;
+}
+.paymentDesignR4 .paymentJourney .isCurrent {
+  color: #163cff;
+}
+.paymentDesignR4 .paymentJourney .isCurrent > span:first-child {
+  background: #163cff;
+  color: white;
+}
+.paymentDesignR4 .paymentJourney .isComplete {
+  color: #16704c;
+}
+.paymentDesignR4 .paymentJourney .isComplete > span:first-child,
+.paymentDesignR4 .paymentJourney > div.isComplete::after {
+  background: #16704c;
+  color: white;
+}
+.paymentDesignR4 .shippingFields label,
+.paymentDesignR4 .designControls label {
+  display: grid;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.paymentDesignR4 .shippingFields input,
+.paymentDesignR4 .shippingFields select {
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 8px;
+}
+.paymentDesignR4 .freightResult {
+  background: #f6f8fc;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.paymentDesignR4 .freightResult > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.paymentDesignR4 .freightResult span {
+  font-size: 12px;
+  color: #53627b;
+}
+.paymentDesignR4 .freightResult strong {
+  font-size: 18px;
+  color: #163cff;
+}
+.paymentDesignR4 .freightResult p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #53627b;
+}
+.paymentDesignR4 .deliveryRegion {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.paymentDesignR4 .deliveryRegion > div {
+  display: grid;
+  gap: 5px;
+  font-size: 11px;
+  min-width: 0;
+}
+.paymentDesignR4 .deliveryRegion > div span {
+  color: #69758b;
+}
+.paymentDesignR4 .deliveryRegion strong {
+  font-size: 12px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.paymentDesignR4 .deliveryRegion .tag {
+  flex-shrink: 0;
+}
+.paymentDesignR4 .shippingConditions {
+  border-top: 1px solid #e7ebf2;
+  padding-top: 12px;
+  font-size: 11px;
+}
+.paymentDesignR4 .shippingConditions summary,
+.paymentDesignR4 .designControls summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #53627b;
+}
+.paymentDesignR4 .shippingConditions summary::before,
+.paymentDesignR4 .designControls summary::before {
+  content: "+";
+  margin-right: 8px;
+}
+.paymentDesignR4 details[open] > summary::before {
+  content: "−";
+}
+.paymentDesignR4 .designControls {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #69758b;
+}
+.paymentDesignR4 .designControls select {
+  margin-top: 4px;
+  font-size: 11px;
+}
+.paymentDesignR4 .shippingCard input[aria-invalid="true"] {
+  border-color: #b13a36;
+}
+.paymentDesignR4 .unifiedFields {
+  gap: 16px;
+}
+.paymentDesignR4 .unifiedFields .hint {
+  margin: 0;
+}
+.paymentDesignR4 .checkoutFooter {
+  margin-top: 20px;
+}
+.paymentDesignR4 .checkoutCompletion {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e7ebf2;
+}
+.paymentDesignR4 .checkoutCompletion label.consent {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  align-items: flex-start;
+}
+.paymentDesignR4 .checkoutCompletion .consent input {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin: 1px 0 0;
+}
+.paymentDesignR4 .checkoutCompletion .hint {
+  font-size: 10px;
+  margin: 6px 0;
+}
+.paymentDesignR4 .checkoutCompletion .checkoutFooter {
+  margin-top: 10px;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.paymentDesignR4 .checkoutCompletion .primary {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  font-size: 12px;
+  padding: 10px;
+}
+.paymentDesignR4 .checkoutCompletion .secondary {
+  width: auto;
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  padding: 6px;
+  color: #53627b;
+}
+.paymentDesignR4 .checkoutReview {
+  padding: 20px;
+}
+.paymentDesignR4 .checkoutReview h3 {
+  margin: 0;
+  font-size: 14px;
+}
+.paymentDesignR4 .checkoutReview .sectionHeading {
+  margin: 0;
+  flex-direction: row;
+  align-items: center;
+}
+.paymentDesignR4 .checkoutReview .sectionHeading > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.paymentDesignR4 .checkoutReview #selectedCount {
+  font-size: 11px;
+  margin: 0;
+}
+.paymentDesignR4 .checkoutReview .allocationLine {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+.paymentDesignR4 .reviewThumbnail {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f5f9;
+  border: 1px solid #e7ebf2;
+  color: #9ba6b7;
+  font-size: 18px;
+}
+.paymentDesignR4 .reviewThumbnail img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.paymentDesignR4 .reviewItem {
+  display: grid;
+  gap: 4px;
+}
+.paymentDesignR4 .reviewItem > strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.paymentDesignR4 .reviewItem > small {
+  font-size: 11px;
+  color: #69758b;
+}
+.paymentDesignR4 .deliveryReview {
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.paymentDesignR4 #recipientSummary {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.paymentDesignR4 .checkoutTerms {
+  border-top: 1px solid #e7ebf2;
+  margin: 12px 0 0;
+  padding-top: 12px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #53627b;
+}
+.paymentDesignR4 .checkoutDemoControls {
+  margin-top: 8px;
+}
+.paymentDesignR4 .checkoutDemoControls label {
+  max-width: 360px;
+}
+.paymentDesignR4 #checkoutBack {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.paymentDesignR4 .footer {
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 28px;
+}
+.paymentDesignR4 #emptyCart {
+  margin: 0 0 16px;
+}
+.paymentDesignR4 .previewMain summary:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 900px) {
+  .paymentDesignR4 .grid {
+    grid-template-columns: 1fr;
+  }
+  .paymentDesignR4 #cart > .grid {
+    grid-template-columns: 1fr;
+  }
+  .paymentDesignR4 .checkoutAside {
+    position: static;
+  }
+}
+@media (max-width: 600px) {
+  .paymentDesignR4 .previewMain {
+    padding-top: 18px;
+  }
+  .paymentDesignR4 .previewNotice {
+    padding: 9px 16px;
+    gap: 4px 10px;
+  }
+  .paymentDesignR4 .pageTabs {
+    margin-bottom: 22px;
+  }
+  .paymentDesignR4 .pageTab {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .paymentDesignR4 .requestHeading h1 {
+    font-size: 24px;
+  }
+  .paymentDesignR4 .requestHeading p {
+    font-size: 12px;
+  }
+  .paymentDesignR4 .card,
+  .paymentDesignR4 .quickRequestForm {
+    padding: 16px;
+  }
+  .paymentDesignR4 .cartLine {
+    padding: 16px;
+    gap: 10px;
+  }
+  .paymentDesignR4 .cartLine .lineControls strong {
+    width: auto;
+    margin-left: auto !important;
+  }
+  .paymentDesignR4 .cartLine .lineControls label {
+    font-size: 11px;
+  }
+  .paymentDesignR4 .shippingFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .paymentDesignR4 .shippingFields label:nth-child(2) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .paymentDesignR4 .deliveryRegion {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .paymentDesignR4 .sectionHeading {
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .paymentDesignR4 .shippingCard h3 {
+    font-size: 14px;
+  }
+  .paymentDesignR4 .freightResult strong {
+    font-size: 17px;
+  }
+  .paymentDesignR4 #cart .checkoutSteps button {
+    font-size: 10px;
+  }
+  .paymentDesignR4 .grid {
+    gap: 18px;
+  }
+  .paymentDesignR4 .checkoutReview .sectionHeading > div {
+    flex-wrap: wrap;
+    gap: 4px 10px;
+  }
+}

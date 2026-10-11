@@ -1,0 +1,7 @@
+# Narrow demo-only delta awaiting human response
+
+Observed: actual purchaseCheckoutSetup returned pricing null; read-only metadata confirms settings/upfrontCheckout version1 is enabled/approved but expired. Server correctly refuses checkout. No setting, rate, amount or policy changed.
+
+Proposed action, only after explicit approval: on demo-satsunicgo Firestore emulator18207, snapshot the existing settings/upfrontCheckout document in a private temporary file; update only expiresAt to execution time+2hours using transaction compare-and-set against the observed document/version. Preserve all prices, formulas, effectiveFrom, approved/enabled flags and version. Execute synthetic checkout/payment-adapter/purchase/packing/delivery/receipt tests with external providers disabled. Restore exact original document only if it still equals our temporary version; otherwise stop restoration and report concurrent change. Delete only recorded synthetic fixtures and private backup. No restart/reset/reseed or production I/O.
+
+Impact: shared checkout pricing becomes usable temporarily for all consumers of this emulator. This is outside approved plan's shared-configuration exclusion, so it is not authorized by timeline implementation approval. Question submitted in current chat; absent response is not approval. Alternative is keeping configuration unchanged and recording H01 blocked/H02 partial. No proposed change to payment or price correctness rules.

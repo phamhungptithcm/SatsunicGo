@@ -1,0 +1,19 @@
+# Release monitor — 2026-10-09 22:40 UTC trigger
+
+Integration remains **NOT_READY**. This bounded monitor supersedes earlier descriptions of the active main pipeline and the MFA harness. It is not a final implementation review pass or production capability activation.
+
+Normal [release37999610430](https://github.com/phamhungptithcm/SatsunicGo/actions/runs/37999610430) at99822aa passed quality22:38:05Z and immutable artifact build22:39:28Z. Provider readback shows deployment in progress at “Promote precompiled artifact to production”. The CI owner is actively following that run. Root did not rerun, cancel, edit or take over the pipeline. Published verified-release metadata still namesv0.7.0 at0d6 in this readback; the owner's draftv0.7.1 is not a completed verified release. Do not claim production remained unchanged while promotion is running, or claim it succeeded before provider verification.
+
+This main release contains the committed CI delta. It does not deploy the separate275-file integration candidate atda9369f. Current AI review remains optional/advisory/defaultOFF under direct user instruction; its current job was skipped. The mandatory quality/artifact/provider checks remain required.
+
+The release owner completed the approved PRE001-MFA v1 harness and handed off a login-ready window atlocalhost5208. Four guard groups and three HTTP negative probes passed according to the source-bound owner receipt. Genuine user MFA and producer→CRM acceptance are **NOT_RUN_USER_LOGIN_PENDING**. The owner already requested existing Google/MFA login in the opened browser; root did not repeat that request or access credential fields. The approved5208/15209 processes remain owned by that task for the active handoff. No synthetic fixture was created; ownership cleanup and server shutdown remain required after acceptance/cancellation. VoiceOver acceptance and restoration remain completed within the earlier local checkout scope.
+
+Independent bounded preparation verified all nine harness source hashes against the actual isolated candidate Git repository and current canonical source. The974 current-source inputs have no drift from the prior observation. Main has eight net CI file changes since0d6; the candidate has275 changed paths; their changed-path sets do not intersect. This prepares integration analysis only: no merge, integration test or promotion permission is inferred from empty path overlap. The candidate must be reconciled with current main and tested/reviewed at its actual combined SHA after required acceptance and handoff.
+
+Original five feature-owner wait cursors are unchanged. Repository intelligence remains **DEGRADED**; bounded canonical source/Git/provider evidence was used. The observed newest release-owner review is cycle8 **BLOCKED_USER_LOGIN_PENDING**, with whole integration **NOT_READY**. Historical R4/R5 validation, audits and reviews retain their exact scope; no duplicate suite/audit/browser test or new whole-review pass is claimed.
+
+Next action depends on the existing owner login handoff and normal CI completion. Preserve shared5207/emulators, current sessions, consent/current identity/unknown/cutover/quota protections and rollback order. No additional user decision or repeat approval is required from root at this point. Sending activation and live controls follow only after integration gates and exact artifact/revision/IAM/secret-version/scheduler/settings/domain readback.
+
+Root application/Git/CI/provider/runtime mutations: **None**. Only monitoring receipts and the existing heartbeat context were updated. Ask budget allocation50,000 VND; actual billed cost and aggregate token usage: **Unavailable**. Memory candidates: **None**.
+
+Evidence: `PROVIDER.json`, `PREINTEGRATION.json`, `OWNER-HARNESS-READINESS.json`, `OWNER-FINAL-REVIEW-OBSERVED.json`, `RIG.json` and `MONITOR.json`.

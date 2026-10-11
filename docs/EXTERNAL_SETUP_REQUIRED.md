@@ -9,7 +9,7 @@ Completed scoped action: Firebase WEB app SatsunicGo registered in satsunicgo, a
 | App Check | Provider/site registration, debug/staging strategy, enforced production rollout | BLOCKED_EXTERNAL |
 | payOS | Merchant beneficiary, return origins, Secret Manager credentials, verified sandbox/live scope | BLOCKED_EXTERNAL |
 | Gemini | Supported model/region, IAM, approved quota/cost settings; resolve dependency blockers before enabling | BLOCKED_EXTERNAL |
-| SMTP | Approved sender/provider, verified recipient test, secret/config and reconciliation procedure | BLOCKED_EXTERNAL |
+| Resend email | Approved version1 deployed secret binding, strict settings/cutover, committed CI artifact, owner opt-in canary and unknown reconciliation | NOT_READY — hunpeolabs.com verified in authenticated Resend; three sending DNS additions preserve all28 existing records. Secret version1 ENABLED; both email workers currently not deployed. Activation/live delivery remain unverified; current evidence in reviews/PRODUCTION-INTEGRATION-20261009/EMAIL-REPORT.md |
 | Commercial/privacy | Rates, fee coverage, routes/restricted goods, refund terms, membership, consent and retention | BLOCKED_EXTERNAL |
 | Release | Separate staging, protected deploy identity, monitoring, backups/restore/rollback and explicit release authorization | BLOCKED_EXTERNAL |
 | Browser | Approved access to current local candidate for interaction/motion/viewport evidence | BLOCKED_EXTERNAL |

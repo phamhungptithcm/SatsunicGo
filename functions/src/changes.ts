@@ -1,3 +1,4 @@
+import { requireLivePurchaseRecord } from "./purchase-test-boundary";
 import {
   customerEvent,
   customerEventFields,
@@ -94,6 +95,7 @@ export const changeCommand = onCall(
             "aborted",
             "Đơn đã thay đổi. Tải lại để tiếp tục.",
           );
+        requireLivePurchaseRecord(order);
         if (d.action === "propose") {
           if (ps.exists || order.hold?.startsWith("Chờ duyệt thay đổi"))
             throw Error("PROPOSAL_PENDING");

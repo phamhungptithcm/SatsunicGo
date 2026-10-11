@@ -1,0 +1,11 @@
+# Order tracking hardening — local handoff
+
+Implemented three bug fixes: ambiguous imported histories no longer misattribute transfer time to initial payment; future parcel activity is rejected on server and client; shipping mutations now record public parcel activity time. Existing approved compact UI remains. No finance rule, authorization, provider integration or deployment changed.
+
+Acceptance: all three scoped criteria verified (100% of these criteria, not all possible business states). Tests:82unit+29backend/rules=111, all passed. Browser:22VI/EN cases at320px, zero horizontal overflow, one current step each; desktop time disclosure opens with Enter. Performance: standalone200samples at60parcels/50events; p50≈2.33ms,p95≈4.03ms,max≈9.36ms, local domain only. Full realistic matrix: SCENARIOS.md.
+
+Quality gates: root and Functions typecheck PASSED; scoped lint PASSED; Vite build PASSED with existing bundle-size/ineffective-dynamic-import advisories; API/architecture/concurrency/database/security/product-content review PASSED in scope. SEO, database migration and animation changes NOT_APPLICABLE. Provider Google/App Check, live carrier, production load, OS reduced-motion toggle and screen reader speech NOT_RUN. UI is actual shared component with synthetic data; source-backed callable/rules tests use isolated emulator projects and synthetic claims. No new authenticated browser transport acceptance claimed.
+
+Review cycles:1BLOCKED/red (3medium defects);2PASSED after fixes/green verification and current source manifest. Declared self-review only; runtime records independent attestation unavailable. Production NOT_READY/NOT_DEPLOYED: shared dirty WIP and provider/release acceptance unverified. No commit/push/PR produced. No unrelated WIP reverted; no shared server restarted or baseline reseeded.
+
+Progress: scoped hardening complete; remaining release/provider/accessibility certification explicitly outside this local result. Token usage Unavailable; billed cost and API-equivalent estimate Unavailable. Memory candidates:None. Evidence logs, screenshots, source hashes and review records in this directory. Runtime rendered report is stored under ignored .ai-agent-kit/runtime/report-outputs/ORDER-TRACKING-HARDENING-20261009.txt.

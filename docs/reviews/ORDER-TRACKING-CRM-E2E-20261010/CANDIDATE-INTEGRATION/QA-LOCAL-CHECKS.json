@@ -1,0 +1,12 @@
+{
+  "harness-lint": {
+    "exitCode": 0,
+    "seconds": 1.26,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/harness-lint.log"
+  },
+  "types": {
+    "exitCode": 0,
+    "seconds": 27.13,
+    "log": "/private/tmp/satsunicgo-crm-candidate-preparation-20261010/types.log"
+  }
+}

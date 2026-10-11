@@ -3,6 +3,8 @@ import { RestrictedPage } from "../features/content/RestrictedPage";
 import { PrivacyPage } from "../features/content/PrivacyPage";
 import { TermsPage } from "../features/content/TermsPage";
 import { AuthFeedbackToast } from "../features/auth/AuthFeedbackToast";
+import { AuthPageBoundary } from "../features/auth/AuthPageBoundary";
+import { GoogleLoginDialog } from "../features/auth/GoogleLoginDialog";
 import { CrmAccessScreen } from "../features/auth/CrmAccessScreen";
 import {
   authFeedbackSnapshot,
@@ -21,6 +23,8 @@ import { routeModules } from "./route-modules";
 import { LoadingState } from "../shared/Loading";
 import { CampaignBanner } from "../features/content/CampaignBanner";
 import { AccountRail } from "../features/account/AccountRail";
+import { TestOrderBadge } from "../features/orders/TestOrderBadge";
+import { purchaseTestRecord } from "../../packages/domain/purchase-checkout";
 import {
   customerOrderFilters,
   parseCustomerOrderFilter,
@@ -281,11 +285,11 @@ export function App() {
     setAuthBusy(true);
     setAuthError("");
     try {
-      await withProgress(login, { overlay: !isCrmPath(location.pathname) });
+      await login();
       if (auth?.currentUser && !pendingMfa())
         notify("Đã đăng nhập.", "success");
-    } catch (e) {
-      setAuthError((e as Error).message);
+    } catch {
+      // The shared Google dialog owns popup failures and recovery.
     } finally {
       authFlight.current = false;
       setAuthBusy(false);
@@ -306,10 +310,12 @@ export function App() {
     }
   }
   return (
-    <CartProvider key={`${authReady}:${user?.uid ?? "guest"}`} user={user} ready={authReady}>
+    <AuthPageBoundary uid={user?.uid ?? null}>
+    <CartProvider user={user} ready={authReady}>
     <StaffMfaSetup user={user} signOut={signOut} busy={authBusy}>
       <AnalyticsConsent account={user?.uid ?? null} ready={authReady} />
       <OneTap user={user} onError={setAuthError} />
+      <GoogleLoginDialog retry={() => void signIn()} />
       <AuthFeedbackToast
         message={authError || redirectError}
         staff={isCrmPath(location.pathname)}
@@ -355,7 +361,6 @@ export function App() {
                 path="/request"
                 element={
                   <RequestForm
-                    key={user?.uid ?? "anonymous"}
                     user={user}
                     signIn={signIn}
                   />
@@ -426,11 +431,11 @@ export function App() {
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
               <Route path="/cart" element={<CartPage signIn={signIn} />} />
-              <Route path="/checkout" element={<PurchaseCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
+              <Route path="/checkout" element={<PurchaseCheckout user={user} signIn={signIn} />} />
               <Route path="/checkout/payment/:id" element={<PurchasePayment key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />
               <Route
                 path="/products/:slug/checkout"
-                element={<ProductCheckout key={user?.uid ?? "guest"} user={user} signIn={signIn} />}
+                element={<ProductCheckout user={user} signIn={signIn} />}
               />
               <Route path="/posts" element={<Catalog kind="posts" />} />
               <Route
@@ -494,7 +499,7 @@ export function App() {
       {!isCrmPath(location.pathname) && <SiteFooter />}
       {authReady && !isCrmPath(location.pathname) && (
         <Ask
-          key={`${location.pathname}:${user?.uid ?? "anonymous"}`}
+          key={location.pathname}
           startCollapsed={
             location.pathname.startsWith("/posts") ||
             location.pathname.startsWith("/account") ||
@@ -505,6 +510,7 @@ export function App() {
       )}
     </StaffMfaSetup>
     </CartProvider>
+    </AuthPageBoundary>
   );
 }
 function JourneyTimeline() {
@@ -634,7 +640,7 @@ function JourneyTimeline() {
             [
               "01",
               "Chọn món",
-              "Chọn hàng có sẵn hoặc gửi món cần mua hộ.",
+              "Chọn sản phẩm đã đăng hoặc gửi món cần mua hộ.",
             ],
             [
               "02",
@@ -662,6 +668,9 @@ function JourneyTimeline() {
           ))}
         </ol>
       </div>
+      <Link className="journeyMore" to="/how-it-works">
+        Xem cách hoạt động <Icon />
+      </Link>
     </div>
   );
 }
@@ -682,12 +691,14 @@ function Home() {
           <p>
             Món bạn thích từ Mỹ, Nhật, Hàn — rõ nguồn gốc, an tâm chọn mua.
           </p>
-          <Link className="primary" to="/request">
-            Gửi yêu cầu mua hộ <Icon />
-          </Link>
-          <Link className="secondary" to="/how-it-works">
-            Xem cách hoạt động
-          </Link>
+          <div className="heroActions">
+            <Link className="primary" to="/products">
+              Xem sản phẩm <Icon />
+            </Link>
+            <Link className="secondary" to="/request">
+              Gửi yêu cầu mua hộ
+            </Link>
+          </div>
           <div className="origins">
             <span>
               Mỹ <b>US</b>
@@ -927,6 +938,7 @@ function Account({
                             {o.items[0]?.name || "Yêu cầu mua hộ"}
                           </strong>
                           <small>
+                            <TestOrderBadge record={o} />{" "}
                             {new Intl.DateTimeFormat("vi-VN").format(
                               o.createdAt,
                             )}{" "}
@@ -977,6 +989,7 @@ function Account({
   );
 }
 function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
+  const testOrder = purchaseTestRecord(o);
   const [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [section, setSection] = useState<"overview" | "files" | "history">(
@@ -1006,7 +1019,10 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
     <article className="order orderDetail">
       <div className="pageHeading">
         <h1>{o.items[0]?.name}</h1>
-        <span className="statusTag">{orderStageLabel(o)}</span>
+        <span className="orderStatusGroup">
+          <TestOrderBadge record={o} />
+          <span className="statusTag">{orderStageLabel(o)}</span>
+        </span>
       </div>
       <p>
         {o.market} · {new Intl.DateTimeFormat("vi-VN").format(o.createdAt)} ·{" "}
@@ -1081,8 +1097,8 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
             <section aria-label="Thanh toán sản phẩm niêm yết">
               <h2>Đặt mua theo giá niêm yết</h2>
               <p>
-                Tổng trọn gói: <strong>{money(total!)}</strong>. Thanh toán toàn
-                bộ để SatsunicGo tiến hành mua hộ.
+                Tổng trọn gói: <strong>{money(total!)}</strong>.
+                {!testOrder && " Thanh toán toàn bộ để SatsunicGo tiến hành mua hộ."}
               </p>
               <p>
                 Điều khoản: {o.catalogSnapshot?.termsVersion}. Không cần báo giá
@@ -1091,10 +1107,12 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
               {o.stage === "QUOTE_ACCEPTED" &&
                 o.collected - o.refunded >= total! && (
                   <p role="status">
-                    Đã xác nhận thanh toán. Nhân viên sẽ tiến hành mua hộ.
+                    {testOrder
+                      ? "Đã xác nhận thanh toán test."
+                      : "Đã xác nhận thanh toán. Nhân viên sẽ tiến hành mua hộ."}
                   </p>
                 )}
-              {o.stage === "QUOTE_ACCEPTED" && o.collected === 0 && (
+              {!testOrder && o.stage === "QUOTE_ACCEPTED" && o.collected === 0 && (
                 <button
                   disabled={busy}
                   onClick={() => void act("cancelRequest", {})}
@@ -1132,7 +1150,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
               </p>
             </>
           )}
-          {o.stage === "QUOTED" && (
+          {!testOrder && o.stage === "QUOTED" && (
             <button
               className="primary"
               disabled={busy}
@@ -1145,8 +1163,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
           )}
           {o.deposit !== undefined && (
             <p>
-              {o.upfront ? "Thanh toán ban đầu" : "Cọc cần xác nhận"}: <strong>{money(o.deposit)}</strong> · Đã thu
-              ròng: <strong>{money(o.collected - o.refunded)}</strong>
+              {o.upfront ? "Thanh toán ban đầu" : "Cọc cần xác nhận"}: <strong>{money(o.deposit)}</strong> · {testOrder ? "Thanh toán test" : "Đã thu ròng"}: <strong>{money(o.collected - o.refunded)}</strong>
             </p>
           )}
           {o.consolidatedFreight && o.purchaseKind !== "catalog" && (
@@ -1165,7 +1182,7 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
               </strong>
             </p>
           )}
-          {o.stage === "PACKED" && o.finalApproved === false && (
+          {!testOrder && o.stage === "PACKED" && o.finalApproved === false && (
             <button
               disabled={busy}
               onClick={() => void act("approveFinal", {})}
@@ -1180,13 +1197,13 @@ function OrderCard({ order: o, uid }: { order: Order; uid: string }) {
               </LoadingState>
             }
           >
-            <CustomerChanges order={o} />
-            {!o.checkoutId && <TransferNotice order={o} />}
+            {!testOrder && <CustomerChanges order={o} />}
+            {!testOrder && !o.checkoutId && <TransferNotice order={o} />}
             <OrderTools order={o} section="actions" />
             <OrderConversation key={o.id} orderId={o.id} />
           </Suspense>
           {o.tracking && <p>Vận đơn: {o.tracking} · Cập nhật bởi nhân viên</p>}
-          {o.stage === "DELIVERED" &&
+          {!testOrder && o.stage === "DELIVERED" &&
             o.tracking &&
             canDispatch({ ...o, stage: "READY_TO_SHIP" }) && (
               <section aria-label="Xác nhận nhận hàng">

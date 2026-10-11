@@ -1,0 +1,7 @@
+# Notification preview extension verification
+
+Cycle 3 was generated from the new candidate source, not manually edited HTML. Added actual Notifications and its existing CSS, using a local exact read-only notification adapter. The old cycle 1 failure and cycle 2 accepted manifest/preparation remain archived. All prior network, mutation and persistence denial controls remain; process.env production define and real-Firebase bundle guards are preserved.
+
+Exact artifact: 516,185 bytes; SHA256 `b9dc199cf65a511cc6913b663c821ac1a263924f3f8fb333c748d57b44093394`; 39 inputs; 0 drift; one inline script; 0 external script/styles; 0 real Firebase SDK modules; 0 process.env references; 6 guarded React process fallback tokens. Build and JavaScript syntax pass. 59 focused tests, frontend strict and scoped lint pass. At generation, cycle 3 HTTP/browser/network observation was NOT_RUN. Root handles exact reviewed existing HTTP delivery; no file URL retry, new server or browser action by this subagent.
+
+Current evidence rebind 2026-10-10T02:07:00.531051+00:00: root's exact HTTP and actual notification desktop/narrow browser acceptance now pass within synthetic render scope, bound to `INTEGRATION/NOTIFICATION-BROWSER-ACCEPTANCE.json` (b6e0944504d81091fdf45fa2428361626be4a0cedcb912b7743f64fca28c6db1). This reviewer inspected both images. Native select remains NOT_VERIFIED; genuine 200%zoom/spoken AT NOT_RUN. No browser network trace, auth/backend/provider or production claim. Source/scaffold unchanged, no regeneration.

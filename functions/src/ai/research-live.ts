@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { z } from "zod";
@@ -24,6 +24,12 @@ import {
 } from "../../../packages/domain/ask-web";
 import { geminiResearch, researchReservation } from "./research-gemini";
 import { vertexResearchTransport } from "./research-transport";
+import { admitSharedAskReservation, askCostPolicy } from "./ask-cost-policy";
+import {
+  productionTestEnvironment,
+  admitProductionTestPolicy,
+  productionTestProvenance,
+} from "../production-test-policy";
 
 const digest = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -94,7 +100,8 @@ export async function runWebDiscovery(
 ) {
   assertCatalogScope(catalogCollection);
   const input = webDiscoveryInputSchema.parse(value),
-    db = getFirestore();
+    db = getFirestore(),
+    testRunId = randomUUID();
   if (
     redactChat(input.query) !== input.query ||
     /https?:\/\/|[\r\n]/i.test(input.query) ||
@@ -114,16 +121,27 @@ export async function runWebDiscovery(
     budget = db.doc("askResearchBudget/lifetime");
   const admission = await db.runTransaction(async (tx) => {
     const now = Date.now();
-    const [user, access, conversation, settings, merchants, ledger, prior] =
-      await Promise.all([
-        tx.get(db.doc(`users/${uid}`)),
-        tx.get(db.doc(`staffAccess/${uid}`)),
-        tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
-        tx.get(db.doc("settings/askWebDiscovery")),
-        tx.get(db.doc("settings/askResearch")),
-        tx.get(budget),
-        tx.get(ref),
-      ]);
+    const [
+      user,
+      access,
+      conversation,
+      settings,
+      merchants,
+      ledger,
+      pilot,
+      prior,
+      testSettings,
+    ] = await Promise.all([
+      tx.get(db.doc(`users/${uid}`)),
+      tx.get(db.doc(`staffAccess/${uid}`)),
+      tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
+      tx.get(db.doc("settings/askWebDiscovery")),
+      tx.get(db.doc("settings/askResearch")),
+      tx.get(budget),
+      tx.get(db.doc("aiPilotBudget/lifetime")),
+      tx.get(ref),
+      tx.get(db.doc("settings/productionTest")),
+    ]);
     const c = askConversationSchema.safeParse(conversation.data()),
       policy = discoveryPolicySchema.safeParse(settings.data()),
       p = researchPolicySchema.safeParse(merchants.data());
@@ -132,6 +150,11 @@ export async function runWebDiscovery(
         "permission-denied",
         "Không thể tìm web với tài khoản này.",
       );
+    const testPolicy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testSettings.data(), uid, now)
+      : null;
+    if (process.env.GCLOUD_PROJECT === "satsunicgo" && !testPolicy)
+      throw new HttpsError("unavailable", "Tìm web hiện chưa sẵn sàng.");
     if (
       !c.success ||
       c.data.ownerId !== uid ||
@@ -181,6 +204,7 @@ export async function runWebDiscovery(
           ? 0
           : 50000,
       );
+      admitSharedAskReservation(pilot.data(), ledger.data(), 25000, now);
     } catch {
       throw new HttpsError(
         "resource-exhausted",
@@ -247,10 +271,17 @@ export async function runWebDiscovery(
       policyHash,
       state: "reserved",
       reserveVnd: 25000,
+      costPolicyId: askCostPolicy.id,
+      ...(testPolicy ? productionTestProvenance(testPolicy, testRunId) : {}),
       createdAt: now,
       expiresAt: new Date(now + 600000),
     });
-    return { result: null, policy: p.data, policyHash };
+    return {
+      result: null,
+      policy: p.data,
+      policyHash,
+      testPolicyVersion: testPolicy?.version,
+    };
   });
   if (admission.error)
     throw new HttpsError("failed-precondition", admission.error);
@@ -265,6 +296,17 @@ export async function runWebDiscovery(
     transport.send,
     signal,
     transport.redirect,
+    async () => {
+      if (process.env.GCLOUD_PROJECT !== "satsunicgo") return;
+      const current = productionTestEnvironment(db)
+        ? admitProductionTestPolicy(
+            (await db.doc("settings/productionTest").get()).data(),
+            uid,
+          )
+        : null;
+      if (!current || current.version !== admission.testPolicyVersion)
+        throw Error("RESEARCH_UNAVAILABLE");
+    },
   );
   const now = Date.now(),
     result = webDiscoveryResultSchema.parse({
@@ -279,17 +321,22 @@ export async function runWebDiscovery(
       suggestionsHtml: discovery.suggestionsHtml,
     });
   await db.runTransaction(async (tx) => {
-    const [user, access, c, p, settings, prior] = await Promise.all([
-      tx.get(db.doc(`users/${uid}`)),
-      tx.get(db.doc(`staffAccess/${uid}`)),
-      tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
-      tx.get(db.doc("settings/askResearch")),
-      tx.get(db.doc("settings/askWebDiscovery")),
-      tx.get(ref),
-    ]);
+    const [user, access, c, p, settings, prior, testSettings] =
+      await Promise.all([
+        tx.get(db.doc(`users/${uid}`)),
+        tx.get(db.doc(`staffAccess/${uid}`)),
+        tx.get(db.doc(`askConversations/${uid}-${input.conversationId}`)),
+        tx.get(db.doc("settings/askResearch")),
+        tx.get(db.doc("settings/askWebDiscovery")),
+        tx.get(ref),
+        tx.get(db.doc("settings/productionTest")),
+      ]);
     const conversation = askConversationSchema.safeParse(c.data()),
       policy = researchPolicySchema.safeParse(p.data()),
       approved = discoveryPolicySchema.safeParse(settings.data());
+    const testPolicy = productionTestEnvironment(db)
+      ? admitProductionTestPolicy(testSettings.data(), uid)
+      : null;
     if (
       user.data()?.locked ||
       access.data()?.locked ||
@@ -304,6 +351,8 @@ export async function runWebDiscovery(
       approved.data.expiresAt <= Date.now() ||
       digest([approved.data, policy.data]) !== admission.policyHash ||
       prior.data()?.state !== "reserved" ||
+      (process.env.GCLOUD_PROJECT === "satsunicgo" &&
+        (!testPolicy || testPolicy.version !== admission.testPolicyVersion)) ||
       result.candidates.some(
         (candidate) =>
           !researchMerchant(

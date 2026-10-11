@@ -1,6 +1,8 @@
 import { createRequire } from 'node:module';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { assertRetentionWorkflow, ensureRetentionIndexes, retentionRequest } from './feedback-retention.mjs';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 import console from 'node:console';
@@ -53,6 +55,13 @@ export async function launchReviewedDeployment(root = process.cwd()) {
   const packageFile = require.resolve('firebase-tools/package.json');
   if (JSON.parse(readFileSync(packageFile, 'utf8')).version !== '15.32.1') throw Error('FIREBASE_RETRY_PROMPT_CONTRACT_CHANGED');
   const manifest = verify(resolve(root, 'release-work'), process.env.GITHUB_SHA, process.env.RELEASE_TAG);
+  if (manifest.feedbackRetention) {
+    const account = execFileSync('gcloud', ['auth', 'list', '--filter=status:ACTIVE', '--format=value(account)'], {encoding:'utf8',timeout:30_000}).trim();
+    assertRetentionWorkflow(process.env, manifest, account);
+    const token = execFileSync('gcloud', ['auth','print-access-token'], {encoding:'utf8',timeout:30_000}).trim();
+    const indexes = await ensureRetentionIndexes(manifest.feedbackRetention, retentionRequest(token), {create:true});
+    writeFileSync(resolve(root, 'retention-index-delivery.json'), JSON.stringify({schemaVersion:1,sha:manifest.sha,tag:manifest.tag,project:'satsunicgo',...indexes},null,2)+'\n');
+  }
   const prompts = require('firebase-tools/lib/deploy/functions/prompts.js');
   const backend = require('firebase-tools/lib/deploy/functions/backend.js');
   installReviewedRetryPrompt(prompts, backend, manifest, admission => writeFileSync(resolve(root, 'retry-policy-admission.json'), JSON.stringify(admission, null, 2) + '\n'));
@@ -63,5 +72,8 @@ export async function launchReviewedDeployment(root = process.cwd()) {
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try { await launchReviewedDeployment(); }
-  catch { console.error('REVIEWED_DEPLOYMENT_ADMISSION_FAILED'); process.exitCode = 1; }
+  catch (error) {
+    const code = /^[A-Z][A-Z_]{2,79}$/.test(error.message ?? '') ? error.message : 'REVIEWED_DEPLOYMENT_ADMISSION_FAILED';
+    console.error(code); process.exitCode = 1;
+  }
 }

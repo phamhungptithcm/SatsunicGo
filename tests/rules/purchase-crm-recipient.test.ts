@@ -73,6 +73,7 @@ function trackCheckout(id: string, ownerId: string, orderIds: string[]) {
     for (const collection of ["orders", "orderRecipients", "orderOperations"])
       paths.add(`${collection}/${orderId}`);
     paths.add(`financialEntries/purchase-${id}-${orderId}`);
+    paths.add(`purchaseTestFinancialEntries/purchase-${id}-${orderId}`);
     paths.add(`orders/${orderId}/timeline/purchase-${id}`);
   }
 }
@@ -235,11 +236,19 @@ it("mixed initial payment atomically projects the same canonical recipient for e
   expect(
     (
       await db
-        .collection("financialEntries")
+        .collection("purchaseTestFinancialEntries")
         .where("ownerId", "==", f.ownerId)
         .get()
     ).size,
   ).toBe(2);
+  expect(
+    (
+      await db
+        .collection("financialEntries")
+        .where("ownerId", "==", f.ownerId)
+        .get()
+    ).empty,
+  ).toBe(true);
 });
 
 it.each(["OWNER", "OPERATIONS_MANAGER", "WAREHOUSE"])(
@@ -302,6 +311,13 @@ it.each(["pending", "unknown", "cancelled"] as const)(
             .get()
         ).exists,
       ).toBe(false);
+      expect(
+        (
+          await getFirestore()
+            .doc(`purchaseTestFinancialEntries/purchase-${f.id}-${orderId}`)
+            .get()
+        ).exists,
+      ).toBe(false);
     }
   },
 );
@@ -332,6 +348,13 @@ it("projection collision aborts the entire payment without overwriting operation
     expect(
       (await db.doc(`financialEntries/purchase-${f.id}-${orderId}`).get())
         .exists,
+    ).toBe(false);
+    expect(
+      (
+        await db
+          .doc(`purchaseTestFinancialEntries/purchase-${f.id}-${orderId}`)
+          .get()
+      ).exists,
     ).toBe(false);
   }
   expect((await db.doc(`purchaseReceipts/${f.id}`).get()).exists).toBe(false);

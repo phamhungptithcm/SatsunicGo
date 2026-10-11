@@ -36,3 +36,6 @@ Final source build and full lint passed. A third review cycle rechecked the same
 Human approved the test-only clock delta and public push/draft PR. Added Date-only beforeEach fixture clock and afterEach real-timer cleanup to notification-subscriptions.test.ts, preserving all assertions and production email code. Focused check: 2 files / 127 tests passed. Complete check: **165 files / 2,419 tests passed**, `/private/tmp/ask-ai-approved-full-unit-unsandboxed.log`. First sandbox run passed 2,418 tests but the telemetry temporary HTTP listener hit EPERM; permitted rerun passed all tests. Full lint passed, `/private/tmp/ask-ai-approved-lint.log`. Production source/build remains unchanged by the test delta.
 
 Prior clock and public disclosure blockers are resolved. Native Node 22 CI/rules/HTTP/restore, immutable deployment, real OWNER canary and non-OWNER customer acceptance remain required. No production mutation or paid model call yet.
+
+## Native CI supersedes prior pending integration status
+PR run 38053761162 SUCCESS on f262d3b; merged source run 38054366988 quality/local SUCCESS on b5c0a1c. Node 22 typecheck/lint/unit/release helpers/config/rules/HTTP/restore/audit passed. Immutable build SUCCESS. Merge tree exactly equals tested candidate tree. Deployment receipt and hosted customer acceptance remain pending.

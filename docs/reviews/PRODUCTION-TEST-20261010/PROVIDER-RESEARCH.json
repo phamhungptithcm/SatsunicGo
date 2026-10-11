@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-10-10T00:38:16.523523+00:00",
+  "scope": "Read-only official documentation; not live provider/runtime verification",
+  "sources": [
+    {
+      "url": "https://developer.sepay.vn/vi/cong-thanh-toan/sandbox",
+      "verifiedClaim": "Hosted sandbox is isolated by merchant credentials and fixed sandbox API/checkout hosts; IPN and callback still reach the application"
+    },
+    {
+      "url": "https://developer.sepay.vn/vi/cong-thanh-toan/IPN",
+      "verifiedClaim": "Dashboard SECRET_KEY authentication sends X-Secret-Key; application needs configured HTTPS IPN"
+    },
+    {
+      "url": "https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing?hl=en",
+      "verifiedClaim": "Standard Gemini2.5FlashLite text input0.10USD/M and text output including reasoning0.40USD/M; GoogleSearch grounding has an additional charge above shared allowance",
+      "pricingScope": "Standard, not Priority; no reliance on free shared allowance"
+    },
+    {
+      "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions",
+      "verifiedClaim": "gemini-2.5-flash-lite retirement date2026-10-20; a pricing refresh alone does not extend model availability"
+    }
+  ],
+  "inferences": [
+    "Current1000VND reserve can cover old bounded text-only envelope using its conservative FX limit, but cannot be assumed to cover grounded requests when shared free allowance is exhausted. Grounding requires a separately bounded reservation included in the50000VND ceiling.",
+    "Use a fresh short-lived price/model policy; do not silently change model or extend dates without verified contract and regression coverage."
+  ],
+  "providerRequests": 0,
+  "modelTokens": "Unavailable",
+  "actualBilledCost": "Unavailable"
+}

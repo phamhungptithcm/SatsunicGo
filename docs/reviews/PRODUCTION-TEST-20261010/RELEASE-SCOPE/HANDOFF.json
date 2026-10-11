@@ -1,0 +1,81 @@
+{
+  "created_at": "2026-10-10T01:18:32.522074+00:00",
+  "base_revision": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "source_review": "PASSED_WITHIN_OWNED_SCOPE",
+  "final_review": "BLOCKED_AGGREGATE_GATES",
+  "production": "NOT_READY",
+  "hashes": {
+    ".github/workflows/release.yml": "9fb8f52e6ddc603c27ceb69f54942e4ca33273eed9c70868e4bc9639d0ff6eed",
+    "functions/src/index.ts": "dff14921e406d189e8764a497e3f2c22da8dc53816c14d109d57e6d66f5ff226",
+    "functions/src/jobs.ts": "02c2b6462d7dd7c9834cc4acba73c7a40b6041dd1791158abdff8017198d4795",
+    "functions/src/provider-release-gate.ts": "7abf20487e70a78e1ced85ca430f3e66a5b7385a8d06fa7266d9b6b4128c2889",
+    "functions/src/production-test-commands.ts": "13e81973a8b2f352de77de62e043599f7576c2d49f31b1edd0dd7ca3f78fcdc4",
+    "scripts/release/artifact.mjs": "f3e6f410fc508bceae1d1a87eaf8feba01c345ddb8837caebce66af93e46bad4",
+    "scripts/release/preflight.mjs": "7fbd3e3b97723e888deac295e810aad871be5148d4554ed755d6d37eed05af2a",
+    "scripts/release/verify-production.mjs": "40696429ed4ab33d9a744e76e3b520c28e34731498f268aa46fdeeb4e8c0c905",
+    "scripts/release/verify-source.py": "9f800510f76a6d1983ea62c09c81de47d0cc01b8f79e5932e576436e9306b173",
+    "scripts/release/production-test.mjs": "2ded738a8db209fc7aa98c74d135bdca8e414f9bbfdf3d090bb5cc80e428c5d8",
+    "scripts/release/reviewed-retries.mjs": "85cdef79b47f62be04e8417084f94500eb16d880a2be010e56a3e5b88a9311c0",
+    "tests/unit/release108.test.mjs": "2df1d765f77d815faa4240e2443e80f64672962adfa69f9f991e613afe4ca247",
+    "tests/unit/release-preflight067.test.ts": "7f2eafb532443d551be2871f4344097f025bbafe5921dc0593d15e24049c462a",
+    "tests/unit/production-test-commands.test.ts": "aeb627e31541c755dfd8523495c4189852ab73572d3f1521d6a9766cbce4403f",
+    "tests/unit/production-test-jobs.test.ts": "4e9c63b98c2774668ef2ba1af78906978d6649140bee39856f2c14ba4967d465",
+    "tests/unit/production-test-command-producer.test.ts": "eb282f434258583451cff6ca11db03df24109bae6ffd266fe8970a5c392bc04e"
+  },
+  "checks": {
+    "backendStrict": {
+      "status": "PASSED",
+      "evidence": "/private/tmp/release-mode-typecheck-frozen.log"
+    },
+    "focusedUnit": {
+      "status": "PASSED",
+      "tests": 258,
+      "files": 5,
+      "evidence": "/private/tmp/release-mode-unit-frozen.log"
+    },
+    "artifactAndSDKContracts": {
+      "status": "PASSED",
+      "tests": 124,
+      "evidence": "/private/tmp/release-mode-artifact-test-r2.log"
+    },
+    "ownedTypeScriptLint": {
+      "status": "PASSED",
+      "evidence": "/private/tmp/release-mode-lint-frozen.log"
+    },
+    "ownedDiffWhitespace": {
+      "status": "PASSED"
+    },
+    "actualSourcePreflight": {
+      "status": "FAILED",
+      "errors": [
+        "PUBLIC_ASSET_BINDING_INVALID"
+      ],
+      "sourceInventory": 110,
+      "productionTestExports": 3,
+      "strippedClientOutcomeDemos": 2,
+      "evidence": "/private/tmp/release-mode-preflight-current.json"
+    },
+    "fullCombinedCI": {
+      "status": "NOT_RUN",
+      "owner": "root"
+    },
+    "productionProviderAndRuntime": {
+      "status": "NOT_RUN",
+      "owner": "root"
+    }
+  },
+  "evidence_hashes": {
+    "/private/tmp/release-mode-unit-frozen.log": "b9953e6bfdb258e40b63767906e8decce2c1049652b060875591c509af699a7c",
+    "/private/tmp/release-mode-typecheck-frozen.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/release-mode-lint-frozen.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/private/tmp/release-mode-artifact-test-r2.log": "14f151fd7c4107c9fd91f58c809c93359a9f09a047ef50019a86eff5fc2b8802",
+    "/private/tmp/release-mode-preflight-current.json": "862d81e61e25566443adfe094e6623a73c0166a2696bc9a2170ad235650b9f17"
+  },
+  "review": "docs/reviews/PRODUCTION-TEST-20261010/RELEASE-SCOPE/FINAL-REVIEW.json",
+  "freeze": "No further ownedsource edits planned until parentreview finding.",
+  "git": "No stage/commit/push/deploy/dispatch/provider mutation performed.",
+  "memory_candidates": "None",
+  "provider_tokens": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "reviewHash": "b62d69e7a077bdeced01448309a9cf0ffb1873faa6a6245cb7ccdb4ed6f50256"
+}

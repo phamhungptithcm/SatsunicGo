@@ -9,9 +9,9 @@ import { useCart } from "../features/cart/cart-store";
 import { CartIcon } from "../features/cart/AddToCart";
 const navigation = [
   ["Sản phẩm", "/products"],
-  ["Mua hộ", "/request"],
-  ["Biểu phí", "/fees"],
-  ["Membership", "/membership"],
+  ["Mua hộ theo yêu cầu", "/request"],
+  ["Phí dịch vụ", "/fees"],
+  ["Thành viên", "/membership"],
   ["Bài viết", "/posts"],
   ["Hỗ trợ", "/support"],
 ] as const;
@@ -19,7 +19,7 @@ const accountNavigation = [
   ["Hồ sơ và địa chỉ", "/account/profile"],
   ["Đơn của tôi", "/account"],
   ["Gửi yêu cầu mua hộ", "/request"],
-  ["Membership", "/membership"],
+  ["Thành viên", "/membership"],
   ["Hỗ trợ", "/support"],
   ["Bảo mật tài khoản", "/account/security"],
 ] as const;
@@ -195,6 +195,8 @@ export function SiteHeader({
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
+  const primaryNavigation = useRef<HTMLElement>(null);
+  const focusMenuOnOpen = useRef(false);
   const [compact, setCompact] = useState(false);
   useEffect(() => {
     let small = false;
@@ -222,6 +224,10 @@ export function SiteHeader({
   }, [pathname]);
   useEffect(() => {
     if (!open) return;
+    if (focusMenuOnOpen.current) {
+      primaryNavigation.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+      focusMenuOnOpen.current = false;
+    }
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
@@ -279,6 +285,8 @@ export function SiteHeader({
           </span>
         </Link>
         <nav
+          ref={primaryNavigation}
+          className="primaryNavigation"
           id="primary-navigation"
           aria-label="Điều hướng chính"
           data-open={open}
@@ -286,7 +294,34 @@ export function SiteHeader({
           onFocusCapture={preloadNavigation}
         >
           {navigation.map(([label, path]) => (
-            <NavLink key={path} to={path} onClick={() => setOpen(false)}>
+            <NavLink
+              key={path}
+              to={path}
+              className={
+                path === "/request"
+                  ? "requestNav"
+                  : path === "/products"
+                    ? "catalogNav"
+                    : undefined
+              }
+              onClick={() => setOpen(false)}
+            >
+              {path === "/products" && (
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  aria-hidden="true"
+                >
+                  <rect x="2" y="2" width="5" height="5" rx="1" />
+                  <rect x="11" y="2" width="5" height="5" rx="1" />
+                  <rect x="2" y="11" width="5" height="5" rx="1" />
+                  <rect x="11" y="11" width="5" height="5" rx="1" />
+                </svg>
+              )}
               {label}
             </NavLink>
           ))}
@@ -323,8 +358,9 @@ export function SiteHeader({
             to="/request"
             onPointerEnter={preloadNavigation}
             onFocus={preloadNavigation}
+            onClick={() => setOpen(false)}
           >
-            Mua hộ <span aria-hidden="true">↗</span>
+            Mua hộ theo yêu cầu <span aria-hidden="true">↗</span>
           </Link>
           {user && (
             <AccountProfile
@@ -343,7 +379,10 @@ export function SiteHeader({
             aria-controls="primary-navigation"
             aria-expanded={open}
             aria-label={open ? "Đóng menu" : "Mở menu"}
-            onClick={() => setOpen((value) => !value)}
+            onClick={(event) => {
+              focusMenuOnOpen.current = !open && event.detail === 0;
+              setOpen((value) => !value);
+            }}
           >
             <span aria-hidden="true" />
             <span aria-hidden="true" />

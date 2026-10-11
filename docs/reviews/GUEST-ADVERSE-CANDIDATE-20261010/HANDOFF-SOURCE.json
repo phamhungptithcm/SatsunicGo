@@ -1,0 +1,31 @@
+{
+  "verifiedAt": "2026-10-10T13:34:25.986874+00:00",
+  "source": "/Users/hunpeo97/Desktop/Workspace/Coder/SatsunicGo/docs/reviews/ASK-GUEST-ADVERSE-20261010/SOURCE-MANIFEST.json",
+  "verifiedFiles": 10,
+  "hashes": {
+    "src/features/ask/Ask.tsx": "aea83c27b2b956c15b7c14ec9b7ad2134406fbd0b7f793c8556f382ec2a20b5a",
+    "tests/component/README.md": "d56a32a33340fe12c35aadcf3a23214fc850cb8c47626d90cdc65e217773bbe2",
+    "tests/component/build-guest-harness.mjs": "7d0c7150ed1cdbb2866b9f40729ea34518a1d0828ee997506f788a2b48675c19",
+    "tests/component/guest-adverse.config.mjs": "973f7c192663581b4c378749f3613de47b0d1bb10fd2437a017ad31dd8501600",
+    "tests/component/guest-browser-harness.tsx": "1066ea8055c6aa609c19dcfa5d97b05d542db1be2fa3aa87a5fadc9e2396c0f9",
+    "tests/component/guest-browser-state.ts": "caacc1988d4a9904df7ecee59881c9f59f2449571a74f311795db0d40bd1d315",
+    "tests/component/guest-dom.setup.mjs": "bcfacbd9de5acc90edcd837e9cf7eea9fd841277a898b80f9461869c5446d4d0",
+    "tests/component/guest-harness.html": "db119b72375b7bb85ef78aac9faea05f84611c2a0a8b9bda85808be2cb3eee45",
+    "tests/component/guest-qa-tools.d.ts": "0ce3a817c6f6db12ce285327fa966978fda7cf9903e1ad5ec623c0eb811b97a8",
+    "tests/component/guest-tracking-adverse.test.ts": "f36b8d677ab62cae0a6202d79b93777613a31423f0088f2a3989535cbc7490df"
+  },
+  "ownerLocalTests": {
+    "component": 25,
+    "unitRegression": 65,
+    "backend": 34
+  },
+  "ownerProductPassNotAdopted": "Root genuinezoom/spokenAT gates remainBLOCKED",
+  "excludedOwnerFiles": [
+    "tests/component/README.md",
+    "tests/component/build-guest-harness.mjs",
+    "tests/component/guest-browser-harness.tsx",
+    "tests/component/guest-browser-state.ts",
+    "tests/component/guest-harness.html",
+    "tests/component/guest-qa-tools.d.ts"
+  ]
+}

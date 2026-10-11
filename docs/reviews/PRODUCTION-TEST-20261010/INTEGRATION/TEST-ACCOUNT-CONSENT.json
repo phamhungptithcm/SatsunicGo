@@ -1,0 +1,33 @@
+{
+  "recorded_at": "2026-10-10T02:09:22.678862+00:00",
+  "human_reply_reference": "call_bf0840ee33f14b138478c8edea23e719 item0",
+  "selected_existing_account": true,
+  "approved_purpose": "SatsunicGo hosted sandbox test and test email recipient",
+  "recipient_email": "REDACTED_NOT_COMMITTED",
+  "runtime_uid_binding": "VERIFIED_EXACT_EMAIL_LOOKUP; UID held task-local only, not committed",
+  "email_send": "NOT_RUN",
+  "scope": "One explicitly chosen tester; not broad customer consent",
+  "lookup_attempts": [
+    {
+      "method": "Admin SDK ADC exact-email lookup",
+      "result": "auth/internal-error"
+    },
+    {
+      "method": "Existing gcloud identity REST exact-email lookup",
+      "result": "HTTP403",
+      "response_body": "NOT_RETAINED; root cause not inferred"
+    },
+    {
+      "method": "Existing gcloud identity REST exact-email lookup with documented quota-project header",
+      "result": "PASS_EXACT_SINGLE_ACCOUNT",
+      "disabled": false,
+      "emailVerified": true,
+      "account_identity": "REDACTED"
+    }
+  ],
+  "lookup_mutations": 0,
+  "next_evidence": "Actual signed-in owner/AppCheck/confirmation and live sandbox/IPN checks after immutable release; account lookup is not MFA or session acceptance.",
+  "updated_at": "2026-10-10T02:17:25.503114+00:00",
+  "changed_condition": "Per-request x-goog-user-project=satsunicgo added per official Google REST authentication contract; no global credential/IAM/auth changes.",
+  "official_contract": "https://docs.cloud.google.com/docs/authentication/rest#quota-project"
+}

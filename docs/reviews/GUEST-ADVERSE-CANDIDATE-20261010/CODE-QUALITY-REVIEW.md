@@ -1,0 +1,9 @@
+# Bounded integration code quality review
+
+RIG DEGRADED: candidate optional indexes missing. Critical source/diff/compiler/tests verified directly; no whole-graph assurance. Node22/TypeScript6/React19/Vite8/Vitest4; profiles universal, TypeScript, web/frontend, security, concurrency, product-content. Only production Ask and generated asset manifest changed; owner25case component test/config/setup and reproduction note added. No backend/Firestore/auth/quotas/contracts/workflows/dependencies/provider change.
+
+Six Ask hunks match current owner source hash and reverse patch check passes. Guest flag stays in existing bounded12turn state, adds no network/timer/listener/provider I/O. Generic failures/cancellation cannot replay masked capability. Ordinary answer retry and request links remain. Focus guard excludes closing/outside dialog and bounded25component cases cover cancel/late/deadline/auth/request races/cleanup/privacy. Constant-time attributes/guard do not establish production performance. Native zoom/AT and physical offline/real signin/provider security remainunverified. No sensitive logging or production operation.
+
+Local25component and117focusedunit,strict frontend build/scoped lint/diffcheck PASS. Full exact-head PR CI pending. Component suite intentionally separate from normal tests/unit include; no inflated CI count. Owner browser fixture excluded; no additional server/reset. Generated assets regenerated from existing npm build, no direct generated edit. Existing bundle/import warnings retained. Prior dependency audit and CI apply only to d704 until new receipt.
+
+Product/final handoff BLOCKED: genuine200%zoom/spokenVoiceOver,PRE001/MFA/manual/immutable/provider/live missing. No deploy/mainpush/PRmerge/provideractivation/paidAI. All original WIP preserved. Token usage/actualcost Unavailable;memorycandidatesNone.

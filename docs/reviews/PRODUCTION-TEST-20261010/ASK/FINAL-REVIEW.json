@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-ASK",
+  "status": "BLOCKED",
+  "scope": "Aggregate handoff; local code checks passed",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Owned approved Ask cost/feedback scope matches source. No provider/config/export edit.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "Central exact test environment/admission; owner/MFA/consent/source gates preserved; no secret/raw chat/provider call.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Node22 backendstrict/focusedlint130unit tests pass. Additive bounded metadata and3indexes.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Missing/corrupt budgets, expiry/revocation, unknown outcomes, rollback provenance, forged modes, retention boundary and cleanup preconditions covered.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "Existing safe error text reused; no retry/refund of unknown paid attempts.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Conservative permanent reserves and short price expiry preserve budget at cost of availability; documented no topup, no automatic learning.",
+      "evidence_refs": [
+        "HANDOFF.json",
+        "REPORT.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "BLOCKED",
+      "summary": "Combined mandatory CI/artifact/index readback/live model/AppCheck/MFA and aggregate final independent review pending.",
+      "evidence_refs": [
+        "HANDOFF.json"
+      ]
+    },
+    "product_language": {
+      "status": "BLOCKED",
+      "summary": "UI owner implements Test feedback marker; root in-context Product Language Gate/eight principles evidence pending. Error text reused with same failure meaning.",
+      "evidence_refs": [
+        "REPORT.md"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "ASK-AGGREGATE-001",
+      "severity": "High",
+      "status": "OPEN_OWNER_PENDING",
+      "location": "functions/src/index.ts submitRequest producer; functions/src/ai/ask-workflow.ts command.run delegation",
+      "problem": "Current custom request producer creates REQUESTED order without production-test provenance. Read-only web selection can feed this producer through Ask.",
+      "production_impact": "Test-created custom order could be handled as live by consumers before checkout provenance exists.",
+      "evidence": "Bounded source read index.ts lines150-168 and ask-workflow command.run branch; producer is outside Ask agent write ownership.",
+      "recommendation": "Producer owner must pin server-derived production_test provenance on new custom request under approved policy and maintain pinned retries/legacy separation; add focused producer/consumer test.",
+      "owner": "root/finance_implementation and root"
+    }
+  ],
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "findings": [
+        "Expired price/model envelopes",
+        "Separate ledgers could admit up to60000VND",
+        "Cleanup lacked approved-class fence"
+      ],
+      "fixes": [
+        "Verified standard rates with explicit paid grounding and full billed context reserve; short price expiry before model retirement",
+        "Cross-ledger transaction reads with shared50000 ceiling; preserve original own ceilings/import floors/permanent unknown reservations",
+        "Explicit new test/operational retention classes and bounded class/expiry queries"
+      ]
+    },
+    {
+      "cycle": 2,
+      "findings": [
+        "Disabling test policy before feedback could classify a test answer as real",
+        "Skipped legacy expiry docs could starve new class cleanup",
+        "Production test revocation during count must block generation"
+      ],
+      "fixes": [
+        "Server-only bounded24-turn provenance map; feedback inherits saved matching answer hash even after disable",
+        "Three additive composite indexes and class equality before expiry query",
+        "Exact central environment/tester admission plus recheck before paid generation"
+      ]
+    },
+    {
+      "cycle": 3,
+      "decision": "SCOPED_LOCAL_REVIEW_PASS",
+      "findings": [],
+      "limits": [
+        "Not independent whole-candidate or production acceptance",
+        "Root final implementation review remains required"
+      ]
+    }
+  ],
+  "residual_risks": [
+    "Deploy composite indexes through normal immutable release; cleanup inactive until READY readback",
+    "Reconcile existing research import and both durable counters before paid activation; no reset/topup/new confirmed remaining balance assumed",
+    "Fresh whole combined mandatory CI/artifact/audit/final review and product-content in-context verification",
+    "Owner/staff genuine MFA and live AppCheck remain separate acceptance",
+    "Pricing expires2026-10-12T00:00:00Z; model retirement2026-10-20; no silent model or date extension"
+  ],
+  "limitations": [
+    "Repository Intelligence DEGRADED",
+    "ai-agent-kit CLI unavailable; no runtime review ledger receipt claimed",
+    "No new rules/emulator/live/provider run in this subtask",
+    "Indexes must be deployed/readback before cleanup activation"
+  ]
+}

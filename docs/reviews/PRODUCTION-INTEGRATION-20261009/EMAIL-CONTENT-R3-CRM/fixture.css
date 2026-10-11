@@ -1,0 +1,6 @@
+.fixtureBar, .fixtureTrace { padding: 12px 16px; font: 12px/1.5 system-ui,sans-serif; color: #53627b; }
+.fixtureBar p { margin: 0 0 8px; }
+.fixtureControls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fixtureControls button { border: 1px solid #dce2ec; padding: 6px 9px; border-radius: 5px; color: #163cff; background: white; }
+.fixtureControls output { padding: 4px; }
+.fixtureTrace ol { padding-left: 24px; overflow-wrap: anywhere; }

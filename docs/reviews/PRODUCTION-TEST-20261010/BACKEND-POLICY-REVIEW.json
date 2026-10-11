@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "task_id": "PRODUCTION-TEST-v1-policy",
+  "at": "2026-10-10T01:10:45.823230+00:00",
+  "owner": "/root/policy_implementation",
+  "approval_reference": "APPROVAL.json call_5081fd46f74546c08b78d7a095730a9a item0",
+  "rig": "DEGRADED; shared TEAM-BRIEF.json; bounded source/Git/compiler/SDK-backed unit evidence",
+  "status": "BLOCKED_PENDING_COMBINED_PRODUCT_AND_LIVE_ACCEPTANCE",
+  "implementation_status": "COMPLETE_WITHIN_OWNED_SCOPE",
+  "base": "608d2e0554471648ad65a2840a6c0ed313854f1d",
+  "source_hashes": {
+    "functions/src/production-test-policy.ts": "c839057220171ed74fd91c84e2e77ef1bc3d7447c734d6286bd5a62539a361e7",
+    "functions/src/payments/sepay-sandbox.ts": "6d43b35ad9a55bea6a7a04ffca4794de09b3ae4454e75648f6a1ec21d7c90c00",
+    "functions/src/purchase-checkout.ts": "59f8877b589d5f8d8bc49ec1c4d5a22205b331d6a4f394d9875b313240fc2672",
+    "functions/src/purchase-sepay.ts": "16c2da115b93017ad82b2f4a38564426f030f55d9ecf5afb5b76e1ffaff0866e",
+    "packages/domain/purchase-checkout.ts": "4a4d7823ee98c315b23c7d222cd373ef27f1d6b29c8ee7c8f0c322d93fe7e054",
+    "packages/domain/purchase-sepay.ts": "d85a5359f86d238091bc346d790a93934b022b8c7fe9ddc79c6dca10bae1afd3",
+    "tests/unit/production-test-policy.test.ts": "4fd5296aacc27bccd2e1383304bb0a3f2bcf93ef7e36b5471bceb8d36ab0caff",
+    "tests/unit/production-test-checkout.test.ts": "a0130bee87f53e0aabb13dc4a8ba20fd565c13b25c7064b35163abbfc2296c3e",
+    "tests/unit/sepay-secret-registration.test.ts": "87cf13b8b269395b6f2212d14771dcdaf339f95add7bb009b710078b7f5dcea2",
+    "tests/unit/purchase-sepay.test.ts": "e433f0ee69ff061dfce283e83932b346ad6188788ebada317bf11f643ddeb927"
+  },
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Explicit production-test artifact/environment/actualdb policy admission; immutable checkout/intent/proof/inbox provenance; callbacks fixedHTTPS; legacy exactdemo preserved; no live financial operations added."
+    },
+    "security": {
+      "status": "PASSED_WITHIN_LOCAL_SCOPE",
+      "summary": "Ownership/verifiedGoogle/locked/AppCheck existingguard preserved. Client strictcommands forbid mode injection. No runtime injected adapters; strict provenance rejects partial/unknown. Secrets onlyregister in exactdemo or approvedartifact context. No payload/network/provider read."
+    },
+    "code_quality": {
+      "status": "PASSED_WITHIN_OWNED_SCOPE",
+      "summary": "Node22.23.3/TypeScript6/FirebaseonCall/Vitest4; pure environment/admission helpers; owned ESLint and current combined backend/frontend strict passed."
+    },
+    "failure_paths": {
+      "status": "PASSED_WITHIN_LOCAL_SCOPE",
+      "summary": "Policy disabled/expired/wrongtester/version drift; cart/owner/accountguard; replay; legacy/mixedbalance; intentmode mismatch; recovery refuses live/partial/different-run targets."
+    },
+    "error_handling": {
+      "status": "PASSED_WITHIN_LOCAL_SCOPE",
+      "summary": "Policy unavailable failsbefore newwrite. Idempotent acknowledgement survives activationoff; pinnedreconcile continues and neverrelabels. SafeexistingVietnameseerror reused; no customer secrets/PII logged."
+    },
+    "product_language": {
+      "status": "NOT_RUN",
+      "summary": "Existing text Kênh thử chưa khả dụng. extended to approvedmode states; metadata visible through UIowner. Rendered context/accessibility/localization acceptance belongs combinedproduct gate, not mockedbackendproof."
+    },
+    "production_readiness": {
+      "status": "NOT_RUN",
+      "summary": "No deploy/provider calls fromthisagent. RealSDKartifactdiscovery, sourceZIP/runtime env/secretbinding, realIPN/readback, genuineMFA androotfullCI/live acceptance remain."
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Currentpolicy governs newcheckouts/firstintents; pinnedexistingintent/IPN/reconcile deliberately independentof policyoff. Balance keeps entireoriginalprovenance acrosspolicyversion; actualcurrentpolicy separately admittester. Legacyrecords notmigrated."
+    }
+  },
+  "review_cycles": [
+    {
+      "cycle": 1,
+      "status": "FINDINGS_FIXED",
+      "findings": [
+        {
+          "severity": "HIGH",
+          "location": "functions/src/purchase-sepay.ts processSePayInbox catch",
+          "finding": "Existinggenericrecovery marked pendingcheckout unknown evenwhenproduction-test inbox pointedat legacy/live/malformed/different-run record.",
+          "fix": "Strict environment/provenance/provider matching beforecheckoutmutation.",
+          "verification": "3backendtransactionregressioncases prove checkout/order unchanged and inboxqueuedretry retained."
+        },
+        {
+          "severity": "LOW",
+          "location": "tests/unit/production-test-policy.test.ts",
+          "finding": "Testintent merchant literal inferredstring causedstrictfailure.",
+          "fix": "Explicitliteraltypeannotation.",
+          "verification": "Subsequentfrontend/backendstrict passed before concurrentrootemaildelta."
+        }
+      ]
+    },
+    {
+      "cycle": 2,
+      "status": "LOCAL_SCOPE_REVIEWED_COMBINED_GATES_PENDING",
+      "findings": [],
+      "summary": "Re-reviewed final diff, including exact intent/provider/merchant/invoice/checkout bindings and live-target recovery fence; no new in-scope finding in executed checks."
+    }
+  ],
+  "checks": {
+    "focused_unit": {
+      "status": "PASSED",
+      "files": 6,
+      "tests": 232,
+      "command": "node22 node_modules/vitest/vitest.mjs run tests/unit/production-test-checkout.test.ts tests/unit/production-test-policy.test.ts tests/unit/sepay-secret-registration.test.ts tests/unit/purchase-sepay.test.ts tests/unit/purchase-checkout.test.ts tests/unit/purchase-acknowledgement.test.ts",
+      "limits": "MockedFirestore transaction tests are boundedlocalintegration; no emulator/provider/MFA claims."
+    },
+    "owned_lint": {
+      "status": "PASSED",
+      "command": "node22 node_modules/eslint/bin/eslint.js <10ownedfiles>"
+    },
+    "strict": {
+      "status": "PASSED",
+      "summary": "Currentcombinedbackendandfrontendstrict both exit0 after rootemailunionfix; no ownedsource compilerfindings."
+    },
+    "bounded_performance": {
+      "status": "PASSED",
+      "summary": "30line preview+commit exactly5writes; no order/financial/inventorywrite incheckout."
+    },
+    "real_provider": {
+      "status": "NOT_RUN"
+    },
+    "genuine_mfa": {
+      "status": "NOT_RUN"
+    },
+    "combined_ci": {
+      "status": "NOT_RUN"
+    },
+    "product_context": {
+      "status": "NOT_RUN"
+    },
+    "diff_check": {
+      "status": "PASSED",
+      "command": "git diff --check"
+    }
+  },
+  "profiles": [
+    "universal",
+    "typescript-javascript",
+    "api",
+    "product-content"
+  ],
+  "runtime_ledger": "ai-agent-kit CLI unavailable; no runtime receipt claimed",
+  "production_status": "NOT_READY",
+  "token_usage": "Unavailable",
+  "actual_billed_cost": "Unavailable",
+  "memory_candidates": "None"
+}

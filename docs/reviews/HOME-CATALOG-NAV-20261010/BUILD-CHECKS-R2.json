@@ -1,0 +1,29 @@
+{
+  "scope": "Approved frontend delta; exact public CI tuple; no deployment/provider request",
+  "checks": [
+    {
+      "name": "public-config",
+      "at": "2026-10-10T04:16:47.747078+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.41,
+      "log": "/private/tmp/satsunicgo-home-catalog-nav-20261010/build-r2/public-config.log",
+      "sha256": "a78e5ff25dbd82b721ffa8b397c1ae33f8cc70ff2e8d16b2d6d1948c384f06d8"
+    },
+    {
+      "name": "frontend-build",
+      "at": "2026-10-10T04:16:49.502075+00:00",
+      "exit_code": 0,
+      "duration_seconds": 1.75,
+      "log": "/private/tmp/satsunicgo-home-catalog-nav-20261010/build-r2/frontend-build.log",
+      "sha256": "dd88af7856b4e81834f401501b0989daf4f58db1f4a73eb256ed1e5b2722c5fa"
+    },
+    {
+      "name": "public-assets",
+      "at": "2026-10-10T04:16:49.542874+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.04,
+      "log": "/private/tmp/satsunicgo-home-catalog-nav-20261010/build-r2/public-assets.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

@@ -30,6 +30,11 @@ const shipment = z.object({
     .max(100),
 });
 const safeActions = new Set([
+  "parcelDispatch",
+  "parcelPacked",
+  "parcelProgress",
+  "parcelDelivered",
+  "deliveryEstimateUpdated",
   "catalogCheckout",
   "submitRequest",
   "issueQuote",

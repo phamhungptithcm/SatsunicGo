@@ -1,0 +1,9 @@
+# Center checkout sign-in — 2026-10-09
+
+Approved narrow continuation: current human request “căn giữa màn hình” explicitly authorizes centering the just-approved Google sign-in UI. Existing PAYMENT-UPFRONT v3 and Google sign-in v1 approval cover these checkout files. Preserve content, provider handler, logo/font/license, authenticated checkout/payment layouts and unrelated WIP.
+
+Intelligence DEGRADED: checker reports optional index health/freshness limitations; CodeGraph queried first, CocoIndex second, critical facts verified in current source. App main contains page sections; shell reserves --header-height for the fixed header. Both signed-out branches currently return a normal left-aligned page. No persistence or new behavior is needed.
+
+Plan: add purchaseSignInPage only to the signed-out section in purchase-checkout.tsx and purchase-payment.tsx. In purchase-sign-in.css center its column horizontally/vertically with flex, balanced padding, viewport-aware minimum height excluding the existing fixed header; reset heading/helper/button margins and use a consistent gap. Keep natural overflow on short screens and native focus/44px button. No global/body/fixed-position changes or new dependencies.
+
+Validation: reuse5207; existing listener absent so restart frontend only under earlier explicit human permission with demo-satsunicgo and documented19207/18207/15207 emulator ports. Preserve backend data/processes. Verify actual signed-out desktop/mobile geometry, no overflow, keyboard focus; TypeScript/lint/format; fresh final/content review with scoped hashes/screenshots. No new tests for this reversible style change. Real login/payment/deployment out of scope. Applicable profiles universal,TypeScript/JavaScript,frontend HTML/CSS,web,visual-design,product-content. No text/data meaning change. Product language/final review skills continue to apply.

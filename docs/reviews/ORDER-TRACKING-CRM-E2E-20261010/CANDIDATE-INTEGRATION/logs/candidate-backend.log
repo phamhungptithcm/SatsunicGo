@@ -1,0 +1,9 @@
+
+ RUN  v4.1.11 /private/tmp/satsunicgo-production-test-candidate-4ywwpdpc/repo
+
+
+ Test Files  2 passed (2)
+      Tests  87 passed (87)
+   Start at  13:29:06
+   Duration  33.40s (transform 1.23s, setup 28ms, import 1.08s, tests 32.07s, environment 0ms)
+

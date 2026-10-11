@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-10T01:29:43.298864+00:00",
+  "status": "VERIFIED_BASE_FEATURE_RELEASE",
+  "tag": "v0.10.0",
+  "sha": "c4230014959389c3c23b44cdb11c5fe846f815fe",
+  "runId": "38012012422",
+  "normalCI": "SUCCESS",
+  "receiptStatus": "VERIFIED",
+  "providerVerifiedAt": "2026-10-10T01:26:22.318Z",
+  "functionNamesExact": 98,
+  "hostingVerifiedFiles": 194,
+  "bundleSha256": "107861dbf9dfb633099f6aa1f8e062b56c0f71d67f14d5ac7bc34f606f954416",
+  "receiptSha256": "1a1b310c5939ef11c3c3412d323985c9cac25634302c82ec607ca1e2c71271f0",
+  "manifestSha256": "7699d0d767a5846d66dab5e925d371b708370b4b55238dda5a035eb3a2a8e69b",
+  "browserReadback": {
+    "url": "https://satsunicgo.web.app/",
+    "headline": "Chính hãng từ xa. Ưng ý về nhà.",
+    "old50PercentDepositRemoved": true,
+    "screenshot": "/private/tmp/satsunicgo-release-v0100-verified/homepage.png"
+  },
+  "productionTestDelta": "NOT_INCLUDED; still local WIP",
+  "runtimeActivation": "NOT_ASSERTED",
+  "evidenceRoot": "/private/tmp/satsunicgo-release-v0100-verified"
+}

@@ -1,7 +1,5 @@
-import {
-  loginFeedback,
-  publishAuthFailure,
-} from "../features/auth/auth-feedback";
+import { publishAuthFailure } from "../features/auth/auth-feedback";
+import { googlePopupLogin } from "../features/auth/google-popup-login";
 import { requestActionMfa } from "../features/auth/ActionMfa";
 import { runWithMfaRecovery } from "./mfa-recovery";
 import { notify, withProgress } from "./feedback";
@@ -12,7 +10,6 @@ import {
   connectAuthEmulator,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
   signOut,
   getRedirectResult,
 } from "firebase/auth";
@@ -81,24 +78,14 @@ if (local && auth && db && functions) {
     Number(env.VITE_FUNCTIONS_EMULATOR_PORT ?? 5101),
   );
 }
-export async function login() {
-  if (!auth) throw Error("Đăng nhập chưa được kích hoạt.");
-  const p = new GoogleAuthProvider();
-  try {
-    await signInWithPopup(auth, p);
-  } catch (e) {
-    if (captureMfa(e, auth)) return;
-    const code = (e as { code?: string }).code;
-    if (code === "auth/popup-blocked") {
-      try {
-        await signInWithRedirect(auth, p);
-      } catch (failure) {
-        throw Object.assign(new Error(loginFeedback(failure)), {
-          code: (failure as { code?: string }).code,
-        });
-      }
-    } else throw Object.assign(new Error(loginFeedback(e)), { code });
-  }
+export function login() {
+  return googlePopupLogin(
+    () => {
+      if (!auth) throw Error("AUTH_UNCONFIGURED");
+      return signInWithPopup(auth, new GoogleAuthProvider());
+    },
+    (error) => captureMfa(error, auth),
+  );
 }
 export async function logout() {
   clearMfa();

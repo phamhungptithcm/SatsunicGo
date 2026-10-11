@@ -14,6 +14,15 @@ import type { Order } from "../../packages/domain";
 import { normalizeCustomerName } from "../../packages/domain/crm";
 import { purchaseBalanceTarget } from "./purchase-adjustment";
 import { purchaseDemoEnvironment } from "./purchase-environment";
+import {
+  assertPurchaseExecutionEnvironment,
+  productionTestEnvironment,
+} from "./production-test-policy";
+import {
+  matchingPurchaseExecution,
+  purchaseExecutionFields,
+  purchaseFinancialCollection,
+} from "./purchase-test-boundary";
 import { withPurchaseMutation } from "./purchase-mutation-queue";
 import {
   SEPAY_MERCHANT,
@@ -33,7 +42,10 @@ export async function applyDemoSettlement(input: DemoSettlementInput) {
 }
 /** Only persisted server-verified evidence can reach the SePay allocation branch. */
 export async function settleSePayEvidence(evidenceId: string) {
-  if (!/^[a-f0-9]{64}$/.test(evidenceId) || !purchaseDemoEnvironment())
+  if (
+    !/^[a-f0-9]{64}$/.test(evidenceId) ||
+    (!purchaseDemoEnvironment() && !productionTestEnvironment())
+  )
     throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
   const stored = await getFirestore()
     .doc(`purchaseSePayEvidence/${evidenceId}`)
@@ -44,6 +56,7 @@ export async function settleSePayEvidence(evidenceId: string) {
       "failed-precondition",
       "Chưa xác minh được giao dịch.",
     );
+  assertPurchaseExecutionEnvironment(proof);
   return applySettlement({
     id: proof.checkoutId,
     uid: proof.ownerId,
@@ -56,7 +69,10 @@ async function applySettlement(
 ) {
   const { id, outcome, uid, token = {}, linkId, evidenceId } = input,
     db = getFirestore();
-  if (!purchaseDemoEnvironment(db))
+  if (
+    !purchaseDemoEnvironment(db) &&
+    (!evidenceId || !productionTestEnvironment(db))
+  )
     throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
   const channel = evidenceId ? "sepay_sandbox" : "demo";
   const merchant = evidenceId ? SEPAY_MERCHANT : "demo-satsunicgo";
@@ -154,6 +170,13 @@ async function applySettlement(
           "permission-denied",
           "Chưa mở được thanh toán demo.",
         );
+      assertPurchaseExecutionEnvironment(checkout, db);
+      const execution = purchaseExecutionFields(checkout);
+      if (proof && !matchingPurchaseExecution(checkout, proof))
+        throw new HttpsError(
+          "failed-precondition",
+          "Bằng chứng thanh toán chưa khớp.",
+        );
       if (checkout.state === "paid") {
         if (
           proof &&
@@ -205,6 +228,17 @@ async function applySettlement(
         checkout.purpose === "balance"
           ? await tx.get(db.doc(`orders/${checkout.sourceOrderId}`))
           : null;
+      // Reject a mixed-mode balance before even setting a hold on its source.
+      if (
+        balanceOrder &&
+        (!balanceOrder.exists ||
+          !matchingPurchaseExecution(checkout, balanceOrder.data()))
+      )
+        throw new HttpsError(
+          "failed-precondition",
+          "Đơn và lượt thanh toán chưa khớp.",
+          { reason: "PURCHASE_EXECUTION_MISMATCH" },
+        );
       if (outcome === "cancelled") {
         if (checkout.state === "unknown" || received.exists)
           throw new HttpsError(
@@ -325,6 +359,7 @@ async function applySettlement(
             ) !== checkout.total))
       ) {
         tx.create(db.doc(`purchasePaymentEvidence/${reference}`), {
+          ...execution,
           checkoutId: id,
           provider: channel,
           merchant,
@@ -369,6 +404,7 @@ async function applySettlement(
         });
       }
       tx.create(db.doc(`purchasePaymentEvidence/${reference}`), {
+        ...execution,
         checkoutId: id,
         provider: channel,
         merchant,
@@ -383,6 +419,7 @@ async function applySettlement(
           throw new HttpsError("failed-precondition", "Phân bổ đơn chưa khớp.");
         if (balanceOrder)
           tx.update(balanceOrder.ref, {
+            ...execution,
             collected: currentOrder!.collected + line.total,
             latestReceiptId: id,
             ...(proof ? { testMode: true, paymentProvider: channel } : {}),
@@ -396,6 +433,7 @@ async function applySettlement(
         else
           tx.create(db.doc(`orders/${order.id}`), {
             ...order,
+            ...execution,
             collected: line.total,
             ...(proof ? { testMode: true, paymentProvider: channel } : {}),
             latestReceiptId: id,
@@ -408,6 +446,7 @@ async function applySettlement(
           for (const media of images) {
             const mediaId = hash({ orderId: order.id, sourceId: media.id });
             tx.create(db.doc(`orderMedia/${mediaId}`), {
+              ...execution,
               orderId: order.id,
               kind: "request",
               description: line.name,
@@ -420,6 +459,7 @@ async function applySettlement(
           }
           if (images.length)
             tx.create(db.doc(`orderMediaCounters/${order.id}`), {
+              ...execution,
               count: images.length,
             });
         }
@@ -435,6 +475,7 @@ async function applySettlement(
             ].join(", "),
           };
           tx.create(db.doc(`orderRecipients/${order.id}`), {
+            ...execution,
             ownerId: uid,
             ...recipient,
             checkoutId: id,
@@ -443,30 +484,39 @@ async function applySettlement(
           // Match Ask's private operations projection in the same allocation.
           // A replay/balance never replaces the frozen recipient or warehouse data.
           tx.create(db.doc(`orderOperations/${order.id}`), {
+            ...execution,
             recipient,
             changedAt: now,
           });
         }
-        tx.create(db.doc(`financialEntries/purchase-${id}-${order.id}`), {
-          orderId: order.id,
-          ownerId: uid,
-          checkoutId: id,
-          kind: "payment",
-          purpose: balanceOrder ? "balance" : "full",
-          amount: line.total,
-          reference,
-          provider: channel,
-          ...(proof
-            ? { testMode: true, paymentMethod: proof.paymentMethod }
-            : {}),
-          createdAt: now,
-        });
+        tx.create(
+          db.doc(
+            `${purchaseFinancialCollection(checkout)}/purchase-${id}-${order.id}`,
+          ),
+          {
+            ...execution,
+            orderId: order.id,
+            ownerId: uid,
+            checkoutId: id,
+            kind: "payment",
+            purpose: balanceOrder ? "balance" : "full",
+            amount: line.total,
+            reference,
+            provider: channel,
+            ...(proof
+              ? { testMode: true, paymentMethod: proof.paymentMethod }
+              : {}),
+            createdAt: now,
+          },
+        );
         tx.create(db.doc(`orders/${order.id}/timeline/purchase-${id}`), {
+          ...execution,
           action: "verifyTransfer",
           createdAt: now,
         });
       });
       tx.create(db.doc(`purchaseReceipts/${receiptId}`), {
+        ...execution,
         id: receiptId,
         ownerId: uid,
         ownerEmail: proof
@@ -509,6 +559,8 @@ async function applySettlement(
         }),
       });
       tx.create(db.doc(`outboxJobs/purchase-payment-${receiptId}`), {
+        ...execution,
+        ...(proof ? { testMode: true, paymentProvider: channel } : {}),
         ownerId: uid,
         action: "verifyTransfer",
         resourceId: id,
@@ -548,6 +600,8 @@ async function applySettlement(
         ),
       });
       tx.create(db.doc(`purchaseReceiptJobs/${receiptId}`), {
+        ...execution,
+        ...(proof ? { testMode: true, paymentProvider: channel } : {}),
         ownerId: uid,
         receiptId,
         state: "queued",
@@ -572,6 +626,8 @@ async function applySettlement(
           updatedAt: now,
         });
       tx.create(db.collection("auditEvents").doc(), {
+        ...execution,
+        ...(proof ? { testMode: true, paymentProvider: channel } : {}),
         action: "purchasePaymentVerified",
         actor: proof ? "sepay-sandbox-adapter" : "demo-payment-adapter",
         resourceId: id,
