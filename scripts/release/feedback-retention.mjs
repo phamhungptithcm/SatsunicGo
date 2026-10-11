@@ -108,7 +108,9 @@ export function verifyRetentionScheduler(job, fn) {
   // Admit only this exact Function alias when the same provider row attests it.
   const functionUrl='https://asia-southeast1-satsunicgo.cloudfunctions.net/askFeedbackCleanup';
   const target=job?.httpTarget?.uri;
-  const matchingTarget=target===service?.uri || fn?.url===functionUrl && target===functionUrl;
+  // Updated Scheduler jobs may serialize the same Run origin with its root slash.
+  const runRootTarget=typeof service?.uri==='string' && /^https:\/\/askfeedbackcleanup-[a-z0-9-]+\.a\.run\.app$/.test(service.uri) && target===`${service.uri}/`;
+  const matchingTarget=target===service?.uri || runRootTarget || fn?.url===functionUrl && target===functionUrl;
   // ProtoJSON omits default zero scalar values; absence means effective zero.
   const retry=job?.retryConfig;
   const retryCount=retry?.retryCount===undefined ? 0 : retry.retryCount;
