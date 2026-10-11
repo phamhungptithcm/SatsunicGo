@@ -22,7 +22,8 @@
     "nodemailer": "10.0.14",
     "sepay-pg-node": "1.0.0",
     "sharp": "0.35.5",
-    "zod": "4.6.5"
+    "zod": "4.6.5",
+    "@satsunicgo/otel-resources-compat": "file:vendor/otel-resources-compat"
   },
   "overrides": {
     "@grpc/grpc-js": "1.14.5",
@@ -34,6 +35,28 @@
     "@opentelemetry/propagator-jaeger": "2.11.0",
     "@google-cloud/opentelemetry-cloud-monitoring-exporter": "0.22.0",
     "@google-cloud/opentelemetry-cloud-trace-exporter": "3.1.0",
-    "uuid@<11.1.1": "11.1.1"
+    "@modelcontextprotocol/sdk": "1.32.0",
+    "acorn": "8.18.0",
+    "nanoid": "3.3.19",
+    "postcss": "8.5.28",
+    "@emnapi/runtime": "1.11.3",
+    "uuid@<11.1.1": "11.1.1",
+    "lodash-es": "4.18.1",
+    "handlebars": "4.7.10",
+    "katex": "0.18.2",
+    "@opentelemetry/core": "2.11.0",
+    "@opentelemetry/resources": "2.11.0",
+    "@opentelemetry/context-async-hooks": "2.11.0",
+    "@opentelemetry/sdk-metrics": "2.11.0",
+    "@opentelemetry/sdk-trace-base": "2.11.0",
+    "@opentelemetry/sdk-logs": "0.219.0",
+    "@opentelemetry/api-logs": "0.222.0",
+    "@opentelemetry/instrumentation": "0.222.0",
+    "@opentelemetry/instrumentation-pino": "0.68.0",
+    "@opentelemetry/instrumentation-winston": "0.66.0",
+    "@google-cloud/opentelemetry-resource-util": "3.1.0",
+    "@genkit-ai/google-cloud": {
+      "@opentelemetry/resources": "file:../../../vendor/otel-resources-compat"
+    }
   }
 }

@@ -146,6 +146,13 @@ export function deploymentConfig(config) {
     hosting: config.hosting,
   };
 }
+const RESOURCE_ADAPTER = 'vendor/otel-resources-compat';
+const RESOURCE_ADAPTER_NAME = '@satsunicgo/otel-resources-compat';
+const RESOURCE_ADAPTER_LINKS = new Set([
+  `node_modules/${RESOURCE_ADAPTER_NAME}`,
+  'node_modules/@genkit-ai/google-cloud/node_modules/@opentelemetry/resources',
+]);
+
 export function deploymentLockSeed(rootLock, pkg) {
   const declarations = value => JSON.stringify(Object.entries(value ?? {}).sort());
   if (rootLock.lockfileVersion !== 3 || declarations(rootLock.packages?.functions?.dependencies) !== declarations(pkg.dependencies)) throw Error('WORKSPACE_DEPENDENCY_MISMATCH');
@@ -156,12 +163,25 @@ export function deploymentLockSeed(rootLock, pkg) {
   for (const [key, value] of Object.entries(rootLock.packages)) {
     if (key.startsWith('functions/node_modules/')) packages[key.slice('functions/'.length)] = value;
   }
+  if (pkg.dependencies?.[RESOURCE_ADAPTER_NAME]) {
+    if (pkg.dependencies[RESOURCE_ADAPTER_NAME] !== `file:${RESOURCE_ADAPTER}` ||
+        !rootLock.packages[`functions/${RESOURCE_ADAPTER}`]?.version) throw Error('INVALID_RESOURCE_ADAPTER');
+    packages[RESOURCE_ADAPTER] = rootLock.packages[`functions/${RESOURCE_ADAPTER}`];
+    for (const key of RESOURCE_ADAPTER_LINKS) {
+      const entry = rootLock.packages[key];
+      if (!entry?.link || entry.resolved !== `functions/${RESOURCE_ADAPTER}`) throw Error('INVALID_RESOURCE_ADAPTER_LINK');
+      packages[key] = { ...entry, resolved: RESOURCE_ADAPTER };
+    }
+  }
   packages[''] = { ...rootLock.packages.functions, name: pkg.name, version: pkg.version };
   return { name: pkg.name, version: pkg.version, lockfileVersion: 3, requires: true, packages };
 }
 export function assertLockedVersions(seed, actual) {
   for (const [key, value] of Object.entries(actual.packages)) {
-    if (key && (!seed.packages[key] || seed.packages[key].version !== value.version || seed.packages[key].integrity !== value.integrity || value.link)) throw Error('DEPLOYMENT_DEPENDENCY_DRIFT');
+    const safeAdapterLink = RESOURCE_ADAPTER_LINKS.has(key) && value.link === true &&
+      value.resolved === RESOURCE_ADAPTER && seed.packages[key]?.resolved === RESOURCE_ADAPTER;
+    if (key && (!seed.packages[key] || seed.packages[key].version !== value.version ||
+        seed.packages[key].integrity !== value.integrity || Boolean(seed.packages[key].link) !== Boolean(value.link) || (value.link && !safeAdapterLink))) throw Error('DEPLOYMENT_DEPENDENCY_DRIFT');
   }
 }
 export function verify(root, expectedSha, expectedTag) {
@@ -310,6 +330,23 @@ export function create(root, stage, candidatePath, notesPath = join(root, 'relea
   // Workspace installs use root overrides/lock. Preserve that tested graph when
   // deploying Functions standalone instead of silently using its older separate lock.
   pkg.overrides = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).overrides;
+  if (pkg.dependencies?.[RESOURCE_ADAPTER_NAME]) {
+    if (pkg.overrides?.['@genkit-ai/google-cloud']?.['@opentelemetry/resources'] !==
+        `file:../../../functions/${RESOURCE_ADAPTER}`) throw Error('INVALID_RESOURCE_ADAPTER_OVERRIDE');
+    pkg.overrides['@genkit-ai/google-cloud']['@opentelemetry/resources'] = `file:../../../${RESOURCE_ADAPTER}`;
+    // Copy explicit source files, never an arbitrary vendor directory or node_modules symlink.
+    for (const directory of ['vendor', RESOURCE_ADAPTER]) {
+      const stat = lstatSync(join(root, 'functions', directory));
+      if (!stat.isDirectory() || stat.isSymbolicLink()) throw Error('UNSAFE_RESOURCE_ADAPTER_SOURCE');
+    }
+    for (const file of ['package.json', 'index.cjs']) {
+      const target = join(stage, 'deployment/functions', RESOURCE_ADAPTER, file);
+      mkdirSync(resolve(target, '..'), { recursive: true });
+      const source = join(root, 'functions', RESOURCE_ADAPTER, file);
+      if (!lstatSync(source).isFile() || lstatSync(source).isSymbolicLink()) throw Error('UNSAFE_RESOURCE_ADAPTER_SOURCE');
+      cpSync(source, target);
+    }
+  }
   writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + '\n');
   const lockPath = join(stage, 'deployment/functions/package-lock.json');
   const seed = deploymentLockSeed(JSON.parse(readFileSync(join(root, 'package-lock.json'), 'utf8')), pkg);
