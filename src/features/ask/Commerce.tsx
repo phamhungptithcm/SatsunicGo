@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { linkAnalyticsOrder } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import {
@@ -134,7 +135,7 @@ type EditorReadiness = {
   recipientVersion?: number;
 };
 export function useAskCommerce(
-  onRestore: (c: AskConversation) => void,
+  onRestore: (c: AskConversation, reason?: "hydrate") => void,
   enabled = true,
 ) {
   const [user, setUser] = useState<User | null>(null);
@@ -304,7 +305,10 @@ export function useAskCommerce(
               auth?.currentUser?.uid !== uid
             )
               return;
-            const id = result.conversationId ?? crypto.randomUUID();
+            const { conversationId: id } = z
+              .object({ conversationId: z.string().uuid() })
+              .strict()
+              .parse(result);
             currentCid.current = id;
             contextFence.current.reset(uid, id);
             setConversationId(id);
@@ -367,22 +371,18 @@ export function useAskCommerce(
         if (!hydrated.current && snap.metadata.fromCache) return;
         const raw = snap.data();
         const parsed = askConversationSchema.safeParse(raw);
-        if (
-          raw !== undefined &&
-          (!parsed.success || parsed.data.ownerId !== user.uid)
-        ) {
+        if (!parsed.success || parsed.data.ownerId !== user.uid) {
+          const initialRestore = !hydrated.current;
           hydrated.current = false;
           setRestorationReady(false);
           setConversation(null);
           verifiedConversationVersion.current = null;
           setOrder(null);
           setDraft({});
-          restore.current({
-            ownerId: user.uid,
-            version: 0,
-            updatedAt: 0,
-            turns: [],
-          });
+          restore.current(
+            { ownerId: user.uid, version: 0, updatedAt: 0, turns: [] },
+            initialRestore ? "hydrate" : undefined,
+          );
           setError("ASK_CONVERSATION_UNVERIFIED");
           return;
         }
@@ -402,7 +402,7 @@ export function useAskCommerce(
           const signature = draftSignature(c.draft);
           if (!hydrated.current) {
             setDraft(c.draft ?? draftRef.current);
-            restore.current(c);
+            restore.current(c, "hydrate");
           } else if (signature !== draftBase.current.signature) {
             const localDirty =
               editorReadiness.current.state.manualDirty ||
@@ -418,11 +418,12 @@ export function useAskCommerce(
           draftBase.current = { signature, version: c.version };
         }
         hydrated.current = true;
-        setRestorationReady(true);
+        if (!snap.metadata.fromCache) setRestorationReady(true);
       },
       () => {
         if (!valid()) return;
         verifiedConversationVersion.current = null;
+        setRestorationReady(false);
         setError("Chưa tải được hội thoại. Kiểm tra kết nối và thử lại.");
       },
     );

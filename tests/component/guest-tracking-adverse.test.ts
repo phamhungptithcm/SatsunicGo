@@ -11,7 +11,7 @@ const state = vi.hoisted(() => {
     pendingOperation: null,
     draft: {},
     order: null,
-    conversation: null,
+    conversation: null as null | { ownerId: string; turns: unknown[] },
     error: null,
     resolved: vi.fn(),
     resume: vi.fn(),
@@ -26,6 +26,8 @@ const state = vi.hoisted(() => {
     provider: vi.fn(),
     invalidate: vi.fn(),
     prepare: vi.fn(),
+    restore: null as null | ((saved: unknown, reason?: "hydrate") => void),
+    admissionEnabled: undefined as boolean | undefined,
   };
 });
 vi.mock("../../src/shared/firebase", () => ({
@@ -58,7 +60,9 @@ vi.mock("../../src/features/ask/transport", () => ({
   askRateLimited: () => false,
 }));
 vi.mock("../../src/features/ask/Commerce", () => ({
-  useAskCommerce: () => state.commerce,
+  useAskCommerce: (restore: (saved: unknown, reason?: "hydrate") => void, enabled?: boolean) => {
+    state.restore = restore; state.admissionEnabled = enabled; return state.commerce;
+  },
   CommercePanel: () => null,
   askReadinessMessage: () => "",
 }));
@@ -177,7 +181,7 @@ beforeEach(async () => {
   state.listeners.clear();
   state.revisions.clear();
   state.auth.currentUser = null;
-  Object.assign(state.commerce, { user: null, conversationId: null });
+  Object.assign(state.commerce, { user: null, conversationId: null, conversation: null, restorationReady: true });
   localStorage.clear();
   sessionStorage.clear();
   host = document.createElement("div");
@@ -652,4 +656,49 @@ it("N20 refresh settling in the new-question event cannot rewrite historical pro
   expect(cards[0].querySelector("h2")?.textContent).toBe("Đã nhận đơn");
   expect(cards[1].querySelector("h2")?.textContent).toBe("Đang chuẩn bị");
   privacy();
+});
+
+it.each(["pending", "denied", "offline", "timeout"])("Ask composer and fallback remain usable while commerce admission is %s", async () => {
+  await signIn("A");
+  state.commerce.conversationId = null;
+  state.commerce.restorationReady = false;
+  state.call.mockResolvedValueOnce(dto());
+  await submit(A);
+  expect(input().disabled).toBe(false);
+  expect(host.querySelector('[aria-current="step"]')).not.toBeNull();
+  expect(host.querySelector('[aria-label="Thêm ảnh sản phẩm"]')).toBeNull();
+  expect(text()).toContain("Gửi yêu cầu mua hộ");
+  expect(state.admissionEnabled).toBeUndefined();
+  privacy();
+});
+it("only hydrated current-owner admission exposes purchase controls and uses the same answer fallback state", async () => {
+  await signIn("A");
+  state.commerce.conversation = { ownerId: "A", turns: [] };
+  state.call.mockResolvedValueOnce(dto());
+  await submit(A);
+  expect(host.querySelector('[aria-label="Thêm ảnh sản phẩm"]')).not.toBeNull();
+  expect(text()).not.toContain("Gửi yêu cầu mua hộ");
+  privacy();
+});
+it("foreign conversation cannot expose purchase controls", async () => {
+  await signIn("A"); state.commerce.conversation = { ownerId: "B", turns: [] };
+  state.call.mockResolvedValueOnce(dto()); await submit(A);
+  expect(host.querySelector('[aria-label="Thêm ảnh sản phẩm"]')).toBeNull();
+  expect(text()).toContain("Gửi yêu cầu mua hộ"); privacy();
+});
+it.each(["valid", "invalid initial snapshot"])("background admission %s cannot erase or strand a plain Ask turn already in flight", async (kind) => {
+  await signIn("A"); state.commerce.conversationId = null; state.commerce.restorationReady = false;
+  const pending = deferred(); state.call.mockReturnValueOnce(pending.promise);
+  await submit(A);
+  await act(async () => {
+    state.commerce.conversationId = "new-conversation";
+    state.commerce.conversation = kind === "valid" ? { ownerId: "A", turns: [] } : null;
+    state.commerce.restorationReady = kind === "valid";
+    state.restore!({ ownerId: "A", version: 0, updatedAt: 1, turns: [] }, "hydrate");
+    root.render(createElement(MemoryRouter, null, createElement(Ask)));
+  });
+  await act(async () => pending.resolve(dto()));
+  expect(host.querySelector('[aria-current="step"]')).not.toBeNull();
+  expect(text()).not.toContain("Em đang kiểm tra thông tin SatsunicGo");
+  expect(input().disabled).toBe(false); privacy();
 });
