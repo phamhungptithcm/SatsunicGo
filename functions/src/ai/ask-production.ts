@@ -383,16 +383,21 @@ export async function generateCustomerAi(
       usageMetadata: z.object({
         promptTokenCount: z.number().int().nonnegative().max(10000),
         candidatesTokenCount: z.number().int().nonnegative().max(800),
-        thoughtsTokenCount: z.number().int().nonnegative().max(0).optional(),
+        thoughtsTokenCount: z.number().int().nonnegative().max(800).optional(),
+        toolUsePromptTokenCount: z.literal(0).optional(),
         totalTokenCount: z.number().int().nonnegative().max(10800),
         cachedContentTokenCount: z.number().int().nonnegative().optional(),
       }),
     })
     .parse(await boundedJson(response));
+  const usage = payload.usageMetadata;
+  // Thinking counters share the existing output envelope; they are not free
+  // tokens and must never expand the reservation's reviewed maximum.
+  const outputTokens =
+    usage.candidatesTokenCount + (usage.thoughtsTokenCount ?? 0);
   if (
-    payload.usageMetadata.totalTokenCount !==
-    payload.usageMetadata.promptTokenCount +
-      payload.usageMetadata.candidatesTokenCount
+    outputTokens > customerAiLimits.maxOutputTokens ||
+    usage.totalTokenCount !== usage.promptTokenCount + outputTokens
   )
     throw unavailable();
   await attempt.update({

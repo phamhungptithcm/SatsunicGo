@@ -333,3 +333,140 @@ test("failed token count prevents reservation and paid dispatch", async () => {
   expect(state.reserved).toBe(0);
   expect(fetch).toHaveBeenCalledTimes(1);
 });
+
+test.each([
+  [
+    "no-thoughts",
+    { promptTokenCount: 100, candidatesTokenCount: 40, totalTokenCount: 140 },
+    true,
+  ],
+  [
+    "thoughts",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 100,
+      totalTokenCount: 240,
+    },
+    true,
+  ],
+  [
+    "boundary",
+    {
+      promptTokenCount: 10000,
+      candidatesTokenCount: 799,
+      thoughtsTokenCount: 1,
+      toolUsePromptTokenCount: 0,
+      totalTokenCount: 10800,
+    },
+    true,
+  ],
+  [
+    "combined-overflow",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 800,
+      thoughtsTokenCount: 1,
+      totalTokenCount: 901,
+    },
+    false,
+  ],
+  [
+    "thought-overflow",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 0,
+      thoughtsTokenCount: 801,
+      totalTokenCount: 901,
+    },
+    false,
+  ],
+  [
+    "unreconciled",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 1,
+      totalTokenCount: 140,
+    },
+    false,
+  ],
+  [
+    "tools",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      toolUsePromptTokenCount: 1,
+      totalTokenCount: 141,
+    },
+    false,
+  ],
+  [
+    "negative",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: -1,
+      totalTokenCount: 139,
+    },
+    false,
+  ],
+  [
+    "fractional",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 0.5,
+      totalTokenCount: 140.5,
+    },
+    false,
+  ],
+  [
+    "missing",
+    { candidatesTokenCount: 40, thoughtsTokenCount: 1, totalTokenCount: 141 },
+    false,
+  ],
+])("pilot usage accounting: %s", async (_name, usageMetadata, accepted) => {
+  let calls = 0;
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string, options: RequestInit) => {
+      if (url.endsWith(":countTokens"))
+        return { ok: true, json: async () => ({ totalTokens: 100 }) };
+      calls++;
+      const body = JSON.parse(String(options.body));
+      expect(body.generationConfig.thinkingConfig.thinkingBudget).toBe(0);
+      expect(body.generationConfig.maxOutputTokens).toBe(800);
+      return {
+        ok: true,
+        json: async () => ({
+          candidates: [
+            { finishReason: "STOP", content: { parts: [{ text: "{}" }] } },
+          ],
+          usageMetadata,
+        }),
+      };
+    }),
+  );
+  const result = generatePilot(
+    "owner",
+    pilotRequest("instructions", "hello"),
+    new AbortController().signal,
+  );
+  if (accepted) {
+    await expect(result).resolves.toEqual({});
+    expect(state.events).toContainEqual({
+      state: "answered",
+      usage: usageMetadata,
+    });
+  } else {
+    await expect(result).rejects.toThrow();
+    expect(
+      state.events.some(
+        (event) => (event as { state?: string }).state === "answered",
+      ),
+    ).toBe(false);
+  }
+  expect(state.reserved).toBe(1000);
+  expect(calls).toBe(1);
+});

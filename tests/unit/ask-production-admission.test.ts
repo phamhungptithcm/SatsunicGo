@@ -611,3 +611,127 @@ test.each(["valid", "invented-citation", "malformed", "changed-context"])(
     expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
   },
 );
+
+// Live Vertex may report thought counters even with thinkingBudget=0. Accept
+// only reconciled usage inside the original combined 800-token envelope.
+test.each([
+  [
+    "thoughts",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 100,
+      totalTokenCount: 240,
+    },
+    true,
+  ],
+  [
+    "boundary",
+    {
+      promptTokenCount: 10000,
+      candidatesTokenCount: 799,
+      thoughtsTokenCount: 1,
+      toolUsePromptTokenCount: 0,
+      totalTokenCount: 10800,
+    },
+    true,
+  ],
+  [
+    "combined-overflow",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 800,
+      thoughtsTokenCount: 1,
+      totalTokenCount: 901,
+    },
+    false,
+  ],
+  [
+    "thought-overflow",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 0,
+      thoughtsTokenCount: 801,
+      totalTokenCount: 901,
+    },
+    false,
+  ],
+  [
+    "unreconciled",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 1,
+      totalTokenCount: 140,
+    },
+    false,
+  ],
+  [
+    "tools",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      toolUsePromptTokenCount: 1,
+      totalTokenCount: 141,
+    },
+    false,
+  ],
+  [
+    "negative",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: -1,
+      totalTokenCount: 139,
+    },
+    false,
+  ],
+  [
+    "fractional",
+    {
+      promptTokenCount: 100,
+      candidatesTokenCount: 40,
+      thoughtsTokenCount: 0.5,
+      totalTokenCount: 140.5,
+    },
+    false,
+  ],
+  [
+    "missing",
+    { candidatesTokenCount: 40, thoughtsTokenCount: 1, totalTokenCount: 141 },
+    false,
+  ],
+])("customer usage accounting: %s", async (_name, counters, accepted) => {
+  state.docs.set(policyPath, policy("owner-canary"));
+  state.docs.set("staffAccess/owner", { active: true, roles: ["OWNER"] });
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string, options: RequestInit) => {
+      if (url.endsWith(":countTokens"))
+        return Response.json({ totalTokens: 100 });
+      paid.push(String(options.body));
+      const body = JSON.parse(String(options.body));
+      expect(body.generationConfig.thinkingConfig.thinkingBudget).toBe(0);
+      expect(body.generationConfig.maxOutputTokens).toBe(800);
+      return Response.json({ ...answer, usageMetadata: counters });
+    }),
+  );
+  if (accepted) {
+    const result = await generate("owner");
+    await completeCustomerAiAnswer(
+      "owner",
+      result.operation,
+      result.policyVersion,
+    );
+    expect(state.docs.get(budgetPath)?.canaryAt).toBe(Date.now());
+    expect(
+      state.docs.get(`${budgetPath}/attempts/${result.operation}`)?.usage,
+    ).toEqual(counters);
+  } else {
+    await expect(generate("owner")).rejects.toThrow();
+    expect(state.docs.get(budgetPath)?.canaryAt).toBeUndefined();
+  }
+  expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
+  await expect(generate("owner")).rejects.toThrow();
+  expect(paid).toHaveLength(1);
+});
