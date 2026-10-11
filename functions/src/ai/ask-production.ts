@@ -181,6 +181,56 @@ export function customerAiRequest(
       candidateCount: 1,
       maxOutputTokens: customerAiLimits.maxOutputTokens,
       responseMimeType: "application/json",
+      // Constrain generation to the existing answer contract. Server-side Zod,
+      // provenance and action/draft checks remain authoritative after generation.
+      responseSchema: {
+        type: "OBJECT",
+        required: [
+          "language",
+          "title",
+          "paragraphs",
+          "bullets",
+          "sourceIds",
+          "action",
+        ],
+        properties: {
+          language: { type: "STRING", enum: ["vi", "en"] },
+          title: { type: "STRING" },
+          paragraphs: {
+            type: "ARRAY",
+            items: { type: "STRING" },
+            minItems: 1,
+            maxItems: 6,
+          },
+          bullets: { type: "ARRAY", items: { type: "STRING" }, maxItems: 8 },
+          sourceIds: { type: "ARRAY", items: { type: "STRING" }, maxItems: 8 },
+          action: { type: "STRING", enum: ["request", "workflow"] },
+          followUp: { type: "STRING" },
+          draft: {
+            type: "OBJECT",
+            required: ["market", "items", "notes"],
+            properties: {
+              market: { type: "STRING", enum: ["US", "JP", "KR"] },
+              items: {
+                type: "ARRAY",
+                minItems: 1,
+                maxItems: 30,
+                items: {
+                  type: "OBJECT",
+                  required: ["name", "quantity", "variant"],
+                  properties: {
+                    name: { type: "STRING" },
+                    quantity: { type: "INTEGER", minimum: 1, maximum: 100 },
+                    variant: { type: "STRING" },
+                    url: { type: "STRING" },
+                  },
+                },
+              },
+              notes: { type: "STRING" },
+            },
+          },
+        },
+      },
       thinkingConfig: { thinkingBudget: 0 },
     },
   });

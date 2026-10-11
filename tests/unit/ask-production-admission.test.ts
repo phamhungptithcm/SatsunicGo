@@ -553,6 +553,9 @@ test.each([
   "changed-context",
   "invalid-json",
   "action-claim",
+  "null-paragraphs",
+  "unknown-field",
+  "null-draft",
 ])(
   "real customer answer path validates %s before canary proof",
   async (kind) => {
@@ -589,6 +592,17 @@ test.each([
           sourceIds: kind === "invented-citation" ? ["post:unapproved"] : [],
           action: "workflow",
         };
+        const candidate =
+          kind === "malformed"
+            ? {}
+            : {
+                ...value,
+                ...(kind === "null-paragraphs" ? { paragraphs: null } : {}),
+                ...(kind === "unknown-field"
+                  ? { privateSensitiveFixture: "private-sensitive-fixture" }
+                  : {}),
+                ...(kind === "null-draft" ? { draft: null } : {}),
+              };
         return Response.json({
           ...answer,
           candidates: [
@@ -600,7 +614,7 @@ test.each([
                     text:
                       kind === "invalid-json"
                         ? "private-sensitive-fixture{"
-                        : JSON.stringify(kind === "malformed" ? {} : value),
+                        : JSON.stringify(candidate),
                   },
                 ],
               },
@@ -628,6 +642,9 @@ test.each([
         "changed-context": "context-binding",
         "invalid-json": "answer-json",
         "action-claim": "action-claim",
+        "null-paragraphs": "answer-schema",
+        "unknown-field": "answer-schema",
+        "null-draft": "answer-schema",
       };
       expect(warn).toHaveBeenCalledWith("ask-answer-rejected", {
         reason: reasons[kind as keyof typeof reasons],
@@ -768,4 +785,37 @@ test.each([
   expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
   await expect(generate("owner")).rejects.toThrow();
   expect(paid).toHaveLength(1);
+});
+
+test("customer request constrains answer structure without draft or action authority", () => {
+  const body = JSON.parse(customerAiRequest("instruction", "question"));
+  const config = body.generationConfig,
+    schema = config.responseSchema;
+  expect(config.responseMimeType).toBe("application/json");
+  expect(config.maxOutputTokens).toBe(800);
+  expect(schema.required).toEqual([
+    "language",
+    "title",
+    "paragraphs",
+    "bullets",
+    "sourceIds",
+    "action",
+  ]);
+  expect(schema.properties.paragraphs).toEqual({
+    type: "ARRAY",
+    items: { type: "STRING" },
+    minItems: 1,
+    maxItems: 6,
+  });
+  expect(schema.properties.sourceIds.maxItems).toBe(8);
+  expect(schema.properties.action.enum).toEqual(["request", "workflow"]);
+  expect(schema.required).not.toContain("draft");
+  expect(schema.properties.draft.nullable).toBeUndefined();
+  expect(
+    schema.properties.draft.properties.items.items.properties.quantity,
+  ).toEqual({ type: "INTEGER", minimum: 1, maximum: 100 });
+  expect(schema.properties).not.toHaveProperty("shoppingDraft");
+  expect(JSON.stringify(schema)).not.toMatch(
+    /payment|ownerId|orderId|submit|quote|unitSourceMinor|budget/,
+  );
 });
