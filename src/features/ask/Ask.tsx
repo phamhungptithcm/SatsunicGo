@@ -159,8 +159,6 @@ type Turn = {
     direction: "VN_US" | "US_VN";
   };
 };
-const askCommerceEnabled =
-  import.meta.env.DEV || import.meta.env.VITE_ASK_COMMERCE_ENABLED === "true";
 const subscribeHydration = () => () => {};
 
 function AskIcon({ kind }: { kind: "send" | "close" | "stop" | "chat" }) {
@@ -203,9 +201,11 @@ function AskIcon({ kind }: { kind: "send" | "close" | "stop" | "chat" }) {
 const PublishedAnswer = memo(function PublishedAnswer({
   answer,
   readOnly = false,
+  commerceEnabled,
 }: {
   answer: AskAnswer;
   readOnly?: boolean;
+  commerceEnabled: boolean;
 }) {
   const vi = answer.language === "vi";
   const navigate = useNavigate();
@@ -255,7 +255,7 @@ const PublishedAnswer = memo(function PublishedAnswer({
           })}
         </div>
       )}
-      {!askCommerceEnabled && answer.draft && (
+      {!commerceEnabled && answer.draft && (
         <button
           type="button"
           className={styles.nextAction}
@@ -268,7 +268,7 @@ const PublishedAnswer = memo(function PublishedAnswer({
         </button>
       )}
       {draftError && <p role="alert">{draftError}</p>}
-      {!askCommerceEnabled && (
+      {!commerceEnabled && (
         <Link className={styles.nextAction} href={action.href}>
           {vi ? "Gửi yêu cầu mua hộ" : "Request an item"}{" "}
           <span aria-hidden="true">↗</span>
@@ -287,6 +287,7 @@ const ConversationContent = memo(function ConversationContent({
   onRetry,
   commerce,
   onCatalogResults,
+  commerceEnabled,
 }: {
   turns: Turn[];
   phase: "retrieving" | "selecting" | "committing";
@@ -295,6 +296,7 @@ const ConversationContent = memo(function ConversationContent({
   visible: boolean;
   onRetry: (question: string, analyticsRetry?: string) => Promise<unknown>;
   commerce: Commerce;
+  commerceEnabled: boolean;
   onCatalogResults: (turnId: number, result: CatalogSearchResult) => void;
 }) {
   const vi = language === "vi";
@@ -431,7 +433,11 @@ const ConversationContent = memo(function ConversationContent({
             </p>
           ) : turn.answer ? (
             <>
-              <PublishedAnswer answer={turn.answer} readOnly={!visible} />
+              <PublishedAnswer
+                answer={turn.answer}
+                readOnly={!visible}
+                commerceEnabled={commerceEnabled}
+              />
               {turn.shipping && (
                 <ShippingQuote
                   snapshot={turn.shipping.snapshot}
@@ -592,9 +598,14 @@ export function Ask({
   const closing = useRef(false);
   const outsidePointer = useRef(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const commerceEnabled =
-    import.meta.env.DEV || import.meta.env.VITE_ASK_COMMERCE_ENABLED === "true";
-  const baseCommerce = useAskCommerce((saved) => {
+  const localTurnSequence = useRef(0);
+  const restoreStartId = useRef(0);
+  const baseCommerce = useAskCommerce((saved, reason) => {
+    // Admission may finish after a plain Ask turn starts. Keep that turn intact.
+    if (
+      reason === "hydrate" &&
+      localTurnSequence.current !== restoreStartId.current
+    ) return;
     actionsRef.current?.invalidate();
     catalogContext.current = null;
     setCatalogChoice(null);
@@ -620,7 +631,16 @@ export function Ask({
       }));
       setTurns(restored);
     } else setTurns([]);
-  }, commerceEnabled);
+    restoreStartId.current = localTurnSequence.current;
+  });
+  // UI availability follows authenticated backend admission, never a build flag.
+  const commerceEnabled = !!(
+    baseCommerce.user &&
+    baseCommerce.user.uid === auth?.currentUser?.uid &&
+    baseCommerce.conversationId &&
+    baseCommerce.restorationReady &&
+    baseCommerce.conversation?.ownerId === baseCommerce.user.uid
+  );
   const actions = useActionPreview({
     commerce: baseCommerce,
     history: false,
@@ -633,7 +653,8 @@ export function Ask({
   actionsRef.current = actions;
   const commerce = actions.commerce;
   const latestConversation = useRef(commerce.conversationId);
-  latestConversation.current = commerce.conversationId;
+  // A background admission must not invalidate an already running plain Ask turn.
+  if (!busy) latestConversation.current = commerce.conversationId;
   useEffect(() => {
     catalogContext.current = null;
     setCatalogChoice(null);
@@ -1054,6 +1075,7 @@ export function Ask({
         hideTimer.current
       )
         return;
+      ++localTurnSequence.current;
       const analyticsTurn = analyticsRetry ?? crypto.randomUUID();
       locked.current = true;
       operationMode.current = "read";
@@ -2634,6 +2656,7 @@ export function Ask({
               visible={open && !exiting && !accountPending}
               onRetry={sendMessage}
               commerce={commerce}
+              commerceEnabled={commerceEnabled}
               onCatalogResults={rememberCatalog}
             />
             {turns.at(-1)?.trackingRefreshFailed && <p role="status">{vi ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản." : "Tracking is unavailable. Re-enter the code or check your account."}</p>}
