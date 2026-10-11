@@ -311,15 +311,41 @@ describe("private ambiguity classification", () => {
       "SEPAY_MULTIPLE_APPROVED_PAYMENTS",
     );
   });
-  it.each(["SEPAY_NO_APPROVED_PAYMENT", "SEPAY_MULTIPLE_APPROVED_PAYMENTS"])(
-    "allows only the fixed diagnostic %s",
-    (code) => {
-      expect(sepayFailureDiagnostic(new Error(code))).toEqual({ code });
-      expect(sepayFailureDiagnostic(new Error(code + ": private-value"))).toEqual({
+  it("refuses captured order with an empty transaction list", () => {
+    const r = raw();
+    r.data.transactions = [];
+    expect(() => verifySePayReadback(r, intent, undefined, now)).toThrow(
+      "SEPAY_EMPTY_TRANSACTIONS",
+    );
+  });
+  it("refuses an approved non-payment transaction", () => {
+    const r = raw();
+    r.data.transactions[0].transaction_type = "REFUND";
+    expect(() => verifySePayReadback(r, intent, undefined, now)).toThrow(
+      "SEPAY_NO_PAYMENT_TRANSACTION",
+    );
+  });
+  it("refuses notice that does not identify an approved readback payment", () => {
+    const r = raw();
+    r.data.transactions[0].id = "OTHER_APPROVED";
+    expect(() => verifySePayReadback(r, intent, ipn(), now)).toThrow(
+      "SEPAY_NOTICE_TRANSACTION_NOT_FOUND",
+    );
+  });
+  it.each([
+    "SEPAY_NO_APPROVED_PAYMENT",
+    "SEPAY_MULTIPLE_APPROVED_PAYMENTS",
+    "SEPAY_EMPTY_TRANSACTIONS",
+    "SEPAY_NO_PAYMENT_TRANSACTION",
+    "SEPAY_NOTICE_TRANSACTION_NOT_FOUND",
+  ])("allows only the fixed diagnostic %s", (code) => {
+    expect(sepayFailureDiagnostic(new Error(code))).toEqual({ code });
+    expect(sepayFailureDiagnostic(new Error(code + ": private-value"))).toEqual(
+      {
         code: "SEPAY_INTERNAL_FAILURE",
-      });
-    },
-  );
+      },
+    );
+  });
 });
 describe("backend-only signing and form admission", () => {
   const adapter = createSandboxAdapter(
