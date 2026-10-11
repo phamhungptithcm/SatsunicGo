@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { digest, verify } from './artifact.mjs';
 import { readRetentionReadiness, retentionRequest, retentionReadinessDigest } from './feedback-retention.mjs';
 
-const projection = 'json(name,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,serviceConfig.uri,serviceConfig.serviceAccountEmail,labels,eventTrigger.retryPolicy)';
+const projection = 'json(name,url,state,buildConfig.source,serviceConfig.revision,serviceConfig.environmentVariables,serviceConfig.uri,serviceConfig.serviceAccountEmail,labels,eventTrigger.retryPolicy)';
 function inventory() {
   return JSON.parse(execFileSync('gcloud', ['functions', 'list', '--v2', '--project=satsunicgo', '--regions=asia-southeast1', `--format=${projection}`], {
     encoding: 'utf8', timeout: 120_000,

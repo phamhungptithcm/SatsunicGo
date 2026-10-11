@@ -104,13 +104,18 @@ export async function ensureRetentionIndexes(metadata, request, { create = false
 }
 export function verifyRetentionScheduler(job, fn) {
   const service=fn?.serviceConfig,oidc=job?.httpTarget?.oidcToken;
+  // Firebase Scheduler may use the provider's Function URL rather than its Run URI.
+  // Admit only this exact Function alias when the same provider row attests it.
+  const functionUrl='https://asia-southeast1-satsunicgo.cloudfunctions.net/askFeedbackCleanup';
+  const target=job?.httpTarget?.uri;
+  const matchingTarget=target===service?.uri || fn?.url===functionUrl && target===functionUrl;
   // ProtoJSON omits default zero scalar values; absence means effective zero.
   const retry=job?.retryConfig;
   const retryCount=retry?.retryCount===undefined ? 0 : retry.retryCount;
   const maxRetryDuration=retry?.maxRetryDuration===undefined ? '0s' : retry.maxRetryDuration;
   const zeroRetry=(retry===undefined || retry!==null && typeof retry==='object' && !Array.isArray(retry)) && retryCount===0 && typeof maxRetryDuration==='string' && /^0(?:\.0{1,9})?s$/.test(maxRetryDuration);
   const validServiceAccount = /^(278913913091-compute@developer\.gserviceaccount\.com|[a-z][a-z0-9-]*@satsunicgo\.iam\.gserviceaccount\.com)$/;
-  if (fn?.name!=='projects/satsunicgo/locations/asia-southeast1/functions/askFeedbackCleanup' || fn.state!=='ACTIVE' || !service?.revision || typeof service.uri!=='string' || !/^https:\/\/(askfeedbackcleanup-[a-z0-9-]+\.a\.run\.app|asia-southeast1-satsunicgo\.cloudfunctions\.net\/askFeedbackCleanup)$/.test(service.uri) || !validServiceAccount.test(service.serviceAccountEmail??'') || job?.name!==RETENTION_SCHEDULER || job.state!=='ENABLED' || job.schedule!=='every 60 minutes' || job.timeZone!=='UTC' || job.httpTarget?.httpMethod!=='POST' || job.httpTarget.uri!==service.uri || oidc?.serviceAccountEmail!==service.serviceAccountEmail || oidc.audience!==undefined && oidc.audience!==service.uri || !zeroRetry || job.pubsubTarget!==undefined || job.appEngineHttpTarget!==undefined || job.httpTarget.oauthToken!==undefined) throw Error('RETENTION_SCHEDULER_READBACK_MISMATCH');
+  if (fn?.name!=='projects/satsunicgo/locations/asia-southeast1/functions/askFeedbackCleanup' || fn.state!=='ACTIVE' || !service?.revision || typeof service.uri!=='string' || !/^https:\/\/(askfeedbackcleanup-[a-z0-9-]+\.a\.run\.app|asia-southeast1-satsunicgo\.cloudfunctions\.net\/askFeedbackCleanup)$/.test(service.uri) || !validServiceAccount.test(service.serviceAccountEmail??'') || job?.name!==RETENTION_SCHEDULER || job.state!=='ENABLED' || job.schedule!=='every 60 minutes' || job.timeZone!=='UTC' || job.httpTarget?.httpMethod!=='POST' || !matchingTarget || oidc?.serviceAccountEmail!==service.serviceAccountEmail || oidc.audience!==undefined && oidc.audience!==target || !zeroRetry || job.pubsubTarget!==undefined || job.appEngineHttpTarget!==undefined || job.httpTarget.oauthToken!==undefined) throw Error('RETENTION_SCHEDULER_READBACK_MISMATCH');
   return {name:job.name,state:job.state,uri:service.uri,revision:service.revision};
 }
 /** Match the runtime canonical field order; Firestore may reorder map keys. */
