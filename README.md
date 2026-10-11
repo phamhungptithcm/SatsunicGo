@@ -1,5 +1,11 @@
 # SatsunicGo
 
+## Watch Ask Anything in action
+
+https://github.com/user-attachments/assets/2e921623-bd37-4153-a48f-ef076b54556b
+
+*One minute in the real app: find a product, prepare a purchase draft, ask about fees, and check an order. Local demo with sample data; no purchase or payment completed.*
+
 **Overseas shopping, from the first question to order tracking.**
 
 SatsunicGo helps customers in Vietnam buy products from the US, Japan, and South Korea. Browse listed products or request something new. **Ask Anything** connects product discovery, purchase details, service information, and order tracking in one conversation.
