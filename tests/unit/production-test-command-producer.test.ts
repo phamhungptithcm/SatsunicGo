@@ -105,3 +105,86 @@ it("a malformed v1 runtime cannot fall back to live creation", async () => {
   await expect(exports.command!.run(request())).rejects.toMatchObject({ code: "failed-precondition", details: { reason: "PRODUCTION_TEST_NOT_ADMITTED" } });
   expect(writes).toEqual([]);
 });
+
+it.each([
+  "disabled-commerce",
+  "mode-change",
+  "revoked-policy",
+  "unlisted",
+  "expired",
+  "live-order",
+])(
+  "delegated sandbox mutation rejects %s inside command transaction",
+  async (kind) => {
+    rows.set("settings/productionTest", valid());
+    rows.set("settings/askCommerce", {
+      enabled: true,
+      approved: true,
+      executionMode: "production_test",
+    });
+    rows.set("orders/owned-test-request", {
+      ownerId: "tester",
+      version: 1,
+      stage: "QUOTED",
+      executionMode: "production_test",
+      executionPolicyVersion: 3,
+      testRunId: operationId,
+    });
+    if (kind === "disabled-commerce")
+      rows.set("settings/askCommerce", {
+        enabled: false,
+        approved: true,
+        executionMode: "production_test",
+      });
+    if (kind === "mode-change")
+      rows.set("settings/askCommerce", { enabled: true, approved: true });
+    if (kind === "revoked-policy")
+      rows.set("settings/productionTest", { ...valid(), enabled: false });
+    if (kind === "unlisted")
+      rows.set("settings/productionTest", {
+        ...valid(),
+        testerUids: ["other"],
+      });
+    if (kind === "expired")
+      rows.set("settings/productionTest", { ...valid(), expiresAt: now });
+    if (kind === "live-order")
+      rows.set("orders/owned-test-request", {
+        ownerId: "tester",
+        version: 1,
+        stage: "QUOTED",
+      });
+    // Fence supplied by server wrapper before later policy revocation; command reads current policy atomically.
+    await expect(
+      exports.command!.run({
+        ...request(),
+        [commands.askSandboxFence]: true,
+        data: {
+          ...data,
+          action: "acceptQuote",
+          expectedVersion: 1,
+          payload: {},
+        },
+      }),
+    ).rejects.toThrow();
+    expect(writes).toEqual([]);
+    expect(rows.get("orders/owned-test-request")?.stage).toBe("QUOTED");
+  },
+);
+it("JSON input cannot forge or disable the server-only fence", () => {
+  const encoded = JSON.parse(
+    JSON.stringify({ [commands.askSandboxFence]: true, askSandboxFence: true }),
+  );
+  expect(encoded[commands.askSandboxFence]).toBeUndefined();
+});
+it("delegated sandbox customer mutation succeeds and exact replay survives later revocation without writes", async () => {
+  rows.set("settings/productionTest", valid());
+  rows.set("settings/askCommerce", {enabled:true,approved:true,executionMode:"production_test"});
+  rows.set("orders/owned-test-request", {id:"owned-test-request",ownerId:"tester",version:1,stage:"REQUESTED",purchaseKind:"custom",market:"US",items:[{name:"Test item",quantity:1}],collected:0,refunded:0,executionMode:"production_test",executionPolicyVersion:3,testRunId:operationId});
+  const req = {...request(),[commands.askSandboxFence]:true,data:{...data,action:"cancelRequest",expectedVersion:1,payload:{}}};
+  const result = await exports.command!.run(req);
+  expect(rows.get("orders/owned-test-request")?.stage).toBe("CANCELLED");
+  rows.set("settings/productionTest", {...valid(),enabled:false});
+  writes.length = 0;
+  expect(await exports.command!.run(req)).toEqual(result);
+  expect(writes).toEqual([]);
+});

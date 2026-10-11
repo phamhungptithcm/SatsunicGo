@@ -1,3 +1,4 @@
+import { askSandboxFence } from "../../functions/src/production-test-commands";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -267,4 +268,16 @@ describe("actual legacy catalog callable in the production-test artifact", () =>
     for (const path of h.writes)
       expect(h.rows.get(path)).not.toHaveProperty("executionMode");
   });
+});
+
+it.each(["commerce-disabled", "scope-change", "tester-revoked"])("delegated catalog sandbox rejects %s atomically without writes", async kind => {
+  h.rows.set("settings/askCommerce", {enabled:kind !== "commerce-disabled",approved:true,...(kind === "scope-change" ? {} : {executionMode:"production_test"})});
+  if (kind === "tester-revoked") h.rows.set("settings/productionTest", {...policy(),testerUids:["other"]});
+  const delegated = {...request(), [askSandboxFence]:true};
+  await rejectsWithoutWrites(() => catalogCheckout.run(delegated), {code:"unavailable"});
+});
+it("delegated catalog sandbox retains the admitted happy path", async () => {
+  h.rows.set("settings/askCommerce", {enabled:true,approved:true,executionMode:"production_test"});
+  const delegated = {...request(), [askSandboxFence]:true};
+  await expect(catalogCheckout.run(delegated)).resolves.toMatchObject(expected);
 });

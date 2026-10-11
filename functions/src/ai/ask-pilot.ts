@@ -305,11 +305,20 @@ export async function generatePilot(
       usageMetadata: z.object({
         promptTokenCount: z.number().int().nonnegative().max(10000),
         candidatesTokenCount: z.number().int().nonnegative().max(800),
-        thoughtsTokenCount: z.number().int().nonnegative().max(0).optional(),
+        thoughtsTokenCount: z.number().int().nonnegative().max(800).optional(),
+        toolUsePromptTokenCount: z.literal(0).optional(),
         totalTokenCount: z.number().int().nonnegative().max(10800),
       }),
     })
     .parse(await result.json());
+  const usage = payload.usageMetadata;
+  const outputTokens =
+    usage.candidatesTokenCount + (usage.thoughtsTokenCount ?? 0);
+  if (
+    outputTokens > pilotLimits.maxOutputTokens ||
+    usage.totalTokenCount !== usage.promptTokenCount + outputTokens
+  )
+    throw new HttpsError("unavailable", "Chưa xác minh được giới hạn xử lý.");
   await db.doc(`aiPilotBudget/lifetime/attempts/${operation}`).update({
     state: "answered",
     usage: payload.usageMetadata,

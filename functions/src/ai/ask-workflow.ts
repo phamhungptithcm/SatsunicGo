@@ -1,6 +1,7 @@
 import { catalogCheckout } from "../catalog-checkout";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
-import { getFirestore } from "firebase-admin/firestore";
+import { askSandboxFence } from "../production-test-commands";
+import { getFirestore, type Transaction } from "firebase-admin/firestore";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { requireVerifiedGoogle } from "../auth/guards";
@@ -12,6 +13,7 @@ import {
   type AskConversation,
 } from "../../../packages/domain/ask-workflow";
 import { type Order } from "../../../packages/domain";
+import { purchaseExecutionProvenance } from "../../../packages/domain/purchase-checkout";
 import {
   productionTestEnvironment,
   admitProductionTestPolicy,
@@ -24,20 +26,78 @@ const options = {
   concurrency: 10,
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
 };
-async function requireCommerceEnabled() {
+function assertCommerceEnabled(
+  settings: Record<string, unknown> | undefined,
+  testSettings: unknown,
+  uid: string,
+  db: ReturnType<typeof getFirestore>,
+) {
+  const sandbox = settings?.executionMode === "production_test";
+  if (
+    settings?.enabled !== true ||
+    settings?.approved !== true ||
+    (settings.executionMode !== undefined && !sandbox) ||
+    (sandbox &&
+      (!productionTestEnvironment(db) ||
+        !admitProductionTestPolicy(testSettings, uid)))
+  )
+    throw new HttpsError(
+      "unavailable",
+      "Mua hộ trong chat chưa được kích hoạt. Anh/chị vẫn có thể dùng trang yêu cầu.",
+    );
+  return sandbox;
+}
+function assertCommerceScope(
+  settings: Record<string, unknown> | undefined,
+  testSettings: unknown,
+  uid: string,
+  db: ReturnType<typeof getFirestore>,
+  sandbox: boolean,
+) {
   if (
     process.env.FUNCTIONS_EMULATOR === "true" &&
     process.env.GCLOUD_PROJECT === "demo-satsunicgo"
   )
     return;
-  const settings = (
-    await getFirestore().doc("settings/askCommerce").get()
-  ).data();
-  if (settings?.enabled !== true || settings?.approved !== true)
+  if (assertCommerceEnabled(settings, testSettings, uid, db) !== sandbox)
     throw new HttpsError(
-      "unavailable",
-      "Mua hộ trong chat chưa được kích hoạt. Anh/chị vẫn có thể dùng trang yêu cầu.",
+      "failed-precondition",
+      "Hội thoại đã thay đổi. Mở lại trước khi tiếp tục.",
     );
+}
+async function assertSandboxOrder(
+  tx: Transaction,
+  db: ReturnType<typeof getFirestore>,
+  uid: string,
+  orderId: unknown,
+  sandbox: boolean,
+) {
+  if (!sandbox || !orderId) return;
+  if (typeof orderId !== "string" || !/^[A-Za-z0-9-]{1,80}$/.test(orderId))
+    throw new HttpsError("permission-denied", "Không thể mở hội thoại này.");
+  const order = (await tx.get(db.doc(`orders/${orderId}`))).data();
+  let execution;
+  try {
+    execution = purchaseExecutionProvenance(order);
+  } catch {
+    execution = null;
+  }
+  if (!execution || order?.ownerId !== uid)
+    throw new HttpsError("permission-denied", "Không thể mở hội thoại này.");
+}
+async function requireCommerceEnabled(uid: string) {
+  if (
+    process.env.FUNCTIONS_EMULATOR === "true" &&
+    process.env.GCLOUD_PROJECT === "demo-satsunicgo"
+  )
+    return false;
+  const db = getFirestore();
+  const settings = (await db.doc("settings/askCommerce").get()).data();
+  const testSettings =
+    settings?.executionMode === "production_test"
+      ? (await db.doc("settings/productionTest").get()).data()
+      : undefined;
+  return assertCommerceEnabled(settings, testSettings, uid, db);
 }
 const envelope = z
   .object({
@@ -55,7 +115,7 @@ export const askWorkflow = onCall(
     req,
   ): Promise<{ id?: string; version: number; outcome?: "no_operation" }> => {
     const uid = requireVerifiedGoogle(req.auth);
-    await requireCommerceEnabled();
+    const sandbox = await requireCommerceEnabled(uid);
     const parsed = envelope.safeParse(req.data);
     if (parsed.success && parsed.data.action === "resume") {
       const ref = getFirestore().doc(
@@ -72,11 +132,22 @@ export const askWorkflow = onCall(
         );
       const db = getFirestore();
       const current = await db.runTransaction(async (tx) => {
-        const [user, access, conversation] = await Promise.all([
-          tx.get(db.doc(`users/${uid}`)),
-          tx.get(db.doc(`staffAccess/${uid}`)),
-          tx.get(ref),
-        ]);
+        const [user, access, conversation, commerce, policy] =
+          await Promise.all([
+            tx.get(db.doc(`users/${uid}`)),
+            tx.get(db.doc(`staffAccess/${uid}`)),
+            tx.get(ref),
+            tx.get(db.doc("settings/askCommerce")),
+            tx.get(db.doc("settings/productionTest")),
+          ]);
+        assertCommerceScope(commerce.data(), policy.data(), uid, db, sandbox);
+        await assertSandboxOrder(
+          tx,
+          db,
+          uid,
+          conversation.data()?.orderId,
+          sandbox,
+        );
         if (
           user.data()?.locked ||
           access.data()?.locked ||
@@ -148,14 +219,28 @@ export const askWorkflow = onCall(
     const hash = createHash("sha256").update(JSON.stringify(d)).digest("hex");
     const testRunId = randomUUID();
     const prepared = await db.runTransaction(async (tx) => {
-      const [user, access, conversation, previous, testSettings] =
-        await Promise.all([
-          tx.get(db.doc(`users/${uid}`)),
-          tx.get(db.doc(`staffAccess/${uid}`)),
-          tx.get(ref),
-          tx.get(op),
-          tx.get(db.doc("settings/productionTest")),
-        ]);
+      const [
+        user,
+        access,
+        conversation,
+        previous,
+        testSettings,
+        commerceSettings,
+      ] = await Promise.all([
+        tx.get(db.doc(`users/${uid}`)),
+        tx.get(db.doc(`staffAccess/${uid}`)),
+        tx.get(ref),
+        tx.get(op),
+        tx.get(db.doc("settings/productionTest")),
+        tx.get(db.doc("settings/askCommerce")),
+      ]);
+      assertCommerceScope(
+        commerceSettings.data(),
+        testSettings.data(),
+        uid,
+        db,
+        sandbox,
+      );
       if (user.data()?.locked || access.data()?.locked)
         throw new HttpsError(
           "permission-denied",
@@ -172,6 +257,7 @@ export const askWorkflow = onCall(
           "permission-denied",
           "Không thể mở hội thoại này.",
         );
+      await assertSandboxOrder(tx, db, uid, c.orderId, sandbox);
       if (previous.exists) {
         if (previous.data()?.hash !== hash)
           throw new HttpsError(
@@ -378,14 +464,21 @@ export const askWorkflow = onCall(
     if (prepared.done) return prepared.done;
     let result: { id: string; version: number };
     try {
+      if ((await requireCommerceEnabled(uid)) !== sandbox)
+        throw new HttpsError(
+          "failed-precondition",
+          "Hội thoại đã thay đổi. Mở lại trước khi tiếp tục.",
+        );
       result =
         a.action === "catalogCheckout"
           ? await catalogCheckout.run({
               ...req,
+              ...(sandbox ? { [askSandboxFence]: true as const } : {}),
               data: { ...a.payload, operationId: d.operationId },
             })
           : await command.run({
               ...req,
+              ...(sandbox ? { [askSandboxFence]: true as const } : {}),
               data: {
                 action: a.action,
                 payload: a.payload,
@@ -451,14 +544,17 @@ export const askWorkflow = onCall(
 export const currentAskConversation = onCall(options, async (req) => {
   const uid = requireVerifiedGoogle(req.auth),
     db = getFirestore();
-  await requireCommerceEnabled();
+  const sandbox = await requireCommerceEnabled(uid);
   return db.runTransaction(async (tx) => {
     const pointerRef = db.doc(`askCurrent/${uid}`);
-    const [user, staff, pointer] = await Promise.all([
+    const [user, staff, pointer, commerce, policy] = await Promise.all([
       tx.get(db.doc(`users/${uid}`)),
       tx.get(db.doc(`staffAccess/${uid}`)),
       tx.get(pointerRef),
+      tx.get(db.doc("settings/askCommerce")),
+      tx.get(db.doc("settings/productionTest")),
     ]);
+    assertCommerceScope(commerce.data(), policy.data(), uid, db, sandbox);
     if (user.data()?.locked || staff.data()?.locked)
       throw new HttpsError(
         "permission-denied",
@@ -469,8 +565,16 @@ export const currentAskConversation = onCall(options, async (req) => {
       const conversation = await tx.get(
         db.doc(`askConversations/${uid}-${existing}`),
       );
-      if (conversation.data()?.ownerId === uid)
+      if (conversation.data()?.ownerId === uid) {
+        await assertSandboxOrder(
+          tx,
+          db,
+          uid,
+          conversation.data()?.orderId,
+          sandbox,
+        );
         return { conversationId: existing };
+      }
     }
     const conversationId = randomUUID();
     tx.create(db.doc(`askConversations/${uid}-${conversationId}`), {

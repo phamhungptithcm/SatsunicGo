@@ -1,5 +1,5 @@
 import { purchaseExecutionFields } from "./purchase-test-boundary";
-import { assertProductionTestCommand, productionTestCommandAdmissionRequired } from "./production-test-commands";
+import { assertAskSandboxMutation, assertProductionTestCommand, productionTestCommandAdmissionRequired } from "./production-test-commands";
 import { productionTestEnvironment, admitProductionTestPolicy, productionTestProvenance } from "./production-test-policy";
 import { orderCustomerFields } from "./customer-notification-events";
 import {
@@ -181,6 +181,7 @@ export const command = onCall(config, async (req) => {
     }
     if (d.action === "submitRequest" && previous.exists)
       return previous.data()?.result;
+    await assertAskSandboxMutation(req, tx, db, uid, d.action === "submitRequest" ? undefined : o);
     try {
       if (d.action === "submitRequest") {
         if (snapshot.exists)
