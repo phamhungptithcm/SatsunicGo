@@ -2,6 +2,7 @@ import { test } from "vitest";
 import assert from "node:assert/strict";
 import {
   collectReadFrame,
+  informationalPreparationQuestion,
   canonicalFrameDetectors,
 } from "../../packages/domain/ask-task-frame";
 import { extractOrderTrackingIntent } from "../../packages/domain/order-tracking";
@@ -293,3 +294,45 @@ for (const raw of [
       assert.equal(f.tasks[0].span.raw, raw);
     },
   );
+
+const preparation = (text: string, command = false) =>
+  informationalPreparationQuestion(
+    text,
+    extractOrderTrackingIntent(text).kind !== "none" ||
+      !!shippingQuestionDirection(text),
+    command,
+  );
+for (const text of [
+  "Tôi muốn nhờ mua một cuốn sách chuyên ngành từ Nhật, cần chuẩn bị thông tin gì?",
+  "Tôi cần mua sách, nên cung cấp thông tin gì?",
+  "For a book from Japan, what information do I need to provide?",
+])
+  test("informational preparation avoids mixed lookup: " + text, () =>
+    assert.equal(preparation(text), true),
+  );
+for (const text of [
+  "Tôi muốn mua sách và kể chuyện, cần chuẩn bị thông tin gì?",
+  "Tôi muốn mua sách, florb zarg, cần chuẩn bị thông tin gì?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì và thanh toán luôn?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì và xác nhận?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì; gửi yêu cầu",
+  "Tôi cần chuẩn bị thông tin gì, tìm sách?",
+  "mã đơn order-42, cần chuẩn bị thông tin gì?",
+  "tìm sách, cần chuẩn bị thông tin gì?",
+  "For a book, what information do I need to provide to confirm?",
+  "buy a book, what information do I need to provide?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì để hoàn tiền?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì để xóa?",
+  "Tôi muốn mua sách, cần chuẩn bị thông tin gì để phân quyền?",
+  "tìm kem, giải thích thêm",
+  "tìm kem, lỗi gì?",
+  "Một câu hỏi, có dấu phẩy?",
+])
+  test("mixed/security ambiguity remains unchanged: " + text, () =>
+    assert.equal(preparation(text), false),
+  );
+test("canonical command and explicit lookup always retain mixed guards", () => {
+  const text = "Tôi cần mua sách, nên cung cấp thông tin gì?";
+  assert.equal(preparation(text, true), false);
+  assert.equal(informationalPreparationQuestion(text, true, false), false);
+});

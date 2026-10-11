@@ -9,7 +9,7 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { readFileSync } from "node:fs";
 import { randomUUID, createHash, createHmac } from "node:crypto";
-import { beforeAll, beforeEach, afterAll, it, expect } from "vitest";
+import { beforeAll, beforeEach, afterAll, it, expect, vi } from "vitest";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { profileTransaction } from "../helpers/tracking-transaction-profile";
 let app: ReturnType<typeof initializeApp> | undefined;
@@ -349,24 +349,40 @@ it("partial delivery, held/failed and future projection cannot produce false ETA
 it.each([NaN, "30", -1, 1.5])(
   "corrupted quota %s fails closed",
   async (count) => {
-    const { code } = await issue();
-    await db
-      .doc(`guestTrackingQuotas/read-${Math.floor(Date.now() / 60000)}`)
-      .set({ count, expiresAt: Date.now() + 120000 });
-    await expect(read(code!)).rejects.toMatchObject({ code: "unavailable" });
+    const clock = vi.spyOn(Date, "now").mockReturnValue(Date.now());
+    try {
+      const { code } = await issue();
+      await db
+        .doc(`guestTrackingQuotas/read-${Math.floor(Date.now() / 60000)}`)
+        .set({ count, expiresAt: Date.now() + 120000 });
+      await expect(read(code!)).rejects.toMatchObject({ code: "unavailable" });
+    } finally {
+      clock.mockRestore();
+    }
   },
 );
 it("thirty attempts are charged and thirty-first denied without exposing raw IP", async () => {
-  const { code } = await issue();
-  for (let i = 0; i < 30; i++)
-    await expect(read("SGT-" + "b".repeat(64))).rejects.toMatchObject({
-      code: "not-found",
+  // Keep all31 calls in one logical minute even when the emulator is slow.
+  // Only Date.now is controlled; network/timer progress stays real.
+  const now = Date.now();
+  const clock = vi.spyOn(Date, "now").mockReturnValue(now);
+  try {
+    const { code } = await issue();
+    for (let i = 0; i < 30; i++)
+      await expect(read("SGT-" + "b".repeat(64))).rejects.toMatchObject({
+        code: "not-found",
+      });
+    await expect(read(code!)).rejects.toMatchObject({
+      code: "resource-exhausted",
     });
-  await expect(read(code!)).rejects.toMatchObject({
-    code: "resource-exhausted",
-  });
-  const quotas = await db.collection("guestTrackingQuotas").get();
-  expect(JSON.stringify(quotas.docs.map((d) => d.data()))).not.toContain(ip);
+    const quotas = await db.collection("guestTrackingQuotas").get();
+    expect(JSON.stringify(quotas.docs.map((d) => d.data()))).not.toContain(ip);
+    // A new minute legitimately resets the per-minute budget, without datafix.
+    clock.mockReturnValue(now + 60000);
+    expect((await read(code!)).publicStatus).toBe("shipping");
+  } finally {
+    clock.mockRestore();
+  }
 });
 it("signed-in nonowner receives only public DTO, injected extra fields always reject", async () => {
   const { code } = await issue();

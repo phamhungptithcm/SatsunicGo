@@ -39,6 +39,45 @@ export type TaskFrame<P extends TaskPayloads> = Readonly<{
   concurrency: 2;
   requiresClarification: boolean;
 }>;
+/** Narrow routing exception only. It grants no read, command or model authority. */
+export function informationalPreparationQuestion(
+  text: string,
+  hasExplicitLookup: boolean,
+  hasCanonicalCommand: boolean,
+) {
+  if (
+    text.length > 1000 ||
+    hasExplicitLookup ||
+    hasCanonicalCommand ||
+    /[;\n]|\s+(?:và|va|and)\s+/iu.test(text) ||
+    (text.match(/,/gu)?.length ?? 0) > 1
+  )
+    return false;
+  const folded = text
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/đ/g, "d");
+  if (
+    /\b(?:tim|kiem|find|search|phi|cuoc|shipping|freight|ma don|order id|order code|track)\b/u.test(
+      folded,
+    ) ||
+    /\b(?:thanh toan|tra tien|chuyen tien|chuyen khoan|dat hang|bo vao gio|them vao gio|add to cart|gui yeu cau|chap nhan|duyet|xac nhan|huy|hoan tien|xoa|phan quyen|payment|pay|checkout|submit|accept|approve|confirm|cancel|refund|delete|grant)\b/u.test(
+      folded,
+    ) ||
+    /^\s*(?:mua|buy|purchase|order)\b/u.test(folded)
+  )
+    return false;
+  return (
+    /\b(?:can|nen|phai) (?:chuan bi|cung cap).*(?:thong tin|giay to).*\b(?:gi|nao)\s*\??$/u.test(
+      folded,
+    ) ||
+    /\b(?:what|which) (?:information|details|documents)\b.*\b(?:need|prepare|provide)\b.*\?$/u.test(
+      folded,
+    )
+  );
+}
+
 const MAX_INPUT = 1000,
   MAX_TASKS = 4;
 export function collectReadFrame<P extends TaskPayloads>(
