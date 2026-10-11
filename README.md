@@ -183,3 +183,21 @@ For a connected build, use your authorised browser configuration with `VITE_USE_
 The frontend build produces `dist/` and regenerates the public asset manifest used by Functions. These commands do not deploy anything.
 
 `npm run test:rules`, `npm run test:http`, and `npm run test:restore` start isolated test emulators on the legacy ports in `firebase.json`. Run them in a coordinated test environment with those ports free. They can create and clean up fixture data; they should not target emulators someone is using for a demo.
+
+
+---
+
+## Ask Anything walkthrough
+
+Ask Anything brings product search, purchase preparation, fee information, and order lookup into the same conversation.
+
+| What you need | What Ask can help with |
+| --- | --- |
+| Find a listed product | Search the catalog, select a product and update its variant or quantity. |
+| Buy something outside the catalog | When external discovery is enabled, choose a reference source and prepare a purchase draft for review. |
+| Check shipping fees | Open the shipping calculator in chat and enter weight and category. |
+| Follow an order | Read the recorded status of an order you can access. |
+
+Prices are checked again when items enter the cart. A purchase draft still needs review and missing details before submission. External references do not confirm price, stock, or authenticity. AI/provider availability depends on the environment's approved configuration.
+
+A real app recording is being prepared with synthetic local demo data. The complete video will be added after every shown flow has been verified.
