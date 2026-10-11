@@ -41,7 +41,7 @@ export function assertRetentionWorkflow(env, manifest, account) {
 export function retentionRequest(token, read = fetch) {
   if (!token || typeof token !== 'string') throw Error('RETENTION_IDENTITY_UNAVAILABLE');
   return async (method, path, body) => {
-    const indexPath = /^projects\/satsunicgo\/databases\/\(default\)\/collectionGroups\/(askFeedback|askFeedbackReviewOperations|askFeedbackQuota)\/indexes(?:\?pageSize=100(?:&pageToken=[^&]+)?)?$/;
+    const indexPath = /^projects\/satsunicgo\/databases\/\(default\)\/collectionGroups\/(askFeedback|askFeedbackReviewOperations|askFeedbackQuota)\/indexes(?:\?pageSize=0(?:&pageToken=[^&]+)?)?$/;
     const schedulerPath = path === RETENTION_SCHEDULER;
     if (!(method === 'GET' && (indexPath.test(path) || schedulerPath) || method === 'POST' && indexPath.test(path) && !path.includes('?') && RETENTION_INDEXES.some(spec => path === `${parent(spec.collectionGroup)}/indexes` && same(body, {queryScope: spec.queryScope, fields: spec.fields})))) throw Error('RETENTION_PROVIDER_OPERATION_OUT_OF_SCOPE');
     const origin = schedulerPath ? 'https://cloudscheduler.googleapis.com/v1/' : 'https://firestore.googleapis.com/v1/';
@@ -62,11 +62,14 @@ function matchingIndexes(spec, rows) {
 async function listIndexes(spec, request) {
   const rows=[],seen=new Set();let pageToken;
   for (let page=0;page<10;page++) {
-    const result=await request('GET',`${parent(spec.collectionGroup)}/indexes?pageSize=100${pageToken ? '&pageToken='+encodeURIComponent(pageToken) : ''}`);
+    const result=await request('GET',`${parent(spec.collectionGroup)}/indexes?pageSize=0${pageToken ? '&pageToken='+encodeURIComponent(pageToken) : ''}`);
     if (result.indexes !== undefined && !Array.isArray(result.indexes) || result.nextPageToken !== undefined && typeof result.nextPageToken !== 'string') throw Error('RETENTION_INDEX_RESPONSE_INVALID');
     for(const row of result.indexes??[]) {
-      if(!row || typeof row.name!=='string' || !row.name.startsWith(`${parent(spec.collectionGroup)}/indexes/`) || !/^[A-Za-z0-9_-]+$/.test(row.name.split('/').at(-1)) || seen.has(row.name)) throw Error('RETENTION_INDEX_RESPONSE_INVALID');
-      seen.add(row.name);rows.push(row);
+      if(!row || typeof row.name!=='string' || !/^projects\/satsunicgo\/databases\/\(default\)\/collectionGroups\/[^/]+\/indexes\/[A-Za-z0-9_-]+$/.test(row.name) || seen.has(row.name)) throw Error('RETENTION_INDEX_RESPONSE_INVALID');
+      seen.add(row.name);
+      if (seen.size>1000) throw Error('RETENTION_INDEX_RESPONSE_BUDGET');
+      // Firestore can return database-wide rows even for a collection-specific parent.
+      if (row.name.startsWith(`${parent(spec.collectionGroup)}/indexes/`)) rows.push(row);
     }
     if (!result.nextPageToken) return rows;
     if (result.nextPageToken.length>4096 || result.nextPageToken===pageToken) throw Error('RETENTION_INDEX_PAGINATION_BUDGET');

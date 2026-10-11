@@ -1017,6 +1017,42 @@ test('existing READY indexes are idempotent and read-only across all three fixed
   const calls=[];const result=await ensureRetentionIndexes(retentionPlan,async(method,path)=>{calls.push({method,path});return {indexes:[indexRow(RETENTION_INDEXES.find(spec=>path.includes('/'+spec.collectionGroup+'/')))]};},{create:true});
   assert.equal(result.indexes.length,3);assert.deepEqual(result.created,[]);assert.equal(calls.length,3);assert.ok(calls.every(row=>row.method==='GET'));
 });
+test('Firestore provider-default page size is used end-to-end and nonzero sizes are denied',async()=>{
+  const paths=[];
+  const request=retentionRequest('synthetic-token',async(url)=>{
+    const parsed=new URL(url);paths.push(parsed);
+    assert.equal(parsed.searchParams.get('pageSize'),'0');
+    const spec=RETENTION_INDEXES.find(spec=>parsed.pathname.includes('/'+spec.collectionGroup+'/'));
+    return {ok:true,status:200,body:(async function*(){yield Buffer.from(JSON.stringify({indexes:[indexRow(spec)]}));})()};
+  });
+  const result=await ensureRetentionIndexes(retentionPlan,request);
+  assert.equal(result.indexes.length,3);assert.equal(paths.length,3);
+  await assert.rejects(()=>request('GET','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes?pageSize=100'),/OUT_OF_SCOPE/);
+  assert.equal(paths.length,3);
+});
+test('provider-default pages retain the independent 1000-row response budget',async()=>{
+  const spec=RETENTION_INDEXES[0];
+  const indexes=Array.from({length:1001},(_,i)=>({...indexRow(spec),name:indexRow(spec).name+'_'+i}));
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes})),/RETENTION_INDEX_RESPONSE_BUDGET/);
+});
+test('database-wide provider response is filtered by exact parent before matching or creating',async()=>{
+  const existing=RETENTION_INDEXES.map(spec=>indexRow(spec));
+  const unrelated={...indexRow(RETENTION_INDEXES[0]),name:'projects/satsunicgo/databases/(default)/collectionGroups/other/indexes/unrelated'};
+  const result=await ensureRetentionIndexes(retentionPlan,async(method)=>{assert.equal(method,'GET');return {indexes:[unrelated,...existing]};},{create:true});
+  assert.equal(result.indexes.length,3);assert.deepEqual(result.created,[]);
+  result.indexes.forEach((row,i)=>assert.equal(row.name,existing[i].name));
+  // An identical spec in another collection never proves this collection ready.
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[unrelated]})),/NOT_READY/);
+});
+test('foreign database/project, malformed and repeated index names remain rejected',async()=>{
+  const original=indexRow(RETENTION_INDEXES[0]);
+  for(const name of [original.name.replace('/satsunicgo/','/other/'),original.name.replace('/(default)/','/other/'),original.name+'/nested','not-a-resource']){
+    await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[{...original,name}]})),/RESPONSE_INVALID/);
+  }
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:[original,original]})),/RESPONSE_INVALID/);
+  const unrelated=Array.from({length:1001},(_,i)=>({...original,name:'projects/satsunicgo/databases/(default)/collectionGroups/other/indexes/id_'+i}));
+  await assert.rejects(()=>ensureRetentionIndexes(retentionPlan,async()=>({indexes:unrelated})),/RESPONSE_BUDGET/);
+});
 test('missing exact indexes create only the reviewed spec, then poll READY; no unrelated deletion/reconcile',async()=>{
   const calls=[],created=new Set();
   const result=await ensureRetentionIndexes(retentionPlan,async(method,path,body)=>{
@@ -1062,7 +1098,7 @@ test('provider transport denies deletion, TTL, foreign groups, arbitrary POST an
 });
 test('provider transport exposes precise missing IAM capability without printing token/provider payload',async()=>{
   const request=retentionRequest('synthetic-token',async()=>({status:403}));
-  await assert.rejects(()=>request('GET','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes?pageSize=100'),/RETENTION_INDEX_IAM_DENIED/);
+  await assert.rejects(()=>request('GET','projects/satsunicgo/databases/(default)/collectionGroups/askFeedback/indexes?pageSize=0'),/RETENTION_INDEX_IAM_DENIED/);
   await assert.rejects(()=>request('GET',RETENTION_SCHEDULER),/RETENTION_SCHEDULER_IAM_DENIED/);
 });
 test('provider 409 handling applies only to create and respects fixed JSON/body bounds',async()=>{
