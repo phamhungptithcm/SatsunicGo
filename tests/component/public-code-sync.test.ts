@@ -79,3 +79,25 @@ it("N28 revision switch fences issuance response", async () => {
   await act(async () => resolve(value));
   expect(host.textContent).not.toContain(code);
 });
+
+it("stale revoke retry shows recovery instead of claiming replacement code is revoked", async () => {
+  state.call
+    .mockRejectedValueOnce({ code: "functions/unavailable" })
+    .mockRejectedValueOnce({ code: "functions/failed-precondition" });
+  await render();
+  const revoke = () =>
+    act(async () =>
+      host.querySelectorAll<HTMLButtonElement>("button")[1].click(),
+    );
+  await revoke();
+  await revoke();
+  expect(state.call.mock.calls[1][1].operationId).toBe(
+    state.call.mock.calls[0][1].operationId,
+  );
+  expect(state.call.mock.calls[1][1].action).toBe("revoke");
+  expect(host.querySelector('[role="alert"]')?.textContent).toContain(
+    "Chưa xử lý được mã tra cứu",
+  );
+  expect(host.textContent).not.toContain("Đã thu hồi mã tra cứu.");
+  expect(host.querySelectorAll<HTMLButtonElement>("button")[1].disabled).toBe(false);
+});

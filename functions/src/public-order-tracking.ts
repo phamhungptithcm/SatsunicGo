@@ -218,7 +218,13 @@ export const managePublicTrackingCode = onCall(options, async (req) => {
     if (previous.exists) {
       if (previous.get("fingerprint") !== fingerprint)
         throw new HttpsError("already-exists", "Mã thao tác đã được sử dụng.");
-      if (d.action === "issue" && access.get("activeHash") !== hash)
+      // A replay acknowledges the current capability state, never an older
+      // revoke after another window has issued a replacement.
+      if (
+        d.action === "issue"
+          ? access.get("activeHash") !== hash
+          : access.get("activeHash") !== null
+      )
         throw new HttpsError(
           "failed-precondition",
           "Mã đã được thay thế hoặc thu hồi.",

@@ -461,3 +461,25 @@ afterAll(async () => {
   if (env) await env.cleanup();
   if (app) await deleteApp(app);
 });
+
+it("revoke replay remains idempotent only while no replacement code is active", async () => {
+  const first = await issue();
+  const operationId = randomUUID();
+  const result = await issue({ action: "revoke", operationId });
+  const audits = (await db.collection("auditEvents").get()).size;
+  expect(await issue({ action: "revoke", operationId })).toEqual(result);
+  expect((await db.collection("auditEvents").get()).size).toBe(audits);
+  await expect(read(first.code!)).rejects.toMatchObject({ code: "not-found" });
+  const replacement = await issue();
+  const before = (await db.doc("guestTrackingAccess/order").get()).data();
+  const orderBefore = (await db.doc("orders/order").get()).data();
+  const replacementAudits = (await db.collection("auditEvents").get()).size;
+  await expect(issue({ action: "revoke", operationId })).rejects.toMatchObject({
+    code: "failed-precondition",
+  });
+  expect((await db.doc("guestTrackingAccess/order").get()).data()).toEqual(before);
+  expect((await db.doc("orders/order").get()).data()).toEqual(orderBefore);
+  expect((await db.collection("auditEvents").get()).size).toBe(replacementAudits);
+  expect(await read(replacement.code!)).toHaveProperty("publicStatus");
+  await expect(read(first.code!)).rejects.toMatchObject({ code: "not-found" });
+});

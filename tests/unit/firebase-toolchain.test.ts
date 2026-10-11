@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, mkdir, writeFile, unlink, rm } from "node:fs/promises";
+import {
+  mkdtemp,
+  realpath,
+  mkdir,
+  writeFile,
+  unlink,
+  rm,
+} from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
@@ -15,11 +22,13 @@ const watcher: {
 } = firebase("chokidar");
 const ftpRequire = createRequire(firebase.resolve("get-uri"));
 
-async function until(predicate: () => boolean) {
+async function until(predicate: () => boolean, diagnostic?: () => unknown) {
   const deadline = Date.now() + 5000;
   while (!predicate()) {
     if (Date.now() > deadline)
-      throw new Error("Watcher did not emit the expected event");
+      throw new Error(
+        `Watcher did not emit the expected event: ${JSON.stringify(diagnostic?.())}`,
+      );
     await new Promise((resolve) => setTimeout(resolve, 20));
   }
 }
@@ -47,7 +56,13 @@ describe("Firebase toolchain compatibility", () => {
   }, 20000);
 
   it("preserves ready, hot reload, add, unlink, ignore and close", async () => {
-    const root = await mkdtemp(join(tmpdir(), "firebase-watcher-"));
+    const root = await realpath(
+      await mkdtemp(join(tmpdir(), "firebase-watcher-")),
+    );
+    // Subscribe to an existing file before testing change: add/change on a
+    // newly discovered file can be coalesced by the native filesystem watcher.
+    const hotFile = join(root, "hot.js");
+    await writeFile(hotFile, "initial");
     const seen: string[] = [];
     const errors: unknown[] = [];
     let closed = false;
@@ -64,12 +79,23 @@ describe("Firebase toolchain compatibility", () => {
     instance.on("error", (error) => errors.push(error));
     try {
       await once(instance, "ready", { signal: AbortSignal.timeout(5000) });
-      await mkdir(join(root, "nested"));
-      const file = join(root, "nested", "index.js");
+      const addedDirectory = join(root, "nested");
+      await mkdir(addedDirectory);
+      const file = join(addedDirectory, "index.js");
       await writeFile(file, "one");
-      await until(() => seen.includes(`add:${file}`));
-      await writeFile(file, "two");
-      await until(() => seen.includes(`change:${file}`));
+      await until(
+        () =>
+          seen.includes(`add:${file}`) &&
+          seen.includes(`addDir:${addedDirectory}`),
+        () => ({
+          expected: ["add", "addDir"],
+          seen,
+          errors: errors.map(String),
+          watched: instance.getWatched(),
+        }),
+      );
+      await writeFile(hotFile, "updated hot reload");
+      await until(() => seen.includes(`change:${hotFile}`));
       await unlink(file);
       await until(() => seen.includes(`unlink:${file}`));
       for (const folder of [".hidden", "generated", "node_modules/pkg"]) {
