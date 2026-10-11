@@ -21,7 +21,7 @@ export const customerAiLimits = Object.freeze({
   globalPerMinute: 10,
   userPerMinute: 2,
   windowMs: 86400000,
-  pricingExpiresAt: Date.parse("2026-10-12T00:00:00Z"),
+  pricingExpiresAt: Date.parse("2026-10-12T02:00:00Z"),
 });
 export const customerAiPolicySchema = z
   .object({

@@ -228,6 +228,41 @@ test("pricing expiry closes even otherwise valid policy", async () => {
   await expect(generate()).rejects.toThrow();
   expect(paid).toHaveLength(0);
 });
+test.each([
+  ["2026-10-12T01:59:59.999Z", true],
+  ["2026-10-12T02:00:00.000Z", false],
+  ["2026-10-12T02:00:00.001Z", false],
+])("renewed customer policy boundary %s permits=%s", async (time, allowed) => {
+  const renewed = {
+    ...policy(),
+    activatedAt: Date.parse("2026-10-11T23:00:00Z"),
+    expiresAt: Date.parse("2026-10-12T02:00:00Z"),
+  };
+  vi.setSystemTime(new Date(time));
+  state.docs.set(policyPath, renewed);
+  if (allowed) {
+    expect(checkCustomerAiPolicy(renewed, "customer", Date.now())).toBeTruthy();
+    await generate();
+    expect(paid).toHaveLength(1);
+    expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
+  } else {
+    await expect(generate()).rejects.toThrow();
+    expect(paid).toHaveLength(0);
+    expect(state.docs.has(budgetPath)).toBe(false);
+  }
+});
+test("source renewal does not renew the expired settings policy or reset history", async () => {
+  state.docs.set(policyPath, {
+    ...policy(),
+    activatedAt: Date.parse("2026-10-11T23:00:00Z"),
+    expiresAt: Date.parse("2026-10-12T00:00:00Z"),
+  });
+  state.docs.set(budgetPath, { reservedVnd: 4000 });
+  vi.setSystemTime(new Date("2026-10-12T00:00:00Z"));
+  await expect(generate()).rejects.toThrow();
+  expect(paid).toHaveLength(0);
+  expect(state.docs.get(budgetPath)).toEqual({ reservedVnd: 4000 });
+});
 test.each([NaN, -1000, "1000", 1, 50000, Number.MAX_SAFE_INTEGER])(
   "invalid/exhausted budget fails closed %s",
   async (reservedVnd) => {
