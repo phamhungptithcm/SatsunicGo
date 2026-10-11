@@ -238,7 +238,10 @@ function proofFixture(
   const adapter: SePayAdapter = {
     form: createSandboxAdapter("synthetic-fixture-only-no-provider-access")
       .form,
-    readback: async () => raw,
+    readback: async (invoice) => {
+      expect(invoice).toBe(intent.invoice);
+      return raw;
+    },
   };
   return { notification, raw, adapter };
 }

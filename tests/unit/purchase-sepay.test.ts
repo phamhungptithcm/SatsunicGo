@@ -412,12 +412,12 @@ describe("bounded private readback transport", () => {
     ).toBe("form-action 'self' https://pay-sandbox.sepay.vn");
     expect(csp).not.toContain("https://pay.sepay.vn");
   });
-  it("uses the fixed sandbox host, provider ID and server-only Basic auth", async () => {
-    let called = false;
+  it("uses the fixed sandbox host, immutable invoice and server-only Basic auth", async () => {
+    let calls = 0;
     const a = createSandboxAdapter("fixture-key", async (url, options) => {
-      called = true;
+      calls++;
       expect(url).toBe(
-        "https://pgapi-sandbox.sepay.vn/v1/order/detail/SEPAY-123",
+        `https://pgapi-sandbox.sepay.vn/v1/order/detail/${intent.invoice}`,
       );
       expect(options?.redirect).toBe("error");
       expect(options?.headers).toHaveProperty("authorization");
@@ -425,11 +425,17 @@ describe("bounded private readback transport", () => {
         headers: { "content-type": "application/json" },
       });
     });
-    expect(await a.readback("SEPAY-123")).toEqual(raw());
-    expect(called).toBe(true);
-    await expect(a.readback("../../secret")).rejects.toThrow(
-      "SEPAY_ORDER_INVALID",
-    );
+    expect(await a.readback(intent.invoice)).toEqual(raw());
+    expect(calls).toBe(1);
+    for (const invalid of [
+      "SEPAY-123",
+      "../../secret",
+      `${intent.invoice}/extra`,
+      "",
+    ]) {
+      await expect(a.readback(invalid)).rejects.toThrow("SEPAY_ORDER_INVALID");
+    }
+    expect(calls).toBe(1);
   });
   it.each(["status", "html", "large", "malformed", "network"])(
     "redacts and releases %s failures",
@@ -445,7 +451,7 @@ describe("bounded private readback transport", () => {
           headers: { "content-type": "application/json" },
         });
       });
-      await expect(a.readback("SEPAY-123")).rejects.toThrow(
+      await expect(a.readback(intent.invoice)).rejects.toThrow(
         /^SEPAY_READBACK_UNAVAILABLE$/,
       );
     },
@@ -498,7 +504,7 @@ describe("private runtime failure diagnostics", () => {
             },
           }),
       );
-      await expect(adapter.readback("fixture-order")).rejects.toThrow(
+      await expect(adapter.readback(intent.invoice)).rejects.toThrow(
         "SEPAY_READBACK_UNAVAILABLE",
       );
       expect(warn).toHaveBeenCalledWith("SEPAY_READBACK_DIAGNOSTIC", {

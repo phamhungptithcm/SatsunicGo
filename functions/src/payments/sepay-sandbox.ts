@@ -7,6 +7,7 @@ import {
   SEPAY_CHECKOUT_URL,
   SEPAY_MERCHANT,
   admitSePayForm,
+  sepayInvoiceSchema,
   type SePayIntent,
 } from "../../../packages/domain/purchase-sepay";
 import { purchaseDemoEnvironment } from "../purchase-environment";
@@ -48,7 +49,7 @@ export function authenticSePayIpn(header: unknown, expected: string) {
 }
 export interface SePayAdapter {
   form(intent: SePayIntent): ReturnType<typeof admitSePayForm>;
-  readback(orderId: string): Promise<unknown>;
+  readback(invoice: string): Promise<unknown>;
 }
 export function sandboxAdapter(): SePayAdapter {
   if (!sepaySandboxSecret || !sandboxPaymentReady())
@@ -161,8 +162,8 @@ export function createSandboxAdapter(
         { id: intent.checkoutId, total: intent.amount, ...(provenance ?? {}) },
       );
     },
-    async readback(orderId) {
-      if (!/^[A-Za-z0-9_-]{1,100}$/.test(orderId))
+    async readback(invoice) {
+      if (!sepayInvoiceSchema.safeParse(invoice).success)
         throw Error("SEPAY_ORDER_INVALID");
       const controller = new AbortController(),
         timer = setTimeout(() => controller.abort(), 10000);
@@ -172,7 +173,7 @@ export function createSandboxAdapter(
       let stage: "transport" | "response" | "body" | "json" = "transport";
       try {
         const response = await transport(
-          `https://pgapi-sandbox.sepay.vn/v1/order/detail/${orderId}`,
+          `https://pgapi-sandbox.sepay.vn/v1/order/detail/${invoice}`,
           {
             method: "GET",
             redirect: "error",

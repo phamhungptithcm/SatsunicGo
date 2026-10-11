@@ -385,9 +385,7 @@ export async function reconcileSePayIntent(
         };
       }
     }
-    const raw = await (adapter ?? sandboxAdapter()).readback(
-        intent.providerOrderId!,
-      ),
+    const raw = await (adapter ?? sandboxAdapter()).readback(intent.invoice),
       proof = verifySePayReadback(raw, intent, notification);
     if (!proof) return { kind: "pending" as const }; // No reservation release from a callback.
     const key = evidenceKey(proof.transactionId);
