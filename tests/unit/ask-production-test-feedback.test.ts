@@ -2,6 +2,8 @@ import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import type { CallableRequest } from "firebase-functions/v2/https";
 const state = vi.hoisted(() => ({
   rows: new Map<string, Record<string, unknown>>(),
+  beforeTransaction: undefined as (() => void) | undefined,
+  afterTransaction: undefined as (() => void) | undefined,
 }));
 vi.mock("firebase-admin/firestore", () => ({
   getFirestore: () => ({
@@ -13,8 +15,11 @@ vi.mock("firebase-admin/firestore", () => ({
         doc: (id: string) => ({ path: `${path}/${name}/${id}` }),
       }),
     }),
-    runTransaction: async (work: (tx: unknown) => Promise<unknown>) =>
-      work({
+    runTransaction: async (work: (tx: unknown) => Promise<unknown>) => {
+      const hook = state.beforeTransaction;
+      state.beforeTransaction = undefined;
+      hook?.();
+      const result = await work({
         get: async ({ path }: { path: string }) => ({
           exists: state.rows.has(path),
           data: () => state.rows.get(path),
@@ -32,7 +37,12 @@ vi.mock("firebase-admin/firestore", () => ({
             path,
             options?.merge ? { ...state.rows.get(path), ...data } : data,
           ),
-      }),
+      });
+      const after = state.afterTransaction;
+      state.afterTransaction = undefined;
+      after?.();
+      return result;
+    },
   }),
 }));
 vi.mock("../../functions/src/index", () => ({ command: { run: vi.fn() } }));
@@ -49,7 +59,11 @@ import {
 } from "../../functions/src/ai/feedback-provenance";
 import { inboxRow } from "../../functions/src/ai/feedback-lifecycle";
 import { productionTestPolicySchema } from "../../functions/src/production-test-policy";
-import { askWorkflow } from "../../functions/src/ai/ask-workflow";
+import {
+  askWorkflow,
+  currentAskConversation,
+} from "../../functions/src/ai/ask-workflow";
+import { command } from "../../functions/src/index";
 
 const now = Date.parse("2026-10-10T01:00:00Z"),
   id = "11111111-1111-4111-8111-111111111111",
@@ -97,6 +111,8 @@ beforeEach(() => {
   ])
     vi.stubEnv(key, undefined);
   state.rows.clear();
+  state.beforeTransaction = undefined;
+  state.afterTransaction = undefined;
   state.rows.set(
     "settings/productionTest",
     productionTestPolicySchema.parse({
@@ -256,3 +272,293 @@ test("retention deletes only approved class/duration and exact expiry boundary",
     false,
   );
 });
+
+function sandboxTurnRequest() {
+  return request({
+    conversationId: id,
+    operationId,
+    expectedVersion: 1,
+    action: "saveTurn",
+    payload: { id, question: "Public question", answer },
+  });
+}
+function enableSandboxCommerce() {
+  state.rows.set("settings/askCommerce", {
+    enabled: true,
+    approved: true,
+    executionMode: "production_test",
+  });
+}
+test("sandbox Ask admits tester and pins saved turn to test provenance", async () => {
+  enableSandboxCommerce();
+  await expect(askWorkflow.run(sandboxTurnRequest())).resolves.toEqual({
+    version: 2,
+  });
+  expect(
+    state.rows.get(`askConversations/tester-${id}`)?.turnProvenance,
+  ).toHaveProperty(id);
+});
+test.each([
+  "unlisted",
+  "expired",
+  "disabled",
+  "missing",
+  "wrong-environment",
+  "unknown-mode",
+  "locked",
+])("sandbox Ask rejects %s before writing conversation", async (kind) => {
+  enableSandboxCommerce();
+  const p = state.rows.get("settings/productionTest")!;
+  if (kind === "unlisted")
+    state.rows.set("settings/productionTest", { ...p, testerUids: ["other"] });
+  if (kind === "expired")
+    state.rows.set("settings/productionTest", { ...p, expiresAt: now });
+  if (kind === "disabled")
+    state.rows.set("settings/productionTest", { ...p, enabled: false });
+  if (kind === "missing") state.rows.delete("settings/productionTest");
+  if (kind === "wrong-environment")
+    vi.stubEnv("GCLOUD_PROJECT", "demo-satsunicgo");
+  if (kind === "unknown-mode")
+    state.rows.set("settings/askCommerce", {
+      enabled: true,
+      approved: true,
+      executionMode: "production",
+    });
+  if (kind === "locked") state.rows.set("users/tester", { locked: true });
+  const before = JSON.stringify([...state.rows.entries()]);
+  await expect(askWorkflow.run(sandboxTurnRequest())).rejects.toThrow();
+  expect(JSON.stringify([...state.rows.entries()])).toBe(before);
+});
+test.each(["disabled", "expired", "unlisted", "scope-change"])(
+  "sandbox Ask rechecks %s inside mutation transaction",
+  async (kind) => {
+    enableSandboxCommerce();
+    state.beforeTransaction = () => {
+      const p = state.rows.get("settings/productionTest")!;
+      if (kind === "disabled")
+        state.rows.set("settings/productionTest", { ...p, enabled: false });
+      if (kind === "expired")
+        state.rows.set("settings/productionTest", { ...p, expiresAt: now });
+      if (kind === "unlisted")
+        state.rows.set("settings/productionTest", {
+          ...p,
+          testerUids: ["other"],
+        });
+      if (kind === "scope-change")
+        state.rows.set("settings/askCommerce", {
+          enabled: true,
+          approved: true,
+        });
+    };
+    await expect(askWorkflow.run(sandboxTurnRequest())).rejects.toThrow();
+    expect(state.rows.get(`askConversations/tester-${id}`)?.version).toBe(1);
+    expect(
+      state.rows.has(`askConversations/tester-${id}/operations/${operationId}`),
+    ).toBe(false);
+  },
+);
+test.each(["live", "foreign-test", "malformed-test", "missing"])(
+  "sandbox Ask cannot mutate %s attached order",
+  async (kind) => {
+    enableSandboxCommerce();
+    const conversation = state.rows.get(`askConversations/tester-${id}`)!;
+    state.rows.set(`askConversations/tester-${id}`, {
+      ...conversation,
+      orderId: "attached",
+    });
+    const order = { ownerId: "tester", stage: "QUOTED", version: 1 };
+    if (kind !== "missing")
+      state.rows.set("orders/attached", {
+        ...order,
+        ...(kind === "foreign-test"
+          ? {
+              ownerId: "other",
+              executionMode: "production_test",
+              executionPolicyVersion: 3,
+              testRunId: id,
+            }
+          : {}),
+        ...(kind === "malformed-test"
+          ? { executionMode: "production_test" }
+          : {}),
+      });
+    const before = JSON.stringify([...state.rows.entries()]);
+    await expect(askWorkflow.run(sandboxTurnRequest())).rejects.toThrow();
+    expect(JSON.stringify([...state.rows.entries()])).toBe(before);
+  },
+);
+
+test("sandbox Ask preserves access to its tester-owned test order", async () => {
+  enableSandboxCommerce();
+  state.rows.set(`askConversations/tester-${id}`, {
+    ...state.rows.get(`askConversations/tester-${id}`),
+    orderId: "attached",
+  });
+  state.rows.set("orders/attached", {
+    ownerId: "tester",
+    executionMode: "production_test",
+    executionPolicyVersion: 3,
+    testRunId: id,
+  });
+  await expect(askWorkflow.run(sandboxTurnRequest())).resolves.toEqual({
+    version: 2,
+  });
+});
+test.each(["disabled", "unlisted", "scope-change"])(
+  "sandbox Ask rechecks %s before delegating command",
+  async (kind) => {
+    enableSandboxCommerce();
+    vi.mocked(command.run).mockClear();
+    state.rows.set(`askConversations/tester-${id}`, {
+      ...state.rows.get(`askConversations/tester-${id}`),
+      orderId: "attached",
+    });
+    state.rows.set("orders/attached", {
+      ownerId: "tester",
+      stage: "DELIVERED",
+      version: 1,
+      executionMode: "production_test",
+      executionPolicyVersion: 3,
+      testRunId: id,
+    });
+    state.afterTransaction = () => {
+      if (kind === "disabled")
+        state.rows.set("settings/productionTest", {
+          ...state.rows.get("settings/productionTest"),
+          enabled: false,
+        });
+      if (kind === "unlisted")
+        state.rows.set("settings/productionTest", {
+          ...state.rows.get("settings/productionTest"),
+          testerUids: ["other"],
+        });
+      if (kind === "scope-change")
+        state.rows.set("settings/askCommerce", {
+          enabled: true,
+          approved: true,
+        });
+    };
+    await expect(
+      askWorkflow.run(
+        request({
+          conversationId: id,
+          operationId,
+          expectedVersion: 1,
+          expectedOrderVersion: 1,
+          action: "confirmReceipt",
+          payload: { received: true },
+        }),
+      ),
+    ).rejects.toThrow();
+    expect(command.run).not.toHaveBeenCalled();
+    expect(state.rows.get("orders/attached")?.stage).toBe("DELIVERED");
+  },
+);
+
+test("sandbox current conversation creates an admitted tester pointer", async () => {
+  enableSandboxCommerce();
+  const result = await currentAskConversation.run(request({}));
+  expect(state.rows.get("askCurrent/tester")?.conversationId).toBe(
+    result.conversationId,
+  );
+  expect(
+    state.rows.get(`askConversations/tester-${result.conversationId}`)?.ownerId,
+  ).toBe("tester");
+});
+test.each([
+  "unlisted",
+  "revoked",
+  "scope-change",
+  "live-pointer",
+  "foreign-test",
+  "malformed-test",
+])(
+  "sandbox current conversation denies %s without pointer writes",
+  async (kind) => {
+    enableSandboxCommerce();
+    if (kind === "unlisted")
+      state.rows.set("settings/productionTest", {
+        ...state.rows.get("settings/productionTest"),
+        testerUids: ["other"],
+      });
+    if (kind === "revoked")
+      state.beforeTransaction = () =>
+        state.rows.set("settings/productionTest", {
+          ...state.rows.get("settings/productionTest"),
+          enabled: false,
+        });
+    if (kind === "scope-change")
+      state.beforeTransaction = () =>
+        state.rows.set("settings/askCommerce", {
+          enabled: true,
+          approved: true,
+        });
+    if (["live-pointer", "foreign-test", "malformed-test"].includes(kind)) {
+      state.rows.set("askCurrent/tester", { conversationId: id });
+      state.rows.set(`askConversations/tester-${id}`, {
+        ...state.rows.get(`askConversations/tester-${id}`),
+        orderId: "attached",
+      });
+      state.rows.set("orders/attached", {
+        ownerId: kind === "foreign-test" ? "other" : "tester",
+        ...(kind !== "live-pointer"
+          ? {
+              executionMode: "production_test",
+              executionPolicyVersion: 3,
+              testRunId: kind === "malformed-test" ? "bad" : id,
+            }
+          : {}),
+      });
+    }
+    const pointer = state.rows.get("askCurrent/tester");
+    await expect(currentAskConversation.run(request({}))).rejects.toThrow();
+    expect(state.rows.get("askCurrent/tester")).toEqual(pointer);
+  },
+);
+test("sandbox current conversation reuses an owned test order pointer", async () => {
+  enableSandboxCommerce();
+  state.rows.set("askCurrent/tester", { conversationId: id });
+  state.rows.set(`askConversations/tester-${id}`, {
+    ...state.rows.get(`askConversations/tester-${id}`),
+    orderId: "attached",
+  });
+  state.rows.set("orders/attached", {
+    ownerId: "tester",
+    executionMode: "production_test",
+    executionPolicyVersion: 3,
+    testRunId: id,
+  });
+  await expect(currentAskConversation.run(request({}))).resolves.toEqual({
+    conversationId: id,
+  });
+});
+test.each(["revoked", "live-order"])(
+  "resume rejects sandbox %s",
+  async (kind) => {
+    enableSandboxCommerce();
+    if (kind === "revoked")
+      state.beforeTransaction = () =>
+        state.rows.set("settings/productionTest", {
+          ...state.rows.get("settings/productionTest"),
+          enabled: false,
+        });
+    else {
+      state.rows.set(`askConversations/tester-${id}`, {
+        ...state.rows.get(`askConversations/tester-${id}`),
+        orderId: "live",
+      });
+      state.rows.set("orders/live", { ownerId: "tester" });
+    }
+    await expect(
+      askWorkflow.run(
+        request({
+          conversationId: id,
+          operationId,
+          expectedVersion: 1,
+          action: "resume",
+          payload: {},
+        }),
+      ),
+    ).rejects.toThrow();
+  },
+);

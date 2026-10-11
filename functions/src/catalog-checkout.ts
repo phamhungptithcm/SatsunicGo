@@ -1,3 +1,4 @@
+import { assertAskSandboxMutation } from "./production-test-commands";
 import { createHash, randomUUID } from "node:crypto";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
@@ -54,6 +55,7 @@ export const catalogCheckout = onCall(
           throw new HttpsError("already-exists", "Mã đặt mua đã được sử dụng.");
         return previous.data()?.result;
       }
+      await assertAskSandboxMutation(req, tx, db, uid);
       const testEnvironment = productionTestEnvironment(db);
       const testPolicy = testEnvironment
         ? admitProductionTestPolicy(
