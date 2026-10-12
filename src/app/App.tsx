@@ -503,6 +503,9 @@ export function App() {
           startCollapsed={
             location.pathname.startsWith("/posts") ||
             location.pathname.startsWith("/account") ||
+            location.pathname === "/checkout" ||
+            location.pathname.startsWith("/checkout/") ||
+            /^\/products\/[^/]+\/checkout\/?$/.test(location.pathname) ||
             location.pathname === "/request" ||
             location.pathname === "/cart"
           }
