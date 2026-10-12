@@ -228,6 +228,41 @@ test("pricing expiry closes even otherwise valid policy", async () => {
   await expect(generate()).rejects.toThrow();
   expect(paid).toHaveLength(0);
 });
+test.each([
+  ["2026-10-12T01:59:59.999Z", true],
+  ["2026-10-12T02:00:00.000Z", false],
+  ["2026-10-12T02:00:00.001Z", false],
+])("renewed customer policy boundary %s permits=%s", async (time, allowed) => {
+  const renewed = {
+    ...policy(),
+    activatedAt: Date.parse("2026-10-11T23:00:00Z"),
+    expiresAt: Date.parse("2026-10-12T02:00:00Z"),
+  };
+  vi.setSystemTime(new Date(time));
+  state.docs.set(policyPath, renewed);
+  if (allowed) {
+    expect(checkCustomerAiPolicy(renewed, "customer", Date.now())).toBeTruthy();
+    await generate();
+    expect(paid).toHaveLength(1);
+    expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
+  } else {
+    await expect(generate()).rejects.toThrow();
+    expect(paid).toHaveLength(0);
+    expect(state.docs.has(budgetPath)).toBe(false);
+  }
+});
+test("source renewal does not renew the expired settings policy or reset history", async () => {
+  state.docs.set(policyPath, {
+    ...policy(),
+    activatedAt: Date.parse("2026-10-11T23:00:00Z"),
+    expiresAt: Date.parse("2026-10-12T00:00:00Z"),
+  });
+  state.docs.set(budgetPath, { reservedVnd: 4000 });
+  vi.setSystemTime(new Date("2026-10-12T00:00:00Z"));
+  await expect(generate()).rejects.toThrow();
+  expect(paid).toHaveLength(0);
+  expect(state.docs.get(budgetPath)).toEqual({ reservedVnd: 4000 });
+});
 test.each([NaN, -1000, "1000", 1, 50000, Number.MAX_SAFE_INTEGER])(
   "invalid/exhausted budget fails closed %s",
   async (reservedVnd) => {
@@ -553,6 +588,9 @@ test.each([
   "changed-context",
   "invalid-json",
   "action-claim",
+  "null-paragraphs",
+  "unknown-field",
+  "null-draft",
 ])(
   "real customer answer path validates %s before canary proof",
   async (kind) => {
@@ -589,6 +627,17 @@ test.each([
           sourceIds: kind === "invented-citation" ? ["post:unapproved"] : [],
           action: "workflow",
         };
+        const candidate =
+          kind === "malformed"
+            ? {}
+            : {
+                ...value,
+                ...(kind === "null-paragraphs" ? { paragraphs: null } : {}),
+                ...(kind === "unknown-field"
+                  ? { privateSensitiveFixture: "private-sensitive-fixture" }
+                  : {}),
+                ...(kind === "null-draft" ? { draft: null } : {}),
+              };
         return Response.json({
           ...answer,
           candidates: [
@@ -600,7 +649,7 @@ test.each([
                     text:
                       kind === "invalid-json"
                         ? "private-sensitive-fixture{"
-                        : JSON.stringify(kind === "malformed" ? {} : value),
+                        : JSON.stringify(candidate),
                   },
                 ],
               },
@@ -628,6 +677,9 @@ test.each([
         "changed-context": "context-binding",
         "invalid-json": "answer-json",
         "action-claim": "action-claim",
+        "null-paragraphs": "answer-schema",
+        "unknown-field": "answer-schema",
+        "null-draft": "answer-schema",
       };
       expect(warn).toHaveBeenCalledWith("ask-answer-rejected", {
         reason: reasons[kind as keyof typeof reasons],
@@ -768,4 +820,37 @@ test.each([
   expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
   await expect(generate("owner")).rejects.toThrow();
   expect(paid).toHaveLength(1);
+});
+
+test("customer request constrains answer structure without draft or action authority", () => {
+  const body = JSON.parse(customerAiRequest("instruction", "question"));
+  const config = body.generationConfig,
+    schema = config.responseSchema;
+  expect(config.responseMimeType).toBe("application/json");
+  expect(config.maxOutputTokens).toBe(800);
+  expect(schema.required).toEqual([
+    "language",
+    "title",
+    "paragraphs",
+    "bullets",
+    "sourceIds",
+    "action",
+  ]);
+  expect(schema.properties.paragraphs).toEqual({
+    type: "ARRAY",
+    items: { type: "STRING" },
+    minItems: 1,
+    maxItems: 6,
+  });
+  expect(schema.properties.sourceIds.maxItems).toBe(8);
+  expect(schema.properties.action.enum).toEqual(["request", "workflow"]);
+  expect(schema.required).not.toContain("draft");
+  expect(schema.properties.draft.nullable).toBeUndefined();
+  expect(
+    schema.properties.draft.properties.items.items.properties.quantity,
+  ).toEqual({ type: "INTEGER", minimum: 1, maximum: 100 });
+  expect(schema.properties).not.toHaveProperty("shoppingDraft");
+  expect(JSON.stringify(schema)).not.toMatch(
+    /payment|ownerId|orderId|submit|quote|unitSourceMinor|budget/,
+  );
 });

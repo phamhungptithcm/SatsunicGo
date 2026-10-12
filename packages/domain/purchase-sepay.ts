@@ -191,7 +191,16 @@ export function verifySePayReadback(
   );
   // A normalized authenticated notice identifies one transaction within the
   // readback. Without it, multiple approved payments remain ambiguous.
-  if (paid.length === 0) throw Error("SEPAY_NO_APPROVED_PAYMENT");
+  if (paid.length === 0) {
+    if (data.transactions.length === 0) throw Error("SEPAY_EMPTY_TRANSACTIONS");
+    const payments = data.transactions.filter(
+      (t) => t.transaction_type === "PAYMENT",
+    );
+    if (payments.length === 0) throw Error("SEPAY_NO_PAYMENT_TRANSACTION");
+    if (!payments.some((t) => t.transaction_status === "APPROVED"))
+      throw Error("SEPAY_NO_APPROVED_PAYMENT");
+    throw Error("SEPAY_NOTICE_TRANSACTION_NOT_FOUND");
+  }
   if (paid.length > 1) throw Error("SEPAY_MULTIPLE_APPROVED_PAYMENTS");
   const t = paid[0];
   if (
