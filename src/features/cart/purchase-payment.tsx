@@ -8,6 +8,7 @@ import {
 import type { User } from "firebase/auth";
 import type { PurchaseCheckout } from "../../../packages/domain/purchase-checkout";
 import { callService } from "../../shared/firebase";
+import { notify } from "../../shared/feedback";
 import { LoadingState } from "../../shared/Loading";
 import { useCart } from "./cart-store";
 import { PurchaseJourney } from "./purchase-checkout";
@@ -49,11 +50,13 @@ export function PurchasePayment({
     if (checkingFlight.current === gen) return;
     checkingFlight.current = gen;
     setChecking(true);
+    setError("");
     try {
-      let c = await callService<PurchaseCheckout>("purchaseCheckout", {
-        action: "status",
-        id,
-      });
+      let c = await callService<PurchaseCheckout>(
+        "purchaseCheckout",
+        { action: "status", id },
+        "inline",
+      );
       if (gen !== generation.current) return;
       setCheckout(c); // Keep the owned checkout visible during a provider outage.
       if (
@@ -66,12 +69,14 @@ export function PurchasePayment({
             ? "purchaseSePayPayment"
             : "purchaseDemoPayment",
           { action: "reconcile", id },
+          "inline",
         );
         if (gen !== generation.current) return;
-        c = await callService<PurchaseCheckout>("purchaseCheckout", {
-          action: "status",
-          id,
-        });
+        c = await callService<PurchaseCheckout>(
+          "purchaseCheckout",
+          { action: "status", id },
+          "inline",
+        );
       }
       if (gen === generation.current) {
         setCheckout(c);
@@ -80,7 +85,7 @@ export function PurchasePayment({
       }
     } catch {
       if (gen === generation.current)
-        setError("Chưa cập nhật được thanh toán. Thử kiểm tra lại.");
+        notify("Chưa cập nhật được thanh toán. Thử kiểm tra lại.", "error");
     } finally {
       if (checkingFlight.current === gen) checkingFlight.current = null;
       if (gen === generation.current) setChecking(false);
@@ -268,7 +273,7 @@ export function PurchasePayment({
       )}
       {!checkout ? (
         <>
-          <LoadingState>Đang kiểm tra thanh toán…</LoadingState>
+          {checking && <LoadingState>Đang kiểm tra thanh toán…</LoadingState>}
           <button disabled={busy || checking} onClick={() => void read()}>
             Kiểm tra lại
           </button>

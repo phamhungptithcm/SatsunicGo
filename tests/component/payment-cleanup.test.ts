@@ -5,8 +5,13 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import type { User } from "firebase/auth";
 import type { PurchaseCheckout } from "../../packages/domain/purchase-checkout";
 
-const state = vi.hoisted(() => ({ call: vi.fn(), refresh: vi.fn() }));
+const state = vi.hoisted(() => ({
+  call: vi.fn(),
+  refresh: vi.fn(),
+  notify: vi.fn(),
+}));
 vi.mock("../../src/shared/firebase", () => ({ callService: state.call }));
+vi.mock("../../src/shared/feedback", () => ({ notify: state.notify }));
 vi.mock("../../src/features/cart/cart-store", () => ({
   useCart: () => ({ refresh: state.refresh }),
 }));
@@ -69,6 +74,7 @@ beforeEach(() => {
   vi.useRealTimers();
   state.call.mockReset();
   state.refresh.mockReset();
+  state.notify.mockReset();
   container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
@@ -127,9 +133,14 @@ it("provider failure retains owned amount, retry and safe unknown warning", asyn
     throw Error("offline");
   });
   await render();
-  expect(container.querySelector("[role=alert]")?.textContent).toContain(
-    "Chưa cập nhật được thanh toán",
+  expect(container.querySelector(".purchaseError")).toBeNull();
+  expect(state.notify).toHaveBeenCalledExactlyOnceWith(
+    "Chưa cập nhật được thanh toán. Thử kiểm tra lại.",
+    "error",
   );
+  expect(
+    state.call.mock.calls.every(([, , feedback]) => feedback === "inline"),
+  ).toBe(true);
   expect(container.querySelector(".paymentAmount")?.textContent).toContain(
     "125.000",
   );
@@ -139,9 +150,37 @@ it("provider failure retains owned amount, retry and safe unknown warning", asyn
 it("initial failure offers recovery and never renders unknown as paid", async () => {
   state.call.mockRejectedValue(Error("timeout"));
   await render();
-  expect(container.querySelector("[role=alert]")).not.toBeNull();
+  expect(container.querySelector("[role=alert]")).toBeNull();
+  expect(state.notify).toHaveBeenCalledTimes(1);
+  expect(container.textContent).not.toContain("Đang kiểm tra thanh toán");
   expect(container.textContent).not.toContain("Đã ghi nhận thanh toán");
   expect(buttons().some((b) => b.textContent === "Kiểm tra lại")).toBe(true);
+});
+it("a second status timeout shows one toast and keeps the owned checkout", async () => {
+  let reads = 0;
+  state.call.mockImplementation(async (name: string) => {
+    if (name !== "purchaseCheckout") return {};
+    if (++reads === 1) return fixture({ state: "unknown" });
+    throw Error("timeout");
+  });
+  await render();
+  expect(state.notify).toHaveBeenCalledTimes(1);
+  expect(container.querySelector(".purchaseError")).toBeNull();
+  expect(checkButton().disabled).toBe(false);
+  expect(container.textContent).toContain("125.000");
+  expect(
+    state.call.mock.calls.every(([, , feedback]) => feedback === "inline"),
+  ).toBe(true);
+});
+it("successful recovery clears failure feedback without a duplicate inline message", async () => {
+  state.call.mockRejectedValueOnce(Error("offline"));
+  await render();
+  expect(state.notify).toHaveBeenCalledTimes(1);
+  state.call.mockResolvedValue(fixture({ state: "unknown" }));
+  await click(buttons().find((b) => b.textContent === "Kiểm tra lại")!);
+  expect(state.notify).toHaveBeenCalledTimes(1);
+  expect(container.querySelector(".purchaseError")).toBeNull();
+  expect(container.textContent).toContain("Chưa xác nhận thanh toán");
 });
 it("paid delegates unchanged receipt completion and refreshes cart", async () => {
   state.call.mockResolvedValue(fixture({ state: "paid" }));
@@ -240,6 +279,23 @@ it("shows only the persisted known payment method without offering a replacement
   );
   expect(container.querySelector('input[type="radio"]')).toBeNull();
   expect(buttons()).toHaveLength(1);
+});
+it("an old account failure cannot publish a toast into the new account", async () => {
+  let reads = 0;
+  let rejectOld!: (error: Error) => void;
+  state.call.mockImplementation(async (name: string) => {
+    if (name === "purchaseCheckout")
+      return fixture({ state: ++reads === 1 ? "unknown" : "cancelled" });
+    return new Promise((_, reject) => {
+      rejectOld = reject;
+    });
+  });
+  await render();
+  await render("other-owner");
+  await act(async () => rejectOld(Error("private provider exception")));
+  expect(state.notify).not.toHaveBeenCalled();
+  expect(container.textContent).toContain("Đã hủy thanh toán");
+  expect(container.querySelector(".purchaseError")).toBeNull();
 });
 it("absent payment method is not invented from provider", async () => {
   state.call.mockResolvedValue(fixture({ paymentMethod: undefined }));
