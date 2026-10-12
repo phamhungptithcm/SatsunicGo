@@ -918,3 +918,113 @@
     gap: 2px;
   }
 }
+
+/* Status color reinforces the written state; it never indicates paid proof. */
+.purchasePayment .purchaseCard[data-payment-state] {
+  padding: 0 24px 8px;
+  border-color: #e0e6f3;
+  box-shadow: 0 8px 28px #163cff08;
+  overflow: hidden;
+}
+.purchasePayment .paymentSummary {
+  margin-inline: -24px;
+  padding: 22px 24px 16px;
+  background: linear-gradient(135deg, #f4f7ff, #ffffff 80%);
+  border-bottom: 1px solid #edf0f7;
+}
+.purchasePayment .paymentStatusRow {
+  gap: 10px;
+}
+.purchasePayment .paymentStatusIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #e9eeff;
+  color: #163cff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.purchasePayment .paymentStatusIcon svg {
+  width: 22px;
+  height: 22px;
+}
+.purchasePayment .paymentStatusRow h2 {
+  color: #17347b;
+  font-size: 16px;
+}
+.purchasePayment .paymentTestBadge {
+  width: fit-content;
+  margin-left: 46px;
+  margin-top: -6px;
+  background: #eef2ff;
+  color: #485b89;
+}
+.purchasePayment [data-payment-state="unknown"] .paymentStatusIcon,
+.purchasePayment [data-payment-state="review_required"] .paymentStatusIcon {
+  color: #965b05;
+  background: #fff0d3;
+}
+.purchasePayment [data-payment-state="unknown"] .paymentStatusRow h2,
+.purchasePayment [data-payment-state="review_required"] .paymentStatusRow h2 {
+  color: #80500b;
+}
+.purchasePayment [data-payment-state="cancelled"] .paymentStatusIcon {
+  color: #617086;
+  background: #eaf0f5;
+}
+.purchasePayment [data-payment-state="cancelled"] .paymentStatusRow h2 {
+  color: #45546a;
+}
+.purchasePayment .paymentAmount {
+  margin: 20px 0 16px;
+  font-size: 32px;
+  letter-spacing: -0.025em;
+}
+.purchasePayment .paymentSelectedMethod {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #273c68;
+}
+.purchasePayment .paymentMethodGlyph {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: #edf2ff;
+  border: 1px solid #dfe8ff;
+  border-radius: 8px;
+  color: #163cff;
+}
+.purchasePayment .paymentMethodGlyph svg {
+  width: 18px;
+  height: 18px;
+}
+.purchasePayment .paymentNote {
+  color: #795619;
+  margin-top: 16px;
+}
+.purchasePayment .paymentDetails {
+  margin-top: 14px;
+}
+@media (min-width: 620px) {
+  .purchasePayment .paymentTestBadge {
+    margin-left: auto;
+    margin-top: 0;
+  }
+}
+@media (max-width: 480px) {
+  .purchasePayment .purchaseCard[data-payment-state] {
+    padding-inline: 18px;
+  }
+  .purchasePayment .paymentSummary {
+    margin-inline: -18px;
+    padding-inline: 18px;
+  }
+  .purchasePayment .paymentStatusRow h2 {
+    font-size: 15px;
+  }
+}

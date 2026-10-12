@@ -37,7 +37,7 @@ await build({
         if (s === "./cart-store")
           return "export const useCart=()=>({refresh:async()=>{}})";
         if (s === "../../shared/firebase")
-          return `export async function callService(name) {if(name!=="purchaseCheckout")return {};return {id:"00000000-0000-4000-8000-000000000001",provider:"sepay_sandbox",state:new URLSearchParams(location.search).get("state")||"unknown",total:735000,expiresAt:Date.now()+60000,sepayInvoice:"qa-only",lines:[{lineId:"item1",name:"Paula’s Choice SKIN BALANCING Invisible Finish Gel Moisturizer, 2 fl oz",quantity:1,total:735000}]};}`;
+          return `export async function callService(name) {if(name!=="purchaseCheckout")return {};return {id:"00000000-0000-4000-8000-000000000001",provider:"sepay_sandbox",paymentMethod:"BANK_TRANSFER",state:new URLSearchParams(location.search).get("state")||"unknown",total:735000,expiresAt:Date.now()+60000,sepayInvoice:"qa-only",lines:[{lineId:"item1",name:"Paula’s Choice SKIN BALANCING Invisible Finish Gel Moisturizer, 2 fl oz",quantity:1,total:735000}]};}`;
         return "export const PurchaseGateway=()=>null,PurchaseCompletion=()=>null,PurchaseSignIn=()=>null;";
       },
     },
@@ -47,6 +47,6 @@ await build({
   build: {
     outDir: "test-results/payment-cleanup",
     emptyOutDir: true,
-    rolldownOptions: { input: "tests/component/payment-cleanup.html" },
+    rolldownOptions: { input: ["tests/component/payment-cleanup.html", "tests/component/payment-cleanup-mobile.html"] },
   },
 });

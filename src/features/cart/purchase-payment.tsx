@@ -282,9 +282,33 @@ export function PurchasePayment({
           onDownload={() => void download()}
         />
       ) : (
-        <div className="purchaseCard">
+        <div className="purchaseCard" data-payment-state={checkout.state}>
           <div className="paymentSummary">
             <div className="paymentStatusRow">
+              <span className="paymentStatusIcon" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {checkout.state === "cancelled" ? (
+                    <path d="m8 8 8 8m0-8-8 8" />
+                  ) : checkout.state === "review_required" ? (
+                    <>
+                      <path d="M12 7v6m0 4h.01" />
+                      <circle cx="12" cy="12" r="9" />
+                    </>
+                  ) : (
+                    <>
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
+                    </>
+                  )}
+                </svg>
+              </span>
               <h2 aria-live="polite">
                 {checkout.state === "cancelled"
                   ? "Đã hủy thanh toán"
@@ -311,6 +335,21 @@ export function PurchasePayment({
                 </li>
               ))}
             </ul>
+            {checkout.paymentMethod === "BANK_TRANSFER" && (
+              <div className="paymentSelectedMethod">
+                <span className="paymentMethodGlyph" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  >
+                    <path d="M3 3h6v6H3zm12 0h6v6h-6zM3 15h6v6H3zm12 0h3v3h3v3h-6z" />
+                  </svg>
+                </span>
+                <span>QR chuyển khoản ngân hàng</span>
+              </div>
+            )}
           </div>
           {checkout.state === "cancelled" ? (
             <>

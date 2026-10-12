@@ -230,3 +230,19 @@ it("switching account during reconciliation ignores old response and clears new 
     state.call.mock.calls.filter(([name]) => name === "purchaseCheckout"),
   ).toHaveLength(2);
 });
+it("shows only the persisted known payment method without offering a replacement", async () => {
+  state.call.mockResolvedValue(
+    fixture({ paymentMethod: "BANK_TRANSFER", state: "unknown" }),
+  );
+  await render();
+  expect(container.querySelector(".paymentSelectedMethod")?.textContent).toBe(
+    "QR chuyển khoản ngân hàng",
+  );
+  expect(container.querySelector('input[type="radio"]')).toBeNull();
+  expect(buttons()).toHaveLength(1);
+});
+it("absent payment method is not invented from provider", async () => {
+  state.call.mockResolvedValue(fixture({ paymentMethod: undefined }));
+  await render();
+  expect(container.querySelector(".paymentSelectedMethod")).toBeNull();
+});
