@@ -39,11 +39,16 @@ export function PurchasePayment({
   const [checkout, setCheckout] = useState<PurchaseCheckout | null>(null),
     [receipt, setReceipt] = useState<Receipt | null>(null),
     [busy, setBusy] = useState(false),
+    [checking, setChecking] = useState(false),
     [error, setError] = useState("");
+  const checkingFlight = useRef<number | null>(null);
   const flight = useRef(false),
     generation = useRef(0);
   async function read() {
     const gen = generation.current;
+    if (checkingFlight.current === gen) return;
+    checkingFlight.current = gen;
+    setChecking(true);
     try {
       let c = await callService<PurchaseCheckout>("purchaseCheckout", {
         action: "status",
@@ -62,6 +67,7 @@ export function PurchasePayment({
             : "purchaseDemoPayment",
           { action: "reconcile", id },
         );
+        if (gen !== generation.current) return;
         c = await callService<PurchaseCheckout>("purchaseCheckout", {
           action: "status",
           id,
@@ -74,9 +80,10 @@ export function PurchasePayment({
       }
     } catch {
       if (gen === generation.current)
-        setError(
-          "Chưa kiểm tra được lượt thanh toán. Tải lại để tiếp tục với cùng mã.",
-        );
+        setError("Chưa cập nhật được thanh toán. Thử kiểm tra lại.");
+    } finally {
+      if (checkingFlight.current === gen) checkingFlight.current = null;
+      if (gen === generation.current) setChecking(false);
     }
   }
   useEffect(() => {
@@ -118,7 +125,12 @@ export function PurchasePayment({
     };
   }, [checkout?.state, checkout?.receiptId]);
   async function openGateway() {
-    if (flight.current || !checkout) return;
+    if (
+      flight.current ||
+      checkingFlight.current === generation.current ||
+      !checkout
+    )
+      return;
     flight.current = true;
     setBusy(true);
     setError("");
@@ -244,8 +256,7 @@ export function PurchasePayment({
       {checkout?.state !== "paid" && (
         <>
           <header className="purchaseHeader">
-            <h1>Thanh toán đơn hàng</h1>
-            <p>Tiếp tục với đúng lượt thanh toán này để kiểm tra kết quả.</p>
+            <h1>Thanh toán</h1>
           </header>
           <PurchaseJourney current={3} />
         </>
@@ -258,7 +269,7 @@ export function PurchasePayment({
       {!checkout ? (
         <>
           <LoadingState>Đang kiểm tra thanh toán…</LoadingState>
-          <button disabled={busy} onClick={() => void read()}>
+          <button disabled={busy || checking} onClick={() => void read()}>
             Kiểm tra lại
           </button>
         </>
@@ -272,28 +283,41 @@ export function PurchasePayment({
         />
       ) : (
         <div className="purchaseCard">
-          <p className="purchaseHint">
-            {checkout.purpose === "balance"
-              ? "Thanh toán thêm"
-              : "Thanh toán ban đầu"}{" "}
-            · mã {checkout.id}
-          </p>
-          <div className="purchaseTotal">
-            <p>{money(checkout.total)}</p>
+          <div className="paymentSummary">
+            <div className="paymentStatusRow">
+              <h2 aria-live="polite">
+                {checkout.state === "cancelled"
+                  ? "Đã hủy thanh toán"
+                  : checkout.state === "review_required"
+                    ? "Cần đối chiếu thanh toán"
+                    : checkout.state === "unknown"
+                      ? "Chưa xác nhận thanh toán"
+                      : "Chờ thanh toán"}
+              </h2>
+              {["demo", "sepay_sandbox"].includes(checkout.provider) && (
+                <span className="paymentTestBadge">
+                  Thanh toán thử · Không thu tiền thật
+                </span>
+              )}
+            </div>
+            <p className="paymentAmount">{money(checkout.total)}</p>
+            <ul className="paymentProducts">
+              {checkout.lines.map((l) => (
+                <li key={l.lineId}>
+                  <span>
+                    {l.name} × {l.quantity}
+                  </span>
+                  <span>{money(l.total)}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul>
-            {checkout.lines.map((l) => (
-              <li key={l.lineId}>
-                {l.name} · {l.quantity} món · {money(l.total)}
-              </li>
-            ))}
-          </ul>
           {checkout.state === "cancelled" ? (
             <>
               <p role="status">
                 {checkout.purpose === "balance"
-                  ? "Lượt trả thêm đã hủy. Khoản còn thiếu vẫn được giữ trong đơn."
-                  : "Lượt thanh toán đã hủy. Các món vẫn ở trong giỏ."}
+                  ? "Khoản còn thiếu vẫn được giữ trong đơn."
+                  : "Các món vẫn ở trong giỏ."}
               </p>
               <Link
                 to={
@@ -312,50 +336,64 @@ export function PurchasePayment({
               {checkout.receivedAmount !== undefined
                 ? `Đã nhận ${money(checkout.receivedAmount)}. `
                 : ""}
-              Khoản tiền cần đối chiếu trước khi phân bổ. Giữ mã thanh toán này
-              và liên hệ hỗ trợ; không thanh toán lại khoản này.
+              Liên hệ hỗ trợ để đối chiếu. Không thanh toán lại.
             </p>
           ) : (
             <>
-              <p role="status">
-                {checkout.state === "unknown"
-                  ? checkout.purpose === "balance"
-                    ? "Kết quả chưa rõ. Khoản trả thêm được giữ để đối chiếu cùng lượt; không tạo khoản khác."
-                    : "Kết quả chưa rõ. Giỏ được giữ để đối chiếu cùng lượt; không tạo khoản khác."
-                  : "Đang chờ thanh toán."}
-              </p>
+              {checkout.state === "unknown" && (
+                <p className="paymentNote">
+                  Không thanh toán lại khi chưa có kết quả.
+                </p>
+              )}
               {["demo", "sepay_sandbox"].includes(checkout.provider) && (
                 <>
-                  <p className="purchaseHint">
-                    {checkout.provider === "sepay_sandbox"
-                      ? "QR chuyển khoản qua SePay sandbox. Đây là thanh toán thử, không thu tiền thật."
-                      : "Thanh toán demo trên môi trường thử, không thu tiền thật."}
-                  </p>
-                  <div className="purchaseActions">
-                    <button
-                      className="primary"
-                      disabled={busy}
-                      onClick={() =>
-                        checkout.provider === "sepay_sandbox" &&
-                        checkout.state === "unknown"
-                          ? void read()
-                          : void openGateway()
-                      }
-                    >
-                      {busy
-                        ? "Đang mở thanh toán…"
-                        : checkout.state === "unknown"
-                          ? "Tiếp tục kiểm tra thanh toán"
-                          : "Tiếp tục thanh toán"}
-                    </button>
-                  </div>
+                  {!(
+                    checkout.provider === "sepay_sandbox" &&
+                    checkout.state === "unknown"
+                  ) && (
+                    <div className="purchaseActions">
+                      <button
+                        className="primary"
+                        disabled={busy || checking}
+                        onClick={() => void openGateway()}
+                      >
+                        {busy
+                          ? "Đang mở thanh toán…"
+                          : checkout.state === "unknown"
+                            ? "Mở thanh toán thử"
+                            : "Thanh toán"}
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
-              <button disabled={busy} onClick={() => void read()}>
-                Kiểm tra lại trạng thái
-              </button>
+              <div className="purchaseActions">
+                <button
+                  className={
+                    checkout.state === "unknown" ? "primary" : undefined
+                  }
+                  disabled={busy || checking}
+                  aria-busy={checking}
+                  onClick={() => void read()}
+                >
+                  {checking ? "Đang kiểm tra…" : "Kiểm tra thanh toán"}
+                </button>
+              </div>
             </>
           )}
+          <details className="paymentDetails">
+            <summary>Chi tiết thanh toán</summary>
+            <p>
+              {checkout.purpose === "balance"
+                ? "Thanh toán thêm"
+                : "Thanh toán đơn hàng"}
+            </p>
+            <dl>
+              <dt>Mã thanh toán</dt>
+              <dd>{checkout.id}</dd>
+            </dl>
+            <Link to="/support">Liên hệ hỗ trợ</Link>
+          </details>
         </div>
       )}
     </section>

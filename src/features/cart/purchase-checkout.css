@@ -832,3 +832,89 @@
     padding: 24px 16px;
   }
 }
+
+/* Compact payment status, scoped away from checkout and receipt layouts. */
+.purchasePayment .paymentStatusRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.purchasePayment .paymentStatusRow h2 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.purchasePayment .paymentTestBadge {
+  color: #56647a;
+  background: #f2f4f8;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.purchasePayment .paymentAmount {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111c35;
+  margin: 16px 0;
+  line-height: 1.2;
+}
+.purchasePayment .paymentProducts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.purchasePayment .paymentProducts li {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid #edf0f5;
+}
+.purchasePayment .paymentProducts li > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.purchasePayment .paymentProducts li > span:last-child {
+  flex-shrink: 0;
+}
+.purchasePayment .paymentNote {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 12px 0 4px;
+}
+.purchasePayment .paymentDetails {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #edf0f5;
+  font-size: 12px;
+  color: #56647a;
+}
+.purchasePayment .paymentDetails summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: list-item;
+  align-content: center;
+}
+.purchasePayment .paymentDetails p {
+  margin: 4px 0 12px;
+}
+.purchasePayment .paymentDetails dl {
+  margin: 0 0 12px;
+}
+.purchasePayment .paymentDetails dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.purchasePayment .paymentDetails a {
+  display: inline-block;
+  min-height: 44px;
+  align-content: center;
+}
+@media (max-width: 480px) {
+  .purchasePayment .paymentProducts li {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
