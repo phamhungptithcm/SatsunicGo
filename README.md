@@ -10,11 +10,7 @@ https://github.com/user-attachments/assets/2e921623-bd37-4153-a48f-ef076b54556b
 
 SatsunicGo helps customers in Vietnam buy products from the US, Japan, and South Korea. Browse listed products or request something new. **Ask Anything** connects product discovery, purchase details, service information, and order tracking in one conversation.
 
-[Explore SatsunicGo](https://satsunicgo.web.app/) · [Watch the walkthrough](docs/assets/readme/ask-demo/ask-anything-demo.mp4) · [Local setup](#install-and-run) · [Architecture](docs/ARCHITECTURE_AND_DATA.md)
-
-[![Ask Anything walkthrough: find products, choose a source, prepare a purchase request, ask about fees, and track orders](docs/assets/readme/ask-demo/poster.png)](docs/assets/readme/ask-demo/ask-anything-demo.mp4)
-
-*A 72-second Vietnamese product walkthrough with captions and illustrative data. This is a storyboard based on current source, rather than a recording of a completed transaction. [Transcript and demo notes](docs/assets/readme/ask-demo/README.md).*
+[Explore SatsunicGo](https://satsunicgo.web.app/) · [Local setup](#install-and-run) · [Architecture](docs/ARCHITECTURE_AND_DATA.md)
 
 ## Ask Anything
 
