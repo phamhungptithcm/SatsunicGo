@@ -1,0 +1,350 @@
+{
+  "scope": "Real Gemini; synthetic questions and catalog. Expanded no-diacritic/code-switched interpretation review; no customer data or application writes.",
+  "initial_mixed_passed": 6,
+  "initial_mixed_total": 8,
+  "quantity_repair_passed": 2,
+  "quantity_repair_total": 2,
+  "total_provider_calls": 63,
+  "reserved_vnd": 4990,
+  "maximum_reserved_vnd": 5000,
+  "cases": [
+    {
+      "question": "mình muon mua",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": []
+      },
+      "usage": {
+        "promptTokenCount": 955,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 1054,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 955
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 99
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh can ao uniqlo duoi 500k",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "áo uniqlo",
+            "maxPriceVnd": 500000
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 990,
+        "candidatesTokenCount": 140,
+        "totalTokenCount": 1130,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 990
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 140
+          }
+        ]
+      }
+    },
+    {
+      "question": "cho minh xem cart voi",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 982,
+        "candidatesTokenCount": 114,
+        "totalTokenCount": 1096,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 982
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 114
+          }
+        ]
+      }
+    },
+    {
+      "question": "lay cai dau 2 chiec mau trang size L nha",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 2,
+            "variant": "White / L"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 989,
+        "candidatesTokenCount": 188,
+        "totalTokenCount": 1177,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 989
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 188
+          }
+        ]
+      }
+    },
+    {
+      "question": "actually doi thanh ba cai white large nhe",
+      "passed": false,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "variant": "White / L"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 986,
+        "candidatesTokenCount": 141,
+        "totalTokenCount": 1127,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 986
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 141
+          }
+        ]
+      }
+    },
+    {
+      "question": "khoan mua nha, minh chi hoi thoi",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": []
+      },
+      "usage": {
+        "promptTokenCount": 987,
+        "candidatesTokenCount": 97,
+        "totalTokenCount": 1084,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 987
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 97
+          }
+        ]
+      }
+    },
+    {
+      "question": "don cua minh toi dau roi?",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 984,
+        "candidatesTokenCount": 128,
+        "totalTokenCount": 1112,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 984
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 128
+          }
+        ]
+      }
+    },
+    {
+      "question": "can you tinh phi ship giup minh",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "shipping_quote"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 985,
+        "candidatesTokenCount": 131,
+        "totalTokenCount": 1116,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 985
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 131
+          }
+        ]
+      }
+    },
+    {
+      "question": "them mot cai nua mau cu nhe",
+      "passed": false,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 1,
+            "variant": "Black / M"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 986,
+        "candidatesTokenCount": 152,
+        "totalTokenCount": 1138,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 986
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 152
+          }
+        ]
+      }
+    },
+    {
+      "question": "actually doi thanh ba cai white large nhe",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 3,
+            "variant": "White / L"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1192,
+        "candidatesTokenCount": 153,
+        "totalTokenCount": 1345,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1192
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 153
+          }
+        ]
+      }
+    },
+    {
+      "question": "them mot cai nua mau cu nhe",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 3,
+            "variant": "Black / M"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1192,
+        "candidatesTokenCount": 153,
+        "totalTokenCount": 1345,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1192
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 153
+          }
+        ]
+      }
+    }
+  ]
+}
