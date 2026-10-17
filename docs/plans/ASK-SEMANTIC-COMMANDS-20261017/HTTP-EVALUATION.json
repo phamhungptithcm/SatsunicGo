@@ -1,0 +1,56 @@
+{
+  "runId": "36024dc9-2d50-4bf9-9341-ecbb0e870b97",
+  "status": "PASSED",
+  "boundary": "Canonical local Auth/Functions/Firestore/Storage HTTP checkout, demo payment and receipt only; no real provider or fulfillment claim",
+  "checkoutId": "7db31575-83a1-46ea-bc4d-8f3246b2239b",
+  "orderIds": [
+    "246acf52-426f-45d0-8717-0d52d5d2afcf",
+    "5e8b29a2-1ca1-407b-a9f7-147616497a29"
+  ],
+  "results": [
+    {
+      "scenario": "custom add replay once; no staff work before payment",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseDraftImage PERMISSION_DENIED",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseCheckout ABORTED",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseCheckout FAILED_PRECONDITION",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseCheckout PERMISSION_DENIED",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject cartCommand FAILED_PRECONDITION",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseDemoPayment PERMISSION_DENIED",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseDemoPayment FAILED_PRECONDITION",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "unknown survives reload/pending; concurrent paid allocates exactly once and consumes cart",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "reject purchaseReceipt PERMISSION_DENIED",
+      "status": "PASSED"
+    },
+    {
+      "scenario": "payment produces durable orders and authorized PDF receipt with demo email sink",
+      "status": "PASSED"
+    }
+  ]
+}

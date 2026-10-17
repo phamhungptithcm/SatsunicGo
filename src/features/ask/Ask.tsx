@@ -1,4 +1,9 @@
 "use client";
+import { PurchaseWorkspace } from "./PurchaseWorkspace";
+import { useCart } from "../cart/cart-store";
+import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
+import { doc, getDocFromServer } from "firebase/firestore";
+import { db } from "../../shared/firebase";
 import { readGuestTracking } from "./guest-tracking-request";
 import { TrackingRefresh } from "./TrackingRefresh";
 import { GuestOrderTracking } from "./GuestOrderTracking";
@@ -158,6 +163,8 @@ type Turn = {
     signedOut: boolean;
   };
   catalog?: CatalogSearchResult;
+  catalogQuery?: string;
+  catalogMaxPrice?: number;
   webDiscovery?: WebDiscoveryResult;
   webQuery?: string;
   tracking?: CustomerOrderTracking;
@@ -239,15 +246,22 @@ const PublishedAnswer = memo(function PublishedAnswer({
   }
   const action = sourceLink(answer.action, answer.language);
   return (
-    <div className={styles.answer} lang={answer.language}>
-      <h2>{answer.title}</h2>
+    <div
+      className={styles.answer}
+      lang={answer.contentLanguage ?? answer.language}
+    >
+      <h2 dir="auto">{answer.title}</h2>
       {answer.paragraphs.map((paragraph, index) => (
-        <p key={index}>{paragraph}</p>
+        <p key={index} dir="auto">
+          {paragraph}
+        </p>
       ))}
       {!!answer.bullets.length && (
         <ul>
           {answer.bullets.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item} dir="auto">
+              {item}
+            </li>
           ))}
         </ul>
       )}
@@ -297,6 +311,7 @@ const ConversationContent = memo(function ConversationContent({
   onRetry,
   commerce,
   onCatalogResults,
+  onProductSelected,
   commerceEnabled,
 }: {
   turns: Turn[];
@@ -308,6 +323,7 @@ const ConversationContent = memo(function ConversationContent({
   commerce: Commerce;
   commerceEnabled: boolean;
   onCatalogResults: (turnId: number, result: CatalogSearchResult) => void;
+  onProductSelected: (product: unknown) => void;
 }) {
   const vi = language === "vi";
   return (
@@ -355,6 +371,7 @@ const ConversationContent = memo(function ConversationContent({
               {turn.catalog && (
                 <CatalogSearch
                   result={turn.catalog}
+                  onSelect={onProductSelected}
                   question={turn.mixed.queries.catalog!}
                   commerce={commerce}
                   vi={turn.mixed.language === "vi"}
@@ -480,7 +497,9 @@ const ConversationContent = memo(function ConversationContent({
               {turn.catalog && !turn.webDiscovery && (
                 <CatalogSearch
                   result={turn.catalog}
-                  question={turn.question}
+                  onSelect={onProductSelected}
+                  question={turn.catalogQuery ?? turn.question}
+                  maxPriceVnd={turn.catalogMaxPrice}
                   commerce={commerce}
                   vi={vi}
                   active={visible && turn.id === turns.at(-1)?.id && !busy}
@@ -519,7 +538,9 @@ const ConversationContent = memo(function ConversationContent({
                   <button
                     type="button"
                     disabled={busy || !visible}
-                    onClick={() => void onRetry(turn.question, turn.analyticsTurn)}
+                    onClick={() =>
+                      void onRetry(turn.question, turn.analyticsTurn)
+                    }
                   >
                     {vi ? "Thử lại" : "Try again"}
                   </button>
@@ -543,6 +564,10 @@ export function Ask({
   aiAvailable?: boolean;
   startCollapsed?: boolean;
 }) {
+  const cartApi = useCart();
+  const [purchasePath, setPurchasePath] = useState<string | null>(null);
+  const [purchaseBusy, setPurchaseBusy] = useState(false);
+  const cartFlight = useRef(false);
   const route = useLocation();
   const hydrated = useSyncExternalStore(
     subscribeHydration,
@@ -615,7 +640,8 @@ export function Ask({
     if (
       reason === "hydrate" &&
       localTurnSequence.current !== restoreStartId.current
-    ) return;
+    )
+      return;
     actionsRef.current?.invalidate();
     catalogContext.current = null;
     setCatalogChoice(null);
@@ -714,6 +740,7 @@ export function Ask({
       selectedGuestTracking.current = null;
       catalogContext.current = null;
       setCatalogChoice(null);
+      setPurchasePath(null);
       if (!firstLogin) setInput("");
       preparing.current = null;
       setTurns([]);
@@ -798,13 +825,7 @@ export function Ask({
   const newestTurnId = turns.at(-1)?.id;
   useEffect(() => {
     const pane = conversation.current;
-    if (
-      !open ||
-      !pane ||
-      newestTurnId === undefined ||
-      taskView
-    )
-      return;
+    if (!open || !pane || newestTurnId === undefined || taskView) return;
     // Read from the submitted question onward. Answer/status updates never
     // yank a visitor away from the passage they are reading.
     let frame = 0;
@@ -922,7 +943,14 @@ export function Ask({
 
   function close() {
     actionsRef.current?.hideReview();
-    if (!open || closing.current || operationMode.current === "commit") return;
+    if (
+      !open ||
+      closing.current ||
+      operationMode.current === "commit" ||
+      purchaseBusy ||
+      cartFlight.current
+    )
+      return;
     closing.current = true;
     setExiting(true);
     interrupt();
@@ -1078,6 +1106,10 @@ export function Ask({
         !text ||
         !chatReady ||
         text.length > 1000 ||
+        purchaseBusy ||
+        accountPending ||
+        cartApi.busy ||
+        cartApi.pending ||
         commerce.busy ||
         commerce.pendingOperation ||
         locked.current ||
@@ -1219,6 +1251,189 @@ export function Ask({
                 : turn,
             ),
           );
+          return true;
+        }
+        // Free text reaches semantic interpretation before lexical shortcuts.
+        // The model can only propose reads/navigation/editable selection, never commit.
+        if (requestUid && !images.length) {
+          const known = catalogContext.current;
+          const contextFresh =
+            known &&
+            !known.stale &&
+            known.ownerId === requestUid &&
+            known.conversationId === (requestCid ?? null) &&
+            Date.now() - known.createdAt < 300000;
+          const currentChoice =
+            catalogChoice?.ownerId === requestUid &&
+            catalogChoice.conversationId === (requestCid ?? null) &&
+            Date.now() - catalogChoice.createdAt < 300000
+              ? catalogChoice
+              : null;
+          const answer = await askService(
+            {
+              question: suppliedText,
+              history,
+              sessionId: session.current,
+              language: detectLanguage(suppliedText, language),
+              commandProtocol: 1,
+              ...(requestCid ? { conversationId: requestCid } : {}),
+              ...(commerce.order?.id ? { orderId: commerce.order.id } : {}),
+              commandContext: {
+                visibleProductIds: contextFresh
+                  ? known.rows
+                      .slice(0, 20)
+                      .map((row) => (row as { id: string }).id)
+                  : [],
+                ...(currentChoice
+                  ? {
+                      selected: {
+                        productId: currentChoice.product.id,
+                        quantity: currentChoice.quantity,
+                        variant: currentChoice.variant,
+                      },
+                    }
+                  : {}),
+              },
+            },
+            requestSignal,
+            (event) => {
+              if (ownsRequest() && event.type === "status")
+                setPhase(event.phase);
+            },
+          );
+          if (!ownsRequest() || requestSignal.aborted) return false;
+          if (!answer.commandPlan) throw Error("COMMAND_PROTOCOL_UNAVAILABLE");
+          if (!answer.commandPlan.commands.length) setTaskView(false);
+          let catalog: CatalogSearchResult | undefined;
+          let catalogQuery: string | undefined;
+          let catalogMaxPrice: number | undefined;
+          let tracking: CustomerOrderTracking | undefined;
+          let shipping: Turn["shipping"];
+          for (const command of answer.commandPlan.commands) {
+            if (command.kind === "search_catalog") {
+              catalogQuery = command.query;
+              catalogMaxPrice = command.maxPriceVnd;
+              catalog = await searchPublishedCatalog(
+                command.query,
+                requestSignal,
+              );
+              if (command.maxPriceVnd !== undefined)
+                catalog = {
+                  ...catalog,
+                  rows: catalog.rows.filter(
+                    (row) =>
+                      typeof row.listedPrice === "number" &&
+                      row.listedPrice <= command.maxPriceVnd!,
+                  ),
+                };
+              if (!ownsRequest() || requestSignal.aborted) return false;
+              setCatalogChoice(null);
+              catalogContext.current = null;
+              setPurchasePath(null);
+              setTaskView(false);
+            } else if (command.kind === "select_product") {
+              const row =
+                (contextFresh ? known.rows : []).find(
+                  (row) => (row as { id: string }).id === command.productId,
+                ) ??
+                (currentChoice?.product.id === command.productId
+                  ? currentChoice.product
+                  : null);
+              const product = catalogProductSchema.parse(row);
+              const same =
+                currentChoice?.product.id === command.productId
+                  ? currentChoice
+                  : null;
+              const variant = command.variant ?? same?.variant ?? "";
+              if (variant && !product.catalogOptions.includes(variant))
+                throw Error("VARIANT_NOT_AVAILABLE");
+              setCatalogChoice({
+                ownerId: requestUid,
+                conversationId: requestCid ?? null,
+                createdAt: Date.now(),
+                product: { ...product, id: command.productId },
+                quantity: command.quantity ?? same?.quantity ?? 0,
+                variant,
+              });
+              actions.invalidate();
+              setAccountTask(null);
+              setPurchasePath(null);
+              setTaskView(true);
+            } else if (
+              command.kind === "open_cart" ||
+              command.kind === "checkout" ||
+              command.kind === "request_item"
+            ) {
+              actions.invalidate();
+              setAccountTask(null);
+              setPurchasePath(
+                command.kind === "request_item"
+                  ? "/request"
+                  : command.kind === "checkout"
+                    ? "/checkout"
+                    : "/cart",
+              );
+              setTaskView(true);
+            } else if (
+              command.kind === "profile" ||
+              command.kind === "membership"
+            ) {
+              actions.invalidate();
+              setPurchasePath(null);
+              setAccountTask(command.kind);
+              setTaskView(true);
+            } else if (command.kind === "track_order") {
+              setTaskView(false);
+              const orderId = command.orderId ?? commerce.order?.id;
+              if (orderId)
+                tracking = await callService<CustomerOrderTracking>(
+                  "customerOrderTracking",
+                  { orderId },
+                );
+              else {
+                answer.action = "account";
+                answer.paragraphs = [
+                  answer.language === "vi"
+                    ? "Mở Đơn của tôi để chọn đơn cần theo dõi."
+                    : "Open My orders to select the order to track.",
+                ];
+              }
+            } else if (command.kind === "shipping_quote") {
+              setTaskView(false);
+              const snapshot = await callService<ShippingRatesPublicSnapshot>(
+                "shippingRatesPublic",
+                {},
+              );
+              shipping = { snapshot, direction: "US_VN" };
+            } else {
+              setPurchasePath(null);
+              setAccountTask(null);
+              setTaskView(true);
+            }
+          }
+          if (!ownsRequest() || requestSignal.aborted) return false;
+          // Never persist an executable proposal into restorable conversation history.
+          const displayAnswer = { ...answer };
+          delete displayAnswer.commandPlan;
+          setLanguage(answer.language);
+          setTurns((current) =>
+            current.map((turn) =>
+              turn.id === id
+                ? {
+                    ...turn,
+                    answer: displayAnswer,
+                    catalog,
+                    catalogQuery,
+                    catalogMaxPrice,
+                    tracking,
+                    shipping,
+                    status: "answered",
+                  }
+                : turn,
+            ),
+          );
+          if (catalog) rememberCatalog(id, catalog);
+          void baseCommerce.resolved(suppliedText, displayAnswer);
           return true;
         }
         const references = [...turns]
@@ -2125,6 +2340,7 @@ export function Ask({
         return true;
       } catch (error) {
         if (ownsRequest()) {
+          setTaskView(false);
           setTurns((current) =>
             !ownsRequest()
               ? current
@@ -2171,10 +2387,85 @@ export function Ask({
       trackedOrderDiffers,
       commerceEnabled,
       actions,
+      baseCommerce,
+      rememberCatalog,
+      purchaseBusy,
+      accountPending,
+      cartApi.busy,
+      cartApi.pending,
     ],
   );
 
   const vi = language === "vi";
+  async function addSelectedToCart() {
+    if (
+      cartFlight.current ||
+      busy ||
+      commerce.busy ||
+      commerce.pendingOperation ||
+      cartApi.busy ||
+      cartApi.pending ||
+      !db
+    )
+      return;
+    const owner = auth?.currentUser?.uid;
+    const selection = catalogChatSelection(catalogChoice, {
+      ownerId: owner ?? null,
+      conversationId: commerce.conversationId ?? null,
+    });
+    if (!owner || !selection) return;
+    cartFlight.current = true;
+    commerce.setError("");
+    setAccountPending(true);
+    try {
+      const snapshot = await getDocFromServer(
+        doc(db, "products", selection.productId),
+      );
+      const product = catalogProductSchema.parse(snapshot.data());
+      if (
+        auth?.currentUser?.uid !== owner ||
+        product.version !== selection.productVersion ||
+        (product.catalogOptions.length
+          ? !product.catalogOptions.includes(selection.variant)
+          : selection.variant !== "")
+      )
+        throw Error("STALE_SELECTION");
+      const added = await cartApi.change({
+        action: "merge",
+        items: [
+          {
+            lineId: crypto.randomUUID(),
+            productId: selection.productId,
+            variant: selection.variant,
+            quantity: selection.quantity,
+          },
+        ],
+      });
+      if (auth?.currentUser?.uid !== owner) return;
+      if (added) {
+        actions.invalidate();
+        setCatalogChoice(null);
+        catalogContext.current = null;
+        setPurchasePath("/cart");
+        setTaskView(true);
+      } else
+        commerce.setError(
+          vi
+            ? "Chưa xác nhận được lần thêm vào giỏ. Mở giỏ để kiểm tra trước khi thử lại."
+            : "Adding to cart is not confirmed. Open the cart to check before retrying.",
+        );
+    } catch {
+      if (auth?.currentUser?.uid === owner)
+        commerce.setError(
+          vi
+            ? "Chưa thêm được sản phẩm. Kiểm tra kết nối và chọn lại sản phẩm."
+            : "The item was not added. Check your connection and select it again.",
+        );
+    } finally {
+      cartFlight.current = false;
+      setAccountPending(false);
+    }
+  }
   const sendLabel =
     phase === "committing"
       ? vi
@@ -2235,6 +2526,10 @@ export function Ask({
       commerce.pendingOperation ||
       locked.current ||
       images.working ||
+      accountPending ||
+      purchaseBusy ||
+      cartApi.busy ||
+      !!cartApi.pending ||
       preparing.current !== null
     )
       return;
@@ -2251,7 +2546,7 @@ export function Ask({
       return;
     }
     const reply = !images.photos.length ? contextualReply(question) : null;
-    if (reply) {
+    if (reply && (actions.preview || reply === "decline")) {
       setInput("");
       if (reply === "decline") {
         actions.invalidate();
@@ -2555,8 +2850,8 @@ export function Ask({
       {(expanded || focused) && (
         <p className={styles.notice}>
           {vi
-            ? "Khi dùng AI, câu hỏi có thể được Google xử lý. Không chia sẻ thông tin nhạy cảm."
-            : "When AI is used, questions may be processed by Google. Avoid sharing sensitive information."}{" "}
+            ? "Khi dùng AI, câu hỏi và tối đa 6 lượt hội thoại gần nhất được lọc thông tin nhạy cảm rồi gửi tới Google để hiểu ngữ cảnh. Bộ lọc có thể bỏ sót; anh/chị không gửi thông tin riêng tư."
+            : "AI sends your question and up to 6 recent turns to Google for context after filtering sensitive information. Filters may miss details; avoid sharing private information."}{" "}
           <Link href="/privacy">{vi ? "Quyền riêng tư" : "Privacy"}</Link>
         </p>
       )}
@@ -2671,13 +2966,77 @@ export function Ask({
               commerce={commerce}
               commerceEnabled={commerceEnabled}
               onCatalogResults={rememberCatalog}
+              onProductSelected={(row) => {
+                if (busy || accountPending || commerce.pendingOperation) return;
+                const product = catalogProductSchema.parse(row);
+                const id = (row as { id: string }).id;
+                actions.invalidate();
+                setAccountTask(null);
+                setPurchasePath(null);
+                setCatalogChoice({
+                  ownerId: auth?.currentUser?.uid ?? null,
+                  conversationId: commerce.conversationId ?? null,
+                  createdAt: Date.now(),
+                  product: { ...product, id },
+                  quantity: 0,
+                  variant: "",
+                });
+                setTaskView(true);
+              }}
             />
-            {turns.at(-1)?.trackingRefreshFailed && <p role="status">{vi ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản." : "Tracking is unavailable. Re-enter the code or check your account."}</p>}
-            {open && !exiting && !busy && !accountPending && turns.at(-1)?.status === "answered" && (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
-              <TrackingRefresh key={`${turns.at(-1)!.id}:${authGeneration.current}`} uid={auth?.currentUser?.uid ?? null} order={turns.at(-1)?.tracking} code={turns.at(-1)?.guestTracking ? selectedGuestTracking.current ?? undefined : undefined} language={language}
-                update={value => { const id = turns.at(-1)!.id; setTurns(current => current.map(turn => turn.id === id ? "publicStatus" in value ? {...turn, guestTracking: value} : {...turn, tracking: value} : turn)); }}
-                clear={() => { const id = turns.at(-1)!.id; selectedGuestTracking.current = null; setTurns(current => current.map(turn => turn.id === id ? {...turn, tracking: undefined, guestTracking: undefined, trackingRefreshFailed: true} : turn)); }} />
+            {turns.at(-1)?.trackingRefreshFailed && (
+              <p role="status">
+                {vi
+                  ? "Không thể tiếp tục tra cứu. Nhập lại mã hoặc kiểm tra tài khoản."
+                  : "Tracking is unavailable. Re-enter the code or check your account."}
+              </p>
             )}
+            {open &&
+              !exiting &&
+              !busy &&
+              !accountPending &&
+              turns.at(-1)?.status === "answered" &&
+              (turns.at(-1)?.tracking || turns.at(-1)?.guestTracking) && (
+                <TrackingRefresh
+                  key={`${turns.at(-1)!.id}:${authGeneration.current}`}
+                  uid={auth?.currentUser?.uid ?? null}
+                  order={turns.at(-1)?.tracking}
+                  code={
+                    turns.at(-1)?.guestTracking
+                      ? (selectedGuestTracking.current ?? undefined)
+                      : undefined
+                  }
+                  language={language}
+                  update={(value) => {
+                    const id = turns.at(-1)!.id;
+                    setTurns((current) =>
+                      current.map((turn) =>
+                        turn.id === id
+                          ? "publicStatus" in value
+                            ? { ...turn, guestTracking: value }
+                            : { ...turn, tracking: value }
+                          : turn,
+                      ),
+                    );
+                  }}
+                  clear={() => {
+                    const id = turns.at(-1)!.id;
+                    selectedGuestTracking.current = null;
+                    setTurns((current) =>
+                      current.map((turn) =>
+                        turn.id === id
+                          ? {
+                              ...turn,
+                              tracking: undefined,
+                              guestTracking: undefined,
+                              trackingRefreshFailed: true,
+                            }
+                          : turn,
+                      ),
+                    );
+                  }}
+                />
+              )}
             {(import.meta.env.DEV ||
               import.meta.env.VITE_ASK_FEEDBACK_ENABLED === "true") &&
               turns.at(-1)?.status === "answered" &&
@@ -2688,24 +3047,32 @@ export function Ask({
                 <AnswerFeedback commerce={commerce} vi={vi} />
               )}
           </div>
-          {commerceEnabled && (
+          {
             <ActionWindow
               title={
-                accountTask === "profile"
+                purchasePath
                   ? vi
-                    ? "Hồ sơ và địa chỉ"
-                    : "Profile and addresses"
-                  : accountTask === "membership"
-                    ? "Membership"
-                    : actions.preview
-                      ? actionLabel(actions.preview.command.action, vi)
-                      : commerce.order
-                        ? vi
-                          ? "Đơn hàng"
-                          : "Order"
-                        : vi
-                          ? "Yêu cầu mua hộ"
-                          : "Buying request"
+                    ? "Mua hàng"
+                    : "Purchase"
+                  : catalogChoice && !accountTask
+                    ? vi
+                      ? "Kiểm tra sản phẩm"
+                      : "Review product"
+                    : accountTask === "profile"
+                      ? vi
+                        ? "Hồ sơ và địa chỉ"
+                        : "Profile and addresses"
+                      : accountTask === "membership"
+                        ? "Membership"
+                        : actions.preview
+                          ? actionLabel(actions.preview.command.action, vi)
+                          : commerce.order
+                            ? vi
+                              ? "Đơn hàng"
+                              : "Order"
+                            : vi
+                              ? "Yêu cầu mua hộ"
+                              : "Buying request"
               }
               visible={open && !exiting && taskView}
               vi={vi}
@@ -2715,6 +3082,7 @@ export function Ask({
               blocked={
                 busy ||
                 commerce.busy ||
+                purchaseBusy ||
                 (accountPending && accountTask === null)
               }
               readOnly={false}
@@ -2742,101 +3110,147 @@ export function Ask({
               }}
               onRendered={actions.markRendered}
             >
-              <CustomerWorkspace
-                key={JSON.stringify([
-                  commerce.user?.uid ?? null,
-                  commerce.conversationId ?? null,
-                  authGeneration.current,
-                ])}
-                user={commerce.user}
-                language={language}
-                task={accountTask}
-                blocked={
-                  !!commerce.pendingOperation ||
-                  commerce.busy ||
-                  !!actions.preview
-                }
-                readOnly={false}
-                onPendingChange={setAccountPending}
-                onTaskChange={(task) => {
-                  if (
-                    !commerce.pendingOperation &&
-                    !commerce.busy &&
-                    !accountPending
-                  ) {
-                    actions.invalidate();
-                    setAccountTask(task);
-                    setTaskView(true);
-                  }
-                }}
-              />
-              <div
-                hidden={accountTask !== null}
-                onChangeCapture={() => actions.invalidate()}
-                onClickCapture={(event) => {
-                  if (
-                    !!commerce.pendingOperation ||
-                    accountPending
-                  ) {
-                    const anchor = (event.target as Element).closest("a");
-                    if (anchor) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                    }
-                  }
-                }}
+              <nav
+                aria-label={vi ? "Tiện ích trong Ask" : "Ask utilities"}
+                className={styles.suggestions}
               >
-                {!trackedOrderDiffers &&
-                  !commerce.order &&
-                  catalogChoice &&
-                  catalogChoice.ownerId === (auth?.currentUser?.uid ?? null) &&
-                  catalogChoice.conversationId ===
-                    (commerce.conversationId ?? null) && (
-                    <CatalogChat
-                      choice={catalogChoice}
-                      scope={{
-                        ownerId: auth?.currentUser?.uid ?? null,
-                        conversationId: commerce.conversationId ?? null,
-                      }}
-                      commerce={commerce}
-                      vi={vi}
-                      onChange={(choice) => {
-                        if (
-                          !locked.current &&
-                          !commerce.busy &&
-                          !commerce.pendingOperation &&
-                          !accountPending
-                        ) {
-                          actions.invalidate();
-                          setCatalogChoice(choice);
-                        }
-                      }}
-                      onConfirm={() =>
-                        void sendMessage(
-                          vi
-                            ? "xác nhận lựa chọn và tạo đơn"
-                            : "confirm selection and create order",
-                        )
-                      }
-                    />
-                  )}
-                {!trackedOrderDiffers && (
-                  <CommercePanel
-                    commerce={commerce}
-                    language={language}
-                    hasMessages={turns.length > 0}
-                    catalogFocused={
-                      !!catalogChoice &&
-                      catalogChoice.ownerId ===
-                        (auth?.currentUser?.uid ?? null) &&
-                      catalogChoice.conversationId ===
-                        (commerce.conversationId ?? null)
-                    }
-                  />
+                <button
+                  type="button"
+                  disabled={
+                    busy ||
+                    accountPending ||
+                    purchaseBusy ||
+                    cartApi.busy ||
+                    !!commerce.pendingOperation
+                  }
+                  onClick={() => {
+                    actions.invalidate();
+                    setAccountTask(null);
+                    setPurchasePath("/cart");
+                    setTaskView(true);
+                  }}
+                >
+                  {vi ? "Giỏ hàng" : "Cart"}
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    busy ||
+                    accountPending ||
+                    purchaseBusy ||
+                    cartApi.busy ||
+                    !!commerce.pendingOperation
+                  }
+                  onClick={() => {
+                    actions.invalidate();
+                    setAccountTask(null);
+                    setPurchasePath("/request");
+                    setTaskView(true);
+                  }}
+                >
+                  {vi ? "Thêm món mua hộ" : "Request an item"}
+                </button>
+              </nav>
+              {purchasePath && (
+                <PurchaseWorkspace
+                  key={commerce.user?.uid ?? "guest"}
+                  path={purchasePath}
+                  onNavigate={setPurchasePath}
+                  onBusyChange={setPurchaseBusy}
+                  user={commerce.user}
+                  vi={vi}
+                />
+              )}
+              <div hidden={purchasePath !== null}>
+                {commerce.error && catalogChoice && (
+                  <p role="alert">{commerce.error}</p>
                 )}
+                <CustomerWorkspace
+                  key={JSON.stringify([
+                    commerce.user?.uid ?? null,
+                    commerce.conversationId ?? null,
+                    authGeneration.current,
+                  ])}
+                  user={commerce.user}
+                  language={language}
+                  task={accountTask}
+                  blocked={
+                    !!commerce.pendingOperation ||
+                    commerce.busy ||
+                    !!actions.preview
+                  }
+                  readOnly={false}
+                  onPendingChange={setAccountPending}
+                  onTaskChange={(task) => {
+                    if (
+                      !commerce.pendingOperation &&
+                      !commerce.busy &&
+                      !accountPending
+                    ) {
+                      actions.invalidate();
+                      setAccountTask(task);
+                      setTaskView(true);
+                    }
+                  }}
+                />
+                <div
+                  hidden={accountTask !== null}
+                  onChangeCapture={() => actions.invalidate()}
+                  onClickCapture={(event) => {
+                    if (!!commerce.pendingOperation || accountPending) {
+                      const anchor = (event.target as Element).closest("a");
+                      if (anchor) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }
+                    }
+                  }}
+                >
+                  {!trackedOrderDiffers &&
+                    catalogChoice &&
+                    catalogChoice.ownerId ===
+                      (auth?.currentUser?.uid ?? null) &&
+                    catalogChoice.conversationId ===
+                      (commerce.conversationId ?? null) && (
+                      <CatalogChat
+                        choice={catalogChoice}
+                        scope={{
+                          ownerId: auth?.currentUser?.uid ?? null,
+                          conversationId: commerce.conversationId ?? null,
+                        }}
+                        commerce={{
+                          ...commerce,
+                          busy: commerce.busy || accountPending || cartApi.busy,
+                        }}
+                        vi={vi}
+                        onChange={(choice) => {
+                          if (
+                            !locked.current &&
+                            !commerce.busy &&
+                            !commerce.pendingOperation &&
+                            !accountPending
+                          ) {
+                            actions.invalidate();
+                            setCatalogChoice(choice);
+                          }
+                        }}
+                        onConfirm={() => void addSelectedToCart()}
+                      />
+                    )}
+                  {!trackedOrderDiffers &&
+                    !!commerce.order &&
+                    !catalogChoice && (
+                      <CommercePanel
+                        commerce={commerce}
+                        language={language}
+                        hasMessages={turns.length > 0}
+                      catalogFocused={false}
+                      />
+                    )}
+                </div>
               </div>
             </ActionWindow>
-          )}
+          }
         </div>
         <div className={styles.dialogBottom}>{composer(true)}</div>
       </dialog>

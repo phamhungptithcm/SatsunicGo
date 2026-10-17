@@ -104,13 +104,13 @@ export function CatalogChat({
         )}
         <p>
           {vi
-            ? "Anh/chị có thể sửa bằng chat, ví dụ “số lượng 2”. Kiểm tra mẫu và tổng tiền, rồi nhắn “xác nhận lựa chọn và tạo đơn”."
-            : "Edit by chat: “quantity 2”. Review the variant and total, then type “confirm selection and create order”."}
+            ? "Anh/chị có thể nhắn để sửa mẫu hoặc số lượng. Kiểm tra lựa chọn trước khi thêm vào giỏ."
+            : "Ask to change the variant or quantity. Review your selection before adding it to the cart."}
         </p>
         <p>
           {vi
-            ? "Giá được kiểm tra lại khi tạo đơn. Hàng trong danh mục thanh toán đủ trước khi xử lý."
-            : "The price is checked again when creating the order. Catalog orders require full payment before processing."}{" "}
+            ? "Giá được kiểm tra lại trước khi thêm vào giỏ và khi đặt mua. Chưa tạo đơn hoặc thanh toán ở bước này."
+            : "The price is checked before adding to cart and at checkout. This step does not place or pay for an order."}{" "}
           {vi ? "Điều khoản" : "Terms"}: {p.termsVersion}
         </p>
         {!valid && (
@@ -129,7 +129,7 @@ export function CatalogChat({
             !!commerce.pendingOperation
           }
         >
-          {vi ? "Kiểm tra lựa chọn" : "Review selection"}
+          {vi ? "Thêm vào giỏ" : "Add to cart"}
         </button>
       </form>
     </section>

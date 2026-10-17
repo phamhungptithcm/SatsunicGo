@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  PurchaseLink as Link,
+  usePurchaseNavigate as useNavigate,
+} from "./purchase-navigation";
 import type { DemoPaymentLink } from "../../../packages/domain/purchase-provider";
 import { callService } from "../../shared/firebase";
 

@@ -7,7 +7,11 @@ import {
 import { notify } from "../../shared/feedback";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { User } from "firebase/auth";
-import { Link, useLocation } from "react-router-dom";
+import {
+  PurchaseLink as Link,
+  usePurchaseLocation as useLocation,
+  usePurchaseBusy,
+} from "../cart/purchase-navigation";
 import { requestSchema } from "../../../packages/domain";
 import {
   normalizeRequestInput,
@@ -35,8 +39,11 @@ type Attempt = {
   images: { hash: string; operationId: string; uploaded: boolean }[];
 };
 function savedRequestName() {
-  try { return sessionStorage.getItem("request-name") ?? ""; }
-  catch { return ""; }
+  try {
+    return sessionStorage.getItem("request-name") ?? "";
+  } catch {
+    return "";
+  }
 }
 function pendingFor(uid?: string): Attempt | null {
   if (!uid) return null;
@@ -153,7 +160,9 @@ export function RequestForm({
     // state without replacing the person's in-progress fields or images.
     if (!user) return;
     try {
-      setLegacyPending(Boolean(sessionStorage.getItem(`request-pending:${user.uid}`)));
+      setLegacyPending(
+        Boolean(sessionStorage.getItem(`request-pending:${user.uid}`)),
+      );
       const stored = sessionStorage.getItem(`request-cart-pending:${user.uid}`);
       const recovered = pendingFor(user.uid);
       setPendingUnreadable(Boolean(stored && !recovered));
@@ -173,6 +182,7 @@ export function RequestForm({
     };
   }, []);
   const frozen = busy || imageReading || Boolean(attempt && !attempt.orderId);
+  usePurchaseBusy(busy || imageReading);
   function payload() {
     return {
       market,

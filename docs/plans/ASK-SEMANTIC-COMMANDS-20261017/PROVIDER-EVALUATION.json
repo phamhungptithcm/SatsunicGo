@@ -1,0 +1,374 @@
+{
+  "boundary": "Synthetic real Vertex evaluation, no customer records or application writes",
+  "model": "gemini-2.5-flash-lite",
+  "currentSchemaCases": [
+    {
+      "case": 27,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o Uniqlo",
+            "maxPriceVnd": 500000
+          }
+        ]
+      }
+    },
+    {
+      "case": 28,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o thun",
+            "maxPriceVnd": 500000
+          }
+        ]
+      }
+    },
+    {
+      "case": 29,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o s\u01a1 mi Uniqlo"
+          }
+        ]
+      }
+    },
+    {
+      "case": 30,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      }
+    },
+    {
+      "case": 31,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      }
+    },
+    {
+      "case": 32,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      }
+    },
+    {
+      "case": 33,
+      "passed": true,
+      "expected": "track_order",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order"
+          }
+        ]
+      }
+    },
+    {
+      "case": 34,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      }
+    },
+    {
+      "case": 35,
+      "passed": true,
+      "expected": "track_order",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order",
+            "orderId": "my-order"
+          }
+        ]
+      }
+    },
+    {
+      "case": 36,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      }
+    },
+    {
+      "case": 37,
+      "passed": true,
+      "expected": null,
+      "actual": {
+        "version": 1,
+        "commands": []
+      }
+    },
+    {
+      "case": 38,
+      "passed": true,
+      "expected": "select_product",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 3,
+            "variant": "White / L"
+          }
+        ]
+      }
+    },
+    {
+      "case": 39,
+      "passed": true,
+      "expected": null,
+      "actual": {
+        "version": 1,
+        "commands": []
+      }
+    }
+  ],
+  "historicalFindings": {
+    "initial24Passed": 22,
+    "budgetSchemaFailures": 2,
+    "diagnosticReproductions": 2,
+    "fixedBy": "Discriminated anyOf provider schemas; strict local admission unchanged"
+  },
+  "providerUsage": {
+    "inputTokens": 44437,
+    "outputTokensIncludingThoughts": 6601
+  },
+  "maximumEvaluationReservationVnd": 5000,
+  "reservedEvaluationVnd": 4524,
+  "actualBilledCost": "Unavailable",
+  "finalProtocolConfirmation": [
+    {
+      "case": 40,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o Uniqlo",
+            "maxPriceVnd": 500000
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 41,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o thun",
+            "maxPriceVnd": 500000
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 42,
+      "passed": true,
+      "expected": "search_catalog",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "\u00e1o s\u01a1 mi"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 43,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 44,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 45,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 46,
+      "passed": true,
+      "expected": "track_order",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order",
+            "orderId": "my-order"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 47,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 48,
+      "passed": true,
+      "expected": "track_order",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 49,
+      "passed": true,
+      "expected": "open_cart",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 50,
+      "passed": true,
+      "expected": null,
+      "actual": {
+        "version": 1,
+        "commands": []
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 51,
+      "passed": true,
+      "expected": "select_product",
+      "actual": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "shirt",
+            "quantity": 3,
+            "variant": "White / L"
+          }
+        ]
+      },
+      "contentLanguage": "vi"
+    },
+    {
+      "case": 52,
+      "passed": true,
+      "expected": null,
+      "actual": {
+        "version": 1,
+        "commands": []
+      },
+      "contentLanguage": "vi"
+    }
+  ]
+}

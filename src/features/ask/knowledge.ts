@@ -3,10 +3,13 @@ import {
   searchViews,
 } from "../../../packages/domain/ask-language-query";
 import type { z } from "zod";
+import type { AskCommandPlan } from "../../../packages/domain/ask-command-plan";
 import { requestSchema } from "../../../packages/domain";
 export type AskLanguage = "vi" | "en";
 export type AskAnswer = {
+  commandPlan?: AskCommandPlan;
   language: AskLanguage;
+  contentLanguage?: string;
   title: string;
   paragraphs: string[];
   bullets: string[];

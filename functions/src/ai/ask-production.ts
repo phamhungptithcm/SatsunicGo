@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { warn } from "firebase-functions/logger";
 import { z } from "zod";
 
-// Reviewed 2026-10-10: standard Vertex text input $0.10/M; output incl.
+// Reviewed 2026-10-17: standard Vertex text input $0.10/M; output incl.
 // reasoning $0.40/M. At 100,000 VND/USD, max 10k+800 costs 132 VND.
 // 1,000 VND/attempt reserves >7x that envelope; never release uncertainty.
 // Model retires Oct 20. This short activation expires well before retirement.
@@ -17,11 +17,11 @@ export const customerAiLimits = Object.freeze({
   maxOutputTokens: 800,
   reserveVnd: 1000,
   maxBudgetVnd: 50000,
-  perUserBudgetVnd: 5000,
+  perUserBudgetVnd: 20000,
   globalPerMinute: 10,
-  userPerMinute: 2,
+  userPerMinute: 6,
   windowMs: 86400000,
-  pricingExpiresAt: Date.parse("2026-10-12T02:00:00Z"),
+  pricingExpiresAt: Date.parse("2026-10-19T00:00:00Z"),
 });
 export const customerAiPolicySchema = z
   .object({

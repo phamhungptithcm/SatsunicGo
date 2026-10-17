@@ -1,0 +1,29 @@
+{
+  "base": "f9e323eeffaa38b313428a583f56cdd8324ffdf5",
+  "files": {
+    "functions/src/ai/ask-pilot-answer.ts": "13b08b95445b7d5cfe5b4570627ebdf18cf219d60856365cdc8970c1d1697ff0",
+    "functions/src/ai/ask-production.ts": "24cd13bcdab237710946d1c4833cc0f0972f8932c9dd00d321a9d610e0893f23",
+    "functions/src/ai/ask.ts": "b45f0e7b186f7471ee773c05c882a18cab54e7acaeb0d1e6f1249cd093e1a599",
+    "functions/src/ai/server-context.ts": "d8af8ec149592724f8c521b9b1e7c9ef984c322c4cd70e123939c6ac3ff5af5b",
+    "packages/domain/ask-command-plan.ts": "0e338fe1a6effcdc87b30d10758d03f07819f7ab8119d9fc7597d66fd07da733",
+    "packages/domain/ask-stream.ts": "462da86391b0b4f26985907e61632bf17d81b1bfe8377ce89f73edc4ce0e6086",
+    "src/features/ask/Ask.module.css": "47536ab629c07700031660b55edf999cc925d21ec2513dd6cf99b7512b1b2300",
+    "src/features/ask/Ask.tsx": "da4569ccc10e499f11d0cf9d2ac47414b6d64a47c03b187c3107b02c24f53274",
+    "src/features/ask/CatalogChat.tsx": "03b1f9880103e12e89d459e00426f333b525005b0a0fc2f9e876e22f3d407908",
+    "src/features/ask/CatalogSearch.tsx": "d140b88e8e7cc4114bfd32abe4fa3fef050c95fb7ea39bc09e3db919beff546d",
+    "src/features/ask/PurchaseWorkspace.tsx": "0d7a89a5329f82b8c651cbd6c436f229a260ac7deb9d39794f678d81cdb58cf9",
+    "src/features/ask/knowledge.ts": "789c61430e675952a197efdbea1c5a6b38a20a9fc6464bd449fae34cc3786558",
+    "src/features/ask/purchase-workspace.css": "d2e7768b54cf538c263694eff5e3334376bff5426fe00c85704e2b8eb08fe125",
+    "src/features/cart/Cart.tsx": "6ca2fdd407d4cabe2c1ceccd59403c6d7336d4517601f619aee6bd77d0ff61fd",
+    "src/features/cart/purchase-checkout.tsx": "6b5a3c1a1b4c05786ad23408cb770de8abf9802e4dd8e12de1b5b7f628ad28f1",
+    "src/features/cart/purchase-completion.tsx": "b045aad138aab3af1ef681d4b2715fea49f6c92d60506405a8c21367b2bef6ce",
+    "src/features/cart/purchase-gateway.tsx": "b0fa4e5f9d4e8ee75a7f7879181786269c6284fb7341a7705ed232d80e31de91",
+    "src/features/cart/purchase-navigation.tsx": "3b184c1aacf8e7373e6d1898407327f298bd67bfa3b33a0dbbf98c7243c02078",
+    "src/features/cart/purchase-payment.tsx": "13ab2d821bfec495aa12f5d423e6e3c8b3c0b22b0ea1f987da904322429b2ebe",
+    "src/features/requests/RequestForm.tsx": "0aaeef766505568d78434d4debc00796ca01ea502be488c0e570d605bb0e0a25",
+    "tests/browser/ask-semantic.config.ts": "42938038d16a24ee42f7133a7291b622ffd32dfbf4b6b698f370ac058f947907",
+    "tests/browser/ask-semantic.spec.ts": "740e36627b4c4764664bd31d12e707749895f9f8e3109996ca37280048826748",
+    "tests/unit/ask-command-plan.test.ts": "7217b0304e592e0240a097fe7dcea95f109e80302c8a65c24f3571dacdf83394",
+    "tests/unit/ask-production-admission.test.ts": "f07904866ef590d7dc3fc8ef536696bf620ae80a49c37fbffa14427493d90c25"
+  }
+}
