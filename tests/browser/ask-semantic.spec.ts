@@ -55,7 +55,7 @@ async function mount(page: Page) {
     window.qaCalls=[];window.qaConversation={ownerId:'qa-semantic',version:0,updatedAt:Date.now(),turns:[],draft:{}};
     const listeners=new Set(),snapshot=()=>({metadata:{fromCache:false},data:()=>window.qaConversation});
     window.qaEmitConversation=patch=>{window.qaConversation={...window.qaConversation,...patch,updatedAt:Date.now()};for(const ok of listeners)ok(snapshot())};
-    export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;if(ref.kind==='askConversations')listeners.add(ok);queueMicrotask(()=>{if(live)ok(ref.kind==='askConversations'?snapshot():{metadata:{fromCache:false},docs:[],data:()=>undefined,exists:()=>false})});return()=>{live=false;listeners.delete(ok)}}`,
+    export function onSnapshot(ref,...args){const ok=args.find(x=>typeof x==='function');let live=true;if(ref.kind==='askConversations')listeners.add(ok);queueMicrotask(()=>{if(live)ok(ref.kind==='askConversations'?snapshot():{metadata:{fromCache:false},docs:[],data:()=>ref.kind==='orders'?window.qaOrder:undefined,exists:()=>ref.kind==='orders'})});return()=>{live=false;listeners.delete(ok)}}`,
     }),
   );
   await page.route("**/src/features/cart/cart-store.tsx*", (r) =>
@@ -267,4 +267,60 @@ test("clarification and provider failure remain visible after a mobile task", as
         ).length,
     ),
   ).toBe(0);
+});
+
+test("a prior order does not hide a new explicit product selection", async ({
+  page,
+}) => {
+  await mount(page);
+  await send(page, "xin chào", []);
+  await page.evaluate(() => {
+    const fixture = window as unknown as {
+      qaOrder: unknown;
+      qaEmitConversation: (patch: unknown) => void;
+    };
+    fixture.qaOrder = {
+      id: "old-order",
+      ownerId: "qa-semantic",
+      market: "US",
+      items: [{ name: "Previous item", quantity: 1, variant: "" }],
+      notes: "",
+      stage: "COMPLETED",
+      version: 1,
+      createdAt: Date.now(),
+      collected: 350000,
+      refunded: 0,
+      finalTotal: 350000,
+      finalApproved: true,
+    };
+    fixture.qaEmitConversation({ orderId: "old-order" });
+  });
+  await send(page, "tìm áo khác", [
+    { kind: "search_catalog", query: "Uniqlo" },
+  ]);
+  await send(page, "hai cái trắng L", [
+    {
+      kind: "select_product",
+      productId: "shirt",
+      quantity: 2,
+      variant: "White / L",
+    },
+  ]);
+  await expect(
+    page
+      .getByRole("region", { name: "Sản phẩm đang chọn" })
+      .getByRole("button", { name: "Thêm vào giỏ", exact: true }),
+  ).toBeEnabled();
+  const calls = await page.evaluate(
+    () =>
+      (
+        window as unknown as {
+          qaCalls: { name: string; data: { orderId?: string } }[];
+        }
+      ).qaCalls,
+  );
+  expect(calls.filter((c) => c.name === "ask").at(-1)?.data.orderId).toBe(
+    "old-order",
+  );
+  expect(calls.some((c) => c.name === "cartCommand")).toBe(false);
 });

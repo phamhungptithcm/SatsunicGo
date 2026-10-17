@@ -3162,7 +3162,7 @@ export function Ask({
                 />
               )}
               <div hidden={purchasePath !== null}>
-                {!commerce.order && commerce.error && catalogChoice && (
+                {commerce.error && catalogChoice && (
                   <p role="alert">{commerce.error}</p>
                 )}
                 <CustomerWorkspace
@@ -3207,7 +3207,6 @@ export function Ask({
                   }}
                 >
                   {!trackedOrderDiffers &&
-                    !commerce.order &&
                     catalogChoice &&
                     catalogChoice.ownerId ===
                       (auth?.currentUser?.uid ?? null) &&
@@ -3238,20 +3237,16 @@ export function Ask({
                         onConfirm={() => void addSelectedToCart()}
                       />
                     )}
-                  {!trackedOrderDiffers && !!commerce.order && (
-                    <CommercePanel
-                      commerce={commerce}
-                      language={language}
-                      hasMessages={turns.length > 0}
-                      catalogFocused={
-                        !!catalogChoice &&
-                        catalogChoice.ownerId ===
-                          (auth?.currentUser?.uid ?? null) &&
-                        catalogChoice.conversationId ===
-                          (commerce.conversationId ?? null)
-                      }
-                    />
-                  )}
+                  {!trackedOrderDiffers &&
+                    !!commerce.order &&
+                    !catalogChoice && (
+                      <CommercePanel
+                        commerce={commerce}
+                        language={language}
+                        hasMessages={turns.length > 0}
+                      catalogFocused={false}
+                      />
+                    )}
                 </div>
               </div>
             </ActionWindow>

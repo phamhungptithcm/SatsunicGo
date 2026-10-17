@@ -15,7 +15,7 @@ Scope: approved semantic interpretation, multilingual conversation, bounded reda
 
 1. BLOCKED: real Gemini generated unrelated variant fields for two budget searches. Fixed provider schema with separate command variants; strict admission retained. Current-schema multilingual provider set: 13/13 pass, including both budget regressions. Initial failed attempts remain disclosed in PROVIDER-EVALUATION.json.
 2. BLOCKED: cart failure text was hidden, mobile clarifications could remain behind the task pane, and purchase navigation could interrupt a pending component. Fixed error rendering, conversation visibility and busy propagation. Browser scenarios cover current source at 1440/390/320 pixels, stale-price rejection and provider error recovery. Historical local fixture import/locator failures were corrected without loosening business assertions.
-3. Source review: payment-word matching could reject legitimate negation. Valid semantic commands now survive while model payment claims are replaced by neutral, non-transactional text; legacy behavior is unchanged. Added handler-level tests proving no cart/order writes and retained paid-call reservation on rejection. Added redacted-history and invalid-command coverage. Final release/production readback remains a separate gate.
+3. Source review: payment-word matching could reject legitimate negation. Valid semantic commands now survive while model payment claims are replaced by neutral, non-transactional text; legacy behavior is unchanged. Added handler-level tests proving no cart/order writes and retained paid-call reservation on rejection. Added redacted-history and invalid-command coverage. A completed prior order also hid a newly selected product; separate the old-order view from the explicit new cart candidate, with a dedicated sixth browser regression. Final release/production readback remains a separate gate.
 
 ## Checks and boundaries
 
@@ -24,7 +24,7 @@ Scope: approved semantic interpretation, multilingual conversation, bounded reda
 | TypeScript frontend + Functions Node 22 | `npm run typecheck` |
 | Static analysis | `npm run lint`, `git diff --check` |
 | Unit regression | `npm test`: 191 files; final count in completion receipt |
-| Browser integration | `tests/browser/ask-semantic.config.ts`: five scenarios; real components with synthetic transport/data fixtures, not production proof |
+| Browser integration | `tests/browser/ask-semantic.config.ts`: six scenarios; real components with synthetic transport/data fixtures, not production proof |
 | Canonical HTTP integration | HTTP-EVALUATION.json: 11 passed checks against shared demo Auth/Firestore/Functions/Storage; demo payment and receipt, not external provider evidence |
 | Provider interpretation | PROVIDER-EVALUATION.json: real Vertex, synthetic inputs/catalog only; no actual customer data |
 | Production build and release contracts | `npm run build`; Node release108/deep-review tests; public config tests |
@@ -46,4 +46,4 @@ Current Google sources checked 2026-10-17: [standard text pricing](https://cloud
 
 Residual limits: probabilistic interpretation; one supported command per turn; only text uses this protocol; signed-in verified Google accounts; no unrestricted Gemini consumer-product tool parity; interface forms remain their existing locale; external sandbox provider completion and production smoke need live evidence. Global remaining budget includes prior reservations. No production completion claim until those gates have readback.
 
-Provider evaluation totals: 31,633 input tokens and 4,971 output/thought tokens across 39 completed calls; API-equivalent estimate USD 0.0051517 at the checked standard text prices. Actual billed cost and coding-agent token usage: Unavailable. Memory candidates: None. Runtime reporting CLI is unavailable in PATH; this source-bound manual report is the fallback, not a fabricated runtime receipt.
+Provider evaluation totals: 44,437 input tokens and 6,601 output/thought tokens across 52 completed calls; API-equivalent estimate USD 0.0070841 at the checked standard text prices. Actual billed cost and coding-agent token usage: Unavailable. Memory candidates: None. Runtime reporting CLI is unavailable in PATH; this source-bound manual report is the fallback, not a fabricated runtime receipt.
