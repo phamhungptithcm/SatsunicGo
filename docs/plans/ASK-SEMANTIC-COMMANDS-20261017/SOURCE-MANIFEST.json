@@ -5,7 +5,7 @@
     "functions/src/ai/ask-production.ts": "24cd13bcdab237710946d1c4833cc0f0972f8932c9dd00d321a9d610e0893f23",
     "functions/src/ai/ask.ts": "b45f0e7b186f7471ee773c05c882a18cab54e7acaeb0d1e6f1249cd093e1a599",
     "functions/src/ai/server-context.ts": "d8af8ec149592724f8c521b9b1e7c9ef984c322c4cd70e123939c6ac3ff5af5b",
-    "packages/domain/ask-command-plan.ts": "0e338fe1a6effcdc87b30d10758d03f07819f7ab8119d9fc7597d66fd07da733",
+    "packages/domain/ask-command-plan.ts": "212e3ccccbe9d1b06c8c22a46bb310741736ef706633f41abb6e0d9b016f2d7b",
     "packages/domain/ask-stream.ts": "462da86391b0b4f26985907e61632bf17d81b1bfe8377ce89f73edc4ce0e6086",
     "src/features/ask/Ask.module.css": "47536ab629c07700031660b55edf999cc925d21ec2513dd6cf99b7512b1b2300",
     "src/features/ask/Ask.tsx": "da4569ccc10e499f11d0cf9d2ac47414b6d64a47c03b187c3107b02c24f53274",
