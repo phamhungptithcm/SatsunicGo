@@ -106,6 +106,9 @@ export async function readServerContext(
           JSON.stringify({
             question: redactChat(turn.question),
             answerTitle: redactChat(turn.answer.title),
+            answerParagraphs: turn.answer.paragraphs
+              .slice(0, 3)
+              .map((text) => redactChat(text).slice(0, 1000)),
           }),
         ) ?? null;
       if (input.orderId && (!task || task.orderId !== input.orderId))
@@ -152,6 +155,12 @@ export async function readServerContext(
           .slice(0, 1);
       });
       const catalog = products.docs.slice(0, 100).map((doc) => ({
+        id: doc.id,
+        catalogOptions: Array.isArray(doc.data().catalogOptions)
+          ? (doc.data().catalogOptions as unknown[])
+              .filter((v): v is string => typeof v === "string")
+              .slice(0, 40)
+          : [],
         title:
           typeof doc.data().title === "string"
             ? (doc.data().title.slice(0, 160) as string)

@@ -1,0 +1,31 @@
+.askPurchaseWorkspace {
+  min-width: 0;
+  width: 100%;
+}
+.askPurchaseWorkspace > p {
+  margin: 0 0 12px;
+  color: #52617b;
+}
+.askPurchaseWorkspace .page {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.askPurchaseWorkspace .cartLayout107,
+.askPurchaseWorkspace .purchaseGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.askPurchaseWorkspace input,
+.askPurchaseWorkspace select,
+.askPurchaseWorkspace textarea {
+  max-width: 100%;
+}
+.askPurchaseWorkspace h1 {
+  font-size: 22px;
+}
+.askPurchaseWorkspace [class*="Summary"],
+.askPurchaseWorkspace [class*="summary"] {
+  position: static;
+}

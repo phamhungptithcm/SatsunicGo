@@ -229,14 +229,14 @@ test("pricing expiry closes even otherwise valid policy", async () => {
   expect(paid).toHaveLength(0);
 });
 test.each([
-  ["2026-10-12T01:59:59.999Z", true],
-  ["2026-10-12T02:00:00.000Z", false],
-  ["2026-10-12T02:00:00.001Z", false],
+  ["2026-10-18T23:59:59.999Z", true],
+  ["2026-10-19T00:00:00.000Z", false],
+  ["2026-10-19T00:00:00.001Z", false],
 ])("renewed customer policy boundary %s permits=%s", async (time, allowed) => {
   const renewed = {
     ...policy(),
-    activatedAt: Date.parse("2026-10-11T23:00:00Z"),
-    expiresAt: Date.parse("2026-10-12T02:00:00Z"),
+    activatedAt: Date.parse("2026-10-18T00:00:00Z"),
+    expiresAt: Date.parse("2026-10-19T00:00:00Z"),
   };
   vi.setSystemTime(new Date(time));
   state.docs.set(policyPath, renewed);
@@ -282,18 +282,17 @@ test("concurrent admission never exceeds total ceiling", async () => {
   expect(state.docs.get(budgetPath)?.reservedVnd).toBe(50000);
 });
 test("per-user lifetime ceiling survives minute rollover", async () => {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 20; i++) {
     await generate("customer", `turn-${i}`);
     vi.advanceTimersByTime(60000);
   }
-  await expect(generate("customer", "sixth")).rejects.toThrow();
-  expect(paid).toHaveLength(5);
+  await expect(generate("customer", "twenty-first")).rejects.toThrow();
+  expect(paid).toHaveLength(20);
 });
-test("per-minute customer limit denies third distinct turn", async () => {
-  await generate("customer", "one");
-  await generate("customer", "two");
-  await expect(generate("customer", "three")).rejects.toThrow();
-  expect(paid).toHaveLength(2);
+test("per-minute customer limit denies seventh distinct turn", async () => {
+  for (let i = 0; i < 6; i++) await generate("customer", `minute-${i}`);
+  await expect(generate("customer", "seventh")).rejects.toThrow();
+  expect(paid).toHaveLength(6);
 });
 test("global minute limit denies eleventh customer", async () => {
   for (let i = 0; i < 10; i++) await generate(`customer-${i}`);
@@ -536,6 +535,82 @@ const questionInput = {
   history: [],
   images: [],
 };
+test.each([
+  [{ kind: "open_cart" }, true],
+  [{ kind: "checkout" }, true],
+  [{ kind: "search_catalog", query: "Uniqlo", maxPriceVnd: 500000 }, true],
+  [{ kind: "select_product", productId: "invented", quantity: 2 }, false],
+  [{ kind: "track_order", orderId: "foreign-order" }, false],
+  [{ kind: "checkout", confirmed: true }, false],
+  [{ kind: "refund", amount: 1000000 }, false],
+])(
+  "semantic customer response admits only authorized command %j",
+  async (command, allowed) => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, options: RequestInit) => {
+        if (url.endsWith(":countTokens"))
+          return Response.json({ totalTokens: 100 });
+        const request = JSON.parse(String(options.body));
+        expect(
+          request.generationConfig.responseSchema.properties.commandPlan,
+        ).toBeTruthy();
+        expect(request.contents[0].parts[0].text).toContain("commandContext");
+        paid.push(String(options.body));
+        return Response.json({
+          ...answer,
+          candidates: [
+            {
+              finishReason: "STOP",
+              content: {
+                parts: [
+                  {
+                    text: JSON.stringify({
+                      language: "en",
+                      title: "Your request",
+                      paragraphs: [
+                        command.kind === "checkout"
+                          ? "We purchased it."
+                          : "This order has not been paid.",
+                      ],
+                      bullets: [],
+                      sourceIds: [],
+                      action: "workflow",
+                      commandPlan: { version: 1, commands: [command] },
+                    }),
+                  },
+                ],
+              },
+            },
+          ],
+        });
+      }),
+    );
+    const result = pilotAnswer(
+      "customer",
+      {
+        ...questionInput,
+        commandProtocol: 1,
+        commandContext: { visibleProductIds: [] },
+      },
+      new AbortController().signal,
+      "semantic-session",
+    );
+    if (allowed) {
+      const response = await result;
+      expect(response.commandPlan?.commands).toEqual([command]);
+      expect(response.title).toBe("Review information");
+      expect(response.paragraphs.join(" ")).not.toContain("We purchased it.");
+    } else await expect(result).rejects.toThrow();
+    expect(paid).toHaveLength(1);
+    expect(state.docs.get(budgetPath)?.reservedVnd).toBe(1000);
+    expect(
+      [...state.docs.keys()].some(
+        (key) => key.startsWith("orders/") || key.startsWith("carts/"),
+      ),
+    ).toBe(false);
+  },
+);
 test("customer server context needs no staff role; legacy pilot still requires OWNER", async () => {
   const context = await readServerContext(
     "customer",
@@ -544,6 +619,45 @@ test("customer server context needs no staff role; legacy pilot still requires O
   );
   expect(context.currentFacts.order).toBeNull();
   await expect(readServerContext("customer", questionInput)).rejects.toThrow();
+});
+test("approved recent answer context is bounded and redacts sensitive details", async () => {
+  const conversationId = "22222222-2222-4222-8222-222222222222";
+  state.docs.set(`askConversations/customer-${conversationId}`, {
+    ownerId: "customer",
+    version: 1,
+    updatedAt: Date.now(),
+    turns: Array.from({ length: 8 }, (_, index) => ({
+      id: `22222222-2222-4222-8222-${String(index).padStart(12, "0")}`,
+      question: "Which size?",
+      answer: {
+        language: "en",
+        title: "Size selection",
+        paragraphs: [
+          "Reach fixture@example.invalid or +84 900 000 000",
+          "address: private synthetic street",
+          "Choose M or L",
+          "Excluded fourth paragraph",
+        ],
+        bullets: [],
+        sourceIds: [],
+        action: "workflow",
+      },
+    })),
+  });
+  const context = await readServerContext(
+    "customer",
+    { ...questionInput, conversationId },
+    "customer",
+  );
+  expect(context.recentTurns).toHaveLength(6);
+  expect(JSON.stringify(context.recentTurns)).not.toMatch(
+    /fixture@example|900 000|private synthetic street|Excluded fourth/,
+  );
+  expect(JSON.parse(context.recentTurns![0]).answerParagraphs).toEqual([
+    "Reach [email] or [private number]",
+    "[private details]",
+    "Choose M or L",
+  ]);
 });
 test("customer context cannot read a foreign conversation or order", async () => {
   const conversationId = "22222222-2222-4222-8222-222222222222";

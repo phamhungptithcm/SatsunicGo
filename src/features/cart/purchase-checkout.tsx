@@ -4,7 +4,12 @@ import {
 } from "../notifications/NotificationPreferences";
 import { useNotificationPreferences } from "../notifications/use-notification-preferences";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  PurchaseLink as Link,
+  usePurchaseNavigate as useNavigate,
+  usePurchaseSearchParams as useSearchParams,
+  usePurchaseBusy,
+} from "./purchase-navigation";
 import type { User } from "firebase/auth";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { callService, db } from "../../shared/firebase";
@@ -125,6 +130,7 @@ export function PurchaseCheckout({
     [recipientAttempted, setRecipientAttempted] = useState(false);
   const [paymentMethod, setPaymentMethod] =
     useState<PurchasePaymentMethod | null>(null);
+  usePurchaseBusy(busy);
   const enabledPaymentMethods = availablePurchasePaymentMethods(
     setup?.paymentCapabilities,
   );

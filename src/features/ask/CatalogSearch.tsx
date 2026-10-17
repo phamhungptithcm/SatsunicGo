@@ -18,6 +18,8 @@ export function CatalogSearch({
   vi,
   active,
   onResults,
+  maxPriceVnd,
+  onSelect,
 }: {
   result: CatalogSearchResult;
   question: string;
@@ -25,6 +27,8 @@ export function CatalogSearch({
   vi: boolean;
   active: boolean;
   onResults?: (result: CatalogSearchResult) => void;
+  maxPriceVnd?: number;
+  onSelect?: (product: unknown) => void;
 }) {
   const [data, setData] = useState(result),
     [selected, setSelected] = useState(""),
@@ -58,15 +62,21 @@ export function CatalogSearch({
         AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]),
         data.cursor,
       );
+      const nextRows =
+        maxPriceVnd === undefined
+          ? next.rows
+          : next.rows.filter(
+              (row) =>
+                typeof row.listedPrice === "number" &&
+                row.listedPrice <= maxPriceVnd,
+            );
       if (!controller.signal.aborted)
         setData((old) => ({
           ...next,
           stale: old.stale || next.stale,
           rows: [
             ...old.rows,
-            ...next.rows.filter(
-              (row) => !old.rows.some((r) => r.id === row.id),
-            ),
+            ...nextRows.filter((row) => !old.rows.some((r) => r.id === row.id)),
           ],
         }));
     } catch {
@@ -82,7 +92,7 @@ export function CatalogSearch({
         if (!controller.signal.aborted) setLoading(false);
       }
     }
-  }, [question, data.cursor, vi]);
+  }, [question, data.cursor, vi, maxPriceVnd]);
   useEffect(() => {
     if (!active) {
       abort.current?.abort();
@@ -149,7 +159,10 @@ export function CatalogSearch({
                 </span>
               )}
               <div>
-                <Link data-analytics-product={row.id} to={`/products/${row.slug}`}>
+                <Link
+                  data-analytics-product={row.id}
+                  to={`/products/${row.slug}`}
+                >
                   {index + 1}. {row.title}
                 </Link>
                 <p>
@@ -164,7 +177,11 @@ export function CatalogSearch({
                 <button
                   type="button"
                   aria-pressed={selected === row.slug}
-                  onClick={() => { trackProduct(row.id, "product_click"); setSelected(row.slug); }}
+                  onClick={() => {
+                    trackProduct(row.id, "product_click");
+                    if (onSelect) onSelect(row);
+                    else setSelected(row.slug);
+                  }}
                 >
                   {vi ? "Chọn mua" : "Buy"}
                 </button>
@@ -185,9 +202,20 @@ export function CatalogSearch({
         </button>
       )}
       {error && <p role="alert">{error}</p>}
-      {!data.rows.length && !data.hasMore && !data.stale && !error && active && !commerce.order &&
-        (import.meta.env.DEV || import.meta.env.VITE_ASK_RESEARCH_ENABLED === "true") && (
-          <WebResearch question={question} commerce={commerce} vi={vi} active={active} />
+      {!data.rows.length &&
+        !data.hasMore &&
+        !data.stale &&
+        !error &&
+        active &&
+        !commerce.order &&
+        (import.meta.env.DEV ||
+          import.meta.env.VITE_ASK_RESEARCH_ENABLED === "true") && (
+          <WebResearch
+            question={question}
+            commerce={commerce}
+            vi={vi}
+            active={active}
+          />
         )}
       {selected && active && !commerce.order && (
         <CatalogPurchase

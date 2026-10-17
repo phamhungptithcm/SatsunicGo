@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+  PurchaseLink as Link,
+  usePurchaseNavigate as useNavigate,
+  usePurchaseParams as useParams,
+  usePurchaseSearchParams as useSearchParams,
+  usePurchaseBusy,
+} from "./purchase-navigation";
 import type { User } from "firebase/auth";
 import type { PurchaseCheckout } from "../../../packages/domain/purchase-checkout";
 import { callService } from "../../shared/firebase";
@@ -43,6 +44,7 @@ export function PurchasePayment({
     [checking, setChecking] = useState(false),
     [error, setError] = useState("");
   const checkingFlight = useRef<number | null>(null);
+  usePurchaseBusy(busy || checking);
   const flight = useRef(false),
     generation = useRef(0);
   async function read() {

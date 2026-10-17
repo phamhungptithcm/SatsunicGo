@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  PurchaseLink as Link,
+  usePurchaseNavigate as useNavigate,
+} from "./purchase-navigation";
 import { customCartTotal } from "../../../packages/domain/cart";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import { LoadingState } from "../../shared/Loading";

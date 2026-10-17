@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { PurchaseLink as Link } from "./purchase-navigation";
 import type { PurchaseCheckout } from "../../../packages/domain/purchase-checkout";
 
 export function PurchaseCompletion({

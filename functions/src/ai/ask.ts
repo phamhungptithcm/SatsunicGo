@@ -1,4 +1,5 @@
 import { approvedKnowledgeAnswer } from "./approved-knowledge";
+import { askCommandContextSchema } from "../../../packages/domain/ask-command-plan";
 import { createAskRunGuard } from "./run-guard";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
 import { askImageSchema } from "../../../packages/domain/ask-images";
@@ -36,6 +37,8 @@ assertSafeTelemetryEnvironment(process.env);
 const input = z
   .object({
     images: z.array(askImageSchema).max(3).default([]),
+    commandProtocol: z.literal(1).optional(),
+    commandContext: askCommandContextSchema.optional(),
     conversationId: z.string().uuid().optional(),
     question: z.string().trim().min(1).max(1000),
     sessionId: z.string().uuid(),
@@ -69,11 +72,9 @@ export const ask = onCall(
     // deterministic answers and explicit workflows use their existing paths.
     const verifiedUid = requireVerifiedGoogle(req.auth);
     const db = getFirestore();
-    const evidence = await approvedKnowledgeAnswer(
-      verifiedUid,
-      p.data,
-      response?.signal,
-    );
+    const evidence = p.data.commandProtocol
+      ? null
+      : await approvedKnowledgeAnswer(verifiedUid, p.data, response?.signal);
     if (evidence) {
       await response?.sendChunk({ type: "answer", answer: evidence });
       return evidence;
