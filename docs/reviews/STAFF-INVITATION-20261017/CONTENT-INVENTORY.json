@@ -1,0 +1,797 @@
+[
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 24,
+    "text": "Chủ doanh nghiệp"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 25,
+    "text": "Quản lý vận hành"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 26,
+    "text": "Mua hàng"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 28,
+    "text": "Kế toán"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 29,
+    "text": "Hỗ trợ"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 30,
+    "text": "Biên tập nội dung"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 102,
+    "text": "Dữ liệu quyền chưa hợp lệ để chỉnh sửa. Kiểm tra lại tài khoản trước khi lưu."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 112,
+    "text": "Chưa kiểm tra được quyền nhân viên."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 157,
+    "text": "Đã lưu quyền. Kiểm tra lại nhân viên trước khi sửa tiếp."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 182,
+    "text": "Chưa lưu được. Kiểm tra phiên bản và xác thực Google gần đây cùng hai lớp."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 183,
+    "text": "Chưa xác nhận được kết quả lưu. Thử lại thao tác đang chờ cho đúng tài khoản này."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 195,
+    "text": "Phân quyền cho"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 196,
+    "text": "Quản lý nhân viên hiện có"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 198,
+    "text": "Kiểm tra tài khoản trước khi cập nhật quyền làm việc."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 203,
+    "text": "Cần quyền chủ doanh nghiệp và xác thực hai lớp gần đây để lưu."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 210,
+    "text": "Email nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 211,
+    "text": "Mã tài khoản nhân viên hiện có"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 213,
+    "text": "*"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 236,
+    "text": "Nhân viên đã chấp nhận lời mời bằng tài khoản Google này."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 237,
+    "text": "Kiểm tra đúng nhân viên trước khi cập nhật quyền hiện có."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 240,
+    "text": "Đang kiểm tra…"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 240,
+    "text": "Kiểm tra quyền hiện tại"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 245,
+    "text": "Vai trò"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 245,
+    "text": "Phạm vi & trạng thái"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 245,
+    "text": "Kiểm tra"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 252,
+    "text": "Tài khoản đang chỉnh quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 258,
+    "text": "Vai trò được phép"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 279,
+    "text": "Được phép làm việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 287,
+    "text": "Khóa quyền nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 290,
+    "text": "Các đơn giao cho nhân viên mua hàng (mỗi mã một dòng)"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 299,
+    "text": "Đang lưu…"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 299,
+    "text": "Lưu quyền nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 314,
+    "text": "Thử lại thao tác đang chờ"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 394,
+    "text": "Chưa tải được danh sách nhân viên. Thử tải lại."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 402,
+    "text": "Chưa ghi nhận"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 431,
+    "text": "Chưa tải được danh sách lời mời. Thử tải lại."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 459,
+    "text": "Đã ghi nhận nghỉ việc và ngừng quyền làm việc."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 461,
+    "text": "Đã thu hồi lời mời. Link cũ không thể dùng để tham gia."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 462,
+    "text": "Đã tạo yêu cầu gửi lời mời. Theo dõi trạng thái email trong danh sách."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 493,
+    "text": "Chưa xác nhận được kết quả. Kiểm tra thao tác đang chờ trước khi thực hiện thay đổi khác."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 496,
+    "text": "Quyền nhân viên đã thay đổi. Tải lại nhân viên rồi ghi nhận nghỉ việc."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 497,
+    "text": "Chưa ghi nhận nghỉ việc. Kiểm tra quyền quản trị, xác thực hai lớp gần đây và tải lại nhân viên."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 499,
+    "text": "Email đã có lời mời hoặc đã tham gia. Tải lại danh sách để kiểm tra."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 501,
+    "text": "Chưa thể gửi thêm. Đợi một lúc rồi thử lại."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 503,
+    "text": "Lời mời đã thay đổi. Tải lại danh sách trước khi thao tác."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 505,
+    "text": "Chưa thực hiện được. Kiểm tra trạng thái gửi và xác thực hai lớp gần đây của bạn."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 506,
+    "text": "Chưa thực hiện được. Kiểm tra tài khoản và email rồi thử lại."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 521,
+    "text": "Nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 522,
+    "text": "Quản lý nhân viên và quyền làm việc."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 524,
+    "text": "Mời nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 534,
+    "text": "Email tài khoản Google"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 536,
+    "text": "*"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 551,
+    "text": "Đang xử lý…"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 551,
+    "text": "Gửi lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 554,
+    "text": "Nhân viên chấp nhận bằng tài khoản Google, sau đó bạn phân quyền."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 560,
+    "text": "Kiểm tra thao tác đang chờ"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 566,
+    "text": "Danh sách nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 571,
+    "text": "Tải lại nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 575,
+    "text": "Đang tải nhân viên…"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 578,
+    "text": "Chưa có nhân viên nào."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 584,
+    "text": "Bảng nhân viên, cuộn ngang để xem đủ cột"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 588,
+    "text": "Thông tin và quyền làm việc của nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 592,
+    "text": "Họ tên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 593,
+    "text": "Email"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 594,
+    "text": "Ngày tham gia"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 595,
+    "text": "Ngày nghỉ việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 596,
+    "text": "Vai trò"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 597,
+    "text": "Trạng thái"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 598,
+    "text": "Thao tác"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 610,
+    "text": "Chưa có họ tên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 613,
+    "text": "Chưa có email"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 622,
+    "text": "Vai trò chưa xác định"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 625,
+    "text": "Chưa phân quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 632,
+    "text": "Đã nghỉ việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 634,
+    "text": "Đang khóa"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 636,
+    "text": "Đang làm việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 637,
+    "text": "Chưa có quyền làm việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 651,
+    "text": "Nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 658,
+    "text": "Chỉnh quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 667,
+    "text": "Ghi nhận nghỉ việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 682,
+    "text": "Xem thêm nhân viên"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 686,
+    "text": "Xác nhận nghỉ việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 688,
+    "text": "Ghi nhận"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 689,
+    "text": "nhân viên này"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 689,
+    "text": "nghỉ việc hôm nay và ngừng quyền làm việc? Lịch sử nhân viên được giữ lại."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 704,
+    "text": "Xác nhận nghỉ việc"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 710,
+    "text": "Hủy"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 731,
+    "text": "Lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 734,
+    "text": "Theo dõi lời mời và trạng thái gửi email"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 737,
+    "text": "Tải lại danh sách"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 740,
+    "text": "Đang tải danh sách…"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 743,
+    "text": "Chưa có lời mời nào. Nhập email để mời nhân viên đầu tiên."
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 755,
+    "text": "· Đã cấp quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 756,
+    "text": "· Chưa có quyền truy cập"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 766,
+    "text": "Hết hạn:"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 784,
+    "text": "Chỉnh quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 784,
+    "text": "Phân quyền"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 803,
+    "text": "Gửi lại lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 815,
+    "text": "Thu hồi lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffAccess.tsx",
+    "line": 825,
+    "text": "Xem thêm lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 69,
+    "text": "Chưa xác nhận được kết quả chấp nhận. Kiểm tra lại lời mời để tiếp tục."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 84,
+    "text": "Lời mời tham gia SatsunicGo"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 87,
+    "text": "Tài khoản đang dùng:"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 90,
+    "text": "Đang kiểm tra lời mời…"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 93,
+    "text": "Đăng nhập bằng tài khoản Google nhận email này để xem lời mời."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 95,
+    "text": "Đăng nhập với Google"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 102,
+    "text": "Bạn được mời tham gia đội ngũ SatsunicGo. Sau khi bạn chấp nhận, chủ doanh nghiệp sẽ phân quyền làm việc."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 110,
+    "text": "Đang chấp nhận…"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 110,
+    "text": "Chấp nhận tham gia"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 117,
+    "text": "Bạn đã chấp nhận lời mời. Chủ doanh nghiệp sẽ cấp quyền làm việc cho bạn."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 120,
+    "text": "Kiểm tra quyền vào CRM"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 125,
+    "text": "Lời mời không dành cho tài khoản này hoặc không còn khả dụng. Thử tài khoản Google nhận email lời mời."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 131,
+    "text": "Link lời mời chưa hợp lệ. Mở lại link trong email hoặc liên hệ người mời."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 137,
+    "text": "Lời mời đã hết hạn. Liên hệ người mời để nhận lời mời mới."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 142,
+    "text": "Lời mời đã được thu hồi. Liên hệ người mời nếu bạn vẫn cần tham gia."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 149,
+    "text": "Chưa kiểm tra được lời mời. Kiểm tra kết nối rồi thử lại."
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 152,
+    "text": "Kiểm tra lại lời mời"
+  },
+  {
+    "file": "src/features/settings/StaffInvitationAccept.tsx",
+    "line": 158,
+    "text": "Đăng xuất để đổi tài khoản"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 62,
+    "text": "Chờ chấp nhận"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 63,
+    "text": "Đã tham gia"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 64,
+    "text": "Đã thu hồi"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 65,
+    "text": "Đã hết hạn"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 68,
+    "text": "Đang chờ gửi email"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 69,
+    "text": "Đang gửi email"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 70,
+    "text": "Dịch vụ email đã nhận yêu cầu gửi"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 71,
+    "text": "Chưa gửi được email"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 72,
+    "text": "Chưa xác nhận được kết quả gửi"
+  },
+  {
+    "file": "packages/domain/staff-invitation.ts",
+    "line": 73,
+    "text": "Đã dừng gửi email"
+  },
+  {
+    "file": "functions/src/staff-invitation-email.ts",
+    "line": 38,
+    "text": "Lời mời tham gia SatsunicGo"
+  },
+  {
+    "file": "functions/src/staff-invitation-email.ts",
+    "line": 39,
+    "text": "Bạn được mời tham gia đội ngũ SatsunicGo. Mở"
+  },
+  {
+    "file": "functions/src/staff-invitation-email.ts",
+    "line": 39,
+    "text": "và đăng nhập bằng tài khoản Google nhận email này để chấp nhận. Lời mời có hiệu lực tối đa 7 ngày. Sau khi chấp nhận, chủ doanh nghiệp sẽ phân quyền. Nếu không mong đợi lời mời này, bạn có thể bỏ qua email."
+  },
+  {
+    "file": "functions/src/staff-invitation-email.ts",
+    "line": 40,
+    "text": "<h1>Lời mời tham gia SatsunicGo</h1><p>Đăng nhập bằng tài khoản Google nhận email này để chấp nhận.</p><p><a href=\""
+  },
+  {
+    "file": "functions/src/staff-invitation-email.ts",
+    "line": 40,
+    "text": "\">Xem lời mời</a></p><p>Lời mời có hiệu lực tối đa 7 ngày. Sau khi chấp nhận, chủ doanh nghiệp sẽ phân quyền.</p><p>Nếu không mong đợi lời mời này, bạn có thể bỏ qua email.</p>"
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 65,
+    "text": "Không thể thực hiện thao tác với lời mời."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 70,
+    "text": "Xác thực hai lớp gần đây để tiếp tục."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 83,
+    "text": "Kiểm tra email và lời mời."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 95,
+    "text": "Mã thao tác đã được dùng."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 117,
+    "text": "Email đã có lời mời hoặc đã tham gia. Tải lại danh sách."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 125,
+    "text": "Cần kiểm tra kết quả gửi trước khi tạo lời mời mới."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 134,
+    "text": "Đã đạt giới hạn gửi lời mời. Thử lại sau."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 151,
+    "text": "Lời mời không còn khả dụng."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 156,
+    "text": "Lời mời đã thay đổi. Tải lại danh sách."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 161,
+    "text": "Lời mời không còn chờ chấp nhận."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 169,
+    "text": "Lời mời đã được thay thế. Tải lại danh sách để dùng lời mời mới."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 182,
+    "text": "Lần gửi trước đang chờ hoặc chưa xác nhận. Tải lại để kiểm tra."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 187,
+    "text": "Chưa thể gửi lại. Thử lại sau."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 230,
+    "text": "Không thể tải danh sách."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 278,
+    "text": "Lời mời không hợp lệ."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 286,
+    "text": "Lời mời không dành cho tài khoản này hoặc không còn khả dụng."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 292,
+    "text": "Lời mời không dành cho tài khoản này hoặc không còn khả dụng."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 299,
+    "text": "Lời mời đã hết hạn hoặc bị thu hồi."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 357,
+    "text": "Không thể tải danh sách nhân viên."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 467,
+    "text": "Kiểm tra lại nhân viên."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 474,
+    "text": "Không thể tự ghi nhận nghỉ việc cho tài khoản đang quản trị."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 483,
+    "text": "Mã thao tác đã được dùng."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 491,
+    "text": "Nhân viên chưa được cấp quyền làm việc."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 496,
+    "text": "Quyền nhân viên đã thay đổi. Tải lại danh sách."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 501,
+    "text": "Nhân viên đã được ghi nhận nghỉ việc."
+  },
+  {
+    "file": "functions/src/staff-invitations.ts",
+    "line": 509,
+    "text": "Dữ liệu quyền chưa hợp lệ."
+  }
+]

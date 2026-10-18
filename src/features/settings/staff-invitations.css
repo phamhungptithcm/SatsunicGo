@@ -1,0 +1,265 @@
+.staffInvitations {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+.staffInvitations > .panel {
+  min-width: 0;
+}
+.staffInviteForm {
+  max-width: 44rem;
+}
+.staffInviteHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.staffInviteList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.staffInviteList li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #e1e6f0;
+}
+.staffInviteList li > div {
+  min-width: 0;
+}
+.staffInviteList strong,
+.staffInviteIdentity,
+.staffInvitations h1 {
+  overflow-wrap: anywhere;
+}
+.staffInviteList p {
+  margin: 0.35rem 0;
+}
+.staffInviteActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.staffInviteAccept {
+  max-width: 44rem;
+  margin: 2rem auto;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+.staffInvitations summary {
+  cursor: pointer;
+}
+.staffInvitations button:focus-visible,
+.staffInviteAccept button:focus-visible,
+.staffInviteAccept a:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .staffInviteList li {
+    flex-direction: column;
+  }
+  .staffInviteActions button {
+    flex: 1 1 10rem;
+  }
+  .staffInviteAccept {
+    margin: 1rem 0;
+  }
+}
+
+.staffTableScroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.staffDirectory {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.staffDirectory th,
+.staffDirectory td {
+  text-align: left;
+  padding: 0.8rem;
+  vertical-align: top;
+  border-bottom: 1px solid #e1e6f0;
+  min-width: 8rem;
+}
+.staffDirectory th {
+  color: #111c35;
+  background: #f5f7fc;
+}
+.staffDirectory td:nth-child(2) {
+  overflow-wrap: anywhere;
+  max-width: 18rem;
+  min-width: 12rem;
+}
+.staffDeparture {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #cdd6e7;
+  border-radius: 0.6rem;
+}
+.staffDeparture button {
+  margin: 0.5rem 0.5rem 0 0;
+}
+
+/* Compact staff workspace: directory first; invitation history is secondary. */
+.workspaceShell .workspaceContent .staffInvitations.admin096 .panel,
+.staffInvitations > .panel {
+  margin-block: 0;
+  padding: 20px;
+}
+.staffInvitations .staffInviteForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 12px;
+  row-gap: 8px;
+  max-width: 760px;
+}
+.staffInviteForm label {
+  min-width: 0;
+}
+.staffInviteForm > p {
+  grid-column: 1 / -1;
+  font-size: 13px;
+}
+.staffInviteForm > button {
+  white-space: nowrap;
+}
+.staffInvitations .staffInviteHeading {
+  margin-bottom: 12px;
+}
+.staffInvitations h2 {
+  font-size: 18px;
+  font-weight: 650;
+}
+.staffInvitations .staffInviteList li {
+  padding: 14px 0;
+}
+.staffInvitations .staffInviteList li:last-child {
+  border-bottom: 0;
+}
+.staffInvitations .staffInviteActions {
+  gap: 6px;
+}
+.staffInvitations .staffInviteActions button {
+  font-size: 13px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #dce3ef;
+  border-radius: 7px;
+  background: white;
+  color: #233454;
+}
+.staffInvitations .staffInviteActions button:hover:not(:disabled) {
+  background: #f0f4ff;
+  border-color: #a8b8e8;
+}
+.staffInvitations button:disabled {
+  cursor: not-allowed;
+}
+.staffInvitations .staffInviteActions button:disabled {
+  opacity: 0.5;
+}
+.staffDirectory {
+  font-size: 13px;
+}
+.staffDirectory th,
+.staffDirectory td {
+  padding: 12px;
+}
+.staffDirectory tbody tr:hover {
+  background: #fafbfe;
+}
+.staffDirectory td:first-child {
+  font-weight: 550;
+}
+.staffStatus {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #f1f4f9;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #526079;
+}
+.staffStatusActive {
+  color: #163bb0;
+  background: #edf2ff;
+}
+.staffStatusMuted {
+  color: #616b7d;
+  background: #f0f1f4;
+}
+.staffRoleLayout {
+  max-width: 800px;
+}
+.staffInviteHistory > summary {
+  font-weight: 650;
+  font-size: 15px;
+}
+.staffInvitations .staffInviteHistory[open] > summary {
+  margin-bottom: 16px;
+}
+.staffInvitations .staffInviteHistory .staffInviteHeading {
+  margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .workspaceShell .workspaceContent .staffInvitations.admin096 .panel,
+  .staffInvitations > .panel {
+    padding: 16px;
+  }
+  .staffInvitations .staffInviteForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .staffInvitations .staffInviteActions button {
+    flex: 0 1 auto;
+  }
+}
+
+.workspaceShell .workspaceContent .staffInvitations.admin096 > .crmHeading {
+  margin-bottom: 0;
+}
+.workspaceShell .workspaceContent .staffInvitations.admin096 .staffInviteForm {
+  gap: 8px 12px;
+}
+.workspaceShell
+  .workspaceContent
+  .staffInvitations.admin096
+  .staffInviteActions
+  button {
+  min-height: 36px;
+}
+
+.staffPerson {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 10rem;
+}
+.staffAvatar {
+  display: inline-flex;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #edf2ff;
+  color: #2944a0;
+  font-size: 11px;
+  font-weight: 650;
+}
+.staffAvatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

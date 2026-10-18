@@ -251,6 +251,8 @@ function Icon({ kind = "arrow" }: { kind?: string }) {
     </svg>
   );
 }
+const StaffInvitationAccept = lazy(() => routeModules.staffInvitation().then(m => ({ default: m.StaffInvitationAccept })));
+
 export function App() {
   const [user, setUser] = useState<User | null>(null),
     [authError, setAuthError] = useState(""),
@@ -356,6 +358,7 @@ export function App() {
             )
           ) : (
             <Routes>
+              <Route path="/join-staff" element={<StaffInvitationAccept key={user?.uid ?? "anonymous"} user={user} signIn={signIn} signOut={signOut} busy={authBusy} />} />
               <Route path="/" element={<Home />} />
               <Route
                 path="/request"

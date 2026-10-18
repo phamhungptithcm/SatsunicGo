@@ -1,3 +1,5 @@
+import { invitationRecord } from "../../packages/domain/staff-invitation";
+import { invitationRef } from "./staff-invitations";
 import {
   customerEvent,
   customerEventFields,
@@ -347,6 +349,7 @@ export const workspaceCommand = onCall(opts, async (req) => {
         .string()
         .regex(/^[a-zA-Z0-9-]{1,128}$/)
         .optional(),
+      invitationId: z.string().uuid().optional(),
       expectedVersion: z.number().int().nonnegative().optional(),
       payload: z.unknown(),
     })
@@ -773,6 +776,22 @@ export const workspaceCommand = onCall(opts, async (req) => {
       throw new HttpsError("invalid-argument", "Cần định danh nhân viên.");
     const ref = db.doc(`${collection}/${entityId}`),
       old = await tx.get(ref);
+    if (d.action === "saveStaffAccess") {
+      const targetProfile = await tx.get(db.doc(`users/${entityId}`));
+      if (targetProfile.get("locked"))
+        throw new HttpsError("permission-denied", "Tài khoản nhân viên đang bị khóa.");
+      if (old.get("departedAt") && data.active === true)
+        throw new HttpsError("failed-precondition", "Nhân viên đã nghỉ việc. Cần tiếp nhận lại trước khi cấp quyền làm việc.");
+      if (!old.exists) {
+        if (!d.invitationId)
+          throw new HttpsError("failed-precondition", "Nhân viên cần chấp nhận lời mời trước khi được phân quyền.");
+        const invitation = await tx.get(invitationRef(db, d.invitationId));
+        const accepted = invitationRecord.safeParse(invitation.data());
+        if (!accepted.success || accepted.data.state !== "accepted" || accepted.data.acceptedUid !== entityId || !Number.isSafeInteger(accepted.data.acceptedAt))
+          throw new HttpsError("failed-precondition", "Nhân viên cần chấp nhận lời mời trước khi được phân quyền.");
+        data.joinedAt = accepted.data.acceptedAt;
+      }
+    }
     if (["openTicket"].includes(d.action) && old.exists)
       throw new HttpsError("already-exists", "Hội thoại đã tồn tại.");
     if (old.exists && old.data()?.version !== d.expectedVersion)

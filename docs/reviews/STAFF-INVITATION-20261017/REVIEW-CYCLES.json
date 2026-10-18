@@ -1,0 +1,59 @@
+{
+  "task": "STAFF-INVITATION-20261017",
+  "cycles": [
+    {
+      "cycle": 1,
+      "decision": "CHANGES_REQUESTED",
+      "findings": [
+        {
+          "severity": "P2",
+          "finding": "Superseded expired invitation can be resent",
+          "fix": "Check current email lock before resend",
+          "status": "FIXED"
+        },
+        {
+          "severity": "P2",
+          "finding": "Resend worker checks original inviter instead of requesting owner",
+          "fix": "Per-job requestedBy authority",
+          "status": "FIXED"
+        },
+        {
+          "severity": "P2",
+          "finding": "Switch employee discards uncertain save",
+          "fix": "Parent pending guard and regression",
+          "status": "FIXED"
+        }
+      ]
+    },
+    {
+      "cycle": 2,
+      "decision": "PASSED_LOCAL_SCOPE",
+      "reviewer": "independent review_staff_invitation",
+      "sourceManifestSha256": "ebb67a731d8f4231c7f5c9d403632f6c3131b0250955b090b09d8f2fa054b3ea",
+      "sourceFilesVerified": 15,
+      "findings": [],
+      "limitations": [
+        "Production NOT_READY",
+        "Shared runtime other checkout",
+        "Synthetic Google/MFA/callable and email boundary",
+        "Exact preimage restoration NOT_VERIFIED"
+      ]
+    },
+    {
+      "cycle": 3,
+      "decision": "PASSED_LOCAL_SCOPE",
+      "reviewer": "independent review_staff_invitation",
+      "sourceManifestSha256": "638284e570731a60a8bef99b4ebd20c2bc4187a51750796f2fb6a70d8eeaa529",
+      "sourceFilesVerified": 15,
+      "findings": [],
+      "summary": "Google identity/avatar and full current scope passed; no actionable findings;54 tests reported,7 browser receipt confirmed",
+      "limitations": [
+        "Production NOT_READY",
+        "Alternate Google avatar hosts blocked by existing CSP use initials fallback",
+        "Real Google freshness/provider delivery/deployed transport not verified",
+        "Shared normal runtime still other checkout",
+        "Original demo profile preimages unavailable"
+      ]
+    }
+  ]
+}
