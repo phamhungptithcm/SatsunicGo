@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "STAFF-INVITATION-20261017-RELEASE",
+  "status": "PASSED",
+  "scope": "SCOPED_CODE_ROLLOUT_EMAIL_DISABLED",
+  "base": "fff83392e79a7dc8628cc76a06e1febe443e6082",
+  "manifest_sha256": "f112cd0aaee70c72c3e62b4a81ffd804b8782d6123664b32758cf00b59c8610c",
+  "reviewer": "independent release_candidate_review",
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED"
+    },
+    "security_privacy": {
+      "status": "PASSED"
+    },
+    "correctness_compatibility": {
+      "status": "PASSED"
+    },
+    "failure_concurrency": {
+      "status": "PASSED"
+    },
+    "error_handling_observability": {
+      "status": "PASSED"
+    },
+    "product_content": {
+      "status": "PASSED"
+    },
+    "production_design_rollback": {
+      "status": "PASSED"
+    },
+    "trade_offs": {
+      "status": "PASSED"
+    }
+  },
+  "findings": [],
+  "cycles": [
+    {
+      "cycle": 4,
+      "status": "NOT_RUN",
+      "reason": "Legacy reviewer READY-only role constraint; no candidate source finding"
+    },
+    {
+      "cycle": 5,
+      "status": "PASSED",
+      "method": "CodeGraph plus bounded native source, independent compiler and reviewed test receipts; semantic-index limitation disclosed"
+    },
+    {
+      "cycle": 6,
+      "status": "PASSED",
+      "reason": "Independent clean-rebase review:17feature hashes unchanged;12incoming files byte-identical to main; no overlaps/conflicts;139affectedtests and frontend/Functions compiler pass"
+    }
+  ],
+  "checks": {
+    "unit": 3104,
+    "emulator": 21,
+    "release_contracts": 189,
+    "browser": 7,
+    "post_label_focused": 10,
+    "post_label_browser": 1,
+    "typecheck": "PASSED",
+    "lint": "PASSED",
+    "audit": "0 vulnerabilities",
+    "release_build_preflight": "PASSED",
+    "post_rebase_unit": 139
+  },
+  "residual_risks": [
+    "Real email disabled: settings/email read404; no provider/inbox acceptance",
+    "Proxy browser evidence is not live Google/MFA/AppCheck transport",
+    "CocoIndex timed out initially; subsequent refresh and both health queries passed but worktree metadata stale after evidence updates",
+    "Live Firebase Rules source read403; existing default-deny source and emulator behavior verified, no production rule edit",
+    "Exact CI/provider deployment readback still required"
+  ],
+  "integrated_base": "095250f2bd5426a528f760a34bbef3364574982a"
+}

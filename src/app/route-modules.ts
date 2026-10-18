@@ -15,6 +15,9 @@ export function cacheModule<T>(load: () => Promise<T>) {
 }
 
 export const routeModules = {
+  staffInvitation: cacheModule(
+    () => import("../features/settings/StaffInvitationAccept"),
+  ),
   request: cacheModule(() => import("../features/requests/RequestForm")),
   content: cacheModule(() => import("../features/content/Content")),
   membership: cacheModule(() => import("../features/membership/Membership")),

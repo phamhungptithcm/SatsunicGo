@@ -1,0 +1,22 @@
+{
+  "base": "fff83392e79a7dc8628cc76a06e1febe443e6082",
+  "files": {
+    "packages/domain/staff-invitation.ts": "0edb68c4c00caa84fa5c28b95f3b2cb854755e6540edf4c219f86a7f4a4a3052",
+    "functions/src/staff-invitations.ts": "1a4476dca4802e8f6a96c0c1ee0a3f100ada1e95acb6e28875225d4b63282d26",
+    "functions/src/staff-invitation-email.ts": "54c67ca7e9cb9030cd0e5d97d74c27cf8fbfc9be1f944475d480827b8cbdacdf",
+    "functions/src/workspace.ts": "be97b31ea12b559c506a43abba4c160530b9b3915724d90946d75a7f1182fd39",
+    "functions/src/index.ts": "0d77d2066a176ba629ddc741a3d278f1af84e9fd7f2321ae22c1a8358c6cd494",
+    "firestore.rules": "82f03bcdc90fab770a8e13b94616fdfa1c3e8e4fc8fa49de24953579ae8e5075",
+    "src/features/settings/StaffAccess.tsx": "9072bf73a81cf8eb564a3782b1be6f6c119e91b98dc20624a6d62ae96a689800",
+    "src/features/settings/StaffInvitationAccept.tsx": "9b70473f9a76e4c5be2315669e27844943b17f67663019c531621f89e0716ad5",
+    "src/features/settings/staff-invitations.css": "c1167db422a723a51aa9b1763c8e6c27a4c4eb6d91f03dfd8beeee7997ad8588",
+    "src/app/App.tsx": "53aba268319a3f05bdfb6f67c1ade7fe3352ed3366f9ee74f241ca5f3f0a1a12",
+    "src/app/route-modules.ts": "249a87632adfb9b1b78091ecbc9b77cd83fba24e88bc941565bd43c2a34f0d0f",
+    "tests/unit/staff-invitations.test.ts": "aba4696a40ed1428cacbdbc2b831195cc8adbec66c925119732846896c159077",
+    "tests/integration/staff-invitations.firestore.test.ts": "dc353ec71a375217b9ae8242254e45a5cecd96d4bca85781f6a2462fee6ba7bb",
+    "tests/rules/staff-invitations.test.ts": "7795eda4a5748821ed070fdc770f989886c77c1e7ea875fc71157ff23b3f9018",
+    "tests/browser/staff-invitations.spec.ts": "061023b584336d68dd6bb276328c5aca1673ec10f0d89cb834ee75069c05470f",
+    "tests/staff-invitations.vitest.config.ts": "0e86310c6ae92664d2c4b414259451be5f73e4df046e599ce9d31c31c37db466",
+    "tests/staff-invitations.playwright.config.ts": "6d000e8b0ff3464712d7f31cb382423466f4793bd4fc739ed953a14c694f5d10"
+  }
+}

@@ -635,3 +635,5 @@ export { publicOrderTracking, managePublicTrackingCode } from "./public-order-tr
 
 export { productionDemo } from "./production-demo-payment";
 export { productionDemoCommand } from "./production-demo-commands";
+export { listStaffMembers, departStaffMember, staffInvitationCommand, listStaffInvitations, readStaffInvitation, acceptStaffInvitation } from "./staff-invitations";
+export { deliverStaffInvitations } from "./staff-invitation-email";
