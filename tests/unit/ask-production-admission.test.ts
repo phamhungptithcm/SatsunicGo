@@ -555,6 +555,10 @@ test.each([
         expect(
           request.generationConfig.responseSchema.properties.commandPlan,
         ).toBeTruthy();
+        expect(request.generationConfig.thinkingConfig).toEqual({
+          thinkingBudget: 512,
+        });
+        expect(request.generationConfig.maxOutputTokens).toBe(800);
         expect(
           request.generationConfig.responseSchema.properties.sourceIds.maxItems,
         ).toBe(0);
