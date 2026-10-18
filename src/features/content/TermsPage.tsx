@@ -25,8 +25,8 @@ export function TermsPage() {
           </li>
         ))}
       </ol>
-      <Link className="primary purchaseTermsAction" to="/request">
-        Gửi yêu cầu mua hộ <span aria-hidden="true">→</span>
+      <Link className="primary purchaseTermsAction" to="/support">
+        Liên hệ hỗ trợ <span aria-hidden="true">→</span>
       </Link>
     </section>
   );

@@ -1,3 +1,5 @@
+import { CatalogOption } from "./CatalogOption";
+import { initialCatalogOption } from "./catalog-option";
 import { linkAnalyticsOrder } from "../../shared/analytics";
 import { LoadingState } from "../../shared/Loading";
 import { useEffect, useRef, useState, type FormEvent } from "react";
@@ -105,7 +107,13 @@ export function ProductCheckout({
           ? null
           : ({ ...s.docs[0].data(), id: s.docs[0].id } as ContentRow);
         setProduct(row);
-        setVariant(attempt.current?.selection.variant ?? initialVariant);
+        const loaded = catalogProductSchema.safeParse(row);
+        setVariant(
+          attempt.current?.selection.variant ??
+            (loaded.success && !cartLine
+              ? initialCatalogOption(loaded.data.catalogOptions, initialVariant)
+              : initialVariant),
+        );
         setQuantity(
           attempt.current?.selection.quantity ??
             (Number.isInteger(initialQuantity) &&
@@ -237,27 +245,12 @@ export function ProductCheckout({
             Giá trọn gói: {parsed.data.listedPrice.toLocaleString("vi-VN")} ₫ /
             sản phẩm. Bao gồm phí mua hộ và giao hàng.
           </p>
-          {parsed.data.catalogOptions.length > 0 && (
-            <label>
-              <span className="formLabelText">
-                Mẫu sản phẩm{" "}
-                <span className="requiredMark" aria-hidden="true">
-                  *
-                </span>
-              </span>
-              <select
-                value={variant}
-                disabled={busy || !!pending}
-                required
-                onChange={(e) => setVariant(e.target.value)}
-              >
-                <option value="">Chọn mẫu</option>
-                {parsed.data.catalogOptions.map((v) => (
-                  <option key={v}>{v}</option>
-                ))}
-              </select>
-            </label>
-          )}
+          <CatalogOption
+            options={parsed.data.catalogOptions}
+            value={variant}
+            disabled={busy || !!pending}
+            onChange={setVariant}
+          />
           <label>
             <span className="formLabelText">
               Số lượng{" "}
@@ -288,12 +281,15 @@ export function ProductCheckout({
           </p>
           <p>
             Thanh toán toàn bộ một lần. Nhân viên mua hộ sau khi tiền được xác
-            nhận. Điều khoản: {parsed.data.termsVersion}.
+            nhận. Điều khoản: {parsed.data.termsVersion}.{" "}
+            <Link to="/terms" target="_blank" rel="noopener noreferrer">
+              Xem điều khoản đổi trả và hoàn tiền
+            </Link>
           </p>
           {needsPriceReview && (
             <div className="cartNotice107" role="status">
               <span>
-                Sản phẩm đã cập nhật từ lúc bạn xem giỏ. Xem lại giá và mẫu
+                Sản phẩm đã cập nhật từ lúc bạn xem giỏ. Xem lại giá và quy cách
                 trước khi đặt mua.
               </span>
               <button type="button" onClick={() => setNeedsPriceReview(false)}>
@@ -302,7 +298,7 @@ export function ProductCheckout({
             </div>
           )}
           {!selectionValid && !pending && (
-            <p role="status">Chọn mẫu và số lượng hợp lệ để tiếp tục.</p>
+            <p role="status">Chọn quy cách và số lượng hợp lệ để tiếp tục.</p>
           )}
           {user ? (
             <button

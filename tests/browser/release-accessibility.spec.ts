@@ -51,7 +51,7 @@ test("UI-H200 native browser 200 percent zoom preserves checkout labels and keyb
     expect(dimensions.ratio).toBeCloseTo(2, 1);
     expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width + 1);
     await page
-      .getByRole("combobox", { name: "Mẫu sản phẩm", exact: true })
+      .getByRole("combobox", { name: "Chọn quy cách", exact: true })
       .selectOption("Large");
     const quantity = page.getByRole("spinbutton", {
       name: "Số lượng",
@@ -95,7 +95,7 @@ test("UI-H200 native browser 200 percent zoom preserves checkout labels and keyb
       });
     expect(contrast).toBeGreaterThanOrEqual(4.5);
     const tree = await page.locator("main").ariaSnapshot();
-    expect(tree).toContain("Mẫu sản phẩm");
+    expect(tree).toContain("Chọn quy cách");
     expect(tree).toContain("Số lượng");
     expect(tree).toContain("Đặt mua và tiếp tục thanh toán");
     await page.evaluate(() => window.scrollTo(0, 0));

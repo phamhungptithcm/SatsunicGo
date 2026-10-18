@@ -1,3 +1,4 @@
+import { CatalogOption } from "../products/CatalogOption";
 import {
   catalogChatSelection,
   type CatalogChatChoice,
@@ -47,33 +48,13 @@ export function CatalogChat({
             onConfirm();
         }}
       >
-        {p.catalogOptions.length > 0 && (
-          <label>
-            <span className="formLabelText">
-              {vi ? "Màu / size / phiên bản" : "Color / size / variant"}{" "}
-              <span className="requiredMark" aria-hidden="true">
-                *
-              </span>
-            </span>
-            <select
-              value={choice.variant}
-              required
-              disabled={commerce.busy || !!commerce.pendingOperation}
-              onChange={(event) =>
-                onChange({ ...choice, variant: event.target.value })
-              }
-            >
-              <option value="">
-                {vi ? "Chọn phiên bản" : "Choose variant"}
-              </option>
-              {p.catalogOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
+        <CatalogOption
+          options={p.catalogOptions}
+          value={choice.variant}
+          vi={vi}
+          disabled={commerce.busy || !!commerce.pendingOperation}
+          onChange={(variant) => onChange({ ...choice, variant })}
+        />
         <label>
           <span className="formLabelText">
             {vi ? "Số lượng" : "Quantity"}{" "}
@@ -116,8 +97,8 @@ export function CatalogChat({
         {!valid && (
           <p role="status">
             {vi
-              ? "Chọn mẫu hợp lệ và số lượng từ 1 đến 100. Nếu lựa chọn đã cũ, hãy tìm sản phẩm lại."
-              : "Choose an available variant and a quantity from 1 to 100. Search again if this selection has expired."}
+              ? "Chọn quy cách hợp lệ và số lượng từ 1 đến 100. Nếu lựa chọn đã cũ, hãy tìm sản phẩm lại."
+              : "Choose an available product option and a quantity from 1 to 100. Search again if this selection has expired."}
           </p>
         )}
         <button

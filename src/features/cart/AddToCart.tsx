@@ -1,3 +1,5 @@
+import { CatalogOption } from "../products/CatalogOption";
+import { initialCatalogOption } from "../products/catalog-option";
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
@@ -41,31 +43,23 @@ export function AddToCart({
   if (!parsed.success) return null;
   const options = parsed.data.catalogOptions;
   const selectedQuantity = compact ? 1 : quantity;
+  const selectedVariant = initialCatalogOption(options, variant);
   const valid =
     Number.isInteger(selectedQuantity) &&
     selectedQuantity >= 1 &&
     selectedQuantity <= 100 &&
-    (!options.length || options.includes(variant));
+    (!options.length || options.includes(selectedVariant));
   return (
     <div className="cartAdd107">
-      {options.length > 0 && (
-        <label>
-          <span>Mẫu sản phẩm</span>
-          <select
-            value={variant}
-            disabled={busy || pending}
-            onChange={(e) => {
-              setVariant(e.target.value);
-              setMessage("");
-            }}
-          >
-            <option value="">Chọn mẫu</option>
-            {options.map((v) => (
-              <option key={v}>{v}</option>
-            ))}
-          </select>
-        </label>
-      )}
+      <CatalogOption
+        options={options}
+        value={selectedVariant}
+        disabled={busy || pending}
+        onChange={(value) => {
+          setVariant(value);
+          setMessage("");
+        }}
+      />
       {!compact && (
         <label>
           <span>Số lượng</span>
@@ -100,7 +94,7 @@ export function AddToCart({
               items: [
                 {
                   productId: product.id,
-                  variant,
+                  variant: selectedVariant,
                   quantity: selectedQuantity,
                   lineId: crypto.randomUUID(),
                 },

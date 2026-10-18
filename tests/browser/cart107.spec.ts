@@ -65,7 +65,7 @@ test("guest offline and second-tab sync preserve the local cart", async ({
   await page.goto(`/products/${id}`);
   await page
     .locator(".cartAdd107")
-    .getByLabel("Mẫu sản phẩm")
+    .getByLabel("Chọn quy cách")
     .selectOption("Trắng");
   await page
     .locator(".cartAdd107")
@@ -106,7 +106,7 @@ test("storage failure retains further additions in memory with an honest warning
   await page.goto(`/products/${id}`);
   await page
     .locator(".cartAdd107")
-    .getByLabel("Mẫu sản phẩm")
+    .getByLabel("Chọn quy cách")
     .selectOption("Trắng");
   await page
     .locator(".cartAdd107")
@@ -129,7 +129,7 @@ test("storage failure retains further additions in memory with an honest warning
 test("long product names and 200 percent cart scaling retain controls", async ({ page }) => {
   await page.setViewportSize({ width: 800, height: 1000 });
   await page.goto(`/products/${id}`);
-  await page.locator(".cartAdd107").getByLabel("Mẫu sản phẩm").selectOption("Trắng");
+  await page.locator(".cartAdd107").getByLabel("Chọn quy cách").selectOption("Trắng");
   await page.locator(".cartAdd107").getByRole("button", { name: "Thêm vào giỏ" }).click();
   await page.locator(".headerCart107").click();
   await expect(page.locator(".cartItemBody107 h2")).toBeVisible();
@@ -203,7 +203,7 @@ for (const width of [1440, 390, 320])
     await expect(
       add.getByRole("button", { name: "Thêm vào giỏ" }),
     ).toBeDisabled();
-    await add.getByLabel("Mẫu sản phẩm").selectOption("Trắng");
+    await add.getByLabel("Chọn quy cách").selectOption("Trắng");
     await add.getByLabel("Số lượng").fill("2");
     await add.getByRole("button", { name: "Thêm vào giỏ" }).click();
     await expect(
@@ -248,7 +248,7 @@ test("offline cart, explicit account merge, checkout prefill and sign-out isolat
   await page.goto(`/products/${id}`);
   await page
     .locator(".cartAdd107")
-    .getByLabel("Mẫu sản phẩm")
+    .getByLabel("Chọn quy cách")
     .selectOption("Đen");
   await page
     .locator(".cartAdd107")
@@ -329,7 +329,7 @@ test("offline cart, explicit account merge, checkout prefill and sign-out isolat
     "2",
   );
   await expect(
-    page.getByRole("combobox", { name: "Mẫu sản phẩm" }),
+    page.getByRole("combobox", { name: "Chọn quy cách" }),
   ).toHaveValue("Đen");
   await expect(
     page.getByRole("button", {
@@ -373,7 +373,7 @@ test("offline cart, explicit account merge, checkout prefill and sign-out isolat
   await page.goto(`/products/${id}`);
   await page
     .locator(".cartAdd107")
-    .getByLabel("Mẫu sản phẩm")
+    .getByLabel("Chọn quy cách")
     .selectOption("Trắng");
   await page
     .locator(".cartAdd107")

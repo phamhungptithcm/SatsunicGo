@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "task_id": "PURCHASE-TERMS-OPTIONS-20261017",
+  "status": "PASSED",
+  "review_cycles": 2,
+  "dimensions": {
+    "requirement_match": {
+      "status": "PASSED",
+      "summary": "Scoped terms and exact per-product specifications implemented.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "security": {
+      "status": "PASSED",
+      "summary": "No authorization, persistence, customer-data, dependency or payment control changes.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "code_quality": {
+      "status": "PASSED",
+      "summary": "Shared typed component; Node 22 builds, lint and regression checks passed.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "failure_paths": {
+      "status": "PASSED",
+      "summary": "Empty/multiple/stale and disabled/pending semantics reviewed and tested.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "error_handling": {
+      "status": "PASSED",
+      "summary": "No new async actions; existing retry and snapshot handling preserved.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "product_language": {
+      "status": "PASSED",
+      "summary": "Eight principles, actual browser rendering, focus and 200% zoom verified.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "production_readiness": {
+      "status": "PASSED",
+      "summary": "Release candidate ready for existing exact-SHA pipeline; live deployment/readback pending.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    },
+    "trade_offs": {
+      "status": "PASSED",
+      "summary": "Case-specific supplier acceptance and refund timing; no live financial operations claimed.",
+      "evidence_refs": [
+        "review.md",
+        "product-content-review.md"
+      ]
+    }
+  },
+  "findings": [],
+  "residual_risks": [
+    "Vendor return conditions and refund timing require case-specific operational handling."
+  ],
+  "limitations": [
+    "Full screen-reader narration not run.",
+    "Browser regression specs updated but not executed locally; no duplicate shared emulator runtime started.",
+    "Runtime ledger package unavailable; manual report supplied.",
+    "Production verification pending exact-SHA release."
+  ]
+}

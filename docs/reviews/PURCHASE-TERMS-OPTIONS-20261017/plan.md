@@ -1,0 +1,13 @@
+# PURCHASE-TERMS-OPTIONS-20261017 v1
+
+User-authorized scope: “hãy hoàn thiện nội dung điều khoản đổi trả hoàn tiền cho chuyên nghiệp và cập nhật lên production luôn và mẫu sản phẩm phải hiện thị phù hợp cho từng sản phẩm không phải chung chung”. Previous user authorization covers the supplied catalog prices and professional product terms. This request authorizes this scoped implementation and production publication; no additional business prices or deadlines are inferred.
+
+Base: 03acf5fbd8718960b8d4cfd083c69802211ee7cf in an isolated managed worktree. Primary checkout has unrelated WIP and is excluded. Repository intelligence ran READY in primary checkout; CodeGraph and CocoIndex located affected paths. Isolated base differs from primary index, so all conclusions are verified with bounded source reads (DEGRADED for this base).
+
+Plan: replace the placeholder returns policy with actionable cancellation, nonconformity, change-of-mind returns, refund and evidence/privacy procedures. Preserve existing quote/catalog financial semantics; no fixed processing SLA, new fee, medical claim or waiver of consumer rights. Use existing customer support route. Share the same terms content between React and public Functions rendering.
+
+Create a small product option component displaying the exact catalog option as a static specification when there is one valid selected option. Multiple/unselected/invalid options remain a labelled select. Default only a fresh empty selection to the sole option; never replace a nonempty stale choice or pending checkout snapshot. Apply to product/cart, checkout and existing Ask purchase surfaces. Keep quantities, versions, authorization, price checks and idempotency unchanged.
+
+Approved paths: packages/domain/public-content.ts; src/features/content/TermsPage.tsx; src/features/products/{CatalogOption.tsx,catalog-option.ts,Checkout.tsx}; src/features/cart/AddToCart.tsx; src/features/ask/{CatalogPurchase.tsx,CatalogChat.tsx}; focused tests; this review directory. No schema/rules/dependency/workflow changes, no order/payment mutations. Risk: medium customer-facing purchase content, low UI implementation; operational production risk controlled by existing release pipeline.
+
+Validation: focused unit/render tests for no/single/multiple/stale options; existing catalog/cart regressions; typecheck/build/lint; rendered responsive/keyboard content review; final diff/security/failure-path review. Push only the scoped allowlist after current-main check; existing serialized production release workflow; verify exact SHA release metadata, public terms, and real catalog options. Rollback by reverting scoped commit through same workflow. No separate servers or unreviewed primary WIP deployment.

@@ -643,7 +643,7 @@ async function selectedCheckout(page: Page) {
   await login(page);
   await page.goto(`/products/${p.slug}/checkout`);
   await page
-    .getByRole("combobox", { name: "Mẫu sản phẩm", exact: true })
+    .getByRole("combobox", { name: "Chọn quy cách", exact: true })
     .selectOption("Large");
   await page
     .getByRole("spinbutton", { name: "Số lượng", exact: true })
@@ -689,7 +689,7 @@ test("CAT-B01 variant and quantity invalid states prevent submission", async ({
   });
   await expect(submit).toBeDisabled();
   await page
-    .getByRole("combobox", { name: "Mẫu sản phẩm", exact: true })
+    .getByRole("combobox", { name: "Chọn quy cách", exact: true })
     .selectOption("Large");
   for (const quantity of ["0", "1.5", "101"]) {
     await page

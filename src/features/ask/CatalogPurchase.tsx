@@ -1,3 +1,4 @@
+import { CatalogOption } from "../products/CatalogOption";
 import { useEffect, useState } from "react";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { catalogProductSchema } from "../../../packages/domain/catalog-checkout";
@@ -144,27 +145,13 @@ export function CatalogPurchase({
             {parsed.data.listedPrice.toLocaleString(vi ? "vi-VN" : "en-US")} ₫
           </p>
           <div className={styles.catalogFields}>
-            {parsed.data.catalogOptions.length > 0 && (
-              <label>
-                <span className="formLabelText">
-                  {vi ? "Mẫu" : "Variant"}{" "}
-                  <span className="requiredMark" aria-hidden="true">
-                    *
-                  </span>
-                </span>
-                <select
-                  required
-                  value={variant}
-                  disabled={c.busy || !!c.pendingOperation}
-                  onChange={(e) => setVariant(e.target.value)}
-                >
-                  <option value="">{vi ? "Chọn mẫu" : "Choose variant"}</option>
-                  {parsed.data.catalogOptions.map((v) => (
-                    <option key={v}>{v}</option>
-                  ))}
-                </select>
-              </label>
-            )}
+            <CatalogOption
+              options={parsed.data.catalogOptions}
+              value={variant}
+              vi={vi}
+              disabled={c.busy || !!c.pendingOperation}
+              onChange={setVariant}
+            />
             <label>
               <span className="formLabelText">
                 {vi ? "Số lượng" : "Quantity"}{" "}
