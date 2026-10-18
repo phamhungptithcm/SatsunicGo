@@ -28,6 +28,44 @@ import {
   SEPAY_MERCHANT,
   type SePayProof,
 } from "../../packages/domain/purchase-sepay";
+import {
+  demoEnvironment,
+  demoMerchant,
+  demoProvider,
+  demoSession,
+  assertDemoRecord,
+} from "./production-demo-policy";
+
+type SimulationProof = Omit<SePayProof, "provider"> & {
+  provider: "production_demo";
+  kind: "simulation";
+};
+export async function settleProductionDemoEvidence(id: string) {
+  if (!/^[0-9a-f-]{36}$/.test(id) || !demoEnvironment())
+    throw new HttpsError("permission-denied", "Phiên demo chưa khả dụng.");
+  const proof = (
+    await getFirestore().doc(`productionDemoEvidence/${id}`).get()
+  ).data();
+  if (
+    !proof ||
+    proof.kind !== "simulation" ||
+    proof.provider !== demoProvider ||
+    proof.checkoutId !== id ||
+    proof.state !== "verified"
+  )
+    throw new HttpsError(
+      "failed-precondition",
+      "Chưa có kết quả mô phỏng được lưu.",
+    );
+  return applySettlement({
+    id,
+    uid: proof.ownerId,
+    outcome: "paid",
+    evidenceId: id,
+    productionSimulation: true,
+  });
+}
+
 const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
 type DemoSettlementInput = {
@@ -65,17 +103,38 @@ export async function settleSePayEvidence(evidenceId: string) {
   });
 }
 async function applySettlement(
-  input: DemoSettlementInput & { evidenceId?: string },
+  input: DemoSettlementInput & {
+    evidenceId?: string;
+    productionSimulation?: true;
+  },
 ) {
-  const { id, outcome, uid, token = {}, linkId, evidenceId } = input,
+  const {
+      id,
+      outcome,
+      uid,
+      token = {},
+      linkId,
+      evidenceId,
+      productionSimulation,
+    } = input,
     db = getFirestore();
   if (
-    !purchaseDemoEnvironment(db) &&
-    (!evidenceId || !productionTestEnvironment(db))
+    productionSimulation
+      ? !demoEnvironment()
+      : !purchaseDemoEnvironment(db) &&
+        (!evidenceId || !productionTestEnvironment(db))
   )
     throw new HttpsError("permission-denied", "Kênh thử chưa khả dụng.");
-  const channel = evidenceId ? "sepay_sandbox" : "demo";
-  const merchant = evidenceId ? SEPAY_MERCHANT : "demo-satsunicgo";
+  const channel = productionSimulation
+    ? demoProvider
+    : evidenceId
+      ? "sepay_sandbox"
+      : "demo";
+  const merchant = productionSimulation
+    ? demoMerchant
+    : evidenceId
+      ? SEPAY_MERCHANT
+      : "demo-satsunicgo";
   const ref = db.doc(`purchaseCheckouts/${id}`);
   return withPurchaseMutation(`allocation-${id}`, () =>
     db.runTransaction(async (tx) => {
@@ -83,12 +142,14 @@ async function applySettlement(
         db.doc(`users/${uid}`),
         db.doc(`staffAccess/${uid}`),
         evidenceId
-          ? db.doc(`purchaseSePayEvidence/${evidenceId}`)
+          ? db.doc(
+              `${productionSimulation ? "productionDemoEvidence" : "purchaseSePayEvidence"}/${evidenceId}`,
+            )
           : db.doc(`purchaseDemoLinks/${id}`),
       );
       const provider = providerDoc.data();
       const proof = evidenceId
-        ? (provider as SePayProof | undefined)
+        ? (provider as SePayProof | SimulationProof | undefined)
         : undefined;
       if (
         evidenceId &&
@@ -103,7 +164,11 @@ async function applySettlement(
           !Number.isSafeInteger(proof.amount) ||
           proof.amount <= 0 ||
           !Number.isSafeInteger(proof.paidAt) ||
-          !/^SEPAY-SBX-[A-Za-z0-9_-]{1,100}$/.test(proof.reference))
+          !(
+            productionSimulation
+              ? /^PRODUCTION-DEMO-[a-f0-9-]{36}$/
+              : /^SEPAY-SBX-[A-Za-z0-9_-]{1,100}$/
+          ).test(proof.reference))
       )
         throw new HttpsError(
           "failed-precondition",
@@ -146,7 +211,11 @@ async function applySettlement(
       const [stored, demo, cartDoc, received] = await tx.getAll(
         ref,
         db.doc("settings/purchaseDemo"),
-        db.doc(`carts/${uid}`),
+        db.doc(
+          productionSimulation
+            ? `productionDemoCarts/${proof?.testRunId}`
+            : `carts/${uid}`,
+        ),
         db.doc(`purchasePaymentEvidence/${reference}`),
       );
       const checkout = stored.data() as
@@ -170,7 +239,28 @@ async function applySettlement(
           "permission-denied",
           "Chưa mở được thanh toán demo.",
         );
-      assertPurchaseExecutionEnvironment(checkout, db);
+      if (productionSimulation) {
+        const session = await demoSession(
+          tx,
+          String(proof?.testRunId),
+          uid,
+          false,
+        );
+        assertDemoRecord(checkout, session);
+        if (
+          !session.checkoutIds.includes(id) ||
+          !proof ||
+          !("kind" in proof) ||
+          proof.kind !== "simulation" ||
+          proof.paidAt < session.createdAt ||
+          proof.paidAt >= session.expiresAt ||
+          checkout.purpose === "balance"
+        )
+          throw new HttpsError(
+            "permission-denied",
+            "Bằng chứng mô phỏng không khớp phiên.",
+          );
+      } else assertPurchaseExecutionEnvironment(checkout, db);
       const execution = purchaseExecutionFields(checkout);
       if (proof && !matchingPurchaseExecution(checkout, proof))
         throw new HttpsError(
@@ -511,7 +601,7 @@ async function applySettlement(
         );
         tx.create(db.doc(`orders/${order.id}/timeline/purchase-${id}`), {
           ...execution,
-          action: "verifyTransfer",
+          action: productionSimulation ? "simulatePayment" : "verifyTransfer",
           createdAt: now,
         });
       });
@@ -519,11 +609,13 @@ async function applySettlement(
         ...execution,
         id: receiptId,
         ownerId: uid,
-        ownerEmail: proof
-          ? (checkout.receiptEmail ?? null)
-          : typeof token.email === "string"
-            ? token.email
-            : null,
+        ownerEmail: productionSimulation
+          ? null
+          : proof
+            ? (checkout.receiptEmail ?? null)
+            : typeof token.email === "string"
+              ? token.email
+              : null,
         checkoutId: id,
         lines: checkout.lines,
         total: checkout.total,
@@ -629,7 +721,11 @@ async function applySettlement(
         ...execution,
         ...(proof ? { testMode: true, paymentProvider: channel } : {}),
         action: "purchasePaymentVerified",
-        actor: proof ? "sepay-sandbox-adapter" : "demo-payment-adapter",
+        actor: productionSimulation
+          ? "production-demo-adapter"
+          : proof
+            ? "sepay-sandbox-adapter"
+            : "demo-payment-adapter",
         resourceId: id,
         createdAt: now,
       });

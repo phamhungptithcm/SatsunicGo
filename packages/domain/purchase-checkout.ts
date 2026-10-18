@@ -39,6 +39,8 @@ export function purchaseTestRecord(record: unknown): boolean {
   return (
     executionKeys.some((key) => Object.hasOwn(value, key)) ||
     value.testMode === true ||
+    value.provider === "production_demo" ||
+    value.paymentProvider === "production_demo" ||
     value.provider === "demo" ||
     value.provider === "sepay_sandbox" ||
     value.paymentProvider === "demo" ||
@@ -149,7 +151,7 @@ export type CheckoutSnapshot = Partial<PurchaseExecutionProvenance> & {
 };
 export type PurchaseCheckout = CheckoutSnapshot & {
   state: "pending" | "unknown" | "paid" | "cancelled" | "review_required";
-  provider: "demo" | "payos_unavailable" | "sepay_sandbox";
+  provider: "demo" | "payos_unavailable" | "sepay_sandbox" | "production_demo";
   paymentMethod?: "BANK_TRANSFER";
   sepayInvoice?: string;
   paidAt?: number;
@@ -162,7 +164,7 @@ const checkoutAcknowledgementSchema = z.object({
   id: z.string().uuid(),
   state: z.literal("pending"),
   total: money.positive(),
-  provider: z.enum(["demo", "sepay_sandbox"]),
+  provider: z.enum(["demo", "sepay_sandbox", "production_demo"]),
   paymentMethod: z.literal("BANK_TRANSFER").optional(),
 });
 const sourcingAcknowledgementSchema = z.object({

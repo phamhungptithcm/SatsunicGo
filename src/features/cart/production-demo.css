@@ -1,0 +1,154 @@
+.productionDemo {
+  max-width: 1080px;
+  margin: auto;
+  padding: 24px 16px 80px;
+}
+.productionDemo header,
+.demoRow,
+.demoSession {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.productionDemo h1 {
+  margin: 4px 0 12px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+.productionDemo h2 {
+  font-size: 1.15rem;
+  margin-top: 0;
+}
+.productionDemo p {
+  line-height: 1.55;
+}
+.demoEyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #47647c;
+}
+.productionDemo article {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid #d6e0e8;
+  border-radius: 12px;
+  background: #fff;
+}
+.demoNotice {
+  background: #edf4ff;
+  padding: 14px;
+  border-left: 3px solid #163cff;
+  border-radius: 4px;
+}
+.demoActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.demoFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(90px, 140px);
+  gap: 12px;
+  margin: 16px 0;
+}
+.demoFields label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.productionDemo select,
+.productionDemo input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid #abbeca;
+  border-radius: 6px;
+  background: white;
+}
+.productionDemo button {
+  min-height: 44px;
+  padding: 10px 14px;
+  white-space: normal;
+}
+.productionDemo a {
+  overflow-wrap: anywhere;
+}
+.productionDemo button:focus-visible,
+.productionDemo a:focus-visible,
+.productionDemo input:focus-visible,
+.productionDemo select:focus-visible {
+  outline: 3px solid #163cff;
+  outline-offset: 3px;
+}
+.demoRow {
+  padding: 16px 0;
+  border-top: 1px solid #e3e9ef;
+}
+.demoRow > div {
+  min-width: 0;
+}
+.demoPreview {
+  padding: 16px;
+  margin-top: 16px;
+  background: #f5f8fc;
+  border-radius: 8px;
+}
+.demoError {
+  background: #fff1ed;
+  border-left: 3px solid #ad3525;
+  padding: 14px;
+}
+.demoWorking {
+  position: sticky;
+  bottom: 8px;
+  padding: 12px;
+  border: 1px solid #b5c9dd;
+  background: #fff;
+  border-radius: 8px;
+}
+.productionDemo code {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .demoFields {
+    grid-template-columns: 1fr;
+  }
+  .productionDemo article {
+    padding: 14px;
+  }
+  .demoRow {
+    align-items: stretch;
+  }
+  .demoRow > .demoActions {
+    width: 100%;
+  }
+  .demoActions button {
+    flex: 1 1 auto;
+  }
+}
+
+.productionDemo button {
+  border: 1px solid #c5cedb;
+  border-radius: 7px;
+  background: #fff;
+  color: #111c35;
+}
+.productionDemo button.primary {
+  background: #163cff;
+  border-color: #163cff;
+  color: #fff;
+}
+.productionDemo button:disabled {
+  color: #637084;
+  background: #f1f4f8;
+  border-color: #dce2eb;
+  cursor: not-allowed;
+}
+.productionDemo a {
+  color: #163cff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

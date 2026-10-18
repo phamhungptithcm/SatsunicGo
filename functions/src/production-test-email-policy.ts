@@ -43,6 +43,15 @@ export async function productionTestEmailAllowed(
   request: TestEmailRequest,
   transaction?: Transaction,
 ): Promise<boolean> {
+  // Simulation is never email authorization, even if a SePay tester opted in.
+  if (
+    [request.resource, request.job].some(
+      (record) =>
+        record?.provider === "production_demo" ||
+        record?.paymentProvider === "production_demo",
+    )
+  )
+    return false;
   const testResource = isPurchaseTestRecord(request.resource);
   const testJob = isPurchaseTestRecord(request.job);
   const artifactRequested =

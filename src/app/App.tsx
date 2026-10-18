@@ -50,6 +50,7 @@ import {
   isCrmPath,
   legacyStaffTarget,
 } from "../../packages/domain/staff-route";
+const ProductionDemo = lazy(() => import("../features/cart/ProductionDemo").then(m => ({default:m.ProductionDemo})));
 const PurchaseCheckout = lazy(() => import("../features/cart/purchase-checkout").then(m => ({default:m.PurchaseCheckout})));
 const PurchasePayment = lazy(() => import("../features/cart/purchase-payment").then(m => ({default:m.PurchasePayment})));
 const ProductCheckout = lazy(() =>
@@ -430,6 +431,7 @@ export function App() {
               />
               <Route path="/documents/shared" element={<SharedDocument />} />
               <Route path="/products" element={<Catalog kind="products" />} />
+              <Route path="/demo" element={<ProductionDemo key={`${user?.uid ?? "guest"}:${location.search}`} user={user} signIn={signIn} />} />
               <Route path="/cart" element={<CartPage signIn={signIn} />} />
               <Route path="/checkout" element={<PurchaseCheckout user={user} signIn={signIn} />} />
               <Route path="/checkout/payment/:id" element={<PurchasePayment key={user?.uid ?? "guest"} user={user} signIn={signIn} />} />

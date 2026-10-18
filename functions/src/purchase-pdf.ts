@@ -255,7 +255,11 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
     `q ${green} RG 1.2 w 440 ${y + 1} m 443 ${y - 2} l 449 ${y + 5} l S Q`,
   );
   text(
-    testReceipt ? "Thanh toán test" : "Đã thanh toán",
+    receipt.provider === "production_demo"
+      ? "Mô phỏng"
+      : testReceipt
+        ? "Thanh toán test"
+        : "Đã thanh toán",
     456,
     y - 1,
     8.5,
@@ -277,13 +281,15 @@ export function renderPurchaseReceipt(receipt: PurchaseReceiptData): Buffer {
   const receiptRows = wrap(`SG-${receipt.id}`, 229, 8.5),
     referenceRows = wrap(receipt.reference, 224, 8.5),
     methodRows = wrap(
-      receipt.provider === "demo"
-        ? "Thanh toán demo"
-        : receipt.provider === "sepay_sandbox"
-          ? "QR chuyển khoản · SePay sandbox"
-          : receipt.provider === "payos"
-            ? "PayOS"
-            : receipt.provider,
+      receipt.provider === "production_demo"
+        ? "Mô phỏng — không xác nhận thu tiền"
+        : receipt.provider === "demo"
+          ? "Thanh toán demo"
+          : receipt.provider === "sepay_sandbox"
+            ? "QR chuyển khoản · SePay sandbox"
+            : receipt.provider === "payos"
+              ? "PayOS"
+              : receipt.provider,
       229,
       9,
     );

@@ -4,14 +4,22 @@ import "./test-order.css";
 /** A display cue only. Every mutation still checks persisted server provenance. */
 export function TestOrderBadge({
   record,
-  label = "Đơn test",
+  label,
 }: {
   record: unknown;
   label?: string;
 }) {
+  const simulated =
+    (record as { paymentProvider?: string; provider?: string } | null)
+      ?.paymentProvider === "production_demo" ||
+    (record as { provider?: string } | null)?.provider === "production_demo";
   return purchaseTestRecord(record) ? (
-    <span className="testOrderBadge" role="note" aria-label={label}>
-      Test
+    <span
+      className="testOrderBadge"
+      role="note"
+      aria-label={label ?? (simulated ? "Đơn mô phỏng" : "Đơn test")}
+    >
+      {simulated ? "Mô phỏng" : "Test"}
     </span>
   ) : null;
 }
