@@ -40,3 +40,7 @@ CUA Chrome served from isolated authorized `127.0.0.1:5208`. Actual TermsPage re
 Screenshots in task artifacts: terms-responsive-local.png, options-responsive-local.png, terms-local-desktop.png, terms-local-200.png. Desktop styling: terms uses existing stylesheet; no new animation, no app-specific Apple conventions. Vietnamese text expansion and long specification wrapping observed. English labels rendered in unit check.
 
 Product Language Gate: PASSED for changed scope. Publication must still pass the exact-SHA production pipeline and public readback. No claim of live refund execution or payment-provider verification.
+
+## Follow-up after first production readback
+
+The first harness did not include the catalog action grid. Production exposed a narrow 88 px specification column, although all 20 option values matched. Cycle 3 therefore reopened Craft/in-context layout as FAILED. The correction adds `.catalogSpecification` to the existing full-grid-span selector. The follow-up harness uses actual CatalogCard, AddToCart and CartProvider plus the actual global/public/catalog styles. Desktop specification width equals the action width (319.33 px), grid-column is `1 / -1`, and height is 48.30 px. Mobile 390 px screenshot shows full-width readable specification. Evidence: catalog-layout-fixed-local.png and catalog-layout-fixed-mobile.png. Cycle 4 Product Language Gate: PASSED for the corrected candidate; production CSS readback remains required.

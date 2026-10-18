@@ -262,7 +262,7 @@
 .products074 .productAction:not(:has(.cartAdd107)) {
   grid-template-columns: minmax(0, 1fr);
 }
-.products074 .productAction .cartAdd107 > :is(label, p) {
+.products074 .productAction .cartAdd107 > :is(label, p, .catalogSpecification) {
   grid-column: 1 / -1;
 }
 .products074 .productAction .cartAdd107 > label {

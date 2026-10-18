@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "PURCHASE-TERMS-OPTIONS-20261017",
   "status": "PASSED",
-  "review_cycles": 2,
+  "review_cycles": 4,
   "dimensions": {
     "requirement_match": {
       "status": "PASSED",
@@ -46,7 +46,7 @@
     },
     "product_language": {
       "status": "PASSED",
-      "summary": "Eight principles, actual browser rendering, focus and 200% zoom verified.",
+      "summary": "Cycle 4: actual CatalogCard/AddToCart with production CSS, full-width specification at desktop and 390px; earlier policy/focus/zoom evidence retained.",
       "evidence_refs": [
         "review.md",
         "product-content-review.md"
@@ -69,7 +69,14 @@
       ]
     }
   },
-  "findings": [],
+  "findings": [
+    {
+      "severity": "medium",
+      "status": "fixed",
+      "location": "src/features/content/products-catalog.css:265",
+      "summary": "Catalog display:contents grid narrowed static specification. Included specification in existing full-width selector and verified actual catalog components at desktop/390px."
+    }
+  ],
   "residual_risks": [
     "Vendor return conditions and refund timing require case-specific operational handling."
   ],
@@ -77,6 +84,7 @@
     "Full screen-reader narration not run.",
     "Browser regression specs updated but not executed locally; no duplicate shared emulator runtime started.",
     "Runtime ledger package unavailable; manual report supplied.",
-    "Production verification pending exact-SHA release."
+    "Production verification pending exact-SHA release.",
+    "Pre-existing direct checkout URL 404; SPA catalog-to-checkout navigation verified. Routing unchanged and out of scope."
   ]
 }

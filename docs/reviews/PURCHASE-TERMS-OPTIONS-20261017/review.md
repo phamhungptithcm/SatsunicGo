@@ -16,3 +16,9 @@ Cycle 2: PASSED for release candidate. Reviewed complete diff and consumers. No 
 - Tradeoffs: no fixed vendor return deadline, refund SLA or universal return guarantee is promised. Support handles case-specific acceptance and timing. Production business operations and refund execution are not proven by content/UI tests. Full product browsing/readback follows deploy.
 
 Rollback: revert this scoped commit and run existing release pipeline; do not mix Hosting assets with an older Functions publicPage bundle. Unrelated dirty primary checkout never enters this candidate.
+
+Cycle 3: BLOCKED after production readback — all seven policy sections and 20 specifications matched, but the catalog's `display: contents`/three-column action grid compressed the new static specification to 88 px. First fixture did not include this container. Classified medium visual regression; corrected by adding the specification class to the existing full-width grid selector. No quantity, price or action changes.
+
+Cycle 4: PASSED for corrected release candidate — reviewed the one-selector diff and all applicable styles. Actual CatalogCard/AddToCart/CartProvider fixture at desktop and 390 px confirms full-width specification and separate action row. Build/typecheck rerun. Existing semantic tests and first release CI remain relevant because only CSS changed; subsequent pipeline remains required. Screenshots and measurements are recorded in product-content-review.md.
+
+Separate observed pre-existing limitation: navigating directly to `/products/:slug/checkout` returns 404 because Hosting routes `/products/**` to publicPage, whose route regex excludes checkout. These files are unchanged from the base. Navigation from the catalog succeeds; Biotin showed the exact 100-capsule option, quantity 1, 305000 VND, enabled submit and `/terms` link. No order was submitted. Routing correction is outside this content/specification scope and was disclosed to the user.
