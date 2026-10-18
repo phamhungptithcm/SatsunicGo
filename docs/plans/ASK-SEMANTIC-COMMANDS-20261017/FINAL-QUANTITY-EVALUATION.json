@@ -1,0 +1,457 @@
+{
+  "status": "PASSED_FINAL_14_OF_14",
+  "diagnostic_attempts": 118,
+  "historical_failures_retained": 16,
+  "reservedVnd": 7501,
+  "maximumReservedVnd": 7600,
+  "final_cases": [
+    {
+      "question": "them mot cai nua mau cu nhe",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 3,
+            "variant": "Test"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1488,
+        "candidatesTokenCount": 183,
+        "totalTokenCount": 1945,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1488
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 183
+          }
+        ],
+        "thoughtsTokenCount": 274
+      }
+    },
+    {
+      "question": "bot di mot cai keep same option",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 1,
+            "variant": "Test"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1511,
+        "candidatesTokenCount": 175,
+        "totalTokenCount": 2100,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1511
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 175
+          }
+        ],
+        "thoughtsTokenCount": 414
+      }
+    },
+    {
+      "question": "actually doi thanh bon cai mau Test nhe",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 4,
+            "variant": "Test"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1488,
+        "candidatesTokenCount": 178,
+        "totalTokenCount": 1933,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1488
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 178
+          }
+        ],
+        "thoughtsTokenCount": 267
+      }
+    },
+    {
+      "question": "mình muon mua",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": []
+      },
+      "usage": {
+        "promptTokenCount": 1345,
+        "candidatesTokenCount": 94,
+        "totalTokenCount": 1706,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1345
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 94
+          }
+        ],
+        "thoughtsTokenCount": 267
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "Paula's Choice Skin Balancing"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1352,
+        "candidatesTokenCount": 135,
+        "totalTokenCount": 1641,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1352
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 135
+          }
+        ],
+        "thoughtsTokenCount": 154
+      }
+    },
+    {
+      "question": "show my cart cho minh xem voi",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1348,
+        "candidatesTokenCount": 116,
+        "totalTokenCount": 1605,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1348
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 116
+          }
+        ],
+        "thoughtsTokenCount": 141
+      }
+    },
+    {
+      "question": "tinh phi ship tu Nhat ve Viet Nam giup minh",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "shipping_quote"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1354,
+        "candidatesTokenCount": 127,
+        "totalTokenCount": 1585,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1354
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 127
+          }
+        ],
+        "thoughtsTokenCount": 104
+      }
+    },
+    {
+      "question": "I need to update my profile",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "profile"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1347,
+        "candidatesTokenCount": 124,
+        "totalTokenCount": 1531,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1347
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 124
+          }
+        ],
+        "thoughtsTokenCount": 60
+      }
+    },
+    {
+      "question": "kiem tra don hang hien tai giup minh",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "track_order",
+            "orderId": "my-order"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1351,
+        "candidatesTokenCount": 131,
+        "totalTokenCount": 1558,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1351
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 131
+          }
+        ],
+        "thoughtsTokenCount": 76
+      }
+    },
+    {
+      "question": "do not buy anything, I am just saying hello",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": []
+      },
+      "usage": {
+        "promptTokenCount": 1351,
+        "candidatesTokenCount": 99,
+        "totalTokenCount": 1602,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1351
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 99
+          }
+        ],
+        "thoughtsTokenCount": 152
+      }
+    },
+    {
+      "question": "Je voudrais deux exemplaires du premier produit, même option.",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 2,
+            "variant": "Test"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1491,
+        "candidatesTokenCount": 173,
+        "totalTokenCount": 2077,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1491
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 173
+          }
+        ],
+        "thoughtsTokenCount": 413
+      }
+    },
+    {
+      "question": "最初の商品を2個、同じ種類でお願いします",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 2,
+            "variant": "Test"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1489,
+        "candidatesTokenCount": 181,
+        "totalTokenCount": 2054,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1489
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 181
+          }
+        ],
+        "thoughtsTokenCount": 384
+      }
+    },
+    {
+      "question": "أريد رؤية سلة التسوق",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "open_cart"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1350,
+        "candidatesTokenCount": 124,
+        "totalTokenCount": 1776,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1350
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 124
+          }
+        ],
+        "thoughtsTokenCount": 302
+      }
+    },
+    {
+      "question": "xem quyen loi thanh vien cho minh",
+      "passed": true,
+      "command": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "membership"
+          }
+        ]
+      },
+      "usage": {
+        "promptTokenCount": 1350,
+        "candidatesTokenCount": 121,
+        "totalTokenCount": 1558,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1350
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 121
+          }
+        ],
+        "thoughtsTokenCount": 87
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic context with real Vertex Gemini; production browser verification separate",
+    "Not a statistical accuracy guarantee",
+    "Previous failed attempts preserved in local diagnostic ledger"
+  ]
+}

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import {
   admitAskCommands,
+  normalizeAskProviderQuantities,
   askCommandPlanSchema,
   askCommandResponseSchemaForSources,
 } from "../../packages/domain/ask-command-plan";
@@ -14,6 +15,64 @@ const catalog = [
   { id: "cream", catalogOptions: [] },
 ];
 const plan = (command: unknown) => ({ version: 1, commands: [command] });
+describe("provider quantity normalization preserves the public total-only protocol", () => {
+  test.each([
+    ["increase", 1, 3],
+    ["decrease", 1, 1],
+    ["set", 4, 4],
+  ])(
+    "%s uses the current selection exactly once",
+    (quantityMode, quantity, total) => {
+      const value = {
+        commandPlan: plan({
+          kind: "select_product",
+          productId: "shirt",
+          quantityMode,
+          quantity,
+          variant: "Black / M",
+        }),
+      };
+      const normalized = normalizeAskProviderQuantities(
+        value,
+        context,
+      ) as typeof value;
+      expect(normalized.commandPlan).toEqual(
+        plan({
+          kind: "select_product",
+          productId: "shirt",
+          quantity: total,
+          variant: "Black / M",
+        }),
+      );
+      expect(value.commandPlan.commands[0]).toHaveProperty("quantityMode");
+      expect(normalizeAskProviderQuantities(normalized, context)).toEqual(
+        normalized,
+      );
+      expect(
+        askCommandPlanSchema.safeParse(normalized.commandPlan).success,
+      ).toBe(true);
+    },
+  );
+  test.each([
+    { productId: "cream", quantityMode: "increase", quantity: 1 },
+    { productId: "shirt", quantityMode: "increase" },
+    { productId: "shirt", quantityMode: "decrease", quantity: 2 },
+    { productId: "shirt", quantityMode: "increase", quantity: 100 },
+    {
+      productId: "shirt",
+      quantityMode: "increase",
+      quantity: 1,
+      injected: true,
+    },
+  ])("rejects unsafe relative quantity %j", (fields) => {
+    expect(() =>
+      normalizeAskProviderQuantities(
+        { commandPlan: plan({ kind: "select_product", ...fields }) },
+        context,
+      ),
+    ).toThrow();
+  });
+});
 test("provider citation schema cannot leak another request's evidence or cite catalog IDs", () => {
   const first = askCommandResponseSchemaForSources(["approved", "approved"]);
   const second = askCommandResponseSchemaForSources([]);
@@ -58,6 +117,33 @@ test("provider can select only current products and their exact variants", () =>
   ).not.toContain("owned-order");
 });
 describe("untrusted semantic proposal admission", () => {
+  test("quantity guidance binds only the current product and request", () => {
+    const bound = askCommandResponseSchemaForSources(
+      [],
+      catalog,
+      undefined,
+      context.selected,
+    );
+    const choices =
+      bound.properties.commandPlan.properties.commands.items.anyOf;
+    const selection = (productId: string) =>
+      choices.find(
+        (choice) =>
+          "productId" in choice.properties &&
+          choice.properties.productId &&
+          "enum" in choice.properties.productId &&
+          choice.properties.productId.enum[0] === productId,
+      );
+    expect(JSON.stringify(selection("shirt"))).toContain(
+      "CURRENT selected total is 2",
+    );
+    expect(JSON.stringify(selection("cream"))).toContain(
+      "no current selected quantity",
+    );
+    expect(
+      JSON.stringify(askCommandResponseSchemaForSources([], catalog)),
+    ).not.toContain("CURRENT selected total is 2");
+  });
   test.each([
     "open_cart",
     "checkout",
