@@ -2,7 +2,7 @@ import { warn } from "firebase-functions/logger";
 import {
   admitAskCommands,
   askCommandInstruction,
-  askCommandResponseSchema,
+  askCommandResponseSchemaForSources,
   type AskCommandContext,
 } from "../../../packages/domain/ask-command-plan";
 import { HttpsError } from "firebase-functions/v2/https";
@@ -135,7 +135,18 @@ export async function pilotAnswer(
             );
             if (!input.commandProtocol) return serialized;
             const body = JSON.parse(serialized);
-            body.generationConfig.responseSchema = askCommandResponseSchema;
+            body.generationConfig.responseSchema =
+              askCommandResponseSchemaForSources(
+                context.evidence.map((chunk) => chunk.documentId),
+                catalog.filter(
+                  (product) =>
+                    input.commandContext?.visibleProductIds.includes(
+                      product.id,
+                    ) ||
+                    input.commandContext?.selected?.productId === product.id,
+                ),
+                snapshot.task?.orderId ?? undefined,
+              );
             return JSON.stringify(body);
           },
         );

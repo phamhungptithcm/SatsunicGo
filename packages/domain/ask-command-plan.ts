@@ -216,3 +216,65 @@ export const askCommandResponseSchema = {
     },
   },
 };
+
+/** Bind citations to the final packed evidence, never catalog or history IDs. */
+export function askCommandResponseSchemaForSources(
+  sourceIds: readonly string[],
+  selectableProducts: readonly { id: string; catalogOptions: string[] }[] = [],
+  orderId?: string,
+) {
+  const ids = [...new Set(sourceIds)];
+  const [search, selection, tracking, navigation] =
+    askCommandResponseSchema.properties.commandPlan.properties.commands.items
+      .anyOf;
+  const selections = selectableProducts.map((product) => ({
+    ...selection,
+    properties: {
+      ...selection.properties,
+      productId: { type: "STRING", enum: [product.id] },
+      variant: {
+        type: "STRING",
+        enum: product.catalogOptions.length ? product.catalogOptions : [""],
+      },
+    },
+  }));
+  return {
+    ...askCommandResponseSchema,
+    properties: {
+      ...askCommandResponseSchema.properties,
+      sourceIds: {
+        ...askCommandResponseSchema.properties.sourceIds,
+        description:
+          "Only approved evidence documentId values used in the answer. Catalog product IDs and history IDs are not citations. Return [] when no evidence is supplied or cited.",
+        maxItems: ids.length ? 8 : 0,
+        items: { type: "STRING", ...(ids.length ? { enum: ids } : {}) },
+      },
+      commandPlan: {
+        ...askCommandResponseSchema.properties.commandPlan,
+        properties: {
+          ...askCommandResponseSchema.properties.commandPlan.properties,
+          commands: {
+            ...askCommandResponseSchema.properties.commandPlan.properties
+              .commands,
+            items: {
+              anyOf: [
+                search,
+                ...selections,
+                {
+                  ...tracking,
+                  properties: {
+                    kind: { type: "STRING", enum: ["track_order"] },
+                    ...(orderId
+                      ? { orderId: { type: "STRING", enum: [orderId] } }
+                      : {}),
+                  },
+                },
+                navigation,
+              ],
+            },
+          },
+        },
+      },
+    },
+  };
+}

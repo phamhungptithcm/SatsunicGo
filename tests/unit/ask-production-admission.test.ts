@@ -555,6 +555,9 @@ test.each([
         expect(
           request.generationConfig.responseSchema.properties.commandPlan,
         ).toBeTruthy();
+        expect(
+          request.generationConfig.responseSchema.properties.sourceIds.maxItems,
+        ).toBe(0);
         expect(request.contents[0].parts[0].text).toContain("commandContext");
         paid.push(String(options.body));
         return Response.json({

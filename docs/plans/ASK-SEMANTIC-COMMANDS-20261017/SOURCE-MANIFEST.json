@@ -1,11 +1,11 @@
 {
   "base": "f9e323eeffaa38b313428a583f56cdd8324ffdf5",
   "files": {
-    "functions/src/ai/ask-pilot-answer.ts": "13b08b95445b7d5cfe5b4570627ebdf18cf219d60856365cdc8970c1d1697ff0",
+    "functions/src/ai/ask-pilot-answer.ts": "984b33fb96d4c062938421511683c7a4a937fbfabf0a9c72b3835c95a64e9be5",
     "functions/src/ai/ask-production.ts": "24cd13bcdab237710946d1c4833cc0f0972f8932c9dd00d321a9d610e0893f23",
     "functions/src/ai/ask.ts": "b45f0e7b186f7471ee773c05c882a18cab54e7acaeb0d1e6f1249cd093e1a599",
     "functions/src/ai/server-context.ts": "d8af8ec149592724f8c521b9b1e7c9ef984c322c4cd70e123939c6ac3ff5af5b",
-    "packages/domain/ask-command-plan.ts": "212e3ccccbe9d1b06c8c22a46bb310741736ef706633f41abb6e0d9b016f2d7b",
+    "packages/domain/ask-command-plan.ts": "9e63a8b09093c1bbeb544823dc9b0a3036ea138785dc6f34a23d7c4261a86962",
     "packages/domain/ask-stream.ts": "462da86391b0b4f26985907e61632bf17d81b1bfe8377ce89f73edc4ce0e6086",
     "src/features/ask/Ask.module.css": "47536ab629c07700031660b55edf999cc925d21ec2513dd6cf99b7512b1b2300",
     "src/features/ask/Ask.tsx": "da4569ccc10e499f11d0cf9d2ac47414b6d64a47c03b187c3107b02c24f53274",
@@ -23,7 +23,7 @@
     "src/features/requests/RequestForm.tsx": "0aaeef766505568d78434d4debc00796ca01ea502be488c0e570d605bb0e0a25",
     "tests/browser/ask-semantic.config.ts": "42938038d16a24ee42f7133a7291b622ffd32dfbf4b6b698f370ac058f947907",
     "tests/browser/ask-semantic.spec.ts": "740e36627b4c4764664bd31d12e707749895f9f8e3109996ca37280048826748",
-    "tests/unit/ask-command-plan.test.ts": "7217b0304e592e0240a097fe7dcea95f109e80302c8a65c24f3571dacdf83394",
-    "tests/unit/ask-production-admission.test.ts": "f07904866ef590d7dc3fc8ef536696bf620ae80a49c37fbffa14427493d90c25"
+    "tests/unit/ask-command-plan.test.ts": "eb38dcc8d480a387f1147191c5c7e58c60375e6e2b6db6a7ee8445e042b270e7",
+    "tests/unit/ask-production-admission.test.ts": "335707154c1261bea7af17385cee3f7b34d5aa5e6863fef3d8eaa6b49fb49eae"
   }
 }

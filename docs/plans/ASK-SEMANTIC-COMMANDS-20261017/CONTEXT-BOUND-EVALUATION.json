@@ -1,0 +1,321 @@
+{
+  "scope": "Synthetic real-provider regression for live source-binding and unavailable selection failures; no customer payloads",
+  "live_diagnostic": {
+    "reason": "source-binding",
+    "timestamp": "2026-10-18T00:01:01.467275Z",
+    "release": "v0.16.0"
+  },
+  "final_bound_schema_passed": 3,
+  "final_bound_schema_total": 3,
+  "total_provider_calls": 72,
+  "reservedVnd": 5392,
+  "maximumReservedVnd": 5500,
+  "cases": [
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "complete",
+      "passed": false,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 1,
+            "variant": "Test"
+          }
+        ]
+      },
+      "allowedSources": [],
+      "sourceIds": [],
+      "usage": {
+        "promptTokenCount": 1209,
+        "candidatesTokenCount": 167,
+        "totalTokenCount": 1376,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1209
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 167
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "Paula's Choice Skin Balancing"
+          }
+        ]
+      },
+      "allowedSources": [
+        "approved-care"
+      ],
+      "sourceIds": [
+        "approved-care"
+      ],
+      "usage": {
+        "promptTokenCount": 1234,
+        "candidatesTokenCount": 151,
+        "totalTokenCount": 1385,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1234
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 151
+          }
+        ]
+      }
+    },
+    {
+      "question": "lay cai dau hai cai mau Test nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 2,
+            "variant": "Test"
+          }
+        ]
+      },
+      "allowedSources": [],
+      "sourceIds": [],
+      "usage": {
+        "promptTokenCount": 1207,
+        "candidatesTokenCount": 176,
+        "totalTokenCount": 1383,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1207
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 176
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "rejected",
+      "passed": false,
+      "plan": null,
+      "allowedSources": null,
+      "sourceIds": null,
+      "usage": {
+        "promptTokenCount": 1187,
+        "candidatesTokenCount": 139,
+        "totalTokenCount": 1326,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1187
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 139
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "rejected",
+      "passed": false,
+      "plan": null,
+      "allowedSources": null,
+      "sourceIds": null,
+      "usage": {
+        "promptTokenCount": 1212,
+        "candidatesTokenCount": 161,
+        "totalTokenCount": 1373,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1212
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 161
+          }
+        ]
+      }
+    },
+    {
+      "question": "lay cai dau hai cai mau Test nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 2,
+            "variant": "Test"
+          }
+        ]
+      },
+      "allowedSources": [],
+      "sourceIds": [],
+      "usage": {
+        "promptTokenCount": 1207,
+        "candidatesTokenCount": 176,
+        "totalTokenCount": 1383,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1207
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 176
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "Paula's Choice Skin Balancing"
+          }
+        ]
+      },
+      "allowedSources": [],
+      "sourceIds": [],
+      "usage": {
+        "promptTokenCount": 1131,
+        "candidatesTokenCount": 141,
+        "totalTokenCount": 1272,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1131
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 141
+          }
+        ]
+      }
+    },
+    {
+      "question": "minh tim Paula's Choice Skin Balancing nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "search_catalog",
+            "query": "Paula's Choice Skin Balancing"
+          }
+        ]
+      },
+      "allowedSources": [
+        "approved-care"
+      ],
+      "sourceIds": [
+        "approved-care"
+      ],
+      "usage": {
+        "promptTokenCount": 1156,
+        "candidatesTokenCount": 151,
+        "totalTokenCount": 1307,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1156
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 151
+          }
+        ]
+      }
+    },
+    {
+      "question": "lay cai dau hai cai mau Test nhe",
+      "state": "complete",
+      "passed": true,
+      "plan": {
+        "version": 1,
+        "commands": [
+          {
+            "kind": "select_product",
+            "productId": "product-paula",
+            "quantity": 2,
+            "variant": "Test"
+          }
+        ]
+      },
+      "allowedSources": [],
+      "sourceIds": [],
+      "usage": {
+        "promptTokenCount": 1209,
+        "candidatesTokenCount": 187,
+        "totalTokenCount": 1396,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1209
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 187
+          }
+        ]
+      }
+    }
+  ]
+}

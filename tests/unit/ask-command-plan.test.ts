@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   admitAskCommands,
   askCommandPlanSchema,
+  askCommandResponseSchemaForSources,
 } from "../../packages/domain/ask-command-plan";
 import { askAnswerSchema } from "../../packages/domain/ask-stream";
 const context = {
@@ -13,6 +14,49 @@ const catalog = [
   { id: "cream", catalogOptions: [] },
 ];
 const plan = (command: unknown) => ({ version: 1, commands: [command] });
+test("provider citation schema cannot leak another request's evidence or cite catalog IDs", () => {
+  const first = askCommandResponseSchemaForSources(["approved", "approved"]);
+  const second = askCommandResponseSchemaForSources([]);
+  const third = askCommandResponseSchemaForSources(["other-approved"]);
+  expect(first.properties.sourceIds.items.enum).toEqual(["approved"]);
+  expect(second.properties.sourceIds.maxItems).toBe(0);
+  expect(second.properties.sourceIds.items).not.toHaveProperty("enum");
+  expect(third.properties.sourceIds.items.enum).toEqual(["other-approved"]);
+  expect(first.properties.sourceIds.items.enum).toEqual(["approved"]);
+});
+test("provider can select only current products and their exact variants", () => {
+  const empty = askCommandResponseSchemaForSources([]);
+  const bound = askCommandResponseSchemaForSources(
+    [],
+    [{ id: "shirt", catalogOptions: ["Black / M"] }],
+    "owned-order",
+  );
+  const choices = bound.properties.commandPlan.properties.commands.items.anyOf;
+  expect(
+    JSON.stringify(empty.properties.commandPlan.properties.commands),
+  ).not.toContain("select_product");
+  expect(choices).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        properties: expect.objectContaining({
+          productId: { type: "STRING", enum: ["shirt"] },
+          variant: { type: "STRING", enum: ["Black / M"] },
+        }),
+      }),
+      expect.objectContaining({
+        properties: {
+          kind: { type: "STRING", enum: ["track_order"] },
+          orderId: { type: "STRING", enum: ["owned-order"] },
+        },
+      }),
+    ]),
+  );
+  expect(
+    JSON.stringify(
+      askCommandResponseSchemaForSources([]).properties.commandPlan,
+    ),
+  ).not.toContain("owned-order");
+});
 describe("untrusted semantic proposal admission", () => {
   test.each([
     "open_cart",
